@@ -1,20 +1,26 @@
-import React from 'react';
 import Navbar from '~/componentes-sgp/navbar/navbar';
-import Sider from './sider';
-import Conteudo from './conteudo';
-import CapturaErros from './captura-erros';
+
+import SiderSGP from '@/components/sgp/sider';
+import { Layout } from 'antd';
+import { Content } from 'antd/es/layout/layout';
 import { useNavigate } from 'react-router-dom';
+import CapturaErros from './captura-erros';
+import Conteudo from './conteudo';
 
 const Pagina = () => {
   const navigate = useNavigate();
 
   return (
     <CapturaErros navigate={navigate}>
-      <Navbar />
-      <div className="h-100" style={{ padding: '0px 32px 0px 32px' }}>
-        <Sider />
-        <Conteudo />
-      </div>
+      <Layout hasSider style={{ minHeight: '100vh' }}>
+        <SiderSGP />
+        <Layout style={{ marginLeft: '88px' }}>
+          <Navbar />
+          <Content style={{ margin: '16px 32px' }}>
+            <Conteudo />
+          </Content>
+        </Layout>
+      </Layout>
     </CapturaErros>
   );
 };

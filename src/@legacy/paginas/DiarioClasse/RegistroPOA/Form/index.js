@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // Form
-import { Formik, Form } from 'formik';
+import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
 // Redux
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLoaderSecao } from '~/redux/modulos/loader/actions';
 
 // Serviços
-import RotasDto from '~/dtos/rotasDto';
+import { ROUTES } from '@/core/enum/routes';
 import RegistroPOAServico from '~/servicos/Paginas/DiarioClasse/RegistroPOA';
-import { erros, erro, sucesso, confirmar } from '~/servicos/alertas';
+import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
@@ -20,13 +20,13 @@ import { Cabecalho, DreDropDown, UeDropDown } from '~/componentes-sgp';
 
 // Componentes
 import {
-  Card,
-  ButtonGroup,
-  Grid,
-  CampoTexto,
-  Localizador,
-  Loader,
   Auditoria,
+  ButtonGroup,
+  CampoTexto,
+  Card,
+  Grid,
+  Loader,
+  Localizador,
 } from '~/componentes';
 import MesesDropDown from '../componentes/MesesDropDown';
 
@@ -34,12 +34,12 @@ import MesesDropDown from '../componentes/MesesDropDown';
 import { Row } from './styles';
 
 // Funçoes
-import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/constantes/ids/button';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
 
 function RegistroPOAForm() {
   const dispatch = useDispatch();
@@ -77,7 +77,7 @@ function RegistroPOAForm() {
   });
 
   useEffect(() => {
-    const permissoes = permissoesTela[RotasDto.REGISTRO_POA];
+    const permissoes = permissoesTela[ROUTES.REGISTRO_POA];
     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
       modalidadesFiltroPrincipal,
       turmaSelecionada
@@ -150,7 +150,7 @@ function RegistroPOAForm() {
         sucesso(
           `Registro ${paramsRoute?.id ? 'alterado' : 'salvo'} com sucesso.`
         );
-        navigate(RotasDto.REGISTRO_POA);
+        navigate(ROUTES.REGISTRO_POA);
       }
     } catch (err) {
       if (err) {
@@ -170,10 +170,10 @@ function RegistroPOAForm() {
       if (confirmou) {
         validaAntesDoSubmit(form);
       } else {
-        navigate(RotasDto.REGISTRO_POA);
+        navigate(ROUTES.REGISTRO_POA);
       }
     } else {
-      navigate(RotasDto.REGISTRO_POA);
+      navigate(ROUTES.REGISTRO_POA);
     }
   };
 
@@ -206,7 +206,7 @@ function RegistroPOAForm() {
       );
       if (excluir) {
         sucesso(`Registro excluído com sucesso!`);
-        navigate(RotasDto.REGISTRO_POA);
+        navigate(ROUTES.REGISTRO_POA);
       }
     }
   };
@@ -249,7 +249,7 @@ function RegistroPOAForm() {
   useEffect(() => {
     if (paramsRoute?.id) {
       setNovoRegistro(false);
-      setBreadcrumbManual(location.pathname, 'Registro', RotasDto.REGISTRO_POA);
+      setBreadcrumbManual(location.pathname, 'Registro', ROUTES.REGISTRO_POA);
       buscarPorId(paramsRoute.id);
     } else {
       setValoresCarregados(true);
@@ -274,7 +274,7 @@ function RegistroPOAForm() {
               <Cabecalho pagina="Registro">
                 <ButtonGroup
                   form={form}
-                  permissoesTela={permissoesTela[RotasDto.REGISTRO_POA]}
+                  permissoesTela={permissoesTela[ROUTES.REGISTRO_POA]}
                   novoRegistro={novoRegistro}
                   idBotaoPrincipal={SGP_BUTTON_ALTERAR_CADASTRAR}
                   labelBotaoPrincipal={

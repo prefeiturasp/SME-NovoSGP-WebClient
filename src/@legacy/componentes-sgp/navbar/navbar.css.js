@@ -20,7 +20,7 @@ export const Logo = styled.img`
 `;
 
 export const Botoes = styled.div`
-  height: 45px !important;
+  height: 55px !important;
   z-index: 101;
 `;
 
@@ -47,8 +47,7 @@ export const Texto = styled.span`
 `;
 
 export const Div = styled.div`
-  margin-left: ${props =>
-    props.retraido ? '120px !important' : '260px !important'};
+  margin-left: 30px;
   @media (max-width: 767.98px) {
     left: 50%;
     margin-left: 0 !important;

@@ -1,17 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { Cabecalho } from '~/componentes-sgp';
-import { Card, ListaPaginada, ButtonGroup, Loader } from '~/componentes';
-import RotasDto from '~/dtos/rotasDto';
-import AtribuicaoEsporadicaServico from '~/servicos/Paginas/AtribuicaoEsporadica';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import { confirmar, sucesso, erros } from '~/servicos/alertas';
-
-import Filtro from './componentes/Filtro';
-import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
-import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/core/enum/routes';
+import { ButtonGroup, Card, ListaPaginada, Loader } from '~/componentes';
+import { Cabecalho } from '~/componentes-sgp';
+import AtribuicaoEsporadicaServico from '~/servicos/Paginas/AtribuicaoEsporadica';
+import { confirmar, erros, sucesso } from '~/servicos/alertas';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+
+import { useNavigate } from 'react-router-dom';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
+import Filtro from './componentes/Filtro';
 
 function AtribuicaoEsporadicaLista() {
   const navigate = useNavigate();
@@ -20,8 +19,7 @@ function AtribuicaoEsporadicaLista() {
   const [filtro, setFiltro] = useState({});
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela =
-    usuario.permissoes[RotasDto.ATRIBUICAO_ESPORADICA_LISTA];
+  const permissoesTela = usuario.permissoes[ROUTES.ATRIBUICAO_ESPORADICA_LISTA];
 
   const formatarCampoDataGrid = data => {
     let dataFormatada = '';

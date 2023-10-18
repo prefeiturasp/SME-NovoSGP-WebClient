@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useCallback, useReducer } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 
 // Redux
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 // Componentes
-import { Loader, Card, Grid } from '~/componentes';
+import { Card, Grid, Loader } from '~/componentes';
 
 // Componentes Internos
 import DropDownTipoCalendario from './componentes/DropDownTipoCalendario';
@@ -14,8 +14,8 @@ import { Linha } from '~/componentes/EstilosGlobais';
 
 // Componentes SGP
 import {
-  Cabecalho,
   AlertaSelecionarTurma,
+  Cabecalho,
   Calendario,
 } from '~/componentes-sgp';
 
@@ -26,17 +26,17 @@ import { erro } from '~/servicos/alertas';
 // Reducer
 import Reducer, { estadoInicial } from './reducer';
 import {
-  setarEventosMes,
-  setarEventosDia,
-  setarCarregandoMes,
   setarCarregandoDia,
+  setarCarregandoMes,
+  setarEventosDia,
+  setarEventosMes,
 } from './reducer/actions';
 
 // DTOs
-import RotasDTO from '~/dtos/rotasDto';
-import { selecionaDia } from '~/redux/modulos/calendarioProfessor/actions';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { ROUTES } from '@/core/enum/routes';
 import { useNavigate } from 'react-router-dom';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { selecionaDia } from '~/redux/modulos/calendarioProfessor/actions';
 
 function CalendarioProfessor() {
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ function CalendarioProfessor() {
     estado => estado.usuario
   );
 
-  const permissaoTela = permissoes[RotasDTO.CALENDARIO_PROFESSOR];
+  const permissaoTela = permissoes[ROUTES.CALENDARIO_PROFESSOR];
 
   const [estado, disparar] = useReducer(Reducer, estadoInicial);
   const [tipoCalendarioId, setTipoCalendarioId] = useState(undefined);

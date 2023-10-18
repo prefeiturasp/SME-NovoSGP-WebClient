@@ -3,7 +3,7 @@ import React, { useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { ListaPaginada } from '~/componentes';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 
 const ListaOcorrenciasPaginada = props => {
   const {
@@ -123,7 +123,7 @@ const ListaOcorrenciasPaginada = props => {
       colunas={colunas}
       filtro={filtros}
       onClick={ocorrencia =>
-        navigate(`${RotasDto.OCORRENCIAS}/editar/${ocorrencia.id}`)
+        navigate(`${ROUTES.OCORRENCIAS}/editar/${ocorrencia.id}`)
       }
       multiSelecao
       selecionarItems={onSelecionarItems}

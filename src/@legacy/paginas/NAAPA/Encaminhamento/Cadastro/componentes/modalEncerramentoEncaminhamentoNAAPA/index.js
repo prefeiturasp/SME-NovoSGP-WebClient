@@ -10,7 +10,7 @@ import {
   SGP_BUTTON_CANCELAR_MODAL_ENCERRAMENTO,
   SGP_BUTTON_SALVAR_MODAL_ENCERRAMENTO,
 } from '~/constantes/ids/button';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { setExibirModalEncerramentoEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { confirmar, erros, sucesso } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
@@ -89,7 +89,7 @@ const ModalEncerramentoEncaminhamentoNAAPA = () => {
     if (retorno?.status === 200) {
       sucesso('Encaminhamento encerrado com sucesso.');
       fecharModal();
-      navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
     }
   };
 

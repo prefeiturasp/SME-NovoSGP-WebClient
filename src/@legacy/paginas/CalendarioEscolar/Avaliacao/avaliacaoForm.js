@@ -1,30 +1,31 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { ROUTES } from '@/core/enum/routes';
+import { Col, Row } from 'antd';
+import { Form, Formik } from 'formik';
+import _ from 'lodash';
 import queryString from 'query-string';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import { Formik, Form } from 'formik';
-import _ from 'lodash';
-import { Col, Row } from 'antd';
+import { Auditoria, Colors, Label, Loader } from '~/componentes';
+import Alert from '~/componentes/alert';
+import Button from '~/componentes/button';
+import CampoTexto from '~/componentes/campoTexto';
 import Card from '~/componentes/card';
 import Grid from '~/componentes/grid';
-import Button from '~/componentes/button';
 import RadioGroupButton from '~/componentes/radioGroupButton';
-import CampoTexto from '~/componentes/campoTexto';
 import SelectComponent from '~/componentes/select';
-import { Auditoria, Colors, Label, Loader } from '~/componentes';
-import { Div, Badge } from './avaliacao.css';
-import RotasDTO from '~/dtos/rotasDto';
 import ServicoAvaliacao from '~/servicos/Paginas/Calendario/ServicoAvaliacao';
-import { erro, sucesso, confirmar } from '~/servicos/alertas';
+import { confirmar, erro, sucesso } from '~/servicos/alertas';
+import { Badge, Div } from './avaliacao.css';
 import ModalCopiarAvaliacao from './componentes/ModalCopiarAvaliacao';
-import Alert from '~/componentes/alert';
 
 // Utils
-import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
-import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import JoditEditor from '~/componentes/jodit-editor/joditEditor';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Cabecalho } from '~/componentes-sgp';
+import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
@@ -32,16 +33,15 @@ import {
   SGP_BUTTON_EXCLUIR,
   SGP_BUTTON_REGENCIA,
 } from '~/constantes/ids/button';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import { SGP_JODIT_EDITOR_CADASTRO_AVALIACAO_DESCRICAO } from '~/constantes/ids/jodit-editor';
 import { SGP_RADIO_CATEGORIA } from '~/constantes/ids/radio';
 import {
   SGP_SELECT_COMPONENTE_CURRICULAR,
   SGP_SELECT_NOME_AVALIACAO,
   SGP_SELECT_TIPO_AVALIACAO,
 } from '~/constantes/ids/select';
-import { SGP_JODIT_EDITOR_CADASTRO_AVALIACAO_DESCRICAO } from '~/constantes/ids/jodit-editor';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
 const AvaliacaoForm = () => {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ const AvaliacaoForm = () => {
   const [mostrarModalCopiarAvaliacao, setMostrarModalCopiarAvaliacao] =
     useState(false);
   const permissaoTela = useSelector(
-    state => state.usuario.permissoes[RotasDTO.CADASTRO_DE_AVALIACAO]
+    state => state.usuario.permissoes[ROUTES.CADASTRO_DE_AVALIACAO]
   );
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -79,10 +79,10 @@ const AvaliacaoForm = () => {
       if (confirmado) {
         if (botaoCadastrarRef.current) botaoCadastrarRef.current.click();
       } else {
-        navigate(RotasDTO.CALENDARIO_PROFESSOR);
+        navigate(ROUTES.CALENDARIO_PROFESSOR);
       }
     } else {
-      navigate(RotasDTO.CALENDARIO_PROFESSOR);
+      navigate(ROUTES.CALENDARIO_PROFESSOR);
     }
   };
 
@@ -144,7 +144,7 @@ const AvaliacaoForm = () => {
       if (exclusao && exclusao.status === 200) {
         setCarregandoTela(false);
         sucesso('Atividade avaliativa excluída com sucesso!');
-        navigate(RotasDTO.CALENDARIO_PROFESSOR);
+        navigate(ROUTES.CALENDARIO_PROFESSOR);
       } else {
         erro(exclusao);
         setCarregandoTela(false);
@@ -280,7 +280,7 @@ const AvaliacaoForm = () => {
             );
           }
           setCarregandoTela(false);
-          navigate(RotasDTO.CALENDARIO_PROFESSOR);
+          navigate(ROUTES.CALENDARIO_PROFESSOR);
         } else {
           setCarregandoTela(false);
           erro(salvar);
@@ -467,7 +467,7 @@ const AvaliacaoForm = () => {
     setCarregandoTela(true);
     setTimeout(() => {
       setCarregandoTela(false);
-      navigate(RotasDTO.CALENDARIO_PROFESSOR);
+      navigate(ROUTES.CALENDARIO_PROFESSOR);
     }, 2000);
   };
 

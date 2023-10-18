@@ -40,7 +40,7 @@ import ListaOcorrenciasPaginada from './listaOcorrenciasPaginada';
 const ListaOcorrencias = () => {
   const usuario = useSelector(state => state.usuario);
   const { permissoes } = usuario;
-  const { podeExcluir, podeIncluir } = permissoes[RotasDto.OCORRENCIAS];
+  const { podeExcluir, podeIncluir } = permissoes[ROUTES.OCORRENCIAS];
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [anoLetivo, setAnoLetivo] = useState();
@@ -91,9 +91,7 @@ const ListaOcorrencias = () => {
   const filtroEhValido = !!(anoLetivo && dre?.id && ue?.id);
 
   useEffect(() => {
-    const soConsulta = verificaSomenteConsulta(
-      permissoes[RotasDto.OCORRENCIAS]
-    );
+    const soConsulta = verificaSomenteConsulta(permissoes[ROUTES.OCORRENCIAS]);
     setSomenteConsulta(soConsulta);
   }, [permissoes]);
 
@@ -145,7 +143,6 @@ const ListaOcorrencias = () => {
     if (anoLetivo) {
       obterDres();
     }
-
   }, [anoLetivo]);
 
   const obterUes = useCallback(async () => {
@@ -207,7 +204,6 @@ const ListaOcorrencias = () => {
     if (ue?.codigo) {
       obterModalidades();
     }
-
   }, [ue]);
 
   const obterSemestres = useCallback(async () => {
@@ -570,7 +566,12 @@ const ListaOcorrencias = () => {
                     valueText="desc"
                     label="Semestre"
                     placeholder="Selecione o semestre"
-                    disabled={!modalidade || listaSemestres?.length === 1 || !ue?.codigo || ue?.codigo === OPCAO_TODOS}
+                    disabled={
+                      !modalidade ||
+                      listaSemestres?.length === 1 ||
+                      !ue?.codigo ||
+                      ue?.codigo === OPCAO_TODOS
+                    }
                     valueSelect={semestre}
                     onChange={onChangeSemestre}
                   />
@@ -587,7 +588,12 @@ const ListaOcorrencias = () => {
                   valueOption="id"
                   valueText="nomeFiltro"
                   label="Turma"
-                  disabled={!modalidade || (ehEJA && !semestre) || !ue?.codigo || ue?.codigo === OPCAO_TODOS}
+                  disabled={
+                    !modalidade ||
+                    (ehEJA && !semestre) ||
+                    !ue?.codigo ||
+                    ue?.codigo === OPCAO_TODOS
+                  }
                   valueSelect={turmaId}
                   onChange={onChangeTurma}
                   placeholder="Turma"
@@ -595,24 +601,24 @@ const ListaOcorrencias = () => {
                 />
               </Loader>
             </Col>
-                <Col sm={24} md={12}>
-                <CampoTexto
-                  id="SGP_INPUT_TEXT_ALUNO_NOME"
-                  value={alunoNomeExibicao}
-                  onChange={onChangeAlunoNome}
-                  label="Crianças/Estudantes"
-                  placeholder="Procure pelo nome da criança"
-                  desabilitado={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
-                  iconeBusca
-                  allowClear
-                />
-              </Col>
+            <Col sm={24} md={12}>
+              <CampoTexto
+                id="SGP_INPUT_TEXT_ALUNO_NOME"
+                value={alunoNomeExibicao}
+                onChange={onChangeAlunoNome}
+                label="Crianças/Estudantes"
+                placeholder="Procure pelo nome da criança"
+                desabilitado={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
+                iconeBusca
+                allowClear
+              />
+            </Col>
             <Col sm={24} md={12}>
               <CampoTexto
                 id="SGP_INPUT_TEXT_SERVIDOR_NOME"
                 value={servidorNomeExibicao}
                 onChange={onChangeServidorNome}
-                label= "Servidor/Funcionário"
+                label="Servidor/Funcionário"
                 desabilitado={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
                 placeholder="Procure pelo nome do servidor/funcionário"
                 iconeBusca

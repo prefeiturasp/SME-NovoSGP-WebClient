@@ -1,26 +1,27 @@
+import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import $ from 'jquery';
 import * as moment from 'moment';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Auditoria, CampoData, Loader, momentSchema } from '~/componentes';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
-import {
-  SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_SALVAR_ALTERAR,
-} from '~/constantes/ids/button';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import SelectComponent from '~/componentes/select';
-import RotasDto from '~/dtos/rotasDto';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR_ALTERAR,
+} from '~/constantes/ids/button';
 import {
   limparDadosPlanejamento,
   setAlterouCaixaSelecao,
@@ -29,17 +30,16 @@ import {
   setPlanejamentoExpandido,
   setPlanejamentoSelecionado,
 } from '~/redux/modulos/devolutivas/actions';
-import { confirmar, erros, sucesso } from '~/servicos/alertas';
-import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ServicoDevolutivas from '~/servicos/Paginas/DiarioClasse/ServicoDevolutivas';
 import ServicoDiarioBordo from '~/servicos/Paginas/DiarioClasse/ServicoDiarioBordo';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import DadosPlanejamentoDiarioBordo from './DadosPlanejamentoDiarioBordo/dadosPlanejamentoDiarioBordo';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { confirmar, erros, sucesso } from '~/servicos/alertas';
+import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { removerTagsHtml } from '~/utils';
+import DadosPlanejamentoDiarioBordo from './DadosPlanejamentoDiarioBordo/dadosPlanejamentoDiarioBordo';
 
 const DevolutivasForm = () => {
   const dispatch = useDispatch();
@@ -71,7 +71,7 @@ const DevolutivasForm = () => {
   const [modoEdicao, setModoEdicao] = useState(false);
   const [datasParaHabilitar, setDatasParaHabilitar] = useState();
   const [refForm, setRefForm] = useState({});
-  const permissoesTela = usuario.permissoes[RotasDto.DEVOLUTIVAS];
+  const permissoesTela = usuario.permissoes[ROUTES.DEVOLUTIVAS];
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
   const [exibirCampoDescricao, setExibirCampoDescricao] = useState(false);
   const [periodoLetivo, setPeriodoLetivo] = useState();
@@ -175,7 +175,7 @@ const DevolutivasForm = () => {
       setBreadcrumbManual(
         location.pathname,
         'Alterar Devolutiva',
-        RotasDto.DEVOLUTIVAS
+        ROUTES.DEVOLUTIVAS
       );
 
       dispatch(setPlanejamentoExpandido(false));
@@ -203,13 +203,13 @@ const DevolutivasForm = () => {
 
     if (!infantil) {
       resetarTela();
-      navigate(RotasDto.DEVOLUTIVAS);
+      navigate(ROUTES.DEVOLUTIVAS);
     }
   }, [turmaSelecionada, modalidadesFiltroPrincipal, resetarTela]);
 
   useEffect(() => {
     if (!turmaSelecionada.turma) {
-      navigate(RotasDto.DEVOLUTIVAS);
+      navigate(ROUTES.DEVOLUTIVAS);
     }
     resetarTela();
   }, [turmaSelecionada.turma, resetarTela]);
@@ -535,13 +535,13 @@ const DevolutivasForm = () => {
       if (confirmado) {
         const salvou = await validaAntesDoSubmit(form);
         if (salvou) {
-          navigate(RotasDto.DEVOLUTIVAS);
+          navigate(ROUTES.DEVOLUTIVAS);
         }
       } else {
-        navigate(RotasDto.DEVOLUTIVAS);
+        navigate(ROUTES.DEVOLUTIVAS);
       }
     } else {
-      navigate(RotasDto.DEVOLUTIVAS);
+      navigate(ROUTES.DEVOLUTIVAS);
     }
   };
 
@@ -559,7 +559,7 @@ const DevolutivasForm = () => {
 
         if (deletou && deletou.status === 200) {
           sucesso('Registro excluído com sucesso.');
-          navigate(RotasDto.DEVOLUTIVAS);
+          navigate(ROUTES.DEVOLUTIVAS);
         }
       }
     }
@@ -657,7 +657,7 @@ const DevolutivasForm = () => {
                     onClick={async () => {
                       const salvou = await validaAntesDoSubmit(form, true);
                       if (salvou) {
-                        navigate(RotasDto.DEVOLUTIVAS);
+                        navigate(ROUTES.DEVOLUTIVAS);
                       }
                     }}
                     disabled={

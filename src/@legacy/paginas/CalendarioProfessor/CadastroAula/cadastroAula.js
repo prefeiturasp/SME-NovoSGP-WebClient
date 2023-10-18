@@ -1,51 +1,51 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import queryString from 'query-string';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
-import { Col, Row } from 'antd';
-import Alert from '~/componentes/alert';
 import { Cabecalho } from '~/componentes-sgp';
+import Alert from '~/componentes/alert';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
 import {
-  Card,
-  SelectComponent,
-  Loader,
-  CampoData,
-  RadioGroupButton,
-  Button,
-  Colors,
   Auditoria,
+  Button,
+  CampoData,
+  Card,
+  Colors,
+  Loader,
+  RadioGroupButton,
+  SelectComponent,
 } from '~/componentes';
-import servicoCadastroAula from '~/servicos/Paginas/CalendarioProfessor/CadastroAula/ServicoCadastroAula';
-import { erros, sucesso, confirmar } from '~/servicos/alertas';
-import servicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import CampoNumeroFormik from '~/componentes/campoNumeroFormik/campoNumeroFormik';
 import { aulaDto } from '~/dtos/aulaDto';
+import servicoCadastroAula from '~/servicos/Paginas/CalendarioProfessor/CadastroAula/ServicoCadastroAula';
+import servicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
+import { confirmar, erros, sucesso } from '~/servicos/alertas';
 
-import ExcluirAula from './excluirAula';
-import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
-import RotasDto from '~/dtos/rotasDto';
+import { ROUTES } from '@/core/enum/routes';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { RegistroMigrado } from '~/componentes-sgp/registro-migrado';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import AlterarAula from './alterarAula';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
 } from '~/constantes/ids/button';
+import { SGP_DATA_AULA } from '~/constantes/ids/date';
 import { SGP_INPUT_NUMBER_QUANTIDADE_AULAS } from '~/constantes/ids/input';
-import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 import {
   SGP_RADIO_RECORRENCIA,
   SGP_RADIO_TIPO_AULA,
 } from '~/constantes/ids/radio';
-import { SGP_DATA_AULA } from '~/constantes/ids/date';
+import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 import { ContainerColumnReverseRowAntd } from '~/paginas/Planejamento/Anual/planoAnual.css';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
+import AlterarAula from './alterarAula';
+import ExcluirAula from './excluirAula';
 
 function CadastroDeAula() {
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ function CadastroDeAula() {
   const ehReposicao = somenteReposicao === 'true';
   const permissoesTela = useSelector(state => state.usuario.permissoes);
   const somenteConsulta = verificaSomenteConsulta(
-    permissoesTela[RotasDto.CALENDARIO_PROFESSOR]
+    permissoesTela[ROUTES.CALENDARIO_PROFESSOR]
   );
   const refForm = useRef();
   const modalidadesFiltroPrincipal = useSelector(
@@ -155,10 +155,14 @@ function CadastroDeAula() {
   const obterComponenteSelecionadoPorId = useCallback(
     componenteCurricularId => {
       return listaComponentes.find(
-        c => c.codigoComponenteCurricular === Number(componenteCurricularId) ||
-             c.id === Number(componenteCurricularId)
-             || (c.regencia && (c.codDisciplinaPai === Number(componenteCurricularId)))
-             || (c.territorioSaber && (c.codigoTerritorioSaber === Number(componenteCurricularId)))
+        c =>
+          c.codigoComponenteCurricular === Number(componenteCurricularId) ||
+          c.id === Number(componenteCurricularId) ||
+          (c.regencia &&
+            c.codDisciplinaPai === Number(componenteCurricularId)) ||
+          (c.territorioSaber &&
+            c.codigoComponenteCurricularTerritorioSaber ===
+              Number(componenteCurricularId))
       );
     },
     [listaComponentes]
@@ -262,14 +266,16 @@ function CadastroDeAula() {
       if (componenteSelecionado && dataAula) {
         setCarregandoDados(true);
         servicoCadastroAula
-        .obterGradePorComponenteETurma(
-          turmaSelecionada.turma,
-          componenteSelecionado.territorioSaber ? componenteSelecionado.id : componenteSelecionado.codigoComponenteCurricular,
-          dataAula,
-          id || 0,
-          componenteSelecionado.regencia,
-          tipoAula
-        )
+          .obterGradePorComponenteETurma(
+            turmaSelecionada.turma,
+            componenteSelecionado.territorioSaber
+              ? componenteSelecionado.id
+              : componenteSelecionado.codigoComponenteCurricular,
+            dataAula,
+            id || 0,
+            componenteSelecionado.regencia,
+            tipoAula
+          )
           .then(respostaGrade => {
             setDesabilitarBtnSalvar(false);
             if (respostaGrade.status === 200) {
@@ -303,10 +309,12 @@ function CadastroDeAula() {
   const obterAula = useCallback(async () => {
     const carregarComponentesCurriculares = async idTurma => {
       setCarregandoDados(true);
-      const respostaComponentes = !!(!!id || aula?.disciplinaId) ? await servicoDisciplina
-        .obterDisciplinasTurma(idTurma) : await servicoDisciplina.obterDisciplinasPorTurma(idTurma)
-        .catch(e => erros(e))
-        .finally(() => setCarregandoDados(false));
+      const respostaComponentes = !!(!!id || aula?.disciplinaId)
+        ? await servicoDisciplina.obterDisciplinasTurma(idTurma)
+        : await servicoDisciplina
+            .obterDisciplinasPorTurma(idTurma)
+            .catch(e => erros(e))
+            .finally(() => setCarregandoDados(false));
 
       if (respostaComponentes?.status === 200) {
         setListaComponentes(respostaComponentes.data);
@@ -335,22 +343,29 @@ function CadastroDeAula() {
               setRecorrenciaAulaEmEdicao(resp.data);
             })
             .catch(e => erros(e));
-            if (componentes) {
-              const componenteSelecionado = componentes.find(
-                c =>
-                  String(c.codigoComponenteCurricular) ===
+          if (componentes) {
+            const componenteSelecionado = componentes.find(
+              c =>
+                String(c.codigoComponenteCurricular) ===
                   String(respostaAula.disciplinaId) ||
-                  String(c.id) ===
-                  String(respostaAula.disciplinaId) ||
-                  (c.regencia && String(c.codDisciplinaPai) === respostaAula.disciplinaId) ||
-                  (c.territorioSaber && String(c.codigoTerritorioSaber) === respostaAula.disciplinaId)
-              );
+                String(c.id) === String(respostaAula.disciplinaId) ||
+                (c.regencia &&
+                  String(c.codDisciplinaPai) === respostaAula.disciplinaId) ||
+                (c.territorioSaber &&
+                  String(c.codigoComponenteCurricularTerritorioSaber) ===
+                    respostaAula.disciplinaId)
+            );
 
-              if (componenteSelecionado.codigoComponenteCurricular == respostaAula.disciplinaId||
-                  componenteSelecionado.codigoTerritorioSaber == respostaAula.disciplinaId && componenteSelecionado.territorioSaber){
-                respostaAula.disciplinaId = String(componenteSelecionado.id);
-                setAula(respostaAula);
-              }
+            if (
+              componenteSelecionado.codigoComponenteCurricular ==
+                respostaAula.disciplinaId ||
+              (componenteSelecionado.codigoComponenteCurricularTerritorioSaber ==
+                respostaAula.disciplinaId &&
+                componenteSelecionado.territorioSaber)
+            ) {
+              respostaAula.disciplinaId = String(componenteSelecionado.id);
+              setAula(respostaAula);
+            }
 
             if (componenteSelecionado) {
               carregarGrade(
@@ -830,7 +845,7 @@ function CadastroDeAula() {
                           listaComponentes[0]?.codDisciplinaPai &&
                           listaComponentes[0]?.codDisciplinaPai !== 0
                             ? 'codDisciplinaPai'
-                            :  'id'
+                            : 'id'
                         }
                         valueText="nome"
                         placeholder="Selecione um componente curricular"

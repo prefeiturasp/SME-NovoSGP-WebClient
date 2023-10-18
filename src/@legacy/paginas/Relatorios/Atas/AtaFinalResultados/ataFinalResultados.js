@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { SelectComponent, CheckboxComponent, Loader, RadioGroupButton } from '~/componentes';
+import {
+  CheckboxComponent,
+  Loader,
+  RadioGroupButton,
+  SelectComponent,
+} from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Card from '~/componentes/card';
-import { URL_HOME } from '~/constantes/url';
-import modalidade from '~/dtos/modalidade';
-import RotasDto from '~/dtos/rotasDto';
-import AbrangenciaServico from '~/servicos/Abrangencia';
-import { erros, sucesso } from '~/servicos/alertas';
-import api from '~/servicos/api';
-import ServicoConselhoAtaFinal from '~/servicos/Paginas/ConselhoAtaFinal/ServicoConselhoAtaFinal';
-import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import { OPCAO_TODOS } from '~/constantes/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import FiltroHelper from '~/componentes-sgp/filtro/helper';
+import Card from '~/componentes/card';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
+import { SGP_RADIO_IMPRIMIR_COMPONENTES_SEM_NOTA } from '~/constantes/ids/radio';
 import {
   SGP_SELECT_ANO_LETIVO,
   SGP_SELECT_DRE,
@@ -26,10 +26,13 @@ import {
   SGP_SELECT_UE,
   SGP_SELECT_VISUALIZACAO,
 } from '~/constantes/ids/select';
-import { SGP_RADIO_IMPRIMIR_COMPONENTES_SEM_NOTA } from '~/constantes/ids/radio';
+import { URL_HOME } from '~/constantes/url';
 import { ModalidadeDTO } from '~/dtos';
-import { Label } from '~/componentes';
-import { Switch } from 'antd';
+import modalidade from '~/dtos/modalidade';
+import AbrangenciaServico from '~/servicos/Abrangencia';
+import ServicoConselhoAtaFinal from '~/servicos/Paginas/ConselhoAtaFinal/ServicoConselhoAtaFinal';
+import { erros, sucesso } from '~/servicos/alertas';
+import api from '~/servicos/api';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -37,7 +40,7 @@ const AtaFinalResultados = () => {
   const navigate = useNavigate();
 
   const usuarioStore = useSelector(store => store.usuario);
-  const permissoesTela = usuarioStore.permissoes[RotasDto.ATA_FINAL_RESULTADOS];
+  const permissoesTela = usuarioStore.permissoes[ROUTES.ATA_FINAL_RESULTADOS];
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaSemestre, setListaSemestre] = useState([]);
@@ -54,7 +57,10 @@ const AtaFinalResultados = () => {
   const [turmaId, setTurmaId] = useState();
   const [formato, setFormato] = useState('1');
   const [consideraHistorico, setConsideraHistorico] = useState(false);
-  const [imprimirComponentesQueNaoLancamNota, setImprimirComponentesQueNaoLancamNota] = useState(true);
+  const [
+    imprimirComponentesQueNaoLancamNota,
+    setImprimirComponentesQueNaoLancamNota,
+  ] = useState(true);
 
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [desabilitarBtnFormato, setDesabilitarBtnFormato] = useState(true);
@@ -76,7 +82,6 @@ const AtaFinalResultados = () => {
     { label: 'Sim', value: true },
     { label: 'Não', value: false },
   ];
-
 
   const ehEJA = Number(modalidadeId) === ModalidadeDTO.EJA;
 
@@ -371,7 +376,11 @@ const AtaFinalResultados = () => {
       turmaItinerancia.length === arrayTurmas?.length ||
       (ehModalidadeMedio && !turmaSegundo.length && !turmaTerceiro.length)
     ) {
-      setVisualizacao(`${    listaVisualizacao.find(a => a.desc?.toUpperCase() === 'TURMA')?.valor}`);
+      setVisualizacao(
+        `${
+          listaVisualizacao.find(a => a.desc?.toUpperCase() === 'TURMA')?.valor
+        }`
+      );
       return true;
     }
     return !turmaSegundo.length && !turmaTerceiro.length;

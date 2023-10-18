@@ -1,5 +1,5 @@
+import '@/core/config/bibliotecas-legacy';
 import ReactDOM from 'react-dom/client';
-import '~/bibliotecas-legacy';
 
 import App from './app';
 

@@ -10,6 +10,10 @@ const CampoDinamicoPeriodo = props => {
 
   const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
 
+  const opcionais = questaoAtual?.opcionais
+    ? JSON.parse(questaoAtual?.opcionais)
+    : null;
+
   const obterErroQuestaoAtual = () => {
     return form &&
       form?.touched[questaoAtual?.id] &&
@@ -33,8 +37,12 @@ const CampoDinamicoPeriodo = props => {
           }
           break;
         case 'PERIODO_INICIO_MAIOR_QUE_FIM':
+        case 'PERIODO_FIM_MENOR_QUE_INICIO':
           if (nomeCampo === 'periodoInicio') {
             textoErro = 'Período inicial deve ser menor que o período final';
+          }
+          if (nomeCampo === 'periodoFim') {
+            textoErro = 'Período final deve ser maior que o período inicial';
           }
           break;
 
@@ -49,11 +57,18 @@ const CampoDinamicoPeriodo = props => {
     return '';
   };
 
+  const desabilitarDataFutura = current => {
+    if (current) {
+      return current >= window.moment();
+    }
+    return false;
+  };
+
   return (
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       {label}
       <div className="row">
-        <div className="col-md-2">
+        <div className="col-md">
           <CampoData
             form={form}
             placeholder="Início"
@@ -71,11 +86,14 @@ const CampoDinamicoPeriodo = props => {
               );
               onChange();
             }}
+            desabilitarData={
+              opcionais?.desabilitarDataFutura ? desabilitarDataFutura : null
+            }
           />
           {obterErroPorCampo('periodoInicio')}
         </div>
         <span style={{ marginTop: 5 }}>à</span>
-        <div className="col-md-2">
+        <div className="col-md">
           <CampoData
             form={form}
             placeholder="Fim"
@@ -93,6 +111,9 @@ const CampoDinamicoPeriodo = props => {
               );
               onChange();
             }}
+            desabilitarData={
+              opcionais?.desabilitarDataFutura ? desabilitarDataFutura : null
+            }
           />
           {obterErroPorCampo('periodoFim')}
         </div>
