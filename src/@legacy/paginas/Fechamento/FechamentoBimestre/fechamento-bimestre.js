@@ -11,7 +11,7 @@ import Card from '~/componentes/card';
 import SelectComponent from '~/componentes/select';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { URL_HOME } from '~/constantes/url';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import periodo from '~/dtos/periodo';
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
 import ServicoFechamentoFinal from '~/servicos/Paginas/DiarioClasse/ServicoFechamentoFinal';
@@ -72,8 +72,9 @@ const FechamentoBismestre = () => {
   const [idDisciplinaTerritorioSaber, setIdDisciplinaTerritorioSaber] =
     useState(undefined);
 
-  const ehModaliadeEJA =
-    Number(turmaSelecionada?.modalidade) !== ModalidadeDTO.EJA;
+  const ehModaliadeEJAOuCelp =
+    Number(turmaSelecionada?.modalidade) !== ModalidadeEnum.EJA ||
+    Number(turmaSelecionada?.modalidade) !== ModalidadeEnum.CELP;
 
   const ehIgualPeriodoAnual = periodoFechamento === periodo.Anual;
 
@@ -421,7 +422,7 @@ const FechamentoBismestre = () => {
                       />
                     ) : null}
                   </TabPane>
-                  {ehIgualPeriodoAnual && ehModaliadeEJA ? (
+                  {ehIgualPeriodoAnual && ehModaliadeEJAOuCelp ? (
                     <TabPane
                       tab="3º Bimestre"
                       key="3"
@@ -447,7 +448,7 @@ const FechamentoBismestre = () => {
                       ) : null}
                     </TabPane>
                   ) : null}
-                  {ehIgualPeriodoAnual && ehModaliadeEJA ? (
+                  {ehIgualPeriodoAnual && ehModaliadeEJAOuCelp ? (
                     <TabPane
                       tab="4º Bimestre"
                       key="4"

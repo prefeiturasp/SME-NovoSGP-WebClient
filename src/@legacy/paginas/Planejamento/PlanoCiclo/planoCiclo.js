@@ -14,7 +14,7 @@ import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import tipoPermissao from '~/dtos/tipoPermissao';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import {
@@ -241,7 +241,7 @@ export default function PlanoCiclo() {
         const anoLetivo = String(turmaSelecionada.anoLetivo);
         const codEscola = String(turmaSelecionada.unidadeEscolar);
 
-        if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
+        if (Number(turmaSelecionada.modalidade) === ModalidadeEnum.EJA) {
           setModalidadeEja(true);
         } else {
           setModalidadeEja(false);

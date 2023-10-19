@@ -11,7 +11,7 @@ import {
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import Card from '~/componentes/card';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -188,11 +188,11 @@ const RelatorioLeitura = () => {
     }
 
     if (
-      !desabilitar &&
-      temDreUeSelecionada &&
-      modalidadeId &&
-      modalidadeId === ModalidadeDTO.EJA &&
-      !semestre
+      (!desabilitar &&
+        temDreUeSelecionada &&
+        modalidadeId &&
+        modalidadeId === ModalidadeEnum.EJA) ||
+      (modalidadeId === ModalidadeEnum.CELP && !semestre)
     ) {
       desabilitar = true;
     }
@@ -440,9 +440,10 @@ const RelatorioLeitura = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
+      (modalidadeId &&
+        anoLetivo &&
+        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP)
     ) {
       obterSemestres(modalidadeId, anoLetivo);
     } else {
@@ -475,8 +476,8 @@ const RelatorioLeitura = () => {
   useEffect(() => {
     if (
       modalidadeId &&
-      (Number(modalidadeId) === ModalidadeDTO.ENSINO_MEDIO ||
-        Number(modalidadeId) === ModalidadeDTO.FUNDAMENTAL)
+      (Number(modalidadeId) === ModalidadeEnum.Medio ||
+        Number(modalidadeId) === ModalidadeEnum.Fundamental)
     ) {
       obterAnosEscolaresPorModalidade();
     } else {
@@ -575,9 +576,9 @@ const RelatorioLeitura = () => {
     (async () => {
       if (isSubscribed && anoLetivo && codigoDre && codigoUe && modalidadeId) {
         if (
-          modalidadeId &&
-          String(modalidadeId) === String(ModalidadeDTO.EJA) &&
-          !semestre
+          (modalidadeId &&
+            String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
+          (String(modalidadeId) === String(ModalidadeEnum.CELP) && !semestre)
         ) {
           return;
         }
@@ -755,7 +756,8 @@ const RelatorioLeitura = () => {
                 disabled={
                   !modalidadeId ||
                   listaSemestres?.length === 1 ||
-                  String(modalidadeId) !== String(ModalidadeDTO.EJA)
+                  String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
+                  String(modalidadeId) !== String(ModalidadeEnum.CELP)
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

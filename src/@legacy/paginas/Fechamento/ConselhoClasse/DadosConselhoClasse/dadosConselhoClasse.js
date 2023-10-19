@@ -307,14 +307,16 @@ const DadosConselhoClasse = props => {
           <TabPane tab="2º Bimestre" key="2">
             {bimestreAtual.valor === '2' ? montarDados() : ''}
           </TabPane>
-          {modalidade.toString() !== modalidadeDto.EJA.toString() ? (
+          {modalidade.toString() !== ModalidadeEnum.EJA.toString() ||
+          modalidade.toString() !== ModalidadeEnum.CELP.toString() ? (
             <TabPane tab="3º Bimestre" key="3">
               {bimestreAtual.valor === '3' ? montarDados() : ''}
             </TabPane>
           ) : (
             ''
           )}
-          {modalidade.toString() !== modalidadeDto.EJA.toString() ? (
+          {modalidade.toString() !== ModalidadeEnum.EJA.toString() ||
+          modalidade.toString() !== ModalidadeEnum.CELP.toString() ? (
             <TabPane tab="4º Bimestre" key="4">
               {bimestreAtual.valor === '4' ? montarDados() : ''}
             </TabPane>

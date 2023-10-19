@@ -12,7 +12,7 @@ import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import SelectComponent from '~/componentes/select';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { ROUTES } from '@/core/enum/routes';
 import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
@@ -131,7 +131,10 @@ const CompensacaoAusenciaForm = () => {
 
   useEffect(() => {
     let listaBi = [];
-    if (String(turmaSelecionada.modalidade) === String(modalidade.EJA)) {
+    if (
+      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.EJA) ||
+      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.CELP)
+    ) {
       listaBi = [
         { valor: 1, descricao: '1°' },
         { valor: 2, descricao: '2°' },
@@ -436,7 +439,7 @@ const CompensacaoAusenciaForm = () => {
     limparListas();
     const dentroPeriodo = await podeAlterarNoPeriodo(String(bimestre));
     setForaDoPeriodo(!dentroPeriodo);
-    
+
     if (dentroPeriodo && (disciplina > 0 || form.values.disciplinaId)) {
       let podeEditar = false;
       const valorDisciplina =
@@ -533,7 +536,9 @@ const CompensacaoAusenciaForm = () => {
       const disciplina = disciplinas.data[0];
 
       if (registroNovo) {
-        const disciplinaSelecionada = String(disciplina.codigoComponenteCurricular);
+        const disciplinaSelecionada = String(
+          disciplina.codigoComponenteCurricular
+        );
 
         valoresIniciaisForm.disciplinaId = disciplinaSelecionada;
 

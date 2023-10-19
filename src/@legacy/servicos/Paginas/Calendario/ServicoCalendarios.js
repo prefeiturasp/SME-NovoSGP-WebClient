@@ -16,13 +16,13 @@ class ServicoCalendarios {
   converterModalidade = modalidadeCalendario => {
     switch (modalidadeCalendario) {
       case modalidadeTipoCalendario.EJA:
-        return modalidadeDto.EJA;
+        return ModalidadeEnum.EJA;
       case modalidadeTipoCalendario.CELP:
-        return modalidadeDto.CELP;
+        return ModalidadeEnum.CELP;
       case modalidadeTipoCalendario.Infantil:
-        return modalidadeDto.INFANTIL;
+        return ModalidadeEnum.INFANTIL;
       case modalidadeTipoCalendario.FUNDAMENTAL_MEDIO:
-        return modalidadeDto.FUNDAMENTAL;
+        return ModalidadeEnum.Fundamental;
       default:
         return null;
     }

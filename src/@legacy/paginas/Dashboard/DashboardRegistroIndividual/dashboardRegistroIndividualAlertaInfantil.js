@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { AlertaPermiteSomenteTurmaInfantil } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const DashboardRegistroIndividualAlertaInfantil = () => {
   const { ue } = useSelector(
@@ -19,7 +19,7 @@ const DashboardRegistroIndividualAlertaInfantil = () => {
     if (!ue) return true;
 
     if (ue?.codigo === OPCAO_TODOS) {
-      return modalidade && Number(modalidade) !== ModalidadeDTO.INFANTIL;
+      return modalidade && Number(modalidade) !== ModalidadeEnum.INFANTIL;
     }
 
     return !ue?.ehInfantil;

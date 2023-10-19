@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ROUTES } from '@/core/enum/routes';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   setDesabilitarCamposPlanoAula,
   setExibirSwitchEscolhaObjetivos,
@@ -62,13 +62,14 @@ const DadosPlanoAula = props => {
 
   useEffect(() => {
     const ehEja = !!(
-      turmaSelecionada &&
-      String(turmaSelecionada.modalidade) === String(modalidade.EJA)
+      (turmaSelecionada &&
+        String(turmaSelecionada.modalidade) === String(ModalidadeEnum.EJA)) ||
+      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.CELP)
     );
 
     const ehMedio = !!(
       turmaSelecionada &&
-      String(turmaSelecionada.modalidade) === String(modalidade.ENSINO_MEDIO)
+      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.Medio)
     );
 
     const esconderSwitch =

@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
 import { erros, ServicoComunicados } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
@@ -12,14 +12,8 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaTurmas, setListaTurmas] = useState([]);
 
-  const {
-    anoLetivo,
-    codigoUe,
-    modalidades,
-    semestre,
-    anosEscolares,
-    turmas,
-  } = form.values;
+  const { anoLetivo, codigoUe, modalidades, semestre, anosEscolares, turmas } =
+    form.values;
 
   const dispatch = useDispatch();
 
@@ -27,7 +21,9 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const ehTodasUe = codigoUe === OPCAO_TODOS;
 
   const temModalidadeEja = modalidades?.find(
-    item => String(item) === String(ModalidadeDTO.EJA)
+    item =>
+      String(item) === String(ModalidadeEnum.EJA) ||
+      String(item) === String(ModalidadeEnum.CELP)
   );
 
   const nomeCampo = 'turmas';
@@ -71,7 +67,6 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaTurmas([]);
       form.setFieldValue(nomeCampo, []);
     }
-
   }, [
     anoLetivo,
     codigoUe,
@@ -89,7 +84,6 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaTurmas([]);
       form.setFieldValue(nomeCampo, []);
     }
-
   }, [anosEscolares, obterTurmas]);
 
   const onChangeAnosEscolares = novosValores => {

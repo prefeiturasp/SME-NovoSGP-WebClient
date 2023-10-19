@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
@@ -13,14 +13,8 @@ import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDash
 const DashboardFrequenciaFiltros = () => {
   const usuario = useSelector(store => store.usuario);
 
-  const {
-    anoLetivo,
-    dre,
-    ue,
-    modalidade,
-    semestre,
-    consideraHistorico,
-  } = useSelector(store => store.dashboardFrequencia?.dadosDashboardFrequencia);
+  const { anoLetivo, dre, ue, modalidade, semestre, consideraHistorico } =
+    useSelector(store => store.dashboardFrequencia?.dadosDashboardFrequencia);
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaDres, setListaDres] = useState([]);
@@ -52,7 +46,13 @@ const DashboardFrequenciaFiltros = () => {
 
     ServicoDashboardFrequencia.atualizarFiltros('anoLetivo', valorAtual);
   };
+  const naoEhEjaOuCelp =
+    Number(modalidade) !== ModalidadeEnum.EJA ||
+    Number(modalidade) !== ModalidadeEnum.CELP;
 
+  const ehEJAOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
 
@@ -260,12 +260,7 @@ const DashboardFrequenciaFiltros = () => {
   }, [consideraHistorico, anoLetivo, modalidade, ue, dre]);
 
   useEffect(() => {
-    if (
-      ue &&
-      modalidade &&
-      anoLetivo &&
-      String(modalidade) === String(ModalidadeDTO.EJA)
-    ) {
+    if (ue && modalidade && anoLetivo && ehEJAOuCelp) {
       obterSemestres();
     } else {
       ServicoDashboardFrequencia.atualizarFiltros('semestre', undefined);
@@ -278,13 +273,14 @@ const DashboardFrequenciaFiltros = () => {
   };
 
   const obterAnosEscolares = useCallback(async () => {
-    const respota = await ServicoDashboardFrequencia.obterAnosEscolaresPorModalidade(
-      anoLetivo,
-      dre?.id,
-      ue?.id,
-      modalidade,
-      semestre
-    ).catch(e => erros(e));
+    const respota =
+      await ServicoDashboardFrequencia.obterAnosEscolaresPorModalidade(
+        anoLetivo,
+        dre?.id,
+        ue?.id,
+        modalidade,
+        semestre
+      ).catch(e => erros(e));
 
     if (respota?.data?.length) {
       if (respota.data.length > 1) {
@@ -429,10 +425,7 @@ const DashboardFrequenciaFiltros = () => {
               lista={listaSemestres}
               valueOption="valor"
               valueText="desc"
-              disabled={
-                listaSemestres?.length === 1 ||
-                Number(modalidade) !== ModalidadeDTO.EJA
-              }
+              disabled={listaSemestres?.length === 1 || naoEhEjaOuCelp}
               onChange={onChangeSemestre}
               valueSelect={semestre}
               placeholder="Selecione um semestre"

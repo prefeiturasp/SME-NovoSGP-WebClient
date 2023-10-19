@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
 import { erros, ServicoComunicados } from '~/servicos';
 
@@ -13,7 +13,9 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const { anoLetivo, codigoUe, modalidades } = form.values;
 
   const temModalidadeEja = modalidades?.find(
-    item => String(item) === String(ModalidadeDTO.EJA)
+    item =>
+      String(item) === String(ModalidadeEnum.EJA) ||
+      String(item) === String(ModalidadeEnum.CELP)
   );
 
   const dispatch = useDispatch();
@@ -25,7 +27,7 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
     // TODO: VERIFICAR SOBRE O CONSIDERA HISTÓRICO!
     const retorno = await ServicoComunicados.obterSemestres(
       false,
-      ModalidadeDTO.EJA,
+      ModalidadeEnum.EJA,
       anoLetivo,
       codigoUe
     )
@@ -47,19 +49,17 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaSemestres([]);
     }
-
   }, [anoLetivo, codigoUe]);
 
   useEffect(() => {
     if (modalidades?.length) {
       if (modalidades?.length && temModalidadeEja) {
-        obterSemestres(ModalidadeDTO.EJA);
+        obterSemestres(ModalidadeEnum.EJA);
       }
     } else {
       form.setFieldValue(nomeCampo, undefined);
       setListaSemestres([]);
     }
-
   }, [modalidades, obterSemestres]);
 
   return (

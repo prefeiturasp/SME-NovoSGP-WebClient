@@ -11,7 +11,7 @@ import {
 } from '~/constantes/ids/select';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import api from '~/servicos/api';
 import { obterTodosMeses, ordenarListaMaiorParaMenor } from '~/utils';
@@ -48,6 +48,13 @@ const DashboardNAAPAFiltros = () => {
   const [listaSemestres, setListaSemestres] = useState([]);
 
   const ANO_MINIMO = 2020;
+  const naoEhEjaOuCelp =
+    Number(modalidade) !== ModalidadeEnum.EJA ||
+    Number(modalidade) !== ModalidadeEnum.CELP;
+
+  const ehEjaOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
@@ -273,7 +280,7 @@ const DashboardNAAPAFiltros = () => {
   }, [modalidade, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (modalidade && anoLetivo && Number(modalidade) === ModalidadeDTO.EJA) {
+    if (modalidade && anoLetivo && ehEjaOuCelp) {
       setSemestre();
       obterSemestres();
     } else {
@@ -398,9 +405,7 @@ const DashboardNAAPAFiltros = () => {
               valueText="desc"
               label="Semestre"
               disabled={
-                !modalidade ||
-                listaSemestres?.length === 1 ||
-                Number(modalidade) !== ModalidadeDTO.EJA
+                !modalidade || listaSemestres?.length === 1 || naoEhEjaOuCelp
               }
               valueSelect={semestre}
               onChange={onChangeSemestre}

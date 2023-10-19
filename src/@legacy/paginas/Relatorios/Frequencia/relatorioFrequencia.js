@@ -12,7 +12,7 @@ import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 import { URL_HOME, OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   onchangeMultiSelect,
   ordenarListaMaiorParaMenor,
@@ -93,8 +93,10 @@ const RelatorioFrequencia = () => {
   };
   const OPCAO_TODOS_ESTUDANTES = '4';
   const ehTurma = tipoRelatorio === TIPO_RELATORIO.TURMA;
-  const ehEJA = Number(modalidadeId) === ModalidadeDTO.EJA;
-  const ehInfantil = Number(modalidadeId) === ModalidadeDTO.INFANTIL;
+  const ehEJAOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
+  const ehInfantil = Number(modalidadeId) === ModalidadeEnum.INFANTIL;
 
   const opcoesListarTurmasDePrograma = [
     { label: 'Sim', value: true },
@@ -293,8 +295,9 @@ const RelatorioFrequencia = () => {
 
   const obterAnosEscolares = useCallback(async (mod, ue) => {
     if (
-      Number(mod) === ModalidadeDTO.EJA ||
-      Number(mod) === ModalidadeDTO.INFANTIL
+      Number(mod) === ModalidadeEnum.EJA ||
+      Number(mod) === ModalidadeEnum.CELP ||
+      Number(mod) === ModalidadeEnum.INFANTIL
     ) {
       setListaAnosEscolares([{ descricao: 'Todos', valor: OPCAO_TODOS }]);
       setAnosEscolares([OPCAO_TODOS]);
@@ -408,7 +411,8 @@ const RelatorioFrequencia = () => {
         .catch(e => erros(e))
         .finally(() => setCarregandoComponentesCurriculares(false));
       if (retorno?.data?.length) {
-        const nomeParametro = ehInfantil && !(codigoUe === OPCAO_TODOS) ? 'nome' : 'descricao';
+        const nomeParametro =
+          ehInfantil && !(codigoUe === OPCAO_TODOS) ? 'nome' : 'descricao';
         const lista = retorno.data.map(item => ({
           desc: item[nomeParametro],
           valor: String(item.codigo),
@@ -480,9 +484,10 @@ const RelatorioFrequencia = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      Number(modalidadeId) === ModalidadeDTO.EJA
+      (modalidadeId &&
+        anoLetivo &&
+        Number(modalidadeId) === ModalidadeEnum.EJA) ||
+      Number(modalidadeId) === ModalidadeEnum.CELP
     ) {
       obterSemestres();
       return;
@@ -493,7 +498,8 @@ const RelatorioFrequencia = () => {
 
   useEffect(() => {
     const desabilitado =
-      String(modalidadeId) === String(ModalidadeDTO.EJA) && !semestre;
+      String(modalidadeId) === String(ModalidadeEnum.EJA) ||
+      (String(modalidadeId) === String(ModalidadeEnum.CELP) && !semestre);
 
     setDesabilitarSemestre(desabilitado);
   }, [modalidadeId, semestre]);
@@ -516,7 +522,7 @@ const RelatorioFrequencia = () => {
       desabilitar = !valorCondicao;
     }
 
-    if (Number(modalidadeId) === ModalidadeDTO.EJA) {
+    if (Number(modalidadeId) === ModalidadeEnum.EJA) {
       setDesabilitarBtnGerar(!semestre || desabilitar);
       return;
     }
@@ -761,12 +767,12 @@ const RelatorioFrequencia = () => {
 
   useEffect(() => {
     if (modalidadeId && codigoUe) {
-      obterTurmas(modalidadeId, codigoUe, anoLetivo, semestre, ehEJA);
+      obterTurmas(modalidadeId, codigoUe, anoLetivo, semestre, ehEJAOuCelp);
       return;
     }
     setTurmasCodigo();
     setListaTurmas([]);
-  }, [modalidadeId, codigoUe, anoLetivo, semestre, obterTurmas, ehEJA]);
+  }, [modalidadeId, codigoUe, anoLetivo, semestre, obterTurmas, ehEJAOuCelp]);
 
   useEffect(() => {
     if (ehTurma) {
@@ -894,7 +900,9 @@ const RelatorioFrequencia = () => {
                     valueText="desc"
                     label="Semestre"
                     disabled={
-                      !modalidadeId || !ehEJA || listaSemestre?.length === 1
+                      !modalidadeId ||
+                      !ehEJAOuCelp ||
+                      listaSemestre?.length === 1
                     }
                     valueSelect={semestre}
                     onChange={onChangeSemestre}
@@ -980,7 +988,7 @@ const RelatorioFrequencia = () => {
                     disabled={
                       !modalidadeId ||
                       listaTurmas?.length === 1 ||
-                      (ehEJA && !semestre)
+                      (ehEJAOuCelp && !semestre)
                     }
                     valueSelect={turmasCodigo}
                     onChange={valores => {

@@ -10,7 +10,7 @@ import {
 } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   AbrangenciaServico,
   erros,
@@ -25,9 +25,8 @@ import { onchangeMultiSelect } from '~/utils';
 const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
-  const [atualizaFiltrosAvançados, setAtualizaFiltrosAvançados] = useState(
-    false
-  );
+  const [atualizaFiltrosAvançados, setAtualizaFiltrosAvançados] =
+    useState(false);
   const [buscou, setBuscou] = useState(false);
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
@@ -38,10 +37,8 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
   const [dreCodigo, setDreCodigo] = useState();
   const [dreId, setDreId] = useState();
   const [filtrosPrincipais, setFiltrosPrincipais] = useState();
-  const [
-    habilitaConsideraHistorico,
-    setHabilitaConsideraHistorico,
-  ] = useState();
+  const [habilitaConsideraHistorico, setHabilitaConsideraHistorico] =
+    useState();
   const [listaAnosLetivo, setListaAnosLetivo] = useState({});
   const [listaDres, setListaDres] = useState([]);
   const [listaModalidades, setListaModalidades] = useState([]);
@@ -211,12 +208,11 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
   const obterModalidades = useCallback(async ue => {
     if (ue) {
       setCarregandoModalidade(true);
-      const {
-        data,
-      } = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-        ue,
-        true
-      ).finally(() => setCarregandoModalidade(false));
+      const { data } =
+        await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
+          ue,
+          true
+        ).finally(() => setCarregandoModalidade(false));
 
       if (data?.length) {
         const lista = data.map(item => ({
@@ -283,10 +279,17 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
 
   useEffect(() => {
     const temEja = modalidades?.find(
-      item => String(item) === String(ModalidadeDTO.EJA)
+      item => String(item) === String(ModalidadeEnum.EJA)
+    );
+    const temCelp = modalidades?.find(
+      item => String(item) === String(ModalidadeEnum.CELP)
     );
     if (modalidades?.length && anoLetivo && temEja) {
-      obterSemestres(ModalidadeDTO.EJA, anoLetivo);
+      obterSemestres(ModalidadeEnum.EJA, anoLetivo);
+      return;
+    }
+    if (modalidades?.length && anoLetivo && temCelp) {
+      obterSemestres(ModalidadeEnum.CELP, anoLetivo);
       return;
     }
     setSemestre();

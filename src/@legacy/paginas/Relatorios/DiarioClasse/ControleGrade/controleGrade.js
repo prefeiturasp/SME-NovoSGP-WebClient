@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import Card from '~/componentes/card';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -268,7 +268,10 @@ const ControleGrade = () => {
   }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
 
   useEffect(() => {
-    if (String(modalidadeId) === String(modalidade.EJA)) {
+    if (
+      String(modalidadeId) === String(ModalidadeEnum.EJA) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP)
+    ) {
       setListaBimestres(bimestresEja);
     } else {
       setListaBimestres(bimestresFundMedio);
@@ -374,7 +377,7 @@ const ControleGrade = () => {
       setListaComponentesCurriculares([]);
     }
   }, [ueId, turmaId]);
-  
+
   const obterSemestres = async (
     modalidadeSelecionada,
     anoLetivoSelecionado
@@ -400,9 +403,10 @@ const ControleGrade = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(modalidade.EJA)
+      (modalidadeId &&
+        anoLetivo &&
+        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP)
     ) {
       obterSemestres(modalidadeId, anoLetivo);
     } else {
@@ -430,7 +434,10 @@ const ControleGrade = () => {
       !dreId ||
       !ueId ||
       !modalidadeId ||
-      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      (String(modalidadeId) === String(ModalidadeEnum.EJA) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP)
+        ? !semestre
+        : false) ||
       !turmaId ||
       !componentesCurricularesId ||
       !bimestre ||
@@ -582,7 +589,8 @@ const ControleGrade = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(modalidade.EJA)
+                    String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
+                    String(modalidadeId) !== String(ModalidadeEnum.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

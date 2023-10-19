@@ -66,15 +66,18 @@ const ListaoPaginado = () => {
   const [filtros, setFiltros] = useState({});
   const [colunas, setColunas] = useState([]);
 
-  const temSemetreQuandoEja =
-    modalidade === String(ModalidadeDTO.EJA) ? !!semestre : true;
+  const temSemetreQuandoEjaouCelp =
+    modalidade === String(ModalidadeEnum.EJA) ||
+    modalidade === String(ModalidadeEnum.CELP)
+      ? !!semestre
+      : true;
 
   const filtroEhValido = !!(
     anoLetivo &&
     codigoDre &&
     codigoUe &&
     modalidade &&
-    temSemetreQuandoEja &&
+    temSemetreQuandoEjaouCelp &&
     codigoTurma &&
     bimestre
   );
@@ -261,7 +264,7 @@ const ListaoPaginado = () => {
       },
     ];
 
-    if (modalidade === String(ModalidadeDTO.INFANTIL) && !ehBimestreFinal) {
+    if (modalidade === String(ModalidadeEnum.INFANTIL) && !ehBimestreFinal) {
       cols.push(
         {
           title: 'Frequência',
@@ -278,7 +281,7 @@ const ListaoPaginado = () => {
       );
     }
 
-    if (modalidade !== String(ModalidadeDTO.INFANTIL) && !ehBimestreFinal) {
+    if (modalidade !== String(ModalidadeEnum.INFANTIL) && !ehBimestreFinal) {
       cols.push(
         {
           title: 'Frequência',

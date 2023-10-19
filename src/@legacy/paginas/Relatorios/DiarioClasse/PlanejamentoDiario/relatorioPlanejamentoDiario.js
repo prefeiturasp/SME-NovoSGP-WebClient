@@ -8,7 +8,7 @@ import {
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import Card from '~/componentes/card';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -180,11 +180,11 @@ const RelatorioPlanejamentoDiario = () => {
     }
 
     if (
-      !desabilitar &&
-      temDreUeSelecionada &&
-      modalidadeId &&
-      modalidadeId === ModalidadeDTO.EJA &&
-      !semestre
+      (!desabilitar &&
+        temDreUeSelecionada &&
+        modalidadeId &&
+        modalidadeId === ModalidadeEnum.EJA) ||
+      (modalidadeId === ModalidadeEnum.CELP && !semestre)
     ) {
       desabilitar = true;
     }
@@ -490,9 +490,10 @@ const RelatorioPlanejamentoDiario = () => {
 
   useEffect(() => {
     if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
+      (modalidadeId &&
+        anoLetivo &&
+        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP)
     ) {
       obterSemestres();
     } else {
@@ -647,7 +648,8 @@ const RelatorioPlanejamentoDiario = () => {
                 disabled={
                   !modalidadeId ||
                   listaSemestres?.length === 1 ||
-                  String(modalidadeId) !== String(ModalidadeDTO.EJA)
+                  String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
+                  String(modalidadeId) !== String(ModalidadeEnum.CELP)
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}
