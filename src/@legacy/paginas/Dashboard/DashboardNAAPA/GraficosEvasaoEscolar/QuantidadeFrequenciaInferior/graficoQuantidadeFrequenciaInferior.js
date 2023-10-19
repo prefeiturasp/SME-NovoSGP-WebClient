@@ -105,7 +105,7 @@ const GraficoQuantidadeFrequenciaInferior = () => {
         {dadosGrafico?.length ? (
           <GraficoBarras
             data={dadosGrafico}
-            xAxisVisible={ue.codigo === '-99' ? false : true}
+            xAxisVisible={ue.codigo !== '-99'}
             legendVisible={false}
           />
         ) : !exibirLoader ? (

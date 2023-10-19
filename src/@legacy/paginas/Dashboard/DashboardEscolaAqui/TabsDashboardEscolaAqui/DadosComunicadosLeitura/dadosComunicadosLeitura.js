@@ -94,6 +94,9 @@ const DadosComunicadosLeitura = props => {
   const [visualizacao, setVisualizacao] = useState('1');
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
+  const ehEJAOuCelp =
+    String(modalidadeId) === String(ModalidadeEnum.EJA) ||
+    String(modalidadeId) === String(ModalidadeEnum.CELP);
 
   const obterAnosLetivos = useCallback(async () => {
     setExibirLoader(true);
@@ -187,11 +190,7 @@ const DadosComunicadosLeitura = props => {
   }, [modalidadeId, codigoUe]);
 
   useEffect(() => {
-    if (
-      modalidadeId &&
-      (Number(modalidadeId) === ModalidadeEnum.Medio ||
-        Number(modalidadeId) === ModalidadeEnum.Fundamental)
-    ) {
+    if (modalidadeId && ehEJAOuCelp) {
       obterAnosEscolaresPorModalidade();
     } else {
       setAnosEscolares();
@@ -220,12 +219,7 @@ const DadosComunicadosLeitura = props => {
   }, [modalidadeId, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (
-      (modalidadeId &&
-        anoLetivo &&
-        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP)
-    ) {
+    if (modalidadeId && anoLetivo && ehEJAOuCelp) {
       obterSemestres();
     } else {
       setSemestre();
@@ -331,11 +325,7 @@ const DadosComunicadosLeitura = props => {
     let isSubscribed = true;
     (async () => {
       if (isSubscribed && anoLetivo && codigoDre && codigoUe && modalidadeId) {
-        if (
-          (modalidadeId &&
-            String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
-          (String(modalidadeId) === String(ModalidadeEnum.CELP) && !semestre)
-        ) {
+        if (modalidadeId && ehEJAOuCelp && !semestre) {
           return;
         }
 
@@ -590,8 +580,7 @@ const DadosComunicadosLeitura = props => {
                 disabled={
                   !modalidadeId ||
                   (listaSemestres && listaSemestres.length === 1) ||
-                  String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
-                  String(modalidadeId) !== String(ModalidadeEnum.CELP)
+                  ehEJAOuCelp
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

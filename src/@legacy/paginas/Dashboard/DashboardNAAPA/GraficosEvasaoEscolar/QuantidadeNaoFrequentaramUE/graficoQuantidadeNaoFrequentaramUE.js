@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
-import { OPCAO_TODOS } from '~/constantes';
 import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { erros } from '~/servicos';
 import ServicoDashboardNAAPA from '~/servicos/Paginas/Dashboard/ServicoDashboardNAAPA';
@@ -105,7 +104,7 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
         {dadosGrafico?.length ? (
           <GraficoBarras
             data={dadosGrafico}
-            xAxisVisible={ue.codigo === '-99' ? false : true}
+            xAxisVisible={ue.codigo !== '-99'}
             legendVisible={false}
           />
         ) : !exibirLoader ? (

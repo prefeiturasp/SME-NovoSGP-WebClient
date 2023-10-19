@@ -56,7 +56,13 @@ const DashboardFechamentoFiltros = () => {
 
     ServicoDashboardFechamento.atualizarFiltros('anoLetivo', valorAtual);
   };
+  const naoEhEJAOuCelp =
+    Number(modalidade) !== ModalidadeEnum.EJA ||
+    Number(modalidade) !== ModalidadeEnum.CELP;
 
+  const ehEJAOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
 
@@ -269,13 +275,7 @@ const DashboardFechamentoFiltros = () => {
   }, [consideraHistorico, anoLetivo, modalidade]);
 
   useEffect(() => {
-    if (
-      (ue &&
-        modalidade &&
-        anoLetivo &&
-        String(modalidade) === String(ModalidadeEnum.EJA)) ||
-      String(modalidade) === String(ModalidadeEnum.CELP)
-    ) {
+    if (ue && modalidade && anoLetivo && ehEJAOuCelp) {
       obterSemestres();
     } else {
       ServicoDashboardFechamento.atualizarFiltros('semestre', undefined);
@@ -414,11 +414,7 @@ const DashboardFechamentoFiltros = () => {
               lista={listaSemestres}
               valueOption="valor"
               valueText="desc"
-              disabled={
-                listaSemestres?.length === 1 ||
-                Number(modalidade) !== ModalidadeEnum.EJA ||
-                Number(modalidade) !== ModalidadeEnum.CELP
-              }
+              disabled={listaSemestres?.length === 1 || naoEhEJAOuCelp}
               onChange={onChangeSemestre}
               valueSelect={semestre}
               placeholder="Selecione um semestre"

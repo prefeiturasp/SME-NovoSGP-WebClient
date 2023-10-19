@@ -48,6 +48,13 @@ const DashboardNAAPAFiltros = () => {
   const [listaSemestres, setListaSemestres] = useState([]);
 
   const ANO_MINIMO = 2020;
+  const naoEhEjaOuCelp =
+    Number(modalidade) !== ModalidadeEnum.EJA ||
+    Number(modalidade) !== ModalidadeEnum.CELP;
+
+  const ehEjaOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
@@ -273,10 +280,7 @@ const DashboardNAAPAFiltros = () => {
   }, [modalidade, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (
-      (modalidade && anoLetivo && Number(modalidade) === ModalidadeEnum.EJA) ||
-      Number(modalidade) === ModalidadeEnum.CELP
-    ) {
+    if (modalidade && anoLetivo && ehEjaOuCelp) {
       setSemestre();
       obterSemestres();
     } else {
@@ -401,10 +405,7 @@ const DashboardNAAPAFiltros = () => {
               valueText="desc"
               label="Semestre"
               disabled={
-                !modalidade ||
-                listaSemestres?.length === 1 ||
-                Number(modalidade) !== ModalidadeEnum.EJA ||
-                Number(modalidade) !== ModalidadeEnum.CELP
+                !modalidade || listaSemestres?.length === 1 || naoEhEjaOuCelp
               }
               valueSelect={semestre}
               onChange={onChangeSemestre}

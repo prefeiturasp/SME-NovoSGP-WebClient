@@ -46,7 +46,13 @@ const DashboardFrequenciaFiltros = () => {
 
     ServicoDashboardFrequencia.atualizarFiltros('anoLetivo', valorAtual);
   };
+  const naoEhEjaOuCelp =
+    Number(modalidade) !== ModalidadeEnum.EJA ||
+    Number(modalidade) !== ModalidadeEnum.CELP;
 
+  const ehEJAOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
 
@@ -254,13 +260,7 @@ const DashboardFrequenciaFiltros = () => {
   }, [consideraHistorico, anoLetivo, modalidade, ue, dre]);
 
   useEffect(() => {
-    if (
-      (ue &&
-        modalidade &&
-        anoLetivo &&
-        String(modalidade) === String(ModalidadeEnum.EJA)) ||
-      String(modalidade) === String(ModalidadeEnum.CELP)
-    ) {
+    if (ue && modalidade && anoLetivo && ehEJAOuCelp) {
       obterSemestres();
     } else {
       ServicoDashboardFrequencia.atualizarFiltros('semestre', undefined);
@@ -425,11 +425,7 @@ const DashboardFrequenciaFiltros = () => {
               lista={listaSemestres}
               valueOption="valor"
               valueText="desc"
-              disabled={
-                listaSemestres?.length === 1 ||
-                Number(modalidade) !== ModalidadeEnum.EJA ||
-                Number(modalidade) !== ModalidadeEnum.CELP
-              }
+              disabled={listaSemestres?.length === 1 || naoEhEjaOuCelp}
               onChange={onChangeSemestre}
               valueSelect={semestre}
               placeholder="Selecione um semestre"

@@ -20,7 +20,9 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
     store =>
       store.dashboardFrequencia?.dadosDashboardFrequencia?.consideraHistorico
   );
-
+  const ejaOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
   const [anoEscolar, setAnoEscolar] = useState();
@@ -54,9 +56,6 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
   useEffect(() => {
     const consultaPorTurma = ueId && ueId !== OPCAO_TODOS;
     const consultaPorAnoEscolar = ueId === OPCAO_TODOS;
-    const ejaOuCelp =
-      Number(modalidade) === ModalidadeEnum.EJA ||
-      Number(modalidade) === ModalidadeEnum.CELP;
     if (
       anoLetivo &&
       dreId &&
