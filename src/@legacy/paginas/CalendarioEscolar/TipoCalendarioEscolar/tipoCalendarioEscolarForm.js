@@ -379,7 +379,6 @@ const TipoCalendarioEscolarForm = () => {
         initialValues={valoresIniciais}
         validationSchema={validacoes}
         onSubmit={valores => {
-          console.log(valores);
           onClickCadastrar(valores);
         }}
         validateOnChange
