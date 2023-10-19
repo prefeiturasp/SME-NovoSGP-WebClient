@@ -1,6 +1,6 @@
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
+import { ModalidadeTipoCalendarioEnum } from '@/core/enum/modalidade-tipo-calendario-enum';
 import moment from 'moment';
-import modalidadeDto from '~/dtos/modalidade';
-import modalidadeTipoCalendario from '~/dtos/modalidadeTipoCalendario';
 import api from '~/servicos/api';
 
 class ServicoCalendarios {
@@ -15,13 +15,13 @@ class ServicoCalendarios {
 
   converterModalidade = modalidadeCalendario => {
     switch (modalidadeCalendario) {
-      case modalidadeTipoCalendario.EJA:
+      case ModalidadeTipoCalendarioEnum.EJA:
         return ModalidadeEnum.EJA;
-      case modalidadeTipoCalendario.CELP:
+      case ModalidadeTipoCalendarioEnum.CELP:
         return ModalidadeEnum.CELP;
-      case modalidadeTipoCalendario.Infantil:
+      case ModalidadeTipoCalendarioEnum.Infantil:
         return ModalidadeEnum.INFANTIL;
-      case modalidadeTipoCalendario.FUNDAMENTAL_MEDIO:
+      case ModalidadeTipoCalendarioEnum.FUNDAMENTAL_MEDIO:
         return ModalidadeEnum.Fundamental;
       default:
         return null;

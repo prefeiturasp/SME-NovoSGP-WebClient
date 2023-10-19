@@ -1,4 +1,3 @@
-export { default as modalidadeTipoCalendario } from './modalidadeTipoCalendario';
 export { default as periodo } from './periodo';
 export { default as tipoEscolaDTO } from './tipoEscolaDto';
 export { default as situacaoAEE } from './situacaoAEE';

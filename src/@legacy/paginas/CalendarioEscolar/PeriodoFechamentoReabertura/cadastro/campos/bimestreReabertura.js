@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import React, { useContext, useEffect } from 'react';
 import { SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
-import { modalidadeTipoCalendario } from '~/dtos';
 import { onchangeMultiSelect } from '~/utils';
 import FechaReabCadastroContext from '../fechaReabCadastroContext';
+import { ModalidadeTipoCalendarioEnum } from '@/core/enum/modalidade-tipo-calendario-enum';
 
 const BimestreReabertura = ({ form, onChangeCampos }) => {
   const {
@@ -31,8 +31,8 @@ const BimestreReabertura = ({ form, onChangeCampos }) => {
     ];
 
     if (
-      tipoModalidade !== modalidadeTipoCalendario.EJA ||
-      tipoModalidade !== modalidadeTipoCalendario.CELP
+      tipoModalidade !== ModalidadeTipoCalendarioEnum.EJA ||
+      tipoModalidade !== ModalidadeTipoCalendarioEnum.CELP
     ) {
       listaNova.push(
         {

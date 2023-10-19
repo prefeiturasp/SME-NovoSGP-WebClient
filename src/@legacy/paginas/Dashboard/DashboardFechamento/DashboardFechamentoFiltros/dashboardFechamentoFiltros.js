@@ -57,7 +57,7 @@ const DashboardFechamentoFiltros = () => {
     ServicoDashboardFechamento.atualizarFiltros('anoLetivo', valorAtual);
   };
   const naoEhEJAOuCelp =
-    Number(modalidade) !== ModalidadeEnum.EJA ||
+    Number(modalidade) !== ModalidadeEnum.EJA &&
     Number(modalidade) !== ModalidadeEnum.CELP;
 
   const ehEJAOuCelp =

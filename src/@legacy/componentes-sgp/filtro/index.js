@@ -413,7 +413,7 @@ const Filtro = () => {
 
       setCarregandoPeriodos(false);
 
-      if (!ModalidadeEnum) {
+      if (!modalidadeSelecionada) {
         setCampoPeriodoDesabilitado(true);
         return [];
       }
@@ -639,7 +639,7 @@ const Filtro = () => {
     }
 
     if (
-      modalidadeSelecionada.toString() !== ModalidadeEnum.EJA.toString() ||
+      modalidadeSelecionada.toString() !== ModalidadeEnum.EJA.toString() &&
       modalidadeSelecionada.toString() !== ModalidadeEnum.CELP.toString()
     )
       return retornoEstado;
