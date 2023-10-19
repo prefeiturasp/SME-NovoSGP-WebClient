@@ -14,7 +14,7 @@ import {
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 import { ANO_INICIO_INFANTIL, OPCAO_TODOS } from '~/constantes/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   AbrangenciaServico,
   erros,
@@ -23,8 +23,7 @@ import {
   ServicoRelatorioDevolutivas,
   sucesso,
 } from '~/servicos';
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate } from 'react-router-dom';
 
 const RelatorioDevolutivas = () => {
   const navigate = useNavigate();
@@ -314,7 +313,7 @@ const RelatorioDevolutivas = () => {
 
   const verificarAbrangencia = data => {
     const modalidadeInfatil = data.filter(
-      item => String(item.valor) === String(ModalidadeDTO.INFANTIL)
+      item => Number(item.valor) === ModalidadeEnum.INFANTIL
     );
     if (!modalidadeInfatil.length) {
       setNaoEhInfantil(true);
@@ -338,7 +337,7 @@ const RelatorioDevolutivas = () => {
         setListaModalidades(lista);
         let naoInfantil = true;
         if (lista?.length === 1) {
-          if (String(lista[0].valor) === String(ModalidadeDTO.INFANTIL)) {
+          if (Number(lista[0].valor) === ModalidadeEnum.INFANTIL) {
             setModalidadeId(lista[0].valor);
             naoInfantil = false;
           }
@@ -443,7 +442,10 @@ const RelatorioDevolutivas = () => {
     bi.push({ desc: '1º', valor: 1 });
     bi.push({ desc: '2º', valor: 2 });
 
-    if (modalidadeId !== ModalidadeDTO.EJA) {
+    if (
+      Number(modalidadeId) !== ModalidadeEnum.EJA &&
+      Number(modalidadeId) !== ModalidadeEnum.CELP
+    ) {
       bi.push({ desc: '3º', valor: 3 });
       bi.push({ desc: '4º', valor: 4 });
     }
@@ -537,7 +539,7 @@ const RelatorioDevolutivas = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [turmaId]);
-  
+
   return (
     <Loader loading={exibirLoaderGeral}>
       {naoEhInfantil && (

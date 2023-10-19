@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros } from '~/servicos';
 import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
 
@@ -20,7 +20,9 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
     store =>
       store.dashboardFrequencia?.dadosDashboardFrequencia?.consideraHistorico
   );
-
+  const ejaOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
   const [anoEscolar, setAnoEscolar] = useState();
@@ -31,17 +33,18 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardFrequencia.obterQuantidadeJustificativasMotivo(
-      anoLetivo,
-      dreId === OPCAO_TODOS ? '' : dreId,
-      ueId === OPCAO_TODOS ? '' : ueId,
-      modalidade,
-      semestre,
-      anoEscolar === OPCAO_TODOS ? '' : anoEscolar,
-      turmaId === OPCAO_TODOS ? '' : turmaId
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardFrequencia.obterQuantidadeJustificativasMotivo(
+        anoLetivo,
+        dreId === OPCAO_TODOS ? '' : dreId,
+        ueId === OPCAO_TODOS ? '' : ueId,
+        modalidade,
+        semestre,
+        anoEscolar === OPCAO_TODOS ? '' : anoEscolar,
+        turmaId === OPCAO_TODOS ? '' : turmaId
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno?.data?.length) {
       setDadosGrafico(retorno.data);
@@ -53,13 +56,12 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
   useEffect(() => {
     const consultaPorTurma = ueId && ueId !== OPCAO_TODOS;
     const consultaPorAnoEscolar = ueId === OPCAO_TODOS;
-
     if (
       anoLetivo &&
       dreId &&
       ueId &&
       modalidade &&
-      !!(Number(modalidade) === ModalidadeDTO.EJA ? semestre : !semestre) &&
+      !!(ejaOuCelp ? semestre : !semestre) &&
       ((consultaPorTurma && turmaId) || (consultaPorAnoEscolar && anoEscolar))
     ) {
       obterDadosGrafico();
@@ -133,7 +135,6 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
       setTurmaId();
       setListaTurmas([]);
     }
-
   }, [modalidade]);
 
   const onChangeTurma = valor => setTurmaId(valor);

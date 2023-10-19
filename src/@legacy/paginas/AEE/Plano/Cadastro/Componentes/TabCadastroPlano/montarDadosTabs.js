@@ -3,13 +3,14 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
-import { RotasDto, situacaoPlanoAEE } from '~/dtos';
+import { situacaoPlanoAEE } from '~/dtos';
 import { setTypePlanoAEECadastro } from '~/redux/modulos/planoAEE/actions';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import SecaoParecerPlanoCollapse from '../SecaoParecerPlanoCollapse/secaoParecerPlanoCollapse';
 import SecaoPlanoCollapse from '../SecaoPlanoCollapse/secaoPlanoCollapse';
 import SecaoReestruturacaoPlano from '../SecaoReestruturacaoPlano/secaoReestruturacaoPlano';
 import AddResponsavelCadastroPlano from './addResponsavelCadastroPlano';
+import { ROUTES } from '@/core/enum/routes';
 
 const { TabPane } = Tabs;
 

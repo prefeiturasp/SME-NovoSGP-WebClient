@@ -1,4 +1,4 @@
-import { ModalidadeDTO } from '@/@legacy/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { Formik } from 'formik';
 import { useContext } from 'react';
 import * as Yup from 'yup';
@@ -27,10 +27,12 @@ const RelatorioDinamicoNAAPAConteudo = () => {
         textoCampoObrigatorio,
         function validar() {
           const { modalidade, semestre } = this.parent;
-          const temModalidadeEja = Number(modalidade) === ModalidadeDTO.EJA;
+          const temModalidadeEjaOuCelp =
+            Number(modalidade) === ModalidadeEnum.EJA ||
+            Number(modalidade) === ModalidadeEnum.CELP;
 
           let ehValido = true;
-          if (!temModalidadeEja) {
+          if (!temModalidadeEjaOuCelp) {
             return ehValido;
           }
           if (!semestre) {

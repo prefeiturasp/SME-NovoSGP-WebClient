@@ -8,7 +8,7 @@ import {
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import Card from '~/componentes/card';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -64,6 +64,10 @@ const RelatorioPlanejamentoDiario = () => {
     { label: 'Não', value: false },
     { label: 'Sim', value: true },
   ];
+
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const onChangeAnoLetivo = async valor => {
     setCodigoDre();
@@ -183,7 +187,7 @@ const RelatorioPlanejamentoDiario = () => {
       !desabilitar &&
       temDreUeSelecionada &&
       modalidadeId &&
-      modalidadeId === ModalidadeDTO.EJA &&
+      ehEjaOuCelp &&
       !semestre
     ) {
       desabilitar = true;
@@ -208,6 +212,7 @@ const RelatorioPlanejamentoDiario = () => {
     bimestre,
     componenteCurricularId,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   const validarValorPadraoAnoLetivo = lista => {
@@ -489,17 +494,19 @@ const RelatorioPlanejamentoDiario = () => {
   }, [modalidadeId, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
-    ) {
+    if (modalidadeId && anoLetivo && ehEjaOuCelp) {
       obterSemestres();
     } else {
       setSemestre();
       setListaSemestres([]);
     }
-  }, [obterAnosLetivos, modalidadeId, anoLetivo, consideraHistorico]);
+  }, [
+    obterAnosLetivos,
+    modalidadeId,
+    anoLetivo,
+    consideraHistorico,
+    ehEjaOuCelp,
+  ]);
 
   const cancelar = async () => {
     setConsideraHistorico(false);
@@ -647,7 +654,8 @@ const RelatorioPlanejamentoDiario = () => {
                 disabled={
                   !modalidadeId ||
                   listaSemestres?.length === 1 ||
-                  String(modalidadeId) !== String(ModalidadeDTO.EJA)
+                  (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                    Number(modalidadeId) !== ModalidadeEnum.CELP)
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

@@ -5,8 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Base, ListaPaginada } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
-import { modalidadeTipoCalendario, RotasDto } from '~/dtos';
+import { ModalidadeTipoCalendarioEnum } from '@/core/enum/modalidade-tipo-calendario-enum';
 import FechaReabListaContext from './fechaReabListaContext';
+import { ROUTES } from '@/core/enum/routes';
 
 export const CampoBimestre = styled.div`
   i {
@@ -161,8 +162,9 @@ const FechaReabListaPaginada = () => {
   useEffect(() => {
     if (calendarioSelecionado?.modalidade) {
       const colBim =
-        calendarioSelecionado?.modalidade === modalidadeTipoCalendario.EJA ||
-        calendarioSelecionado?.modalidade === modalidadeTipoCalendario.CELP
+        calendarioSelecionado?.modalidade ===
+          ModalidadeTipoCalendarioEnum.EJA ||
+        calendarioSelecionado?.modalidade === ModalidadeTipoCalendarioEnum.CELP
           ? getColunasBimestreSemestral()
           : getColunasBimestreAnual();
       setColunasBimestre([...colBim]);
