@@ -1,4 +1,4 @@
-import { ModalidadeDTO } from '@/@legacy/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { Formik } from 'formik';
 import { useContext } from 'react';
 import * as Yup from 'yup';

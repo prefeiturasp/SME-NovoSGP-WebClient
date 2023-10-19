@@ -22,8 +22,8 @@ const TurmasComunicados = ({ form, onChangeCampos, desabilitar }) => {
 
   const temModalidadeEja = modalidades?.find(
     item =>
-      String(item) === String(ModalidadeEnum.EJA) ||
-      String(item) === String(ModalidadeEnum.CELP)
+      Number(item) === ModalidadeEnum.EJA ||
+      Number(item) === ModalidadeEnum.CELP
   );
 
   const nomeCampo = 'turmas';

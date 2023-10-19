@@ -56,8 +56,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const OPCAO_PADRAO = '-99';
 
   const ehEJAOuCelp =
-    String(modalidadeId) === String(ModalidadeEnum.EJA) ||
-    String(modalidadeId) === String(ModalidadeEnum.CELP);
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const carregandoAcompanhamentoFechamento = useSelector(
     store => store.acompanhamentoFechamento.carregandoAcompanhamentoFechamento
@@ -341,18 +341,13 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, [consideraHistorico, modalidadeId, anoLetivo, ueCodigo, dreCodigo]);
 
   useEffect(() => {
-    if (
-      (modalidadeId &&
-        anoLetivo &&
-        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP)
-    ) {
+    if (modalidadeId && anoLetivo && ehEJAOuCelp) {
       obterSemestres();
     } else {
       setSemestre();
       setListaSemestres([]);
     }
-  }, [modalidadeId]);
+  }, [modalidadeId, ehEJAOuCelp]);
 
   const onChangeTurma = valor => {
     setTurmasId(valor);
@@ -607,8 +602,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               disabled={
                 !modalidadeId ||
                 listaSemestres?.length === 1 ||
-                String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
-                String(modalidadeId) !== String(ModalidadeEnum.CELP) ||
+                (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                  Number(modalidadeId) !== ModalidadeEnum.CELP) ||
                 desabilitarCampos
               }
               valueSelect={semestre}

@@ -13,7 +13,7 @@ import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { OPCAO_TODOS } from '~/constantes';
 
-import { ModalidadeDTO, tipoPendenciasGruposDto } from '~/dtos';
+import { tipoPendenciasGruposDto } from '~/dtos';
 import {
   api,
   erros,
@@ -28,6 +28,7 @@ import {
   onchangeMultiSelect,
   ordenarListaMaiorParaMenor,
 } from '~/utils/funcoes/gerais';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const RelatorioPendencias = () => {
   const navigate = useNavigate();
@@ -84,6 +85,10 @@ const RelatorioPendencias = () => {
     { value: false, label: 'Não' },
     { value: true, label: 'Sim' },
   ];
+
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const limparCampos = () => {
     setModalidadeId();
@@ -485,18 +490,13 @@ const RelatorioPendencias = () => {
   );
 
   useEffect(() => {
-    if (
-      (modalidadeId &&
-        anoLetivo &&
-        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP)
-    ) {
+    if (modalidadeId && anoLetivo && ehEjaOuCelp) {
       obterSemestres(modalidadeId, anoLetivo);
       return;
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterSemestres, modalidadeId, anoLetivo]);
+  }, [obterSemestres, modalidadeId, anoLetivo, ehEjaOuCelp]);
 
   const obterTipoPendenciaGrupo = useCallback(async () => {
     setCarregandoTipoPendenciaGrupo(true);
@@ -557,10 +557,7 @@ const RelatorioPendencias = () => {
   useEffect(() => {
     const condicoesComuns = !anoLetivo || !dreId || !ueId || clicouBotaoGerar;
 
-    const temModalidadeEjaOuCelp =
-      String(modalidadeId) === String(ModalidadeEnum.EJA) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP);
-    const consideraSemestre = temModalidadeEjaOuCelp && !semestre;
+    const consideraSemestre = ehEjaOuCelp && !semestre;
 
     const condicoesParciais =
       !modalidadeId ||
@@ -594,6 +591,7 @@ const RelatorioPendencias = () => {
     tipoPendenciaGrupo,
     usuarioRf,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   const gerar = async () => {
@@ -745,8 +743,8 @@ const RelatorioPendencias = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
-                    String(modalidadeId) !== String(ModalidadeEnum.CELP)
+                    (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                      Number(modalidadeId) !== ModalidadeEnum.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

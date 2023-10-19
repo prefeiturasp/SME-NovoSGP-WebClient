@@ -95,8 +95,8 @@ const DadosComunicadosLeitura = props => {
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const ehEJAOuCelp =
-    String(modalidadeId) === String(ModalidadeEnum.EJA) ||
-    String(modalidadeId) === String(ModalidadeEnum.CELP);
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const obterAnosLetivos = useCallback(async () => {
     setExibirLoader(true);
@@ -190,7 +190,10 @@ const DadosComunicadosLeitura = props => {
   }, [modalidadeId, codigoUe]);
 
   useEffect(() => {
-    if (modalidadeId && ehEJAOuCelp) {
+    const ehMedioOuFundamental =
+      Number(modalidadeId) === ModalidadeEnum.Medio ||
+      Number(modalidadeId) === ModalidadeEnum.Fundamental;
+    if (modalidadeId && ehMedioOuFundamental) {
       obterAnosEscolaresPorModalidade();
     } else {
       setAnosEscolares();
@@ -580,7 +583,8 @@ const DadosComunicadosLeitura = props => {
                 disabled={
                   !modalidadeId ||
                   (listaSemestres && listaSemestres.length === 1) ||
-                  ehEJAOuCelp
+                  (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                    Number(modalidadeId) !== ModalidadeEnum.CELP)
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

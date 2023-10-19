@@ -17,11 +17,9 @@ import {
 
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import {
-  ModalidadeDTO,
   statusAcompanhamentoConselhoClasse,
   statusAcompanhamentoFechamento,
 } from '~/dtos';
-import modalidadeDTO from '~/dtos/modalidade';
 import { onchangeMultiSelect } from '~/utils';
 
 import {
@@ -34,6 +32,7 @@ import {
 } from '~/servicos';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { useNavigate } from 'react-router-dom';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const AcompanhamentoFechamento = () => {
   const navigate = useNavigate();
@@ -102,6 +101,10 @@ const AcompanhamentoFechamento = () => {
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
   );
+
+  const ehEjaOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const limparCampos = (limparDre = false, limparUe = false) => {
     setListaModalidades([]);
@@ -303,9 +306,7 @@ const AcompanhamentoFechamento = () => {
             desc: item.descricao,
             valor: String(item.valor),
           }))
-          .filter(
-            item => String(item.valor) !== String(ModalidadeEnum.INFANTIL)
-          );
+          .filter(item => Number(item.valor) !== ModalidadeEnum.INFANTIL);
 
         setListaModalidades(lista);
         if (lista?.length === 1) {
@@ -404,12 +405,7 @@ const AcompanhamentoFechamento = () => {
   );
 
   useEffect(() => {
-    if (
-      (modalidade &&
-        anoLetivo &&
-        String(modalidade) === String(ModalidadeEnum.EJA)) ||
-      String(modalidade) === String(ModalidadeEnum.CELP)
-    ) {
+    if (modalidade && anoLetivo && ehEjaOuCelp) {
       if (ueCodigo === OPCAO_TODOS) {
         obterSemestresEja(modalidade, anoLetivo);
         return;
@@ -426,6 +422,7 @@ const AcompanhamentoFechamento = () => {
     modalidade,
     ueCodigo,
     anoLetivo,
+    ehEjaOuCelp,
   ]);
 
   const onChangeTurma = valor => {
@@ -501,23 +498,20 @@ const AcompanhamentoFechamento = () => {
   );
 
   useEffect(() => {
-    const temModalidadeEjaOuCelp =
-      Number(modalidade) === ModalidadeEnum.EJA ||
-      Number(modalidade) === ModalidadeEnum.CELP;
     const OPCAO_TODAS_TURMA = { valor: OPCAO_TODOS, nomeFiltro: 'Todas' };
     if (ueCodigo === OPCAO_TODOS) {
       setListaTurmas([OPCAO_TODAS_TURMA]);
       setTurmasCodigo([OPCAO_TODAS_TURMA.valor]);
       return;
     }
-    if (modalidade && ueCodigo && !temModalidadeEjaOuCelp) {
+    if (modalidade && ueCodigo && !ehEjaOuCelp) {
       obterTurmas(OPCAO_TODAS_TURMA);
       return;
     }
     if (
       modalidade &&
       ueCodigo &&
-      temModalidadeEjaOuCelp &&
+      ehEjaOuCelp &&
       Object.keys(listaTurmasPorSemestre)?.length &&
       semestre
     ) {
@@ -530,6 +524,7 @@ const AcompanhamentoFechamento = () => {
     listaTurmasPorSemestre,
     obterTurmasEJA,
     obterTurmas,
+    ehEjaOuCelp,
   ]);
 
   const onChangeBimestre = valor => {
@@ -669,10 +664,7 @@ const AcompanhamentoFechamento = () => {
       !dreCodigo ||
       !ueCodigo ||
       !modalidade ||
-      (String(modalidade) === String(ModalidadeEnum.EJA) ||
-      String(modalidade) === String(ModalidadeEnum.CELP)
-        ? !semestre
-        : false) ||
+      (ehEjaOuCelp ? !semestre : false) ||
       !turmasCodigo?.length ||
       !bimestres?.length ||
       desabilitarSituacaoFechamento ||
@@ -693,6 +685,7 @@ const AcompanhamentoFechamento = () => {
     situacaoConselhoClasse,
     escolheuModalidadeInfantil,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   useEffect(() => {
@@ -851,8 +844,8 @@ const AcompanhamentoFechamento = () => {
                     disabled={
                       !modalidade ||
                       listaSemestres?.length === 1 ||
-                      String(modalidade) !== String(ModalidadeEnum.EJA) ||
-                      String(modalidade) !== String(ModalidadeEnum.CELP) ||
+                      (Number(modalidade) !== ModalidadeEnum.EJA &&
+                        Number(modalidade) !== ModalidadeEnum.CELP) ||
                       desabilitarCampos
                     }
                     valueSelect={semestre}

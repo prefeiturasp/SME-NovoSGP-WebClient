@@ -6,7 +6,7 @@ import { Cabecalho } from '~/componentes-sgp';
 import RelatorioControleFrequenciaMensalBotoesAcoes from './relatorioControleFrequenciaMensalBotoesAcoes';
 import RelatorioControleFrequenciaMensalForm from './relatorioControleFrequenciaMensalForm';
 import { OPCAO_TODOS } from '@/@legacy/constantes';
-import { ModalidadeDTO } from '@/@legacy/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { TIPO_FORMATO_RELATORIO } from '@/core/enum/tipo-formato-relatorio';
 
 const RelatorioControleFrequenciaMensal = () => {

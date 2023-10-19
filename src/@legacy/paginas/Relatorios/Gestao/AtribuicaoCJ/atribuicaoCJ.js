@@ -55,6 +55,10 @@ const AtribuicaoCJ = () => {
 
   const [modoEdicao, setModoEdicao] = useState(false);
 
+  const naoEhEjaOuCelp =
+    Number(modalidadeId) !== ModalidadeEnum.EJA &&
+    Number(modalidadeId) !== ModalidadeEnum.CELP;
+
   const opcoesExibir = [
     { label: 'Não', value: false },
     { label: 'Sim', value: true },
@@ -363,10 +367,7 @@ const AtribuicaoCJ = () => {
     bi.push({ desc: '1º', valor: '1' });
     bi.push({ desc: '2º', valor: '2' });
 
-    if (
-      String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
-      String(modalidadeId) !== String(ModalidadeEnum.CELP)
-    ) {
+    if (naoEhEjaOuCelp) {
       bi.push({ desc: '3º', valor: '3' });
       bi.push({ desc: '4º', valor: '4' });
     }
@@ -374,7 +375,7 @@ const AtribuicaoCJ = () => {
     bi.push({ desc: 'Final', valor: '0' });
     bi.push({ desc: 'Todos', valor: OPCAO_TODOS });
     setListaSemestres(bi);
-  }, [modalidadeId]);
+  }, [naoEhEjaOuCelp]);
 
   useEffect(() => {
     const desabilitar =
@@ -482,8 +483,7 @@ const AtribuicaoCJ = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
-                    String(modalidadeId) !== String(ModalidadeEnum.CELP)
+                    naoEhEjaOuCelp
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

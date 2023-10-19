@@ -42,7 +42,7 @@ const TabsDashboardFechamento = () => {
     modalidade &&
     bimestre &&
     semestreDesabilitado &&
-    String(modalidade) !== String(ModalidadeEnum.INFANTIL);
+    Number(modalidade) !== ModalidadeEnum.INFANTIL;
 
   const onChangeTab = tabAtiva => {
     setTabSelecionada(tabAtiva);

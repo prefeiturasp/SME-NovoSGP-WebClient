@@ -65,6 +65,10 @@ const RelatorioPlanejamentoDiario = () => {
     { label: 'Sim', value: true },
   ];
 
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
+
   const onChangeAnoLetivo = async valor => {
     setCodigoDre();
     setCodigoUe();
@@ -180,11 +184,11 @@ const RelatorioPlanejamentoDiario = () => {
     }
 
     if (
-      (!desabilitar &&
-        temDreUeSelecionada &&
-        modalidadeId &&
-        modalidadeId === ModalidadeEnum.EJA) ||
-      (modalidadeId === ModalidadeEnum.CELP && !semestre)
+      !desabilitar &&
+      temDreUeSelecionada &&
+      modalidadeId &&
+      ehEjaOuCelp &&
+      !semestre
     ) {
       desabilitar = true;
     }
@@ -208,6 +212,7 @@ const RelatorioPlanejamentoDiario = () => {
     bimestre,
     componenteCurricularId,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   const validarValorPadraoAnoLetivo = lista => {
@@ -489,18 +494,19 @@ const RelatorioPlanejamentoDiario = () => {
   }, [modalidadeId, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (
-      (modalidadeId &&
-        anoLetivo &&
-        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP)
-    ) {
+    if (modalidadeId && anoLetivo && ehEjaOuCelp) {
       obterSemestres();
     } else {
       setSemestre();
       setListaSemestres([]);
     }
-  }, [obterAnosLetivos, modalidadeId, anoLetivo, consideraHistorico]);
+  }, [
+    obterAnosLetivos,
+    modalidadeId,
+    anoLetivo,
+    consideraHistorico,
+    ehEjaOuCelp,
+  ]);
 
   const cancelar = async () => {
     setConsideraHistorico(false);
@@ -648,8 +654,8 @@ const RelatorioPlanejamentoDiario = () => {
                 disabled={
                   !modalidadeId ||
                   listaSemestres?.length === 1 ||
-                  String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
-                  String(modalidadeId) !== String(ModalidadeEnum.CELP)
+                  (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                    Number(modalidadeId) !== ModalidadeEnum.CELP)
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

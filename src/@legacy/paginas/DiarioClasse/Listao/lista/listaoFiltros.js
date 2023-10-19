@@ -60,6 +60,12 @@ const ListaoFiltros = () => {
   const [carregandoModalidades, setCarregandoModalidades] = useState(false);
   const [carregandoSemestres, setCarregandoSemestres] = useState(false);
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
+  const naoEhEjaOuCelp =
+    Number(modalidade) !== ModalidadeEnum.EJA &&
+    Number(modalidade) !== ModalidadeEnum.CELP;
+  const ehEjaOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
@@ -206,10 +212,7 @@ const ListaoFiltros = () => {
   useEffect(() => {
     if (carregarFiltrosSalvos) return;
 
-    if (
-      (modalidade && String(modalidade) === String(ModalidadeEnum.EJA)) ||
-      String(modalidade) === String(ModalidadeEnum.CELP)
-    ) {
+    if (modalidade && ehEjaOuCelp) {
       obterSemestres();
     }
   }, [obterSemestres, modalidade]);
@@ -253,14 +256,11 @@ const ListaoFiltros = () => {
     bi.push({ descricao: '1º Bimestre', valor: 1 });
     bi.push({ descricao: '2º Bimestre', valor: 2 });
 
-    if (
-      modalidade !== String(ModalidadeEnum.EJA) ||
-      modalidade !== String(ModalidadeEnum.CELP)
-    ) {
+    if (naoEhEjaOuCelp) {
       bi.push({ descricao: '3º Bimestre', valor: 3 });
       bi.push({ descricao: '4º Bimestre', valor: 4 });
     }
-    if (modalidade !== String(ModalidadeEnum.INFANTIL)) {
+    if (Number(modalidade) !== ModalidadeEnum.INFANTIL) {
       bi.push({ descricao: 'Final', valor: 0 });
     }
 

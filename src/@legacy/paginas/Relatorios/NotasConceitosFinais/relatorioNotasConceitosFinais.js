@@ -81,6 +81,14 @@ const RelatorioNotasConceitosFinais = () => {
   const [carregandoAnosEscolares, setCarregandoAnosEscolares] = useState(false);
   const [carregandoComponentes, setCarregandoComponentes] = useState(false);
 
+  const naoEhEjaOuCelp =
+    Number(modalidadeId) !== ModalidadeEnum.EJA &&
+    Number(modalidadeId) !== ModalidadeEnum.CELP;
+
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
+
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
     const resposta = await FiltroHelper.obterAnosLetivos({
@@ -261,8 +269,8 @@ const RelatorioNotasConceitosFinais = () => {
   const obterAnosEscolares = useCallback(
     async (mod, ue, anoLetivoSelecionado) => {
       if (
-        String(mod) === String(ModalidadeEnum.EJA) ||
-        String(mod) === String(ModalidadeEnum.CELP)
+        Number(mod) === ModalidadeEnum.EJA ||
+        Number(mod) === ModalidadeEnum.CELP
       ) {
         setListaAnosEscolares([{ descricao: 'Todos', valor: OPCAO_TODOS }]);
         setAnosEscolares([OPCAO_TODOS]);
@@ -358,7 +366,7 @@ const RelatorioNotasConceitosFinais = () => {
     bi.push({ desc: '1º', valor: 1 });
     bi.push({ desc: '2º', valor: 2 });
 
-    if (modalidadeId != ModalidadeEnum.EJA || modalidadeId != ModalidadeEnum.CELP) {
+    if (naoEhEjaOuCelp) {
       bi.push({ desc: '3º', valor: 3 });
       bi.push({ desc: '4º', valor: 4 });
     }
@@ -366,7 +374,7 @@ const RelatorioNotasConceitosFinais = () => {
     bi.push({ desc: 'Final', valor: 0 });
     bi.push({ desc: 'Todos', valor: -99 });
     setListaBimestre(bi);
-  }, [modalidadeId]);
+  }, [modalidadeId, naoEhEjaOuCelp]);
 
   useEffect(() => {
     if (modalidadeId) {
@@ -379,10 +387,7 @@ const RelatorioNotasConceitosFinais = () => {
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (
-        String(modalidadeId) === String(ModalidadeEnum.EJA) ||
-        String(modalidadeId) === String(ModalidadeEnum.CELP)
-      ) {
+      if (ehEjaOuCelp) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre(undefined);
@@ -392,7 +397,7 @@ const RelatorioNotasConceitosFinais = () => {
       setSemestre(undefined);
       setListaSemestre([]);
     }
-  }, [modalidadeId, anoLetivo]);
+  }, [modalidadeId, anoLetivo, ehEjaOuCelp]);
 
   const obterConceitos = async anoLetivoSelecionado => {
     setCarregandoGeral(true);
@@ -438,10 +443,7 @@ const RelatorioNotasConceitosFinais = () => {
       !condicao ||
       !tipoNota ||
       valorCondicaoDesabilitar ||
-      (String(modalidadeId) === String(ModalidadeEnum.EJA) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP)
-        ? !semestre
-        : false) ||
+      (ehEjaOuCelp ? !semestre : false) ||
       !formato ||
       clicouBotaoGerar;
 
@@ -459,6 +461,7 @@ const RelatorioNotasConceitosFinais = () => {
     formato,
     bimestres,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   useEffect(() => {
@@ -715,7 +718,7 @@ const RelatorioNotasConceitosFinais = () => {
   return (
     <>
       <AlertaModalidadeInfantil
-        exibir={String(modalidadeId) === String(ModalidadeEnum.INFANTIL)}
+        exibir={Number(modalidadeId) === ModalidadeEnum.INFANTIL}
         validarModalidadeFiltroPrincipal={false}
       />
       <Cabecalho pagina="Notas e conceitos">
@@ -805,8 +808,7 @@ const RelatorioNotasConceitosFinais = () => {
                     label="Semestre"
                     disabled={
                       !modalidadeId ||
-                      String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
-                      String(modalidadeId) !== String(ModalidadeEnum.CELP) ||
+                      naoEhEjaOuCelp ||
                       (listaSemestre && listaSemestre.length === 1)
                     }
                     valueSelect={semestre}

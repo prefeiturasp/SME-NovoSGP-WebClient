@@ -553,8 +553,8 @@ const RelatorioCompensacaoAusencia = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    Number(modalidadeId) !== ModalidadeEnum.EJA ||
-                    Number(modalidadeId) !== ModalidadeEnum.CELP
+                    (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                      Number(modalidadeId) !== ModalidadeEnum.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

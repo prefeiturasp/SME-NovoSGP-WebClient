@@ -6,7 +6,6 @@ import {
   SGP_BUTTON_SECUNDARIO_MODAL_INCONSISTENCIAS,
   SGP_BUTTON_CONFERIR_CONSELHO_CLASSE,
 } from '@/@legacy/constantes/ids/button';
-import { ModalidadeDTO } from '@/@legacy/dtos';
 import { RadioGroupButtonCustomizado } from '@/@legacy/paginas/DiarioClasse/AcompanhamentoFrequencia/Componentes/ModalImpressao/modalImpressao.css';
 import { erros, sucesso } from '@/@legacy/servicos';
 import ServicoConselhoClasse from '@/@legacy/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
@@ -23,6 +22,7 @@ import Button from '~/componentes/button';
 import shortid from 'shortid';
 import { Row } from 'antd';
 import { setDadosInconsistenciasEstudantes } from '@/@legacy/redux/modulos/conselhoClasse/actions';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const BotaoConferirConselhoClasse = () => {
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ const BotaoConferirConselhoClasse = () => {
   ];
 
   if (
-    Number(turmaSelecionada?.modalidade) !== ModalidadeEnum.EJA ||
+    Number(turmaSelecionada?.modalidade) !== ModalidadeEnum.EJA &&
     Number(turmaSelecionada?.modalidade) !== ModalidadeEnum.CELP
   ) {
     opcoesBimestres.push(

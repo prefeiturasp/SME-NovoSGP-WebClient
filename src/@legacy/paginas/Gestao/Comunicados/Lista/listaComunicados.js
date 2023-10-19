@@ -31,8 +31,8 @@ const ListaComunicados = () => {
 
   const temModalidadeEjaOuCelp = !!filtros?.modalidades?.find(
     item =>
-      String(item) === String(ModalidadeEnum.EJA) ||
-      String(item) === String(ModalidadeEnum.CELP)
+      Number(item) === ModalidadeEnum.EJA ||
+      Number(item) === ModalidadeEnum.CELP
   );
   const temSemestre = temModalidadeEjaOuCelp ? filtros?.semestre : true;
 

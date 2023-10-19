@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { Tooltip } from 'antd';
-import modalidadeDto from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import notasConceitos from '~/dtos/notasConceitos';
 import {
   formatarFrequencia,

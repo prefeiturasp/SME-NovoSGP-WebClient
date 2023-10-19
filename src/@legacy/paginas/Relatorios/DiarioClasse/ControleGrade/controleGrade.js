@@ -62,6 +62,10 @@ const ControleGrade = () => {
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [modoEdicao, setModoEdicao] = useState(false);
 
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
+
   const onChangeAnoLetivo = async valor => {
     setDreId();
     setUeId();
@@ -268,16 +272,13 @@ const ControleGrade = () => {
   }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
 
   useEffect(() => {
-    if (
-      String(modalidadeId) === String(ModalidadeEnum.EJA) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP)
-    ) {
+    if (ehEjaOuCelp) {
       setListaBimestres(bimestresEja);
     } else {
       setListaBimestres(bimestresFundMedio);
     }
     setBimestre();
-  }, [modalidadeId]);
+  }, [ehEjaOuCelp]);
 
   const obterAnosLetivos = useCallback(async () => {
     setExibirLoader(true);
@@ -402,18 +403,13 @@ const ControleGrade = () => {
   };
 
   useEffect(() => {
-    if (
-      (modalidadeId &&
-        anoLetivo &&
-        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP)
-    ) {
+    if (modalidadeId && anoLetivo && ehEjaOuCelp) {
       obterSemestres(modalidadeId, anoLetivo);
     } else {
       setSemestre();
       setListaSemestres([]);
     }
-  }, [obterAnosLetivos, modalidadeId, anoLetivo]);
+  }, [obterAnosLetivos, modalidadeId, anoLetivo, ehEjaOuCelp]);
 
   const cancelar = async () => {
     await setDreId();
@@ -434,10 +430,7 @@ const ControleGrade = () => {
       !dreId ||
       !ueId ||
       !modalidadeId ||
-      (String(modalidadeId) === String(ModalidadeEnum.EJA) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP)
-        ? !semestre
-        : false) ||
+      (ehEjaOuCelp ? !semestre : false) ||
       !turmaId ||
       !componentesCurricularesId ||
       !bimestre ||
@@ -456,6 +449,7 @@ const ControleGrade = () => {
     bimestre,
     tipoRelatorio,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   const gerar = async () => {
@@ -589,8 +583,8 @@ const ControleGrade = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
-                    String(modalidadeId) !== String(ModalidadeEnum.CELP)
+                    (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                      Number(modalidadeId) !== ModalidadeEnum.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

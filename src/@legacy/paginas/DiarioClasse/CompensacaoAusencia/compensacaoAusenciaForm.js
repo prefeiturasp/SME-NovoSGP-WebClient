@@ -69,6 +69,9 @@ const CompensacaoAusenciaForm = () => {
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
   );
+  const ehEjaOuCelp =
+    Number(turmaSelecionada.modalidade) === ModalidadeEnum.EJA ||
+    Number(turmaSelecionada.modalidade) === ModalidadeEnum.CELP;
 
   const [refForm, setRefForm] = useState({});
   const [auditoria, setAuditoria] = useState([]);
@@ -131,10 +134,7 @@ const CompensacaoAusenciaForm = () => {
 
   useEffect(() => {
     let listaBi = [];
-    if (
-      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.EJA) ||
-      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.CELP)
-    ) {
+    if (ehEjaOuCelp) {
       listaBi = [
         { valor: 1, descricao: '1°' },
         { valor: 2, descricao: '2°' },

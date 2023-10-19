@@ -52,8 +52,8 @@ const BoletimSimples = () => {
       ueCodigo: valoresFiltro.ueCodigo,
       turmaCodigo: valoresFiltro.turmasId,
       semestre:
-        String(valoresFiltro.modalidadeId) === String(ModalidadeEnum.EJA) ||
-        String(valoresFiltro.modalidadeId) === String(ModalidadeEnum.CELP)
+        Number(valoresFiltro.modalidadeId) === ModalidadeEnum.EJA ||
+        Number(valoresFiltro.modalidadeId) === ModalidadeEnum.CELP
           ? valoresFiltro.semestre
           : 0,
       consideraHistorico: valoresFiltro.consideraHistorico,
@@ -118,11 +118,10 @@ const BoletimSimples = () => {
 
   useEffect(() => {
     const temSemestreOuNaoEja =
-      String(filtro?.modalidade) !== String(ModalidadeEnum.EJA) ||
-      String(filtro?.modalidade) !== String(ModalidadeEnum.CELP) ||
+      (Number(filtro?.modalidade) !== ModalidadeEnum.EJA &&
+        Number(filtro?.modalidade) !== ModalidadeEnum.CELP) ||
       filtro?.semestre;
-    const ehInfantil =
-      String(filtro.modalidade) === String(ModalidadeEnum.INFANTIL);
+    const ehInfantil = Number(filtro.modalidade) === ModalidadeEnum.INFANTIL;
     const temEstudanteSelecionados =
       selecionarAlunos && !itensSelecionados?.length;
 
@@ -142,7 +141,7 @@ const BoletimSimples = () => {
   return (
     <>
       <AlertaModalidadeInfantil
-        exibir={String(filtro.modalidade) === String(ModalidadeEnum.INFANTIL)}
+        exibir={Number(filtro.modalidade) === ModalidadeEnum.INFANTIL}
         validarModalidadeFiltroPrincipal={false}
       />
       <Loader loading={loaderSecao}>

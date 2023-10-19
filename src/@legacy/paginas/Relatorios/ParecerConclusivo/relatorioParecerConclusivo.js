@@ -66,6 +66,10 @@ const RelatorioParecerConclusivo = () => {
 
   const [modoEdicao, setModoEdicao] = useState(false);
 
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
+
   const onChangeConsideraHistorico = e => {
     setConsideraHistorico(e.target.checked);
     setDreId();
@@ -328,29 +332,24 @@ const RelatorioParecerConclusivo = () => {
   }, [modalidadeId, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (
-      (modalidadeId &&
-        anoLetivo &&
-        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP)
-    ) {
+    if (modalidadeId && anoLetivo && ehEjaOuCelp) {
       setSemestre();
       obterSemestres();
     } else {
       setSemestre();
       setListaSemestres([]);
     }
-  }, [modalidadeId, anoLetivo, obterSemestres]);
+  }, [modalidadeId, anoLetivo, obterSemestres, ehEjaOuCelp]);
 
   const obterCiclos = async (modalidadeSelecionada, codigoUe) => {
     if (
-      String(modalidadeSelecionada) === String(ModalidadeEnum.EJA) ||
-      String(modalidadeSelecionada) === String(ModalidadeEnum.CELP) ||
-      String(modalidadeSelecionada) === String(ModalidadeEnum.Medio)
+      Number(modalidadeSelecionada) === ModalidadeEnum.EJA ||
+      Number(modalidadeSelecionada) === ModalidadeEnum.CELP ||
+      Number(modalidadeSelecionada) === ModalidadeEnum.Medio
     ) {
       setListaCiclos([{ id: OPCAO_TODOS, descricao: 'Todos' }]);
       setCiclo(OPCAO_TODOS);
-    } else if (String(modalidadeSelecionada) === String(ModalidadeEnum.INFANTIL)) {
+    } else if (Number(modalidadeSelecionada) === ModalidadeEnum.INFANTIL) {
       setListaCiclos([]);
       setCiclo();
     } else {
@@ -400,8 +399,8 @@ const RelatorioParecerConclusivo = () => {
 
   const obterAnos = async (modalidadeIdSelecionada, cicloSelecionado) => {
     if (
-      String(modalidadeIdSelecionada) === String(ModalidadeEnum.EJA) ||
-      String(modalidadeIdSelecionada) === String(ModalidadeEnum.CELP)
+      Number(modalidadeIdSelecionada) === ModalidadeEnum.EJA ||
+      Number(modalidadeIdSelecionada) === ModalidadeEnum.CELP
     ) {
       setListaAnos([{ valor: OPCAO_TODOS, descricao: 'Todos' }]);
       setAno(OPCAO_TODOS);
@@ -409,7 +408,7 @@ const RelatorioParecerConclusivo = () => {
       setCarregandoAnos(true);
       cicloSelecionado =
         cicloSelecionado === OPCAO_TODOS ||
-        String(modalidadeIdSelecionada) === String(ModalidadeEnum.Medio)
+        Number(modalidadeIdSelecionada) === ModalidadeEnum.Medio
           ? '0'
           : cicloSelecionado;
       const retorno =
@@ -468,11 +467,8 @@ const RelatorioParecerConclusivo = () => {
       !dreId ||
       !ueId ||
       !modalidadeId ||
-      String(modalidadeId) === String(ModalidadeEnum.EJA) ||
-      (String(modalidadeId) === String(ModalidadeEnum.CELP) ? !semestre : false) ||
-      (String(modalidadeId) !== String(ModalidadeEnum.Medio)
-        ? !ciclo
-        : false) ||
+      (ehEjaOuCelp ? !semestre : false) ||
+      (Number(modalidadeId) !== ModalidadeEnum.Medio ? !ciclo : false) ||
       !ano ||
       ano?.length <= 0 ||
       !parecerConclusivoId ||
@@ -491,6 +487,7 @@ const RelatorioParecerConclusivo = () => {
     formato,
     ano,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   const gerar = async () => {
@@ -502,11 +499,7 @@ const RelatorioParecerConclusivo = () => {
       dreCodigo: dreId === OPCAO_TODOS ? '' : dreId,
       ueCodigo: ueId === OPCAO_TODOS ? '' : ueId,
       modalidade: modalidadeId === OPCAO_TODOS ? null : modalidadeId,
-      semestre:
-        String(modalidadeId) === String(ModalidadeEnum.EJA) ||
-        String(modalidadeId) === String(ModalidadeEnum.CELP)
-          ? semestre
-          : null,
+      semestre: ehEjaOuCelp ? semestre : null,
       ciclo: ciclo === OPCAO_TODOS ? 0 : ciclo,
       anos: ano.toString() !== OPCAO_TODOS ? [].concat(ano) : [],
       parecerConclusivoId:
@@ -526,7 +519,7 @@ const RelatorioParecerConclusivo = () => {
   return (
     <CorpoRelatorio>
       <AlertaModalidadeInfantil
-        exibir={String(modalidadeId) === String(ModalidadeEnum.INFANTIL)}
+        exibir={Number(modalidadeId) === ModalidadeEnum.INFANTIL}
         validarModalidadeFiltroPrincipal={false}
       />
       <Cabecalho pagina="Parecer Conclusivo">
@@ -629,8 +622,8 @@ const RelatorioParecerConclusivo = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
-                    String(modalidadeId) !== String(ModalidadeEnum.CELP)
+                    (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                      Number(modalidadeId) !== ModalidadeEnum.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}
@@ -648,7 +641,7 @@ const RelatorioParecerConclusivo = () => {
                   valueText="descricao"
                   disabled={
                     (listaCiclos && listaCiclos.length === 1) ||
-                    String(modalidadeId) === String(ModalidadeEnum.Medio)
+                    Number(modalidadeId) === ModalidadeEnum.Medio
                   }
                   onChange={onChangeCiclos}
                   valueSelect={ciclo}

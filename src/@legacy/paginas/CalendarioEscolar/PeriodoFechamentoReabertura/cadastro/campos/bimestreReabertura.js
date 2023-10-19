@@ -31,7 +31,7 @@ const BimestreReabertura = ({ form, onChangeCampos }) => {
     ];
 
     if (
-      tipoModalidade !== ModalidadeTipoCalendarioEnum.EJA ||
+      tipoModalidade !== ModalidadeTipoCalendarioEnum.EJA &&
       tipoModalidade !== ModalidadeTipoCalendarioEnum.CELP
     ) {
       listaNova.push(

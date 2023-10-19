@@ -301,10 +301,7 @@ const AtaFinalResultados = () => {
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (
-        modalidadeId === ModalidadeEnum.EJA ||
-        modalidadeId === ModalidadeEnum.CELP
-      ) {
+      if (ehEJAOuCelp) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre(undefined);
@@ -314,7 +311,7 @@ const AtaFinalResultados = () => {
       setSemestre(undefined);
       setListaSemestre([]);
     }
-  }, [modalidadeId, anoLetivo]);
+  }, [modalidadeId, anoLetivo, ehEJAOuCelp]);
 
   useEffect(() => {
     const desabilitar =
@@ -327,12 +324,9 @@ const AtaFinalResultados = () => {
 
     let desabilitado = desabilitar;
 
-    if (
-      Number(modalidadeId) === Number(ModalidadeEnum.EJA) ||
-      Number(modalidadeId) === Number(ModalidadeEnum.CELP)
-    ) {
+    if (ehEJAOuCelp) {
       desabilitado = !semestre || desabilitar;
-    } else if (Number(modalidadeId) === Number(ModalidadeEnum.Medio)) {
+    } else if (Number(modalidadeId) === ModalidadeEnum.Medio) {
       desabilitado = desabilitar || !visualizacao;
     }
 
@@ -347,6 +341,7 @@ const AtaFinalResultados = () => {
     semestre,
     visualizacao,
     imprimirComponentesQueNaoLancamNota,
+    ehEJAOuCelp,
   ]);
 
   useEffect(() => {
@@ -552,7 +547,7 @@ const AtaFinalResultados = () => {
   return (
     <>
       <AlertaModalidadeInfantil
-        exibir={String(modalidadeId) === String(ModalidadeEnum.INFANTIL)}
+        exibir={Number(modalidadeId) === ModalidadeEnum.INFANTIL}
         validarModalidadeFiltroPrincipal={false}
       />
 
@@ -562,7 +557,7 @@ const AtaFinalResultados = () => {
           onClickCancelar={onClickCancelar}
           onClickGerar={onClickGerar}
           desabilitarBtnGerar={
-            String(modalidadeId) === String(ModalidadeEnum.INFANTIL) ||
+            Number(modalidadeId) === ModalidadeEnum.INFANTIL ||
             desabilitarBtnGerar ||
             !permissoesTela.podeConsultar
           }
@@ -675,8 +670,8 @@ const AtaFinalResultados = () => {
                 disabled={
                   !permissoesTela.podeConsultar ||
                   !modalidadeId ||
-                  Number(modalidadeId) !== ModalidadeEnum.EJA ||
-                  Number(modalidadeId) !== ModalidadeEnum.CELP ||
+                  (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                    Number(modalidadeId) !== ModalidadeEnum.CELP) ||
                   (listaSemestre && listaSemestre.length === 1)
                 }
                 valueSelect={semestre}

@@ -93,19 +93,27 @@ const TipoCalendarioEscolarForm = () => {
 
   const opcoesModalidade = [
     {
-      label: ModalidadeTipoCalendarioEnumDisplay[1],
+      label:
+        ModalidadeTipoCalendarioEnumDisplay[
+          ModalidadeTipoCalendarioEnum.FundamentalMedio
+        ],
       value: ModalidadeTipoCalendarioEnum.FundamentalMedio,
     },
     {
-      label: ModalidadeTipoCalendarioEnumDisplay[2],
+      label:
+        ModalidadeTipoCalendarioEnumDisplay[ModalidadeTipoCalendarioEnum.EJA],
       value: ModalidadeTipoCalendarioEnum.EJA,
     },
     {
-      label: ModalidadeTipoCalendarioEnumDisplay[3],
+      label:
+        ModalidadeTipoCalendarioEnumDisplay[
+          ModalidadeTipoCalendarioEnum.Infantil
+        ],
       value: ModalidadeTipoCalendarioEnum.Infantil,
     },
     {
-      label: ModalidadeTipoCalendarioEnumDisplay[4],
+      label:
+        ModalidadeTipoCalendarioEnumDisplay[ModalidadeTipoCalendarioEnum.CELP],
       value: ModalidadeTipoCalendarioEnum.CELP,
     },
   ];
@@ -123,7 +131,7 @@ const TipoCalendarioEscolarForm = () => {
   }, [somenteConsulta, novoRegistro]);
 
   const verificarSeSemestreEhRequerido = valor => {
-    if (valor === undefined) {
+    if (!valor === undefined) {
       return false;
     }
     const informarSemestre =
@@ -206,18 +214,18 @@ const TipoCalendarioEscolarForm = () => {
   };
 
   const onClickCadastrar = async valoresForm => {
-    const EjaOuCelp =
+    const ejaOuCelp =
       Number(valoresForm.modalidade) === ModalidadeTipoCalendarioEnum.EJA ||
       Number(valoresForm.modalidade) === ModalidadeTipoCalendarioEnum.CELP;
 
-    if (!valoresForm.semestre && EjaOuCelp) {
+    if (!valoresForm.semestre && ejaOuCelp) {
       erro('Informe o Semestre');
       return;
     }
     valoresForm.id = idTipoCalendario || 0;
     valoresForm.anoLetivo = anoLetivo;
-    valoresForm.semestre = EjaOuCelp ? valoresForm.semestre : null;
-    valoresForm.periodo = EjaOuCelp ? 2 : valoresForm.periodo;
+    valoresForm.semestre = ejaOuCelp ? valoresForm.semestre : null;
+    valoresForm.periodo = ejaOuCelp ? 2 : valoresForm.periodo;
 
     const metodo = idTipoCalendario ? 'put' : 'post';
     let url = 'v1/calendarios/tipos';
@@ -326,7 +334,7 @@ const TipoCalendarioEscolarForm = () => {
   };
   const obterSemestres = useCallback(
     async (valor, form) => {
-      if (valor === undefined || Number(valor) === 0) return;
+      if (!valor) return;
       const semestreEhRequerido = verificarSeSemestreEhRequerido(valor);
       setSemestreRequerido(semestreEhRequerido);
       if (!semestreEhRequerido) {
@@ -512,7 +520,7 @@ const TipoCalendarioEscolarForm = () => {
                       valueText="label"
                       placeholder="Selecione uma modalidade"
                       form={form}
-                      onChange={async valor => {
+                      onChange={valor => {
                         changeModalidade(valor, form);
                       }}
                       disabled={desabilitarCampos || possuiEventos}

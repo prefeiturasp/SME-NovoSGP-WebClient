@@ -108,7 +108,9 @@ const CompensacaoAusenciaLista = () => {
       render: dados => montaExibicaoAlunos(dados),
     },
   ];
-
+  const ehEjaOuCelp =
+    Number(turmaSelecionada.modalidade) === ModalidadeEnum.EJA ||
+    Number(turmaSelecionada.modalidade) === ModalidadeEnum.CELP;
   const filtrar = useCallback(() => {
     const paramsFiltrar = {
       turmaId: turmaSelecionada.turma,
@@ -178,10 +180,7 @@ const CompensacaoAusenciaLista = () => {
     }
 
     let listaBi = [];
-    if (
-      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.EJA) ||
-      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.CELP)
-    ) {
+    if (ehEjaOuCelp) {
       listaBi = [
         { valor: 1, descricao: '1° Bimestre' },
         { valor: 2, descricao: '2° Bimestre' },

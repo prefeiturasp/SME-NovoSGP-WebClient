@@ -5,7 +5,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
-import modalidadeDto from '~/dtos/modalidade';
 import {
   setBimestreAtual,
   setDadosPrincipaisConselhoClasse,
@@ -27,6 +26,7 @@ import AnotacoesRecomendacoes from './AnotacoesRecomendacoes/anotacoesRecomendac
 import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const { TabPane } = Tabs;
 
@@ -58,6 +58,10 @@ const DadosConselhoClasse = props => {
   const [semDados, setSemDados] = useState(true);
   const [carregando, setCarregando] = useState(false);
   const [turmaAtual, setTurmaAtual] = useState(0);
+
+  const naoEhEjaOuCelp =
+    Number(modalidade) !== ModalidadeEnum.EJA &&
+    Number(modalidade) !== ModalidadeEnum.CELP;
 
   const limparDadosNotaPosConselhoJustificativa = useCallback(() => {
     dispatch(setExpandirLinha([]));
@@ -101,7 +105,7 @@ const DadosConselhoClasse = props => {
           : bimestreConsulta,
         codigoEOL,
         ehFinal,
-        dadosAlunoObjectCard.desabilitado ? true : false
+        !!dadosAlunoObjectCard?.desabilitado
       ).catch(e => {
         erros(e);
         dispatch(
@@ -307,16 +311,14 @@ const DadosConselhoClasse = props => {
           <TabPane tab="2º Bimestre" key="2">
             {bimestreAtual.valor === '2' ? montarDados() : ''}
           </TabPane>
-          {modalidade.toString() !== ModalidadeEnum.EJA.toString() ||
-          modalidade.toString() !== ModalidadeEnum.CELP.toString() ? (
+          {naoEhEjaOuCelp ? (
             <TabPane tab="3º Bimestre" key="3">
               {bimestreAtual.valor === '3' ? montarDados() : ''}
             </TabPane>
           ) : (
             ''
           )}
-          {modalidade.toString() !== ModalidadeEnum.EJA.toString() ||
-          modalidade.toString() !== ModalidadeEnum.CELP.toString() ? (
+          {naoEhEjaOuCelp ? (
             <TabPane tab="4º Bimestre" key="4">
               {bimestreAtual.valor === '4' ? montarDados() : ''}
             </TabPane>

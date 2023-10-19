@@ -17,10 +17,7 @@ const obterModalidadeFiltroPrincipal = (modalidades, turmaSelecionada) => {
 };
 
 const ehTurmaInfantil = (modalidades, turmaSelecionada) => {
-  return (
-    obterModalidadeFiltroPrincipal(modalidades, turmaSelecionada) ===
-    String(ModalidadeEnum.INFANTIL)
-  );
+  return Number((modalidades, turmaSelecionada)) === ModalidadeEnum.INFANTIL;
 };
 
 export { ehTurmaInfantil, obterModalidadeFiltroPrincipal };

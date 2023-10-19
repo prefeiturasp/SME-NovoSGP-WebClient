@@ -62,14 +62,14 @@ const DadosPlanoAula = props => {
 
   useEffect(() => {
     const ehEja = !!(
-      (turmaSelecionada &&
-        String(turmaSelecionada.modalidade) === String(ModalidadeEnum.EJA)) ||
-      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.CELP)
+      turmaSelecionada &&
+      (Number(turmaSelecionada.modalidade) === ModalidadeEnum.EJA ||
+        Number(turmaSelecionada.modalidade) === ModalidadeEnum.CELP)
     );
 
     const ehMedio = !!(
       turmaSelecionada &&
-      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.Medio)
+      Number(turmaSelecionada.modalidade) === ModalidadeEnum.Medio
     );
 
     const esconderSwitch =

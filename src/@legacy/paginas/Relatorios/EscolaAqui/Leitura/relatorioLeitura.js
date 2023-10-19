@@ -78,6 +78,10 @@ const RelatorioLeitura = () => {
     { label: 'Sim', value: true },
   ];
 
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
+
   const onChangeAnoLetivo = async valor => {
     setCodigoDre();
     setCodigoUe();
@@ -188,11 +192,11 @@ const RelatorioLeitura = () => {
     }
 
     if (
-      (!desabilitar &&
-        temDreUeSelecionada &&
-        modalidadeId &&
-        modalidadeId === ModalidadeEnum.EJA) ||
-      (modalidadeId === ModalidadeEnum.CELP && !semestre)
+      !desabilitar &&
+      temDreUeSelecionada &&
+      modalidadeId &&
+      ehEjaOuCelp &&
+      !semestre
     ) {
       desabilitar = true;
     }
@@ -206,6 +210,7 @@ const RelatorioLeitura = () => {
     modalidadeId,
     semestre,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   useEffect(() => {
@@ -439,18 +444,13 @@ const RelatorioLeitura = () => {
   };
 
   useEffect(() => {
-    if (
-      (modalidadeId &&
-        anoLetivo &&
-        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP)
-    ) {
+    if (modalidadeId && anoLetivo && ehEjaOuCelp) {
       obterSemestres(modalidadeId, anoLetivo);
     } else {
       setSemestre();
       setListaSemestres([]);
     }
-  }, [obterAnosLetivos, modalidadeId, anoLetivo]);
+  }, [obterAnosLetivos, modalidadeId, anoLetivo, ehEjaOuCelp]);
 
   const obterAnosEscolaresPorModalidade = useCallback(async () => {
     const resposta = await ServicoComunicados.buscarAnosPorModalidade(
@@ -575,11 +575,7 @@ const RelatorioLeitura = () => {
     let isSubscribed = true;
     (async () => {
       if (isSubscribed && anoLetivo && codigoDre && codigoUe && modalidadeId) {
-        if (
-          (modalidadeId &&
-            String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
-          (String(modalidadeId) === String(ModalidadeEnum.CELP) && !semestre)
-        ) {
+        if (modalidadeId && ehEjaOuCelp && !semestre) {
           return;
         }
 
@@ -638,6 +634,7 @@ const RelatorioLeitura = () => {
     dataInicio,
     dataFim,
     pesquisaComunicado,
+    ehEjaOuCelp,
   ]);
 
   const onChangeIntervaloDatas = valor => {
@@ -756,8 +753,8 @@ const RelatorioLeitura = () => {
                 disabled={
                   !modalidadeId ||
                   listaSemestres?.length === 1 ||
-                  String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
-                  String(modalidadeId) !== String(ModalidadeEnum.CELP)
+                  Number(modalidadeId) !== ModalidadeEnum.EJA ||
+                  Number(modalidadeId) !== ModalidadeEnum.CELP
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

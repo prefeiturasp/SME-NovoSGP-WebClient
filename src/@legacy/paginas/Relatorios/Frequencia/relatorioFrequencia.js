@@ -87,10 +87,12 @@ const RelatorioFrequencia = () => {
     }),
     []
   );
+
   const FORMATOS = {
     PDF: '1',
     EXCEL: '4',
   };
+
   const OPCAO_TODOS_ESTUDANTES = '4';
   const ehTurma = tipoRelatorio === TIPO_RELATORIO.TURMA;
   const ehEJAOuCelp =
@@ -483,26 +485,19 @@ const RelatorioFrequencia = () => {
   }, [modalidadeId, obterBimestres]);
 
   useEffect(() => {
-    if (
-      (modalidadeId &&
-        anoLetivo &&
-        Number(modalidadeId) === ModalidadeEnum.EJA) ||
-      Number(modalidadeId) === ModalidadeEnum.CELP
-    ) {
+    if (modalidadeId && anoLetivo && ehEJAOuCelp) {
       obterSemestres();
       return;
     }
     setSemestre(undefined);
     setListaSemestre([]);
-  }, [modalidadeId, anoLetivo, obterSemestres]);
+  }, [modalidadeId, anoLetivo, obterSemestres, ehEJAOuCelp]);
 
   useEffect(() => {
-    const desabilitado =
-      String(modalidadeId) === String(ModalidadeEnum.EJA) ||
-      (String(modalidadeId) === String(ModalidadeEnum.CELP) && !semestre);
+    const desabilitado = ehEJAOuCelp && !semestre;
 
     setDesabilitarSemestre(desabilitado);
-  }, [modalidadeId, semestre]);
+  }, [modalidadeId, semestre, ehEJAOuCelp]);
 
   useEffect(() => {
     let desabilitar =
@@ -522,7 +517,7 @@ const RelatorioFrequencia = () => {
       desabilitar = !valorCondicao;
     }
 
-    if (Number(modalidadeId) === ModalidadeEnum.EJA) {
+    if (ehEJAOuCelp) {
       setDesabilitarBtnGerar(!semestre || desabilitar);
       return;
     }
@@ -543,6 +538,7 @@ const RelatorioFrequencia = () => {
     valorCondicao,
     ehTurma,
     formato,
+    ehEJAOuCelp,
   ]);
 
   useEffect(() => {
@@ -785,7 +781,7 @@ const RelatorioFrequencia = () => {
       return;
     }
     setTurmasCodigo(undefined);
-  }, [ehTurma, FORMATOS, codigoUe]);
+  }, [ehTurma, codigoUe]);
 
   useEffect(() => {
     if (anoLetivo) {

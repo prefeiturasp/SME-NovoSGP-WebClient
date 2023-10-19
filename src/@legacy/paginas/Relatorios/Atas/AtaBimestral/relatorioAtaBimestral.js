@@ -64,8 +64,11 @@ const RelatorioAtaBimestral = () => {
   const usuarioStore = useSelector(store => store.usuario);
   const permissoesTela = usuarioStore.permissoes[ROUTES.ATA_BIMESTRAL];
 
-  const ehModalidadeInfantil =
-    String(modalidadeId) === String(ModalidadeEnum.INFANTIL);
+  const ehModalidadeInfantil = Number(modalidadeId) === ModalidadeEnum.INFANTIL;
+
+  const ehModalidadeEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const onClickCancelar = () => {
     setConsideraHistorico(false);
@@ -340,18 +343,20 @@ const RelatorioAtaBimestral = () => {
   );
 
   useEffect(() => {
-    if (
-      (modalidadeId &&
-        anoLetivo &&
-        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP)
-    ) {
+    if (modalidadeId && anoLetivo && ehModalidadeEjaOuCelp) {
       obterSemestres(modalidadeId, anoLetivo, ueCodigo);
       return;
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterAnosLetivos, obterSemestres, modalidadeId, ueCodigo, anoLetivo]);
+  }, [
+    obterAnosLetivos,
+    obterSemestres,
+    modalidadeId,
+    ueCodigo,
+    anoLetivo,
+    ehModalidadeEjaOuCelp,
+  ]);
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
@@ -429,22 +434,22 @@ const RelatorioAtaBimestral = () => {
   );
 
   useEffect(() => {
-    const temModalidadeEjaOuCelp =
-      Number(modalidadeId) === ModalidadeEnum.EJA ||
-      Number(modalidadeId) === ModalidadeEnum.CELP;
-    if (modalidadeId && ueCodigo && !temModalidadeEjaOuCelp) {
+    if (modalidadeId && ueCodigo && !ehModalidadeEjaOuCelp) {
       obterTurmas(modalidadeId, ueCodigo);
     }
-  }, [modalidadeId, ueCodigo, obterTurmasEJA, obterTurmas]);
+  }, [
+    modalidadeId,
+    ueCodigo,
+    obterTurmasEJA,
+    obterTurmas,
+    ehModalidadeEjaOuCelp,
+  ]);
 
   useEffect(() => {
-    const temModalidadeEjaOuCelp =
-      Number(modalidadeId) === ModalidadeEnum.EJA ||
-      Number(modalidadeId) === ModalidadeEnum.CELP;
     if (
       modalidadeId &&
       ueCodigo &&
-      temModalidadeEjaOuCelp &&
+      ehModalidadeEjaOuCelp &&
       Object.keys(listaTurmasPorSemestre)?.length &&
       semestre
     ) {
@@ -456,6 +461,7 @@ const RelatorioAtaBimestral = () => {
     semestre,
     ueCodigo,
     obterTurmasEJA,
+    ehModalidadeEjaOuCelp,
   ]);
 
   const onChangeTurma = valor => {
@@ -508,10 +514,7 @@ const RelatorioAtaBimestral = () => {
 
     let desabilitado = desabilitar;
 
-    if (
-      Number(modalidadeId) === Number(ModalidadeEnum.EJA) ||
-      Number(modalidadeId) === Number(ModalidadeEnum.CELP)
-    ) {
+    if (ehModalidadeEjaOuCelp) {
       desabilitado = !semestre || desabilitar;
     }
     setDesabilitarBtnGerar(desabilitado);
@@ -523,6 +526,7 @@ const RelatorioAtaBimestral = () => {
     turmaCodigo,
     semestre,
     bimestre,
+    ehModalidadeEjaOuCelp,
   ]);
 
   const onClickGerar = async () => {
@@ -567,7 +571,7 @@ const RelatorioAtaBimestral = () => {
           onClickCancelar={onClickCancelar}
           onClickGerar={onClickGerar}
           desabilitarBtnGerar={
-            String(modalidadeId) === String(ModalidadeEnum.INFANTIL) ||
+            Number(modalidadeId) === ModalidadeEnum.INFANTIL ||
             desabilitarBtnGerar ||
             !permissoesTela?.podeConsultar
           }
@@ -676,8 +680,8 @@ const RelatorioAtaBimestral = () => {
                   placeholder="Selecione o semestre"
                   disabled={
                     !modalidadeId ||
-                    Number(modalidadeId) !== ModalidadeEnum.EJA ||
-                    Number(modalidadeId) !== ModalidadeEnum.CELP ||
+                    (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                      Number(modalidadeId) !== ModalidadeEnum.CELP) ||
                     listaSemestres?.length === 1 ||
                     !listaSemestres?.length ||
                     !permissoesTela?.podeConsultar

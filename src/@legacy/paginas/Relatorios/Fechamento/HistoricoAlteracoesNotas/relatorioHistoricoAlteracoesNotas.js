@@ -52,6 +52,10 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [modoEdicao, setModoEdicao] = useState(false);
 
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
+
   const onChangeAnoLetivo = async valor => {
     setDreId();
     setUeId();
@@ -284,8 +288,8 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     bi.push({ desc: '2º', valor: '2' });
 
     if (
-      String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
-      String(modalidadeId) !== String(ModalidadeEnum.CELP)
+      Number(modalidadeId) !== ModalidadeEnum.EJA &&
+      Number(modalidadeId) !== ModalidadeEnum.CELP
     ) {
       bi.push({ desc: '3º', valor: '3' });
       bi.push({ desc: '4º', valor: '4' });
@@ -414,18 +418,19 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   };
 
   useEffect(() => {
-    if (
-      (modalidadeId &&
-        anoLetivo &&
-        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP)
-    ) {
+    if (modalidadeId && anoLetivo && ehEjaOuCelp) {
       obterSemestres(modalidadeId, anoLetivo, consideraHistorico);
     } else {
       setSemestre();
       setListaSemestres([]);
     }
-  }, [obterAnosLetivos, modalidadeId, anoLetivo, consideraHistorico]);
+  }, [
+    obterAnosLetivos,
+    modalidadeId,
+    anoLetivo,
+    consideraHistorico,
+    ehEjaOuCelp,
+  ]);
 
   const cancelar = async () => {
     setConsideraHistorico(false);
@@ -446,10 +451,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
       !dreId ||
       !ueId ||
       !modalidadeId ||
-      (String(modalidadeId) === String(ModalidadeEnum.EJA) ||
-      String(modalidadeId) === String(ModalidadeEnum.CELP)
-        ? !semestre
-        : false) ||
+      (ehEjaOuCelp ? !semestre : false) ||
       !turmaId ||
       !componentesCurricularesId?.length ||
       !bimestre?.length ||
@@ -468,6 +470,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     bimestre,
     tipoDeNota,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   const gerar = async () => {
@@ -522,7 +525,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
 
   return (
     <Loader loading={exibirLoader}>
-      {modalidadeId && String(modalidadeId) === String(ModalidadeEnum.INFANTIL) ? (
+      {modalidadeId && Number(modalidadeId) === ModalidadeEnum.INFANTIL ? (
         <div className="col-md-12">
           <Alert
             alerta={{
@@ -547,7 +550,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
           onClickGerar={gerar}
           desabilitarBtnGerar={
             desabilitarBtnGerar ||
-            String(modalidadeId) === String(ModalidadeEnum.INFANTIL)
+            Number(modalidadeId) === ModalidadeEnum.INFANTIL
           }
           modoEdicao={modoEdicao}
         />
@@ -635,8 +638,8 @@ const RelatorioHistoricoAlteracoesNotas = () => {
                 disabled={
                   !modalidadeId ||
                   (listaSemestres && listaSemestres.length === 1) ||
-                  String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
-                  String(modalidadeId) !== String(ModalidadeEnum.CELP)
+                  (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                    Number(modalidadeId) !== ModalidadeEnum.CELP)
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

@@ -31,7 +31,7 @@ const HistoricoNotificacoes = () => {
   const [listaTipos, setListaTipos] = useState([]);
   const [listaSituacao, setListaSituacao] = useState([]);
 
-  const [anoAtual] = useState(moment().format('YYYY'));
+  const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState(anoAtual);
   const [codigoDre, setCodigoDre] = useState(undefined);
   const [codigoUe, setCodigoUe] = useState(undefined);
@@ -66,6 +66,10 @@ const HistoricoNotificacoes = () => {
   ];
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoGeral(true);
@@ -265,10 +269,7 @@ const HistoricoNotificacoes = () => {
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (
-        Number(modalidadeId) === ModalidadeEnum.EJA ||
-        Number(modalidadeId) === ModalidadeEnum.CELP
-      ) {
+      if (ehEjaOuCelp) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre(undefined);
@@ -278,15 +279,12 @@ const HistoricoNotificacoes = () => {
       setSemestre(undefined);
       setListaSemestre([]);
     }
-  }, [modalidadeId, anoLetivo]);
+  }, [modalidadeId, anoLetivo, ehEjaOuCelp]);
 
   useEffect(() => {
     const desabilitar = !anoLetivo || !codigoDre || !codigoUe;
 
-    if (
-      Number(modalidadeId) === ModalidadeEnum.EJA ||
-      Number(modalidadeId) === ModalidadeEnum.CELP
-    ) {
+    if (ehEjaOuCelp) {
       setDesabilitarBtnGerar(!semestre || desabilitar);
     } else {
       setDesabilitarBtnGerar(desabilitar);
@@ -304,6 +302,7 @@ const HistoricoNotificacoes = () => {
     situacoes,
     exibirDescricao,
     exibirNotificacoesExcluidas,
+    ehEjaOuCelp,
   ]);
 
   const carregarListas = async () => {
@@ -586,8 +585,8 @@ const HistoricoNotificacoes = () => {
                   label="Semestre"
                   disabled={
                     !modalidadeId ||
-                    Number(modalidadeId) !== ModalidadeEnum.EJA ||
-                    Number(modalidadeId) !== ModalidadeEnum.CELP ||
+                    (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                      Number(modalidadeId) !== ModalidadeEnum.CELP) ||
                     (listaSemestre && listaSemestre.length === 1)
                   }
                   valueSelect={semestre}
