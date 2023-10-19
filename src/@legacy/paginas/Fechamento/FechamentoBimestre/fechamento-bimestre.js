@@ -11,7 +11,7 @@ import Card from '~/componentes/card';
 import SelectComponent from '~/componentes/select';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { URL_HOME } from '~/constantes/url';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import periodo from '~/dtos/periodo';
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
 import ServicoFechamentoFinal from '~/servicos/Paginas/DiarioClasse/ServicoFechamentoFinal';
@@ -73,8 +73,8 @@ const FechamentoBismestre = () => {
     useState(undefined);
 
   const ehModaliadeEJAOuCelp =
-    Number(turmaSelecionada?.modalidade) !== ModalidadeDTO.EJA ||
-    Number(turmaSelecionada?.modalidade) !== ModalidadeDTO.CELP;
+    Number(turmaSelecionada?.modalidade) !== ModalidadeEnum.EJA ||
+    Number(turmaSelecionada?.modalidade) !== ModalidadeEnum.CELP;
 
   const ehIgualPeriodoAnual = periodoFechamento === periodo.Anual;
 

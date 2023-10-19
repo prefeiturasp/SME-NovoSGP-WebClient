@@ -12,7 +12,7 @@ import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 import { URL_HOME, OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   onchangeMultiSelect,
   ordenarListaMaiorParaMenor,
@@ -94,9 +94,9 @@ const RelatorioFrequencia = () => {
   const OPCAO_TODOS_ESTUDANTES = '4';
   const ehTurma = tipoRelatorio === TIPO_RELATORIO.TURMA;
   const ehEJAOuCelp =
-    Number(modalidadeId) === ModalidadeDTO.EJA ||
-    Number(modalidadeId) === ModalidadeDTO.CELP;
-  const ehInfantil = Number(modalidadeId) === ModalidadeDTO.INFANTIL;
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
+  const ehInfantil = Number(modalidadeId) === ModalidadeEnum.INFANTIL;
 
   const opcoesListarTurmasDePrograma = [
     { label: 'Sim', value: true },
@@ -295,9 +295,9 @@ const RelatorioFrequencia = () => {
 
   const obterAnosEscolares = useCallback(async (mod, ue) => {
     if (
-      Number(mod) === ModalidadeDTO.EJA ||
-      Number(mod) === ModalidadeDTO.CELP ||
-      Number(mod) === ModalidadeDTO.INFANTIL
+      Number(mod) === ModalidadeEnum.EJA ||
+      Number(mod) === ModalidadeEnum.CELP ||
+      Number(mod) === ModalidadeEnum.INFANTIL
     ) {
       setListaAnosEscolares([{ descricao: 'Todos', valor: OPCAO_TODOS }]);
       setAnosEscolares([OPCAO_TODOS]);
@@ -486,8 +486,8 @@ const RelatorioFrequencia = () => {
     if (
       (modalidadeId &&
         anoLetivo &&
-        Number(modalidadeId) === ModalidadeDTO.EJA) ||
-      Number(modalidadeId) === ModalidadeDTO.CELP
+        Number(modalidadeId) === ModalidadeEnum.EJA) ||
+      Number(modalidadeId) === ModalidadeEnum.CELP
     ) {
       obterSemestres();
       return;
@@ -498,8 +498,8 @@ const RelatorioFrequencia = () => {
 
   useEffect(() => {
     const desabilitado =
-      String(modalidadeId) === String(ModalidadeDTO.EJA) ||
-      (String(modalidadeId) === String(ModalidadeDTO.CELP) && !semestre);
+      String(modalidadeId) === String(ModalidadeEnum.EJA) ||
+      (String(modalidadeId) === String(ModalidadeEnum.CELP) && !semestre);
 
     setDesabilitarSemestre(desabilitado);
   }, [modalidadeId, semestre]);
@@ -522,7 +522,7 @@ const RelatorioFrequencia = () => {
       desabilitar = !valorCondicao;
     }
 
-    if (Number(modalidadeId) === ModalidadeDTO.EJA) {
+    if (Number(modalidadeId) === ModalidadeEnum.EJA) {
       setDesabilitarBtnGerar(!semestre || desabilitar);
       return;
     }

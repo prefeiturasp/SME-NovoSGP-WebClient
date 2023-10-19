@@ -19,7 +19,7 @@ import {
 
 import { ordenarDescPor } from '~/utils/funcoes/gerais';
 
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 import { URL_HOME } from '~/constantes';
 import { OPCAO_TODOS } from '~/constantes/constantes';
@@ -364,8 +364,8 @@ const AtribuicaoCJ = () => {
     bi.push({ desc: '2º', valor: '2' });
 
     if (
-      String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
-      String(modalidadeId) !== String(ModalidadeDTO.CELP)
+      String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
+      String(modalidadeId) !== String(ModalidadeEnum.CELP)
     ) {
       bi.push({ desc: '3º', valor: '3' });
       bi.push({ desc: '4º', valor: '4' });
@@ -482,8 +482,8 @@ const AtribuicaoCJ = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
-                    String(modalidadeId) !== String(ModalidadeDTO.CELP)
+                    String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
+                    String(modalidadeId) !== String(ModalidadeEnum.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

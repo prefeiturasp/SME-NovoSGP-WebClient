@@ -67,8 +67,8 @@ const ListaoPaginado = () => {
   const [colunas, setColunas] = useState([]);
 
   const temSemetreQuandoEjaouCelp =
-    modalidade === String(ModalidadeDTO.EJA) ||
-    modalidade === String(ModalidadeDTO.CELP)
+    modalidade === String(ModalidadeEnum.EJA) ||
+    modalidade === String(ModalidadeEnum.CELP)
       ? !!semestre
       : true;
 
@@ -264,7 +264,7 @@ const ListaoPaginado = () => {
       },
     ];
 
-    if (modalidade === String(ModalidadeDTO.INFANTIL) && !ehBimestreFinal) {
+    if (modalidade === String(ModalidadeEnum.INFANTIL) && !ehBimestreFinal) {
       cols.push(
         {
           title: 'Frequência',
@@ -281,7 +281,7 @@ const ListaoPaginado = () => {
       );
     }
 
-    if (modalidade !== String(ModalidadeDTO.INFANTIL) && !ehBimestreFinal) {
+    if (modalidade !== String(ModalidadeEnum.INFANTIL) && !ehBimestreFinal) {
       cols.push(
         {
           title: 'Frequência',

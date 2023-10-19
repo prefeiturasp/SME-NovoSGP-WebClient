@@ -113,8 +113,8 @@ const ListaFinal = props => {
 
   const montarValoresNotasConceitos = notasFechamentos => {
     const ehEjaOuCelp =
-      Number(modalidade) === modalidadeDto.EJA ||
-      Number(modalidade) === modalidadeDto.CELP;
+      Number(modalidade) === ModalidadeEnum.EJA ||
+      Number(modalidade) === ModalidadeEnum.CELP;
 
     const primeiroBimestre = notasFechamentos.find(item => item.bimestre === 1);
     const segundoBimestre = notasFechamentos.find(item => item.bimestre === 2);

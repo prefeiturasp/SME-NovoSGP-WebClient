@@ -18,7 +18,7 @@ import {
   ServicoAcompanhamentoRegistros,
   sucesso,
 } from '~/servicos';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { onchangeMultiSelect, ordenarListaMaiorParaMenor } from '~/utils';
 import { OPCAO_TODOS } from '~/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
@@ -296,8 +296,8 @@ const AcompanhamentoRegistros = () => {
     if (
       (modalidadeId &&
         anoLetivo &&
-        String(modalidadeId) === String(ModalidadeDTO.EJA)) ||
-      String(modalidadeId) === String(ModalidadeDTO.CELP)
+        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP)
     ) {
       obterSemestres(modalidadeId, anoLetivo, dreId, ueId);
       return;
@@ -494,8 +494,8 @@ const AcompanhamentoRegistros = () => {
 
   useEffect(() => {
     const temModalidadeEjaOuCelp =
-      String(modalidadeId) === String(ModalidadeDTO.EJA) ||
-      String(modalidadeId) === String(ModalidadeDTO.CELP);
+      String(modalidadeId) === String(ModalidadeEnum.EJA) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP);
     const consideraSemestre = temModalidadeEjaOuCelp && !semestre;
 
     const desabilitar =
@@ -661,8 +661,8 @@ const AcompanhamentoRegistros = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
-                    String(modalidadeId) !== String(ModalidadeDTO.CELP)
+                    String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
+                    String(modalidadeId) !== String(ModalidadeEnum.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

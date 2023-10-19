@@ -11,7 +11,7 @@ import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import Card from '~/componentes/card';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -266,8 +266,8 @@ const HistoricoNotificacoes = () => {
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
       if (
-        Number(modalidadeId) === modalidade.EJA ||
-        Number(modalidadeId) === modalidade.CELP
+        Number(modalidadeId) === ModalidadeEnum.EJA ||
+        Number(modalidadeId) === ModalidadeEnum.CELP
       ) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
@@ -284,8 +284,8 @@ const HistoricoNotificacoes = () => {
     const desabilitar = !anoLetivo || !codigoDre || !codigoUe;
 
     if (
-      Number(modalidadeId) === modalidade.EJA ||
-      Number(modalidadeId) === modalidade.CELP
+      Number(modalidadeId) === ModalidadeEnum.EJA ||
+      Number(modalidadeId) === ModalidadeEnum.CELP
     ) {
       setDesabilitarBtnGerar(!semestre || desabilitar);
     } else {
@@ -586,8 +586,8 @@ const HistoricoNotificacoes = () => {
                   label="Semestre"
                   disabled={
                     !modalidadeId ||
-                    Number(modalidadeId) !== modalidade.EJA ||
-                    Number(modalidadeId) !== modalidade.CELP ||
+                    Number(modalidadeId) !== ModalidadeEnum.EJA ||
+                    Number(modalidadeId) !== ModalidadeEnum.CELP ||
                     (listaSemestre && listaSemestre.length === 1)
                   }
                   valueSelect={semestre}

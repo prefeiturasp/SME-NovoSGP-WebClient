@@ -13,7 +13,7 @@ import {
 } from '~/constantes/ids/select';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { ordenarDescPor } from '~/utils';
 import ListaoContext from '../listaoContext';
@@ -207,8 +207,8 @@ const ListaoFiltros = () => {
     if (carregarFiltrosSalvos) return;
 
     if (
-      (modalidade && String(modalidade) === String(ModalidadeDTO.EJA)) ||
-      String(modalidade) === String(ModalidadeDTO.CELP)
+      (modalidade && String(modalidade) === String(ModalidadeEnum.EJA)) ||
+      String(modalidade) === String(ModalidadeEnum.CELP)
     ) {
       obterSemestres();
     }
@@ -254,13 +254,13 @@ const ListaoFiltros = () => {
     bi.push({ descricao: '2º Bimestre', valor: 2 });
 
     if (
-      modalidade !== String(ModalidadeDTO.EJA) ||
-      modalidade !== String(ModalidadeDTO.CELP)
+      modalidade !== String(ModalidadeEnum.EJA) ||
+      modalidade !== String(ModalidadeEnum.CELP)
     ) {
       bi.push({ descricao: '3º Bimestre', valor: 3 });
       bi.push({ descricao: '4º Bimestre', valor: 4 });
     }
-    if (modalidade !== String(ModalidadeDTO.INFANTIL)) {
+    if (modalidade !== String(ModalidadeEnum.INFANTIL)) {
       bi.push({ descricao: 'Final', valor: 0 });
     }
 
@@ -471,8 +471,8 @@ const ListaoFiltros = () => {
           </Loader>
         </Col>
 
-        {Number(modalidade) === ModalidadeDTO.EJA ||
-        Number(modalidade) === ModalidadeDTO.CELP ? (
+        {Number(modalidade) === ModalidadeEnum.EJA ||
+        Number(modalidade) === ModalidadeEnum.CELP ? (
           <Col sm={24} md={12} lg={8}>
             <Loader loading={carregandoSemestres} ignorarTip>
               <SelectComponent

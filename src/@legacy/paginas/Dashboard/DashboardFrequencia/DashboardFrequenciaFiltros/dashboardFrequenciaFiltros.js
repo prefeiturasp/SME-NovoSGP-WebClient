@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
@@ -258,8 +258,8 @@ const DashboardFrequenciaFiltros = () => {
       (ue &&
         modalidade &&
         anoLetivo &&
-        String(modalidade) === String(ModalidadeDTO.EJA)) ||
-      String(modalidade) === String(ModalidadeDTO.CELP)
+        String(modalidade) === String(ModalidadeEnum.EJA)) ||
+      String(modalidade) === String(ModalidadeEnum.CELP)
     ) {
       obterSemestres();
     } else {
@@ -427,8 +427,8 @@ const DashboardFrequenciaFiltros = () => {
               valueText="desc"
               disabled={
                 listaSemestres?.length === 1 ||
-                Number(modalidade) !== ModalidadeDTO.EJA ||
-                Number(modalidade) !== ModalidadeDTO.CELP
+                Number(modalidade) !== ModalidadeEnum.EJA ||
+                Number(modalidade) !== ModalidadeEnum.CELP
               }
               onChange={onChangeSemestre}
               valueSelect={semestre}

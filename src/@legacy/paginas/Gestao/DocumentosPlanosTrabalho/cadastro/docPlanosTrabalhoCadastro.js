@@ -121,8 +121,8 @@ const DocPlanosTrabalhoCadastro = () => {
         function validar() {
           const { modalidade, semestre } = this.parent;
           const temModalidadeEjaOuCelp =
-            Number(modalidade) === ModalidadeDTO.EJA ||
-            Number(modalidade) === ModalidadeDTO.CELP;
+            Number(modalidade) === ModalidadeEnum.EJA ||
+            Number(modalidade) === ModalidadeEnum.CELP;
 
           let ehValido = true;
           if (!temModalidadeEjaOuCelp) {

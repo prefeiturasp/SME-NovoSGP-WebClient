@@ -8,7 +8,7 @@ import { Cabecalho } from '~/componentes-sgp';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   confirmar,
   erros,
@@ -31,8 +31,8 @@ const ListaComunicados = () => {
 
   const temModalidadeEjaOuCelp = !!filtros?.modalidades?.find(
     item =>
-      String(item) === String(ModalidadeDTO.EJA) ||
-      String(item) === String(ModalidadeDTO.CELP)
+      String(item) === String(ModalidadeEnum.EJA) ||
+      String(item) === String(ModalidadeEnum.CELP)
   );
   const temSemestre = temModalidadeEjaOuCelp ? filtros?.semestre : true;
 

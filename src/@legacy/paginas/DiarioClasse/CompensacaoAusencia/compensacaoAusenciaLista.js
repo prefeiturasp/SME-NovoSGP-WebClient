@@ -10,7 +10,7 @@ import { Colors } from '~/componentes/colors';
 import ListaPaginada from '~/componentes/listaPaginada/listaPaginada';
 import SelectComponent from '~/componentes/select';
 import { URL_HOME } from '~/constantes/url';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { ROUTES } from '@/core/enum/routes';
 import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
 import ServicoCompensacaoAusencia from '~/servicos/Paginas/DiarioClasse/ServicoCompensacaoAusencia';
@@ -179,8 +179,8 @@ const CompensacaoAusenciaLista = () => {
 
     let listaBi = [];
     if (
-      String(turmaSelecionada.modalidade) === String(modalidade.EJA) ||
-      String(turmaSelecionada.modalidade) === String(modalidade.CELP)
+      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.EJA) ||
+      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.CELP)
     ) {
       listaBi = [
         { valor: 1, descricao: '1° Bimestre' },

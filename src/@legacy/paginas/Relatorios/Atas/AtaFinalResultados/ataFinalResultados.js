@@ -27,8 +27,7 @@ import {
   SGP_SELECT_VISUALIZACAO,
 } from '~/constantes/ids/select';
 import { URL_HOME } from '~/constantes/url';
-import { ModalidadeDTO } from '~/dtos';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import ServicoConselhoAtaFinal from '~/servicos/Paginas/ConselhoAtaFinal/ServicoConselhoAtaFinal';
 import { erros, sucesso } from '~/servicos/alertas';
@@ -84,8 +83,8 @@ const AtaFinalResultados = () => {
   ];
 
   const ehEJAOuCelp =
-    Number(modalidadeId) === ModalidadeDTO.EJA ||
-    Number(modalidadeId) === ModalidadeDTO.CELP;
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const obterAnosLetivos = useCallback(async considHistorico => {
     setCarregandoAnosLetivos(true);
@@ -302,7 +301,10 @@ const AtaFinalResultados = () => {
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (modalidadeId === modalidade.EJA || modalidadeId === modalidade.CELP) {
+      if (
+        modalidadeId === ModalidadeEnum.EJA ||
+        modalidadeId === ModalidadeEnum.CELP
+      ) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre(undefined);
@@ -326,11 +328,11 @@ const AtaFinalResultados = () => {
     let desabilitado = desabilitar;
 
     if (
-      Number(modalidadeId) === Number(modalidade.EJA) ||
-      Number(modalidadeId) === Number(modalidade.CELP)
+      Number(modalidadeId) === Number(ModalidadeEnum.EJA) ||
+      Number(modalidadeId) === Number(ModalidadeEnum.CELP)
     ) {
       desabilitado = !semestre || desabilitar;
-    } else if (Number(modalidadeId) === Number(modalidade.ENSINO_MEDIO)) {
+    } else if (Number(modalidadeId) === Number(ModalidadeEnum.Medio)) {
       desabilitado = desabilitar || !visualizacao;
     }
 
@@ -371,11 +373,10 @@ const AtaFinalResultados = () => {
   const checarTipoTurma = arrayTurmas => {
     setVisualizacao('');
     const turmaItinerancia = compararTurmaAno('tipoTurma', 7, arrayTurmas);
-    const turmaPrimeiro = compararTurmaAno('ano', 1, arrayTurmas);
     const turmaSegundo = compararTurmaAno('ano', 2, arrayTurmas);
     const turmaTerceiro = compararTurmaAno('ano', 3, arrayTurmas);
     const ehModalidadeMedio =
-      parseInt(modalidadeId, 10) === parseInt(modalidade.ENSINO_MEDIO, 10);
+      parseInt(modalidadeId, 10) === parseInt(ModalidadeEnum.Medio, 10);
 
     if (
       turmaItinerancia.length === arrayTurmas?.length ||
@@ -400,7 +401,7 @@ const AtaFinalResultados = () => {
       !modalidadeId ||
       !turmaId ||
       (turmaId.length === 1 && turmaId[0] !== OPCAO_TODOS && turmaExcecao) ||
-      parseInt(modalidadeId, 10) !== parseInt(modalidade.ENSINO_MEDIO, 10) ||
+      parseInt(modalidadeId, 10) !== parseInt(ModalidadeEnum.Medio, 10) ||
       !turmaId.length ||
       turmaExcecao;
     setDesabilitaVisualizacao(desabilita);
@@ -474,8 +475,8 @@ const AtaFinalResultados = () => {
     setSemestre(undefined);
 
     if (
-      Number(novaModalidade) === modalidade.EJA ||
-      Number(novaModalidade) === modalidade.CELP
+      Number(novaModalidade) === ModalidadeEnum.EJA ||
+      Number(novaModalidade) === ModalidadeEnum.CELP
     )
       obterSemestres(novaModalidade, anoLetivo);
 
@@ -551,7 +552,7 @@ const AtaFinalResultados = () => {
   return (
     <>
       <AlertaModalidadeInfantil
-        exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
+        exibir={String(modalidadeId) === String(ModalidadeEnum.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
 
@@ -561,7 +562,7 @@ const AtaFinalResultados = () => {
           onClickCancelar={onClickCancelar}
           onClickGerar={onClickGerar}
           desabilitarBtnGerar={
-            String(modalidadeId) === String(modalidade.INFANTIL) ||
+            String(modalidadeId) === String(ModalidadeEnum.INFANTIL) ||
             desabilitarBtnGerar ||
             !permissoesTela.podeConsultar
           }
@@ -674,8 +675,8 @@ const AtaFinalResultados = () => {
                 disabled={
                   !permissoesTela.podeConsultar ||
                   !modalidadeId ||
-                  Number(modalidadeId) !== modalidade.EJA ||
-                  Number(modalidadeId) !== modalidade.CELP ||
+                  Number(modalidadeId) !== ModalidadeEnum.EJA ||
+                  Number(modalidadeId) !== ModalidadeEnum.CELP ||
                   (listaSemestre && listaSemestre.length === 1)
                 }
                 valueSelect={semestre}

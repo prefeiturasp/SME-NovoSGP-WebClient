@@ -27,7 +27,7 @@ import { Colors } from '~/componentes/colors';
 import Grid from '~/componentes/grid';
 import SelectComponent from '~/componentes/select';
 import { TOKEN_EXPIRADO } from '~/constantes';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   limparDadosFiltro,
   salvarAnosLetivos,
@@ -138,6 +138,10 @@ const Filtro = () => {
     !!dadosFiltroAutenticacaoFrequencia?.turma?.historica ||
       !!turmaUsuarioSelecionada.consideraHistorico
   );
+
+  const ehEJAOuCelp =
+    Number(modalidadeSelecionada) === ModalidadeEnum.EJA ||
+    Number(modalidadeSelecionada) === ModalidadeEnum.CELP;
 
   const aplicarFiltro = useCallback(
     async (
@@ -336,9 +340,7 @@ const Filtro = () => {
     turmaUsuarioSelecionada.unidadeEscolar,
   ]);
 
-  const campoVazio = campo => {
-    return !campo || campo === [] || campo === '';
-  };
+  const campoVazio = campo => !campo || campo === '';
 
   /*
   Sessão onde obtem os dados no backend
@@ -411,7 +413,7 @@ const Filtro = () => {
 
       setCarregandoPeriodos(false);
 
-      if (!modalidade) {
+      if (!ModalidadeEnum) {
         setCampoPeriodoDesabilitado(true);
         return [];
       }
@@ -508,11 +510,11 @@ const Filtro = () => {
       )
         return [];
 
-      const periodo =
-        modalidadeSelecionada.toString() === modalidade.EJA.toString() ||
-        (modalidadeSelecionada.toString() === modalidade.CELP.toString() &&
-          periodoSelecionado) ||
-        null;
+      let periodo = null;
+
+      if (ehEJAOuCelp) {
+        periodo = periodoSelecionado;
+      }
 
       setCarregandoTurmas(true);
 
@@ -555,6 +557,7 @@ const Filtro = () => {
       modalidadeSelecionada,
       periodoSelecionado,
       unidadeEscolarSelecionada,
+      ehEJAOuCelp,
     ]
   );
 
@@ -604,10 +607,7 @@ const Filtro = () => {
       return retornoEstado;
     }
 
-    if (
-      modalidadeSelecionada.toString() === modalidade.EJA.toString() ||
-      modalidadeSelecionada.toString() === modalidade.CELP.toString()
-    ) {
+    if (ehEJAOuCelp) {
       obterPeriodos(estado);
       setCampoDreDesabilitado(true);
       return retornoEstado;
@@ -615,7 +615,13 @@ const Filtro = () => {
 
     obterDres(estado);
     return retornoEstado;
-  }, [anoLetivoSelecionado, modalidadeSelecionada, obterDres, obterPeriodos]);
+  }, [
+    anoLetivoSelecionado,
+    modalidadeSelecionada,
+    obterDres,
+    obterPeriodos,
+    ehEJAOuCelp,
+  ]);
 
   useEffect(() => {
     let estado = true;
@@ -633,8 +639,8 @@ const Filtro = () => {
     }
 
     if (
-      modalidadeSelecionada.toString() !== modalidade.EJA.toString() ||
-      modalidadeSelecionada.toString() !== modalidade.CELP.toString()
+      modalidadeSelecionada.toString() !== ModalidadeEnum.EJA.toString() ||
+      modalidadeSelecionada.toString() !== ModalidadeEnum.CELP.toString()
     )
       return retornoEstado;
 
@@ -666,10 +672,11 @@ const Filtro = () => {
       return retornoEstado;
     }
 
-    const periodo =
-      modalidadeSelecionada.toString() === modalidade.EJA.toString() ||
-      (modalidadeSelecionada.toString() === modalidade.CELP.toString() &&
-        periodoSelecionado);
+    let periodo = null;
+    if (ehEJAOuCelp) {
+      periodo = periodoSelecionado;
+    }
+
     obterUnidadesEscolares(estado, periodo);
 
     return retornoEstado;
@@ -679,6 +686,7 @@ const Filtro = () => {
     modalidadeSelecionada,
     obterUnidadesEscolares,
     periodoSelecionado,
+    ehEJAOuCelp,
   ]);
 
   useEffect(() => {
@@ -845,8 +853,8 @@ const Filtro = () => {
         }
 
         const periodo =
-          turmaBkp.modalidade.toString() === modalidade.EJA.toString() ||
-          turmaBkp.modalidade.toString() === modalidade.CELP.toString()
+          turmaBkp.modalidade.toString() === ModalidadeEnum.EJA.toString() ||
+          turmaBkp.modalidade.toString() === ModalidadeEnum.CELP.toString()
             ? turmaBkp.periodo
             : null;
         const listaUes = await obterUnidadesEscolares(false, periodo);
@@ -1316,15 +1324,7 @@ const Filtro = () => {
                 />
               </Grid>
               <Grid
-                cols={
-                  (modalidadeSelecionada &&
-                    modalidadeSelecionada.toString() ===
-                      modalidade.EJA.toString()) ||
-                  modalidadeSelecionada.toString() ===
-                    modalidade.CELP.toString()
-                    ? 5
-                    : 9
-                }
+                cols={modalidadeSelecionada && ehEJAOuCelp ? 5 : 9}
                 className="form-group"
               >
                 <Loader loading={carregandoModalidades} tip="">
@@ -1344,30 +1344,26 @@ const Filtro = () => {
                   />
                 </Loader>
               </Grid>
-              {(modalidadeSelecionada &&
-                modalidadeSelecionada.toString() ===
-                  modalidade.EJA.toString()) ||
-                (modalidadeSelecionada.toString() ===
-                  modalidade.CELP.toString() && (
-                  <Grid cols={4} className="form-group">
-                    <Loader loading={carregandoPeriodos} tip="">
-                      <SelectComponent
-                        id={SGP_SELECT_FILTRO_PRINCIPAL_PERIODO}
-                        className="fonte-14"
-                        onChange={aoTrocarPeriodo}
-                        lista={periodos}
-                        valueOption="valor"
-                        containerVinculoId="containerFiltro"
-                        valueText="desc"
-                        valueSelect={
-                          periodoSelecionado && `${periodoSelecionado}`
-                        }
-                        placeholder="Período"
-                        disabled={campoPeriodoDesabilitado}
-                      />
-                    </Loader>
-                  </Grid>
-                ))}
+              {modalidadeSelecionada && ehEJAOuCelp && (
+                <Grid cols={4} className="form-group">
+                  <Loader loading={carregandoPeriodos} tip="">
+                    <SelectComponent
+                      id={SGP_SELECT_FILTRO_PRINCIPAL_PERIODO}
+                      className="fonte-14"
+                      onChange={aoTrocarPeriodo}
+                      lista={periodos}
+                      valueOption="valor"
+                      containerVinculoId="containerFiltro"
+                      valueText="desc"
+                      valueSelect={
+                        periodoSelecionado && `${periodoSelecionado}`
+                      }
+                      placeholder="Período"
+                      disabled={campoPeriodoDesabilitado}
+                    />
+                  </Loader>
+                </Grid>
+              )}
             </div>
             <div className="form-group">
               <Loader loading={carregandoDres} tip="">

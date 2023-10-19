@@ -4,7 +4,7 @@ import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import CampoNumero from '~/componentes/campoNumero';
 import Card from '~/componentes/card';
 import { URL_HOME } from '~/constantes/url';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -261,8 +261,8 @@ const RelatorioNotasConceitosFinais = () => {
   const obterAnosEscolares = useCallback(
     async (mod, ue, anoLetivoSelecionado) => {
       if (
-        String(mod) === String(modalidade.EJA) ||
-        String(mod) === String(modalidade.CELP)
+        String(mod) === String(ModalidadeEnum.EJA) ||
+        String(mod) === String(ModalidadeEnum.CELP)
       ) {
         setListaAnosEscolares([{ descricao: 'Todos', valor: OPCAO_TODOS }]);
         setAnosEscolares([OPCAO_TODOS]);
@@ -358,7 +358,7 @@ const RelatorioNotasConceitosFinais = () => {
     bi.push({ desc: '1º', valor: 1 });
     bi.push({ desc: '2º', valor: 2 });
 
-    if (modalidadeId != modalidade.EJA || modalidadeId != modalidade.CELP) {
+    if (modalidadeId != ModalidadeEnum.EJA || modalidadeId != ModalidadeEnum.CELP) {
       bi.push({ desc: '3º', valor: 3 });
       bi.push({ desc: '4º', valor: 4 });
     }
@@ -380,8 +380,8 @@ const RelatorioNotasConceitosFinais = () => {
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
       if (
-        String(modalidadeId) === String(modalidade.EJA) ||
-        String(modalidadeId) === String(modalidade.CELP)
+        String(modalidadeId) === String(ModalidadeEnum.EJA) ||
+        String(modalidadeId) === String(ModalidadeEnum.CELP)
       ) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
@@ -438,8 +438,8 @@ const RelatorioNotasConceitosFinais = () => {
       !condicao ||
       !tipoNota ||
       valorCondicaoDesabilitar ||
-      (String(modalidadeId) === String(modalidade.EJA) ||
-      String(modalidadeId) === String(modalidade.CELP)
+      (String(modalidadeId) === String(ModalidadeEnum.EJA) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP)
         ? !semestre
         : false) ||
       !formato ||
@@ -715,7 +715,7 @@ const RelatorioNotasConceitosFinais = () => {
   return (
     <>
       <AlertaModalidadeInfantil
-        exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
+        exibir={String(modalidadeId) === String(ModalidadeEnum.INFANTIL)}
         validarModalidadeFiltroPrincipal={false}
       />
       <Cabecalho pagina="Notas e conceitos">
@@ -805,8 +805,8 @@ const RelatorioNotasConceitosFinais = () => {
                     label="Semestre"
                     disabled={
                       !modalidadeId ||
-                      String(modalidadeId) !== String(modalidade.EJA) ||
-                      String(modalidadeId) !== String(modalidade.CELP) ||
+                      String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
+                      String(modalidadeId) !== String(ModalidadeEnum.CELP) ||
                       (listaSemestre && listaSemestre.length === 1)
                     }
                     valueSelect={semestre}

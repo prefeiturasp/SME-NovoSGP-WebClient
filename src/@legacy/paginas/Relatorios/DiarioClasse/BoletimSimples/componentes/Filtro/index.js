@@ -22,10 +22,10 @@ import {
   SGP_SELECT_TURMA,
   SGP_SELECT_UE,
 } from '~/constantes/ids/select';
-import { ModalidadeDTO } from '~/dtos';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { ordenarDescPor } from '~/utils';
 import { AvisoBoletim } from './styles';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const Filtros = ({
   onFiltrar,
@@ -62,10 +62,10 @@ const Filtros = ({
   const [imprimirEstudantesInativos, setImprimirEstudantesInativos] =
     useState();
 
-  const ehEnsinoMedio = Number(modalidadeId) === ModalidadeDTO.ENSINO_MEDIO;
+  const ehEnsinoMedio = Number(modalidadeId) === ModalidadeEnum.Medio;
   const ehEJAOuCelp =
-    Number(modalidadeId) === ModalidadeDTO.EJA ||
-    Number(modalidadeId) === ModalidadeDTO.CELP;
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const OPCAO_TODOS_ESTUDANTES = '0';
   const OPCAO_SELECIONAR_ALUNOS = '1';
@@ -379,14 +379,7 @@ const Filtros = ({
   };
 
   useEffect(() => {
-    if (
-      (modalidadeId &&
-        anoLetivo &&
-        String(modalidadeId) === String(ModalidadeDTO.EJA)) ||
-      (String(modalidadeId) === String(ModalidadeDTO.CELP) &&
-        dreCodigo &&
-        ueCodigo)
-    ) {
+    if (modalidadeId && anoLetivo && ehEJAOuCelp && dreCodigo && ueCodigo) {
       obterSemestres(modalidadeId, anoLetivo, dreCodigo, ueCodigo);
       return;
     }
@@ -611,8 +604,8 @@ const Filtros = ({
               disabled={
                 !modalidadeId ||
                 listaSemestres?.length === 1 ||
-                String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
-                String(modalidadeId) !== String(ModalidadeDTO.CELP)
+                Number(modalidadeId) !== ModalidadeEnum.EJA ||
+                Number(modalidadeId) !== ModalidadeEnum.CELP
               }
               valueSelect={semestre}
               onChange={onChangeSemestre}

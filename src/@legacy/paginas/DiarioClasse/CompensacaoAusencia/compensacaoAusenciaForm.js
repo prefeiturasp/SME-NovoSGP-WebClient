@@ -12,7 +12,7 @@ import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import SelectComponent from '~/componentes/select';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { ROUTES } from '@/core/enum/routes';
 import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
@@ -132,8 +132,8 @@ const CompensacaoAusenciaForm = () => {
   useEffect(() => {
     let listaBi = [];
     if (
-      String(turmaSelecionada.modalidade) === String(modalidade.EJA) ||
-      String(turmaSelecionada.modalidade) === String(modalidade.CELP)
+      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.EJA) ||
+      String(turmaSelecionada.modalidade) === String(ModalidadeEnum.CELP)
     ) {
       listaBi = [
         { valor: 1, descricao: '1°' },

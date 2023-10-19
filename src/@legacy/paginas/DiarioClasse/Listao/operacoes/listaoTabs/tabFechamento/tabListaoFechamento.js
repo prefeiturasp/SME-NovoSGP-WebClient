@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Alert } from '~/componentes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
 import ListaoContext from '../../../listaoContext';
 import { obterDaodsFechamentoPorBimestreListao } from '../../../listaoFuncoes';
@@ -58,8 +58,8 @@ const TabListaoFechamento = () => {
   }, []);
 
   const ehEJAouCelp =
-    Number(turmaSelecionada?.modalidade) === ModalidadeDTO.EJA ||
-    Number(turmaSelecionada?.modalidade) === ModalidadeDTO.CELP;
+    Number(turmaSelecionada?.modalidade) === ModalidadeEnum.EJA ||
+    Number(turmaSelecionada?.modalidade) === ModalidadeEnum.CELP;
   const naoLancaNota =
     componenteCurricular?.codigoComponenteCurricular &&
     !componenteCurricular?.lancaNota;

@@ -49,8 +49,8 @@ const BotaoConferirConselhoClasse = () => {
   ];
 
   if (
-    Number(turmaSelecionada?.modalidade) !== ModalidadeDTO.EJA ||
-    Number(turmaSelecionada?.modalidade) !== ModalidadeDTO.CELP
+    Number(turmaSelecionada?.modalidade) !== ModalidadeEnum.EJA ||
+    Number(turmaSelecionada?.modalidade) !== ModalidadeEnum.CELP
   ) {
     opcoesBimestres.push(
       {

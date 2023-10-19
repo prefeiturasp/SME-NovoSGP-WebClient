@@ -3,7 +3,7 @@ import { Col } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_TURMA } from '~/constantes/ids/select';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros } from '~/servicos';
 
 const TurmaOcorrencia = props => {
@@ -15,8 +15,8 @@ const TurmaOcorrencia = props => {
   const { anoLetivo, modalidade, semestre } = form.values;
 
   const ehEJAOuCelp =
-    Number(modalidade) === ModalidadeDTO.EJA ||
-    Number(modalidade) === ModalidadeDTO.CELP;
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const nomeCampo = 'turmaId';
 

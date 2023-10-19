@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros } from '~/servicos';
 import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
 
@@ -55,8 +55,8 @@ const GraficoQuantidadeJustificativasPorMotivo = props => {
     const consultaPorTurma = ueId && ueId !== OPCAO_TODOS;
     const consultaPorAnoEscolar = ueId === OPCAO_TODOS;
     const ejaOuCelp =
-      Number(modalidade) === ModalidadeDTO.EJA ||
-      Number(modalidade) === ModalidadeDTO.CELP;
+      Number(modalidade) === ModalidadeEnum.EJA ||
+      Number(modalidade) === ModalidadeEnum.CELP;
     if (
       anoLetivo &&
       dreId &&

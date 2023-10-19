@@ -9,7 +9,7 @@ import {
   setTurmasAcompanhamentoFechamento,
 } from '~/redux/modulos/acompanhamentoFechamento/actions';
 
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { OPCAO_TODOS, ANO_INICIO_INFANTIL } from '~/constantes/constantes';
 
@@ -56,8 +56,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const OPCAO_PADRAO = '-99';
 
   const ehEJAOuCelp =
-    String(modalidadeId) === String(ModalidadeDTO.EJA) ||
-    String(modalidadeId) === String(ModalidadeDTO.CELP);
+    String(modalidadeId) === String(ModalidadeEnum.EJA) ||
+    String(modalidadeId) === String(ModalidadeEnum.CELP);
 
   const carregandoAcompanhamentoFechamento = useSelector(
     store => store.acompanhamentoFechamento.carregandoAcompanhamentoFechamento
@@ -344,8 +344,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     if (
       (modalidadeId &&
         anoLetivo &&
-        String(modalidadeId) === String(ModalidadeDTO.EJA)) ||
-      String(modalidadeId) === String(ModalidadeDTO.CELP)
+        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP)
     ) {
       obterSemestres();
     } else {
@@ -607,8 +607,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               disabled={
                 !modalidadeId ||
                 listaSemestres?.length === 1 ||
-                String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
-                String(modalidadeId) !== String(ModalidadeDTO.CELP) ||
+                String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
+                String(modalidadeId) !== String(ModalidadeEnum.CELP) ||
                 desabilitarCampos
               }
               valueSelect={semestre}

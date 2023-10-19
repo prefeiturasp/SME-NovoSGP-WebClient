@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Card, Loader, momentSchema } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import RelatorioOcorrenciasBotoesAcoes from './relatorioOcorrenciasBotoesAcoes';
 import RelatorioOcorrenciasForm from './relatorioOcorrenciasForm';
 import moment from 'moment';
@@ -49,8 +49,8 @@ const RelatorioOcorrencias = () => {
         function validar() {
           const { modalidade, semestre } = this.parent;
           const temModalidadeEjaOuCelp =
-            Number(modalidade) === ModalidadeDTO.EJA ||
-            Number(modalidade) === ModalidadeDTO.CELP;
+            Number(modalidade) === ModalidadeEnum.EJA ||
+            Number(modalidade) === ModalidadeEnum.CELP;
 
           let ehValido = true;
           if (!temModalidadeEjaOuCelp) {

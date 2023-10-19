@@ -304,7 +304,7 @@ const AcompanhamentoFechamento = () => {
             valor: String(item.valor),
           }))
           .filter(
-            item => String(item.valor) !== String(modalidadeDTO.INFANTIL)
+            item => String(item.valor) !== String(ModalidadeEnum.INFANTIL)
           );
 
         setListaModalidades(lista);
@@ -407,8 +407,8 @@ const AcompanhamentoFechamento = () => {
     if (
       (modalidade &&
         anoLetivo &&
-        String(modalidade) === String(ModalidadeDTO.EJA)) ||
-      String(modalidade) === String(ModalidadeDTO.CELP)
+        String(modalidade) === String(ModalidadeEnum.EJA)) ||
+      String(modalidade) === String(ModalidadeEnum.CELP)
     ) {
       if (ueCodigo === OPCAO_TODOS) {
         obterSemestresEja(modalidade, anoLetivo);
@@ -502,8 +502,8 @@ const AcompanhamentoFechamento = () => {
 
   useEffect(() => {
     const temModalidadeEjaOuCelp =
-      Number(modalidade) === ModalidadeDTO.EJA ||
-      Number(modalidade) === ModalidadeDTO.CELP;
+      Number(modalidade) === ModalidadeEnum.EJA ||
+      Number(modalidade) === ModalidadeEnum.CELP;
     const OPCAO_TODAS_TURMA = { valor: OPCAO_TODOS, nomeFiltro: 'Todas' };
     if (ueCodigo === OPCAO_TODOS) {
       setListaTurmas([OPCAO_TODAS_TURMA]);
@@ -669,8 +669,8 @@ const AcompanhamentoFechamento = () => {
       !dreCodigo ||
       !ueCodigo ||
       !modalidade ||
-      (String(modalidade) === String(modalidadeDTO.EJA) ||
-      String(modalidade) === String(modalidadeDTO.CELP)
+      (String(modalidade) === String(ModalidadeEnum.EJA) ||
+      String(modalidade) === String(ModalidadeEnum.CELP)
         ? !semestre
         : false) ||
       !turmasCodigo?.length ||
@@ -851,8 +851,8 @@ const AcompanhamentoFechamento = () => {
                     disabled={
                       !modalidade ||
                       listaSemestres?.length === 1 ||
-                      String(modalidade) !== String(ModalidadeDTO.EJA) ||
-                      String(modalidade) !== String(ModalidadeDTO.CELP) ||
+                      String(modalidade) !== String(ModalidadeEnum.EJA) ||
+                      String(modalidade) !== String(ModalidadeEnum.CELP) ||
                       desabilitarCampos
                     }
                     valueSelect={semestre}

@@ -11,7 +11,7 @@ import SelectComponent from '~/componentes/select';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { erros } from '~/servicos';
 import ListaBimestres from './Componentes/listaBimestres';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { setBimestreSelecionado } from '~/redux/modulos/acompanhamentoFrequencia/actions';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -160,8 +160,8 @@ const AcompanhamentoFrequencia = () => {
       setTerritorioSaber(componenteCurriular?.territorioSaber);
 
       if (
-        Number(turmaSelecionada.modalidade) === modalidade.EJA ||
-        Number(turmaSelecionada.modalidade) === modalidade.CELP
+        Number(turmaSelecionada.modalidade) === ModalidadeEnum.EJA ||
+        Number(turmaSelecionada.modalidade) === ModalidadeEnum.CELP
       ) {
         setBimestres(listagemBimestresEJA);
       } else {

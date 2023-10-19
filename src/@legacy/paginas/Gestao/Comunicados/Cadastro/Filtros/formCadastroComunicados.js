@@ -168,8 +168,8 @@ const FormCadastroComunicados = props => {
           const { modalidades, semestre } = this.parent;
           const temModalidadeEja = modalidades?.find(
             item =>
-              String(item) === String(ModalidadeDTO.EJA) ||
-              String(item) === String(ModalidadeDTO.CELP)
+              String(item) === String(ModalidadeEnum.EJA) ||
+              String(item) === String(ModalidadeEnum.CELP)
           );
           let ehValido = true;
           if (!temModalidadeEja) {

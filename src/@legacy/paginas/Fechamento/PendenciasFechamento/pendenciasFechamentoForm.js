@@ -16,7 +16,7 @@ import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import Label from '~/componentes/label';
 import SelectComponent from '~/componentes/select';
 import { SGP_BUTTON_APROVAR } from '~/constantes/ids/button';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import situacaoPendenciaDto from '~/dtos/situacaoPendenciaDto';
 import { ServicoPeriodoFechamento } from '~/servicos';
 import ServicoPendenciasFechamento from '~/servicos/Paginas/Fechamento/ServicoPendenciasFechamento';
@@ -92,8 +92,8 @@ const PendenciasFechamentoForm = () => {
     const montaBimestre = () => {
       let listaBi = [];
       if (
-        Number(turmaSelecionada.modalidade) === modalidade.EJA ||
-        Number(turmaSelecionada.modalidade) === modalidade.CELP
+        Number(turmaSelecionada.modalidade) === ModalidadeEnum.EJA ||
+        Number(turmaSelecionada.modalidade) === ModalidadeEnum.CELP
       ) {
         listaBi = [
           { valor: 1, descricao: 'Primeiro bimestre' },

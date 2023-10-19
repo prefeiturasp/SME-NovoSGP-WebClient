@@ -1,7 +1,7 @@
 import { Col, Row, Tabs } from 'antd';
 import React, { useContext, useState } from 'react';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import GraficosEvasaoEscolar from './GraficosEvasaoEscolar/graficosEvasaoEscolar';
 import NAAPAContext from './naapaContext';
 import GraficosEncaminhamento from './GraficosEncaminhamento/graficosEncaminhamento';
@@ -15,8 +15,8 @@ const DashboardNAAPATabs = () => {
   const TAB_ENCAMINHAMENTO = '2';
 
   const ehModalidadeEJAouCelp =
-    Number(modalidade) === ModalidadeDTO.EJA ||
-    Number(modalidade) === ModalidadeDTO.CELP;
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const exibirAbas = anoLetivo && dre?.codigo && ue?.codigo;
 

@@ -18,7 +18,7 @@ import {
 } from '~/constantes/ids/select';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   AbrangenciaServico,
   erros,
@@ -315,8 +315,8 @@ const RelatorioFrequenciaMensal = () => {
     if (
       (modalidadeId &&
         anoLetivo &&
-        String(modalidadeId) === String(ModalidadeDTO.EJA)) ||
-      String(modalidadeId) === String(ModalidadeDTO.CELP)
+        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP)
     ) {
       setSemestre();
       obterSemestres();
@@ -429,8 +429,8 @@ const RelatorioFrequenciaMensal = () => {
 
   useEffect(() => {
     const temModalidadeEjaOuCelp =
-      String(modalidadeId) === String(ModalidadeDTO.EJA) ||
-      String(modalidadeId) === String(ModalidadeDTO.CELP);
+      String(modalidadeId) === String(ModalidadeEnum.EJA) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP);
     const consideraSemestre = temModalidadeEjaOuCelp && !semestre;
 
     const desabilitar =
@@ -592,8 +592,8 @@ const RelatorioFrequenciaMensal = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
-                    String(modalidadeId) !== String(ModalidadeDTO.CELP)
+                    String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
+                    String(modalidadeId) !== String(ModalidadeEnum.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

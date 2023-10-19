@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import Card from '~/componentes/card';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -66,6 +66,10 @@ const RelatorioCompensacaoAusencia = () => {
 
   const [modoEdicao, setModoEdicao] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
+
+  const ehEJAOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const onChangeAnoLetivo = async valor => {
     setDreId();
@@ -261,13 +265,13 @@ const RelatorioCompensacaoAusencia = () => {
   }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
 
   useEffect(() => {
-    if (modalidadeId === modalidade.EJA || modalidadeId === modalidade.CELP) {
+    if (ehEJAOuCelp) {
       setListaBimestres(bimestresEja);
     } else {
       setListaBimestres(bimestresFundMedio);
     }
     setBimestre();
-  }, [modalidadeId]);
+  }, [ehEJAOuCelp]);
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnos(true);
@@ -381,18 +385,13 @@ const RelatorioCompensacaoAusencia = () => {
   };
 
   useEffect(() => {
-    if (
-      (modalidadeId &&
-        anoLetivo &&
-        String(modalidadeId) === String(modalidade.EJA)) ||
-      String(modalidadeId) === String(modalidade.CELP)
-    ) {
+    if (modalidadeId && anoLetivo && ehEJAOuCelp) {
       obterSemestres(modalidadeId, anoLetivo);
     } else {
       setSemestre();
       setListaSemestres([]);
     }
-  }, [obterAnosLetivos, modalidadeId, anoLetivo]);
+  }, [obterAnosLetivos, modalidadeId, anoLetivo, ehEJAOuCelp]);
 
   const cancelar = async () => {
     await setDreId();
@@ -413,14 +412,11 @@ const RelatorioCompensacaoAusencia = () => {
       !dreId ||
       !ueId ||
       !modalidadeId ||
-      (Number(modalidadeId) === modalidade.EJA ||
-      Number(modalidadeId) === modalidade.CELP
-        ? !semestre
-        : false) ||
+      (ehEJAOuCelp ? !semestre : false) ||
       !turmaId ||
       !componentesCurricularesId ||
       !bimestre ||
-      Number(modalidadeId) === modalidade.INFANTIL;
+      Number(modalidadeId) === ModalidadeEnum.INFANTIL;
 
     setDesabilitarBtnGerar(desabilitar);
   }, [
@@ -432,6 +428,7 @@ const RelatorioCompensacaoAusencia = () => {
     turmaId,
     componentesCurricularesId,
     bimestre,
+    ehEJAOuCelp,
   ]);
 
   const gerar = async () => {
@@ -464,7 +461,7 @@ const RelatorioCompensacaoAusencia = () => {
   return (
     <>
       <AlertaModalidadeInfantil
-        exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
+        exibir={Number(modalidadeId) === ModalidadeEnum.INFANTIL}
         validarModalidadeFiltroPrincipal={false}
       />
       <Cabecalho pagina="Relatório de compensação de ausência">
@@ -556,8 +553,8 @@ const RelatorioCompensacaoAusencia = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(modalidade.EJA) ||
-                    String(modalidadeId) !== String(modalidade.CELP)
+                    Number(modalidadeId) !== ModalidadeEnum.EJA ||
+                    Number(modalidadeId) !== ModalidadeEnum.CELP
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

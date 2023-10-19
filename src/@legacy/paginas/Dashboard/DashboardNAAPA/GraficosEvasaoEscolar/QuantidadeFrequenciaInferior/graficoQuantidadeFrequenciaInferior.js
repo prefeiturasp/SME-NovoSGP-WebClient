@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
 import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { erros } from '~/servicos';
 import ServicoDashboardNAAPA from '~/servicos/Paginas/Dashboard/ServicoDashboardNAAPA';
 import NAAPAContext from '../../naapaContext';
@@ -24,8 +24,8 @@ const GraficoQuantidadeFrequenciaInferior = () => {
   const [meseReferencia, setMeseReferencia] = useState(OPCAO_TODOS);
 
   const ehModalidadeEJAouCelp =
-    Number(modalidade) === ModalidadeDTO.EJA ||
-    Number(modalidade) === ModalidadeDTO.CELP;
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);

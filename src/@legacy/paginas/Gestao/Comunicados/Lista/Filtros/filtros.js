@@ -10,7 +10,7 @@ import {
 } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   AbrangenciaServico,
   erros,
@@ -279,17 +279,17 @@ const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
 
   useEffect(() => {
     const temEja = modalidades?.find(
-      item => String(item) === String(ModalidadeDTO.EJA)
+      item => String(item) === String(ModalidadeEnum.EJA)
     );
     const temCelp = modalidades?.find(
-      item => String(item) === String(ModalidadeDTO.CELP)
+      item => String(item) === String(ModalidadeEnum.CELP)
     );
     if (modalidades?.length && anoLetivo && temEja) {
-      obterSemestres(ModalidadeDTO.EJA, anoLetivo);
+      obterSemestres(ModalidadeEnum.EJA, anoLetivo);
       return;
     }
     if (modalidades?.length && anoLetivo && temCelp) {
-      obterSemestres(ModalidadeDTO.CELP, anoLetivo);
+      obterSemestres(ModalidadeEnum.CELP, anoLetivo);
       return;
     }
     setSemestre();

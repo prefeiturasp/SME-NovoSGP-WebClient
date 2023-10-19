@@ -6,7 +6,7 @@ import {
   SGP_SELECT_MODALIDADE,
   SGP_SELECT_SEMESTRE,
 } from '~/constantes/ids/select';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 
 const ModalidadeSemestreOcorrencia = props => {
@@ -26,8 +26,8 @@ const ModalidadeSemestreOcorrencia = props => {
   const { anoLetivo, modalidade } = form.values;
 
   const ehEJAOuCelp =
-    Number(modalidade) === ModalidadeDTO.EJA ||
-    Number(modalidade) === ModalidadeDTO.CELP;
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const listaModalidadesEdicao = form?.initialValues?.modalidade
     ? [

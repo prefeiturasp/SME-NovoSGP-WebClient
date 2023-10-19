@@ -11,7 +11,7 @@ import {
 } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import Alert from '~/componentes/alert';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   limparDadosDashboardEscolaAqui,
   setDadosDeLeituraDeComunicadosAgrupadosPorModalidade,
@@ -189,8 +189,8 @@ const DadosComunicadosLeitura = props => {
   useEffect(() => {
     if (
       modalidadeId &&
-      (Number(modalidadeId) === ModalidadeDTO.ENSINO_MEDIO ||
-        Number(modalidadeId) === ModalidadeDTO.FUNDAMENTAL)
+      (Number(modalidadeId) === ModalidadeEnum.Medio ||
+        Number(modalidadeId) === ModalidadeEnum.Fundamental)
     ) {
       obterAnosEscolaresPorModalidade();
     } else {
@@ -223,8 +223,8 @@ const DadosComunicadosLeitura = props => {
     if (
       (modalidadeId &&
         anoLetivo &&
-        String(modalidadeId) === String(ModalidadeDTO.EJA)) ||
-      String(modalidadeId) === String(ModalidadeDTO.CELP)
+        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP)
     ) {
       obterSemestres();
     } else {
@@ -333,8 +333,8 @@ const DadosComunicadosLeitura = props => {
       if (isSubscribed && anoLetivo && codigoDre && codigoUe && modalidadeId) {
         if (
           (modalidadeId &&
-            String(modalidadeId) === String(ModalidadeDTO.EJA)) ||
-          (String(modalidadeId) === String(ModalidadeDTO.CELP) && !semestre)
+            String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
+          (String(modalidadeId) === String(ModalidadeEnum.CELP) && !semestre)
         ) {
           return;
         }
@@ -590,8 +590,8 @@ const DadosComunicadosLeitura = props => {
                 disabled={
                   !modalidadeId ||
                   (listaSemestres && listaSemestres.length === 1) ||
-                  String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
-                  String(modalidadeId) !== String(ModalidadeDTO.CELP)
+                  String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
+                  String(modalidadeId) !== String(ModalidadeEnum.CELP)
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

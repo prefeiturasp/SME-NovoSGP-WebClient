@@ -135,7 +135,7 @@ const ListaoOperacoesFiltros = () => {
         };
       });
 
-      if (Number(modalidade) !== ModalidadeDTO.INFANTIL) {
+      if (Number(modalidade) !== ModalidadeEnum.INFANTIL) {
         const resultado =
           await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
             turma,

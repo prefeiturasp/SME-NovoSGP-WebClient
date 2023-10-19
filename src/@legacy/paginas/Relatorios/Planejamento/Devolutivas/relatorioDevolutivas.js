@@ -14,7 +14,7 @@ import {
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 import { ANO_INICIO_INFANTIL, OPCAO_TODOS } from '~/constantes/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   AbrangenciaServico,
   erros,
@@ -313,7 +313,7 @@ const RelatorioDevolutivas = () => {
 
   const verificarAbrangencia = data => {
     const modalidadeInfatil = data.filter(
-      item => String(item.valor) === String(ModalidadeDTO.INFANTIL)
+      item => String(item.valor) === String(ModalidadeEnum.INFANTIL)
     );
     if (!modalidadeInfatil.length) {
       setNaoEhInfantil(true);
@@ -337,7 +337,7 @@ const RelatorioDevolutivas = () => {
         setListaModalidades(lista);
         let naoInfantil = true;
         if (lista?.length === 1) {
-          if (String(lista[0].valor) === String(ModalidadeDTO.INFANTIL)) {
+          if (String(lista[0].valor) === String(ModalidadeEnum.INFANTIL)) {
             setModalidadeId(lista[0].valor);
             naoInfantil = false;
           }
@@ -443,8 +443,8 @@ const RelatorioDevolutivas = () => {
     bi.push({ desc: '2º', valor: 2 });
 
     if (
-      modalidadeId !== ModalidadeDTO.EJA ||
-      modalidadeId !== ModalidadeDTO.CELP
+      modalidadeId !== ModalidadeEnum.EJA ||
+      modalidadeId !== ModalidadeEnum.CELP
     ) {
       bi.push({ desc: '3º', valor: 3 });
       bi.push({ desc: '4º', valor: 4 });

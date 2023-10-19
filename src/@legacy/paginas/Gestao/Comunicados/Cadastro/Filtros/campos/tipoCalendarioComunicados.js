@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { erros, ServicoCalendarios } from '~/servicos';
 
 const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
@@ -59,8 +59,8 @@ const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
     if (modalidades?.length && listaModalidadesComunicados?.length) {
       const ehEja = modalidades.find(
         mod =>
-          Number(mod) === ModalidadeDTO.EJA ||
-          Number(mod) === ModalidadeDTO.CELP
+          Number(mod) === ModalidadeEnum.EJA ||
+          Number(mod) === ModalidadeEnum.CELP
       );
       if (ehEja && semestre) {
         obterTiposCalendarios();

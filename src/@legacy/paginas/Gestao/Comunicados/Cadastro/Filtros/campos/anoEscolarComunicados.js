@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
 import { erros, ServicoComunicados } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
@@ -17,8 +17,8 @@ const AnoEscolarComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const ehTodasModalidade = modalidades?.find(item => item === OPCAO_TODOS);
   const temModalidadeEja = modalidades?.find(
     item =>
-      String(item) === String(ModalidadeDTO.EJA) ||
-      String(item) === String(ModalidadeDTO.CELP)
+      String(item) === String(ModalidadeEnum.EJA) ||
+      String(item) === String(ModalidadeEnum.CELP)
   );
 
   const dispatch = useDispatch();

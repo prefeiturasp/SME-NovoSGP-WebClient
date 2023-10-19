@@ -390,7 +390,7 @@ const RelatorioPendencias = () => {
     obterAnosLetivos();
   }, [obterAnosLetivos]);
 
-  const ehInfantil = Number(modalidadeId) === ModalidadeDTO.INFANTIL;
+  const ehInfantil = Number(modalidadeId) === ModalidadeEnum.INFANTIL;
 
   const escolherChamadaEndpointComponeteCurricular = useCallback(
     (ueCodigo, turmas) => {
@@ -488,8 +488,8 @@ const RelatorioPendencias = () => {
     if (
       (modalidadeId &&
         anoLetivo &&
-        String(modalidadeId) === String(ModalidadeDTO.EJA)) ||
-      String(modalidadeId) === String(ModalidadeDTO.CELP)
+        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP)
     ) {
       obterSemestres(modalidadeId, anoLetivo);
       return;
@@ -558,8 +558,8 @@ const RelatorioPendencias = () => {
     const condicoesComuns = !anoLetivo || !dreId || !ueId || clicouBotaoGerar;
 
     const temModalidadeEjaOuCelp =
-      String(modalidadeId) === String(ModalidadeDTO.EJA) ||
-      String(modalidadeId) === String(ModalidadeDTO.CELP);
+      String(modalidadeId) === String(ModalidadeEnum.EJA) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP);
     const consideraSemestre = temModalidadeEjaOuCelp && !semestre;
 
     const condicoesParciais =
@@ -745,8 +745,8 @@ const RelatorioPendencias = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
-                    String(modalidadeId) !== String(ModalidadeDTO.CELP)
+                    String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
+                    String(modalidadeId) !== String(ModalidadeEnum.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

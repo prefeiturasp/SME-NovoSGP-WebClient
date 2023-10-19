@@ -6,7 +6,7 @@ import Alert from '~/componentes/alert';
 import Card from '~/componentes/card';
 import { URL_HOME } from '~/constantes';
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -284,8 +284,8 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     bi.push({ desc: '2º', valor: '2' });
 
     if (
-      String(modalidadeId) !== String(modalidade.EJA) ||
-      String(modalidadeId) !== String(modalidade.CELP)
+      String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
+      String(modalidadeId) !== String(ModalidadeEnum.CELP)
     ) {
       bi.push({ desc: '3º', valor: '3' });
       bi.push({ desc: '4º', valor: '4' });
@@ -417,8 +417,8 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     if (
       (modalidadeId &&
         anoLetivo &&
-        String(modalidadeId) === String(modalidade.EJA)) ||
-      String(modalidadeId) === String(modalidade.CELP)
+        String(modalidadeId) === String(ModalidadeEnum.EJA)) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP)
     ) {
       obterSemestres(modalidadeId, anoLetivo, consideraHistorico);
     } else {
@@ -446,8 +446,8 @@ const RelatorioHistoricoAlteracoesNotas = () => {
       !dreId ||
       !ueId ||
       !modalidadeId ||
-      (String(modalidadeId) === String(modalidade.EJA) ||
-      String(modalidadeId) === String(modalidade.CELP)
+      (String(modalidadeId) === String(ModalidadeEnum.EJA) ||
+      String(modalidadeId) === String(ModalidadeEnum.CELP)
         ? !semestre
         : false) ||
       !turmaId ||
@@ -522,7 +522,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
 
   return (
     <Loader loading={exibirLoader}>
-      {modalidadeId && String(modalidadeId) === String(modalidade.INFANTIL) ? (
+      {modalidadeId && String(modalidadeId) === String(ModalidadeEnum.INFANTIL) ? (
         <div className="col-md-12">
           <Alert
             alerta={{
@@ -547,7 +547,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
           onClickGerar={gerar}
           desabilitarBtnGerar={
             desabilitarBtnGerar ||
-            String(modalidadeId) === String(modalidade.INFANTIL)
+            String(modalidadeId) === String(ModalidadeEnum.INFANTIL)
           }
           modoEdicao={modoEdicao}
         />
@@ -635,8 +635,8 @@ const RelatorioHistoricoAlteracoesNotas = () => {
                 disabled={
                   !modalidadeId ||
                   (listaSemestres && listaSemestres.length === 1) ||
-                  String(modalidadeId) !== String(modalidade.EJA) ||
-                  String(modalidadeId) !== String(modalidade.CELP)
+                  String(modalidadeId) !== String(ModalidadeEnum.EJA) ||
+                  String(modalidadeId) !== String(ModalidadeEnum.CELP)
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

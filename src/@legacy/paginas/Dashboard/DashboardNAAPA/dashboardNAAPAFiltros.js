@@ -11,7 +11,7 @@ import {
 } from '~/constantes/ids/select';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import api from '~/servicos/api';
 import { obterTodosMeses, ordenarListaMaiorParaMenor } from '~/utils';
@@ -274,8 +274,8 @@ const DashboardNAAPAFiltros = () => {
 
   useEffect(() => {
     if (
-      (modalidade && anoLetivo && Number(modalidade) === ModalidadeDTO.EJA) ||
-      Number(modalidade) === ModalidadeDTO.CELP
+      (modalidade && anoLetivo && Number(modalidade) === ModalidadeEnum.EJA) ||
+      Number(modalidade) === ModalidadeEnum.CELP
     ) {
       setSemestre();
       obterSemestres();
@@ -403,8 +403,8 @@ const DashboardNAAPAFiltros = () => {
               disabled={
                 !modalidade ||
                 listaSemestres?.length === 1 ||
-                Number(modalidade) !== ModalidadeDTO.EJA ||
-                Number(modalidade) !== ModalidadeDTO.CELP
+                Number(modalidade) !== ModalidadeEnum.EJA ||
+                Number(modalidade) !== ModalidadeEnum.CELP
               }
               valueSelect={semestre}
               onChange={onChangeSemestre}
