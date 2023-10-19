@@ -639,8 +639,8 @@ const Filtro = () => {
     }
 
     if (
-      modalidadeSelecionada.toString() !== ModalidadeEnum.EJA.toString() &&
-      modalidadeSelecionada.toString() !== ModalidadeEnum.CELP.toString()
+      Number(modalidadeSelecionada) !== ModalidadeEnum.EJA &&
+      Number(modalidadeSelecionada) !== ModalidadeEnum.CELP
     )
       return retornoEstado;
 
@@ -853,8 +853,8 @@ const Filtro = () => {
         }
 
         const periodo =
-          turmaBkp.modalidade.toString() === ModalidadeEnum.EJA.toString() ||
-          turmaBkp.modalidade.toString() === ModalidadeEnum.CELP.toString()
+          Number(turmaBkp.modalidade) === ModalidadeEnum.EJA ||
+          Number(turmaBkp.modalidade) === ModalidadeEnum.CELP
             ? turmaBkp.periodo
             : null;
         const listaUes = await obterUnidadesEscolares(false, periodo);
