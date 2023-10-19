@@ -8,7 +8,7 @@ import { Cabecalho } from '~/componentes-sgp';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   confirmar,
   erros,
@@ -29,10 +29,12 @@ const ListaComunicados = () => {
   const usuario = useSelector(store => store.usuario);
   const permissoesTela = usuario.permissoes[ROUTES.ACOMPANHAMENTO_COMUNICADOS];
 
-  const temModalidadeEja = !!filtros?.modalidades?.find(
-    item => String(item) === String(ModalidadeDTO.EJA)
+  const temModalidadeEjaOuCelp = !!filtros?.modalidades?.find(
+    item =>
+      Number(item) === ModalidadeEnum.EJA ||
+      Number(item) === ModalidadeEnum.CELP
   );
-  const temSemestre = temModalidadeEja ? filtros?.semestre : true;
+  const temSemestre = temModalidadeEjaOuCelp ? filtros?.semestre : true;
 
   const filtroEhValido = !!(
     filtros?.anoLetivo &&
@@ -164,7 +166,7 @@ const ListaComunicados = () => {
           <div className="col-md-12">
             <Filtros
               onChangeFiltros={onChangeFiltros}
-              temModalidadeEja={temModalidadeEja}
+              temModalidadeEja={temModalidadeEjaOuCelp}
             />
 
             {filtroEhValido && (

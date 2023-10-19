@@ -17,7 +17,7 @@ import {
   SGP_BUTTON_IMPRIMIR,
 } from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes/url';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import situacaoPendenciaDto from '~/dtos/situacaoPendenciaDto';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ServicoPendenciasFechamento from '~/servicos/Paginas/Fechamento/ServicoPendenciasFechamento';
@@ -139,7 +139,10 @@ const PendenciasFechamentoLista = () => {
   useEffect(() => {
     const montaBimestres = async () => {
       let listaBi = [];
-      if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
+      if (
+        Number(turmaSelecionada.modalidade) === ModalidadeEnum.EJA ||
+        Number(turmaSelecionada.modalidade) === ModalidadeEnum.CELP
+      ) {
         listaBi = [
           { valor: 1, descricao: 'Primeiro bimestre' },
           { valor: 2, descricao: 'Segundo bimestre' },

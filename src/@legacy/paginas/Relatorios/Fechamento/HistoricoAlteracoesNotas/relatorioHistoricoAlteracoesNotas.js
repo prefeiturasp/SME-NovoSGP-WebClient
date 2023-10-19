@@ -6,7 +6,7 @@ import Alert from '~/componentes/alert';
 import Card from '~/componentes/card';
 import { URL_HOME } from '~/constantes';
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -51,6 +51,10 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [modoEdicao, setModoEdicao] = useState(false);
+
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const onChangeAnoLetivo = async valor => {
     setDreId();
@@ -203,7 +207,12 @@ const RelatorioHistoricoAlteracoesNotas = () => {
       setExibirLoader(true);
 
       const { data } = consideraHistorico
-        ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(ue, false, true, ano)
+        ? await ServicoFiltroRelatorio.obterModalidadesPorAbrangenciaHistorica(
+            ue,
+            false,
+            true,
+            ano
+          )
         : await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
 
       if (data) {
@@ -278,7 +287,10 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     bi.push({ desc: '1º', valor: '1' });
     bi.push({ desc: '2º', valor: '2' });
 
-    if (String(modalidadeId) !== String(modalidade.EJA)) {
+    if (
+      Number(modalidadeId) !== ModalidadeEnum.EJA &&
+      Number(modalidadeId) !== ModalidadeEnum.CELP
+    ) {
       bi.push({ desc: '3º', valor: '3' });
       bi.push({ desc: '4º', valor: '4' });
     }
@@ -388,8 +400,9 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   ) => {
     setExibirLoader(true);
     const retorno = await api.get(
-      `v1/abrangencias/${historico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-      0}`
+      `v1/abrangencias/${historico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+        modalidadeSelecionada || 0
+      }`
     );
     if (retorno && retorno.data) {
       const lista = retorno.data.map(periodo => {
@@ -405,17 +418,19 @@ const RelatorioHistoricoAlteracoesNotas = () => {
   };
 
   useEffect(() => {
-    if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(modalidade.EJA)
-    ) {
+    if (modalidadeId && anoLetivo && ehEjaOuCelp) {
       obterSemestres(modalidadeId, anoLetivo, consideraHistorico);
     } else {
       setSemestre();
       setListaSemestres([]);
     }
-  }, [obterAnosLetivos, modalidadeId, anoLetivo, consideraHistorico]);
+  }, [
+    obterAnosLetivos,
+    modalidadeId,
+    anoLetivo,
+    consideraHistorico,
+    ehEjaOuCelp,
+  ]);
 
   const cancelar = async () => {
     setConsideraHistorico(false);
@@ -436,7 +451,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
       !dreId ||
       !ueId ||
       !modalidadeId ||
-      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      (ehEjaOuCelp ? !semestre : false) ||
       !turmaId ||
       !componentesCurricularesId?.length ||
       !bimestre?.length ||
@@ -455,6 +470,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
     bimestre,
     tipoDeNota,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   const gerar = async () => {
@@ -509,7 +525,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
 
   return (
     <Loader loading={exibirLoader}>
-      {modalidadeId && String(modalidadeId) === String(modalidade.INFANTIL) ? (
+      {modalidadeId && Number(modalidadeId) === ModalidadeEnum.INFANTIL ? (
         <div className="col-md-12">
           <Alert
             alerta={{
@@ -534,7 +550,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
           onClickGerar={gerar}
           desabilitarBtnGerar={
             desabilitarBtnGerar ||
-            String(modalidadeId) === String(modalidade.INFANTIL)
+            Number(modalidadeId) === ModalidadeEnum.INFANTIL
           }
           modoEdicao={modoEdicao}
         />
@@ -622,7 +638,8 @@ const RelatorioHistoricoAlteracoesNotas = () => {
                 disabled={
                   !modalidadeId ||
                   (listaSemestres && listaSemestres.length === 1) ||
-                  String(modalidadeId) !== String(modalidade.EJA)
+                  (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                    Number(modalidadeId) !== ModalidadeEnum.CELP)
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

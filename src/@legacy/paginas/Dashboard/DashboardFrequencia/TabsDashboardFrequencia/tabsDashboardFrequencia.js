@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Tabs } from 'antd';
 import { useSelector } from 'react-redux';
 
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 import GraficosFrequencia from '../DadosDashboardFrequencia/graficosFrequencia';
 import GraficoCompensacaoAusencia from '../DadosDashboardCompensacaoAusencia/graficoCompensacaoAusencia';
@@ -28,9 +28,11 @@ const TabsDashboardFrequencia = () => {
     store => store.dashboardFrequencia?.dadosDashboardFrequencia?.semestre
   );
 
-  const ehModalidadeEJA = Number(modalidade) === ModalidadeDTO.EJA;
-  const ehModalidadeInfatil = Number(modalidade) === ModalidadeDTO.INFANTIL;
-  const semestreDesabilitado = !!(ehModalidadeEJA ? semestre : !semestre);
+  const ehModalidadeEJAouCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
+  const ehModalidadeInfatil = Number(modalidade) === ModalidadeEnum.INFANTIL;
+  const semestreDesabilitado = !!(ehModalidadeEJAouCelp ? semestre : !semestre);
   const exibirAbas =
     anoLetivo && dre && ue && modalidade && semestreDesabilitado;
 

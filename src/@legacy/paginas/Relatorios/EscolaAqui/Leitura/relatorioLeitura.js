@@ -11,7 +11,7 @@ import {
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import Card from '~/componentes/card';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -77,6 +77,10 @@ const RelatorioLeitura = () => {
     { label: 'Não', value: false },
     { label: 'Sim', value: true },
   ];
+
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const onChangeAnoLetivo = async valor => {
     setCodigoDre();
@@ -191,7 +195,7 @@ const RelatorioLeitura = () => {
       !desabilitar &&
       temDreUeSelecionada &&
       modalidadeId &&
-      modalidadeId === ModalidadeDTO.EJA &&
+      ehEjaOuCelp &&
       !semestre
     ) {
       desabilitar = true;
@@ -206,6 +210,7 @@ const RelatorioLeitura = () => {
     modalidadeId,
     semestre,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   useEffect(() => {
@@ -439,17 +444,13 @@ const RelatorioLeitura = () => {
   };
 
   useEffect(() => {
-    if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
-    ) {
+    if (modalidadeId && anoLetivo && ehEjaOuCelp) {
       obterSemestres(modalidadeId, anoLetivo);
     } else {
       setSemestre();
       setListaSemestres([]);
     }
-  }, [obterAnosLetivos, modalidadeId, anoLetivo]);
+  }, [obterAnosLetivos, modalidadeId, anoLetivo, ehEjaOuCelp]);
 
   const obterAnosEscolaresPorModalidade = useCallback(async () => {
     const resposta = await ServicoComunicados.buscarAnosPorModalidade(
@@ -475,8 +476,8 @@ const RelatorioLeitura = () => {
   useEffect(() => {
     if (
       modalidadeId &&
-      (Number(modalidadeId) === ModalidadeDTO.ENSINO_MEDIO ||
-        Number(modalidadeId) === ModalidadeDTO.FUNDAMENTAL)
+      (Number(modalidadeId) === ModalidadeEnum.Medio ||
+        Number(modalidadeId) === ModalidadeEnum.Fundamental)
     ) {
       obterAnosEscolaresPorModalidade();
     } else {
@@ -574,11 +575,7 @@ const RelatorioLeitura = () => {
     let isSubscribed = true;
     (async () => {
       if (isSubscribed && anoLetivo && codigoDre && codigoUe && modalidadeId) {
-        if (
-          modalidadeId &&
-          String(modalidadeId) === String(ModalidadeDTO.EJA) &&
-          !semestre
-        ) {
+        if (modalidadeId && ehEjaOuCelp && !semestre) {
           return;
         }
 
@@ -637,6 +634,7 @@ const RelatorioLeitura = () => {
     dataInicio,
     dataFim,
     pesquisaComunicado,
+    ehEjaOuCelp,
   ]);
 
   const onChangeIntervaloDatas = valor => {
@@ -755,7 +753,8 @@ const RelatorioLeitura = () => {
                 disabled={
                   !modalidadeId ||
                   listaSemestres?.length === 1 ||
-                  String(modalidadeId) !== String(ModalidadeDTO.EJA)
+                  Number(modalidadeId) !== ModalidadeEnum.EJA ||
+                  Number(modalidadeId) !== ModalidadeEnum.CELP
                 }
                 valueSelect={semestre}
                 onChange={onChangeSemestre}

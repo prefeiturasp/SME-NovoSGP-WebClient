@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 import FrequenciaGlobalPorAno from './FrequenciaGlobalPorAno/frequenciaGlobalPorAno';
 import FrequenciaGlobalPorDRE from './FrequenciaGlobalPorDRE/frequenciaGlobalPorDRE';
@@ -35,7 +35,7 @@ const GraficosFrequencia = () => {
 
   const exibirFrequenciaPorDRE = ehTodosDre && ue?.codigo === OPCAO_TODOS;
 
-  const ehInfantil = Number(modalidade) === ModalidadeDTO.INFANTIL;
+  const ehInfantil = Number(modalidade) === ModalidadeEnum.INFANTIL;
 
   return (
     <>

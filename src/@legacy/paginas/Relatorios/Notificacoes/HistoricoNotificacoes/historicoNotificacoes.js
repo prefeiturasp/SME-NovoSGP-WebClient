@@ -11,7 +11,7 @@ import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import Card from '~/componentes/card';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { URL_HOME } from '~/constantes/url';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -31,7 +31,7 @@ const HistoricoNotificacoes = () => {
   const [listaTipos, setListaTipos] = useState([]);
   const [listaSituacao, setListaSituacao] = useState([]);
 
-  const [anoAtual] = useState(moment().format('YYYY'));
+  const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState(anoAtual);
   const [codigoDre, setCodigoDre] = useState(undefined);
   const [codigoUe, setCodigoUe] = useState(undefined);
@@ -66,6 +66,10 @@ const HistoricoNotificacoes = () => {
   ];
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
+
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoGeral(true);
@@ -108,18 +112,23 @@ const HistoricoNotificacoes = () => {
     }
   };
 
-  const obterUes = useCallback(async dre => {
-    if (dre) {
-      setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre, consideraHistorico, anoLetivo).catch(e => {
-        erros(e);
-        setCarregandoGeral(false);
-      });
-      if (retorno?.data?.length) {
-        const lista = retorno.data.map(item => ({
-          desc: item.nome,
-          valor: String(item.codigo),
-        }));
+  const obterUes = useCallback(
+    async dre => {
+      if (dre) {
+        setCarregandoGeral(true);
+        const retorno = await ServicoFiltroRelatorio.obterUes(
+          dre,
+          consideraHistorico,
+          anoLetivo
+        ).catch(e => {
+          erros(e);
+          setCarregandoGeral(false);
+        });
+        if (retorno?.data?.length) {
+          const lista = retorno.data.map(item => ({
+            desc: item.nome,
+            valor: String(item.codigo),
+          }));
 
           const novaLista = lista?.filter(item => item?.valor !== OPCAO_TODOS);
 
@@ -156,24 +165,24 @@ const HistoricoNotificacoes = () => {
   };
 
   const obterDres = async () => {
-      setCarregandoGeral(true);
-      const retorno = await ServicoFiltroRelatorio.obterDres().catch(e => {
-        erros(e);
-        setCarregandoGeral(false);
-      });
-      if (retorno?.data?.length) {
-        const novaLista = retorno.data.filter(
-          item => item?.codigo !== OPCAO_TODOS
-        );
-        setListaDres(novaLista);
-
-        if (novaLista?.length === 1) {
-          setCodigoDre(novaLista[0].codigo);
-        }
-      } else {
-        setListaDres([]);
-      }
+    setCarregandoGeral(true);
+    const retorno = await ServicoFiltroRelatorio.obterDres().catch(e => {
+      erros(e);
       setCarregandoGeral(false);
+    });
+    if (retorno?.data?.length) {
+      const novaLista = retorno.data.filter(
+        item => item?.codigo !== OPCAO_TODOS
+      );
+      setListaDres(novaLista);
+
+      if (novaLista?.length === 1) {
+        setCodigoDre(novaLista[0].codigo);
+      }
+    } else {
+      setListaDres([]);
+    }
+    setCarregandoGeral(false);
   };
 
   const obterSemestres = async (
@@ -260,7 +269,7 @@ const HistoricoNotificacoes = () => {
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (Number(modalidadeId) === modalidade.EJA) {
+      if (ehEjaOuCelp) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre(undefined);
@@ -270,12 +279,12 @@ const HistoricoNotificacoes = () => {
       setSemestre(undefined);
       setListaSemestre([]);
     }
-  }, [modalidadeId, anoLetivo]);
+  }, [modalidadeId, anoLetivo, ehEjaOuCelp]);
 
   useEffect(() => {
     const desabilitar = !anoLetivo || !codigoDre || !codigoUe;
 
-    if (Number(modalidadeId) === modalidade.EJA) {
+    if (ehEjaOuCelp) {
       setDesabilitarBtnGerar(!semestre || desabilitar);
     } else {
       setDesabilitarBtnGerar(desabilitar);
@@ -293,6 +302,7 @@ const HistoricoNotificacoes = () => {
     situacoes,
     exibirDescricao,
     exibirNotificacoesExcluidas,
+    ehEjaOuCelp,
   ]);
 
   const carregarListas = async () => {
@@ -450,7 +460,7 @@ const HistoricoNotificacoes = () => {
     setCodigoDre();
     setCodigoUe();
 
-    if(ano){
+    if (ano) {
       setConsideraHistorico(Number(ano) !== Number(new Date().getFullYear()));
       obterDres();
       obterUes();
@@ -530,7 +540,10 @@ const HistoricoNotificacoes = () => {
                   lista={listaDres}
                   valueOption="codigo"
                   valueText="nome"
-                  disabled={(listaDres && listaDres.length === 1) || listaDres.length === 0}
+                  disabled={
+                    (listaDres && listaDres.length === 1) ||
+                    listaDres.length === 0
+                  }
                   onChange={onChangeDre}
                   valueSelect={codigoDre}
                   placeholder="Diretoria Regional de Educação (DRE)"
@@ -543,7 +556,9 @@ const HistoricoNotificacoes = () => {
                   lista={listaUes}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={(listaUes && listaUes.length === 1) || listaUes.length === 0}
+                  disabled={
+                    (listaUes && listaUes.length === 1) || listaUes.length === 0
+                  }
                   onChange={onChangeUe}
                   valueSelect={codigoUe}
                   placeholder="Unidade Escolar (UE)"
@@ -570,7 +585,8 @@ const HistoricoNotificacoes = () => {
                   label="Semestre"
                   disabled={
                     !modalidadeId ||
-                    Number(modalidadeId) !== modalidade.EJA ||
+                    (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                      Number(modalidadeId) !== ModalidadeEnum.CELP) ||
                     (listaSemestre && listaSemestre.length === 1)
                   }
                   valueSelect={semestre}
@@ -586,8 +602,7 @@ const HistoricoNotificacoes = () => {
                   valueText="nomeFiltro"
                   label="Turma"
                   disabled={
-                    !modalidadeId ||
-                    (listaTurmas && listaTurmas.length === 1)
+                    !modalidadeId || (listaTurmas && listaTurmas.length === 1)
                   }
                   valueSelect={turmaId}
                   onChange={onChangeTurma}

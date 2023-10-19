@@ -19,7 +19,7 @@ import {
 
 import { ordenarDescPor } from '~/utils/funcoes/gerais';
 
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 import { URL_HOME } from '~/constantes';
 import { OPCAO_TODOS } from '~/constantes/constantes';
@@ -54,6 +54,10 @@ const AtribuicaoCJ = () => {
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
 
   const [modoEdicao, setModoEdicao] = useState(false);
+
+  const naoEhEjaOuCelp =
+    Number(modalidadeId) !== ModalidadeEnum.EJA &&
+    Number(modalidadeId) !== ModalidadeEnum.CELP;
 
   const opcoesExibir = [
     { label: 'Não', value: false },
@@ -222,10 +226,10 @@ const AtribuicaoCJ = () => {
           abrev: item.abreviacao,
         }));
 
-        if(lista?.some(l=> l.valor === "-99")){
+        if (lista?.some(l => l.valor === '-99')) {
           lista.shift();
         }
-        
+
         setListaDres(lista);
 
         if (lista?.length && lista?.length === 1) {
@@ -261,7 +265,7 @@ const AtribuicaoCJ = () => {
             valor: String(item.codigo),
           }));
 
-          if(lista?.some(l=> l.valor === "-99")){
+          if (lista?.some(l => l.valor === '-99')) {
             lista.shift();
           }
 
@@ -363,7 +367,7 @@ const AtribuicaoCJ = () => {
     bi.push({ desc: '1º', valor: '1' });
     bi.push({ desc: '2º', valor: '2' });
 
-    if (String(modalidadeId) !== String(ModalidadeDTO.EJA)) {
+    if (naoEhEjaOuCelp) {
       bi.push({ desc: '3º', valor: '3' });
       bi.push({ desc: '4º', valor: '4' });
     }
@@ -371,7 +375,7 @@ const AtribuicaoCJ = () => {
     bi.push({ desc: 'Final', valor: '0' });
     bi.push({ desc: 'Todos', valor: OPCAO_TODOS });
     setListaSemestres(bi);
-  }, [modalidadeId]);
+  }, [naoEhEjaOuCelp]);
 
   useEffect(() => {
     const desabilitar =
@@ -479,7 +483,7 @@ const AtribuicaoCJ = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(ModalidadeDTO.EJA)
+                    naoEhEjaOuCelp
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}
