@@ -369,12 +369,13 @@ const RelatorioAtaBimestral = () => {
           anoLetivo,
           consideraHistorico,
           false,
-          Number(modalidadeSelecionada) === ModalidadeEnum.Medio
-            ? []
-            : [1, 2]
+          Number(modalidadeSelecionada ? [] : [1, 2])
         )
           .catch(e => erros(e))
-          .finally(() => setCarregandoTurmas(false));
+          .finally(() => {
+            setCarregandoTurmas(false);
+          });
+
         if (retorno?.data?.length) {
           const lista = retorno.data.map(item => ({
             desc: item.nome,

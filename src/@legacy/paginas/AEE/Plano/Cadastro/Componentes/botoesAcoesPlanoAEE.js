@@ -11,7 +11,7 @@ import {
 } from '~/constantes/ids/button';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import Button from '~/componentes/button';
-import { RotasDto, situacaoPlanoAEE } from '~/dtos';
+import { situacaoPlanoAEE } from '~/dtos';
 import {
   limparDadosParecer,
   setAtualizarDados,
@@ -26,6 +26,7 @@ import { confirmar, erros, sucesso, verificaSomenteConsulta } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import ModalImpressaoPlano from './ModalImpressaoPlano/modalImpressaoPlano';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ROUTES } from '@/core/enum/routes';
 
 const BotoesAcoesPlanoAEE = () => {
   const navigate = useNavigate();

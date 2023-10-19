@@ -3,11 +3,12 @@ import { useSelector } from 'react-redux';
 
 import { Button, Colors, DataTable } from '~/componentes';
 
-import { RotasDto, situacaoPlanoAEE } from '~/dtos';
+import { situacaoPlanoAEE } from '~/dtos';
 import { verificaSomenteConsulta } from '~/servicos';
 
 import ModalReestruturacaoPlano from '../ModalReestruturacaoPlano/modalReestruturacaoPlano';
 import { BotaoEstilizado, TextoEstilizado } from './reestruturacaoTabela.css';
+import { ROUTES } from '@/core/enum/routes';
 
 const ReestruturacaoTabela = ({ key, listaDados, semestre }) => {
   const [exibirModal, setModalVisivel] = useState(false);
