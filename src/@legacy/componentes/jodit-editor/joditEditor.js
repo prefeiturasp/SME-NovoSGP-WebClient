@@ -34,6 +34,10 @@ const Campo = styled.div`
   ol {
     padding-inline-start: 40px;
   }
+
+  .desabilitar {
+    cursor: not-allowed !important;
+  }
 `;
 
 let CHANGE_DEBOUNCE_FLAG;
@@ -490,12 +494,19 @@ const JoditEditor = forwardRef((props, ref) => {
     );
   };
 
+  let className = '';
+  if (validacaoComErro || possuiErro()) {
+    className = className + ' campo-invalido';
+  }
+
+  if (desabilitar) {
+    className = className + ' desabilitar';
+  }
+
   const editorComValidacoes = () => {
     return (
       <Campo>
-        <div
-          className={validacaoComErro || possuiErro() ? 'campo-invalido' : ''}
-        >
+        <div className={className}>
           <Field name={name} id={id} value={value}>
             {() => (
               <textarea ref={textArea} hidden={!textArea?.current?.isJodit} />
@@ -509,9 +520,7 @@ const JoditEditor = forwardRef((props, ref) => {
   const editorSemValidacoes = () => {
     return (
       <Campo>
-        <div
-          className={validacaoComErro || possuiErro() ? 'campo-invalido' : ''}
-        >
+        <div className={className}>
           <textarea
             id={id}
             ref={textArea}
