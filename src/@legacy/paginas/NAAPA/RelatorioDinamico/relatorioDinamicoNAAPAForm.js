@@ -43,7 +43,7 @@ const RelatorioDinamicoNAAPAForm = props => {
           </Col>
 
           <Col xs={24} sm={24} md={10}>
-            <Ue form={form} />
+            <Ue form={form} parametrosOpcionais="&consideraNovasUEs=true" />
           </Col>
 
           <Col xs={24} sm={12} md={8}>
