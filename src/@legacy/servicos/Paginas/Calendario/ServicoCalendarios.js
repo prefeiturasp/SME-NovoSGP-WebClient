@@ -22,7 +22,7 @@ class ServicoCalendarios {
       case ModalidadeTipoCalendarioEnum.Infantil:
         return ModalidadeEnum.INFANTIL;
       case ModalidadeTipoCalendarioEnum.FUNDAMENTAL_MEDIO:
-        return ModalidadeEnum.Fundamental;
+        return ModalidadeEnum.FUNDAMENTAL;
       default:
         return null;
     }

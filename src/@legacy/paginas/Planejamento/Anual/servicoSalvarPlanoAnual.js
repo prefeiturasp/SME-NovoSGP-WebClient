@@ -84,7 +84,7 @@ class ServicoSalvarPlanoAnual {
               item.objetivosAprendizagemId &&
               item.objetivosAprendizagemId.length === 0
           );
-          if (semObjetivos && semObjetivos.length && turmaSelecionada.modalidade !== ModalidadeEnum.Medio) {
+          if (semObjetivos && semObjetivos.length && turmaSelecionada.modalidade !== ModalidadeEnum.MEDIO) {
             semObjetivos.forEach(componente => {
               const c = listaComponentesCurricularesPlanejamento.find(
                 item =>
