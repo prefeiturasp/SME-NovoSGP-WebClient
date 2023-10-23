@@ -191,8 +191,8 @@ const DadosComunicadosLeitura = props => {
 
   useEffect(() => {
     const ehMedioOuFundamental =
-      Number(modalidadeId) === ModalidadeEnum.Medio ||
-      Number(modalidadeId) === ModalidadeEnum.Fundamental;
+      Number(modalidadeId) === ModalidadeEnum.MEDIO ||
+      Number(modalidadeId) === ModalidadeEnum.FUNDAMENTAL;
     if (modalidadeId && ehMedioOuFundamental) {
       obterAnosEscolaresPorModalidade();
     } else {

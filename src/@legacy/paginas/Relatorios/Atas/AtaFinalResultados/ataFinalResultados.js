@@ -326,7 +326,7 @@ const AtaFinalResultados = () => {
 
     if (ehEJAOuCelp) {
       desabilitado = !semestre || desabilitar;
-    } else if (Number(modalidadeId) === ModalidadeEnum.Medio) {
+    } else if (Number(modalidadeId) === ModalidadeEnum.MEDIO) {
       desabilitado = desabilitar || !visualizacao;
     }
 
@@ -371,7 +371,7 @@ const AtaFinalResultados = () => {
     const turmaSegundo = compararTurmaAno('ano', 2, arrayTurmas);
     const turmaTerceiro = compararTurmaAno('ano', 3, arrayTurmas);
     const ehModalidadeMedio =
-      parseInt(modalidadeId, 10) === parseInt(ModalidadeEnum.Medio, 10);
+      parseInt(modalidadeId, 10) === parseInt(ModalidadeEnum.MEDIO, 10);
 
     if (
       turmaItinerancia.length === arrayTurmas?.length ||
@@ -396,7 +396,7 @@ const AtaFinalResultados = () => {
       !modalidadeId ||
       !turmaId ||
       (turmaId.length === 1 && turmaId[0] !== OPCAO_TODOS && turmaExcecao) ||
-      parseInt(modalidadeId, 10) !== parseInt(ModalidadeEnum.Medio, 10) ||
+      parseInt(modalidadeId, 10) !== parseInt(ModalidadeEnum.MEDIO, 10) ||
       !turmaId.length ||
       turmaExcecao;
     setDesabilitaVisualizacao(desabilita);

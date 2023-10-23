@@ -476,8 +476,8 @@ const RelatorioLeitura = () => {
   useEffect(() => {
     if (
       modalidadeId &&
-      (Number(modalidadeId) === ModalidadeEnum.Medio ||
-        Number(modalidadeId) === ModalidadeEnum.Fundamental)
+      (Number(modalidadeId) === ModalidadeEnum.MEDIO ||
+        Number(modalidadeId) === ModalidadeEnum.FUNDAMENTAL)
     ) {
       obterAnosEscolaresPorModalidade();
     } else {
