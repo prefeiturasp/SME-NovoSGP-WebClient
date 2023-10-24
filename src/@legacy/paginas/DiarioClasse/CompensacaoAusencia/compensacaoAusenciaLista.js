@@ -10,7 +10,7 @@ import { Colors } from '~/componentes/colors';
 import ListaPaginada from '~/componentes/listaPaginada/listaPaginada';
 import SelectComponent from '~/componentes/select';
 import { URL_HOME } from '~/constantes/url';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { ROUTES } from '@/core/enum/routes';
 import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
 import ServicoCompensacaoAusencia from '~/servicos/Paginas/DiarioClasse/ServicoCompensacaoAusencia';
@@ -108,7 +108,9 @@ const CompensacaoAusenciaLista = () => {
       render: dados => montaExibicaoAlunos(dados),
     },
   ];
-
+  const ehEjaOuCelp =
+    Number(turmaSelecionada.modalidade) === ModalidadeEnum.EJA ||
+    Number(turmaSelecionada.modalidade) === ModalidadeEnum.CELP;
   const filtrar = useCallback(() => {
     const paramsFiltrar = {
       turmaId: turmaSelecionada.turma,
@@ -178,7 +180,7 @@ const CompensacaoAusenciaLista = () => {
     }
 
     let listaBi = [];
-    if (String(turmaSelecionada.modalidade) === String(modalidade.EJA)) {
+    if (ehEjaOuCelp) {
       listaBi = [
         { valor: 1, descricao: '1° Bimestre' },
         { valor: 2, descricao: '2° Bimestre' },

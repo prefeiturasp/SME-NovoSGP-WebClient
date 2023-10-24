@@ -3,7 +3,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Card, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import RelatorioPlanoAEEBotoesAcoes from './relatorioPlanoAEEBotoesAcoes';
 import RelatorioPlanoAEEForm from './relatorioPlanoAEEForm';
 
@@ -48,10 +48,12 @@ const RelatorioPlanoAEE = () => {
         textoCampoObrigatorio,
         function validar() {
           const { modalidade, semestre } = this.parent;
-          const temModalidadeEja = Number(modalidade) === ModalidadeDTO.EJA;
+          const temModalidadeEjaOuCelp =
+            Number(modalidade) === ModalidadeEnum.EJA ||
+            Number(modalidade) === ModalidadeEnum.CELP;
 
           let ehValido = true;
-          if (!temModalidadeEja) {
+          if (!temModalidadeEjaOuCelp) {
             return ehValido;
           }
           if (!semestre) {

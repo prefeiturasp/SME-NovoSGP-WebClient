@@ -16,7 +16,7 @@ import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import LocalizadorEstudante from '~/componentes/LocalizadorEstudante';
 import { URL_HOME } from '~/constantes/url';
-import { RotasDto, situacaoAEE } from '~/dtos';
+import { situacaoAEE } from '~/dtos';
 import { setDadosIniciaisLocalizarEstudante } from '~/redux/modulos/collapseLocalizarEstudante/actions';
 import { verificaSomenteConsulta } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
@@ -39,6 +39,7 @@ import BotaoGerarRelatorioEncaminhamentoAEE from '../BotaoGerarRelatorioEncaminh
 import { useNavigate } from 'react-router-dom';
 import { OPCAO_TODOS } from '@/@legacy/constantes';
 import { SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_AEE_ENCERRADOS } from '@/@legacy/constantes/ids/radio';
+import { ROUTES } from '@/core/enum/routes';
 
 const EncaminhamentoAEELista = () => {
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const EncaminhamentoAEELista = () => {
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
-    usuario.permissoes[RotasDto.RELATORIO_AEE_ENCAMINHAMENTO];
+    usuario.permissoes[ROUTES.RELATORIO_AEE_ENCAMINHAMENTO];
 
   const somenteConsulta = useSelector(store => store.navegacao.somenteConsulta);
 
@@ -593,7 +594,7 @@ const EncaminhamentoAEELista = () => {
   };
 
   const onClickEditar = item => {
-    navigate(`${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${item.id}`);
+    navigate(`${ROUTES.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${item.id}`);
   };
 
   const onCheckedConsideraHistorico = e => {

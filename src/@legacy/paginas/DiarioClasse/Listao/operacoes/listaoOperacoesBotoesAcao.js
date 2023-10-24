@@ -10,7 +10,7 @@ import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import notasConceitos from '~/dtos/notasConceitos';
 import {
   setAcaoTelaEmEdicao,
@@ -674,13 +674,13 @@ const ListaoOperacoesBotoesAcao = () => {
   const onClickVoltar = async () => {
     if (!desabilitarBotoes && telaEmEdicao) {
       const salvou = await validarSalvar(() => {
-        navigate(RotasDto.LISTAO);
+        navigate(ROUTES.LISTAO);
       });
       if (salvou) {
-        navigate(RotasDto.LISTAO);
+        navigate(ROUTES.LISTAO);
       }
     } else {
-      navigate(RotasDto.LISTAO);
+      navigate(ROUTES.LISTAO);
     }
   };
 

@@ -1,7 +1,9 @@
+import { ROUTES } from '@/core/enum/routes';
+import { store } from '@/core/redux';
 import { Form, Formik } from 'formik';
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import * as Yup from 'yup';
 import moment from 'moment';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import * as Yup from 'yup';
 import { Loader } from '~/componentes';
 import Button from '~/componentes/button';
 import CampoTexto from '~/componentes/campoTexto';
@@ -9,10 +11,8 @@ import { Colors } from '~/componentes/colors';
 import ModalConteudoHtml from '~/componentes/modalConteudoHtml';
 import SelectComponent from '~/componentes/select';
 import DataTable from '~/componentes/table/dataTable';
-import { erros, confirmar } from '~/servicos/alertas';
+import { confirmar, erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import { store } from '@/core/redux';
-import RotasDto from '~/dtos/rotasDto';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
@@ -61,7 +61,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
     [usuario.turmaSelecionada]
   );
 
-  const permissoesTela = usuario.permissoes[RotasDto.REINICIAR_SENHA];
+  const permissoesTela = usuario.permissoes[ROUTES.REINICIAR_SENHA];
 
   const [validacoes] = useState(
     Yup.object({

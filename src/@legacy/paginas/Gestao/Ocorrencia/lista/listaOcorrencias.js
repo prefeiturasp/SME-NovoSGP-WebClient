@@ -23,7 +23,7 @@ import {
   SGP_SELECT_TURMA,
   SGP_SELECT_UE,
 } from '~/constantes/ids/select';
-import { ModalidadeDTO, RotasDto } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   AbrangenciaServico,
   confirmar,
@@ -36,11 +36,12 @@ import {
 import { ordenarDescPor } from '~/utils';
 import ListaOcorrenciasBotoesAcao from './listaOcorrenciasBotoesAcao';
 import ListaOcorrenciasPaginada from './listaOcorrenciasPaginada';
+import { ROUTES } from '@/core/enum/routes';
 
 const ListaOcorrencias = () => {
   const usuario = useSelector(state => state.usuario);
   const { permissoes } = usuario;
-  const { podeExcluir, podeIncluir } = permissoes[RotasDto.OCORRENCIAS];
+  const { podeExcluir, podeIncluir } = permissoes[ROUTES.OCORRENCIAS];
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [anoLetivo, setAnoLetivo] = useState();
@@ -86,14 +87,14 @@ const ListaOcorrencias = () => {
   const ehTurmaAnoAnterior =
     anoLetivo?.toString() !== window.moment().format('YYYY');
 
-  const ehEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehEJAOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const filtroEhValido = !!(anoLetivo && dre?.id && ue?.id);
 
   useEffect(() => {
-    const soConsulta = verificaSomenteConsulta(
-      permissoes[RotasDto.OCORRENCIAS]
-    );
+    const soConsulta = verificaSomenteConsulta(permissoes[ROUTES.OCORRENCIAS]);
     setSomenteConsulta(soConsulta);
   }, [permissoes]);
 
@@ -145,7 +146,6 @@ const ListaOcorrencias = () => {
     if (anoLetivo) {
       obterDres();
     }
-
   }, [anoLetivo]);
 
   const obterUes = useCallback(async () => {
@@ -207,7 +207,6 @@ const ListaOcorrencias = () => {
     if (ue?.codigo) {
       obterModalidades();
     }
-
   }, [ue]);
 
   const obterSemestres = useCallback(async () => {
@@ -238,10 +237,10 @@ const ListaOcorrencias = () => {
   }, [anoLetivo, modalidade, consideraHistorico, dre, ue]);
 
   useEffect(() => {
-    if (modalidade && ehEJA) {
+    if (modalidade && ehEJAOuCelp) {
       obterSemestres();
     }
-  }, [obterSemestres, ehEJA, modalidade]);
+  }, [obterSemestres, ehEJAOuCelp, modalidade]);
 
   const obterTurmas = useCallback(async () => {
     setCarregandoTurmas(true);
@@ -545,7 +544,7 @@ const ListaOcorrencias = () => {
                 />
               </Loader>
             </Col>
-            <Col sm={24} md={12} lg={ehEJA ? 8 : 12}>
+            <Col sm={24} md={12} lg={ehEJAOuCelp ? 8 : 12}>
               <Loader loading={carregandoModalidades} ignorarTip>
                 <SelectComponent
                   id={SGP_SELECT_MODALIDADE}
@@ -560,7 +559,7 @@ const ListaOcorrencias = () => {
                 />
               </Loader>
             </Col>
-            {ehEJA ? (
+            {ehEJAOuCelp ? (
               <Col sm={24} md={12} lg={8}>
                 <Loader loading={carregandoSemestres} ignorarTip>
                   <SelectComponent
@@ -570,7 +569,12 @@ const ListaOcorrencias = () => {
                     valueText="desc"
                     label="Semestre"
                     placeholder="Selecione o semestre"
-                    disabled={!modalidade || listaSemestres?.length === 1 || !ue?.codigo || ue?.codigo === OPCAO_TODOS}
+                    disabled={
+                      !modalidade ||
+                      listaSemestres?.length === 1 ||
+                      !ue?.codigo ||
+                      ue?.codigo === OPCAO_TODOS
+                    }
                     valueSelect={semestre}
                     onChange={onChangeSemestre}
                   />
@@ -579,7 +583,7 @@ const ListaOcorrencias = () => {
             ) : (
               <></>
             )}
-            <Col sm={24} md={12} lg={ehEJA ? 8 : 12}>
+            <Col sm={24} md={12} lg={ehEJAOuCelp ? 8 : 12}>
               <Loader loading={carregandoTurmas} ignorarTip>
                 <SelectComponent
                   id={SGP_SELECT_TURMA}
@@ -587,7 +591,12 @@ const ListaOcorrencias = () => {
                   valueOption="id"
                   valueText="nomeFiltro"
                   label="Turma"
-                  disabled={!modalidade || (ehEJA && !semestre) || !ue?.codigo || ue?.codigo === OPCAO_TODOS}
+                  disabled={
+                    !modalidade ||
+                    (ehEJAOuCelp && !semestre) ||
+                    !ue?.codigo ||
+                    ue?.codigo === OPCAO_TODOS
+                  }
                   valueSelect={turmaId}
                   onChange={onChangeTurma}
                   placeholder="Turma"
@@ -595,24 +604,24 @@ const ListaOcorrencias = () => {
                 />
               </Loader>
             </Col>
-                <Col sm={24} md={12}>
-                <CampoTexto
-                  id="SGP_INPUT_TEXT_ALUNO_NOME"
-                  value={alunoNomeExibicao}
-                  onChange={onChangeAlunoNome}
-                  label="Crianças/Estudantes"
-                  placeholder="Procure pelo nome da criança"
-                  desabilitado={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
-                  iconeBusca
-                  allowClear
-                />
-              </Col>
+            <Col sm={24} md={12}>
+              <CampoTexto
+                id="SGP_INPUT_TEXT_ALUNO_NOME"
+                value={alunoNomeExibicao}
+                onChange={onChangeAlunoNome}
+                label="Crianças/Estudantes"
+                placeholder="Procure pelo nome da criança"
+                desabilitado={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
+                iconeBusca
+                allowClear
+              />
+            </Col>
             <Col sm={24} md={12}>
               <CampoTexto
                 id="SGP_INPUT_TEXT_SERVIDOR_NOME"
                 value={servidorNomeExibicao}
                 onChange={onChangeServidorNome}
-                label= "Servidor/Funcionário"
+                label="Servidor/Funcionário"
                 desabilitado={!ue?.codigo || ue?.codigo === OPCAO_TODOS}
                 placeholder="Procure pelo nome do servidor/funcionário"
                 iconeBusca

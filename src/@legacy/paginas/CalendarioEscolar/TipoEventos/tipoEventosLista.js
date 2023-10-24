@@ -1,28 +1,28 @@
+import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import Grid from '~/componentes/grid';
 import ListaPaginada from '~/componentes/listaPaginada/listaPaginada';
 import SelectComponent from '~/componentes/select';
-import RotasDto from '~/dtos/rotasDto';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
-import { Busca, CampoTexto, Div } from './tipoEventos.css';
 import { useNavigate } from 'react-router-dom';
+import { Busca, CampoTexto, Div } from './tipoEventos.css';
 
 const TipoEventosLista = () => {
   const usuario = useSelector(store => store.usuario);
   const navigate = useNavigate();
-  const permissoesTela = usuario.permissoes[RotasDto.TIPO_EVENTOS];
+  const permissoesTela = usuario.permissoes[ROUTES.TIPO_EVENTOS];
 
   const [tipoEventoSelecionados, setTipoEventoSelecionados] = useState([]);
   const [filtro, setFiltro] = useState({});

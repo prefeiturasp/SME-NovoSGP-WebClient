@@ -10,7 +10,7 @@ import {
 } from '~/constantes/ids/button';
 import { confirmar, erros, ServicoOcorrencias, sucesso } from '~/servicos';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { useNavigate } from 'react-router-dom';
 
 const BotoesCadastroOcorrencias = props => {
@@ -64,10 +64,10 @@ const BotoesCadastroOcorrencias = props => {
       if (confirmado) {
         validaAntesDoSubmit(form);
       } else {
-        navigate(RotasDto.OCORRENCIAS);
+        navigate(ROUTES.OCORRENCIAS);
       }
     } else {
-      navigate(RotasDto.OCORRENCIAS);
+      navigate(ROUTES.OCORRENCIAS);
     }
   };
 
@@ -123,7 +123,7 @@ const BotoesCadastroOcorrencias = props => {
       );
       if (retorno?.status === 200) {
         sucesso('Registro excluído com sucesso');
-        navigate(RotasDto.OCORRENCIAS);
+        navigate(ROUTES.OCORRENCIAS);
       }
     }
   };

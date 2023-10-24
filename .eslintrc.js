@@ -36,7 +36,6 @@ module.exports = {
     ],
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
-    'no-undef': 'off',
     'jsx-a11y/alt-text': [
       'warn',
       {
@@ -61,6 +60,10 @@ module.exports = {
       [require.resolve('@typescript-eslint/parser')]: ['.ts', '.tsx', '.d.ts'],
     },
   },
+  ignorePatterns:
+    process.env.NODE_ENV === 'production'
+      ? ['node_modules', 'build', 'yarn.lock', '*.js']
+      : ['node_modules', 'build', 'yarn.lock'],
   overrides: [
     {
       files: ['src/**/*.js'],

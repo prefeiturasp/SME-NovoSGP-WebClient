@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { ButtonGroup, ListaPaginada } from '~/componentes';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Card from '~/componentes/card';
-import { ListaPaginada, ButtonGroup } from '~/componentes';
 
-import RotasDto from '~/dtos/rotasDto';
-import Filtro from './componentes/Filtro';
-import servicoTipoAvaliaco from '~/servicos/Paginas/TipoAvaliacao';
-import { sucesso, confirmar, erro, erros } from '~/servicos/alertas';
-import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
+import { ROUTES } from '@/core/enum/routes';
 import { useNavigate } from 'react-router-dom';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
+import servicoTipoAvaliaco from '~/servicos/Paginas/TipoAvaliacao';
+import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
+import Filtro from './componentes/Filtro';
 
 const TipoAvaliacaoLista = () => {
   const navigate = useNavigate();
@@ -71,7 +71,7 @@ const TipoAvaliacaoLista = () => {
   };
 
   const onClickEditar = item => {
-    navigate(`${RotasDto.TIPO_AVALIACAO}/editar/${item.id}`);
+    navigate(`${ROUTES.TIPO_AVALIACAO}/editar/${item.id}`);
   };
 
   const onChangeFiltro = valoresFiltro => {
@@ -93,7 +93,7 @@ const TipoAvaliacaoLista = () => {
       <Cabecalho pagina="Tipos de Avaliações">
         <ButtonGroup
           somenteConsulta={somenteConsulta}
-          permissoesTela={permissoesTela[RotasDto.TIPO_AVALIACAO]}
+          permissoesTela={permissoesTela[ROUTES.TIPO_AVALIACAO]}
           temItemSelecionado={itensSelecionados && itensSelecionados.length}
           onClickVoltar={onClickVoltar}
           onClickExcluir={onClickExcluir}

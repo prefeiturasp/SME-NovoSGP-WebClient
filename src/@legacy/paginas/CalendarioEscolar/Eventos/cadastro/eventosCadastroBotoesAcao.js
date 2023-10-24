@@ -9,7 +9,7 @@ import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
 } from '~/constantes/ids/button';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import {
   confirmar,
   erros,
@@ -34,7 +34,7 @@ const EventosCadastroBotoesAcao = () => {
   } = useContext(EventosCadastroContext);
 
   const usuarioStore = useSelector(store => store.usuario);
-  const permissoesTela = usuarioStore.permissoes[RotasDto.EVENTOS];
+  const permissoesTela = usuarioStore.permissoes[ROUTES.EVENTOS];
 
   const paramsRota = useParams();
   const navigate = useNavigate();
@@ -49,17 +49,17 @@ const EventosCadastroBotoesAcao = () => {
 
   const urlTelaListagemEventos = () => {
     if (tipoCalendarioId) {
-      return `${RotasDto.EVENTOS}/${tipoCalendarioId}`;
+      return `${ROUTES.EVENTOS}/${tipoCalendarioId}`;
     }
-    return RotasDto.EVENTOS;
+    return ROUTES.EVENTOS;
   };
 
   const setBreadcrumbLista = () => {
     if (tipoCalendarioId) {
       setBreadcrumbManual(
-        `${RotasDto.EVENTOS}/${tipoCalendarioId}`,
+        `${ROUTES.EVENTOS}/${tipoCalendarioId}`,
         '',
-        RotasDto.EVENTOS
+        ROUTES.EVENTOS
       );
     }
   };

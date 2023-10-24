@@ -5,7 +5,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Auditoria, Card, Loader, momentSchema } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import {
   erros,
   ServicoOcorrencias,
@@ -26,7 +26,7 @@ const CadastroOcorrencias = () => {
 
   const usuario = useSelector(state => state.usuario);
   const { permissoes } = usuario;
-  const permissoesTela = permissoes[RotasDto.OCORRENCIAS];
+  const permissoesTela = permissoes[ROUTES.OCORRENCIAS];
 
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
@@ -37,9 +37,7 @@ const CadastroOcorrencias = () => {
   const ocorrenciaId = id;
 
   useEffect(() => {
-    setSomenteConsulta(
-      verificaSomenteConsulta(permissoes[RotasDto.OCORRENCIAS])
-    );
+    setSomenteConsulta(verificaSomenteConsulta(permissoes[ROUTES.OCORRENCIAS]));
   }, [permissoes]);
 
   const validarSeDesabilitaCampos = () => {
@@ -104,14 +102,14 @@ const CadastroOcorrencias = () => {
       ServicoOcorrencias.alterar(params)
         .then(() => {
           sucesso('Ocorrência alterada com sucesso');
-          navigate(RotasDto.OCORRENCIAS);
+          navigate(ROUTES.OCORRENCIAS);
         })
         .catch(e => erros(e));
     } else {
       ServicoOcorrencias.incluir(params)
         .then(() => {
           sucesso('Ocorrência cadastrada com sucesso');
-          navigate(RotasDto.OCORRENCIAS);
+          navigate(ROUTES.OCORRENCIAS);
         })
         .catch(e => erros(e));
     }
@@ -169,7 +167,7 @@ const CadastroOcorrencias = () => {
 
   useEffect(() => {
     if (ocorrenciaId) {
-      setBreadcrumbManual(pathname, 'Alterar ocorrência', RotasDto.OCORRENCIAS);
+      setBreadcrumbManual(pathname, 'Alterar ocorrência', ROUTES.OCORRENCIAS);
       obterComunicadoPorId();
     }
   }, [ocorrenciaId, pathname, obterComunicadoPorId]);

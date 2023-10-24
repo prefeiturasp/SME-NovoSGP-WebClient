@@ -9,7 +9,7 @@ import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
 } from '~/constantes/ids/button';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import {
   confirmar,
   erros,
@@ -35,7 +35,7 @@ const FechaReabCadastroBotoesAcao = () => {
 
   const usuarioStore = useSelector(store => store.usuario);
   const permissoesTela =
-    usuarioStore.permissoes[RotasDto.PERIODO_FECHAMENTO_REABERTURA];
+    usuarioStore.permissoes[ROUTES.PERIODO_FECHAMENTO_REABERTURA];
 
   const paramsRota = useParams();
   const navigate = useNavigate();
@@ -81,10 +81,10 @@ const FechaReabCadastroBotoesAcao = () => {
       if (confirmado) {
         validaAntesDoSubmit(form);
       } else {
-        navigate(RotasDto.PERIODO_FECHAMENTO_REABERTURA);
+        navigate(ROUTES.PERIODO_FECHAMENTO_REABERTURA);
       }
     } else {
-      navigate(RotasDto.PERIODO_FECHAMENTO_REABERTURA);
+      navigate(ROUTES.PERIODO_FECHAMENTO_REABERTURA);
     }
   };
 
@@ -120,7 +120,7 @@ const FechaReabCadastroBotoesAcao = () => {
 
         if (resposta?.status === 200) {
           sucesso(resposta.data);
-          navigate(RotasDto.PERIODO_FECHAMENTO_REABERTURA);
+          navigate(ROUTES.PERIODO_FECHAMENTO_REABERTURA);
         }
       }
     }

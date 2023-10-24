@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
-import { Base } from '../componentes/colors';
 import ExclamacaoCampoErro from '~/recursos/ExclamacaoCampoErro.svg';
+import { Base } from '../componentes/colors';
 
 export default createGlobalStyle`
   *, *:before, *:after {
@@ -405,87 +405,6 @@ export default createGlobalStyle`
     margin-bottom: 6rem !important;
   }
 
-/*MENU*/
-
-.menuItem{
-    color: ${Base.CinzaMenuItem} !important;
-  }
-
-  .ant-menu-inline .ant-menu-item:not(:first-child), .ant-menu-vertical.ant-menu-sub > .ant-menu-item:not(:first-child){
-    margin-bottom: 0px !important;
-    border-top: 1px solid ${Base.RoxoClaro} !important;
-  }
-
-  .ant-menu-vertical.ant-menu-sub > .ant-menu-dark{
-    background: white !important;
-  }
-
-  .ant-menu-vertical.ant-menu-sub >.ant-menu-item-selected, .ant-menu-vertical.ant-menu-sub > .ant-menu-item-selected{
-    background: ${Base.CinzaMenu} !important;
-    border-bottom-width: 8px;
-    padding-left: 32px !important;
-    border-left: solid ${Base.RoxoClaro} 8px !important;
-  }
-
-  .ant-menu-item {
-    padding-left: 34px !important;
-    font-size: 12px !important;
-    padding-left: 40px !important;
-  }
-
-  .ant-menu-inline.ant-menu-sub{
-    background: ${Base.Branco} !important;
-  }
-
-  .ant-menu-item, .ant-menu-submenu-open {
-    background: ${Base.Branco} !important;
-  }
-
-  .ant-menu-sub, .ant-menu-submenu-popup{
-    box-shadow: 2px 5px 6px rgba(50,50,50,0.77) !important;
-    -webkit-box-shadow: 2px 5px 6px rgba(50,50,50,0.77) !important;
-    -moz-box-shadow: 2px 5px 6px rgba(50,50,50,0.77) !important;
-  }
-
-  .ant-menu-inline, .ant-menu-submenu-title, .ant-menu-item{
-    margin-bottom: 0px !important;
-    margin-top: 0px !important;
-    top: 0;
-  }
-
-  :root{
-    --posicao-item-menu-top: 0;
-    --posicao-item-menu-left: 110px;
-    --espacamento-conteudo: 250px;
-  }
-
-  div > div > .ant-menu-submenu-popup{
-    top: var(--posicao-item-menu-top) !important;
-    left: var(--posicao-item-menu-left) !important;
-  }
-
-  .ant-menu-submenu .ant-menu-submenu-vertical{
-    background: ${Base.Branco} !important;
-    color: ${Base.CinzaMenuItem} !important;
-  }
-
-  .ant-menu-submenu-popup{
-    position: fixed !important;
-    overflow-y: auto;
-    max-height: calc(100vh - 140px);
-    margin-bottom:800px !important;
-
-    ::-webkit-scrollbar {
-      width: 10px;
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #dad7d7;
-      border-radius: 4px;
-      padding-right:5px;
-    }
-  }
 
   .texto-vermelho {
     color: #b40c02 !important;
@@ -536,11 +455,6 @@ export default createGlobalStyle`
 
   .secao-conteudo{
     padding-top: 16px;
-    margin-left: var(--espacamento-conteudo);
-
-    @media screen and (max-width: 993px) {
-      margin-left: 115px !important;
-    }
   }
 
  ination-item-active a:hover{

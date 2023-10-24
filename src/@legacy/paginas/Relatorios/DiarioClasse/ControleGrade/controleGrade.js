@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import Card from '~/componentes/card';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -61,6 +61,10 @@ const ControleGrade = () => {
   const [clicouBotaoGerar, setClicouBotaoGerar] = useState(false);
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [modoEdicao, setModoEdicao] = useState(false);
+
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const onChangeAnoLetivo = async valor => {
     setDreId();
@@ -268,13 +272,13 @@ const ControleGrade = () => {
   }, [modalidadeId, ueId, anoLetivo, obterTurmas]);
 
   useEffect(() => {
-    if (String(modalidadeId) === String(modalidade.EJA)) {
+    if (ehEjaOuCelp) {
       setListaBimestres(bimestresEja);
     } else {
       setListaBimestres(bimestresFundMedio);
     }
     setBimestre();
-  }, [modalidadeId]);
+  }, [ehEjaOuCelp]);
 
   const obterAnosLetivos = useCallback(async () => {
     setExibirLoader(true);
@@ -374,7 +378,7 @@ const ControleGrade = () => {
       setListaComponentesCurriculares([]);
     }
   }, [ueId, turmaId]);
-  
+
   const obterSemestres = async (
     modalidadeSelecionada,
     anoLetivoSelecionado
@@ -399,17 +403,13 @@ const ControleGrade = () => {
   };
 
   useEffect(() => {
-    if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(modalidade.EJA)
-    ) {
+    if (modalidadeId && anoLetivo && ehEjaOuCelp) {
       obterSemestres(modalidadeId, anoLetivo);
     } else {
       setSemestre();
       setListaSemestres([]);
     }
-  }, [obterAnosLetivos, modalidadeId, anoLetivo]);
+  }, [obterAnosLetivos, modalidadeId, anoLetivo, ehEjaOuCelp]);
 
   const cancelar = async () => {
     await setDreId();
@@ -430,7 +430,7 @@ const ControleGrade = () => {
       !dreId ||
       !ueId ||
       !modalidadeId ||
-      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      (ehEjaOuCelp ? !semestre : false) ||
       !turmaId ||
       !componentesCurricularesId ||
       !bimestre ||
@@ -449,6 +449,7 @@ const ControleGrade = () => {
     bimestre,
     tipoRelatorio,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   const gerar = async () => {
@@ -582,7 +583,8 @@ const ControleGrade = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(modalidade.EJA)
+                    (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                      Number(modalidadeId) !== ModalidadeEnum.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}
