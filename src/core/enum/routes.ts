@@ -100,4 +100,7 @@ export enum ROUTES {
   RELATORIO_PAP = '/relatorios/pap/relatorio-pap',
   RELATORIO_OCORRENCIAS = '/relatorios/gestao/ocorrencias',
   RELATORIO_DINAMICO_NAAPA = '/naapa/relatorio-dinamico',
+  INFORMES = '/informes',
+  INFORMES_NOVO = '/informes/novo',
+  INFORMES_EDICAO = '/informes/:id',
 }
