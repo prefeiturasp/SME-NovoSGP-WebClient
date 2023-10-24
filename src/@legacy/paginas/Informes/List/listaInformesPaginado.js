@@ -116,8 +116,8 @@ const ListaInformesPaginado = ({ form }) => {
     }
 
     if (dataInicio && dataFim) {
-      params.dataEnvioInicio = dataInicio;
-      params.dataEnvioFim = dataFim;
+      params.dataEnvioInicio = dataInicio?.format('YYYY-MM-DD');
+      params.dataEnvioFim = dataFim?.format('YYYY-MM-DD');
     }
     setFiltro({ ...params });
     setFiltroEhValido(true);
