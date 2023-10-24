@@ -324,7 +324,6 @@ const TipoCalendarioEscolarForm = () => {
                 </Col>
               </Row>
             </Cabecalho>
-
             <Card>
               <Form className="col-md-12 mb-4">
                 <div className="row">
@@ -337,7 +336,7 @@ const TipoCalendarioEscolarForm = () => {
                         valueOption="valor"
                         valueText="desc"
                         disabled={
-                          listaAnosLetivo && listaAnosLetivo.length === 1
+                          (idTipoCalendario > 0) || listaAnosLetivo && listaAnosLetivo.length === 1
                         }
                         onChange={onChangeAnoLetivo}
                         valueSelect={anoLetivo}
