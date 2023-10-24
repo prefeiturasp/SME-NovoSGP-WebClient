@@ -75,7 +75,7 @@ const ListaInformesFiltros = props => {
         </Col>
 
         <Col xs={24} md={12}>
-          <SelectPerfis form={form} disabled={desabilitarCampos} />
+          <SelectPerfis form={form} disabled={desabilitarCampos} multiple />
         </Col>
 
         <Col xs={24} md={12}>

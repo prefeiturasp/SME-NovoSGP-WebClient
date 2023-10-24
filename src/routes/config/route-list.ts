@@ -1695,8 +1695,7 @@ route.set(ROUTES.INFORMES, {
   component: ListaInformes,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // TODO
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: ROUTES.INFORMES,
 });
 
@@ -1706,8 +1705,17 @@ route.set(ROUTES.INFORMES_NOVO, {
   component: InformesCadastro,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // TODO
-  // temPermissionamento: true,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.INFORMES,
+});
+
+route.set(ROUTES.INFORMES_EDICAO, {
+  breadcrumbName: 'Editar',
+  parent: ROUTES.INFORMES,
+  component: InformesCadastro,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
   chavePermissao: ROUTES.INFORMES,
 });
 

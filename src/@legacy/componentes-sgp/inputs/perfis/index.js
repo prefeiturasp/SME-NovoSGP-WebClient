@@ -22,7 +22,7 @@ export const SelectPerfis = ({
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const ueCodigo = form.values?.ueCodigo;
-  const dreCodigo = form.values?.ueCodigo;
+  const dreCodigo = form.values?.dreCodigo;
 
   const listaPerfis = form.values?.[nameList];
 
@@ -35,14 +35,6 @@ export const SelectPerfis = ({
 
   const obterDados = useCallback(async () => {
     const OPCAO_TODOS_PERFIS = { id: OPCAO_TODOS, nome: 'Todos' };
-
-    if (ueCodigo === OPCAO_TODOS) {
-      const codigoAtual = multiple ? [OPCAO_TODOS] : OPCAO_TODOS;
-
-      form.setFieldValue(nameList, [OPCAO_TODOS_PERFIS]);
-      form.setFieldValue(name, codigoAtual);
-      return;
-    }
 
     setExibirLoader(true);
 
@@ -76,6 +68,7 @@ export const SelectPerfis = ({
         }
         form.setFieldValue(name, idAtual);
       } else if (mostrarOpcaoTodas) {
+        form.setFieldValue(name, multiple ? [OPCAO_TODOS] : OPCAO_TODOS);
         lista.unshift(OPCAO_TODOS_PERFIS);
       }
 

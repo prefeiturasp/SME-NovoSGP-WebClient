@@ -76,7 +76,7 @@ const InformesCadastroBotoesAcoes = props => {
   };
 
   const onClickSalvar = async valores => {
-    const { dreCodigo, ueCodigo, anoLetivo } = valores;
+    const { dreCodigo, ueCodigo, anoLetivo, texto, titulo, perfis } = valores;
 
     const ueSelecionada = listaUes.find(
       item => String(item.codigo) === String(ueCodigo)
@@ -90,9 +90,13 @@ const InformesCadastroBotoesAcoes = props => {
       anoLetivo,
       dreId: dreSelecionada.id,
       ueId: ueSelecionada.id,
+      texto,
+      titulo,
+      perfis: perfis.map(id => ({ id })),
     };
 
     setExibirLoader(true);
+
     const resposta = await salvarInforme(params, id)
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -152,9 +156,9 @@ const InformesCadastroBotoesAcoes = props => {
             color={Colors.Roxo}
             border
             bold
-            onClick={() =>
-              validaAntesDoSubmit(form, initialValues, onClickSalvar)
-            }
+            onClick={() => {
+              validaAntesDoSubmit(form, initialValues, onClickSalvar);
+            }}
           />
         </Col>
       ) : (

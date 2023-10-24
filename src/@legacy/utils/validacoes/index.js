@@ -64,10 +64,11 @@ export const validaAntesDoSubmit = (form, initialValues, acaoPosValidar) => {
   arrayCampos.forEach(campo => {
     form.setFieldTouched(campo, true, true);
   });
-
-  form.validateForm().then(errors => {
-    if (Object.keys(errors).length === 0) {
-      acaoPosValidar(form?.values);
-    }
-  });
+  setTimeout(() => {
+    form.validateForm().then(errors => {
+      if (Object.keys(errors).length === 0) {
+        acaoPosValidar(form?.values);
+      }
+    });
+  }, 500);
 };

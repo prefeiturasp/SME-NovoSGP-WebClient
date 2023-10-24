@@ -9,7 +9,7 @@ const obterInformePorId = (id: string | number): Promise<AxiosResponse<any>> =>
   api.get(`${URL_API_INFORME}/${id}`);
 
 const salvarInforme = (params: any): Promise<AxiosResponse<any>> =>
-  api.post(URL_API_INFORME, params);
+  api.post(`${URL_API_INFORME}/salvar`, params);
 
 const excluirInformePorId = (id: string | number): Promise<AxiosResponse<any>> =>
   api.delete(`${URL_API_INFORME}/${id}`);

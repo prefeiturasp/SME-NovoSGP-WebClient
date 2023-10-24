@@ -29,6 +29,8 @@ const ListaInformes = () => {
     ueCodigo: undefined,
     listaUes: [],
     titulo: '',
+    perfis: '',
+    listaPerfis: [],
     dataInicio: '',
     dataFim: '',
   };

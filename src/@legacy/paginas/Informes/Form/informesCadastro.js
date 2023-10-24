@@ -40,9 +40,6 @@ const InformesCadastro = () => {
     const desabilitar = soConsulta || !permissoesTela?.podeIncluir;
 
     setDesabilitarCampos(!!desabilitar);
-
-    // TODO
-    setDesabilitarCampos(false);
   }, [permissoesTela, id]);
 
   const inicial = {
@@ -79,35 +76,38 @@ const InformesCadastro = () => {
       .finally(() => setExibirLoader(false));
 
     if (resposta?.status === HttpStatusCode.Ok) {
-      const dreCodigo = resposta.data?.dreId?.toString();
-      const ueCodigo = resposta.data?.ueId?.toString();
       const dreNome = resposta.data?.dreNome;
       const ueNome = resposta.data?.ueNome;
+      const perfis = resposta.data?.perfis;
 
       const valores = {
         id: resposta.data.id,
-        dreCodigo,
-        ueCodigo,
+        titulo: resposta.data.titulo,
+        texto: resposta.data.texto,
+        dreCodigo: dreNome,
+        ueCodigo: ueNome,
       };
 
-      if (dreCodigo && dreNome) {
-        valores.listaDres = [{ codigo: dreCodigo, nome: dreNome }];
+      if (dreNome) {
+        valores.listaDres = [{ codigo: dreNome, nome: dreNome }];
       }
 
-      if (ueCodigo && ueNome) {
-        valores.listaUes = [{ codigo: ueCodigo, nome: ueNome }];
+      if (ueNome) {
+        valores.listaUes = [{ codigo: dreNome, nome: ueNome }];
+      }
+
+      if (perfis?.length) {
+        valores.perfis = perfis.map(perfil => String(perfil.id));
+        valores.listaPerfis = perfis;
       }
 
       valores.auditoria = {
-        alteradoEm: resposta.data?.alteradoEm,
-        alteradoPor: resposta.data?.alteradoPor,
+        ...resposta?.data?.auditoria,
         alteradoRf: resposta.data?.alteradoRF,
-        criadoEm: resposta.data?.criadoEm,
-        criadoPor: resposta.data?.criadoPor,
         criadoRf: resposta.data?.criadoRF,
       };
 
-      setInitialValues(valores);
+      setInitialValues({ ...valores });
     }
   }, [id]);
 

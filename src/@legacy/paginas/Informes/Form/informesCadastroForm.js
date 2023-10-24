@@ -34,6 +34,7 @@ const InformesCadastroForm = props => {
 
         <Col xs={24} md={12}>
           <SelectPerfis
+            multiple
             form={form}
             disabled={desabilitarCampos}
             labelRequired
