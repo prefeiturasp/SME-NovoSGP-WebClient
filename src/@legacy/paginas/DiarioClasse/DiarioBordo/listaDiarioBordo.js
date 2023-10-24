@@ -72,6 +72,7 @@ const ListaDiarioBordo = () => {
     setCarregandoGeral(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
       turma,
+      false,
       false
     ).catch(e => erros(e));
 

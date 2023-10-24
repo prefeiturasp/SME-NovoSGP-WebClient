@@ -165,6 +165,7 @@ const TabListaoDiarioBordoFiltros = () => {
     setExibirLoaderComponenteCurricular(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
       turma,
+      false,
       false
     )
       .catch(e => erros(e))
