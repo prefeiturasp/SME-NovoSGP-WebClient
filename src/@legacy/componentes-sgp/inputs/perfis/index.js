@@ -68,7 +68,6 @@ export const SelectPerfis = ({
         }
         form.setFieldValue(name, idAtual);
       } else if (mostrarOpcaoTodas) {
-        form.setFieldValue(name, multiple ? [OPCAO_TODOS] : OPCAO_TODOS);
         lista.unshift(OPCAO_TODOS_PERFIS);
       }
 

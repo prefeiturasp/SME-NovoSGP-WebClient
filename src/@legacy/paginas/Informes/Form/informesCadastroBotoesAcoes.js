@@ -1,3 +1,4 @@
+import { OPCAO_TODOS } from '@/@legacy/constantes';
 import { validaAntesDoSubmit } from '@/@legacy/utils';
 import { ROUTES } from '@/core/enum/routes';
 import {
@@ -76,7 +77,15 @@ const InformesCadastroBotoesAcoes = props => {
   };
 
   const onClickSalvar = async valores => {
-    const { dreCodigo, ueCodigo, anoLetivo, texto, titulo, perfis } = valores;
+    const {
+      dreCodigo,
+      ueCodigo,
+      anoLetivo,
+      texto,
+      titulo,
+      perfis,
+      listaPerfis,
+    } = valores;
 
     const ueSelecionada = listaUes.find(
       item => String(item.codigo) === String(ueCodigo)
@@ -92,8 +101,23 @@ const InformesCadastroBotoesAcoes = props => {
       ueId: ueSelecionada.id,
       texto,
       titulo,
-      perfis: perfis.map(id => ({ id })),
     };
+
+    if (perfis?.length) {
+      const todosPerfisSelecionado = perfis.find(
+        perfilId => String(perfilId) === OPCAO_TODOS
+      );
+
+      if (todosPerfisSelecionado) {
+        const perfisSemOpcaoTodos = listaPerfis.filter(
+          perfil => String(perfil?.id) !== OPCAO_TODOS
+        );
+
+        params.perfis = perfisSemOpcaoTodos;
+      } else {
+        params.perfis = perfis.map(id => ({ id }));
+      }
+    }
 
     setExibirLoader(true);
 
@@ -116,6 +140,8 @@ const InformesCadastroBotoesAcoes = props => {
       );
       if (confirmado) {
         validaAntesDoSubmit(form, initialValues, onClickSalvar);
+      } else {
+        navigate(ROUTES.INFORMES);
       }
     } else {
       navigate(ROUTES.INFORMES);

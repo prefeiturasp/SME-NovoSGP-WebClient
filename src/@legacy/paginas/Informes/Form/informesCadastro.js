@@ -119,7 +119,7 @@ const InformesCadastro = () => {
 
   useEffect(() => {
     if (id) {
-      setBreadcrumbManual(location.pathname, 'Informes', ROUTES.INFORMES);
+      setBreadcrumbManual(location.pathname, 'Edição', ROUTES.INFORMES);
     }
   }, [id, location]);
 

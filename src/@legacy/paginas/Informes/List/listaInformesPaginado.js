@@ -43,21 +43,31 @@ const ListaInformesPaginado = ({ form }) => {
     {
       title: 'Perfil',
       dataIndex: 'perfis',
+      onCell: () => {
+        return {
+          style: {
+            minWidth: '400px',
+          },
+        };
+      },
       render: perfis => {
         if (!perfis?.length) return <></>;
-
-        return perfis.map(perfil => {
-          return (
-            <Badge
-              key={perfil?.id}
-              role="button"
-              alt={perfil.nome}
-              className="badge badge-pill border text-dark bg-white font-weight-light px-2 py-1 mr-2"
-            >
-              {perfil.nome}
-            </Badge>
-          );
-        });
+        return (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px' }}>
+            {perfis.map(perfil => {
+              return (
+                <Badge
+                  key={perfil?.id}
+                  role="button"
+                  alt={perfil.nome}
+                  className="badge badge-pill border text-dark bg-white font-weight-light px-2 py-1 mr-2"
+                >
+                  {perfil.nome}
+                </Badge>
+              );
+            })}
+          </div>
+        );
       },
     },
     {
