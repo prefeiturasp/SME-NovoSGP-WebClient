@@ -95,9 +95,9 @@ const TipoCalendarioEscolarForm = () => {
     {
       label:
         ModalidadeTipoCalendarioEnumDisplay[
-          ModalidadeTipoCalendarioEnum.FundamentalMedio
+          ModalidadeTipoCalendarioEnum.FUNDAMENTAL_MEDIO
         ],
-      value: ModalidadeTipoCalendarioEnum.FundamentalMedio,
+      value: ModalidadeTipoCalendarioEnum.FUNDAMENTAL_MEDIO,
     },
     {
       label:
@@ -107,9 +107,9 @@ const TipoCalendarioEscolarForm = () => {
     {
       label:
         ModalidadeTipoCalendarioEnumDisplay[
-          ModalidadeTipoCalendarioEnum.Infantil
+          ModalidadeTipoCalendarioEnum.INFANTIL
         ],
-      value: ModalidadeTipoCalendarioEnum.Infantil,
+      value: ModalidadeTipoCalendarioEnum.INFANTIL,
     },
     {
       label:
