@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ListaFrequenciaPorBimestre from '~/componentes-sgp/ListaFrequenciaPorBimestre/listaFrequenciaPorBimestre';
 import CardCollapse from '~/componentes/cardCollapse';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { erros } from '~/servicos';
 import ServicoAcompanhamentoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoAcompanhamentoFrequencia';
 
@@ -16,7 +16,7 @@ const FrequenciaCardCollapse = props => {
   const { turmaSelecionada } = usuario;
 
   const ehInfantil = useMemo(
-    () => Number(turmaSelecionada?.modalidade) === ModalidadeDTO.INFANTIL,
+    () => Number(turmaSelecionada?.modalidade) === ModalidadeEnum.INFANTIL,
     [turmaSelecionada]
   );
   const { codigoEOL } = dadosAlunoObjectCard;

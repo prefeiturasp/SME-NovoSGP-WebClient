@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { BIMESTRE_FINAL } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { ehTurmaInfantil } from '~/servicos';
 import {
   LISTAO_TAB_AVALIACOES,
@@ -86,7 +86,7 @@ const ListaoTabs = () => {
       );
     }
 
-    if (Number(modalidade) === ModalidadeDTO.INFANTIL) {
+    if (Number(modalidade) === ModalidadeEnum.INFANTIL) {
       return (
         <ContainerTabsCard
           type="card"

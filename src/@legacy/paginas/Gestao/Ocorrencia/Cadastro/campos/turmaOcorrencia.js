@@ -3,7 +3,7 @@ import { Col } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_TURMA } from '~/constantes/ids/select';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros } from '~/servicos';
 
 const TurmaOcorrencia = props => {
@@ -14,7 +14,9 @@ const TurmaOcorrencia = props => {
 
   const { anoLetivo, modalidade, semestre } = form.values;
 
-  const ehEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehEJAOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const nomeCampo = 'turmaId';
 
@@ -46,7 +48,6 @@ const TurmaOcorrencia = props => {
     } else {
       setListaTurmas([]);
     }
-
   }, [anoLetivo, ueCodigo, modalidade]);
 
   useEffect(() => {
@@ -57,14 +58,13 @@ const TurmaOcorrencia = props => {
     } else {
       setListaTurmas([]);
     }
-
   }, [modalidade]);
 
   const disabled =
-    !modalidade || (ehEJA && !semestre) || desabilitar || !!ocorrenciaId;
+    !modalidade || (ehEJAOuCelp && !semestre) || desabilitar || !!ocorrenciaId;
 
   return (
-    <Col sm={24} md={12} lg={ehEJA ? 8 : 12}>
+    <Col sm={24} md={12} lg={ehEJAOuCelp ? 8 : 12}>
       <Loader loading={exibirLoader} ignorarTip>
         <SelectComponent
           id={SGP_SELECT_TURMA}

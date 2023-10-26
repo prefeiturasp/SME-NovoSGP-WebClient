@@ -192,7 +192,7 @@ const RegistroIndividual = () => {
                 name="ComponenteCurricularId"
                 lista={listaComponenteCurricular || []}
                 valueOption="codigoComponenteCurricular"
-                valueText="nomeComponenteInfantil"
+                valueText="nome"
                 valueSelect={componenteCurricularSelecionado}
                 onChange={onChangeComponenteCurricular}
                 placeholder="Selecione um componente curricular"

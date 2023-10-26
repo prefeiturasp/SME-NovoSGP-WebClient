@@ -6,7 +6,7 @@ import { Cabecalho } from '~/componentes-sgp';
 import RelatorioControleFrequenciaMensalBotoesAcoes from './relatorioControleFrequenciaMensalBotoesAcoes';
 import RelatorioControleFrequenciaMensalForm from './relatorioControleFrequenciaMensalForm';
 import { OPCAO_TODOS } from '@/@legacy/constantes';
-import { ModalidadeDTO } from '@/@legacy/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { TIPO_FORMATO_RELATORIO } from '@/core/enum/tipo-formato-relatorio';
 
 const RelatorioControleFrequenciaMensal = () => {
@@ -49,10 +49,12 @@ const RelatorioControleFrequenciaMensal = () => {
         textoCampoObrigatorio,
         function validar() {
           const { modalidade, semestre } = this.parent;
-          const temModalidadeEja = Number(modalidade) === ModalidadeDTO.EJA;
+          const temModalidadeEjaOuCelp =
+            Number(modalidade) === ModalidadeEnum.EJA ||
+            Number(modalidade) === ModalidadeEnum.CELP;
 
           let ehValido = true;
-          if (!temModalidadeEja) {
+          if (!temModalidadeEjaOuCelp) {
             return ehValido;
           }
           if (!semestre) {

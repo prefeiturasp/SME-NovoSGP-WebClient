@@ -306,7 +306,7 @@ const CartaIntencoes = () => {
                     id="componente-curricular"
                     lista={listaComponenteCurricular || []}
                     valueOption="codigoComponenteCurricular"
-                    valueText="nomeComponenteInfantil"
+                    valueText="nome"
                     valueSelect={componenteCurricular}
                     onChange={onChangeSemestreComponenteCurricular}
                     placeholder="Selecione um componente curricular"

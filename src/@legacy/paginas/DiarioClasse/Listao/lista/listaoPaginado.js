@@ -14,7 +14,6 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Base, ListaPaginada } from '~/componentes';
 import { BIMESTRE_FINAL, OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
 import {
   salvarAnosLetivos,
   salvarDres,
@@ -38,6 +37,7 @@ import {
 } from '../listaoConstantes';
 import ListaoContext from '../listaoContext';
 import { ROUTES } from '@/core/enum/routes';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const ListaoPaginado = () => {
   const dispatch = useDispatch();
@@ -67,15 +67,18 @@ const ListaoPaginado = () => {
   const [filtros, setFiltros] = useState({});
   const [colunas, setColunas] = useState([]);
 
-  const temSemetreQuandoEja =
-    modalidade === String(ModalidadeDTO.EJA) ? !!semestre : true;
+  const temSemetreQuandoEjaouCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP
+      ? !!semestre
+      : true;
 
   const filtroEhValido = !!(
     anoLetivo &&
     codigoDre &&
     codigoUe &&
     modalidade &&
-    temSemetreQuandoEja &&
+    temSemetreQuandoEjaouCelp &&
     codigoTurma &&
     bimestre
   );
@@ -262,7 +265,7 @@ const ListaoPaginado = () => {
       },
     ];
 
-    if (modalidade === String(ModalidadeDTO.INFANTIL) && !ehBimestreFinal) {
+    if (Number(modalidade) === ModalidadeEnum.INFANTIL && !ehBimestreFinal) {
       cols.push(
         {
           title: 'Frequência',
@@ -279,7 +282,7 @@ const ListaoPaginado = () => {
       );
     }
 
-    if (modalidade !== String(ModalidadeDTO.INFANTIL) && !ehBimestreFinal) {
+    if (Number(modalidade) !== ModalidadeEnum.INFANTIL && !ehBimestreFinal) {
       cols.push(
         {
           title: 'Frequência',

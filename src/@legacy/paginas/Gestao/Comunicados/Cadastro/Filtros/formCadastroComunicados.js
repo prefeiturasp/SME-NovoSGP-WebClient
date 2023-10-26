@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Loader, momentSchema } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
 import {
   setExibirLoaderGeralComunicados,
   setFormComunicados,
@@ -32,6 +31,7 @@ import TurmasComunicados from './campos/turmasComunicados';
 import UeComunicados from './campos/ueComunicados';
 import InfoEstudantesReceberComunicados from './infoEstudantesReceberComunicado';
 import { ROUTES } from '@/core/enum/routes';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const FormCadastroComunicados = props => {
   const { comunicadoId, somenteConsulta } = props;
@@ -168,7 +168,9 @@ const FormCadastroComunicados = props => {
         function validar() {
           const { modalidades, semestre } = this.parent;
           const temModalidadeEja = modalidades?.find(
-            item => String(item) === String(ModalidadeDTO.EJA)
+            item =>
+              Number(item) === ModalidadeEnum.EJA ||
+              Number(item) === ModalidadeEnum.CELP
           );
           let ehValido = true;
           if (!temModalidadeEja) {

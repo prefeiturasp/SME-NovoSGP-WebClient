@@ -6,7 +6,6 @@ import {
   SGP_SELECT_BIMESTRE,
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/constantes/ids/select';
-import { ModalidadeDTO } from '~/dtos';
 import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
 import {
@@ -19,6 +18,7 @@ import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoE
 import { ordenarPor } from '~/utils';
 import ListaoContext from '../listaoContext';
 import { ROUTES } from '@/core/enum/routes';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const ListaoOperacoesFiltros = () => {
   const dispatch = useDispatch();
@@ -136,7 +136,7 @@ const ListaoOperacoesFiltros = () => {
         };
       });
 
-      if (Number(modalidade) !== ModalidadeDTO.INFANTIL) {
+      if (Number(modalidade) !== ModalidadeEnum.INFANTIL) {
         const resultado =
           await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
             turma,
