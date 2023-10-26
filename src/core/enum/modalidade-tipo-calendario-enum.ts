@@ -1,13 +1,13 @@
 export enum ModalidadeTipoCalendarioEnum {
-  FundamentalMedio = 1,
+  FUNDAMENTAL_MEDIO = 1,
   EJA = 2,
-  Infantil = 3,
+  INFANTIL = 3,
   CELP = 4,
 }
 
 export const ModalidadeTipoCalendarioEnumDisplay: Record<ModalidadeTipoCalendarioEnum, string> = {
-  [ModalidadeTipoCalendarioEnum.FundamentalMedio]: 'Fundamental/Médio',
+  [ModalidadeTipoCalendarioEnum.FUNDAMENTAL_MEDIO]: 'Fundamental/Médio',
   [ModalidadeTipoCalendarioEnum.EJA]: 'EJA',
-  [ModalidadeTipoCalendarioEnum.Infantil]: 'Infantil',
+  [ModalidadeTipoCalendarioEnum.INFANTIL]: 'Infantil',
   [ModalidadeTipoCalendarioEnum.CELP]: 'CELP',
 };
