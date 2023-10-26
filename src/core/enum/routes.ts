@@ -100,4 +100,7 @@ export enum ROUTES {
   RELATORIO_PAP = '/relatorios/pap/relatorio-pap',
   RELATORIO_OCORRENCIAS = '/relatorios/gestao/ocorrencias',
   RELATORIO_DINAMICO_NAAPA = '/naapa/relatorio-dinamico',
+  CADASTRO_ABAE = '/cadastro-abae',
+  CADASTRO_ABAE_NOVO = '/cadastro-abae/novo',
+  CADASTRO_ABAE_EDICAO = '/cadastro-abae/:id',
 }
