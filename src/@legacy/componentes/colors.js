@@ -39,6 +39,7 @@ const Base = {
   Preto: '#000',
   RosaCalendario: '#FEE4E2',
   Roxo: '#6933FF',
+  RoxoDark: '#490CF5',
   RoxoBorda: '#E2DEF0',
   RoxoFundo: '#6331EA',
   RoxoClaro: '#B99FFF',
@@ -104,4 +105,12 @@ const CoresGraficos = [
   '#FF8A65',
 ];
 
-export { Colors, Base, Active, Hover, CoresGraficos };
+const ColorsCards = [
+  '#AE2577',
+  '#D06D12',
+  '#086397',
+  '#0C6B45',
+  ...CoresGraficos,
+];
+
+export { Colors, Base, Active, Hover, CoresGraficos, ColorsCards };

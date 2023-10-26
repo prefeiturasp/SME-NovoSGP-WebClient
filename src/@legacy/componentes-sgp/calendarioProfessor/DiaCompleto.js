@@ -1,23 +1,23 @@
-﻿import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import shortid from 'shortid';
-import { Base, Colors } from '~/componentes/colors';
-import api from '~/servicos/api';
-import Grid from '~/componentes/grid';
-import { Div, Evento, Botao, BotoesAuxiliaresEstilo } from './DiaCompleto.css';
+﻿import { ROUTES } from '@/core/enum/routes';
 import { store } from '@/core/redux';
-import {
-  selecionaDia,
-  salvarEventoAulaCalendarioEdicao,
-  salvarDadosAulaFrequencia,
-} from '~/redux/modulos/calendarioProfessor/actions';
-import TiposEventoAulaDTO from '~/dtos/tiposEventoAula';
-import RotasDTO from '~/dtos/rotasDto';
-import Loader from '~/componentes/loader';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import shortid from 'shortid';
 import { SelectComponent } from '~/componentes';
 import Alert from '~/componentes/alert';
-import { useNavigate } from 'react-router-dom';
+import { Base, Colors } from '~/componentes/colors';
+import Grid from '~/componentes/grid';
+import Loader from '~/componentes/loader';
+import TiposEventoAulaDTO from '~/dtos/tiposEventoAula';
+import {
+  salvarDadosAulaFrequencia,
+  salvarEventoAulaCalendarioEdicao,
+  selecionaDia,
+} from '~/redux/modulos/calendarioProfessor/actions';
+import api from '~/servicos/api';
+import { Botao, BotoesAuxiliaresEstilo, Div, Evento } from './DiaCompleto.css';
 
 const SemEvento = () => {
   return (
@@ -59,7 +59,7 @@ const DiaCompleto = props => {
   const navigate = useNavigate();
 
   const permissaoTela = useSelector(
-    state => state.usuario.permissoes[RotasDTO.CALENDARIO_PROFESSOR]
+    state => state.usuario.permissoes[ROUTES.CALENDARIO_PROFESSOR]
   );
 
   const usuario = useSelector(state => state.usuario);
@@ -135,12 +135,12 @@ const DiaCompleto = props => {
 
   const aoClicarBotaoNovaAvaliacao = () => {
     salvarDadosEventoAula();
-    navigate(`${RotasDTO.CADASTRO_DE_AVALIACAO}/novo`);
+    navigate(`${ROUTES.CADASTRO_DE_AVALIACAO}/novo`);
   };
 
   const aoClicarBotaoNovaAula = () => {
     salvarDadosEventoAula();
-    navigate(`${RotasDTO.CADASTRO_DE_AULA}/novo/${tipoCalendarioSelecionado}`);
+    navigate(`${ROUTES.CADASTRO_DE_AULA}/novo/${tipoCalendarioSelecionado}`);
   };
 
   const BotoesAuxiliares = ({ temAula, podeCadastrarAvaliacao }) => {
@@ -190,9 +190,9 @@ const DiaCompleto = props => {
     if (permissaoTela && permissaoTela.podeConsultar) {
       salvarDadosEventoAula();
       if (tipo === TiposEventoAulaDTO.Aula || tipo === TiposEventoAulaDTO.CJ) {
-        navigate(`${RotasDTO.CADASTRO_DE_AULA}/editar/${id}`);
+        navigate(`${ROUTES.CADASTRO_DE_AULA}/editar/${id}`);
       } else {
-        navigate(`${RotasDTO.EVENTOS}/editar/${id}`);
+        navigate(`${ROUTES.EVENTOS}/editar/${id}`);
       }
     }
   };
@@ -200,13 +200,13 @@ const DiaCompleto = props => {
   const aoClicarEditarAvaliacao = id => {
     if (permissaoTela && permissaoTela.podeConsultar) {
       salvarDadosEventoAula();
-      navigate(`${RotasDTO.CADASTRO_DE_AVALIACAO}/editar/${id}`);
+      navigate(`${ROUTES.CADASTRO_DE_AVALIACAO}/editar/${id}`);
     }
   };
 
   const irParaFrequencia = (disciplinaId, dia) => {
     store.dispatch(salvarDadosAulaFrequencia(disciplinaId, dia));
-    navigate(`${RotasDTO.FREQUENCIA_PLANO_AULA}`);
+    navigate(`${ROUTES.FREQUENCIA_PLANO_AULA}`);
   };
 
   return (

@@ -6,17 +6,17 @@ import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import DocPlanosTrabalhoBotoesAcoes from './docPlanosTrabalhoBotoesAcoes';
 import DocPlanosTrabalhoFiltros from './docPlanosTrabalhoFiltros';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { verificaSomenteConsulta } from '~/servicos';
 import DocPlanosTrabalhoListaPaginada from './docPlanosTrabalhoListaPaginada';
 
 const DocPlanosTrabalhoLista = () => {
   const usuario = useSelector(store => store.usuario);
-  const somenteConsulta = useSelector(store => store.navegacao)
-    ?.somenteConsulta;
+  const somenteConsulta = useSelector(
+    store => store.navegacao
+  )?.somenteConsulta;
 
-  const permissoesTela =
-    usuario.permissoes[RotasDto.DOCUMENTOS_PLANOS_TRABALHO];
+  const permissoesTela = usuario.permissoes[ROUTES.DOCUMENTOS_PLANOS_TRABALHO];
 
   useEffect(() => {
     verificaSomenteConsulta(permissoesTela);

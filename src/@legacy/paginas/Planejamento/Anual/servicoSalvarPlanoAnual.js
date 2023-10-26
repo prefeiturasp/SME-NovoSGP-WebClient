@@ -1,5 +1,5 @@
 import { store } from '@/core/redux';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   limparDadosPlanoAnual,
   setErrosPlanoAnual,
@@ -84,7 +84,7 @@ class ServicoSalvarPlanoAnual {
               item.objetivosAprendizagemId &&
               item.objetivosAprendizagemId.length === 0
           );
-          if (semObjetivos && semObjetivos.length && turmaSelecionada.modalidade !== ModalidadeDTO.ENSINO_MEDIO) {
+          if (semObjetivos && semObjetivos.length && turmaSelecionada.modalidade !== ModalidadeEnum.MEDIO) {
             semObjetivos.forEach(componente => {
               const c = listaComponentesCurricularesPlanejamento.find(
                 item =>

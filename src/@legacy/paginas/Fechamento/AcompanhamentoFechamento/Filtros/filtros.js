@@ -9,7 +9,7 @@ import {
   setTurmasAcompanhamentoFechamento,
 } from '~/redux/modulos/acompanhamentoFechamento/actions';
 
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { OPCAO_TODOS, ANO_INICIO_INFANTIL } from '~/constantes/constantes';
 
@@ -55,7 +55,9 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
 
   const OPCAO_PADRAO = '-99';
 
-  const ehEJA = String(modalidadeId) === String(ModalidadeDTO.EJA);
+  const ehEJAOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const carregandoAcompanhamentoFechamento = useSelector(
     store => store.acompanhamentoFechamento.carregandoAcompanhamentoFechamento
@@ -99,7 +101,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
       situacaoConselhoClasse: valorSituacaoConselhoClasse || OPCAO_PADRAO,
     };
 
-    const temSemestreOuNaoEja = !ehEJA || semestre;
+    const temSemestreOuNaoEja = !ehEJAOuCelp || semestre;
 
     if (
       anoLetivo &&
@@ -339,17 +341,13 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   }, [consideraHistorico, modalidadeId, anoLetivo, ueCodigo, dreCodigo]);
 
   useEffect(() => {
-    if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
-    ) {
+    if (modalidadeId && anoLetivo && ehEJAOuCelp) {
       obterSemestres();
     } else {
       setSemestre();
       setListaSemestres([]);
     }
-  }, [modalidadeId]);
+  }, [modalidadeId, ehEJAOuCelp]);
 
   const onChangeTurma = valor => {
     setTurmasId(valor);
@@ -371,7 +369,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   };
 
   const obterTurmas = useCallback(async () => {
-    if (ehEJA && !semestre) return;
+    if (ehEJAOuCelp && !semestre) return;
 
     if (dreCodigo && ueCodigo && modalidadeId) {
       setCarregandoTurmas(true);
@@ -413,18 +411,18 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
     consideraHistorico,
     anoLetivo,
     modalidadeId,
-    ehEJA,
+    ehEJAOuCelp,
     semestre,
   ]);
 
   useEffect(() => {
-    if (ueCodigo || (ehEJA && semestre)) {
+    if (ueCodigo || (ehEJAOuCelp && semestre)) {
       obterTurmas();
     } else {
       setTurmasId();
       setListaTurmas([]);
     }
-  }, [ehEJA, semestre, ueCodigo, obterTurmas]);
+  }, [ehEJAOuCelp, semestre, ueCodigo, obterTurmas]);
 
   const onChangeBimestre = valor => {
     dispatch(setTurmasAcompanhamentoFechamento(undefined));
@@ -604,7 +602,8 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
               disabled={
                 !modalidadeId ||
                 listaSemestres?.length === 1 ||
-                String(modalidadeId) !== String(ModalidadeDTO.EJA) ||
+                (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                  Number(modalidadeId) !== ModalidadeEnum.CELP) ||
                 desabilitarCampos
               }
               valueSelect={semestre}
@@ -626,7 +625,7 @@ const Filtros = ({ onChangeFiltros, ehInfantil }) => {
                 !modalidadeId ||
                 listaTurmas?.length === 1 ||
                 desabilitarCampos ||
-                (ehEJA && !semestre)
+                (ehEJAOuCelp && !semestre)
               }
               valueSelect={turmasId}
               onChange={valores => {

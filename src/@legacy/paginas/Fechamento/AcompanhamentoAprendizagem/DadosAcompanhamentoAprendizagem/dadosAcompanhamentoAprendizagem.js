@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { setDesabilitarCamposAcompanhamentoAprendizagem } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import { verificaSomenteConsulta } from '~/servicos';
 import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
@@ -26,8 +26,7 @@ const DadosAcompanhamentoAprendizagem = props => {
 
   const { semestreSelecionado, componenteCurricularId } = props;
 
-  const permissoesTela =
-    usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
+  const permissoesTela = usuario.permissoes[ROUTES.ACOMPANHAMENTO_APRENDIZAGEM];
 
   const [tabAtual, setTabAtual] = useState('1');
 
@@ -57,12 +56,13 @@ const DadosAcompanhamentoAprendizagem = props => {
   );
 
   const obterDadosAcompanhamentoAprendizagemPorEstudante = async () => {
-    const retorno = await ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
-      turmaSelecionada?.id,
-      codigoEOL,
-      semestreSelecionado,
-      componenteCurricularId
-    );
+    const retorno =
+      await ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
+        turmaSelecionada?.id,
+        codigoEOL,
+        semestreSelecionado,
+        componenteCurricularId
+      );
 
     const { acompanhamentoAlunoSemestreId, podeEditar } = retorno;
     validaPermissoes(acompanhamentoAlunoSemestreId, podeEditar);
@@ -72,7 +72,6 @@ const DadosAcompanhamentoAprendizagem = props => {
     if (turmaSelecionada && codigoEOL && semestreSelecionado) {
       obterDadosAcompanhamentoAprendizagemPorEstudante();
     }
-
   }, [turmaSelecionada, codigoEOL, semestreSelecionado]);
 
   const exibirTabs = false;

@@ -15,7 +15,7 @@ import {
 import { Cabecalho, Paginacao } from '~/componentes-sgp';
 import ObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/observacoesUsuario';
 import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import {
   limparDadosObservacoesUsuario,
   setDadosObservacoesUsuario,
@@ -55,7 +55,7 @@ const ListaDiarioBordo = () => {
   const [resetInitialState, setResetInitialState] = useState(false);
   const usuario = useSelector(state => state.usuario);
   const { turmaSelecionada } = usuario;
-  const permissoesTela = usuario.permissoes[RotasDto.DIARIO_BORDO];
+  const permissoesTela = usuario.permissoes[ROUTES.DIARIO_BORDO];
   const turmaId = turmaSelecionada?.id || 0;
   const turma = turmaSelecionada?.turma || 0;
   const modalidadesFiltroPrincipal = useSelector(
@@ -132,7 +132,7 @@ const ListaDiarioBordo = () => {
   const onClickConsultarDiario = () => {
     dispatch(limparDadosObservacoesUsuario());
     navigate(
-      `${RotasDto.DIARIO_BORDO}/detalhes/${diarioBordoAtual?.aulaId}/${diarioBordoAtual?.id}/${componenteCurricularSelecionado}`
+      `${ROUTES.DIARIO_BORDO}/detalhes/${diarioBordoAtual?.aulaId}/${diarioBordoAtual?.id}/${componenteCurricularSelecionado}`
     );
   };
 
@@ -351,7 +351,7 @@ const ListaDiarioBordo = () => {
     navigate('/');
   };
   const onClickNovo = () => {
-    navigate(`${RotasDto.DIARIO_BORDO}/novo`);
+    navigate(`${ROUTES.DIARIO_BORDO}/novo`);
   };
 
   const validarSetarDataFinal = async data => {

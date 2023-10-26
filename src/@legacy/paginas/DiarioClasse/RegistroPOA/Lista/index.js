@@ -1,25 +1,25 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 // Redux
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLoaderSecao } from '~/redux/modulos/loader/actions';
 
 // Servicos
-import RotasDto from '~/dtos/rotasDto';
-import { erro, confirmar, sucesso } from '~/servicos/alertas';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import { ROUTES } from '@/core/enum/routes';
 import RegistroPOAServico from '~/servicos/Paginas/DiarioClasse/RegistroPOA';
+import { confirmar, erro, sucesso } from '~/servicos/alertas';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
 // Componentes SGP
 import { Cabecalho } from '~/componentes-sgp';
 
 // Componentes
-import { Loader, Card, ButtonGroup, ListaPaginada } from '~/componentes';
-import Filtro from './componentes/Filtro';
-import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { useNavigate } from 'react-router-dom';
+import { ButtonGroup, Card, ListaPaginada, Loader } from '~/componentes';
+import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import Filtro from './componentes/Filtro';
 
 function RegistroPOALista() {
   const navigate = useNavigate();
@@ -124,7 +124,7 @@ function RegistroPOALista() {
   };
 
   useEffect(() => {
-    const permissoes = permissoesTela[RotasDto.REGISTRO_POA];
+    const permissoes = permissoesTela[ROUTES.REGISTRO_POA];
     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
       modalidadesFiltroPrincipal,
       turmaSelecionada
@@ -173,7 +173,7 @@ function RegistroPOALista() {
         <Cabecalho pagina="Registro do professor orientador de área">
           <ButtonGroup
             somenteConsulta={somenteConsulta}
-            permissoesTela={permissoesTela[RotasDto.REGISTRO_POA]}
+            permissoesTela={permissoesTela[ROUTES.REGISTRO_POA]}
             temItemSelecionado={
               itensSelecionados && itensSelecionados.length >= 1
             }

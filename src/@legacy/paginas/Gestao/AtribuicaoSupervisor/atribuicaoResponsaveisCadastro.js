@@ -1,36 +1,39 @@
+import { store } from '@/core/redux';
 import { Col, Row } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useCallback, useEffect, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Button, Card, Colors, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import Auditoria from '~/componentes/auditoria';
 import {
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
 import { SGP_SELECT_DRE } from '~/constantes/ids/select';
-import Auditoria from '~/componentes/auditoria';
-import RotasDto from '~/dtos/rotasDto';
-import { store } from '@/core/redux';
 import {
   AbrangenciaServico,
   confirmar,
+  erro,
   erros,
   setBreadcrumbManual,
   sucesso,
-  erro,
   verificaSomenteConsulta,
 } from '~/servicos';
 import ServicoResponsaveis from '~/servicos/Paginas/Gestao/Responsaveis/ServicoResponsaveis';
 import ListaTransferenciaResponsaveis from './listaTransferenciaResponsaveis';
+import { ROUTES } from '@/core/enum/routes';
 
 const AtribuicaoResponsaveisCadastro = () => {
   const { usuario } = store.getState();
+  const location = useLocation();
   const permissoesTela =
-    usuario.permissoes[RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA];
+    usuario.permissoes[ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA];
 
   const paramsRoute = useParams();
   const navigate = useNavigate();
+
+  const dreIDParams = paramsRoute?.dreId;
 
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [listaDres, setListaDres] = useState([]);
@@ -59,11 +62,11 @@ const AtribuicaoResponsaveisCadastro = () => {
   }, [permissoesTela]);
 
   useEffect(() => {
-    if (paramsRoute?.dreId) {
+    if (dreIDParams) {
       setBreadcrumbManual(
-        RotasDto.ATRIBUICAO_RESPONSAVEIS,
+        ROUTES.ATRIBUICAO_RESPONSAVEIS,
         'Editar Atribuição',
-        RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA
+        ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA
       );
     }
   }, [paramsRoute]);
@@ -92,7 +95,7 @@ const AtribuicaoResponsaveisCadastro = () => {
     ServicoResponsaveis.salvarAtribuicao(atribuicao)
       .then(() => {
         sucesso('Atribuição realizada com sucesso.');
-        navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+        navigate(ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA);
       })
       .catch(e => {
         if (e.response.status === 601) {
@@ -114,10 +117,10 @@ const AtribuicaoResponsaveisCadastro = () => {
       if (confirmado) {
         salvarAtribuicao();
       } else {
-        navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+        navigate(ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA);
       }
     } else {
-      navigate(RotasDto.ATRIBUICAO_RESPONSAVEIS_LISTA);
+      navigate(ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA);
     }
   };
 
@@ -154,8 +157,8 @@ const AtribuicaoResponsaveisCadastro = () => {
     if (retorno?.data?.length) {
       if (retorno.data.length === 1) {
         setDreId(retorno.data[0].codigo);
-      } else if (paramsRoute?.dreId) {
-        setDreId(paramsRoute?.dreId);
+      } else if (dreIDParams) {
+        setDreId(dreIDParams);
       }
 
       setListaDres(retorno.data);
@@ -346,6 +349,16 @@ const AtribuicaoResponsaveisCadastro = () => {
   useEffect(() => {
     if (!responsavel) setAuditoria({});
   }, [responsavel]);
+
+  useEffect(() => {
+    if (dreIDParams) {
+      setBreadcrumbManual(
+        location.pathname,
+        '',
+        `${ROUTES.ATRIBUICAO_RESPONSAVEIS}`
+      );
+    }
+  }, [dreIDParams, location]);
 
   return (
     <>

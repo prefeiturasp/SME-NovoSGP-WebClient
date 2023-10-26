@@ -18,7 +18,7 @@ import {
   ServicoAcompanhamentoRegistros,
   sucesso,
 } from '~/servicos';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { onchangeMultiSelect, ordenarListaMaiorParaMenor } from '~/utils';
 import { OPCAO_TODOS } from '~/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
@@ -62,6 +62,10 @@ const AcompanhamentoRegistros = () => {
   const [carregandoBimestres, setCarregandoBimestres] = useState(false);
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
+
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const limparCampos = () => {
     setModalidadeId();
@@ -293,17 +297,21 @@ const AcompanhamentoRegistros = () => {
   );
 
   useEffect(() => {
-    if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
-    ) {
+    if (modalidadeId && anoLetivo && ehEjaOuCelp) {
       obterSemestres(modalidadeId, anoLetivo, dreId, ueId);
       return;
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterAnosLetivos, obterSemestres, modalidadeId, anoLetivo, dreId, ueId]);
+  }, [
+    obterAnosLetivos,
+    obterSemestres,
+    modalidadeId,
+    anoLetivo,
+    dreId,
+    ueId,
+    ehEjaOuCelp,
+  ]);
 
   const onChangeTurma = valor => {
     setTurmasCodigo(valor);
@@ -492,8 +500,7 @@ const AcompanhamentoRegistros = () => {
   };
 
   useEffect(() => {
-    const temModalidadeEja = String(modalidadeId) === String(ModalidadeDTO.EJA);
-    const consideraSemestre = temModalidadeEja && !semestre;
+    const consideraSemestre = ehEjaOuCelp && !semestre;
 
     const desabilitar =
       !anoLetivo ||
@@ -518,6 +525,7 @@ const AcompanhamentoRegistros = () => {
     bimestres,
     professorCodigo,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   const gerar = async () => {
@@ -658,7 +666,8 @@ const AcompanhamentoRegistros = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(ModalidadeDTO.EJA)
+                    (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                      Number(modalidadeId) !== ModalidadeEnum.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

@@ -1,5 +1,5 @@
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import tipoQuestao from '~/dtos/tipoQuestao';
 import { store } from '@/core/redux';
 import {
@@ -402,7 +402,7 @@ class ServicoEncaminhamentoAEE {
             dispatch(setLimparDadosLocalizarEstudante());
             dispatch(setLimparDadosAtribuicaoResponsavel());
             navigate(
-              `${RotasDto.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${resposta?.data?.id}`
+              `${ROUTES.RELATORIO_AEE_ENCAMINHAMENTO}/editar/${resposta?.data?.id}`
             );
           }
 

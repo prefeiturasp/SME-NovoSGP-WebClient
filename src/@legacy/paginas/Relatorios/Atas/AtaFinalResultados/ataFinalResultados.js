@@ -1,21 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { SelectComponent, CheckboxComponent, Loader, RadioGroupButton } from '~/componentes';
+import {
+  CheckboxComponent,
+  Loader,
+  RadioGroupButton,
+  SelectComponent,
+} from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import Card from '~/componentes/card';
-import { URL_HOME } from '~/constantes/url';
-import modalidade from '~/dtos/modalidade';
-import RotasDto from '~/dtos/rotasDto';
-import AbrangenciaServico from '~/servicos/Abrangencia';
-import { erros, sucesso } from '~/servicos/alertas';
-import api from '~/servicos/api';
-import ServicoConselhoAtaFinal from '~/servicos/Paginas/ConselhoAtaFinal/ServicoConselhoAtaFinal';
-import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import { OPCAO_TODOS } from '~/constantes/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
+import FiltroHelper from '~/componentes-sgp/filtro/helper';
+import Card from '~/componentes/card';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
+import { SGP_RADIO_IMPRIMIR_COMPONENTES_SEM_NOTA } from '~/constantes/ids/radio';
 import {
   SGP_SELECT_ANO_LETIVO,
   SGP_SELECT_DRE,
@@ -26,10 +26,12 @@ import {
   SGP_SELECT_UE,
   SGP_SELECT_VISUALIZACAO,
 } from '~/constantes/ids/select';
-import { SGP_RADIO_IMPRIMIR_COMPONENTES_SEM_NOTA } from '~/constantes/ids/radio';
-import { ModalidadeDTO } from '~/dtos';
-import { Label } from '~/componentes';
-import { Switch } from 'antd';
+import { URL_HOME } from '~/constantes/url';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
+import AbrangenciaServico from '~/servicos/Abrangencia';
+import ServicoConselhoAtaFinal from '~/servicos/Paginas/ConselhoAtaFinal/ServicoConselhoAtaFinal';
+import { erros, sucesso } from '~/servicos/alertas';
+import api from '~/servicos/api';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -37,7 +39,7 @@ const AtaFinalResultados = () => {
   const navigate = useNavigate();
 
   const usuarioStore = useSelector(store => store.usuario);
-  const permissoesTela = usuarioStore.permissoes[RotasDto.ATA_FINAL_RESULTADOS];
+  const permissoesTela = usuarioStore.permissoes[ROUTES.ATA_FINAL_RESULTADOS];
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaSemestre, setListaSemestre] = useState([]);
@@ -54,7 +56,10 @@ const AtaFinalResultados = () => {
   const [turmaId, setTurmaId] = useState();
   const [formato, setFormato] = useState('1');
   const [consideraHistorico, setConsideraHistorico] = useState(false);
-  const [imprimirComponentesQueNaoLancamNota, setImprimirComponentesQueNaoLancamNota] = useState(true);
+  const [
+    imprimirComponentesQueNaoLancamNota,
+    setImprimirComponentesQueNaoLancamNota,
+  ] = useState(true);
 
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [desabilitarBtnFormato, setDesabilitarBtnFormato] = useState(true);
@@ -77,8 +82,9 @@ const AtaFinalResultados = () => {
     { label: 'Não', value: false },
   ];
 
-
-  const ehEJA = Number(modalidadeId) === ModalidadeDTO.EJA;
+  const ehEJAOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const obterAnosLetivos = useCallback(async considHistorico => {
     setCarregandoAnosLetivos(true);
@@ -286,16 +292,16 @@ const AtaFinalResultados = () => {
 
   useEffect(() => {
     if (modalidadeId && ueId) {
-      obterTurmas(modalidadeId, ueId, semestre, ehEJA);
+      obterTurmas(modalidadeId, ueId, semestre, ehEJAOuCelp);
     } else {
       setTurmaId(undefined);
       setListaTurmas([]);
     }
-  }, [modalidadeId, ueId, obterTurmas, semestre, ehEJA]);
+  }, [modalidadeId, ueId, obterTurmas, semestre, ehEJAOuCelp]);
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (modalidadeId === modalidade.EJA) {
+      if (ehEJAOuCelp) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre(undefined);
@@ -305,7 +311,7 @@ const AtaFinalResultados = () => {
       setSemestre(undefined);
       setListaSemestre([]);
     }
-  }, [modalidadeId, anoLetivo]);
+  }, [modalidadeId, anoLetivo, ehEJAOuCelp]);
 
   useEffect(() => {
     const desabilitar =
@@ -318,9 +324,9 @@ const AtaFinalResultados = () => {
 
     let desabilitado = desabilitar;
 
-    if (Number(modalidadeId) === Number(modalidade.EJA)) {
+    if (ehEJAOuCelp) {
       desabilitado = !semestre || desabilitar;
-    } else if (Number(modalidadeId) === Number(modalidade.ENSINO_MEDIO)) {
+    } else if (Number(modalidadeId) === ModalidadeEnum.MEDIO) {
       desabilitado = desabilitar || !visualizacao;
     }
 
@@ -335,6 +341,7 @@ const AtaFinalResultados = () => {
     semestre,
     visualizacao,
     imprimirComponentesQueNaoLancamNota,
+    ehEJAOuCelp,
   ]);
 
   useEffect(() => {
@@ -361,17 +368,20 @@ const AtaFinalResultados = () => {
   const checarTipoTurma = arrayTurmas => {
     setVisualizacao('');
     const turmaItinerancia = compararTurmaAno('tipoTurma', 7, arrayTurmas);
-    const turmaPrimeiro = compararTurmaAno('ano', 1, arrayTurmas);
     const turmaSegundo = compararTurmaAno('ano', 2, arrayTurmas);
     const turmaTerceiro = compararTurmaAno('ano', 3, arrayTurmas);
     const ehModalidadeMedio =
-      parseInt(modalidadeId, 10) === parseInt(modalidade.ENSINO_MEDIO, 10);
+      parseInt(modalidadeId, 10) === parseInt(ModalidadeEnum.MEDIO, 10);
 
     if (
       turmaItinerancia.length === arrayTurmas?.length ||
       (ehModalidadeMedio && !turmaSegundo.length && !turmaTerceiro.length)
     ) {
-      setVisualizacao(`${    listaVisualizacao.find(a => a.desc?.toUpperCase() === 'TURMA')?.valor}`);
+      setVisualizacao(
+        `${
+          listaVisualizacao.find(a => a.desc?.toUpperCase() === 'TURMA')?.valor
+        }`
+      );
       return true;
     }
     return !turmaSegundo.length && !turmaTerceiro.length;
@@ -386,7 +396,7 @@ const AtaFinalResultados = () => {
       !modalidadeId ||
       !turmaId ||
       (turmaId.length === 1 && turmaId[0] !== OPCAO_TODOS && turmaExcecao) ||
-      parseInt(modalidadeId, 10) !== parseInt(modalidade.ENSINO_MEDIO, 10) ||
+      parseInt(modalidadeId, 10) !== parseInt(ModalidadeEnum.MEDIO, 10) ||
       !turmaId.length ||
       turmaExcecao;
     setDesabilitaVisualizacao(desabilita);
@@ -459,7 +469,10 @@ const AtaFinalResultados = () => {
     setListaSemestre([]);
     setSemestre(undefined);
 
-    if (Number(novaModalidade) === modalidade.EJA)
+    if (
+      Number(novaModalidade) === ModalidadeEnum.EJA ||
+      Number(novaModalidade) === ModalidadeEnum.CELP
+    )
       obterSemestres(novaModalidade, anoLetivo);
 
     setListaTurmas([]);
@@ -534,7 +547,7 @@ const AtaFinalResultados = () => {
   return (
     <>
       <AlertaModalidadeInfantil
-        exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
+        exibir={Number(modalidadeId) === ModalidadeEnum.INFANTIL}
         validarModalidadeFiltroPrincipal={false}
       />
 
@@ -544,7 +557,7 @@ const AtaFinalResultados = () => {
           onClickCancelar={onClickCancelar}
           onClickGerar={onClickGerar}
           desabilitarBtnGerar={
-            String(modalidadeId) === String(modalidade.INFANTIL) ||
+            Number(modalidadeId) === ModalidadeEnum.INFANTIL ||
             desabilitarBtnGerar ||
             !permissoesTela.podeConsultar
           }
@@ -657,7 +670,8 @@ const AtaFinalResultados = () => {
                 disabled={
                   !permissoesTela.podeConsultar ||
                   !modalidadeId ||
-                  Number(modalidadeId) !== modalidade.EJA ||
+                  (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                    Number(modalidadeId) !== ModalidadeEnum.CELP) ||
                   (listaSemestre && listaSemestre.length === 1)
                 }
                 valueSelect={semestre}
@@ -677,7 +691,7 @@ const AtaFinalResultados = () => {
                   !permissoesTela.podeConsultar ||
                   !modalidadeId ||
                   listaTurmas?.length === 1 ||
-                  (ehEJA && !semestre)
+                  (ehEJAOuCelp && !semestre)
                 }
                 valueSelect={turmaId}
                 onChange={onChangeTurma}

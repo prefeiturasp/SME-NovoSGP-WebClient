@@ -6,7 +6,7 @@ import {
   SGP_SELECT_MODALIDADE,
   SGP_SELECT_SEMESTRE,
 } from '~/constantes/ids/select';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 
 const ModalidadeSemestreOcorrencia = props => {
@@ -25,7 +25,9 @@ const ModalidadeSemestreOcorrencia = props => {
 
   const { anoLetivo, modalidade } = form.values;
 
-  const ehEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehEJAOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const listaModalidadesEdicao = form?.initialValues?.modalidade
     ? [
@@ -63,7 +65,6 @@ const ModalidadeSemestreOcorrencia = props => {
       form.setFieldValue('modalidade', undefined);
       setListaModalidades([]);
     }
-
   }, [anoLetivo, ueCodigo]);
 
   useEffect(() => {
@@ -75,7 +76,6 @@ const ModalidadeSemestreOcorrencia = props => {
       form.setFieldValue('modalidade', undefined);
       setListaModalidades([]);
     }
-
   }, [ueCodigo]);
 
   const obterSemestres = useCallback(async () => {
@@ -101,21 +101,19 @@ const ModalidadeSemestreOcorrencia = props => {
       setListaSemestres([]);
       form.setFieldValue('semestre', undefined);
     }
-
   }, [anoLetivo, modalidade, dreCodigo, ueCodigo]);
 
   useEffect(() => {
     if (ocorrenciaId) return;
 
-    if (modalidade && ehEJA) {
+    if (modalidade && ehEJAOuCelp) {
       obterSemestres();
     }
-
-  }, [ehEJA, modalidade]);
+  }, [ehEJAOuCelp, modalidade]);
 
   return (
     <>
-      <Col sm={24} md={12} lg={ehEJA ? 8 : 12}>
+      <Col sm={24} md={12} lg={ehEJAOuCelp ? 8 : 12}>
         <Loader loading={exibirLoader} ignorarTip>
           <SelectComponent
             id={SGP_SELECT_MODALIDADE}
@@ -135,7 +133,7 @@ const ModalidadeSemestreOcorrencia = props => {
           />
         </Loader>
       </Col>
-      {ehEJA ? (
+      {ehEJAOuCelp ? (
         <Col sm={24} md={12} lg={8}>
           <SelectComponent
             id={SGP_SELECT_SEMESTRE}
@@ -143,7 +141,9 @@ const ModalidadeSemestreOcorrencia = props => {
             lista={ocorrenciaId ? listaSemestresEdicao : listaSemestres}
             valueOption="valor"
             valueText="desc"
-            disabled={!modalidade || !!ocorrenciaId || listaSemestres?.length === 1}
+            disabled={
+              !modalidade || !!ocorrenciaId || listaSemestres?.length === 1
+            }
             placeholder="Selecione o semestre"
             name="semestre"
             form={form}

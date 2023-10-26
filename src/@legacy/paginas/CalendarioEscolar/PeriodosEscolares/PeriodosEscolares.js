@@ -18,7 +18,7 @@ import { Cabecalho } from '~/componentes-sgp';
 
 import { URL_HOME } from '~/constantes';
 
-import { periodo, RotasDto } from '~/dtos';
+import { periodo } from '~/dtos';
 
 import {
   api,
@@ -36,6 +36,7 @@ import {
 } from '~/constantes/ids/button';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/core/enum/routes';
 
 const PeriodosEscolares = () => {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ const PeriodosEscolares = () => {
   };
   const [valoresIniciais, setValoresIniciais] = useState(valoresFormInicial);
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.PERIODOS_ESCOLARES];
+  const permissoesTela = usuario.permissoes[ROUTES.PERIODOS_ESCOLARES];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [desabilitaCampos, setDesabilitaCampos] = useState(false);
   const [listaTipoCalendario, setListaTipoCalendario] = useState([]);

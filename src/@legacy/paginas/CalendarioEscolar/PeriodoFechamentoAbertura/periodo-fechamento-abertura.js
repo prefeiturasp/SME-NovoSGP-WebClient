@@ -22,7 +22,7 @@ import {
   SGP_BUTTON_CANCELAR,
 } from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes';
-import { periodo, RotasDto } from '~/dtos';
+import { periodo } from '~/dtos';
 import { ContainerColumnReverse } from '~/paginas/Planejamento/Anual/planoAnual.css';
 import {
   confirmar,
@@ -37,6 +37,7 @@ import {
   CaixaBimestre,
 } from './periodo-fechamento-abertura.css';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '@/core/enum/routes';
 
 const PeriodoFechamentoAbertura = () => {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ const PeriodoFechamentoAbertura = () => {
   const usuarioLogado = useSelector(store => store.usuario);
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const permissoesTela =
-    usuarioLogado.permissoes[RotasDto.PERIODO_FECHAMENTO_ABERTURA];
+    usuarioLogado.permissoes[ROUTES.PERIODO_FECHAMENTO_ABERTURA];
   const [tipoCalendarioSelecionado, setTipoCalendarioSelecionado] =
     useState('');
 

@@ -1,25 +1,25 @@
+import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
-import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import DataTable from '~/componentes/table/dataTable';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes/url';
-import RotasDto from '~/dtos/rotasDto';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import { useNavigate } from 'react-router-dom';
 
 const TipoCalendarioEscolarLista = () => {
   const usuario = useSelector(store => store.usuario);
   const navigate = useNavigate();
-  const permissoesTela = usuario.permissoes[RotasDto.TIPO_CALENDARIO_ESCOLAR];
+  const permissoesTela = usuario.permissoes[ROUTES.TIPO_CALENDARIO_ESCOLAR];
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
 

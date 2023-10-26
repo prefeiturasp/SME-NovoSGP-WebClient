@@ -3,11 +3,12 @@ import { useSelector } from 'react-redux';
 
 import { Button, Colors, DataTable } from '~/componentes';
 
-import { RotasDto, situacaoPlanoAEE } from '~/dtos';
+import { situacaoPlanoAEE } from '~/dtos';
 import { verificaSomenteConsulta } from '~/servicos';
 
 import ModalReestruturacaoPlano from '../ModalReestruturacaoPlano/modalReestruturacaoPlano';
 import { BotaoEstilizado, TextoEstilizado } from './reestruturacaoTabela.css';
+import { ROUTES } from '@/core/enum/routes';
 
 const ReestruturacaoTabela = ({ key, listaDados, semestre }) => {
   const [exibirModal, setModalVisivel] = useState(false);
@@ -15,7 +16,7 @@ const ReestruturacaoTabela = ({ key, listaDados, semestre }) => {
   const [dadosVisualizacao, setDadosVisualizacao] = useState();
 
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
+  const permissoesTela = usuario.permissoes[ROUTES.RELATORIO_AEE_PLANO];
   const somenteConsulta = useSelector(store => store.navegacao.somenteConsulta);
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
 

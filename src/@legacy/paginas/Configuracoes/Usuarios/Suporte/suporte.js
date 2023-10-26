@@ -1,6 +1,9 @@
+import { ROUTES } from '@/core/enum/routes';
+import { store } from '@/core/redux';
 import { Col, Row } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Button,
   CampoTexto,
@@ -12,11 +15,9 @@ import {
 } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
-import RotasDto from '~/dtos/rotasDto';
+import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
 import LoginHelper from '~/paginas/Login/loginHelper';
-import { store } from '@/core/redux';
 import {
   AbrangenciaServico,
   api,
@@ -24,14 +25,13 @@ import {
   erros,
   verificaSomenteConsulta,
 } from '~/servicos';
-import { useNavigate, useParams } from 'react-router-dom';
 
 const Suporte = () => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
 
   const { usuario } = store.getState();
-  const permissoesTela = usuario.permissoes[RotasDto.SUPORTE];
+  const permissoesTela = usuario.permissoes[ROUTES.SUPORTE];
 
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [listaDres, setListaDres] = useState([]);

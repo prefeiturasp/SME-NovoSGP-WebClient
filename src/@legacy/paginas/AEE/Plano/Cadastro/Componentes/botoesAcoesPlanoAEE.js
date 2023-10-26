@@ -11,7 +11,7 @@ import {
 } from '~/constantes/ids/button';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import Button from '~/componentes/button';
-import { RotasDto, situacaoPlanoAEE } from '~/dtos';
+import { situacaoPlanoAEE } from '~/dtos';
 import {
   limparDadosParecer,
   setAtualizarDados,
@@ -26,6 +26,7 @@ import { confirmar, erros, sucesso, verificaSomenteConsulta } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import ModalImpressaoPlano from './ModalImpressaoPlano/modalImpressaoPlano';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ROUTES } from '@/core/enum/routes';
 
 const BotoesAcoesPlanoAEE = () => {
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ const BotoesAcoesPlanoAEE = () => {
   const [desabilitarBtnAcao, setDesabilitarBtnAcao] = useState(false);
 
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
+  const permissoesTela = usuario.permissoes[ROUTES.RELATORIO_AEE_PLANO];
 
   const ehCP = perfilSelecionado === 'CP';
 
@@ -140,7 +141,7 @@ const BotoesAcoesPlanoAEE = () => {
     if (resposta?.data) {
       sucesso(msg);
       limparParecer();
-      navigate(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(ROUTES.RELATORIO_AEE_PLANO);
     }
     setDesabilitarBtnAcao(false);
   };
@@ -166,14 +167,14 @@ const BotoesAcoesPlanoAEE = () => {
             mensagem = 'Registro alterado com sucesso';
           }
           sucesso(mensagem);
-          navigate(RotasDto.RELATORIO_AEE_PLANO);
+          navigate(ROUTES.RELATORIO_AEE_PLANO);
         }
       } else {
         limparParecer();
-        navigate(RotasDto.RELATORIO_AEE_PLANO);
+        navigate(ROUTES.RELATORIO_AEE_PLANO);
       }
     } else {
-      navigate(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(ROUTES.RELATORIO_AEE_PLANO);
     }
   };
 
@@ -191,7 +192,7 @@ const BotoesAcoesPlanoAEE = () => {
       });
       if (resultado && resultado.status === 200) {
         sucesso('Plano excluído com sucesso');
-        navigate(RotasDto.RELATORIO_AEE_PLANO);
+        navigate(ROUTES.RELATORIO_AEE_PLANO);
       }
     }
   };
@@ -230,7 +231,7 @@ const BotoesAcoesPlanoAEE = () => {
 
       dispatch(setQuestionarioDinamicoEmEdicao(false));
       if (registroNovo) {
-        navigate(`${RotasDto.RELATORIO_AEE_PLANO}`);
+        navigate(`${ROUTES.RELATORIO_AEE_PLANO}`);
       } else {
         dispatch(setAtualizarDados(true));
       }

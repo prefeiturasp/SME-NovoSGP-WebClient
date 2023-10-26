@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { JoditEditor } from '~/componentes';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { setApanhadoGeralEmEdicao } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import { verificaSomenteConsulta } from '~/servicos';
 import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
@@ -20,8 +20,7 @@ const CampoApanhadoGeral = () => {
 
   const usuario = useSelector(store => store.usuario);
 
-  const permissoesTela =
-    usuario.permissoes[RotasDto.ACOMPANHAMENTO_APRENDIZAGEM];
+  const permissoesTela = usuario.permissoes[ROUTES.ACOMPANHAMENTO_APRENDIZAGEM];
 
   const [valorApanhadoGeral, setValorApanhadoGeral] = useState();
   const [desabilitarCampo, setDesabilitarCampo] = useState(false);

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ListaFrequencia from '~/componentes-sgp/ListaFrequencia/listaFrequencia';
 import Ordenacao from '~/componentes-sgp/Ordenacao/ordenacao';
 import CardCollapse from '~/componentes/cardCollapse';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import {
   setExibirCardCollapseFrequencia,
   setListaDadosFrequencia,
@@ -16,7 +16,7 @@ const MontarListaFrequencia = () => {
   const dispatch = useDispatch();
 
   const usuario = useSelector(state => state.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.FREQUENCIA_PLANO_AULA];
+  const permissoesTela = usuario.permissoes[ROUTES.FREQUENCIA_PLANO_AULA];
 
   const { turmaSelecionada } = usuario;
 
