@@ -192,7 +192,7 @@ const FormCadastroABAE: React.FC = () => {
                 <Col>
                   <BotaoExcluirPadrao
                     onClick={onClickExcluir}
-                    disabled={permissoesTela?.podeExcluir}
+                    disabled={!permissoesTela?.podeExcluir}
                   />
                 </Col>
               ) : (
