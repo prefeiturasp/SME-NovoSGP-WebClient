@@ -61,7 +61,7 @@ const InformesCadastroForm = props => {
         <Col xs={24}>
           <JoditEditor
             ref={editorRef}
-            label="Texo"
+            label="Texto"
             form={form}
             value={textoInicial}
             name="texto"

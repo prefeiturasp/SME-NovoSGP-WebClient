@@ -69,7 +69,7 @@ const DadosPlanoAula = props => {
 
     const ehMedio = !!(
       turmaSelecionada &&
-      Number(turmaSelecionada.modalidade) === ModalidadeEnum.Medio
+      Number(turmaSelecionada.modalidade) === ModalidadeEnum.MEDIO
     );
 
     const esconderSwitch =

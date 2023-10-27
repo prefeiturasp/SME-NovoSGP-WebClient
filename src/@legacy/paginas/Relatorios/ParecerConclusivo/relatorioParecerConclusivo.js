@@ -345,7 +345,7 @@ const RelatorioParecerConclusivo = () => {
     if (
       Number(modalidadeSelecionada) === ModalidadeEnum.EJA ||
       Number(modalidadeSelecionada) === ModalidadeEnum.CELP ||
-      Number(modalidadeSelecionada) === ModalidadeEnum.Medio
+      Number(modalidadeSelecionada) === ModalidadeEnum.MEDIO
     ) {
       setListaCiclos([{ id: OPCAO_TODOS, descricao: 'Todos' }]);
       setCiclo(OPCAO_TODOS);
@@ -408,7 +408,7 @@ const RelatorioParecerConclusivo = () => {
       setCarregandoAnos(true);
       cicloSelecionado =
         cicloSelecionado === OPCAO_TODOS ||
-        Number(modalidadeIdSelecionada) === ModalidadeEnum.Medio
+        Number(modalidadeIdSelecionada) === ModalidadeEnum.MEDIO
           ? '0'
           : cicloSelecionado;
       const retorno =
@@ -468,7 +468,7 @@ const RelatorioParecerConclusivo = () => {
       !ueId ||
       !modalidadeId ||
       (ehEjaOuCelp ? !semestre : false) ||
-      (Number(modalidadeId) !== ModalidadeEnum.Medio ? !ciclo : false) ||
+      (Number(modalidadeId) !== ModalidadeEnum.MEDIO ? !ciclo : false) ||
       !ano ||
       ano?.length <= 0 ||
       !parecerConclusivoId ||
@@ -641,7 +641,7 @@ const RelatorioParecerConclusivo = () => {
                   valueText="descricao"
                   disabled={
                     (listaCiclos && listaCiclos.length === 1) ||
-                    Number(modalidadeId) === ModalidadeEnum.Medio
+                    Number(modalidadeId) === ModalidadeEnum.MEDIO
                   }
                   onChange={onChangeCiclos}
                   valueSelect={ciclo}

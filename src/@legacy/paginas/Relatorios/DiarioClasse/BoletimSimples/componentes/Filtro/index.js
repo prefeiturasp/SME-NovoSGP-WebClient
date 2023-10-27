@@ -62,7 +62,7 @@ const Filtros = ({
   const [imprimirEstudantesInativos, setImprimirEstudantesInativos] =
     useState();
 
-  const ehEnsinoMedio = Number(modalidadeId) === ModalidadeEnum.Medio;
+  const ehEnsinoMedio = Number(modalidadeId) === ModalidadeEnum.MEDIO;
   const ehEJAOuCelp =
     Number(modalidadeId) === ModalidadeEnum.EJA ||
     Number(modalidadeId) === ModalidadeEnum.CELP;

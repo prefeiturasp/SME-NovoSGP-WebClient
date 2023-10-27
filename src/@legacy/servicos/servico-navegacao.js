@@ -144,20 +144,20 @@ const obterDescricaoNomeMenu = (
     [ROUTES.FREQUENCIA_PLANO_AULA]: {
       [String(ModalidadeEnum.INFANTIL)]: 'Frequência',
       [String(ModalidadeEnum.EJA)]: 'Frequência/Plano Aula',
-      [String(ModalidadeEnum.Fundamental)]: 'Frequência/Plano Aula',
-      [String(ModalidadeEnum.Medio)]: 'Frequência/Plano Aula',
+      [String(ModalidadeEnum.FUNDAMENTAL)]: 'Frequência/Plano Aula',
+      [String(ModalidadeEnum.MEDIO)]: 'Frequência/Plano Aula',
     },
     [ROUTES.PLANO_ANUAL]: {
       [String(ModalidadeEnum.INFANTIL)]: 'Plano Anual',
       [String(ModalidadeEnum.EJA)]: 'Plano Semestral',
-      [String(ModalidadeEnum.Fundamental)]: 'Plano Anual',
-      [String(ModalidadeEnum.Medio)]: 'Plano Anual',
+      [String(ModalidadeEnum.FUNDAMENTAL)]: 'Plano Anual',
+      [String(ModalidadeEnum.MEDIO)]: 'Plano Anual',
     },
     [ROUTES.PLANO_CICLO]: {
       [String(ModalidadeEnum.INFANTIL)]: 'Plano de Ciclo',
       [String(ModalidadeEnum.EJA)]: 'Plano de Etapa',
-      [String(ModalidadeEnum.Fundamental)]: 'Plano de Ciclo',
-      [String(ModalidadeEnum.Medio)]: 'Plano de Ciclo',
+      [String(ModalidadeEnum.FUNDAMENTAL)]: 'Plano de Ciclo',
+      [String(ModalidadeEnum.MEDIO)]: 'Plano de Ciclo',
     },
   };
   const rota = urls[url];

@@ -793,7 +793,7 @@ const HistoricoEscolar = () => {
                     disabled={
                       !modalidadeId ||
                       (listaSemestre && listaSemestre.length === 1) ||
-                      Number(modalidadeId) === ModalidadeEnum.Fundamental ||
+                      Number(modalidadeId) === ModalidadeEnum.FUNDAMENTAL ||
                       alunoLocalizadorSelecionado?.semestre
                     }
                     valueSelect={semestre}
