@@ -13,7 +13,7 @@ const buscarPorId = (id: number | string) =>
   obterRegistro<CadastroAcessoABAEDto>(`${URL_DEFAULT}/${id}`);
 
 const excluir = (id: number | string) =>
-  deletarRegistro<CadastroAcessoABAEDto>(URL_DEFAULT, { params: { id } });
+  deletarRegistro<CadastroAcessoABAEDto>(`${URL_DEFAULT}/${id}`);
 
 export default {
   incluir,

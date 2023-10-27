@@ -1,7 +1,7 @@
 import { ROUTES } from '@/core/enum/routes';
 import { store } from '@/core/redux';
 import { FiltroHelper } from '~/componentes-sgp';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import tipoPermissao from '~/dtos/tipoPermissao';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
 import {
@@ -142,22 +142,22 @@ const obterDescricaoNomeMenu = (
 ) => {
   const urls = {
     [ROUTES.FREQUENCIA_PLANO_AULA]: {
-      [String(modalidade.INFANTIL)]: 'Frequência',
-      [String(modalidade.EJA)]: 'Frequência/Plano Aula',
-      [String(modalidade.FUNDAMENTAL)]: 'Frequência/Plano Aula',
-      [String(modalidade.ENSINO_MEDIO)]: 'Frequência/Plano Aula',
+      [String(ModalidadeEnum.INFANTIL)]: 'Frequência',
+      [String(ModalidadeEnum.EJA)]: 'Frequência/Plano Aula',
+      [String(ModalidadeEnum.FUNDAMENTAL)]: 'Frequência/Plano Aula',
+      [String(ModalidadeEnum.MEDIO)]: 'Frequência/Plano Aula',
     },
     [ROUTES.PLANO_ANUAL]: {
-      [String(modalidade.INFANTIL)]: 'Plano Anual',
-      [String(modalidade.EJA)]: 'Plano Semestral',
-      [String(modalidade.FUNDAMENTAL)]: 'Plano Anual',
-      [String(modalidade.ENSINO_MEDIO)]: 'Plano Anual',
+      [String(ModalidadeEnum.INFANTIL)]: 'Plano Anual',
+      [String(ModalidadeEnum.EJA)]: 'Plano Semestral',
+      [String(ModalidadeEnum.FUNDAMENTAL)]: 'Plano Anual',
+      [String(ModalidadeEnum.MEDIO)]: 'Plano Anual',
     },
     [ROUTES.PLANO_CICLO]: {
-      [String(modalidade.INFANTIL)]: 'Plano de Ciclo',
-      [String(modalidade.EJA)]: 'Plano de Etapa',
-      [String(modalidade.FUNDAMENTAL)]: 'Plano de Ciclo',
-      [String(modalidade.ENSINO_MEDIO)]: 'Plano de Ciclo',
+      [String(ModalidadeEnum.INFANTIL)]: 'Plano de Ciclo',
+      [String(ModalidadeEnum.EJA)]: 'Plano de Etapa',
+      [String(ModalidadeEnum.FUNDAMENTAL)]: 'Plano de Ciclo',
+      [String(ModalidadeEnum.MEDIO)]: 'Plano de Ciclo',
     },
   };
   const rota = urls[url];

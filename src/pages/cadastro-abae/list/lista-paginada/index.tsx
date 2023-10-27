@@ -14,6 +14,7 @@ const ListaPaginadaCadastroABAE: React.FC = () => {
 
   const form = Form.useFormInstance();
 
+  const dre = useWatch('dre', form);
   const ue = useWatch('ue', form);
   const nome = useWatch('nome', form);
   const situacao = useWatch('situacao', form);
@@ -41,18 +42,18 @@ const ListaPaginadaCadastroABAE: React.FC = () => {
   ];
 
   useEffect(() => {
-    if (form.isFieldsTouched()) {
+    if (form.isFieldsTouched() || (dre?.id && ue?.id)) {
       form.validateFields().then((values) => {
         const filtro: FiltroDreIdUeIdNomeSituacaoABAEDto = {
           ueId: values?.ue?.id,
-          nome: '',
+          nome: values?.nome,
           situacao: values?.situacao,
         };
 
         setFiltro({ ...filtro });
       });
     }
-  }, [ue, nome, situacao]);
+  }, [ue, dre, nome, situacao]);
 
   const onClickEditar = (row: DreUeNomeSituacaoABAEDto) =>
     navigate(`${ROUTES.CADASTRO_ABAE}/${row.id}`, {

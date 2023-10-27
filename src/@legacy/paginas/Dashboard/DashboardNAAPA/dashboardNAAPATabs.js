@@ -1,7 +1,7 @@
 import { Col, Row, Tabs } from 'antd';
 import React, { useContext, useState } from 'react';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import GraficosEvasaoEscolar from './GraficosEvasaoEscolar/graficosEvasaoEscolar';
 import NAAPAContext from './naapaContext';
 import GraficosEncaminhamento from './GraficosEncaminhamento/graficosEncaminhamento';
@@ -14,11 +14,14 @@ const DashboardNAAPATabs = () => {
   const TAB_RISCO_ABANDONO = '1';
   const TAB_ENCAMINHAMENTO = '2';
 
-  const ehModalidadeEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehModalidadeEJAouCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
+
   const exibirAbas = anoLetivo && dre?.codigo && ue?.codigo;
 
   const exibirDadosRiscoAbandono =
-    exibirAbas && modalidade && (ehModalidadeEJA ? !!semestre : true);
+    exibirAbas && modalidade && (ehModalidadeEJAouCelp ? !!semestre : true);
 
   const montarDadosRiscoAbandono = () => {
     if (exibirDadosRiscoAbandono) return <GraficosEvasaoEscolar />;

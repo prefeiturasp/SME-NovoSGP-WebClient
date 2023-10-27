@@ -23,7 +23,7 @@ import {
   SGP_SELECT_TURMA,
   SGP_SELECT_UE,
 } from '~/constantes/ids/select';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   AbrangenciaServico,
   confirmar,
@@ -87,7 +87,9 @@ const ListaOcorrencias = () => {
   const ehTurmaAnoAnterior =
     anoLetivo?.toString() !== window.moment().format('YYYY');
 
-  const ehEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehEJAOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const filtroEhValido = !!(anoLetivo && dre?.id && ue?.id);
 
@@ -235,10 +237,10 @@ const ListaOcorrencias = () => {
   }, [anoLetivo, modalidade, consideraHistorico, dre, ue]);
 
   useEffect(() => {
-    if (modalidade && ehEJA) {
+    if (modalidade && ehEJAOuCelp) {
       obterSemestres();
     }
-  }, [obterSemestres, ehEJA, modalidade]);
+  }, [obterSemestres, ehEJAOuCelp, modalidade]);
 
   const obterTurmas = useCallback(async () => {
     setCarregandoTurmas(true);
@@ -542,7 +544,7 @@ const ListaOcorrencias = () => {
                 />
               </Loader>
             </Col>
-            <Col sm={24} md={12} lg={ehEJA ? 8 : 12}>
+            <Col sm={24} md={12} lg={ehEJAOuCelp ? 8 : 12}>
               <Loader loading={carregandoModalidades} ignorarTip>
                 <SelectComponent
                   id={SGP_SELECT_MODALIDADE}
@@ -557,7 +559,7 @@ const ListaOcorrencias = () => {
                 />
               </Loader>
             </Col>
-            {ehEJA ? (
+            {ehEJAOuCelp ? (
               <Col sm={24} md={12} lg={8}>
                 <Loader loading={carregandoSemestres} ignorarTip>
                   <SelectComponent
@@ -581,7 +583,7 @@ const ListaOcorrencias = () => {
             ) : (
               <></>
             )}
-            <Col sm={24} md={12} lg={ehEJA ? 8 : 12}>
+            <Col sm={24} md={12} lg={ehEJAOuCelp ? 8 : 12}>
               <Loader loading={carregandoTurmas} ignorarTip>
                 <SelectComponent
                   id={SGP_SELECT_TURMA}
@@ -591,7 +593,7 @@ const ListaOcorrencias = () => {
                   label="Turma"
                   disabled={
                     !modalidade ||
-                    (ehEJA && !semestre) ||
+                    (ehEJAOuCelp && !semestre) ||
                     !ue?.codigo ||
                     ue?.codigo === OPCAO_TODOS
                   }

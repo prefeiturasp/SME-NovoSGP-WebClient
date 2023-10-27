@@ -84,7 +84,9 @@ const SelectUE: React.FC<SelectUEProps> = ({
   }, [anoLetivo, consideraHistorico, dre, mostrarOpcaoTodas]);
 
   useEffect(() => {
-    limparDados();
+    if (form.isFieldsTouched()) {
+      limparDados();
+    }
 
     if (dre?.value) {
       obterDados();

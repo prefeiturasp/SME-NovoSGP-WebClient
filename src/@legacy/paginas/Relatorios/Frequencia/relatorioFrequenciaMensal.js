@@ -18,7 +18,7 @@ import {
 } from '~/constantes/ids/select';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   AbrangenciaServico,
   erros,
@@ -71,6 +71,10 @@ const RelatorioFrequenciaMensal = () => {
   const [apenasAlunosPercentualAbaixoDe, setApenasAlunosPercentualAbaixoDe] =
     useState();
   const [modoEdicao, setModoEdicao] = useState(false);
+
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const ANO_MINIMO = 2020;
 
@@ -312,18 +316,14 @@ const RelatorioFrequenciaMensal = () => {
   }, [modalidadeId, anoLetivo, consideraHistorico]);
 
   useEffect(() => {
-    if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
-    ) {
+    if (modalidadeId && anoLetivo && ehEjaOuCelp) {
       setSemestre();
       obterSemestres();
     } else {
       setSemestre();
       setListaSemestres([]);
     }
-  }, [modalidadeId, anoLetivo, obterSemestres]);
+  }, [modalidadeId, anoLetivo, obterSemestres, ehEjaOuCelp]);
 
   const onChangeTurma = valor => {
     setTurmasCodigo(valor);
@@ -427,8 +427,7 @@ const RelatorioFrequenciaMensal = () => {
   };
 
   useEffect(() => {
-    const temModalidadeEja = String(modalidadeId) === String(ModalidadeDTO.EJA);
-    const consideraSemestre = temModalidadeEja && !semestre;
+    const consideraSemestre = ehEjaOuCelp && !semestre;
 
     const desabilitar =
       !anoLetivo ||
@@ -450,6 +449,7 @@ const RelatorioFrequenciaMensal = () => {
     semestre,
     mesesReferencias,
     tipoFormatoRelatorio,
+    ehEjaOuCelp,
   ]);
 
   const gerar = async () => {
@@ -589,7 +589,8 @@ const RelatorioFrequenciaMensal = () => {
                   disabled={
                     !modalidadeId ||
                     (listaSemestres && listaSemestres.length === 1) ||
-                    String(modalidadeId) !== String(ModalidadeDTO.EJA)
+                    (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                      Number(modalidadeId) !== ModalidadeEnum.CELP)
                   }
                   valueSelect={semestre}
                   onChange={onChangeSemestre}

@@ -16,7 +16,7 @@ import {
 } from '@/@legacy/constantes/ids/input';
 import { SGP_RADIO_ATIVO_INATIVO } from '@/@legacy/constantes/ids/radio';
 import { SGP_SELECT_UF } from '@/@legacy/constantes/ids/select';
-import { confirmar, sucesso } from '@/@legacy/servicos';
+import { confirmar, sucesso, verificaSomenteConsulta } from '@/@legacy/servicos';
 import ButtonPrimary from '@/components/lib/button/primary';
 import ButtonSecundary from '@/components/lib/button/secundary';
 import CardContent from '@/components/lib/card-content';
@@ -41,12 +41,18 @@ import abaeService from '@/core/services/abae-service';
 import { Checkbox, Col, Form, Input, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const FormCadastroABAE: React.FC = () => {
+  const usuarioStore = useSelector((store: any) => store?.usuario);
+  const permissoesTela = usuarioStore.permissoes[ROUTES.CADASTRO_ABAE];
+
   const [form] = useForm();
   const navigate = useNavigate();
   const paramsRoute = useParams();
+
+  const [desabilitarCampos, setDesabilitarCampos] = useState<boolean>(false);
 
   const id = paramsRoute?.id || 0;
 
@@ -69,8 +75,8 @@ const FormCadastroABAE: React.FC = () => {
     if (resposta.sucesso) {
       const dados: CadastroAcessoABAEFormDto = {
         ...resposta.dados,
-        dre: { id: resposta.dados.dreId },
-        ue: { id: resposta.dados.ueId },
+        dre: { id: resposta.dados.dreId, value: resposta.dados.dreCodigo },
+        ue: { id: resposta.dados.ueId, value: resposta.dados.ueCodigo },
       };
       setFormInitialValues(dados);
     }
@@ -85,6 +91,15 @@ const FormCadastroABAE: React.FC = () => {
   useEffect(() => {
     form.resetFields();
   }, [form, formInitialValues]);
+
+  useEffect(() => {
+    const soConsulta = verificaSomenteConsulta(permissoesTela);
+
+    const desabilitar = id
+      ? soConsulta || !permissoesTela?.podeIncluir
+      : soConsulta || !permissoesTela?.podeAlterar;
+    setDesabilitarCampos(desabilitar);
+  }, [id, permissoesTela]);
 
   const onClickCancelar = async () => {
     if (form.isFieldsTouched()) {
@@ -175,7 +190,10 @@ const FormCadastroABAE: React.FC = () => {
               </Col>
               {id ? (
                 <Col>
-                  <BotaoExcluirPadrao onClick={onClickExcluir} />
+                  <BotaoExcluirPadrao
+                    onClick={onClickExcluir}
+                    disabled={permissoesTela?.podeExcluir}
+                  />
                 </Col>
               ) : (
                 <></>
@@ -186,7 +204,7 @@ const FormCadastroABAE: React.FC = () => {
                     <ButtonSecundary
                       id={SGP_BUTTON_CANCELAR}
                       onClick={() => onClickCancelar()}
-                      disabled={!form.isFieldsTouched()}
+                      disabled={desabilitarCampos || !form.isFieldsTouched()}
                     >
                       Cancelar
                     </ButtonSecundary>
@@ -194,7 +212,11 @@ const FormCadastroABAE: React.FC = () => {
                 </Form.Item>
               </Col>
               <Col>
-                <ButtonPrimary id={SGP_BUTTON_SALVAR_ALTERAR} htmlType="submit">
+                <ButtonPrimary
+                  id={SGP_BUTTON_SALVAR_ALTERAR}
+                  htmlType="submit"
+                  disabled={desabilitarCampos}
+                >
                   {id ? 'Alterar' : 'Salvar'}
                 </ButtonPrimary>
               </Col>
@@ -213,16 +235,27 @@ const FormCadastroABAE: React.FC = () => {
               </Form.Item>
 
               <Col xs={24} md={12}>
-                <SelectDRE formItemProps={{ rules: [{ required: true }] }} />
+                <SelectDRE
+                  formItemProps={{ rules: [{ required: true }] }}
+                  selectProps={{ disabled: desabilitarCampos }}
+                />
               </Col>
 
               <Col xs={24} md={12}>
-                <SelectUE formItemProps={{ rules: [{ required: true }] }} />
+                <SelectUE
+                  formItemProps={{ rules: [{ required: true }] }}
+                  selectProps={{ disabled: desabilitarCampos }}
+                />
               </Col>
 
               <Col xs={24} md={12}>
                 <Form.Item label="Nome" name="nome" rules={[{ required: true }]}>
-                  <Input maxLength={100} id={SGP_INPUT_NOME} placeholder="Informe o nome" />
+                  <Input
+                    maxLength={100}
+                    id={SGP_INPUT_NOME}
+                    placeholder="Informe o nome"
+                    disabled={desabilitarCampos}
+                  />
                 </Form.Item>
               </Col>
 
@@ -230,52 +263,62 @@ const FormCadastroABAE: React.FC = () => {
                 <InputCPF
                   inputProps={{
                     id: SGP_INPUT_CPF,
+                    disabled: desabilitarCampos,
                   }}
                 />
               </Col>
 
               <Col xs={24} md={12}>
-                <InputEmail inputProps={{ id: SGP_INPUT_EMAIL }} />
+                <InputEmail inputProps={{ id: SGP_INPUT_EMAIL, disabled: desabilitarCampos }} />
               </Col>
 
               <Col xs={24} md={12}>
-                <InputTelefone inputProps={{ id: SGP_INPUT_TELEFONE }} />
+                <InputTelefone
+                  inputProps={{ id: SGP_INPUT_TELEFONE, disabled: desabilitarCampos }}
+                />
               </Col>
 
               <Col xs={24} md={12}>
                 <InputCEP
                   inputProps={{
                     id: SGP_INPUT_CEP,
+                    disabled: desabilitarCampos,
                   }}
                 />
               </Col>
 
               <Col xs={24} md={12}>
-                <InputEndereco inputProps={{ id: SGP_INPUT_ENDERECO }} />
+                <InputEndereco
+                  inputProps={{ id: SGP_INPUT_ENDERECO, disabled: desabilitarCampos }}
+                />
               </Col>
 
               <Col xs={24} md={12}>
-                <InputNumero inputProps={{ id: SGP_INPUT_NUMERO }} />
+                <InputNumero inputProps={{ id: SGP_INPUT_NUMERO, disabled: desabilitarCampos }} />
               </Col>
 
               <Col xs={24} md={12}>
-                <InputComplemento inputProps={{ id: SGP_INPUT_COMPLEMENTO }} />
+                <InputComplemento
+                  inputProps={{ id: SGP_INPUT_COMPLEMENTO, disabled: desabilitarCampos }}
+                />
               </Col>
 
               <Col xs={24} md={12}>
-                <InputBairro inputProps={{ id: SGP_INPUT_BAIRRO }} />
+                <InputBairro inputProps={{ id: SGP_INPUT_BAIRRO, disabled: desabilitarCampos }} />
               </Col>
 
               <Col xs={24} md={12}>
-                <InputCidade inputProps={{ id: SGP_INPUT_CIDADE }} />
+                <InputCidade inputProps={{ id: SGP_INPUT_CIDADE, disabled: desabilitarCampos }} />
               </Col>
 
               <Col xs={24} md={12}>
-                <InputEstado selectProps={{ id: SGP_SELECT_UF }} />
+                <InputEstado selectProps={{ id: SGP_SELECT_UF, disabled: desabilitarCampos }} />
               </Col>
 
               <Col xs={24} md={12}>
-                <RadioSituacaoAtivoInativo radioGroupProps={{ id: SGP_RADIO_ATIVO_INATIVO }} />
+                <RadioSituacaoAtivoInativo
+                  radioGroupProps={{ id: SGP_RADIO_ATIVO_INATIVO, disabled: desabilitarCampos }}
+                />
               </Col>
             </Row>
           </Col>

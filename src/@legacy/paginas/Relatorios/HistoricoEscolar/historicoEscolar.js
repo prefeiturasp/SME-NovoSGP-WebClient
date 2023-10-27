@@ -10,7 +10,7 @@ import {
 import { Cabecalho } from '~/componentes-sgp';
 import Card from '~/componentes/card';
 import { URL_HOME } from '~/constantes/url';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import api from '~/servicos/api';
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
@@ -81,7 +81,7 @@ const HistoricoEscolar = () => {
 
   const vaidaDesabilitarBtnGerar = useCallback(
     desabilitar => {
-      if (String(modalidadeId) === String(modalidade.INFANTIL)) {
+      if (Number(modalidadeId) === ModalidadeEnum.INFANTIL) {
         setDesabilitarBtnGerar(true);
       } else {
         setDesabilitarBtnGerar(desabilitar);
@@ -89,6 +89,10 @@ const HistoricoEscolar = () => {
     },
     [modalidadeId]
   );
+
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const obterObservacao = codigo => {
     setExibirLoaderObservacao(true);
@@ -356,7 +360,8 @@ const HistoricoEscolar = () => {
         setListaSemestre(lista);
 
         if (
-          Number(modalidadeSelecionada) === modalidade.EJA &&
+          (Number(modalidadeSelecionada) === ModalidadeEnum.EJA ||
+            Number(modalidadeSelecionada) === ModalidadeEnum.CELP) &&
           alunoLocalizadorSelecionado?.semestre
         ) {
           setSemestre(alunoLocalizadorSelecionado?.semestre?.toString());
@@ -396,7 +401,7 @@ const HistoricoEscolar = () => {
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (Number(modalidadeId) === modalidade.EJA) {
+      if (ehEjaOuCelp) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre();
@@ -406,7 +411,7 @@ const HistoricoEscolar = () => {
       setSemestre();
       setListaSemestre([]);
     }
-  }, [modalidadeId, anoLetivo]);
+  }, [modalidadeId, anoLetivo, ehEjaOuCelp]);
 
   useEffect(() => {
     let desabilitar = true;
@@ -428,7 +433,7 @@ const HistoricoEscolar = () => {
       }
     }
 
-    if (Number(modalidadeId) === modalidade.EJA) {
+    if (ehEjaOuCelp) {
       vaidaDesabilitarBtnGerar(!semestre || desabilitar);
     } else {
       vaidaDesabilitarBtnGerar(desabilitar);
@@ -445,6 +450,7 @@ const HistoricoEscolar = () => {
     vaidaDesabilitarBtnGerar,
     estudanteOpt,
     alunosSelecionados,
+    ehEjaOuCelp,
   ]);
 
   useEffect(() => {
@@ -607,7 +613,8 @@ const HistoricoEscolar = () => {
         setTurmaId(aluno?.codigoTurma);
       }
       if (
-        Number(aluno?.modalidadeCodigo) === modalidade.EJA &&
+        (Number(aluno?.modalidadeCodigo) === ModalidadeEnum.EJA ||
+          Number(aluno?.modalidadeCodigo) === ModalidadeEnum.CELP) &&
         aluno?.semestre
       ) {
         setSemestre(aluno?.semestre?.toString());
@@ -645,7 +652,7 @@ const HistoricoEscolar = () => {
   return (
     <>
       <AlertaModalidadeInfantil
-        exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
+        exibir={Number(modalidadeId) === ModalidadeEnum.INFANTIL}
         validarModalidadeFiltroPrincipal={false}
       />
       <Cabecalho pagina="Histórico Escolar">
@@ -751,7 +758,7 @@ const HistoricoEscolar = () => {
             )}
             <div
               className={`"col-sm-12 col-md-6 ${
-                modalidadeId && String(modalidadeId) === String(modalidade.EJA)
+                modalidadeId && ehEjaOuCelp
                   ? `col-lg-3 col-xl-3`
                   : `col-lg-4 col-xl-4`
               } mb-2"`}
@@ -775,7 +782,7 @@ const HistoricoEscolar = () => {
                 />
               </Loader>
             </div>
-            {String(modalidadeId) === String(modalidade.EJA) ? (
+            {ehEjaOuCelp ? (
               <div className="col-sm-12 col-md-12 col-lg-3 col-xl-3 mb-2">
                 <Loader loading={carregandoSemestres} tip="">
                   <SelectComponent
@@ -786,7 +793,7 @@ const HistoricoEscolar = () => {
                     disabled={
                       !modalidadeId ||
                       (listaSemestre && listaSemestre.length === 1) ||
-                      String(modalidadeId) === String(modalidade.FUNDAMENTAL) ||
+                      Number(modalidadeId) === ModalidadeEnum.FUNDAMENTAL ||
                       alunoLocalizadorSelecionado?.semestre
                     }
                     valueSelect={semestre}
@@ -798,9 +805,7 @@ const HistoricoEscolar = () => {
             ) : null}
             <div
               className={`"col-sm-12 col-md-6 ${
-                modalidadeId && String(modalidadeId) === String(modalidade.EJA)
-                  ? `col-lg-3 col-xl-3`
-                  : `col-lg-4 col-xl-4`
+                ehEjaOuCelp ? `col-lg-3 col-xl-3` : `col-lg-4 col-xl-4`
               } mb-2"`}
             >
               <Loader loading={carregandoTurmas} tip="">
@@ -825,9 +830,7 @@ const HistoricoEscolar = () => {
             </div>
             <div
               className={`"col-sm-12 col-md-6 ${
-                modalidadeId && String(modalidadeId) === String(modalidade.EJA)
-                  ? `col-lg-3 col-xl-3`
-                  : `col-lg-4 col-xl-4`
+                ehEjaOuCelp ? `col-lg-3 col-xl-3` : `col-lg-4 col-xl-4`
               } mb-2"`}
             >
               <SelectComponent
