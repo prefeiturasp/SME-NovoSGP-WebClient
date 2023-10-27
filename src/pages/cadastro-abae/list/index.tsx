@@ -11,17 +11,30 @@ import { validateMessages } from '@/core/constants/validate-messages';
 import { ROUTES } from '@/core/enum/routes';
 import { Checkbox, Col, Form, Input, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { verificaSomenteConsulta } from '~/servicos';
 import ListaPaginadaCadastroABAE from './lista-paginada';
 
 const ListCadastroABAE: React.FC = () => {
   const navigate = useNavigate();
   const [form] = useForm();
 
+  const usuario = useSelector((state: any) => state.usuario);
+  const { permissoes } = usuario;
+  const podeIncluir = permissoes?.[ROUTES.CADASTRO_ABAE]?.podeIncluir;
+
+  const [somenteConsulta, setSomenteConsulta] = useState(false);
+
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
   const onClickNovo = () => navigate(ROUTES.CADASTRO_ABAE_NOVO);
+
+  useEffect(() => {
+    const soConsulta = verificaSomenteConsulta(permissoes?.[ROUTES.CADASTRO_ABAE]);
+    setSomenteConsulta(soConsulta);
+  }, [permissoes]);
 
   return (
     <Col>
@@ -32,7 +45,11 @@ const ListCadastroABAE: React.FC = () => {
               <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
             </Col>
             <Col>
-              <ButtonPrimary id={SGP_BUTTON_NOVO} onClick={onClickNovo}>
+              <ButtonPrimary
+                id={SGP_BUTTON_NOVO}
+                onClick={onClickNovo}
+                disabled={somenteConsulta || !podeIncluir}
+              >
                 Novo
               </ButtonPrimary>
             </Col>

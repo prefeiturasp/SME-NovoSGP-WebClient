@@ -1,5 +1,5 @@
 export type AuditoriaDto = {
-  id: number;
+  id: number | string;
   criadoEm: string;
   criadoPor: string;
   criadoRF: string;

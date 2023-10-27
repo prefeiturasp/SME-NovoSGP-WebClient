@@ -1695,8 +1695,7 @@ route.set(ROUTES.CADASTRO_ABAE, {
   component: ListCadastroABAE,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // TODO
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: ROUTES.CADASTRO_ABAE,
 });
 
@@ -1707,8 +1706,7 @@ route.set(ROUTES.CADASTRO_ABAE_NOVO, {
   component: FormCadastroABAE,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // TODO
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: ROUTES.CADASTRO_ABAE,
 });
 
@@ -1719,8 +1717,7 @@ route.set(ROUTES.CADASTRO_ABAE_EDICAO, {
   component: FormCadastroABAE,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // TODO
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: ROUTES.CADASTRO_ABAE,
 });
 
