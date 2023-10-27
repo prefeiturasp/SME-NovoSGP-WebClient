@@ -237,14 +237,14 @@ const FormCadastroABAE: React.FC = () => {
               <Col xs={24} md={12}>
                 <SelectDRE
                   formItemProps={{ rules: [{ required: true }] }}
-                  selectProps={{ disabled: desabilitarCampos }}
+                  selectProps={{ disabled: desabilitarCampos || !!id }}
                 />
               </Col>
 
               <Col xs={24} md={12}>
                 <SelectUE
                   formItemProps={{ rules: [{ required: true }] }}
-                  selectProps={{ disabled: desabilitarCampos }}
+                  selectProps={{ disabled: desabilitarCampos || !!id }}
                 />
               </Col>
 
@@ -263,7 +263,7 @@ const FormCadastroABAE: React.FC = () => {
                 <InputCPF
                   inputProps={{
                     id: SGP_INPUT_CPF,
-                    disabled: desabilitarCampos,
+                    disabled: desabilitarCampos || !!id,
                   }}
                 />
               </Col>
