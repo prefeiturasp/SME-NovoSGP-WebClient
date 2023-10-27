@@ -20,13 +20,13 @@ export const SiderSubMenuContainer = styled(SubMenu)<SiderSubMenuStylePros>`
   &.ant-menu-submenu {
     width: ${(props) => (props.collapsed ? '80px' : '224px')};
     background: white;
-    color: ${(props) => props.theme?.antd?.colorText};
+    color: ${(props) => props.theme?.token?.colorText};
     font-weight: 700;
 
     & {
       :not(.ant-menu-submenu-open) {
         color: white !important;
-        background: ${(props) => (props?.isSubMenu ? 'white' : props.theme?.antd?.colorPrimary)};
+        background: ${(props) => (props?.isSubMenu ? 'white' : props.theme?.token?.colorPrimary)};
 
         :hover {
           .ant-menu-submenu-title {
@@ -48,17 +48,17 @@ export const SiderSubMenuContainer = styled(SubMenu)<SiderSubMenuStylePros>`
 
     &.ant-menu-submenu-open {
       > .ant-menu-submenu-title {
-        color: ${(props) => props.theme?.antd?.colorPrimary} !important;
+        color: ${(props) => props.theme?.token?.colorPrimary} !important;
       }
 
       ul li {
         background: white !important;
-        color: ${(props) => props.theme?.antd?.colorText} !important;
+        color: ${(props) => props.theme?.token?.colorText} !important;
       }
 
       .ant-menu-submenu-open {
         .ant-menu-submenu-title {
-          color: ${(props) => props.theme?.antd?.colorPrimary} !important;
+          color: ${(props) => props.theme?.token?.colorPrimary} !important;
         }
       }
     }
@@ -76,16 +76,16 @@ export const SiderSubMenuContainer = styled(SubMenu)<SiderSubMenuStylePros>`
       `
         &.ant-menu-submenu-open,
         &.ant-menu-submenu-selected {
-        border-left: 3px ${`${props.theme?.antd?.colorPrimary}95`} solid;
+        border-left: 3px ${`${props.theme?.token?.colorPrimary}95`} solid;
     }
       `}
 
     &.ant-menu-submenu-selected {
       background: white !important;
-      color: ${(props) => props.theme?.antd?.colorPrimary} !important;
+      color: ${(props) => props.theme?.token?.colorPrimary} !important;
 
       .ant-menu-item-selected {
-        color: ${(props) => props.theme?.antd?.colorPrimary} !important;
+        color: ${(props) => props.theme?.token?.colorPrimary} !important;
         text-decoration: underline;
       }
     }
@@ -98,7 +98,7 @@ export const SiderMenuContainer = styled.div<SiderMenuStylePros>`
 
   ::-webkit-scrollbar {
     width: 4px;
-    background: ${(props) => props.theme?.antd?.colorPrimary};
+    background: ${(props) => props.theme?.token?.colorPrimary};
     border-radius: 4px;
   }
 
@@ -140,7 +140,7 @@ export const SiderMenuContainer = styled.div<SiderMenuStylePros>`
 `;
 
 export const SiderMenuButtonToggleStyle = styled.div<SiderMenuStylePros>`
-  background-color: ${(props) => props.theme?.antd?.colorPrimary};
+  background-color: ${(props) => props.theme?.token?.colorPrimary};
   display: flex;
   align-items: center;
   justify-content: ${(props) => (props.collapsed ? 'center' : 'space-between')};
