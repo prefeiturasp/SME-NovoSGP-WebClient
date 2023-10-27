@@ -2,7 +2,6 @@ import { AbrangenciaDreRetornoDto } from './AbrangenciaDreRetornoDto';
 import { AuditoriaDto } from './AuditoriaDto';
 
 export type CadastroAcessoABAEDto = {
-  id: number;
   dreId: number;
   ueId: number;
   nome: string;

@@ -101,7 +101,7 @@ const FormCadastroABAE: React.FC = () => {
 
   const salvar = async (values: CadastroAcessoABAEFormDto) => {
     let response = null;
-    const valoresSalvar: CadastroAcessoABAEDto = { ...values };
+    const valoresSalvar: CadastroAcessoABAEDto = { ...values, id };
 
     valoresSalvar.dreId = values.dre.id;
     valoresSalvar.ueId = values.ue.id;
