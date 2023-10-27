@@ -259,6 +259,10 @@ export default createGlobalStyle`
     }
   }
 
+  .ant-form-item-label {
+    font-weight: 700;
+  }
+
   /* Antd V5 End */
 
   .ant-select-dropdown-menu-item  {

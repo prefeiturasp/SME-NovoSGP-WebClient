@@ -3,6 +3,8 @@ import ListaInformes from '@/@legacy/paginas/Informes/List/listaInformes';
 import RelatorioDinamicoNAAPA from '@/@legacy/paginas/NAAPA/RelatorioDinamico/relatorioDinamicoNAAPA';
 import RelatorioOcorrencias from '@/@legacy/paginas/Relatorios/Gestao/Ocorrencias/relatorioOcorrencias';
 import RelatorioPAP from '@/@legacy/paginas/Relatorios/PAP/RelatorioPAP/relatorioPAP';
+import FormCadastroABAE from '@/pages/cadastro-abae/form';
+import ListCadastroABAE from '@/pages/cadastro-abae/list';
 import { ROUTES } from 'core/enum/routes';
 import { store } from 'core/redux';
 import RotasTipo from '~/constantes/rotasTipo';
@@ -1686,6 +1688,39 @@ route.set(ROUTES.RELATORIO_DINAMICO_NAAPA, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_DINAMICO_NAAPA,
+});
+
+route.set(ROUTES.CADASTRO_ABAE, {
+  breadcrumbName: 'Cadastro de ABAE',
+  menu: ['Gestão'],
+  parent: '/',
+  component: ListCadastroABAE,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.CADASTRO_ABAE,
+});
+
+route.set(ROUTES.CADASTRO_ABAE_NOVO, {
+  breadcrumbName: 'Cadastro de ABAE',
+  menu: ['Gestão'],
+  parent: '/',
+  component: FormCadastroABAE,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.CADASTRO_ABAE,
+});
+
+route.set(ROUTES.CADASTRO_ABAE_EDICAO, {
+  breadcrumbName: 'Cadastro de ABAE',
+  menu: ['Gestão'],
+  parent: '/',
+  component: FormCadastroABAE,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.CADASTRO_ABAE,
 });
 
 route.set(ROUTES.INFORMES, {
