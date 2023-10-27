@@ -44,7 +44,7 @@ const ListaPaginadaCadastroABAE: React.FC = () => {
     if (form.isFieldsTouched()) {
       form.validateFields().then((values) => {
         const filtro: FiltroDreIdUeIdNomeSituacaoABAEDto = {
-          ueId: values?.ue?.value,
+          ueId: values?.ue?.id,
           nome: '',
           situacao: values?.situacao,
         };
