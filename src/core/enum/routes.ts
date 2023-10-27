@@ -103,4 +103,7 @@ export enum ROUTES {
   CADASTRO_ABAE = '/cadastro-abae',
   CADASTRO_ABAE_NOVO = '/cadastro-abae/novo',
   CADASTRO_ABAE_EDICAO = '/cadastro-abae/:id',
+  INFORMES = '/informes',
+  INFORMES_NOVO = '/informes/novo',
+  INFORMES_EDICAO = '/informes/:id',
 }

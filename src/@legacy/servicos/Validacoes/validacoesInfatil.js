@@ -1,4 +1,4 @@
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const obterModalidadeFiltroPrincipal = (modalidades, turmaSelecionada) => {
   const temSomenteUmaModalidade = modalidades && modalidades.length === 1;
@@ -11,16 +11,13 @@ const obterModalidadeFiltroPrincipal = (modalidades, turmaSelecionada) => {
     modalidadeAtual =
       turmaSelecionada && turmaSelecionada.modalidade
         ? String(turmaSelecionada.modalidade)
-        : modalidade.FUNDAMENTAL;
+        : ModalidadeEnum.Fundamental;
   }
   return modalidadeAtual;
 };
 
 const ehTurmaInfantil = (modalidades, turmaSelecionada) => {
-  return (
-    obterModalidadeFiltroPrincipal(modalidades, turmaSelecionada) ===
-    String(modalidade.INFANTIL)
-  );
+  return Number((modalidades, turmaSelecionada)) === ModalidadeEnum.INFANTIL;
 };
 
 export { ehTurmaInfantil, obterModalidadeFiltroPrincipal };

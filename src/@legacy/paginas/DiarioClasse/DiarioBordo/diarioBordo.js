@@ -178,6 +178,7 @@ const DiarioBordo = () => {
     setCarregandoGeral(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
       turmaId,
+      false,
       false
     ).catch(e => erros(e));
     if (componentes?.data?.length) {
@@ -669,9 +670,11 @@ const DiarioBordo = () => {
         ''
       )}
       {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
+
+      {dataSelecionada && carregandoData ? 
       <AlertaPeriodoEncerrado
         exibir={!dadosDiarioBordo?.temPeriodoAberto && !somenteConsulta}
-      />
+      /> : ''}
       <ModalMultiLinhas
         key="erros-diario-bordo"
         visivel={mostrarErros}

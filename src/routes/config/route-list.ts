@@ -1,3 +1,5 @@
+import InformesCadastro from '@/@legacy/paginas/Informes/Form/informesCadastro';
+import ListaInformes from '@/@legacy/paginas/Informes/List/listaInformes';
 import RelatorioDinamicoNAAPA from '@/@legacy/paginas/NAAPA/RelatorioDinamico/relatorioDinamicoNAAPA';
 import RelatorioOcorrencias from '@/@legacy/paginas/Relatorios/Gestao/Ocorrencias/relatorioOcorrencias';
 import RelatorioPAP from '@/@legacy/paginas/Relatorios/PAP/RelatorioPAP/relatorioPAP';
@@ -1719,6 +1721,37 @@ route.set(ROUTES.CADASTRO_ABAE_EDICAO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.CADASTRO_ABAE,
+});
+
+route.set(ROUTES.INFORMES, {
+  breadcrumbName: 'Informes',
+  menu: ['Gestão'],
+  parent: '/',
+  component: ListaInformes,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.INFORMES,
+});
+
+route.set(ROUTES.INFORMES_NOVO, {
+  breadcrumbName: 'Novo',
+  parent: ROUTES.INFORMES,
+  component: InformesCadastro,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.INFORMES,
+});
+
+route.set(ROUTES.INFORMES_EDICAO, {
+  breadcrumbName: 'Editar',
+  parent: ROUTES.INFORMES,
+  component: InformesCadastro,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.INFORMES,
 });
 
 const getRoutesArray = () => {
