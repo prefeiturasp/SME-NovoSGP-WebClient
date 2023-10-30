@@ -98,8 +98,8 @@ const SelectDRE: React.FC<SelectDREProps> = ({
           options={options}
           placeholder="Diretoria Regional de Educação (DRE)"
           labelInValue
-          disabled={disabled}
           {...selectProps}
+          disabled={disabled}
         />
       </Form.Item>
     </Loader>
