@@ -40,7 +40,7 @@ const ListaInformesFiltros = props => {
         </Col>
 
         <Col xs={24} md={12}>
-          <Ue form={form} />
+          <Ue form={form} touchedInitialValue />
         </Col>
         <Col xs={24}>
           <Row>
