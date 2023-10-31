@@ -16,6 +16,7 @@ const BotoesAcaoRelatorio = props => {
     desabilitarBtnGerar,
     carregandoGerar,
     modoEdicao,
+    exibirBotaoImpressao,
   } = props;
 
   return (
@@ -34,9 +35,22 @@ const BotoesAcaoRelatorio = props => {
           disabled={!modoEdicao}
         />
       </Col>
-      <Col>
-        {temLoaderBtnGerar ? (
-          <Loader loading={carregandoGerar} tip="">
+      {exibirBotaoImpressao ? (
+        <Col>
+          {temLoaderBtnGerar ? (
+            <Loader loading={carregandoGerar} tip="">
+              <Button
+                id={SGP_BUTTON_GERAR}
+                icon="print"
+                label="Gerar"
+                color={Colors.Azul}
+                border
+                bold
+                onClick={() => onClickGerar && onClickGerar()}
+                disabled={desabilitarBtnGerar}
+              />
+            </Loader>
+          ) : (
             <Button
               id={SGP_BUTTON_GERAR}
               icon="print"
@@ -44,23 +58,14 @@ const BotoesAcaoRelatorio = props => {
               color={Colors.Azul}
               border
               bold
-              onClick={() => onClickGerar && onClickGerar()}
+              onClick={onClickGerar}
               disabled={desabilitarBtnGerar}
             />
-          </Loader>
-        ) : (
-          <Button
-            id={SGP_BUTTON_GERAR}
-            icon="print"
-            label="Gerar"
-            color={Colors.Azul}
-            border
-            bold
-            onClick={onClickGerar}
-            disabled={desabilitarBtnGerar}
-          />
-        )}
-      </Col>
+          )}
+        </Col>
+      ) : (
+        <></>
+      )}
     </Row>
   );
 };
@@ -73,6 +78,7 @@ BotoesAcaoRelatorio.propTypes = {
   desabilitarBtnGerar: PropTypes.bool,
   carregandoGerar: PropTypes.bool,
   modoEdicao: PropTypes.bool,
+  exibirBotaoImpressao: PropTypes.bool,
 };
 
 BotoesAcaoRelatorio.defaultProps = {
@@ -83,6 +89,7 @@ BotoesAcaoRelatorio.defaultProps = {
   desabilitarBtnGerar: false,
   carregandoGerar: false,
   modoEdicao: false,
+  exibirBotaoImpressao: true,
 };
 
 export default BotoesAcaoRelatorio;

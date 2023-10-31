@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Loader, momentSchema } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO, RotasDto } from '~/dtos';
 import {
   setExibirLoaderGeralComunicados,
   setFormComunicados,
@@ -31,13 +30,14 @@ import TituloComunicados from './campos/tituloComunicados';
 import TurmasComunicados from './campos/turmasComunicados';
 import UeComunicados from './campos/ueComunicados';
 import InfoEstudantesReceberComunicados from './infoEstudantesReceberComunicado';
+import { ROUTES } from '@/core/enum/routes';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const FormCadastroComunicados = props => {
   const { comunicadoId, somenteConsulta } = props;
 
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela =
-    usuario.permissoes[RotasDto.ACOMPANHAMENTO_COMUNICADOS];
+  const permissoesTela = usuario.permissoes[ROUTES.ACOMPANHAMENTO_COMUNICADOS];
 
   const dispatch = useDispatch();
 
@@ -79,7 +79,6 @@ const FormCadastroComunicados = props => {
     if (refForm) {
       dispatch(setFormComunicados(() => obterForm()));
     }
-
   }, [refForm]);
 
   const tratarValores = valores => {
@@ -142,7 +141,6 @@ const FormCadastroComunicados = props => {
       const valoresTratados = tratarValores(resposta.data);
       setInitialValues(valoresTratados);
     }
-
   }, [comunicadoId]);
 
   useEffect(() => {
@@ -158,18 +156,10 @@ const FormCadastroComunicados = props => {
   const textoCampoObrigatorio = 'Campo obrigatório';
 
   const validacoes = Yup.object({
-    anoLetivo: Yup.string()
-      .nullable()
-      .required(textoCampoObrigatorio),
-    codigoDre: Yup.string()
-      .nullable()
-      .required(textoCampoObrigatorio),
-    codigoUe: Yup.string()
-      .nullable()
-      .required(textoCampoObrigatorio),
-    modalidades: Yup.array()
-      .nullable()
-      .required(textoCampoObrigatorio),
+    anoLetivo: Yup.string().nullable().required(textoCampoObrigatorio),
+    codigoDre: Yup.string().nullable().required(textoCampoObrigatorio),
+    codigoUe: Yup.string().nullable().required(textoCampoObrigatorio),
+    modalidades: Yup.array().nullable().required(textoCampoObrigatorio),
     semestre: Yup.string()
       .nullable()
       .test(
@@ -178,7 +168,9 @@ const FormCadastroComunicados = props => {
         function validar() {
           const { modalidades, semestre } = this.parent;
           const temModalidadeEja = modalidades?.find(
-            item => String(item) === String(ModalidadeDTO.EJA)
+            item =>
+              Number(item) === ModalidadeEnum.EJA ||
+              Number(item) === ModalidadeEnum.CELP
           );
           let ehValido = true;
           if (!temModalidadeEja) {
@@ -190,15 +182,9 @@ const FormCadastroComunicados = props => {
           return ehValido;
         }
       ),
-    tipoEscola: Yup.array()
-      .nullable()
-      .required(textoCampoObrigatorio),
-    anosEscolares: Yup.array()
-      .nullable()
-      .required(textoCampoObrigatorio),
-    turmas: Yup.array()
-      .nullable()
-      .required(textoCampoObrigatorio),
+    tipoEscola: Yup.array().nullable().required(textoCampoObrigatorio),
+    anosEscolares: Yup.array().nullable().required(textoCampoObrigatorio),
+    turmas: Yup.array().nullable().required(textoCampoObrigatorio),
     dataEnvio: momentSchema.required(textoCampoObrigatorio),
     dataExpiracao: momentSchema
       .required(textoCampoObrigatorio)
@@ -224,9 +210,7 @@ const FormCadastroComunicados = props => {
       .required(textoCampoObrigatorio)
       .min(10, 'Deve conter no mínimo 10 caracteres')
       .max(50, 'Deve conter no máximo 50 caracteres'),
-    descricao: Yup.string()
-      .nullable()
-      .required(textoCampoObrigatorio),
+    descricao: Yup.string().nullable().required(textoCampoObrigatorio),
     eventoId: Yup.string()
       .nullable()
       .test('validaSeObrigatorio', textoCampoObrigatorio, function validar() {

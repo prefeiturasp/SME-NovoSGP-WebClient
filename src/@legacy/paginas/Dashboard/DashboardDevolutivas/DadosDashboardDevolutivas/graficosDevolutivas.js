@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import QtdDevolutivasRegistradasEstimada from './QtdDevolutivasRegistradasEstimada/qtdDevolutivasRegistradasEstimada';
 import QtdDiarioBordoDevolutiva from './QtdDiarioBordoDevolutiva/qtdDiarioBordoDevolutiva';
 import TotalDevolutivasPorDRE from './TotalDevolutivasPorDRE/totalDevolutivasPorDRE';
@@ -25,7 +25,7 @@ const GraficosDevolutivas = () => {
   const ueId = OPCAO_TODOS === ue?.codigo ? OPCAO_TODOS : ue?.id;
 
   const naoEhInfantil =
-    modalidade && Number(modalidade) !== ModalidadeDTO.INFANTIL;
+    modalidade && Number(modalidade) !== ModalidadeEnum.INFANTIL;
 
   return anoLetivo && dre && ue && modalidade && !naoEhInfantil ? (
     <>

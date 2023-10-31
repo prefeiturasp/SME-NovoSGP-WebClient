@@ -4,7 +4,7 @@ import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import CampoNumero from '~/componentes/campoNumero';
 import Card from '~/componentes/card';
 import { URL_HOME } from '~/constantes/url';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
@@ -81,6 +81,14 @@ const RelatorioNotasConceitosFinais = () => {
   const [carregandoAnosEscolares, setCarregandoAnosEscolares] = useState(false);
   const [carregandoComponentes, setCarregandoComponentes] = useState(false);
 
+  const naoEhEjaOuCelp =
+    Number(modalidadeId) !== ModalidadeEnum.EJA &&
+    Number(modalidadeId) !== ModalidadeEnum.CELP;
+
+  const ehEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
+
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
     const resposta = await FiltroHelper.obterAnosLetivos({
@@ -128,33 +136,40 @@ const RelatorioNotasConceitosFinais = () => {
     }
   };
 
-  const obterUes = useCallback(async dre => {
-    if (dre) {
-      setCarregandoUes(true);
+  const obterUes = useCallback(
+    async dre => {
+      if (dre) {
+        setCarregandoUes(true);
 
-      const dataAtual = new Date();
-      const consideraHistorico = anoLetivo != dataAtual.getFullYear();
+        const dataAtual = new Date();
+        const consideraHistorico = anoLetivo != dataAtual.getFullYear();
 
-      const retorno = await ServicoFiltroRelatorio.obterUes(dre, consideraHistorico, anoLetivo).catch(e => {
-        erros(e);
-        setCarregandoUes(false);
-      });
-      if (retorno && retorno.data) {
-        const lista = retorno.data.map(item => ({
-          desc: item.nome,
-          valor: String(item.codigo),
-        }));
+        const retorno = await ServicoFiltroRelatorio.obterUes(
+          dre,
+          consideraHistorico,
+          anoLetivo
+        ).catch(e => {
+          erros(e);
+          setCarregandoUes(false);
+        });
+        if (retorno && retorno.data) {
+          const lista = retorno.data.map(item => ({
+            desc: item.nome,
+            valor: String(item.codigo),
+          }));
 
-        if (lista && lista.length && lista.length === 1) {
-          setCodigoUe(lista[0].valor);
+          if (lista && lista.length && lista.length === 1) {
+            setCodigoUe(lista[0].valor);
+          }
+          setListaUes(lista);
+        } else {
+          setListaUes([]);
         }
-        setListaUes(lista);
-      } else {
-        setListaUes([]);
+        setCarregandoUes(false);
       }
-      setCarregandoUes(false);
-    }
-  }, [anoLetivo, codigoDre, consideraHistorico]);
+    },
+    [anoLetivo, codigoDre, consideraHistorico]
+  );
 
   const onChangeDre = dre => {
     setCodigoDre(dre);
@@ -253,7 +268,10 @@ const RelatorioNotasConceitosFinais = () => {
 
   const obterAnosEscolares = useCallback(
     async (mod, ue, anoLetivoSelecionado) => {
-      if (String(mod) === String(modalidade.EJA)) {
+      if (
+        Number(mod) === ModalidadeEnum.EJA ||
+        Number(mod) === ModalidadeEnum.CELP
+      ) {
         setListaAnosEscolares([{ descricao: 'Todos', valor: OPCAO_TODOS }]);
         setAnosEscolares([OPCAO_TODOS]);
       } else {
@@ -348,7 +366,7 @@ const RelatorioNotasConceitosFinais = () => {
     bi.push({ desc: '1º', valor: 1 });
     bi.push({ desc: '2º', valor: 2 });
 
-    if (modalidadeId != modalidade.EJA) {
+    if (naoEhEjaOuCelp) {
       bi.push({ desc: '3º', valor: 3 });
       bi.push({ desc: '4º', valor: 4 });
     }
@@ -356,7 +374,7 @@ const RelatorioNotasConceitosFinais = () => {
     bi.push({ desc: 'Final', valor: 0 });
     bi.push({ desc: 'Todos', valor: -99 });
     setListaBimestre(bi);
-  }, [modalidadeId]);
+  }, [modalidadeId, naoEhEjaOuCelp]);
 
   useEffect(() => {
     if (modalidadeId) {
@@ -369,7 +387,7 @@ const RelatorioNotasConceitosFinais = () => {
 
   useEffect(() => {
     if (modalidadeId && anoLetivo) {
-      if (String(modalidadeId) === String(modalidade.EJA)) {
+      if (ehEjaOuCelp) {
         obterSemestres(modalidadeId, anoLetivo);
       } else {
         setSemestre(undefined);
@@ -379,7 +397,7 @@ const RelatorioNotasConceitosFinais = () => {
       setSemestre(undefined);
       setListaSemestre([]);
     }
-  }, [modalidadeId, anoLetivo]);
+  }, [modalidadeId, anoLetivo, ehEjaOuCelp]);
 
   const obterConceitos = async anoLetivoSelecionado => {
     setCarregandoGeral(true);
@@ -425,7 +443,7 @@ const RelatorioNotasConceitosFinais = () => {
       !condicao ||
       !tipoNota ||
       valorCondicaoDesabilitar ||
-      (String(modalidadeId) === String(modalidade.EJA) ? !semestre : false) ||
+      (ehEjaOuCelp ? !semestre : false) ||
       !formato ||
       clicouBotaoGerar;
 
@@ -443,6 +461,7 @@ const RelatorioNotasConceitosFinais = () => {
     formato,
     bimestres,
     clicouBotaoGerar,
+    ehEjaOuCelp,
   ]);
 
   useEffect(() => {
@@ -699,7 +718,7 @@ const RelatorioNotasConceitosFinais = () => {
   return (
     <>
       <AlertaModalidadeInfantil
-        exibir={String(modalidadeId) === String(modalidade.INFANTIL)}
+        exibir={Number(modalidadeId) === ModalidadeEnum.INFANTIL}
         validarModalidadeFiltroPrincipal={false}
       />
       <Cabecalho pagina="Notas e conceitos">
@@ -789,7 +808,7 @@ const RelatorioNotasConceitosFinais = () => {
                     label="Semestre"
                     disabled={
                       !modalidadeId ||
-                      String(modalidadeId) !== String(modalidade.EJA) ||
+                      naoEhEjaOuCelp ||
                       (listaSemestre && listaSemestre.length === 1)
                     }
                     valueSelect={semestre}

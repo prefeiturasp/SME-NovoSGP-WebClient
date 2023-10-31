@@ -1,29 +1,29 @@
+import { ROUTES } from '@/core/enum/routes';
 import { Tabs } from 'antd';
-import React, { useEffect, useState, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Loader } from '~/componentes';
+import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
 import Card from '~/componentes/card';
 import SelectComponent from '~/componentes/select';
 import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { URL_HOME } from '~/constantes/url';
-import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import FechamentoBimestreLista from './fechamento-bimestre-lista/fechamento-bimestre-lista';
-import RotasDto from '~/dtos/rotasDto';
-import { Fechamento } from './fechamento-bimestre.css';
-import FechamentoFinal from '../FechamentoFinal/fechamentoFinal';
-import ServicoFechamentoFinal from '~/servicos/Paginas/DiarioClasse/ServicoFechamentoFinal';
-import { erros, sucesso, confirmar } from '~/servicos/alertas';
-import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import periodo from '~/dtos/periodo';
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
-import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import ServicoFechamentoFinal from '~/servicos/Paginas/DiarioClasse/ServicoFechamentoFinal';
+import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
+import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import { ModalidadeDTO } from '~/dtos';
+import { confirmar, erros, sucesso } from '~/servicos/alertas';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import FechamentoFinal from '../FechamentoFinal/fechamentoFinal';
 import BtnAcoesFechamentoBimestre from './btnAcoesFechamentoBimestre';
-import { useNavigate } from 'react-router-dom';
+import FechamentoBimestreLista from './fechamento-bimestre-lista/fechamento-bimestre-lista';
+import { Fechamento } from './fechamento-bimestre.css';
 
 const FechamentoBismestre = () => {
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const FechamentoBismestre = () => {
   const { TabPane } = Tabs;
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada, permissoes } = usuario;
-  const permissoesTela = permissoes[RotasDto.FECHAMENTO_BIMESTRE];
+  const permissoesTela = permissoes[ROUTES.FECHAMENTO_BIMESTRE];
   const { podeIncluir, podeAlterar } = permissoesTela;
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [emEdicao, setEmEdicao] = useState(false);
@@ -72,8 +72,9 @@ const FechamentoBismestre = () => {
   const [idDisciplinaTerritorioSaber, setIdDisciplinaTerritorioSaber] =
     useState(undefined);
 
-  const ehModaliadeEJA =
-    Number(turmaSelecionada?.modalidade) !== ModalidadeDTO.EJA;
+  const naoEhModaliadeEJAOuCelp =
+    Number(turmaSelecionada?.modalidade) !== ModalidadeEnum.EJA &&
+    Number(turmaSelecionada?.modalidade) !== ModalidadeEnum.CELP;
 
   const ehIgualPeriodoAnual = periodoFechamento === periodo.Anual;
 
@@ -421,7 +422,7 @@ const FechamentoBismestre = () => {
                       />
                     ) : null}
                   </TabPane>
-                  {ehIgualPeriodoAnual && ehModaliadeEJA ? (
+                  {ehIgualPeriodoAnual && naoEhModaliadeEJAOuCelp ? (
                     <TabPane
                       tab="3º Bimestre"
                       key="3"
@@ -447,7 +448,7 @@ const FechamentoBismestre = () => {
                       ) : null}
                     </TabPane>
                   ) : null}
-                  {ehIgualPeriodoAnual && ehModaliadeEJA ? (
+                  {ehIgualPeriodoAnual && naoEhModaliadeEJAOuCelp ? (
                     <TabPane
                       tab="4º Bimestre"
                       key="4"

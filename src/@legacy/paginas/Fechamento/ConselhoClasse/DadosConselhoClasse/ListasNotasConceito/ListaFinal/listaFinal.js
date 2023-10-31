@@ -3,7 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { Tooltip } from 'antd';
-import modalidadeDto from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import notasConceitos from '~/dtos/notasConceitos';
 import {
   formatarFrequencia,
@@ -112,7 +112,9 @@ const ListaFinal = props => {
   };
 
   const montarValoresNotasConceitos = notasFechamentos => {
-    const ehEja = Number(modalidade) === modalidadeDto.EJA;
+    const ehEjaOuCelp =
+      Number(modalidade) === ModalidadeEnum.EJA ||
+      Number(modalidade) === ModalidadeEnum.CELP;
 
     const primeiroBimestre = notasFechamentos.find(item => item.bimestre === 1);
     const segundoBimestre = notasFechamentos.find(item => item.bimestre === 2);
@@ -141,7 +143,7 @@ const ListaFinal = props => {
             segundoBimestre ? segundoBimestre.notaConceito : ''
           )}
         </div>
-        {!ehEja ? (
+        {!ehEjaOuCelp ? (
           <>
             <div
               className="input-notas-conceitos-final float-left"

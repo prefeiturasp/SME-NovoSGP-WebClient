@@ -108,6 +108,66 @@ class QuestionarioDinamicoValidacoes {
                     );
                 }
                 break;
+              case tipoQuestao.Periodo:
+                camposComValidacao[questaoAtual.id] = Yup.object()
+                  .test(
+                    'validarObrigatoriedadePeriodoInicioFim',
+                    'OBRIGATORIO',
+                    function validar() {
+                      const { periodoInicio, periodoFim } =
+                        this.parent[questaoAtual.id];
+
+                      let ehValido = true;
+                      if (
+                        (periodoInicio && !periodoFim) ||
+                        (!periodoInicio && periodoFim)
+                      ) {
+                        ehValido = false;
+                      }
+                      return ehValido;
+                    }
+                  )
+                  .test(
+                    'validarPeriodoInicioMaiorQueFim',
+                    'PERIODO_INICIO_MAIOR_QUE_FIM',
+                    function validar() {
+                      const { periodoInicio, periodoFim } =
+                        this.parent[questaoAtual.id];
+
+                      let ehValido = true;
+                      if (periodoInicio && periodoFim) {
+                        const inicioMaiorQueFim = moment(
+                          periodoInicio.format('YYYY-MM-DD')
+                        ).isAfter(periodoFim.format('YYYY-MM-DD'));
+
+                        if (inicioMaiorQueFim) {
+                          ehValido = false;
+                        }
+                      }
+                      return ehValido;
+                    }
+                  )
+                  .test(
+                    'validarPeriodoInicioMaiorQueFim',
+                    'PERIODO_FIM_MENOR_QUE_INICIO',
+                    function validar() {
+                      const { periodoInicio, periodoFim } =
+                        this.parent[questaoAtual.id];
+
+                      let ehValido = true;
+                      if (periodoInicio && periodoFim) {
+                        const fimMenorQueInicio = moment(
+                          periodoFim.format('YYYY-MM-DD')
+                        ).isBefore(periodoInicio.format('YYYY-MM-DD'));
+
+                        if (fimMenorQueInicio) {
+                          ehValido = false;
+                        }
+                      }
+                      return ehValido;
+                    }
+                  );
+                break;
 
               default:
                 break;

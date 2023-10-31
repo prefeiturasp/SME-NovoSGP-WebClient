@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
 import { Card, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import { ModalidadeDTO, RotasDto } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import DocPlanosTrabalhoCadastroBotoesAcoes from './docPlanosTrabalhoCadastroBotoesAcoes';
 import DocPlanosTrabalhoCadastroForm from './docPlanosTrabalhoCadastroForm';
 import {
@@ -14,14 +14,14 @@ import {
   verificaSomenteConsulta,
 } from '~/servicos';
 import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
+import { ROUTES } from '@/core/enum/routes';
 
 const DocPlanosTrabalhoCadastro = () => {
   const location = useLocation();
   const paramsRoute = useParams();
 
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela =
-    usuario.permissoes[RotasDto.DOCUMENTOS_PLANOS_TRABALHO];
+  const permissoesTela = usuario.permissoes[ROUTES.DOCUMENTOS_PLANOS_TRABALHO];
 
   const idDocumentosPlanoTrabalho = paramsRoute?.id;
 
@@ -121,10 +121,12 @@ const DocPlanosTrabalhoCadastro = () => {
         textoCampoObrigatorio,
         function validar() {
           const { modalidade, semestre } = this.parent;
-          const temModalidadeEja = Number(modalidade) === ModalidadeDTO.EJA;
+          const temModalidadeEjaOuCelp =
+            Number(modalidade) === ModalidadeEnum.EJA ||
+            Number(modalidade) === ModalidadeEnum.CELP;
 
           let ehValido = true;
-          if (!temModalidadeEja) {
+          if (!temModalidadeEjaOuCelp) {
             return ehValido;
           }
           if (!semestre) {
@@ -293,7 +295,7 @@ const DocPlanosTrabalhoCadastro = () => {
       setBreadcrumbManual(
         location.pathname,
         'Upload do arquivo',
-        RotasDto.DOCUMENTOS_PLANOS_TRABALHO
+        ROUTES.DOCUMENTOS_PLANOS_TRABALHO
       );
     }
   }, [idDocumentosPlanoTrabalho, location]);

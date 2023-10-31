@@ -6,9 +6,8 @@ import Filtro from './componentes/Filtro';
 import ServicoBoletimSimples from '~/servicos/Paginas/Relatorios/DiarioClasse/BoletimSimples/ServicoBoletimSimples';
 import { sucesso, erro, confirmar } from '~/servicos/alertas';
 import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import modalidade from '~/dtos/modalidade';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
-import { ModalidadeDTO } from '~/dtos';
 import { SGP_BUTTON_GERAR } from '~/constantes/ids/button';
 import { useNavigate } from 'react-router-dom';
 
@@ -53,7 +52,8 @@ const BoletimSimples = () => {
       ueCodigo: valoresFiltro.ueCodigo,
       turmaCodigo: valoresFiltro.turmasId,
       semestre:
-        String(valoresFiltro.modalidadeId) === String(modalidade.EJA)
+        Number(valoresFiltro.modalidadeId) === ModalidadeEnum.EJA ||
+        Number(valoresFiltro.modalidadeId) === ModalidadeEnum.CELP
           ? valoresFiltro.semestre
           : 0,
       consideraHistorico: valoresFiltro.consideraHistorico,
@@ -118,10 +118,10 @@ const BoletimSimples = () => {
 
   useEffect(() => {
     const temSemestreOuNaoEja =
-      String(filtro?.modalidade) !== String(ModalidadeDTO.EJA) ||
+      (Number(filtro?.modalidade) !== ModalidadeEnum.EJA &&
+        Number(filtro?.modalidade) !== ModalidadeEnum.CELP) ||
       filtro?.semestre;
-    const ehInfantil =
-      String(filtro.modalidade) === String(modalidade.INFANTIL);
+    const ehInfantil = Number(filtro.modalidade) === ModalidadeEnum.INFANTIL;
     const temEstudanteSelecionados =
       selecionarAlunos && !itensSelecionados?.length;
 
@@ -141,7 +141,7 @@ const BoletimSimples = () => {
   return (
     <>
       <AlertaModalidadeInfantil
-        exibir={String(filtro.modalidade) === String(modalidade.INFANTIL)}
+        exibir={Number(filtro.modalidade) === ModalidadeEnum.INFANTIL}
         validarModalidadeFiltroPrincipal={false}
       />
       <Loader loading={loaderSecao}>

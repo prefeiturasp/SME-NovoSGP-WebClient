@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
+import { ROUTES } from '@/core/enum/routes';
+import { store } from '@/core/redux';
+import { Form, Formik } from 'formik';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import CampoTexto from '~/componentes/campoTexto';
+import styled from 'styled-components';
+import * as Yup from 'yup';
+import AlertaBalao from '~/componentes/alertaBalao';
 import Button from '~/componentes/button';
+import CampoTexto from '~/componentes/campoTexto';
 import { Colors } from '~/componentes/colors';
 import ModalConteudoHtml from '~/componentes/modalConteudoHtml';
-import AlertaBalao from '~/componentes/alertaBalao';
-import api from '~/servicos/api';
-import { sucesso, confirmar } from '~/servicos/alertas';
-import { store } from '@/core/redux';
 import { meusDadosSalvarEmail } from '~/redux/modulos/usuario/actions';
-import FormularioSenha from './FormularioSenha/formularioSenha';
-import RotasDto from '~/dtos/rotasDto';
+import { confirmar, sucesso } from '~/servicos/alertas';
+import api from '~/servicos/api';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import FormularioSenha from './FormularioSenha/formularioSenha';
 
 const Campos = styled.div`
   margin-right: 10px;
@@ -37,7 +37,7 @@ const DadosEmail = () => {
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
 
-  const permissoesTela = usuarioStore.permissoes[RotasDto.MEUS_DADOS];
+  const permissoesTela = usuarioStore.permissoes[ROUTES.MEUS_DADOS];
 
   useEffect(() => {
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));

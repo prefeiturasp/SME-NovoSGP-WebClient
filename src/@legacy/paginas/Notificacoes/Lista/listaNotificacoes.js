@@ -1,29 +1,29 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { useSelector } from 'react-redux';
-import * as moment from 'moment';
 import { Col, Row } from 'antd';
+import * as moment from 'moment';
+import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Button from '~/componentes/button';
 import CampoTexto from '~/componentes/campoTexto';
 import { Colors } from '~/componentes/colors';
-import SelectComponent from '~/componentes/select';
 import ListaPaginada from '~/componentes/listaPaginada/listaPaginada';
+import SelectComponent from '~/componentes/select';
+import servicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 import { confirmar, erro, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import servicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 
-import notificacaoStatus from '~/dtos/notificacaoStatus';
+import { ROUTES } from '@/core/enum/routes';
 import CampoTextoBusca from '~/componentes/campoTextoBusca';
 import { URL_HOME } from '~/constantes/url';
-import RotasDto from '~/dtos/rotasDto';
+import notificacaoStatus from '~/dtos/notificacaoStatus';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
 
-import { Card, Loader } from '~/componentes';
-import { SGP_BUTTON_LIDA } from '~/constantes/ids/button';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { useNavigate } from 'react-router-dom';
+import { Card, Loader } from '~/componentes';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { SGP_BUTTON_LIDA } from '~/constantes/ids/button';
 
 export default function NotificacoesLista() {
   const navigate = useNavigate();
@@ -113,7 +113,7 @@ export default function NotificacoesLista() {
   const [desabilitarTurma, setDesabilitarTurma] = useState(true);
   const [colunasTabela, setColunasTabela] = useState([]);
 
-  const permissoesTela = usuario.permissoes[RotasDto.NOTIFICACOES];
+  const permissoesTela = usuario.permissoes[ROUTES.NOTIFICACOES];
 
   async function carregarListas() {
     const status = await api.get('v1/notificacoes/status');

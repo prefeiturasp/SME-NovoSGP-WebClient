@@ -1,42 +1,42 @@
 import * as moment from 'moment';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import { ROUTES } from '@/core/enum/routes';
+import { useNavigate } from 'react-router-dom';
+import { Loader } from '~/componentes';
+import { Cabecalho } from '~/componentes-sgp';
+import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { RegistroMigrado } from '~/componentes-sgp/registro-migrado';
+import JoditEditor from '~/componentes/jodit-editor/joditEditor';
+import {
+  SGP_BUTTON_CANCELAR,
+  SGP_BUTTON_SALVAR,
+} from '~/constantes/ids/button';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
+import tipoPermissao from '~/dtos/tipoPermissao';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import {
+  obterDescricaoNomeMenu,
+  verificaSomenteConsulta,
+} from '~/servicos/servico-navegacao';
+import { removerTagsHtml } from '~/utils';
 import Alert from '../../../componentes/alert';
 import Button from '../../../componentes/button';
 import Card from '../../../componentes/card';
 import { Colors } from '../../../componentes/colors';
 import SelectComponent from '../../../componentes/select';
-import { erro, sucesso, confirmar, erros } from '../../../servicos/alertas';
+import { confirmar, erro, erros, sucesso } from '../../../servicos/alertas';
 import api from '../../../servicos/api';
 import {
   Badge,
   BtnLink,
-  InseridoAlterado,
-  IframeStyle,
-  ListaItens,
   ContainerCampoTipoCiclo,
+  IframeStyle,
+  InseridoAlterado,
+  ListaItens,
 } from './planoCiclo.css';
-import modalidade from '~/dtos/modalidade';
-import RotasDto from '~/dtos/rotasDto';
-import {
-  verificaSomenteConsulta,
-  obterDescricaoNomeMenu,
-} from '~/servicos/servico-navegacao';
-import tipoPermissao from '~/dtos/tipoPermissao';
-import { Loader } from '~/componentes';
-import { RegistroMigrado } from '~/componentes-sgp/registro-migrado';
-import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import JoditEditor from '~/componentes/jodit-editor/joditEditor';
-import { Cabecalho } from '~/componentes-sgp';
-import {
-  SGP_BUTTON_CANCELAR,
-  SGP_BUTTON_SALVAR,
-} from '~/constantes/ids/button';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { removerTagsHtml } from '~/utils';
-import { useNavigate } from 'react-router-dom';
 
 export default function PlanoCiclo() {
   const urlPrefeitura = 'https://curriculo.sme.prefeitura.sp.gov.br';
@@ -72,7 +72,7 @@ export default function PlanoCiclo() {
 
   const usuario = useSelector(store => store.usuario);
   const turmaSelecionada = useSelector(store => store.usuario.turmaSelecionada);
-  const permissoesTela = usuario.permissoes[RotasDto.PLANO_CICLO];
+  const permissoesTela = usuario.permissoes[ROUTES.PLANO_CICLO];
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -241,7 +241,7 @@ export default function PlanoCiclo() {
         const anoLetivo = String(turmaSelecionada.anoLetivo);
         const codEscola = String(turmaSelecionada.unidadeEscolar);
 
-        if (Number(turmaSelecionada.modalidade) === modalidade.EJA) {
+        if (Number(turmaSelecionada.modalidade) === ModalidadeEnum.EJA) {
           setModalidadeEja(true);
         } else {
           setModalidadeEja(false);
@@ -501,7 +501,7 @@ export default function PlanoCiclo() {
       <AlertaModalidadeInfantil />
       <Cabecalho
         pagina={obterDescricaoNomeMenu(
-          RotasDto.PLANO_CICLO,
+          ROUTES.PLANO_CICLO,
           modalidadesFiltroPrincipal,
           turmaSelecionada
         )}

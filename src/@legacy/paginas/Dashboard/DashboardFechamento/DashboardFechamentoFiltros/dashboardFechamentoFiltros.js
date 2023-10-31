@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
@@ -56,7 +56,13 @@ const DashboardFechamentoFiltros = () => {
 
     ServicoDashboardFechamento.atualizarFiltros('anoLetivo', valorAtual);
   };
+  const naoEhEJAOuCelp =
+    Number(modalidade) !== ModalidadeEnum.EJA &&
+    Number(modalidade) !== ModalidadeEnum.CELP;
 
+  const ehEJAOuCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
 
@@ -269,12 +275,7 @@ const DashboardFechamentoFiltros = () => {
   }, [consideraHistorico, anoLetivo, modalidade]);
 
   useEffect(() => {
-    if (
-      ue &&
-      modalidade &&
-      anoLetivo &&
-      String(modalidade) === String(ModalidadeDTO.EJA)
-    ) {
+    if (ue && modalidade && anoLetivo && ehEJAOuCelp) {
       obterSemestres();
     } else {
       ServicoDashboardFechamento.atualizarFiltros('semestre', undefined);
@@ -292,10 +293,11 @@ const DashboardFechamentoFiltros = () => {
 
   const obterBimestres = useCallback(async () => {
     setCarregandoBimestres(true);
-    const dados = await ServicoPeriodoEscolar.obterPeriodosPorAnoLetivoModalidade(
-      modalidade,
-      anoLetivo
-    ).finally(() => setCarregandoBimestres(false));
+    const dados =
+      await ServicoPeriodoEscolar.obterPeriodosPorAnoLetivoModalidade(
+        modalidade,
+        anoLetivo
+      ).finally(() => setCarregandoBimestres(false));
 
     if (dados?.data?.length) {
       const dadosBimestres = dados.data.map(item => {
@@ -412,10 +414,7 @@ const DashboardFechamentoFiltros = () => {
               lista={listaSemestres}
               valueOption="valor"
               valueText="desc"
-              disabled={
-                listaSemestres?.length === 1 ||
-                Number(modalidade) !== ModalidadeDTO.EJA
-              }
+              disabled={listaSemestres?.length === 1 || naoEhEJAOuCelp}
               onChange={onChangeSemestre}
               valueSelect={semestre}
               placeholder="Selecione um semestre"

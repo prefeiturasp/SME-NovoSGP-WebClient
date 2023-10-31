@@ -6,7 +6,7 @@ import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirP
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import {
   confirmar,
   erros,
@@ -22,7 +22,7 @@ const FechaReabListaBotoesAcao = () => {
   const navigate = useNavigate();
 
   const permissoesTela =
-    usuario.permissoes[RotasDto.PERIODO_FECHAMENTO_REABERTURA];
+    usuario.permissoes[ROUTES.PERIODO_FECHAMENTO_REABERTURA];
 
   const {
     calendarioSelecionado,
@@ -68,7 +68,7 @@ const FechaReabListaBotoesAcao = () => {
 
   const onClickNovo = () => {
     navigate(
-      `${RotasDto.PERIODO_FECHAMENTO_REABERTURA}/novo/${
+      `${ROUTES.PERIODO_FECHAMENTO_REABERTURA}/novo/${
         calendarioSelecionado?.id || ''
       }`
     );

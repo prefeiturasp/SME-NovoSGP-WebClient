@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { SGP_SELECT_SEMESTRE } from '~/constantes/ids/select';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros } from '~/servicos';
 
 export const Semestre = ({
@@ -23,7 +23,9 @@ export const Semestre = ({
 
   const setInitialValues = !form?.values?.modoEdicao;
 
-  const ehEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehEJAouCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const limparDados = () => {
     form.setFieldValue(nameList, []);
@@ -64,21 +66,18 @@ export const Semestre = ({
     } else {
       limparDados();
     }
-
   }, [consideraHistorico, anoLetivo, modalidade, dreCodigo, ueCodigo]);
 
   useEffect(() => {
     if (form.initialValues[nameList]?.length && setInitialValues) return;
 
     limparDados();
-    if (modalidade && ehEJA) obterSemestres();
-
-
-  }, [ehEJA, modalidade]);
+    if (modalidade && ehEJAouCelp) obterSemestres();
+  }, [ehEJAouCelp, modalidade]);
 
   const desabilitar =
     !modalidade ||
-    (modalidade && !ehEJA) ||
+    (modalidade && !ehEJAouCelp) ||
     listaSemestres?.length === 1 ||
     disabled;
 
@@ -94,7 +93,7 @@ export const Semestre = ({
         disabled={desabilitar}
         showSearch={showSearch}
         id={SGP_SELECT_SEMESTRE}
-        labelRequired={ehEJA && labelRequired}
+        labelRequired={ehEJAouCelp && labelRequired}
         placeholder="Selecione um semestre"
         setValueOnlyOnChange
         onChange={newValue => {

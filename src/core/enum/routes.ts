@@ -37,7 +37,6 @@ export enum ROUTES {
   PENDENCIAS_FECHAMENTO = '/fechamento/pendencias-fechamento',
   ACOMPANHAMENTO_COMUNICADOS = '/gestao/comunicados',
   CONSELHO_CLASSE = '/fechamento/conselho-classe',
-  RELATORIO_SEMESTRAL = '/relatorios/pap/relatorio-semestral',
   SEM_PERMISSAO = '/sem-permissao',
   TERRITORIO_SABER = '/planejamento/plano-anual-territorio-saber',
   HISTORICO_ESCOLAR = '/relatorios/historico-escolar',
@@ -54,7 +53,6 @@ export enum ROUTES {
   REGISTRO_INDIVIDUAL = '/diario-classe/registro-individual',
   CONTROLE_GRADE = '/relatorios/diario-classe/controle-grade',
   RELATORIO_PLANEJAMENTO_DIARIO = '/relatorios/diario-classe/planejamento-diario',
-  POC_EDITOR = '/editor',
   SONDAGEM = '/sondagem',
   HISTORICO_NOTIFICACOES = '/relatorios/notificacoes/historico-notificacoes',
   DOCUMENTOS_PLANOS_TRABALHO = '/gestao/documentos-planos-trabalho',
@@ -101,4 +99,5 @@ export enum ROUTES {
   AUTENTICACAO_INTEGRACOES_FREQUENCIA = '/autenticacao/integracoes/frequencia/:tokenIntegracaoFrequencia',
   RELATORIO_PAP = '/relatorios/pap/relatorio-pap',
   RELATORIO_OCORRENCIAS = '/relatorios/gestao/ocorrencias',
+  RELATORIO_DINAMICO_NAAPA = '/naapa/relatorio-dinamico',
 }

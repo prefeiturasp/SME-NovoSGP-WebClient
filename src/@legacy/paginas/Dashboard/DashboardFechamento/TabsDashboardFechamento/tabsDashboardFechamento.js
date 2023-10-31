@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Tabs } from 'antd';
 import { useSelector } from 'react-redux';
 
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 import GraficosFechamento from '../DadosDashboardFechamento/Fechamento/graficosFechamento';
 import GraficoSituacaoConselhoClasse from '../DadosDashboardFechamento/ConselhoClasse/graficosConselhoClasse';
@@ -31,8 +31,10 @@ const TabsDashboardFechamento = () => {
     store => store.dashboardFechamento?.dadosDashboardFechamento?.semestre
   );
 
-  const ehModalidadeEJA = Number(modalidade) === ModalidadeDTO.EJA;
-  const semestreDesabilitado = !!(ehModalidadeEJA ? semestre : !semestre);
+  const ehModalidadeEJAouCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
+  const semestreDesabilitado = !!(ehModalidadeEJAouCelp ? semestre : !semestre);
   const exibirAbas =
     anoLetivo &&
     dre &&
@@ -40,7 +42,7 @@ const TabsDashboardFechamento = () => {
     modalidade &&
     bimestre &&
     semestreDesabilitado &&
-    String(modalidade) !== String(ModalidadeDTO.INFANTIL);
+    Number(modalidade) !== ModalidadeEnum.INFANTIL;
 
   const onChangeTab = tabAtiva => {
     setTabSelecionada(tabAtiva);

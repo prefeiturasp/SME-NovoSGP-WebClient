@@ -10,7 +10,7 @@ import { store } from '@/core/redux';
 import LoaderEncaminhamentoNAAPA from './componentes/loaderEncaminhamentoNAAPA';
 import { limparDadosLocalizarEstudante } from '~/redux/modulos/localizarEstudante/actions';
 import { setLimparDadosEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { verificaSomenteConsulta } from '~/servicos';
 import { setLimparDadosQuestionarioDinamico } from '~/redux/modulos/questionarioDinamico/actions';
 
@@ -19,7 +19,7 @@ const EncaminhamentoNAAPA = () => {
   const navigate = useNavigate();
 
   const usuario = useSelector(state => state.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.ENCAMINHAMENTO_NAAPA];
+  const permissoesTela = usuario.permissoes[ROUTES.ENCAMINHAMENTO_NAAPA];
 
   const encaminhamentoId = id;
 
@@ -37,7 +37,7 @@ const EncaminhamentoNAAPA = () => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
 
     if (mostrarBusca && soConsulta) {
-      navigate(RotasDto.ENCAMINHAMENTO_NAAPA);
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
     }
   }, [permissoesTela, mostrarBusca]);
 

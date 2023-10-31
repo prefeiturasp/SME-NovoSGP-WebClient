@@ -1,8 +1,12 @@
-import { Form, Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
-import * as Yup from 'yup';
+import { ROUTES } from '@/core/enum/routes';
+import { store } from '@/core/redux';
 import { Col, Row } from 'antd';
+import { Form, Formik } from 'formik';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import * as Yup from 'yup';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Auditoria from '~/componentes/auditoria';
 import Button from '~/componentes/button';
@@ -12,19 +16,15 @@ import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import RadioGroupButton from '~/componentes/radioGroupButton';
 import SelectComponent from '~/componentes/select';
-import { confirmar, erros, sucesso } from '~/servicos/alertas';
-import api from '~/servicos/api';
-import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
-import tipoFeriado from '~/dtos/tipoFeriado';
-import { store } from '@/core/redux';
-import RotasDto from '~/dtos/rotasDto';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
 } from '~/constantes/ids/button';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import tipoFeriado from '~/dtos/tipoFeriado';
+import { confirmar, erros, sucesso } from '~/servicos/alertas';
+import api from '~/servicos/api';
+import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
 const TipoFeriadoForm = () => {
   const [auditoria, setAuditoria] = useState([]);
@@ -39,7 +39,7 @@ const TipoFeriadoForm = () => {
   const navigate = useNavigate();
 
   const { usuario } = store.getState();
-  const permissoesTela = usuario.permissoes[RotasDto.TIPO_FERIADO];
+  const permissoesTela = usuario.permissoes[ROUTES.TIPO_FERIADO];
 
   const valoresIniciaisForm = {
     nome: '',
@@ -95,7 +95,7 @@ const TipoFeriadoForm = () => {
         setBreadcrumbManual(
           pathname,
           'Alterar Tipo de Feriado',
-          RotasDto.TIPO_FERIADO
+          ROUTES.TIPO_FERIADO
         );
         setIdTipoFeriadoEdicao(id);
 
@@ -172,7 +172,7 @@ const TipoFeriadoForm = () => {
       } else {
         sucesso('Novo tipo de feriado criado com sucesso.');
       }
-      navigate(RotasDto.TIPO_FERIADO);
+      navigate(ROUTES.TIPO_FERIADO);
     }
   };
 
@@ -201,7 +201,7 @@ const TipoFeriadoForm = () => {
 
         if (excluir?.status === 200) {
           sucesso('Tipo de feriado excluído com sucesso.');
-          navigate(RotasDto.TIPO_FERIADO);
+          navigate(ROUTES.TIPO_FERIADO);
         }
       }
     }
@@ -253,10 +253,10 @@ const TipoFeriadoForm = () => {
       if (confirmado) {
         validaAntesDoSubmit(form);
       } else {
-        navigate(RotasDto.TIPO_FERIADO);
+        navigate(ROUTES.TIPO_FERIADO);
       }
     } else {
-      navigate(RotasDto.TIPO_FERIADO);
+      navigate(ROUTES.TIPO_FERIADO);
     }
   };
 

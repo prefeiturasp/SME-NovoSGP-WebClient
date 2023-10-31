@@ -1,27 +1,27 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { ROUTES } from '@/core/enum/routes';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card } from '~/componentes';
 import AlertaNaoPermiteTurmaInfantil from '~/componentes-sgp/AlertaNaoPermiteTurmaInfantil/alertaNaoPermiteTurmaInfantil';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
-import RotasDto from '~/dtos/rotasDto';
 import {
   limparDadosPlanoAnual,
   setComponenteCurricularPlanoAnual,
   setPlanoAnualSomenteConsulta,
 } from '~/redux/modulos/anual/actions';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import {
   obterDescricaoNomeMenu,
   verificaSomenteConsulta,
 } from '~/servicos/servico-navegacao';
-import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import BotoesAcoesPlanoAnual from './DadosPlanoAnual/BotoesAcoes/botoesAcoesPlanoAnual';
 import ComponenteCurricularPlanoAnual from './DadosPlanoAnual/ComponenteCurricular/componenteCurricularPlanoAnual';
-import DadosPlanoAnual from './DadosPlanoAnual/dadosPlanoAnual';
 import LoaderPlanoAnual from './DadosPlanoAnual/LoaderPlanoAnual/loaderPlanoAnual';
 import MarcadorMigrado from './DadosPlanoAnual/MarcadorMigrado/MarcadorMigrado';
-import ModalErrosPlanoAnual from './DadosPlanoAnual/ModalErros/ModalErrosPlanoAnual';
 import ModalCopiarConteudoPlanoAnual from './DadosPlanoAnual/ModalCopiarConteudoPlanoAnual/modalCopiarConteudoPlanoAnual';
+import ModalErrosPlanoAnual from './DadosPlanoAnual/ModalErros/ModalErrosPlanoAnual';
+import DadosPlanoAnual from './DadosPlanoAnual/dadosPlanoAnual';
 import { ContainerColumnReverse, ContainerPlanoAnual } from './planoAnual.css';
 
 const PlanoAnual = () => {
@@ -30,7 +30,7 @@ const PlanoAnual = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
-  const permissoesTela = usuario.permissoes[RotasDto.PLANO_ANUAL];
+  const permissoesTela = usuario.permissoes[ROUTES.PLANO_ANUAL];
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -100,7 +100,7 @@ const PlanoAnual = () => {
       <ContainerPlanoAnual>
         <Cabecalho
           pagina={obterDescricaoNomeMenu(
-            RotasDto.PLANO_ANUAL,
+            ROUTES.PLANO_ANUAL,
             modalidadesFiltroPrincipal,
             turmaSelecionada
           )}
