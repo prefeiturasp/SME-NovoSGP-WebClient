@@ -271,7 +271,9 @@ const TipoCalendarioEscolarForm = () => {
   }, []);
 
   useEffect(() => {
-    obterAnosLetivos();
+    if(!idTipoCalendario){
+      obterAnosLetivos();
+    }
   }, [obterAnosLetivos]);
 
   return (
