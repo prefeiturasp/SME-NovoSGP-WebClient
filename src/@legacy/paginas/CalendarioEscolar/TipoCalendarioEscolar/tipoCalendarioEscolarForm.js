@@ -376,9 +376,11 @@ const TipoCalendarioEscolarForm = () => {
   );
 
   useEffect(() => {
-    obterAnosLetivos();
+    if (!idTipoCalendario) {
+      obterAnosLetivos();
+    }
     verificarSeSemestreEhRequerido();
-  }, [obterAnosLetivos]);
+  }, [idTipoCalendario, obterAnosLetivos]);
 
   return (
     <Loader loading={carregandoBotoesAcao} tooltip="">
