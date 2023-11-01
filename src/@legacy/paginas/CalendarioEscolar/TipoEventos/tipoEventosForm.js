@@ -1,27 +1,27 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { Col, Radio, Row } from 'antd';
+import { Form, Formik } from 'formik';
+import { useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import * as Yup from 'yup';
-import { Formik, Form } from 'formik';
-import { Col, Radio, Row } from 'antd';
-import Card from '~/componentes/card';
-import Grid from '~/componentes/grid';
-import Button from '~/componentes/button';
-import { Colors, Base } from '~/componentes/colors';
-import SelectComponent from '~/componentes/select';
-import api from '~/servicos/api';
-import CampoTexto from '~/componentes/campoTexto';
-import { sucesso, erro, confirmar, erros } from '~/servicos/alertas';
-import servicoEvento from '~/servicos/Paginas/Calendario/ServicoTipoEvento';
+import { Auditoria, Label } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import Button from '~/componentes/button';
+import CampoTexto from '~/componentes/campoTexto';
+import Card from '~/componentes/card';
+import { Base, Colors } from '~/componentes/colors';
+import Grid from '~/componentes/grid';
+import SelectComponent from '~/componentes/select';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
 } from '~/constantes/ids/button';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
-import { Auditoria, Label } from '~/componentes';
-import { RotasDto } from '~/dtos';
-import { useNavigate, useParams } from 'react-router-dom';
+import { setBreadcrumbManual } from '~/servicos';
+import servicoEvento from '~/servicos/Paginas/Calendario/ServicoTipoEvento';
+import { confirmar, erro, erros, sucesso } from '~/servicos/alertas';
+import api from '~/servicos/api';
 
 const TipoEventosForm = () => {
   const botaoCadastrarRef = useRef();
@@ -29,6 +29,7 @@ const TipoEventosForm = () => {
 
   const navigate = useNavigate();
   const paramsRoute = useParams();
+  const location = useLocation();
 
   const idTipoEvento = paramsRoute?.id;
 
@@ -92,6 +93,16 @@ const TipoEventosForm = () => {
     }
   }, [idTipoEvento]);
 
+  useEffect(() => {
+    if (idTipoEvento) {
+      setBreadcrumbManual(
+        location.pathname,
+        'Alteração de Tipo de Eventos',
+        `${ROUTES.TIPO_EVENTOS}`
+      );
+    }
+  }, [idTipoEvento, location]);
+
   const onChangeCampos = () => {
     if (!modoEdicao) {
       setModoEdicao(true);
@@ -144,7 +155,7 @@ const TipoEventosForm = () => {
           .catch(e => erros(e));
         if (excluir) {
           sucesso('Tipos de evento deletados com sucesso!');
-          navigate(RotasDto.TIPO_EVENTOS);
+          navigate(ROUTES.TIPO_EVENTOS);
         }
       }
     }
@@ -174,10 +185,10 @@ const TipoEventosForm = () => {
       if (confirmado) {
         clicouBotaoCadastrar(form);
       } else {
-        navigate(RotasDto.TIPO_EVENTOS);
+        navigate(ROUTES.TIPO_EVENTOS);
       }
     } else {
-      navigate(RotasDto.TIPO_EVENTOS);
+      navigate(ROUTES.TIPO_EVENTOS);
     }
   };
 
@@ -190,7 +201,7 @@ const TipoEventosForm = () => {
             modoEdicao ? 'atualizado' : 'cadastrado'
           } com sucesso!`
         );
-        navigate(RotasDto.TIPO_EVENTOS);
+        navigate(ROUTES.TIPO_EVENTOS);
       })
       .catch(() => {
         erro(

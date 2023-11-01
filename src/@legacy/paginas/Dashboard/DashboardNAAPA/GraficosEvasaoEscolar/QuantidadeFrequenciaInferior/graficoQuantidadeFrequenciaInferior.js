@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
 import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeDTO } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { erros } from '~/servicos';
 import ServicoDashboardNAAPA from '~/servicos/Paginas/Dashboard/ServicoDashboardNAAPA';
 import NAAPAContext from '../../naapaContext';
@@ -23,21 +23,24 @@ const GraficoQuantidadeFrequenciaInferior = () => {
 
   const [meseReferencia, setMeseReferencia] = useState(OPCAO_TODOS);
 
-  const ehModalidadeEJA = Number(modalidade) === ModalidadeDTO.EJA;
+  const ehModalidadeEJAouCelp =
+    Number(modalidade) === ModalidadeEnum.EJA ||
+    Number(modalidade) === ModalidadeEnum.CELP;
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardNAAPA.obterFrequenciaTurmaEvasaoAbaixo50Porcento(
-      consideraHistorico,
-      anoLetivo,
-      dre?.codigo,
-      ue?.codigo,
-      modalidade,
-      semestre,
-      meseReferencia
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardNAAPA.obterFrequenciaTurmaEvasaoAbaixo50Porcento(
+        consideraHistorico,
+        anoLetivo,
+        dre?.codigo,
+        ue?.codigo,
+        modalidade,
+        semestre,
+        meseReferencia
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno?.data?.length) {
       setDadosGrafico(retorno.data);
@@ -55,7 +58,7 @@ const GraficoQuantidadeFrequenciaInferior = () => {
   ]);
 
   useEffect(() => {
-    const validouEJA = ehModalidadeEJA ? !!semestre : true;
+    const validouEJA = ehModalidadeEJAouCelp ? !!semestre : true;
     if (anoLetivo && dre && ue && modalidade && validouEJA && meseReferencia) {
       obterDadosGrafico();
     } else {
@@ -69,7 +72,7 @@ const GraficoQuantidadeFrequenciaInferior = () => {
     modalidade,
     semestre,
     meseReferencia,
-    ehModalidadeEJA,
+    ehModalidadeEJAouCelp,
     obterDadosGrafico,
   ]);
 
@@ -102,7 +105,7 @@ const GraficoQuantidadeFrequenciaInferior = () => {
         {dadosGrafico?.length ? (
           <GraficoBarras
             data={dadosGrafico}
-            xAxisVisible={ue.codigo === '-99' ? false : true}
+            xAxisVisible={ue.codigo !== '-99'}
             legendVisible={false}
           />
         ) : !exibirLoader ? (

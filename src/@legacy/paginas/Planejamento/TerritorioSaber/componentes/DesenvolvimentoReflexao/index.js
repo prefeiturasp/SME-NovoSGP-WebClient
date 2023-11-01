@@ -1,18 +1,18 @@
 import t from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 // Componentes
 import { Auditoria, Grid } from '~/componentes';
 // Estilos
+import { ROUTES } from '@/core/enum/routes';
 import { Linha } from '~/componentes/EstilosGlobais';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import RotasDto from '~/dtos/rotasDto';
-import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import Alert from '~/componentes/alert';
+import JoditEditor from '~/componentes/jodit-editor/joditEditor';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
 function DesenvolvimentoReflexao({ dadosBimestre, onChange }) {
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.TERRITORIO_SABER];
+  const permissoesTela = usuario.permissoes[ROUTES.TERRITORIO_SABER];
 
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
 

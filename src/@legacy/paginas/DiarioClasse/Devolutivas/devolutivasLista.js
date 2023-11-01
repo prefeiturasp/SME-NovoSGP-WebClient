@@ -1,24 +1,24 @@
+import { ROUTES } from '@/core/enum/routes';
 import * as moment from 'moment';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { CampoData, ListaPaginada, Loader } from '~/componentes';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
 import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import SelectComponent from '~/componentes/select';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes/url';
-import { erros } from '~/servicos/alertas';
+import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
-import RotasDto from '~/dtos/rotasDto';
+import { erros } from '~/servicos/alertas';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
-import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { useNavigate } from 'react-router-dom';
 
 const DevolutivasLista = () => {
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ const DevolutivasLista = () => {
   const [carregandoGeral, setCarregandoGeral] = useState(false);
   const [turmaInfantil, setTurmaInfantil] = useState(false);
   const [filtro, setFiltro] = useState({});
-  const permissoesTela = usuario.permissoes[RotasDto.DEVOLUTIVAS];
+  const permissoesTela = usuario.permissoes[ROUTES.DEVOLUTIVAS];
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [periodoHabilitado, setPeriodoHabilitado] = useState();
 
@@ -194,10 +194,10 @@ const DevolutivasLista = () => {
   };
 
   const onClickNovo = () => {
-    navigate(`${RotasDto.DEVOLUTIVAS}/novo`);
+    navigate(`${ROUTES.DEVOLUTIVAS}/novo`);
   };
   const onClickEditar = item => {
-    navigate(`${RotasDto.DEVOLUTIVAS}/editar/${item.id}`);
+    navigate(`${ROUTES.DEVOLUTIVAS}/editar/${item.id}`);
   };
 
   return (

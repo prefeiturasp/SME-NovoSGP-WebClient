@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Breadcrumb } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { Base } from '../componentes/colors';
+import { ROUTES } from '@/core/enum/routes';
 import { store } from '@/core/redux';
-import { rotaAtiva } from '../redux/modulos/navegacao/actions';
-import { obterDescricaoNomeMenu } from '~/servicos/servico-navegacao';
-import RotasDto from '~/dtos/rotasDto';
-import { validarNavegacaoTela } from '~/utils';
+import { Breadcrumb } from 'antd';
 import _ from 'lodash';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { obterDescricaoNomeMenu } from '~/servicos/servico-navegacao';
+import { validarNavegacaoTela } from '~/utils';
+import { Base } from '../componentes/colors';
+import { rotaAtiva } from '../redux/modulos/navegacao/actions';
 
 const BreadcrumbBody = styled.div`
   height: 24px;
@@ -58,28 +58,28 @@ const BreadcrumbSgp = () => {
 
   const verificaTrocaNomesBreadcrumb = () => {
     if (rotas?.length) {
-      const rotaPlanoCiclo = rotas.get(RotasDto.PLANO_CICLO);
+      const rotaPlanoCiclo = rotas.get(ROUTES.PLANO_CICLO);
       if (rotaPlanoCiclo) {
         rotaPlanoCiclo.breadcrumbName = obterDescricaoNomeMenu(
-          RotasDto.PLANO_CICLO,
+          ROUTES.PLANO_CICLO,
           modalidadesFiltroPrincipal,
           UsuarioStrore.turmaSelecionada
         );
       }
 
-      const rotaPlanoAnual = rotas.get(RotasDto.PLANO_ANUAL);
+      const rotaPlanoAnual = rotas.get(ROUTES.PLANO_ANUAL);
       if (rotaPlanoAnual) {
         rotaPlanoAnual.breadcrumbName = obterDescricaoNomeMenu(
-          RotasDto.PLANO_ANUAL,
+          ROUTES.PLANO_ANUAL,
           modalidadesFiltroPrincipal,
           UsuarioStrore.turmaSelecionada
         );
       }
 
-      const rotaFrequencia = rotas.get(RotasDto.FREQUENCIA_PLANO_AULA);
+      const rotaFrequencia = rotas.get(ROUTES.FREQUENCIA_PLANO_AULA);
       if (rotaFrequencia) {
         rotaFrequencia.breadcrumbName = obterDescricaoNomeMenu(
-          RotasDto.FREQUENCIA_PLANO_AULA,
+          ROUTES.FREQUENCIA_PLANO_AULA,
           modalidadesFiltroPrincipal,
           UsuarioStrore.turmaSelecionada
         );

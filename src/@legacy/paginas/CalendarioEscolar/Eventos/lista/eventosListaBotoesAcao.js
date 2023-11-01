@@ -6,7 +6,7 @@ import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirP
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { SGP_BUTTON_EXCLUIR, SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { setFiltroListaEventos } from '~/redux/modulos/calendarioEscolar/actions';
 import {
   confirmar,
@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 
 const EventosListaBotoesAcao = () => {
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.EVENTOS];
+  const permissoesTela = usuario.permissoes[ROUTES.EVENTOS];
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -103,7 +103,7 @@ const EventosListaBotoesAcao = () => {
 
   const onClickNovo = () => {
     salvarFiltros();
-    navigate(`${RotasDto.EVENTOS}/novo/${calendarioSelecionado?.id}`);
+    navigate(`${ROUTES.EVENTOS}/novo/${calendarioSelecionado?.id}`);
   };
 
   return (

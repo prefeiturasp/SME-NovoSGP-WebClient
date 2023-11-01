@@ -26,7 +26,7 @@ import {
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
 import { SGP_UPLOAD_REGISTRO_ITINERANCIA } from '~/constantes/ids/upload';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import tipoQuestaoDto from '~/dtos/tipoQuestao';
 import {
   confirmar,
@@ -96,7 +96,7 @@ const RegistroItineranciaAEECadastro = () => {
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
-    usuario.permissoes[RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA];
+    usuario.permissoes[ROUTES.RELATORIO_AEE_REGISTRO_ITINERANCIA];
 
   const permissaoStatus = itineranciaId && !itineranciaAlteracao?.podeEditar;
 
@@ -232,7 +232,7 @@ const RegistroItineranciaAEECadastro = () => {
             sucesso(
               `Registro ${itineranciaId ? 'alterado' : 'salvo'} com sucesso`
             );
-            navigate(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
+            navigate(ROUTES.RELATORIO_AEE_REGISTRO_ITINERANCIA);
           } else {
             setCarregandoGeral(false);
           }
@@ -251,9 +251,9 @@ const RegistroItineranciaAEECadastro = () => {
         'Suas alterações não foram salvas, deseja salvar agora?'
       );
       if (confirmou) onClickSalvar();
-      else navigate(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
+      else navigate(ROUTES.RELATORIO_AEE_REGISTRO_ITINERANCIA);
     } else {
-      navigate(RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA);
+      navigate(ROUTES.RELATORIO_AEE_REGISTRO_ITINERANCIA);
     }
   };
 
@@ -293,7 +293,7 @@ const RegistroItineranciaAEECadastro = () => {
       setBreadcrumbManual(
         location.pathname,
         'Alterar',
-        RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA
+        ROUTES.RELATORIO_AEE_REGISTRO_ITINERANCIA
       );
       setItineranciaId(paramsRoute?.id);
     }

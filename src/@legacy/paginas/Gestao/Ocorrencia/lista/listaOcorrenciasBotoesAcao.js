@@ -6,7 +6,7 @@ import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirP
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { confirmar, erros, ServicoOcorrencias, sucesso } from '~/servicos';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,7 +34,7 @@ const ListaOcorrenciasBotoesAcao = props => {
 
   const onClickVoltar = () => navigate(URL_HOME);
 
-  const onClickNovo = () => navigate(`${RotasDto.OCORRENCIAS}/novo`);
+  const onClickNovo = () => navigate(`${ROUTES.OCORRENCIAS}/novo`);
 
   const onClickExcluir = async () => {
     if (ocorrenciasSelecionadas?.length) {

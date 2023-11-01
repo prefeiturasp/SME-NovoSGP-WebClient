@@ -1,5 +1,8 @@
-import tipoPermissao from '~/dtos/tipoPermissao';
+import { ROUTES } from '@/core/enum/routes';
 import { store } from '@/core/redux';
+import { FiltroHelper } from '~/componentes-sgp';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
+import tipoPermissao from '~/dtos/tipoPermissao';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
 import {
   setListaUrlAjudaDoSistema,
@@ -7,10 +10,7 @@ import {
   setPermissoes,
 } from '~/redux/modulos/usuario/actions';
 import api from '~/servicos/api';
-import RotasDto from '~/dtos/rotasDto';
-import modalidade from '~/dtos/modalidade';
 import { obterModalidadeFiltroPrincipal } from './Validacoes/validacoesInfatil';
-import { FiltroHelper } from '~/componentes-sgp';
 
 const setMenusPermissoes = async () => {
   const permissoes = {};
@@ -141,23 +141,23 @@ const obterDescricaoNomeMenu = (
   descricao
 ) => {
   const urls = {
-    [RotasDto.FREQUENCIA_PLANO_AULA]: {
-      [String(modalidade.INFANTIL)]: 'Frequência',
-      [String(modalidade.EJA)]: 'Frequência/Plano Aula',
-      [String(modalidade.FUNDAMENTAL)]: 'Frequência/Plano Aula',
-      [String(modalidade.ENSINO_MEDIO)]: 'Frequência/Plano Aula',
+    [ROUTES.FREQUENCIA_PLANO_AULA]: {
+      [String(ModalidadeEnum.INFANTIL)]: 'Frequência',
+      [String(ModalidadeEnum.EJA)]: 'Frequência/Plano Aula',
+      [String(ModalidadeEnum.FUNDAMENTAL)]: 'Frequência/Plano Aula',
+      [String(ModalidadeEnum.MEDIO)]: 'Frequência/Plano Aula',
     },
-    [RotasDto.PLANO_ANUAL]: {
-      [String(modalidade.INFANTIL)]: 'Plano Anual',
-      [String(modalidade.EJA)]: 'Plano Semestral',
-      [String(modalidade.FUNDAMENTAL)]: 'Plano Anual',
-      [String(modalidade.ENSINO_MEDIO)]: 'Plano Anual',
+    [ROUTES.PLANO_ANUAL]: {
+      [String(ModalidadeEnum.INFANTIL)]: 'Plano Anual',
+      [String(ModalidadeEnum.EJA)]: 'Plano Semestral',
+      [String(ModalidadeEnum.FUNDAMENTAL)]: 'Plano Anual',
+      [String(ModalidadeEnum.MEDIO)]: 'Plano Anual',
     },
-    [RotasDto.PLANO_CICLO]: {
-      [String(modalidade.INFANTIL)]: 'Plano de Ciclo',
-      [String(modalidade.EJA)]: 'Plano de Etapa',
-      [String(modalidade.FUNDAMENTAL)]: 'Plano de Ciclo',
-      [String(modalidade.ENSINO_MEDIO)]: 'Plano de Ciclo',
+    [ROUTES.PLANO_CICLO]: {
+      [String(ModalidadeEnum.INFANTIL)]: 'Plano de Ciclo',
+      [String(ModalidadeEnum.EJA)]: 'Plano de Etapa',
+      [String(ModalidadeEnum.FUNDAMENTAL)]: 'Plano de Ciclo',
+      [String(ModalidadeEnum.MEDIO)]: 'Plano de Ciclo',
     },
   };
   const rota = urls[url];
@@ -194,10 +194,10 @@ const obterAjudaDoSistemaURL = () => {
 };
 
 export {
-  setMenusPermissoes,
   getObjetoStorageUsuario,
-  verificaSomenteConsulta,
-  obterDescricaoNomeMenu,
-  setSomenteConsultaManual,
   obterAjudaDoSistemaURL,
+  obterDescricaoNomeMenu,
+  setMenusPermissoes,
+  setSomenteConsultaManual,
+  verificaSomenteConsulta,
 };

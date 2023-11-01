@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import shortid from 'shortid';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import shortid from 'shortid';
 
-import RotasDto from '~/dtos/rotasDto';
+import { ROUTES } from '@/core/enum/routes';
 import AtribuicaoCJServico from '~/servicos/Paginas/AtribuicaoCJ';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { erros } from '~/servicos/alertas';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
+import { ButtonGroup, Card, DataTable, Loader } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
-import { Card, DataTable, ButtonGroup, Loader } from '~/componentes';
 import Filtro from './componentes/Filtro';
 
-import { PilulaEstilo } from './styles';
-import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { useNavigate } from 'react-router-dom';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
+import { PilulaEstilo } from './styles';
 
 function AtribuicaoCJLista() {
   const navigate = useNavigate();
@@ -53,7 +53,9 @@ function AtribuicaoCJLista() {
 
   const onClickBotaoPrincipal = () =>
     navigate(
-      `/gestao/atribuicao-cjs/novo?dreId=${filtro.DreId}${filtro.UeId ? `&ueId=${filtro.UeId}` : ''}&historico=${filtro.Historico}`
+      `/gestao/atribuicao-cjs/novo?dreId=${filtro.DreId}${
+        filtro.UeId ? `&ueId=${filtro.UeId}` : ''
+      }&historico=${filtro.Historico}`
     );
 
   const onSelecionarItems = items => {
@@ -79,7 +81,7 @@ function AtribuicaoCJLista() {
   };
   useEffect(() => {
     setSomenteConsulta(
-      verificaSomenteConsulta(permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA])
+      verificaSomenteConsulta(permissoesTela[ROUTES.ATRIBUICAO_CJ_LISTA])
     );
   }, [permissoesTela]);
 
@@ -109,7 +111,7 @@ function AtribuicaoCJLista() {
         <Cabecalho pagina="Atribuição de CJ">
           <ButtonGroup
             somenteConsulta={somenteConsulta}
-            permissoesTela={permissoesTela[RotasDto.ATRIBUICAO_CJ_LISTA]}
+            permissoesTela={permissoesTela[ROUTES.ATRIBUICAO_CJ_LISTA]}
             temItemSelecionado={
               itensSelecionados && itensSelecionados.length >= 1
             }

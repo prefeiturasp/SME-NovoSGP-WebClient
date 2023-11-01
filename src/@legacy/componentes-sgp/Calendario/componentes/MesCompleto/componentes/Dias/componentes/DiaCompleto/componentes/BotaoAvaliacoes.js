@@ -1,19 +1,19 @@
-import React, { useCallback } from 'react';
-import styled from 'styled-components';
-import shortid from 'shortid';
 import t from 'prop-types';
+import { useCallback } from 'react';
+import shortid from 'shortid';
+import styled from 'styled-components';
 
 // Ant
 import { Tooltip } from 'antd';
 
 // Componentes
-import { SelectComponent, Base, Colors } from '~/componentes';
+import { Base, Colors, SelectComponent } from '~/componentes';
 
 // Estilos
 import { Botao } from '../styles';
 
 // DTOs
-import RotasDTO from '~/dtos/rotasDto';
+import { ROUTES } from '@/core/enum/routes';
 import { useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
@@ -29,7 +29,7 @@ function BotaoAvaliacoes({ atividadesAvaliativas, permissaoTela }) {
   const onClickAvaliacaoHandler = useCallback(
     avaliacao => {
       if (permissaoTela?.podeConsultar && avaliacao) {
-        navigate(`${RotasDTO.CADASTRO_DE_AVALIACAO}/editar/${avaliacao}`);
+        navigate(`${ROUTES.CADASTRO_DE_AVALIACAO}/editar/${avaliacao}`);
       }
     },
     [permissaoTela]

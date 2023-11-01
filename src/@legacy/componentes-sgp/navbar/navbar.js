@@ -96,51 +96,39 @@ const Navbar = () => {
         )}
         <Nav className="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top py-0">
           <div className="container-fluid h-100">
+            <div>
+              <Link
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                to={URL_HOME}
+                onClick={async e => {
+                  const pararAcao = await validarNavegacaoTela(e, URL_HOME);
+                  if (!pararAcao) navigate(URL_HOME);
+                }}
+              >
+                <Logo
+                  src={LogoDoSgp}
+                  alt="SGP"
+                  className="mx-xl-auto mx-lg-auto mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 d-block"
+                />
+              </Link>
+            </div>
             <div className="d-flex w-100 h-100 position-relative">
-              <div
-                className={`${
-                  retraido
-                    ? 'col-xl-1 col-lg-1 col-md-1 col-sm-4'
-                    : 'col-xl-2 col-lg-2 col-md-2 col-sm-4'
-                }`}
-              >
-                <Link
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  to={URL_HOME}
-                  onClick={async e => {
-                    const pararAcao = await validarNavegacaoTela(e, URL_HOME);
-                    if (!pararAcao) navigate(URL_HOME);
-                  }}
-                >
-                  <Logo
-                    src={LogoDoSgp}
-                    alt="SGP"
-                    className="mx-xl-auto mx-lg-auto mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 d-block"
-                  />
-                </Link>
-              </div>
-              <div
-                className={`d-flex justify-content-end ${
-                  retraido
-                    ? 'col-xl-11 col-lg-11 col-md-11'
-                    : 'col-xl-10 col-lg-10 col-md-10'
-                } col-sm-8`}
-              >
+              <div className="d-flex justify-content-end col-xl-12 p-0">
                 <Botoes className="align-self-xl-center align-self-lg-center align-self-md-center align-self-sm-center mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0">
-                  <ul className="list-inline p-0 m-0">
+                  <ul className="list-inline p-0 m-0 d-flex align-items-center">
+                    <li className="list-inline-item mr-4">
+                      <Perfil />
+                    </li>
                     <li className="list-inline-item mr-4">
                       <NavbarNotificacoes
                         Botao={Botao}
                         Icone={Icone}
                         Texto={Texto}
                       />
-                    </li>
-                    <li className="list-inline-item mr-4">
-                      <Perfil Botao={Botao} Icone={Icone} Texto={Texto} />
                     </li>
                     <li className="list-inline-item">
                       <Botao

@@ -6,7 +6,6 @@ import {
   SGP_SELECT_BIMESTRE,
   SGP_SELECT_COMPONENTE_CURRICULAR,
 } from '~/constantes/ids/select';
-import { ModalidadeDTO, RotasDto } from '~/dtos';
 import { setLimparModoEdicaoGeral } from '~/redux/modulos/geral/actions';
 import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
 import {
@@ -18,6 +17,8 @@ import {
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
 import { ordenarPor } from '~/utils';
 import ListaoContext from '../listaoContext';
+import { ROUTES } from '@/core/enum/routes';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const ListaoOperacoesFiltros = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const ListaoOperacoesFiltros = () => {
   const { modalidade, turma } = turmaSelecionada;
   const telaEmEdicao = useSelector(store => store.geral.telaEmEdicao);
   const acaoTelaEmEdicao = useSelector(store => store.geral.acaoTelaEmEdicao);
-  const permissoesTela = usuario.permissoes[RotasDto.LISTAO];
+  const permissoesTela = usuario.permissoes[ROUTES.LISTAO];
 
   const {
     bimestre,
@@ -47,9 +48,8 @@ const ListaoOperacoesFiltros = () => {
     exibirLoaderPeriodo,
   } = useContext(ListaoContext);
 
-  const [listaBimestresOperacoe, setListaBimestresOperacoes] = useState(
-    listaBimestres
-  );
+  const [listaBimestresOperacoe, setListaBimestresOperacoes] =
+    useState(listaBimestres);
 
   const [bimestreInicial, setBimestreInicial] = useState(bimestre);
 
@@ -65,7 +65,6 @@ const ListaoOperacoesFiltros = () => {
       setPermissaoLista();
       dispatch(setSomenteConsulta(false));
     }
-
   }, [permissoesTela, turma, setSomenteConsultaListao, dispatch]);
 
   useEffect(() => {
@@ -73,7 +72,6 @@ const ListaoOperacoesFiltros = () => {
       setComponenteCurricular();
       setBimestreOperacoes();
     };
-
   }, []);
 
   const obterComponentesCurriculares = useCallback(async () => {
@@ -92,7 +90,6 @@ const ListaoOperacoesFiltros = () => {
       setListaComponenteCurricular([]);
       setComponenteCurricular();
     }
-
   }, [turma]);
 
   useEffect(() => {
@@ -107,7 +104,6 @@ const ListaoOperacoesFiltros = () => {
       limparTelaListao();
       dispatch(setLimparModoEdicaoGeral());
     }
-
   }, [turma, obterComponentesCurriculares]);
 
   useEffect(() => {
@@ -123,7 +119,6 @@ const ListaoOperacoesFiltros = () => {
     } else {
       setPeriodoAbertoListao(true);
     }
-
   }, [bimestreOperacoes, listaBimestresOperacoe]);
 
   const obterBimestresAbertoFechado = useCallback(async () => {
@@ -141,11 +136,12 @@ const ListaoOperacoesFiltros = () => {
         };
       });
 
-      if (Number(modalidade) !== ModalidadeDTO.INFANTIL) {
-        const resultado = await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
-          turma,
-          0
-        ).catch(e => erros(e));
+      if (Number(modalidade) !== ModalidadeEnum.INFANTIL) {
+        const resultado =
+          await ServicoPeriodoFechamento.verificarSePodeAlterarNoPeriodo(
+            turma,
+            0
+          ).catch(e => erros(e));
 
         const finalAberto = !!resultado?.data;
         lista.push({
@@ -167,7 +163,6 @@ const ListaoOperacoesFiltros = () => {
       setListaBimestresOperacoes([]);
       setBimestreOperacoes();
     }
-
   }, [turma, componenteCurricular, listaComponenteCurricular]);
 
   useEffect(() => {
@@ -180,7 +175,6 @@ const ListaoOperacoesFiltros = () => {
       setBimestreOperacoes(bimestreInicial);
       setBimestreInicial();
     }
-
   }, [
     bimestreInicial,
     listaBimestresOperacoe,
@@ -195,15 +189,15 @@ const ListaoOperacoesFiltros = () => {
       listaComponenteCurricular?.length > 1
     ) {
       const componenteNaLista = listaComponenteCurricular.find(
-        item => item.codigoComponenteCurricular === componenteCurricularInicial ||
-                item.id === componenteCurricularInicial
+        item =>
+          item.codigoComponenteCurricular === componenteCurricularInicial ||
+          item.id === componenteCurricularInicial
       );
       if (componenteNaLista) {
         setComponenteCurricular(componenteNaLista);
       }
       setComponenteCurricularInicial();
     }
-
   }, [componenteCurricularInicial, listaComponenteCurricular]);
 
   const onChangeBimestre = async valor => {

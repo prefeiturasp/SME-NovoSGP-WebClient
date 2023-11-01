@@ -1,44 +1,44 @@
-import React, { useMemo, useCallback } from 'react';
-import shortid from 'shortid';
 import t from 'prop-types';
+import { useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import shortid from 'shortid';
 
 // Ant
 import { Tooltip } from 'antd';
 
 // Redux
 import { store } from '@/core/redux';
-import { salvarDadosAulaFrequencia } from '~/redux/modulos/calendarioProfessor/actions';
 import { useSelector } from 'react-redux';
+import { salvarDadosAulaFrequencia } from '~/redux/modulos/calendarioProfessor/actions';
 
 // Estilos
 import {
+  ContainerDetalhesIcon,
   DiaCompletoWrapper,
+  Linha,
   LinhaEvento,
   Pilula,
-  Linha,
-  ContainerDetalhesIcon,
 } from './styles';
 
 // Componentes
-import { Loader, Base } from '~/componentes';
+import { Base, Loader } from '~/componentes';
 
 // Componentes internos
 import AlertaDentroPeriodo from './componentes/AlertaPeriodoEncerrado';
-import LabelAulaEvento from './componentes/LabelAulaEvento';
-import BotoesAuxiliares from './componentes/BotoesAuxiliares';
-import SemEventos from './componentes/SemEventos';
 import BotaoAvaliacoes from './componentes/BotaoAvaliacoes';
 import BotaoFrequencia from './componentes/BotaoFrequencia';
+import BotoesAuxiliares from './componentes/BotoesAuxiliares';
 import DataInicioFim from './componentes/DataInicioFim';
+import LabelAulaEvento from './componentes/LabelAulaEvento';
+import SemEventos from './componentes/SemEventos';
 
 // Utils
 import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 
 // DTOs
-import RotasDTO from '~/dtos/rotasDto';
-import { IconeDiaComPendencia } from '../../styles';
+import { ROUTES } from '@/core/enum/routes';
 import tipoPendenciaAula from '~/dtos/tipoPendenciaAula';
+import { IconeDiaComPendencia } from '../../styles';
 
 function DiaCompleto({
   dia,
@@ -68,7 +68,7 @@ function DiaCompleto({
   const onClickNovaAulaHandler = useCallback(
     diaSelecionado => {
       navigate(
-        `${RotasDTO.CADASTRO_DE_AULA}/novo/${tipoCalendarioId}/${dadosDia.dados.somenteAulaReposicao}?diaAula=${diaSelecionado}`
+        `${ROUTES.CADASTRO_DE_AULA}/novo/${tipoCalendarioId}/${dadosDia.dados.somenteAulaReposicao}?diaAula=${diaSelecionado}`
       );
     },
 
@@ -77,7 +77,7 @@ function DiaCompleto({
 
   const onClickNovaAvaliacaoHandler = useCallback(diaSelecionado => {
     navigate(
-      `${RotasDTO.CADASTRO_DE_AVALIACAO}/novo?diaAvaliacao=${diaSelecionado}`
+      `${ROUTES.CADASTRO_DE_AVALIACAO}/novo?diaAvaliacao=${diaSelecionado}`
     );
   }, []);
 
@@ -92,7 +92,7 @@ function DiaCompleto({
         )
       );
       navigate({
-        pathname: `${RotasDTO.FREQUENCIA_PLANO_AULA}`,
+        pathname: `${ROUTES.FREQUENCIA_PLANO_AULA}`,
         state: { rotaOrigem: location?.pathname },
       });
     },
@@ -103,7 +103,7 @@ function DiaCompleto({
   const onClickAula = useCallback(item => {
     if (item.ehAula)
       navigate(
-        `${RotasDTO.CADASTRO_DE_AULA}/editar/${item.aulaId}/${dadosDia.dados.somenteAulaReposicao}`
+        `${ROUTES.CADASTRO_DE_AULA}/editar/${item.aulaId}/${dadosDia.dados.somenteAulaReposicao}`
       );
   }, []);
 

@@ -6,7 +6,7 @@ import {
   SGP_BUTTON_ATRIBUICAO_RESPONSAVEL,
   SGP_BUTTON_CANCELAR_ATRIBUICAO_RESPONSAVEL,
 } from '~/constantes/ids/button';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import {
   limparDadosParecer,
   setDadosAtribuicaoResponsavel,
@@ -82,7 +82,7 @@ const SecaoParecerResponsavel = () => {
     ).catch(e => erros(e));
 
     if (resposta?.data) {
-      navigate(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(ROUTES.RELATORIO_AEE_PLANO);
       sucesso('Atribuição do responsável realizada com sucesso');
     }
   };
@@ -132,7 +132,7 @@ const SecaoParecerResponsavel = () => {
       dispatch(limparDadosParecer());
       dispatch(setParecerEmEdicao(false));
       dispatch(setPlanoAEELimparDados());
-      navigate(RotasDto.RELATORIO_AEE_PLANO);
+      navigate(ROUTES.RELATORIO_AEE_PLANO);
     }
   };
 

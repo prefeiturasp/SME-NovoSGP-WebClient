@@ -1,6 +1,7 @@
+import { ROUTES } from '@/core/enum/routes';
 import { Tabs } from 'antd';
 import { Form, Formik } from 'formik';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -35,22 +36,21 @@ import {
 } from '~/constantes/ids/tabs';
 import { URL_HOME } from '~/constantes/url';
 import notasConceitos from '~/dtos/notasConceitos';
-import RotasDto from '~/dtos/rotasDto';
 import {
   setExpandirLinha,
   setModoEdicaoGeral,
   setModoEdicaoGeralNotaFinal,
 } from '~/redux/modulos/notasConceitos/actions';
-import { confirmar, erros, sucesso } from '~/servicos/alertas';
-import api from '~/servicos/api';
 import ServicoPeriodoFechamento from '~/servicos/Paginas/Calendario/ServicoPeriodoFechamento';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import ServicoNotas from '~/servicos/ServicoNotas';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { confirmar, erros, sucesso } from '~/servicos/alertas';
+import api from '~/servicos/api';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import { removerTagsHtml } from '~/utils';
 import BotoesAcoessNotasConceitos from './botoesAcoes';
 import { Container, ContainerAuditoria } from './notas.css';
-import { removerTagsHtml } from '~/utils';
 
 const { TabPane } = Tabs;
 
@@ -65,7 +65,7 @@ const Notas = () => {
   );
   const { ehProfessorCj } = usuario;
 
-  const permissoesTela = usuario.permissoes[RotasDto.FREQUENCIA_PLANO_AULA];
+  const permissoesTela = usuario.permissoes[ROUTES.FREQUENCIA_PLANO_AULA];
 
   const [tituloNotasConceitos, setTituloNotasConceitos] = useState('');
   const [listaDisciplinas, setListaDisciplinas] = useState([]);

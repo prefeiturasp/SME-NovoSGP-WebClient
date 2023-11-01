@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'antd';
+import { useEffect, useState } from 'react';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Button from '~/componentes/button';
 import CampoTexto from '~/componentes/campoTexto';
@@ -11,13 +11,13 @@ import { URL_HOME } from '~/constantes/url';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 
+import { ROUTES } from '@/core/enum/routes';
 import { store } from '@/core/redux';
-import RotasDto from '~/dtos/rotasDto';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
-import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { useNavigate } from 'react-router-dom';
+import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
 const TipoFeriadoLista = () => {
   const navigate = useNavigate();
@@ -33,7 +33,7 @@ const TipoFeriadoLista = () => {
     useState(0);
 
   const { usuario } = store.getState();
-  const permissoesTela = usuario.permissoes[RotasDto.TIPO_FERIADO];
+  const permissoesTela = usuario.permissoes[ROUTES.TIPO_FERIADO];
 
   const listaDropdownAbrangencia = [
     { id: 1, nome: 'Nacional' },

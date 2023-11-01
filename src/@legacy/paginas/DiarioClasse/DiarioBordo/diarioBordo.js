@@ -1,6 +1,8 @@
+import { ROUTES } from '@/core/enum/routes';
 import { Form, Formik } from 'formik';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import {
   Auditoria,
@@ -10,32 +12,30 @@ import {
   PainelCollapse,
 } from '~/componentes';
 import AlertaPermiteSomenteTurmaInfantil from '~/componentes-sgp/AlertaPermiteSomenteTurmaInfantil/alertaPermiteSomenteTurmaInfantil';
-import Cabecalho from '~/componentes-sgp/cabecalho';
 import AlertaPeriodoEncerrado from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/AlertaPeriodoEncerrado';
 import DadosMuralGoogleSalaAula from '~/componentes-sgp/MuralGoogleSalaAula/dadosMuralGoogleSalaAula';
-import ObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/observacoesUsuario';
 import ServicoObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/ServicoObservacoesUsuario';
+import ObservacoesUsuario from '~/componentes-sgp/ObservacoesUsuario/observacoesUsuario';
+import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
 import Card from '~/componentes/card';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import ModalMultiLinhas from '~/componentes/modalMultiLinhas';
 import SelectComponent from '~/componentes/select';
-import RotasDto from '~/dtos/rotasDto';
 import {
   limparDadosObservacoesUsuario,
   setDadosObservacoesUsuario,
 } from '~/redux/modulos/observacoesUsuario/actions';
 import { setBreadcrumbManual } from '~/servicos';
-import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import ServicoDiarioBordo from '~/servicos/Paginas/DiarioClasse/ServicoDiarioBordo';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
-import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { confirmar, erros, sucesso } from '~/servicos/alertas';
+import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
+import { removerTagsHtml } from '~/utils';
 import BotoesAcoesDiarioBordo from './botoesAcoesDiarioBordo';
 import ModalSelecionarAula from './modalSelecionarAula';
-import { removerTagsHtml } from '~/utils';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const DiarioBordo = () => {
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ const DiarioBordo = () => {
 
   const usuario = useSelector(state => state.usuario);
   const { turmaSelecionada } = usuario;
-  const permissoesTela = usuario.permissoes[RotasDto.DIARIO_BORDO];
+  const permissoesTela = usuario.permissoes[ROUTES.DIARIO_BORDO];
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
   );
@@ -319,7 +319,7 @@ const DiarioBordo = () => {
     }
     setDataSelecionada('');
     setComponenteCurricularSelecionado(valor);
-    
+
     const valorCodDisciplinaPai = listaComponenteCurriculares.find(
       item => String(item.codigoComponenteCurricular) === valor
     );
@@ -349,7 +349,7 @@ const DiarioBordo = () => {
 
   useEffect(() => {
     if (aulaId) {
-      setBreadcrumbManual(location.pathname, 'Alterar', RotasDto.DIARIO_BORDO);
+      setBreadcrumbManual(location.pathname, 'Alterar', ROUTES.DIARIO_BORDO);
     }
   }, [location, aulaId]);
 
@@ -382,7 +382,7 @@ const DiarioBordo = () => {
         resetarTela();
       }
       if (voltarParaListagem) {
-        navigate(RotasDto.DIARIO_BORDO);
+        navigate(ROUTES.DIARIO_BORDO);
       }
       salvouComSucesso = true;
     }
@@ -460,7 +460,7 @@ const DiarioBordo = () => {
       }
     },
 
-    [obterAulasDataSelecionada,componenteCurricularSelecionado]
+    [obterAulasDataSelecionada, componenteCurricularSelecionado]
   );
 
   const onChangeData = async (data, form) => {
@@ -588,7 +588,7 @@ const DiarioBordo = () => {
     }
 
     if (validouSalvarDiario && validouSalvarObservacao) {
-      navigate(RotasDto.DIARIO_BORDO);
+      navigate(ROUTES.DIARIO_BORDO);
     }
   };
 
@@ -625,7 +625,7 @@ const DiarioBordo = () => {
       });
       if (resultado && resultado.status === 200) {
         sucesso('Diário de bordo excluído com sucesso');
-        navigate(`${RotasDto.DIARIO_BORDO}/novo`);
+        navigate(`${ROUTES.DIARIO_BORDO}/novo`);
         setDataSelecionada();
       }
       setCarregandoGeral(false);

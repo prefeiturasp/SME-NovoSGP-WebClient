@@ -17,7 +17,7 @@ import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPad
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import LocalizadorPadrao from '~/componentes/LocalizadorPadrao';
 import { URL_HOME } from '~/constantes';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import {
   AbrangenciaServico,
   erros,
@@ -59,7 +59,7 @@ const RegistroItineranciaAEELista = () => {
 
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
-    usuario.permissoes[RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA];
+    usuario.permissoes[ROUTES.RELATORIO_AEE_REGISTRO_ITINERANCIA];
   const somenteConsulta = useSelector(
     store => store.navegacao
   )?.somenteConsulta;
@@ -141,7 +141,7 @@ const RegistroItineranciaAEELista = () => {
   };
 
   const onClickNovo = () => {
-    navigate(`${RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA}/novo`);
+    navigate(`${ROUTES.RELATORIO_AEE_REGISTRO_ITINERANCIA}/novo`);
   };
 
   const limparFiltrosSelecionados = () => {
@@ -409,9 +409,7 @@ const RegistroItineranciaAEELista = () => {
   };
 
   const onClickEditar = item => {
-    navigate(
-      `${RotasDto.RELATORIO_AEE_REGISTRO_ITINERANCIA}/editar/${item.id}`
-    );
+    navigate(`${ROUTES.RELATORIO_AEE_REGISTRO_ITINERANCIA}/editar/${item.id}`);
   };
 
   const desabilitarData = current => {

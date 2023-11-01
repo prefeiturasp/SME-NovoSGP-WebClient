@@ -1,31 +1,31 @@
 /* eslint-disable react/prop-types */
+import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
+import { ROUTES } from '@/core/enum/routes';
 import { Tooltip } from 'antd';
-import React, { useState } from 'react';
 import * as moment from 'moment';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Colors, Loader, MarcadorTriangulo } from '~/componentes';
 import Ordenacao from '~/componentes-sgp/Ordenacao/ordenacao';
+import Alert from '~/componentes/alert';
+import Button from '~/componentes/button';
+import situacaoFechamentoDto from '~/dtos/situacaoFechamentoDto';
+import ListaoBotaoAnotacao from '~/paginas/DiarioClasse/Listao/operacoes/listaoTabs/tabFrequencia/lista/componentes/listaoBotaoAnotacao';
+import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
+import { erros, sucesso } from '~/servicos/alertas';
+import { formatarFrequencia } from '~/utils';
+import ModalAnotacaoAluno from '../../FechamentoModalAnotacaoAluno/modal-anotacao-aluno';
 import FechamentoRegencia from '../fechamanto-regencia/fechamento-regencia';
 import BotaoExpandir from './botao-expandir';
 import {
+  DataFechamentoProcessado,
   Info,
   MarcadorAulas,
   Marcadores,
-  TabelaFechamento,
   SituacaoProcessadoComPendencias,
-  DataFechamentoProcessado,
+  TabelaFechamento,
 } from './fechamento-bimestre-lista.css';
-import { Colors, MarcadorTriangulo, Loader } from '~/componentes';
-import Button from '~/componentes/button';
-import situacaoFechamentoDto from '~/dtos/situacaoFechamentoDto';
-import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
-import { erros, sucesso } from '~/servicos/alertas';
-import RotasDto from '~/dtos/rotasDto';
-import ModalAnotacaoAluno from '../../FechamentoModalAnotacaoAluno/modal-anotacao-aluno';
-import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
-import Alert from '~/componentes/alert';
-import ListaoBotaoAnotacao from '~/paginas/DiarioClasse/Listao/operacoes/listaoTabs/tabFrequencia/lista/componentes/listaoBotaoAnotacao';
-import { formatarFrequencia } from '~/utils';
-import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 const FechamentoBimestreLista = props => {
   const {
@@ -106,7 +106,7 @@ const FechamentoBimestreLista = props => {
   const onClickVerPendecias = async () => {
     const { bimestre } = dados;
     navigate({
-      pathname: `${RotasDto.PENDENCIAS_FECHAMENTO}/${bimestre}/${codigoComponenteCurricular}`,
+      pathname: `${ROUTES.PENDENCIAS_FECHAMENTO}/${bimestre}/${codigoComponenteCurricular}`,
       state: { rotaOrigem: location.pathname },
     });
   };

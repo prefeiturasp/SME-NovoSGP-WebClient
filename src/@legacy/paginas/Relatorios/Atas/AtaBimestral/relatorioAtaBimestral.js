@@ -1,3 +1,4 @@
+import { ROUTES } from '@/core/enum/routes';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +18,7 @@ import {
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 
 import { OPCAO_TODOS, URL_HOME } from '~/constantes';
-import { ModalidadeDTO, RotasDto } from '~/dtos';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import {
   AbrangenciaServico,
   erros,
@@ -61,10 +62,13 @@ const RelatorioAtaBimestral = () => {
   const [modoEdicao, setModoEdicao] = useState(false);
 
   const usuarioStore = useSelector(store => store.usuario);
-  const permissoesTela = usuarioStore.permissoes[RotasDto.ATA_BIMESTRAL];
+  const permissoesTela = usuarioStore.permissoes[ROUTES.ATA_BIMESTRAL];
 
-  const ehModalidadeInfantil =
-    String(modalidadeId) === String(ModalidadeDTO.INFANTIL);
+  const ehModalidadeInfantil = Number(modalidadeId) === ModalidadeEnum.INFANTIL;
+
+  const ehModalidadeEjaOuCelp =
+    Number(modalidadeId) === ModalidadeEnum.EJA ||
+    Number(modalidadeId) === ModalidadeEnum.CELP;
 
   const onClickCancelar = () => {
     setConsideraHistorico(false);
@@ -339,17 +343,20 @@ const RelatorioAtaBimestral = () => {
   );
 
   useEffect(() => {
-    if (
-      modalidadeId &&
-      anoLetivo &&
-      String(modalidadeId) === String(ModalidadeDTO.EJA)
-    ) {
+    if (modalidadeId && anoLetivo && ehModalidadeEjaOuCelp) {
       obterSemestres(modalidadeId, anoLetivo, ueCodigo);
       return;
     }
     setSemestre();
     setListaSemestres([]);
-  }, [obterAnosLetivos, obterSemestres, modalidadeId, ueCodigo, anoLetivo]);
+  }, [
+    obterAnosLetivos,
+    obterSemestres,
+    modalidadeId,
+    ueCodigo,
+    anoLetivo,
+    ehModalidadeEjaOuCelp,
+  ]);
 
   const onChangeSemestre = valor => {
     setSemestre(valor);
@@ -367,10 +374,13 @@ const RelatorioAtaBimestral = () => {
           anoLetivo,
           consideraHistorico,
           false,
-          Number(modalidadeSelecionada) === ModalidadeDTO.ENSINO_MEDIO ? [] : [1, 2]
+          Number(modalidadeSelecionada ? [] : [1, 2])
         )
           .catch(e => erros(e))
-          .finally(() => setCarregandoTurmas(false));
+          .finally(() => {
+            setCarregandoTurmas(false);
+          });
+
         if (retorno?.data?.length) {
           const lista = retorno.data.map(item => ({
             desc: item.nome,
@@ -424,18 +434,22 @@ const RelatorioAtaBimestral = () => {
   );
 
   useEffect(() => {
-    const temModalidadeEja = Number(modalidadeId) === ModalidadeDTO.EJA;
-    if (modalidadeId && ueCodigo && !temModalidadeEja) {
+    if (modalidadeId && ueCodigo && !ehModalidadeEjaOuCelp) {
       obterTurmas(modalidadeId, ueCodigo);
     }
-  }, [modalidadeId, ueCodigo, obterTurmasEJA, obterTurmas]);
+  }, [
+    modalidadeId,
+    ueCodigo,
+    obterTurmasEJA,
+    obterTurmas,
+    ehModalidadeEjaOuCelp,
+  ]);
 
   useEffect(() => {
-    const temModalidadeEja = Number(modalidadeId) === ModalidadeDTO.EJA;
     if (
       modalidadeId &&
       ueCodigo &&
-      temModalidadeEja &&
+      ehModalidadeEjaOuCelp &&
       Object.keys(listaTurmasPorSemestre)?.length &&
       semestre
     ) {
@@ -447,6 +461,7 @@ const RelatorioAtaBimestral = () => {
     semestre,
     ueCodigo,
     obterTurmasEJA,
+    ehModalidadeEjaOuCelp,
   ]);
 
   const onChangeTurma = valor => {
@@ -499,7 +514,7 @@ const RelatorioAtaBimestral = () => {
 
     let desabilitado = desabilitar;
 
-    if (Number(modalidadeId) === Number(ModalidadeDTO.EJA)) {
+    if (ehModalidadeEjaOuCelp) {
       desabilitado = !semestre || desabilitar;
     }
     setDesabilitarBtnGerar(desabilitado);
@@ -511,6 +526,7 @@ const RelatorioAtaBimestral = () => {
     turmaCodigo,
     semestre,
     bimestre,
+    ehModalidadeEjaOuCelp,
   ]);
 
   const onClickGerar = async () => {
@@ -555,7 +571,7 @@ const RelatorioAtaBimestral = () => {
           onClickCancelar={onClickCancelar}
           onClickGerar={onClickGerar}
           desabilitarBtnGerar={
-            String(modalidadeId) === String(ModalidadeDTO.INFANTIL) ||
+            Number(modalidadeId) === ModalidadeEnum.INFANTIL ||
             desabilitarBtnGerar ||
             !permissoesTela?.podeConsultar
           }
@@ -664,7 +680,8 @@ const RelatorioAtaBimestral = () => {
                   placeholder="Selecione o semestre"
                   disabled={
                     !modalidadeId ||
-                    Number(modalidadeId) !== ModalidadeDTO.EJA ||
+                    (Number(modalidadeId) !== ModalidadeEnum.EJA &&
+                      Number(modalidadeId) !== ModalidadeEnum.CELP) ||
                     listaSemestres?.length === 1 ||
                     !listaSemestres?.length ||
                     !permissoesTela?.podeConsultar

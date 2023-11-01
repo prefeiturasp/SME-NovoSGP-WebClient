@@ -3,7 +3,7 @@ import React, { useEffect, useCallback, useState } from 'react';
 
 import * as moment from 'moment';
 import { Button, Colors, DataTable, ListaPaginada } from '~/componentes';
-import { RotasDto } from '~/dtos';
+import { ROUTES } from '@/core/enum/routes';
 import { erros } from '~/servicos';
 import { SGP_BUTTON_DOWNLOAD_ARQUIVO } from '~/constantes/ids/button';
 import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
@@ -155,7 +155,7 @@ const DocPlanosTrabalhoListaPaginada = props => {
 
     if (executarClick) {
       navigate(
-        `${RotasDto.DOCUMENTOS_PLANOS_TRABALHO}/editar/${linha.documentoId}`
+        `${ROUTES.DOCUMENTOS_PLANOS_TRABALHO}/editar/${linha.documentoId}`
       );
     }
   };

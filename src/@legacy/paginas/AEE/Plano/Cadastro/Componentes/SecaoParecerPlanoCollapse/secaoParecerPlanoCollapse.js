@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CardCollapse } from '~/componentes';
-import { RotasDto, situacaoPlanoAEE } from '~/dtos';
+import { situacaoPlanoAEE } from '~/dtos';
 import {
   setAtualizarDados,
   setDadosParecer,
@@ -15,12 +15,13 @@ import SecaoParecerResponsavel from '../SecaoParecerResponsavel/secaoParecerResp
 import SecaoParecerCoordenacao from '../SecaoParecerCoordenacao/secaoParecerCoordenacao';
 import { SGP_COLLAPSE_PARECER_PLANO_AEE } from '~/constantes/ids/collapse';
 import { useParams } from 'react-router-dom';
+import { ROUTES } from '@/core/enum/routes';
 
 const SecaoParecerPlanoCollapse = () => {
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
   const dadosParecer = useSelector(store => store.planoAEE.dadosParecer);
   const usuario = useSelector(store => store.usuario);
-  const permissoesTela = usuario.permissoes[RotasDto.RELATORIO_AEE_PLANO];
+  const permissoesTela = usuario.permissoes[ROUTES.RELATORIO_AEE_PLANO];
   const atualizarDados = useSelector(store => store.planoAEE.atualizarDados);
 
   const dispatch = useDispatch();
