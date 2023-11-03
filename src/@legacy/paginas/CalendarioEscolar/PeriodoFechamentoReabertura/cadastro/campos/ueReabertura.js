@@ -7,12 +7,8 @@ import { AbrangenciaServico, erros, ServicoCalendarios } from '~/servicos';
 import FechaReabCadastroContext from '../fechaReabCadastroContext';
 
 const UeReabertura = ({ form, onChangeCampos }) => {
-  const {
-    setListaUes,
-    listaUes,
-    desabilitarCampos,
-    calendarioSelecionado,
-  } = useContext(FechaReabCadastroContext);
+  const { setListaUes, listaUes, desabilitarCampos, calendarioSelecionado } =
+    useContext(FechaReabCadastroContext);
 
   const paramsRota = useParams();
 
@@ -66,7 +62,6 @@ const UeReabertura = ({ form, onChangeCampos }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
-
   }, [dreCodigo, calendarioSelecionado, paramsRota]);
 
   useEffect(() => {
@@ -79,7 +74,6 @@ const UeReabertura = ({ form, onChangeCampos }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
-
   }, [dreCodigo, calendarioSelecionado, obterUes]);
 
   useEffect(() => {
@@ -87,7 +81,6 @@ const UeReabertura = ({ form, onChangeCampos }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
-
   }, [calendarioSelecionado]);
 
   return (

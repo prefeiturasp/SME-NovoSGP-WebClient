@@ -146,7 +146,7 @@ const Filtro = memo(({ onFiltrar }) => {
               />
             </Grid>
             <Grid cols={5}>
-              <DreDropDown form={form} onChange={valor => onChangeDre(valor)}/>
+              <DreDropDown form={form} onChange={valor => onChangeDre(valor)} />
             </Grid>
             <Grid cols={5}>
               <UeDropDown

@@ -20,7 +20,7 @@ const CampoTextoBusca = ({
   onKeyDown,
   type,
   minValue,
-  maxValue
+  maxValue,
 }) => {
   return (
     <>

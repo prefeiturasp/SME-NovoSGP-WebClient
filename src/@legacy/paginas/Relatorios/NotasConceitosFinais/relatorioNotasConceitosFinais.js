@@ -142,7 +142,8 @@ const RelatorioNotasConceitosFinais = () => {
         setCarregandoUes(true);
 
         const dataAtual = new Date();
-        const consideraHistorico = anoLetivo != dataAtual.getFullYear();
+        const consideraHistorico =
+          anoLetivo && Number(anoLetivo) !== dataAtual.getFullYear();
 
         const retorno = await ServicoFiltroRelatorio.obterUes(
           dre,

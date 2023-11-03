@@ -72,8 +72,9 @@ const RegistrosAnterioresConteudo = props => {
 
   useEffect(() => {
     const temDadosAlunos = Object.keys(dadosAlunoObjectCard).length;
-    const temDadosRegistros = Object.keys(dadosPrincipaisRegistroIndividual)
-      .length;
+    const temDadosRegistros = Object.keys(
+      dadosPrincipaisRegistroIndividual
+    ).length;
 
     if (
       temDadosAlunos &&
@@ -127,14 +128,12 @@ const RegistrosAnterioresConteudo = props => {
 
     setDataInicio(dataInicioSelecionada);
     dispatch(setDataInicioImpressaoRegistrosAnteriores(dataInicioSelecionada));
-
   }, [dataFim, turmaSelecionada]);
 
   useEffect(() => {
     if (!dataInicio && dataFim && !periodoInicio && !periodoFim) {
       escolherData();
     }
-
   }, [dataInicio, dataFim, escolherData]);
 
   useEffect(() => {
@@ -177,7 +176,6 @@ const RegistrosAnterioresConteudo = props => {
       setDataFim(dataFimSelecionada);
       dispatch(setDataFimImpressaoRegistrosAnteriores(dataFimSelecionada));
     }
-
   }, [periodoInicio, periodoFim]);
 
   const onChangePaginacao = async pagina => {

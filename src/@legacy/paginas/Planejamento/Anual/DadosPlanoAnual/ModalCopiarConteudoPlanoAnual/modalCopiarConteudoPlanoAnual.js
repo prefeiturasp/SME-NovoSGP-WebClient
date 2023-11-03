@@ -27,15 +27,12 @@ const ModalCopiarConteudoPlanoAnual = () => {
   );
 
   const [refForm, setRefForm] = useState({});
-  const [
-    listaTurmasParaCopiarAgrupada,
-    setListaTurmasParaCopiarAgrupada,
-  ] = useState([]);
+  const [listaTurmasParaCopiarAgrupada, setListaTurmasParaCopiarAgrupada] =
+    useState([]);
   const [listaBimestres, setListaBimestres] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
-  const [confirmacaoTurmasComPlano, setConfirmacaoTurmasComPlano] = useState(
-    ''
-  );
+  const [confirmacaoTurmasComPlano, setConfirmacaoTurmasComPlano] =
+    useState('');
 
   const obterPeriodosEscolaresParaCopia = useCallback(() => {
     ServicoPlanoAnual.obterPeriodosEscolaresParaCopia(planejamentoAnualId)

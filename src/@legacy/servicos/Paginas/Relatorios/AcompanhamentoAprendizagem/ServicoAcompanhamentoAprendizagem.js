@@ -326,8 +326,10 @@ class ServicoAcompanhamentoAprendizagem {
   };
 
   validarInconsistencias = (turmaId, semestre) => {
-    return api.get(`/v1/acompanhamento/alunos/validar-percurso/turma/${turmaId}/semestre/${semestre}`)
-  }
+    return api.get(
+      `/v1/acompanhamento/alunos/validar-percurso/turma/${turmaId}/semestre/${semestre}`
+    );
+  };
 }
 
 export default new ServicoAcompanhamentoAprendizagem();

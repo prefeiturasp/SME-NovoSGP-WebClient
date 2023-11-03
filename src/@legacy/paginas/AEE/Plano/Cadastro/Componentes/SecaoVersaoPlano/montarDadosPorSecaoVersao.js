@@ -6,14 +6,8 @@ import QuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/questio
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
 const MontarDadosPorSecaoVersao = props => {
-  const {
-    versao,
-    dados,
-    auditoria,
-    questionarioId,
-    exibir,
-    turmaCodigo,
-  } = props;
+  const { versao, dados, auditoria, questionarioId, exibir, turmaCodigo } =
+    props;
   const [dadosQuestionarioAtual, setDadosQuestionarioAtual] = useState([]);
 
   const dadosCollapseLocalizarEstudante = useSelector(

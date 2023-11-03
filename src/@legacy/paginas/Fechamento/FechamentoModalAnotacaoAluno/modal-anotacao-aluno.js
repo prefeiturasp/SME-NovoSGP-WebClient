@@ -36,9 +36,7 @@ const ModalAnotacaoAluno = props => {
   const [valoresIniciais, setValoresIniciais] = useState({ anotacao: '' });
   const [validacoes] = useState(
     Yup.object({
-      anotacao: Yup.string()
-        .nullable()
-        .required('Anotação obrigatória'),
+      anotacao: Yup.string().nullable().required('Anotação obrigatória'),
     })
   );
 
@@ -88,7 +86,6 @@ const ModalAnotacaoAluno = props => {
     if (dadosAlunoSelecionado) {
       obterAnotacaoAluno(dadosAlunoSelecionado);
     }
-
   }, [dadosAlunoSelecionado]);
 
   const validaAntesDoSubmit = form => {

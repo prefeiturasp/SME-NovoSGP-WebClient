@@ -25,16 +25,17 @@ const GraficoTotalAusenciaCompensada = ({
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardFrequencia.obterTotalAusenciasCompensadas(
-      anoLetivo,
-      dreId,
-      ueId,
-      modalidade,
-      semestre,
-      bimestre
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardFrequencia.obterTotalAusenciasCompensadas(
+        anoLetivo,
+        dreId,
+        ueId,
+        modalidade,
+        semestre,
+        bimestre
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     let dadosRetorno = [];
     if (retorno?.data) {

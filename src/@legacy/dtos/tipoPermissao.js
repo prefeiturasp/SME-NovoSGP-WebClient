@@ -2,7 +2,7 @@ const tipoPermissao = {
   podeConsultar: 'podeConsultar',
   podeIncluir: 'podeIncluir',
   podeExcluir: 'podeExcluir',
-  podeAlterar: 'podeAlterar'
-}
+  podeAlterar: 'podeAlterar',
+};
 
 export default tipoPermissao;

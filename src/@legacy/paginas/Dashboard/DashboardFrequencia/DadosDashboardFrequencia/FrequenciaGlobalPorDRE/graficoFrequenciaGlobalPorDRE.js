@@ -28,14 +28,15 @@ const GraficoFrequenciaGlobalPorDRE = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardFrequencia.obterFrequenciaGlobalPorDRE(
-      anoLetivo,
-      modalidade,
-      anoEscolar === OPCAO_TODOS ? '' : anoEscolar,
-      semestre
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardFrequencia.obterFrequenciaGlobalPorDRE(
+        anoLetivo,
+        modalidade,
+        anoEscolar === OPCAO_TODOS ? '' : anoEscolar,
+        semestre
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno?.data?.length) {
       setDadosGrafico(retorno.data);

@@ -35,8 +35,9 @@ class ServicoFiltro {
   }) => {
     return api
       .get(
-        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-          0}`
+        `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+          modalidadeSelecionada || 0
+        }`
       )
       .then(resposta => resposta);
   };
@@ -53,8 +54,9 @@ class ServicoFiltro {
 
     return api
       .get(
-        `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-          0}${periodoQuery}`
+        `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+          modalidadeSelecionada || 0
+        }${periodoQuery}`
       )
       .then(resposta => resposta);
   };
@@ -72,8 +74,9 @@ class ServicoFiltro {
 
     return api
       .get(
-        `v1/abrangencias/${consideraHistorico}/dres/${dreSelecionada}/ues?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-          0}${periodoQuery}`
+        `v1/abrangencias/${consideraHistorico}/dres/${dreSelecionada}/ues?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+          modalidadeSelecionada || 0
+        }${periodoQuery}`
       )
       .then(resposta => resposta);
   };
@@ -91,8 +94,9 @@ class ServicoFiltro {
 
     return api
       .get(
-        `v1/abrangencias/${consideraHistorico}/dres/ues/${unidadeEscolarSelecionada}/turmas?anoLetivo=${anoLetivoSelecionado}&modalidade=${modalidadeSelecionada ||
-          0}${periodoQuery}&consideraNovosAnosInfantil=true`
+        `v1/abrangencias/${consideraHistorico}/dres/ues/${unidadeEscolarSelecionada}/turmas?anoLetivo=${anoLetivoSelecionado}&modalidade=${
+          modalidadeSelecionada || 0
+        }${periodoQuery}&consideraNovosAnosInfantil=true`
       )
       .then(resposta => resposta);
   };

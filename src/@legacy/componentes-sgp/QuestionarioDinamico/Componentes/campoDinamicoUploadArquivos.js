@@ -52,9 +52,9 @@ const CampoDinamicoUploadArquivos = props => {
       return true;
     }
     setExibirLoader(true);
-    const resposta = await funcaoRemoverArquivoCampoUpload(
-      codigoArquivo
-    ).catch(e => erros(e));
+    const resposta = await funcaoRemoverArquivoCampoUpload(codigoArquivo).catch(
+      e => erros(e)
+    );
 
     setExibirLoader(false);
     if (resposta && resposta.status === 200) {

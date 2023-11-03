@@ -4,7 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import ReactGA from 'react-ga';
 import { PersistGate } from 'redux-persist/integration/react';
 import { obterTrackingID } from '~/servicos/variaveis';
-import Routes from 'routes';
+import Routes from './routes';
 import GlobalStyle from '~/estilos/global';
 import { store, persistor } from '@/core/redux';
 import { Deslogar } from '~/redux/modulos/usuario/actions';

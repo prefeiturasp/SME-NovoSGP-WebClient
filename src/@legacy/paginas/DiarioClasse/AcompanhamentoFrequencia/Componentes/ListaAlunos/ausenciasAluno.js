@@ -12,17 +12,11 @@ import { BtnVisualizarAnotacao, TabelaColunasFixas } from './listaAlunos.css';
 import { Loader } from '~/componentes';
 
 const AusenciasAluno = props => {
-  const {
-    indexLinha,
-    componenteCurricularId,
-    codigoAluno,
-    turmaId,
-    bimestre,
-  } = props;
+  const { indexLinha, componenteCurricularId, codigoAluno, turmaId, bimestre } =
+    props;
   const [dados, setDados] = useState([]);
-  const [carregandoListaAusencias, setCarregandoListaAusencias] = useState(
-    false
-  );
+  const [carregandoListaAusencias, setCarregandoListaAusencias] =
+    useState(false);
   const [semDados, setSemDados] = useState(false);
 
   const dispatch = useDispatch();
@@ -42,15 +36,16 @@ const AusenciasAluno = props => {
         codigoAluno === frequenciaAlunoCodigo
       ) {
         setCarregandoListaAusencias(true);
-        const retorno = await ServicoAcompanhamentoFrequencia.obterJustificativaAcompanhamentoFrequencia(
-          turmaId,
-          componenteCurricularId,
-          codigoAluno,
-          bimestre
-        ).catch(e => {
-          erros(e);
-          setSemDados(true);
-        });
+        const retorno =
+          await ServicoAcompanhamentoFrequencia.obterJustificativaAcompanhamentoFrequencia(
+            turmaId,
+            componenteCurricularId,
+            codigoAluno,
+            bimestre
+          ).catch(e => {
+            erros(e);
+            setSemDados(true);
+          });
 
         if (retorno?.data) {
           setSemDados(false);
@@ -115,7 +110,7 @@ const AusenciasAluno = props => {
                         <tbody className="tabela-dois-tbody">
                           {dados.map((item, index) => {
                             return (
-                              <tr id={index}>
+                              <tr key={index} id={index}>
                                 <td className="col-valor-linha-tres">
                                   {moment(item.dataAnotacao).format('L')}
                                 </td>

@@ -1,8 +1,8 @@
 import RelatorioDinamicoNAAPA from '@/@legacy/paginas/NAAPA/RelatorioDinamico/relatorioDinamicoNAAPA';
 import RelatorioOcorrencias from '@/@legacy/paginas/Relatorios/Gestao/Ocorrencias/relatorioOcorrencias';
 import RelatorioPAP from '@/@legacy/paginas/Relatorios/PAP/RelatorioPAP/relatorioPAP';
-import { ROUTES } from 'core/enum/routes';
-import { store } from 'core/redux';
+import { ROUTES } from '@/core/enum/routes';
+import { store } from '@/core/redux';
 import RotasTipo from '~/constantes/rotasTipo';
 import EncaminhamentoAEECadastro from '~/paginas/AEE/Encaminhamento/Cadastro/encaminhamentoAEECadastro';
 import EncaminhamentoAEELista from '~/paginas/AEE/Encaminhamento/Lista/encaminhamentoAEELista';

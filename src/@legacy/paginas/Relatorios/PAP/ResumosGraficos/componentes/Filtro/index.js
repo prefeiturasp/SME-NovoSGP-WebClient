@@ -6,7 +6,12 @@ import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 
 // Componentes
-import { Grid, SelectComponent, Loader,CheckboxComponent } from '~/componentes';
+import {
+  Grid,
+  SelectComponent,
+  Loader,
+  CheckboxComponent,
+} from '~/componentes';
 import PeriodosDropDown from './componentes/PeriodosDropDown';
 import { DreDropDown, UeDropDown } from '~/componentes-sgp';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
@@ -255,12 +260,11 @@ function Filtro({ onFiltrar }) {
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
-    const anosLetivo = await ResumosGraficosPAPServico.ListarAnosLetivos().catch(
-      e => {
+    const anosLetivo =
+      await ResumosGraficosPAPServico.ListarAnosLetivos().catch(e => {
         erros(e);
         setCarregandoAnosLetivos(false);
-      }
-    );
+      });
 
     const valorAnos = anosLetivo?.data.map(item => ({
       desc: item.ano,
@@ -293,7 +297,7 @@ function Filtro({ onFiltrar }) {
     setConsideraHistorico(e.target.checked);
   };
   const limparFiltrosSelecionados = () => {
-    setDreId(undefined)
+    setDreId(undefined);
     setUeId(undefined);
     refForm.setFieldValue('ueId', undefined);
     refForm.setFieldValue('dreId', undefined);
@@ -312,8 +316,8 @@ function Filtro({ onFiltrar }) {
       {form => (
         <Form className="col-md-12 mb-4">
           <Linha className="row mb-2">
-          <Grid cols={2}>
-            <div className="col-sm-12 mb-4">
+            <Grid cols={2}>
+              <div className="col-sm-12 mb-4">
                 <CheckboxComponent
                   id={SGP_CHECKBOX_EXIBIR_HISTORICO}
                   label="Exibir histórico?"
@@ -347,7 +351,7 @@ function Filtro({ onFiltrar }) {
             </Grid>
             <Grid cols={5}>
               <UeDropDown
-                form={form} 
+                form={form}
                 consideraHistorico={consideraHistorico}
                 dreId={form.values.dreId}
                 onChange={ue => aoTrocarUeId(ue)}

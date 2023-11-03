@@ -30,12 +30,13 @@ const FrequenciaCardCollapse = props => {
   );
 
   const obterInformacoesEscolaresDoAluno = useCallback(async () => {
-    const resposta = await ServicoAcompanhamentoFrequencia.obterInformacoesDeFrequenciaAlunoPorSemestre(
-      turmaSelecionada?.id,
-      semestreSelecionado,
-      codigoEOL,
-      componenteCurricularSelecionado
-    ).catch(e => erros(e));
+    const resposta =
+      await ServicoAcompanhamentoFrequencia.obterInformacoesDeFrequenciaAlunoPorSemestre(
+        turmaSelecionada?.id,
+        semestreSelecionado,
+        codigoEOL,
+        componenteCurricularSelecionado
+      ).catch(e => erros(e));
 
     if (resposta?.data) {
       setDados(resposta.data);

@@ -49,7 +49,8 @@ const CampoNota = props => {
     store => store.conselhoClasse.expandirLinha
   );
 
-  const temLinhaExpandida = expandirLinha && Object.keys(expandirLinha)?.length > 0;
+  const temLinhaExpandida =
+    expandirLinha && Object.keys(expandirLinha)?.length > 0;
 
   const desabilitarIconeExpandir =
     temLinhaExpandida && notaConceitoPosConselhoAtual?.ehEdicao;

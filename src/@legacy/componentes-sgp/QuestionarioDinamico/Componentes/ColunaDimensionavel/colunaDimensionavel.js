@@ -5,7 +5,6 @@ import { Col } from 'antd';
 const ColunaDimensionavel = props => {
   const { children, novaEstrutura, dimensao } = props;
 
-  let dimensaoCampo = 12;
   let dimensaoCalculada = dimensao;
 
   if (novaEstrutura) {
@@ -17,9 +16,7 @@ const ColunaDimensionavel = props => {
       {children}
     </Col>
   ) : (
-    <div className={`col-12 col-lg-${dimensao} mb-3`}>
-      {children}
-      </div>
+    <div className={`col-12 col-lg-${dimensao} mb-3`}>{children}</div>
   );
 };
 

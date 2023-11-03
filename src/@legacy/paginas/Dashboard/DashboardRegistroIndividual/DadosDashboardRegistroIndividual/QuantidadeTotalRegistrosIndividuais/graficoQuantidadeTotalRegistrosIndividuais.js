@@ -13,14 +13,15 @@ const GraficoQuantidadeTotalRegistrosIndividuais = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardRegistroIndividual.obterQuantidadeTotalRegistrosIndividuais(
-      anoLetivo,
-      dreId === OPCAO_TODOS ? '' : dreId,
-      ueId === OPCAO_TODOS ? '' : ueId,
-      modalidade
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardRegistroIndividual.obterQuantidadeTotalRegistrosIndividuais(
+        anoLetivo,
+        dreId === OPCAO_TODOS ? '' : dreId,
+        ueId === OPCAO_TODOS ? '' : ueId,
+        modalidade
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno?.data?.length) {
       setDadosGrafico(retorno.data);

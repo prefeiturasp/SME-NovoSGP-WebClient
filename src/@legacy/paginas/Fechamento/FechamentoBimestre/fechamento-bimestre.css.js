@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Base } from '~/componentes';
 
 export const Fechamento = styled.div`
   .btn-com-anotacao {

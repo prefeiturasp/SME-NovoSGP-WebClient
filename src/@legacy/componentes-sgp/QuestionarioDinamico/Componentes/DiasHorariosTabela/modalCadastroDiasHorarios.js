@@ -41,9 +41,7 @@ const ModalCadastroDiasHorario = props => {
   }, [dadosIniciais]);
 
   const validacoes = Yup.object().shape({
-    diaSemana: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
+    diaSemana: Yup.string().nullable().required('Campo obrigatório'),
     horarioInicio: momentSchema.required('Campo obrigatório'),
     horarioTermino: momentSchema.required('Campo obrigatório'),
   });

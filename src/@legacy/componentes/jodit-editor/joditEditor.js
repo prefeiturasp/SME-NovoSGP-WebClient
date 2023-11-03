@@ -146,6 +146,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
     if (qtdElementoImg) {
       const regex = new RegExp(`<img[^>]*src=".*?${spgURL}/temp/.*?"[^>]*>`);
+      // eslint-disable-next-line no-undef
       const temImagemPastaTemporaria = dadosColadoHTML?.match(regex) || [];
 
       if (temImagemPastaTemporaria.length) {
@@ -470,7 +471,7 @@ const JoditEditor = forwardRef((props, ref) => {
         }
       });
 
-      let newValue = tempDiv.innerHTML;
+      const newValue = tempDiv.innerHTML;
 
       textArea.current.setEditorValue(newValue);
 

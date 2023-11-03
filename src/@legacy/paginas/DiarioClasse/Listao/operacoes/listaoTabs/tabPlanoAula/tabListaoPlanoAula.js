@@ -40,7 +40,6 @@ const TabListaoPlanoAula = () => {
       limparDadosPlanoAula();
       dispatch(setLimparModoEdicaoGeral(false));
     };
-
   }, []);
 
   const montarListaObjetivos = dados => {
@@ -56,14 +55,15 @@ const TabListaoPlanoAula = () => {
   };
 
   const obterListaObjetivosPorTurmaAnoEComponenteCurricular = async () => {
-    const resposta = await ServicoPlanoAula.obterListaObjetivosPorTurmaAnoEComponenteCurricular(
-      turmaSelecionada?.id,
-      componenteCurricular?.codigoComponenteCurricular,
-      periodo?.dataInicio
-    ).catch(e => {
-      erros(e);
-      setExibirLoaderGeral(false);
-    });
+    const resposta =
+      await ServicoPlanoAula.obterListaObjetivosPorTurmaAnoEComponenteCurricular(
+        turmaSelecionada?.id,
+        componenteCurricular?.codigoComponenteCurricular,
+        periodo?.dataInicio
+      ).catch(e => {
+        erros(e);
+        setExibirLoaderGeral(false);
+      });
 
     if (resposta?.data?.length) {
       const lista = montarListaObjetivos(resposta.data);
@@ -84,7 +84,8 @@ const TabListaoPlanoAula = () => {
     ).catch(e => erros(e));
     if (resposta?.data?.length) {
       if (componenteCurricular?.possuiObjetivos) {
-        const listaObjetivos = await obterListaObjetivosPorTurmaAnoEComponenteCurricular();
+        const listaObjetivos =
+          await obterListaObjetivosPorTurmaAnoEComponenteCurricular();
         setListaObjetivosAprendizagem(listaObjetivos);
       }
 
@@ -104,7 +105,6 @@ const TabListaoPlanoAula = () => {
     limparDadosPlanoAula();
     setExibirLoaderGeral(false);
     return false;
-
   }, [
     dispatch,
     periodoAbertoListao,
@@ -118,7 +118,6 @@ const TabListaoPlanoAula = () => {
       await obterPlanoAulaPorPeriodo();
       setExecutarObterPlanoAulaPorPeriodo(false);
     }
-
   }, [executarObterPlanoAulaPorPeriodo, obterPlanoAulaPorPeriodo]);
 
   useEffect(() => {
@@ -136,7 +135,6 @@ const TabListaoPlanoAula = () => {
     ) {
       obterPlanoAulaPorPeriodo();
     }
-
   }, [periodo]);
 
   return (
