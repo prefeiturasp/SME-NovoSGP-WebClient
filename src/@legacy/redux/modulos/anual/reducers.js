@@ -160,11 +160,11 @@ export default function planoAnual(state = inicial, action) {
         };
       }
 
-      case '@planoAnual/setListaComponentesCheck':{
-        return{
+      case '@planoAnual/setListaComponentesCheck': {
+        return {
           ...draft,
           listaComponentesCheck: action.payload,
-        }
+        };
       }
 
       default:

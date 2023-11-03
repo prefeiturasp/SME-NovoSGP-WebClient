@@ -43,7 +43,6 @@ import LoaderAcompanhamentoAprendizagem from './loaderAcompanhamentoAprendizagem
 import ModalErrosAcompanhamentoAprendizagem from './modalErrosAcompanhamentoAprendizagem';
 import Button from '~/componentes/button';
 import { Colors, ModalConteudoHtml, Label } from '~/componentes';
-import { Row } from 'antd';
 import AlertaDentroPeriodo from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/AlertaPeriodoEncerrado';
 
 const AcompanhamentoAprendizagem = () => {
@@ -150,7 +149,7 @@ const AcompanhamentoAprendizagem = () => {
   };
   const limparListAlunosValidar = alunoCodigo => {
     setListAlunosValidar(null);
-    var alunosComMarcador = listAlunosValidarDados.filter(
+    const alunosComMarcador = listAlunosValidarDados.filter(
       x => x.alunoCodigo !== alunoCodigo
     );
     setListAlunosValidar(alunosComMarcador);

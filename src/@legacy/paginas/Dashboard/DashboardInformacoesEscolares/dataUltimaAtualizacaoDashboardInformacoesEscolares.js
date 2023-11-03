@@ -11,9 +11,10 @@ const DataUltimaAtualizacaoDashboardInformacoesEscolares = props => {
   const [dataUltimaConsolidacao, setDataUltimaConsolidacao] = useState();
 
   const obterDataUltimaAtualizacao = useCallback(async () => {
-    const retorno = await ServicoDashboardInformacoesEscolares.obterUltimaConsolidacao(
-      anoLetivo
-    ).catch(e => erros(e));
+    const retorno =
+      await ServicoDashboardInformacoesEscolares.obterUltimaConsolidacao(
+        anoLetivo
+      ).catch(e => erros(e));
 
     if (retorno?.data) {
       setDataUltimaConsolidacao(retorno.data);

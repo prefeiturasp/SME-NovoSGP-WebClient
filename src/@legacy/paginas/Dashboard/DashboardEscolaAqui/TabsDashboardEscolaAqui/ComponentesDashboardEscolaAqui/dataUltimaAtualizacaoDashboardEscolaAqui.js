@@ -10,9 +10,10 @@ const DataUltimaAtualizacaoDashboardEscolaAqui = props => {
   const [ultimaAtualizacao, setUltimaAtualizacao] = useState();
 
   const obterDataUltimaAtualizacao = async () => {
-    const retorno = await ServicoDashboardEscolaAqui.obterUltimaAtualizacaoPorProcesso(
-      nomeConsulta
-    );
+    const retorno =
+      await ServicoDashboardEscolaAqui.obterUltimaAtualizacaoPorProcesso(
+        nomeConsulta
+      );
     if (retorno && retorno.data && retorno.data.dataUltimaAtualizacao) {
       setUltimaAtualizacao(
         moment(retorno.data.dataUltimaAtualizacao).format('DD/MM/YYYY HH:mm')
@@ -22,7 +23,6 @@ const DataUltimaAtualizacaoDashboardEscolaAqui = props => {
 
   useEffect(() => {
     obterDataUltimaAtualizacao();
-
   }, []);
 
   return ultimaAtualizacao ? (

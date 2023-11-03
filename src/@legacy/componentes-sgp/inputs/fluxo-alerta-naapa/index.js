@@ -12,7 +12,6 @@ export const FluxoAlertaNAAPA = ({
   disabled,
   multiple,
   showSearch,
-  updateData,
   labelRequired,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);

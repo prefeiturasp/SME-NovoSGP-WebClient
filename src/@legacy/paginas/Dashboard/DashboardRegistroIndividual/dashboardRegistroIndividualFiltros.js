@@ -239,9 +239,10 @@ const DashboardRegistroIndividualFiltros = () => {
     ServicoDashboardRegistroIndividual.atualizarFiltros('modalidade', valor);
 
   const obterUltimaConsolidacao = useCallback(async () => {
-    const resposta = await ServicoDashboardRegistroIndividual.obterUltimaConsolidacao(
-      anoLetivo
-    ).catch(e => erros(e));
+    const resposta =
+      await ServicoDashboardRegistroIndividual.obterUltimaConsolidacao(
+        anoLetivo
+      ).catch(e => erros(e));
 
     let valorAtual = null;
 
@@ -267,9 +268,10 @@ const DashboardRegistroIndividualFiltros = () => {
   }, [anoLetivo, obterUltimaConsolidacao]);
 
   const obterQuantidadeDiasSemRegistro = useCallback(async () => {
-    const resposta = await ServicoDashboardRegistroIndividual.obterQuantidadeDiasSemRegistro(
-      anoLetivo
-    ).catch(e => erros(e));
+    const resposta =
+      await ServicoDashboardRegistroIndividual.obterQuantidadeDiasSemRegistro(
+        anoLetivo
+      ).catch(e => erros(e));
 
     let valorAtual = null;
 

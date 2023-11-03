@@ -34,9 +34,11 @@ class ServicoAcompanhamentoFrequencia {
     numeroPagina,
     numeroRegistros
   ) => {
-    const url = `${urlPadrao}/turmas/${turmaId}/componentes-curriculares/${componenteCurricularId ||
-      0}/alunos/${alunoCodigo}/bimestres/${bimestre}/justificativas/semestre/${semestre}?numeroPagina=${numeroPagina ||
-      1}&numeroRegistros=${numeroRegistros}`;
+    const url = `${urlPadrao}/turmas/${turmaId}/componentes-curriculares/${
+      componenteCurricularId || 0
+    }/alunos/${alunoCodigo}/bimestres/${bimestre}/justificativas/semestre/${semestre}?numeroPagina=${
+      numeroPagina || 1
+    }&numeroRegistros=${numeroRegistros}`;
     return api.get(url);
   };
 
@@ -49,9 +51,11 @@ class ServicoAcompanhamentoFrequencia {
     numeroPagina,
     numeroRegistros
   ) => {
-    const url = `${urlPadrao}/turma/${turmaId}/componente-curricular/${componenteCurricularId ||
-      0}/aluno/${alunoCodigo}/bimestre/${bimestre}/semestre/${semestre}?numeroPagina=${numeroPagina ||
-      1}&numeroRegistros=${numeroRegistros}`;
+    const url = `${urlPadrao}/turma/${turmaId}/componente-curricular/${
+      componenteCurricularId || 0
+    }/aluno/${alunoCodigo}/bimestre/${bimestre}/semestre/${semestre}?numeroPagina=${
+      numeroPagina || 1
+    }&numeroRegistros=${numeroRegistros}`;
     return api.get(url);
   };
 

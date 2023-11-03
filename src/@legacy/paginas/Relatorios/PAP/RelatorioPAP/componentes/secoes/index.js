@@ -6,6 +6,7 @@ import {
 import ServicoRelatorioPAP from '@/@legacy/servicos/Paginas/Relatorios/PAP/RelatorioPAP/ServicoRelatorioPAP';
 import { useDispatch, useSelector } from 'react-redux';
 import CollapseDadosSecaoRelatorioPAP from '../dadosSecoesRelatorioPAP/collapseDadosSecaoRelatorioPAP';
+import { erros } from '~/servicos';
 
 export const SecoesRelatorioPAP = () => {
   const dispatch = useDispatch();

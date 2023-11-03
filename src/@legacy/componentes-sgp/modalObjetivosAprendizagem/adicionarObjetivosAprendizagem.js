@@ -62,9 +62,8 @@ const AdicionarObjetivosAprendizagem = props => {
         id => id === item.id
       );
       if (itemParaRemover) {
-        const indexItemRemover = idsObjetivosAprendizagemSelecionados.indexOf(
-          itemParaRemover
-        );
+        const indexItemRemover =
+          idsObjetivosAprendizagemSelecionados.indexOf(itemParaRemover);
         idsObjetivosAprendizagemSelecionados.splice(indexItemRemover, 1);
         onChange([...idsObjetivosAprendizagemSelecionados]);
       }

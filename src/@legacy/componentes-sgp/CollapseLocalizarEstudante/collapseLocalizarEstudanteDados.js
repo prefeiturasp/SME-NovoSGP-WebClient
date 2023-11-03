@@ -36,8 +36,9 @@ const CollapseLocalizarEstudanteDados = props => {
   const dispatch = useDispatch();
 
   const ehProfessor = useSelector(store => store.usuario)?.ehProfessor;
-  const ehProfessorInfantil = useSelector(store => store.usuario)
-    ?.ehProfessorInfantil;
+  const ehProfessorInfantil = useSelector(
+    store => store.usuario
+  )?.ehProfessorInfantil;
 
   const dadosIniciais = useSelector(
     store => store.collapseLocalizarEstudante.dadosIniciaisLocalizarEstudante
@@ -60,10 +61,8 @@ const CollapseLocalizarEstudanteDados = props => {
   const [codigoUe, setCodigoUe] = useState(dadosIniciais?.ueId);
   const [codigoTurma, setCodigoTurma] = useState();
 
-  const [
-    alunoLocalizadorSelecionado,
-    setAlunoLocalizadorSelecionado,
-  ] = useState();
+  const [alunoLocalizadorSelecionado, setAlunoLocalizadorSelecionado] =
+    useState();
 
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);

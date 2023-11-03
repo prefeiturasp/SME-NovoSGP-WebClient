@@ -29,7 +29,6 @@ const AnoLetivoComunicados = ({ form, comunicadoId, onChangeCampos }) => {
     }
 
     setListaAnosLetivos(listaAnos);
-
   }, [anoAtual, comunicadoId]);
 
   useEffect(() => {

@@ -56,17 +56,16 @@ const ModalCopiarConteudoPlanoAula = props => {
 
   useEffect(() => {
     async function buscaTurmas() {
-      const {
-        data,
-      } = await AbrangenciaServico.buscarTurmasMesmoComponenteCurricular(
-        filtro.unidadeEscolar,
-        filtro.modalidade,
-        '',
-        filtro.anoLetivo,
-        filtro.consideraHistorico,
-        true,
-        codigoComponenteCurricular
-      );
+      const { data } =
+        await AbrangenciaServico.buscarTurmasMesmoComponenteCurricular(
+          filtro.unidadeEscolar,
+          filtro.modalidade,
+          '',
+          filtro.anoLetivo,
+          filtro.consideraHistorico,
+          true,
+          codigoComponenteCurricular
+        );
 
       if (data) {
         setListaTurmas(
@@ -81,7 +80,6 @@ const ModalCopiarConteudoPlanoAula = props => {
       }
     }
     buscaTurmas();
-
   }, [filtro.unidadeEscolar, filtro.modalidade, filtro.ano]);
 
   const adicionarTurma = () => {
@@ -172,20 +170,18 @@ const ModalCopiarConteudoPlanoAula = props => {
 
   const copiarPadrao = async () => {
     setExibirLoaderModal(true);
-    const {
-      data: dados,
-      status: resposta,
-    } = await PlanoAulaServico.migrarPlano({
-      idsPlanoTurmasDestino: turmas.map(x => ({
-        ...x,
-        sobreescrever: true,
-      })),
-      planoAulaId,
-      disciplinaId: codigoComponenteCurricular,
-      migrarLicaoCasa: valoresCheckbox.licaoCasa,
-      migrarRecuperacaoAula: valoresCheckbox.recuperacaoContinua,
-      migrarObjetivos: valoresCheckbox.objetivosAprendizagem,
-    });
+    const { data: dados, status: resposta } =
+      await PlanoAulaServico.migrarPlano({
+        idsPlanoTurmasDestino: turmas.map(x => ({
+          ...x,
+          sobreescrever: true,
+        })),
+        planoAulaId,
+        disciplinaId: codigoComponenteCurricular,
+        migrarLicaoCasa: valoresCheckbox.licaoCasa,
+        migrarRecuperacaoAula: valoresCheckbox.recuperacaoContinua,
+        migrarObjetivos: valoresCheckbox.objetivosAprendizagem,
+      });
     setExibirLoaderModal(false);
     if (dados || resposta === 200) {
       sucesso('Plano de aula copiado com sucesso!');

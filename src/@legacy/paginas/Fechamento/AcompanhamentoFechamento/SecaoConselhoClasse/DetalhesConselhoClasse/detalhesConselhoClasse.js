@@ -19,13 +19,14 @@ const DetalhesConselhoClasse = ({ turmaId, parametrosFiltro }) => {
   const obterListaAlunosPorTurma = useCallback(async () => {
     setCarregandoAlunos(true);
 
-    const resposta = await ServicoAcompanhamentoFechamento.obterListaAlunosPorTurma(
-      turmaId,
-      parametrosFiltro?.bimestre,
-      parametrosFiltro?.situacaoConselhoClasse
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoAlunos(false));
+    const resposta =
+      await ServicoAcompanhamentoFechamento.obterListaAlunosPorTurma(
+        turmaId,
+        parametrosFiltro?.bimestre,
+        parametrosFiltro?.situacaoConselhoClasse
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoAlunos(false));
 
     if (resposta?.data?.length) {
       setAlunosDetalhesConselho(resposta.data);

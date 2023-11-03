@@ -1,4 +1,4 @@
-const { Base } = require('~/componentes');
+import { Base } from '~/componentes';
 
 const tipoFrequencia = {
   Compareceu: { valor: 'C', cor: Base.Verde },

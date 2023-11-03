@@ -9,7 +9,8 @@ const RelatorioSondagemAnaliticoForm = props => {
   const { form, onChangeCampos } = props;
 
   const consideraHistorico = !!form.values?.consideraHistorico;
-  const parametroFiltrarUesSondagem = "&modalidade=5&filtrarTipoEscolaPorAnoLetivo=true";
+  const parametroFiltrarUesSondagem =
+    '&modalidade=5&filtrarTipoEscolaPorAnoLetivo=true';
 
   const anoAtual = window.moment().format('YYYY');
 
@@ -53,7 +54,11 @@ const RelatorioSondagemAnaliticoForm = props => {
         </Col>
 
         <Col sm={24} md={24} lg={10}>
-          <Ue form={form} parametrosOpcionais={parametroFiltrarUesSondagem} onChange={() => onChangeCampos()} />
+          <Ue
+            form={form}
+            parametrosOpcionais={parametroFiltrarUesSondagem}
+            onChange={() => onChangeCampos()}
+          />
         </Col>
       </Row>
       <Row gutter={[16, 16]}>

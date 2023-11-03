@@ -76,7 +76,6 @@ const UeCadastroEventos = ({ form, onChangeCampos, desabilitar, eventoId }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
-
   }, [dreId, eventoId, listaCalendarios]);
 
   useEffect(() => {
@@ -86,7 +85,6 @@ const UeCadastroEventos = ({ form, onChangeCampos, desabilitar, eventoId }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
-
   }, [dreId, obterUes]);
 
   return (

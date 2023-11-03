@@ -9,7 +9,7 @@ export const Container = styled.div`
     border: solid 7px #d06d12 !important;
     border-radius: 5px !important;
   }
-`
+`;
 export const ContainerAuditoria = styled.div`
   object-fit: contain;
   font-family: Roboto;
@@ -20,6 +20,6 @@ export const ContainerAuditoria = styled.div`
 
   p {
     margin-top: 0px;
-    margin-bottom: 0px
+    margin-bottom: 0px;
   }
 `;

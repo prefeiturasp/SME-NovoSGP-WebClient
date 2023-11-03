@@ -11,11 +11,8 @@ const AlertaModalidadeInfantil = props => {
     store => store.filtro.modalidades
   );
 
-  const {
-    exibir,
-    validarModalidadeFiltroPrincipal,
-    naoPermiteTurmaInfantil,
-  } = props;
+  const { exibir, validarModalidadeFiltroPrincipal, naoPermiteTurmaInfantil } =
+    props;
 
   const [exibirMsg, setExibirMsg] = useState(exibir);
 
