@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import moment from 'moment';
+import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { JoditEditor, MarcadorSituacao } from '~/componentes';
@@ -22,6 +22,10 @@ import {
 const CaixaTextoExpandivel = ({ item }) => {
   const [icone, setIcone] = useState('expand-alt');
 
+  const perfilSelecionado = useSelector(
+    store => store.perfil.perfilSelecionado.nomePerfil
+  );
+
   const dadosPlanejamentos = useSelector(
     store => store.devolutivas.dadosPlanejamentos
   );
@@ -39,6 +43,8 @@ const CaixaTextoExpandivel = ({ item }) => {
   );
 
   const dispatch = useDispatch();
+
+  const ehPerfilCP = perfilSelecionado === 'CP';
 
   const cliqueAlternado = () => {
     dispatch(setPlanejamentoExpandido(!planejamentoExpandido));
@@ -95,6 +101,7 @@ const CaixaTextoExpandivel = ({ item }) => {
                 readonly
                 height="560px"
                 iframeStyle={IframeStyle}
+                desabilitar={ehPerfilCP}
               />
             </FundoEditor>
           </EditorPlanejamento>
