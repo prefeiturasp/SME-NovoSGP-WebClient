@@ -88,7 +88,7 @@ const RecuperarSenha = props => {
         setRetorno({ status: false });
       })
       .finally(() => {
-        // setCarregando(false);
+        setCarregando(false);
       });
   };
 
