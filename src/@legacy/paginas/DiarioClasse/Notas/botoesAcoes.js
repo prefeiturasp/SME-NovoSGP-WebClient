@@ -11,12 +11,8 @@ import { Colors } from '~/componentes/colors';
 import { confirmar } from '~/servicos/alertas';
 
 const BotoesAcoessNotasConceitos = props => {
-  const {
-    onClickVoltar,
-    onClickCancelar,
-    onClickSalvar,
-    desabilitarBotao,
-  } = props;
+  const { onClickVoltar, onClickCancelar, onClickSalvar, desabilitarBotao } =
+    props;
 
   const modoEdicaoGeral = useSelector(
     store => store.notasConceitos.modoEdicaoGeral

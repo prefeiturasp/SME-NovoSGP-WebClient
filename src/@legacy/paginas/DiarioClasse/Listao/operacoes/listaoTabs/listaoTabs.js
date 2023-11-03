@@ -47,7 +47,6 @@ const ListaoTabs = () => {
       turmaSelecionada
     );
     setListaoEhInfantil(ehInfantil);
-
   }, [modalidadesFiltroPrincipal, turmaSelecionada]);
 
   const desabilitarTabs = !componenteCurricular || !bimestreOperacoes;

@@ -4,14 +4,12 @@ import PropTypes from 'prop-types';
 import { Container } from './listaNotificacoes.css';
 
 const ListaNotificacoes = ({ obs, somenteLeitura }) => {
-
-const [usuariosNotificacao, setUsuariosNotificacao] = useState();
+  const [usuariosNotificacao, setUsuariosNotificacao] = useState();
 
   useEffect(() => {
     if (!usuariosNotificacao && obs.usuarios) {
       setUsuariosNotificacao(obs.usuarios);
     }
-
   }, [usuariosNotificacao, obs.usuarios]);
 
   return (
@@ -22,13 +20,13 @@ const [usuariosNotificacao, setUsuariosNotificacao] = useState();
           listagemDiario={obs?.listagemDiario}
           somenteLeitura={somenteLeitura}
         >
-       <span> 
-          {usuariosNotificacao ? (
-            `Usuários notificados: ${usuariosNotificacao.map(usuario => usuario.nome).join(", ")}`
-          ) : (
-            ""
-          )}
-        </span>
+          <span>
+            {usuariosNotificacao
+              ? `Usuários notificados: ${usuariosNotificacao
+                  .map(usuario => usuario.nome)
+                  .join(', ')}`
+              : ''}
+          </span>
         </Container>
       ) : (
         <></>

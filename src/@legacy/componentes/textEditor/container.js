@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Container = props => {
-
-  const { height, children, maxHeight, id} = props;
+  const { height, children, maxHeight, id } = props;
 
   const Retorno = styled.div`
     .ql-container.ql-snow {
@@ -14,8 +13,8 @@ const Container = props => {
     }
 
     .ql-editor {
-      min-height: ${height || "100px"};
-      max-height: ${maxHeight || "420px"};
+      min-height: ${height || '100px'};
+      max-height: ${maxHeight || '420px'};
       overflow: auto;
     }
 
@@ -44,7 +43,7 @@ const Container = props => {
     }
   `;
 
-  return <Retorno id={id || "textEditor"}>{children}</Retorno>;
+  return <Retorno id={id || 'textEditor'}>{children}</Retorno>;
 };
 
 export default Container;

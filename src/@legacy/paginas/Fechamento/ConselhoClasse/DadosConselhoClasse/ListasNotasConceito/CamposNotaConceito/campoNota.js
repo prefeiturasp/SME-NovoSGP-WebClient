@@ -49,7 +49,8 @@ const CampoNota = props => {
     store => store.conselhoClasse.expandirLinha
   );
 
-  const temLinhaExpandida = expandirLinha && Object.keys(expandirLinha)?.length > 0;
+  const temLinhaExpandida =
+    expandirLinha && Object.keys(expandirLinha)?.length > 0;
 
   const desabilitarIconeExpandir =
     temLinhaExpandida && notaConceitoPosConselhoAtual?.ehEdicao;
@@ -90,9 +91,11 @@ const CampoNota = props => {
 
   const onClickMostrarJustificativa = async () => {
     mostrarJustificativa();
+
     const dados = await ServicoConselhoClasse.obterNotaPosConselho(
       idNotaPosConselho || idCamposNotasPosConselho
     ).catch(e => erro(e));
+
     if (dados && dados.data) {
       const { nota, justificativa } = dados.data;
       const auditoria = {
@@ -122,9 +125,7 @@ const CampoNota = props => {
     ) {
       return;
     }
-    if (!temLinhaExpandida) {
-      mostrarJustificativa();
-    }
+    mostrarJustificativa();
     setNotaPosConselho(valorNovo, true);
     dadosNotaPosConselho.nota = valorNovo;
   };
@@ -171,6 +172,7 @@ const CampoNota = props => {
                 desabilitarIconeExpandir ? null : onClickMostrarJustificativa
               }
             >
+
               <Tooltip
                 title="Ver Justificativa"
                 placement="bottom"

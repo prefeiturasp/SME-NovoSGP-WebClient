@@ -28,9 +28,10 @@ export const TipoDocumento = ({
 
   const obterTiposDocumento = useCallback(async () => {
     setExibirLoader(true);
-    const resposta = await ServicoDocumentosPlanosTrabalho.obterTiposDeDocumentos().catch(
-      e => erros(e)
-    );
+    const resposta =
+      await ServicoDocumentosPlanosTrabalho.obterTiposDeDocumentos().catch(e =>
+        erros(e)
+      );
 
     if (resposta?.data?.length) {
       const lista = resposta.data;
@@ -63,7 +64,6 @@ export const TipoDocumento = ({
       }
     }
     setExibirLoader(false);
-
   }, [form, name]);
 
   useEffect(() => {
@@ -71,7 +71,6 @@ export const TipoDocumento = ({
 
     limparDados();
     obterTiposDocumento();
-
   }, []);
 
   const onChangeTipoDocumento = tipo => {

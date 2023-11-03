@@ -68,7 +68,6 @@ const TabListaoDiarioBordoFiltros = () => {
     if (lista.length === 1) {
       setPeriodo(lista[0]);
     }
-
   }, [
     componenteCurricular,
     turma,
@@ -102,7 +101,6 @@ const TabListaoDiarioBordoFiltros = () => {
       limparDadosComponenteCurricularDiarioBordo();
       limparDadosDiarioBordo();
     };
-
   }, []);
 
   useEffect(() => {
@@ -112,7 +110,6 @@ const TabListaoDiarioBordoFiltros = () => {
     } else {
       limparDadosDiarioBordo();
     }
-
   }, [bimestreOperacoes]);
 
   const obterPeriodoSelecionado = id => {
@@ -181,7 +178,6 @@ const TabListaoDiarioBordoFiltros = () => {
         );
       }
     }
-
   }, [turma, setComponenteCurricularDiarioBordo]);
 
   useEffect(() => {
@@ -191,7 +187,6 @@ const TabListaoDiarioBordoFiltros = () => {
     }
     setListaComponentesCurricularesDiario([]);
     setComponenteCurricularDiarioBordo();
-
   }, [
     turma,
     obterComponentesCurriculares,

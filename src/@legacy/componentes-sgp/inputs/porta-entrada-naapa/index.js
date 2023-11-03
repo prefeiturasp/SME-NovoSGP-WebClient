@@ -12,7 +12,6 @@ export const PortaEntradaNAAPA = ({
   disabled,
   multiple,
   showSearch,
-  updateData,
   labelRequired,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);

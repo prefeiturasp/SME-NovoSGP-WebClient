@@ -42,9 +42,7 @@ const ModalCadastroContatoResponsaveis = props => {
   };
 
   const validacoes = Yup.object().shape({
-    nomeCompleto: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
+    nomeCompleto: Yup.string().nullable().required('Campo obrigatório'),
     grauParentescoAfetividade: Yup.string()
       .nullable()
       .required('Campo obrigatório'),

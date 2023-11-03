@@ -46,12 +46,13 @@ const LeituraDeComunicadosPorAlunos = props => {
         listaComunicado
       );
 
-      const resposta = await ServicoDashboardEscolaAqui.obterDadosLeituraDeComunicadosPorAlunos(
-        codigoTurma,
-        dadosComunicado?.id
-      )
-        .catch(e => erros(e))
-        .finally(() => setExibirLoader(false));
+      const resposta =
+        await ServicoDashboardEscolaAqui.obterDadosLeituraDeComunicadosPorAlunos(
+          codigoTurma,
+          dadosComunicado?.id
+        )
+          .catch(e => erros(e))
+          .finally(() => setExibirLoader(false));
 
       if (resposta?.data) {
         setListaAlunos(resposta.data);

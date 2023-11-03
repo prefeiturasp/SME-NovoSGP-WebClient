@@ -41,14 +41,15 @@ const DadosCabecalhoTabFechamentoListao = props => {
 
   const onClickReprocessarNotasConceitos = async () => {
     setExibirLoader(true);
-    const processando = await ServicoFechamentoBimestre.reprocessarNotasConceitos(
-      dadosFechamento?.fechamentoId
-    ).catch(e => {
-      erros(e);
-      setSituacao(situacaoFechamentoDto.ProcessadoComErro);
-      setSituacaoNome('Processado com erro');
-      setDataFechamento(window.moment());
-    });
+    const processando =
+      await ServicoFechamentoBimestre.reprocessarNotasConceitos(
+        dadosFechamento?.fechamentoId
+      ).catch(e => {
+        erros(e);
+        setSituacao(situacaoFechamentoDto.ProcessadoComErro);
+        setSituacaoNome('Processado com erro');
+        setDataFechamento(window.moment());
+      });
     if (processando?.status === 200) {
       setSituacao(situacaoFechamentoDto.EmProcessamento);
       setSituacaoNome('Em Processamento');

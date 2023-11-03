@@ -58,7 +58,6 @@ export const Dre = ({
     } else {
       limparDados();
     }
-
   }, [anoLetivo, consideraHistorico]);
 
   useEffect(() => {
@@ -67,8 +66,6 @@ export const Dre = ({
     limparDados();
 
     if (anoLetivo) obterDres();
-
-
   }, [anoLetivo]);
 
   return (

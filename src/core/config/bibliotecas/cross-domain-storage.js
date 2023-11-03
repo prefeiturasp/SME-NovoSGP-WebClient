@@ -1,6 +1,6 @@
 import { obterUrlSondagem } from '~/servicos/variaveis';
 
-const createHost = require('cross-domain-storage/host');
+import createHost from 'cross-domain-storage/host';
 
 const newHost = () => {
   const origin = obterUrlSondagem;

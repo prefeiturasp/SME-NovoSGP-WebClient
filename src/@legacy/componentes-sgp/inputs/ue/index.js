@@ -14,7 +14,7 @@ export const Ue = ({
   labelRequired,
   mostrarOpcaoTodas,
   nameList,
-  parametrosOpcionais
+  parametrosOpcionais,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -45,7 +45,7 @@ export const Ue = ({
     const resposta = await AbrangenciaServico.buscarUes(
       dreCodigo,
       `v1/abrangencias/${consideraHistorico}/dres/${dreCodigo}/ues?anoLetivo=${anoLetivo}
-                       ${parametrosOpcionais ? parametrosOpcionais : ''}`,
+                       ${parametrosOpcionais || ''}`,
       true
     )
       .catch(e => erros(e))
@@ -70,7 +70,6 @@ export const Ue = ({
     } else {
       limparDados();
     }
-
   }, [consideraHistorico, anoLetivo, dreCodigo]);
 
   useEffect(() => {
@@ -78,8 +77,6 @@ export const Ue = ({
 
     limparDados();
     if (dreCodigo) obterUes();
-
-
   }, [dreCodigo]);
 
   return (

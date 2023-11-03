@@ -115,15 +115,15 @@ const SelectAutocomplete = ({
     } else {
       filtrar(value);
     }
-
   }, [value]);
 
   const campoComValidacoes = () => (
     <Field
       className={
         form
-          ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${className ||
-              ''}`
+          ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${
+              className || ''
+            }`
           : ''
       }
       onSearch={onSearch}

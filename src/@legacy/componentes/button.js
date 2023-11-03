@@ -49,11 +49,9 @@ const Button = React.forwardRef((props, ref) => {
     position: relative;
     background: ${border ? '#fff' : Active[color]} !important;
     text-align: center;
-    ${
-      border
-        ? `border-color: ${Active[color]} !important; color: ${Active[color]} !important;`
-        : `border: 0 none !important;`
-    };
+    ${border
+      ? `border-color: ${Active[color]} !important; color: ${Active[color]} !important;`
+      : `border: 0 none !important;`};
     ${customRadius || ''};
     font-weight: ${corTextoHover ? 'normal' : 'bold !important'};
     ${width ? `width: ${width};` : ''}
@@ -62,27 +60,21 @@ const Button = React.forwardRef((props, ref) => {
     height: ${height} !important;
     ${lineHeight && `line-height: ${lineHeight}`}
     &:hover {
-      ${
-        disabled
-          ? ''
-          : `background: ${border ? Active[color] : Hover[color]} !important;
+      ${disabled
+        ? ''
+        : `background: ${border ? Active[color] : Hover[color]} !important;
              color: ${
                !steady ? Active[corTextoHover] || Base.Branco : 'initial'
-             } !important;`
-      }
-
+             } !important;`}
     }
     & {
-      ${
-        disabled
-          ? `background: transparent !important;
-      border: 1px solid ${Base.CinzaDesabilitado} !important;
-      color: ${Base.CinzaDesabilitado} !important;
-      cursor: not-allowed !important;
-      pointer-events: none !important;`
-          : ''
-      }
-
+      ${disabled
+        ? `background: transparent !important;
+        border: 1px solid ${Base.CinzaDesabilitado} !important;
+        color: ${Base.CinzaDesabilitado} !important;
+        cursor: not-allowed !important;
+        pointer-events: none !important;`
+        : ''}
     }
   `;
 

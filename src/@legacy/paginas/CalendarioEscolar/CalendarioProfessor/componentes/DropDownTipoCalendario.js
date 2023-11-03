@@ -28,12 +28,10 @@ function DropDownTipoCalendario({
           setListaTipoCalendario([]);
         } else {
           setCarregando(true);
-          const {
-            data,
-            status,
-          } = await CalendarioProfessorServico.buscarTiposCalendario(
-            turmaSelecionada
-          );
+          const { data, status } =
+            await CalendarioProfessorServico.buscarTiposCalendario(
+              turmaSelecionada
+            );
           if (data && status === 200) {
             setListaTipoCalendario(
               [data].map(x => ({
