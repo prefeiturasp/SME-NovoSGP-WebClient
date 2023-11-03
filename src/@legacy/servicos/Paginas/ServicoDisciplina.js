@@ -4,7 +4,7 @@ class ServicoDisciplina {
   obterDisciplinasPorTurma = (
     turmaId,
     realizarAgrupamentoComponente = true,
-    consideraTurmaInfantil = true,
+    consideraTurmaInfantil = true
   ) => {
     const url = `v1/professores/turmas/${turmaId}/disciplinas?realizarAgrupamentoComponente=${realizarAgrupamentoComponente}&consideraTurmaInfantil=${consideraTurmaInfantil}`;
     return api.get(url);
@@ -20,9 +20,7 @@ class ServicoDisciplina {
     return api.get(url);
   };
 
-  obterDisciplinasTurma = (
-    turmaId
-  ) => {
+  obterDisciplinasTurma = turmaId => {
     const url = `v1/professores/turmas/${turmaId}/docencias-compartilhadas/disciplinas/`;
     return api.get(url);
   };

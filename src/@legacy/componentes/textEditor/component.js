@@ -46,7 +46,6 @@ const TextEditor = React.forwardRef((props, ref) => {
           onBlur(ref?.current.state.value);
       }
     };
-
   }, []);
 
   const onBlurQuill = (_, origem) => {

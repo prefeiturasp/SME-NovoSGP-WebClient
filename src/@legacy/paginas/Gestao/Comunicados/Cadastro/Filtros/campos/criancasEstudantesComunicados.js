@@ -36,7 +36,6 @@ const CriancasEstudantesComunicados = ({
     const valorAlunoEspecifico = validacaoTurma ? OPCAO_TODOS : undefined;
 
     form.setFieldValue(nomeCampo, valorAlunoEspecifico);
-
   }, [turmas]);
 
   useEffect(() => {
@@ -59,7 +58,6 @@ const CriancasEstudantesComunicados = ({
       }
       dispatch(setExibirModalAlunos(true));
     }
-
   }, [turmas, anoLetivo, dispatch]);
 
   useEffect(() => {

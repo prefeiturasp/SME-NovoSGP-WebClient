@@ -5,13 +5,8 @@ import Loader from '~/componentes/loader';
 import { InputRFEstilo } from './styles';
 
 const InputCodigo = props => {
-  const {
-    pessoaSelecionada,
-    onSelect,
-    onChange,
-    desabilitado,
-    exibirLoader,
-  } = props;
+  const { pessoaSelecionada, onSelect, onChange, desabilitado, exibirLoader } =
+    props;
 
   const [valor, setValor] = useState('');
 

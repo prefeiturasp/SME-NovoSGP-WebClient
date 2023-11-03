@@ -171,16 +171,17 @@ class ServicoPlanoAnual {
       return listaObjetivos;
     }
     dispatch(setExibirLoaderPlanoAnual(true));
-    const objetivos = await this.obterObjetivosPorAnoTurmaEComponenteCurricularNovo(
-      turmaId,
-      ano,
-      codigoComponenteCurricular,
-      ensinoEspecial
-    )
-      .catch(e => erros(e))
-      .finally(() => {
-        dispatch(setExibirLoaderPlanoAnual(false));
-      });
+    const objetivos =
+      await this.obterObjetivosPorAnoTurmaEComponenteCurricularNovo(
+        turmaId,
+        ano,
+        codigoComponenteCurricular,
+        ensinoEspecial
+      )
+        .catch(e => erros(e))
+        .finally(() => {
+          dispatch(setExibirLoaderPlanoAnual(false));
+        });
 
     if (objetivos && objetivos.data && objetivos.data.length) {
       dispatch(
@@ -194,8 +195,8 @@ class ServicoPlanoAnual {
     return [];
   };
 
-  imprimirPlanoAnual = (params) => api.post("v1/relatorios/plano-anual", params);
-  
+  imprimirPlanoAnual = params => api.post('v1/relatorios/plano-anual', params);
+
   salvarEditarPlanoAnual = (turmaId, componenteCurricularId, params) => {
     const url = `v1/planejamento/anual/turmas/${turmaId}/componentes-curriculares/${componenteCurricularId}`;
     return api.post(url, params);

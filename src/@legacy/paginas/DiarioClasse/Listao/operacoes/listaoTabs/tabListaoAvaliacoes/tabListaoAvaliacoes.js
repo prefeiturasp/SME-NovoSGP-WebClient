@@ -42,7 +42,6 @@ const TabListaoAvaliacoes = () => {
       limparDadosAvaliacao();
       setDadosPeriodosAvaliacao();
     }
-
   }, [turmaSelecionada]);
 
   useEffect(() => {
@@ -55,7 +54,6 @@ const TabListaoAvaliacoes = () => {
     ) {
       obterDadosPeriodos();
     }
-
   }, [componenteCurricular, turmaSelecionada, bimestreOperacoes]);
 
   const obterListaAlunosAvaliacao = useCallback(async () => {
@@ -68,7 +66,6 @@ const TabListaoAvaliacoes = () => {
       setDadosAvaliacao,
       setDadosIniciaisAvaliacao
     );
-
   }, [componenteCurricular, turmaSelecionada, dadosPeriodosAvaliacao]);
 
   useEffect(() => {
@@ -80,7 +77,6 @@ const TabListaoAvaliacoes = () => {
     ) {
       obterListaAlunosAvaliacao();
     }
-
   }, [dadosPeriodosAvaliacao]);
 
   useEffect(() => {
@@ -88,7 +84,6 @@ const TabListaoAvaliacoes = () => {
       limparDadosAvaliacao();
       setDadosPeriodosAvaliacao();
     };
-
   }, []);
 
   return (

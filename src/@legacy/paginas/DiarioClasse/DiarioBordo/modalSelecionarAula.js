@@ -14,7 +14,7 @@ const ModalSelecionarAula = props => {
   } = props;
 
   const opcoesAulas = aulasParaSelecionar
-    .sort((a, b) => (a.aulaCJ ? 1 : -1))
+    .sort(a => (a.aulaCJ ? 1 : -1))
     .map(item => {
       const textoReposicao =
         item.tipoAula === tipoAula.Reposicao ? '(Reposição)' : '';

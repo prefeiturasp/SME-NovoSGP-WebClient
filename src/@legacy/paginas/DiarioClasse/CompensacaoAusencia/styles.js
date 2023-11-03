@@ -65,4 +65,3 @@ export const ListaCopiarCompensacoes = styled.div`
   vertical-align: middle;
   margin-top: 20px;
 `;
-

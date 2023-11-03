@@ -54,7 +54,6 @@ const ColunaNotaConceitoPorBimestre = props => {
     } else {
       setValorExibir(notaBimestre?.notaConceito);
     }
-
   }, [
     notaTipo,
     bimestre,

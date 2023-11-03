@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { Colors } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
@@ -10,8 +9,6 @@ import {
 import Button from '~/componentes/button';
 
 const BtnAcoesFechamentoBimestre = props => {
-  const dispatch = useDispatch();
-
   const {
     salvarFechamentoFinal,
     onClickVoltar,
@@ -19,7 +16,6 @@ const BtnAcoesFechamentoBimestre = props => {
     somenteConsulta,
     ehSintese,
     emEdicao,
-    setEmEdicao,
   } = props;
 
   return (

@@ -11,9 +11,8 @@ import { confirmar, erros, sucesso } from '~/servicos';
 import ServicoPlanoAEEObservacoes from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEEObservacoes';
 
 const MontarDadosObservacoesPlanoAEE = () => {
-  const [desabilitarBotaoNotificar, setDesabilitarBotaoNotificar] = useState(
-    true
-  );
+  const [desabilitarBotaoNotificar, setDesabilitarBotaoNotificar] =
+    useState(true);
 
   const planoAEEDados = useSelector(store => store.planoAEE.planoAEEDados);
 

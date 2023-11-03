@@ -65,7 +65,6 @@ const ModalTrocarImagem = props => {
     if (exibirModal && dadosImagem?.uid) {
       obterImagem(dadosImagem.uid);
     }
-
   }, [dadosImagem, exibirModal]);
 
   const afterSuccessUpload = codigo => {

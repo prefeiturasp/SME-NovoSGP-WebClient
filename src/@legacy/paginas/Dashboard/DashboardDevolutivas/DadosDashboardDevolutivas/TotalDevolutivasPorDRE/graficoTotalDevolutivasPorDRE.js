@@ -26,12 +26,13 @@ const GraficoTotalDevolutivasPorDRE = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardDevolutivas.obterTotalDevolutivasPorDRE(
-      anoLetivo,
-      anoEscolar === OPCAO_TODOS ? '' : anoEscolar
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardDevolutivas.obterTotalDevolutivasPorDRE(
+        anoLetivo,
+        anoEscolar === OPCAO_TODOS ? '' : anoEscolar
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno?.data?.length) {
       setDadosGrafico(retorno.data);
@@ -49,12 +50,13 @@ const GraficoTotalDevolutivasPorDRE = props => {
   }, [anoLetivo, anoEscolar, obterDadosGrafico]);
 
   const obterAnosEscolares = useCallback(async () => {
-    const respota = await ServicoDashboardFrequencia.obterAnosEscolaresPorModalidade(
-      anoLetivo,
-      dreId === OPCAO_TODOS ? '' : dreId,
-      ueId === OPCAO_TODOS ? '' : ueId,
-      modalidade
-    ).catch(e => erros(e));
+    const respota =
+      await ServicoDashboardFrequencia.obterAnosEscolaresPorModalidade(
+        anoLetivo,
+        dreId === OPCAO_TODOS ? '' : dreId,
+        ueId === OPCAO_TODOS ? '' : ueId,
+        modalidade
+      ).catch(e => erros(e));
 
     if (respota?.data?.length) {
       if (respota.data.length === 1) {

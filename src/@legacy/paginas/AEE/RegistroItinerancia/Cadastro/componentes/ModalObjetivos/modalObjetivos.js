@@ -68,7 +68,6 @@ const ModalObjetivos = ({
       });
       setValidacoes(Yup.object(validacoesCamposComDescricao));
     }
-
   }, [listaObjetivos]);
 
   const perguntarSalvarListaUsuario = async () => {

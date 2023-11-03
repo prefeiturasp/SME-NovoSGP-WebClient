@@ -54,25 +54,35 @@ const LinhaAluno = ({
         .filter(
           n => String(n.disciplinaCodigo) === String(disciplinaSelecionada)
         )
-        .map(c => <div className="input-notas">{c.notaConceito}</div>);
+        .map(c => (
+          <div key={c?.disciplinaCodigo} className="input-notas">
+            {c.notaConceito}
+          </div>
+        ));
     }
 
     if (ehNota && !ehRegencia) {
       return aluno.notasConceitoBimestre.map(c => (
-        <div className="input-notas">{c.notaConceito}</div>
+        <div key={c?.disciplinaCodigo} className="input-notas">
+          {c.notaConceito}
+        </div>
       ));
     }
 
     if (!ehNota && !ehRegencia) {
       return aluno.notasConceitoBimestre.map(c => (
-        <div className="input-notas">{obterValorConceito(c.notaConceito)}</div>
+        <div key={c?.disciplinaCodigo} className="input-notas">
+          {obterValorConceito(c.notaConceito)}
+        </div>
       ));
     }
 
     return aluno.notasConceitoBimestre
       .filter(n => String(n.disciplinaCodigo) === String(disciplinaSelecionada))
       .map(c => (
-        <div className="input-notas">{obterValorConceito(c.notaConceito)}</div>
+        <div key={c?.disciplinaCodigo} className="input-notas">
+          {obterValorConceito(c.notaConceito)}
+        </div>
       ));
   };
 

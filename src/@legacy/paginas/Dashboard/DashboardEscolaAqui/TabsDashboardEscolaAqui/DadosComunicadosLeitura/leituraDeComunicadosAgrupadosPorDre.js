@@ -10,12 +10,8 @@ import {
 import GraficoBarraDashboard from '../../../ComponentesDashboard/graficoBarraDashboard';
 
 const LeituraDeComunicadosAgrupadosPorDre = props => {
-  const {
-    chavesGrafico,
-    modoVisualizacao,
-    comunicado,
-    listaComunicado,
-  } = props;
+  const { chavesGrafico, modoVisualizacao, comunicado, listaComunicado } =
+    props;
 
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -30,12 +26,13 @@ const LeituraDeComunicadosAgrupadosPorDre = props => {
     async dadosComunicado => {
       if (dadosComunicado?.id) {
         setExibirLoader(true);
-        const resposta = await ServicoDashboardEscolaAqui.obterDadosDeLeituraDeComunicadosAgrupadosPorDre(
-          dadosComunicado.id,
-          modoVisualizacao
-        )
-          .catch(e => erros(e))
-          .finally(() => setExibirLoader(false));
+        const resposta =
+          await ServicoDashboardEscolaAqui.obterDadosDeLeituraDeComunicadosAgrupadosPorDre(
+            dadosComunicado.id,
+            modoVisualizacao
+          )
+            .catch(e => erros(e))
+            .finally(() => setExibirLoader(false));
 
         if (resposta?.data?.length) {
           const retornoDados = mapearParaDtoDadosComunicadosGraficoBarras(
@@ -80,7 +77,6 @@ const LeituraDeComunicadosAgrupadosPorDre = props => {
         obterDadosDeLeituraDeComunicadosAgrupadosPorDre(dadosComunicado);
       }
     }
-
   }, [comunicado, modoVisualizacao, listaComunicado]);
 
   return (

@@ -42,6 +42,7 @@ const LegendaGrafico = props => {
       {dados.map(item => {
         return (
           <div
+            key={item?.label}
             className={`col-md-${tamanhoColuna} ${
               orizontal && dados.length <= 3 ? 'legenda-centralizada' : ''
             }`}

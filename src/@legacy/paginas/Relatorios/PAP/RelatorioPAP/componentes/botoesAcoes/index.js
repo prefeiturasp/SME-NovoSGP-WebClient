@@ -1,10 +1,6 @@
 import QuestionarioDinamicoFuncoes from '@/@legacy/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import { setDesabilitarCamposRelatorioPAP } from '@/@legacy/redux/modulos/relatorioPAP/actions';
-import {
-  confirmar,
-  sucesso,
-  verificaSomenteConsulta,
-} from '@/@legacy/servicos';
+import { confirmar, verificaSomenteConsulta } from '@/@legacy/servicos';
 import ServicoRelatorioPAP from '@/@legacy/servicos/Paginas/Relatorios/PAP/RelatorioPAP/ServicoRelatorioPAP';
 import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';

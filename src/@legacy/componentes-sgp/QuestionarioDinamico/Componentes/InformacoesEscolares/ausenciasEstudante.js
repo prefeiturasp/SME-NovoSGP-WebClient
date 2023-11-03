@@ -33,12 +33,13 @@ const AusenciasEstudante = props => {
   }, [dispatch]);
 
   const obterAusenciaMotivoPorAlunoTurmaBimestreAno = useCallback(async () => {
-    const retorno = await ServicoCalendarios.obterAusenciaMotivoPorAlunoTurmaBimestreAno(
-      dados.codigoAluno,
-      dados.bimestre,
-      codigoTurma,
-      anoLetivo
-    ).catch(e => erros(e));
+    const retorno =
+      await ServicoCalendarios.obterAusenciaMotivoPorAlunoTurmaBimestreAno(
+        dados.codigoAluno,
+        dados.bimestre,
+        codigoTurma,
+        anoLetivo
+      ).catch(e => erros(e));
 
     if (retorno?.data) {
       setAusencias(retorno.data);
@@ -106,7 +107,7 @@ const AusenciasEstudante = props => {
                     <tbody className="tabela-dois-tbody">
                       {ausencias.map(item => {
                         return (
-                          <tr>
+                          <tr key={item?.dataAusencia}>
                             <td className="col-valor-linha-um">
                               {moment(item.dataAusencia).format('DD/MM/YYYY')}
                             </td>

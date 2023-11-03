@@ -31,7 +31,6 @@ const AnoLetivoOcorrencia = ({ form }) => {
       }
       setListaAnosLetivos(anosOrdenados);
     }
-
   }, []);
 
   useEffect(() => {

@@ -52,7 +52,6 @@ function DropDownTerritorios({
       setListaTerritorios([]);
       onBuscarTerritorios(false);
     }
-
   }, [onChangeTerritorio, turmaSelecionada, modalidadesFiltroPrincipal]);
 
   useEffect(() => {

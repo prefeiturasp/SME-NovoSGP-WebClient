@@ -16,11 +16,10 @@ const DadosMuralGoogleSalaAula = props => {
 
   const obterDadosMuralGoogleSalaAula = useCallback(async () => {
     setCarregandoDados(true);
-    const resposta = await ServicoMuralGoogleSalaAula.obterDadosMuralGoogleSalaAula(
-      aulaId
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoDados(false));
+    const resposta =
+      await ServicoMuralGoogleSalaAula.obterDadosMuralGoogleSalaAula(aulaId)
+        .catch(e => erros(e))
+        .finally(() => setCarregandoDados(false));
 
     if (resposta?.data?.length) {
       setDados(resposta.data);
@@ -35,11 +34,12 @@ const DadosMuralGoogleSalaAula = props => {
 
   const obterDadosAtividadesGoogleSalaAula = useCallback(async () => {
     setCarregandoDados(true);
-    const resposta = await ServicoMuralGoogleSalaAula.obterDadosAtividadesGoogleSalaAula(
-      aulaId
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoDados(false));
+    const resposta =
+      await ServicoMuralGoogleSalaAula.obterDadosAtividadesGoogleSalaAula(
+        aulaId
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoDados(false));
 
     if (resposta?.data?.length) {
       setAtividades(resposta.data);

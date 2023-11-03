@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable react/prop-types */
 import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
@@ -309,12 +310,13 @@ function CadastroDeAula() {
   const obterAula = useCallback(async () => {
     const carregarComponentesCurriculares = async idTurma => {
       setCarregandoDados(true);
-      const respostaComponentes = !!(!!id || aula?.disciplinaId)
-        ? await servicoDisciplina.obterDisciplinasTurma(idTurma)
-        : await servicoDisciplina
-            .obterDisciplinasPorTurma(idTurma)
-            .catch(e => erros(e))
-            .finally(() => setCarregandoDados(false));
+      const respostaComponentes =
+        !!id || aula?.disciplinaId
+          ? await servicoDisciplina.obterDisciplinasTurma(idTurma)
+          : await servicoDisciplina
+              .obterDisciplinasPorTurma(idTurma)
+              .catch(e => erros(e))
+              .finally(() => setCarregandoDados(false));
 
       if (respostaComponentes?.status === 200) {
         setListaComponentes(respostaComponentes.data);
