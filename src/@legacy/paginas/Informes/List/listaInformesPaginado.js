@@ -155,7 +155,7 @@ const ListaInformesPaginado = ({ form }) => {
     if (dreCodigo && ueCodigo) {
       debounceFlag = setTimeout(() => {
         validaAntesDoSubmit(form, form?.initialValues, validarFiltro);
-      }, 60);
+      }, 100);
     }
   }, [
     anoLetivo,

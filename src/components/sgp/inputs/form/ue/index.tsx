@@ -112,8 +112,8 @@ const SelectUE: React.FC<SelectUEProps> = ({
           options={options}
           placeholder="Unidade Escolar (UE)"
           labelInValue
-          disabled={disabled}
           {...selectProps}
+          disabled={disabled}
         />
       </Form.Item>
     </Loader>

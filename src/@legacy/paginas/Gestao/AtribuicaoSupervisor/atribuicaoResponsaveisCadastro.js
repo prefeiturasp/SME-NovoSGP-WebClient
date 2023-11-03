@@ -22,6 +22,7 @@ import {
 } from '~/servicos';
 import ServicoResponsaveis from '~/servicos/Paginas/Gestao/Responsaveis/ServicoResponsaveis';
 import ListaTransferenciaResponsaveis from './listaTransferenciaResponsaveis';
+import { ROUTES } from '@/core/enum/routes';
 
 const AtribuicaoResponsaveisCadastro = () => {
   const { usuario } = store.getState();

@@ -19,10 +19,10 @@ class ServicoCalendarios {
         return ModalidadeEnum.EJA;
       case ModalidadeTipoCalendarioEnum.CELP:
         return ModalidadeEnum.CELP;
-      case ModalidadeTipoCalendarioEnum.Infantil:
+      case ModalidadeTipoCalendarioEnum.INFANTIL:
         return ModalidadeEnum.INFANTIL;
       case ModalidadeTipoCalendarioEnum.FUNDAMENTAL_MEDIO:
-        return ModalidadeEnum.Fundamental;
+        return ModalidadeEnum.FUNDAMENTAL;
       default:
         return null;
     }

@@ -1,20 +1,20 @@
 import _ from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
+import situacaoMatriculaAluno from '~/dtos/situacaoMatriculaAluno';
 import {
   setConselhoClasseEmEdicao,
   setDadosIniciaisListasNotasConceitos,
   setDadosListasNotasConceitos,
   setPodeEditarNota,
 } from '~/redux/modulos/conselhoClasse/actions';
-import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
-import ListasCarregar from './listasCarregar';
+import { erros } from '~/servicos/alertas';
 import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
-import situacaoMatriculaAluno from '~/dtos/situacaoMatriculaAluno';
+import ListasCarregar from './listasCarregar';
 
 const ListasNotasConceitos = props => {
   const { bimestreSelecionado } = props;
@@ -45,6 +45,10 @@ const ListasNotasConceitos = props => {
 
   const dentroPeriodo = useSelector(
     store => store.conselhoClasse.dentroPeriodo
+  );
+
+  const podeEditarNota = useSelector(
+    store => store.conselhoClasse.podeEditarNota
   );
 
   const {
@@ -87,7 +91,7 @@ const ListasNotasConceitos = props => {
   };
 
   const desabilitarEdicaoAluno = () => {
-    if (!alunoDesabilitado || alunoDentroDoPeriodoDoBimestreOuFechamento()) {
+    if (podeEditarNota || alunoDentroDoPeriodoDoBimestreOuFechamento()) {
       return false;
     }
 
@@ -97,10 +101,8 @@ const ListasNotasConceitos = props => {
   const estaNoPeriodoOuFechamento = () => {
     const hoje = moment().format('MM-DD-YYYY');
     if (fechamentoPeriodoInicioFim) {
-      const {
-        periodoFechamentoInicio,
-        periodoFechamentoFim,
-      } = fechamentoPeriodoInicioFim;
+      const { periodoFechamentoInicio, periodoFechamentoFim } =
+        fechamentoPeriodoInicioFim;
 
       if (periodoFechamentoInicio && periodoFechamentoFim) {
         const inicioF = moment(periodoFechamentoInicio).format('MM-DD-YYYY');
@@ -170,7 +172,8 @@ const ListasNotasConceitos = props => {
 
     let alunoDentroDoPeriodoDoBimestre = true;
     if (validarDataSituacao) {
-      alunoDentroDoPeriodoDoBimestre = alunoDentroDoPeriodoDoBimestreOuFechamento();
+      alunoDentroDoPeriodoDoBimestre =
+        alunoDentroDoPeriodoDoBimestreOuFechamento();
     }
     const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
 
@@ -188,16 +191,17 @@ const ListasNotasConceitos = props => {
 
   const obterDadosLista = useCallback(async () => {
     setCarregando(true);
-    const resultado = await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
-      conselhoClasseId,
-      fechamentoTurmaId,
-      alunoCodigo,
-      turmaCodigo,
-      bimestreSelecionado?.valor,
-      (dadosAlunoObjectCard.desabilitado ? true : false)
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregando(false));
+    const resultado =
+      await ServicoConselhoClasse.obterNotasConceitosConselhoClasse(
+        conselhoClasseId,
+        fechamentoTurmaId,
+        alunoCodigo,
+        turmaCodigo,
+        bimestreSelecionado?.valor,
+        !!dadosAlunoObjectCard.desabilitado
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregando(false));
 
     if (resultado?.data) {
       const dadosCarregar = _.cloneDeep(resultado.data.notasConceitos);
@@ -210,7 +214,6 @@ const ListasNotasConceitos = props => {
     } else {
       setExibir(false);
     }
-
   }, [
     alunoCodigo,
     conselhoClasseId,
