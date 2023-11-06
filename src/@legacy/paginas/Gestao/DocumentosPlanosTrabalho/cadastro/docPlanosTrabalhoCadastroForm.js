@@ -36,10 +36,11 @@ const DocPlanosTrabalhoCadastroForm = props => {
   const classificacaoId = form?.values?.classificacaoId;
   const listaClassificacoes = form?.values?.listaClassificacoes;
 
-  const ehClassificacaoDocumentosTurma = ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
-    classificacaoId,
-    listaClassificacoes
-  );
+  const ehClassificacaoDocumentosTurma =
+    ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
+      classificacaoId,
+      listaClassificacoes
+    );
 
   const desabilitarUpload = !ehClassificacaoDocumentosTurma
     ? form?.values?.listaArquivos?.length > 0
@@ -102,10 +103,11 @@ const DocPlanosTrabalhoCadastroForm = props => {
 
   const onChangeClassificacao = id => {
     if (form.values.tipoDocumentoId?.toString() === TIPO_DOCUMENTO.DOCUMENTOS) {
-      const ehDocTurma = ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
-        id,
-        listaClassificacoes
-      );
+      const ehDocTurma =
+        ServicoDocumentosPlanosTrabalho.verificaSeEhClassificacaoDocumentosTurma(
+          id,
+          listaClassificacoes
+        );
       if (ehDocTurma) {
         limparDadosLocalizador();
       } else if (

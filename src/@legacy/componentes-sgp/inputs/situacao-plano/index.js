@@ -33,12 +33,10 @@ export const SituacaoPlano = ({
       setListaSituacoes([]);
       form.setFieldValue(name, undefined);
     }
-
   }, [updateData]);
 
   useEffect(() => {
     obterSituacoes();
-
   }, []);
 
   return (

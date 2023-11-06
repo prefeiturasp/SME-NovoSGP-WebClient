@@ -54,9 +54,8 @@ const CollapseAtribuicaoResponsavelDados = props => {
   );
 
   const obterResponsaveisPAAI = useCallback(async () => {
-    const resposta = await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(
-      codigoTurma
-    );
+    const resposta =
+      await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(codigoTurma);
 
     const dados = resposta?.data?.items;
     if (dados?.length) {
@@ -77,7 +76,6 @@ const CollapseAtribuicaoResponsavelDados = props => {
   useEffect(() => {
     if (codigoTurma && !responsavelInicialEdicao?.codigoRF)
       obterResponsaveisPAAI();
-
   }, [codigoTurma, responsavelInicialEdicao, obterResponsaveisPAAI]);
 
   const onChange = rf => {

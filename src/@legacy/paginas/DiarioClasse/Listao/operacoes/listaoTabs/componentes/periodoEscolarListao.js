@@ -39,7 +39,6 @@ const PeriodoEscolarListao = props => {
       setListaPeriodos([]);
       setPeriodo();
     };
-
   }, []);
 
   const obterPeriodoPorComponente = useCallback(async () => {
@@ -66,7 +65,6 @@ const PeriodoEscolarListao = props => {
     } else {
       setListaPeriodos([]);
     }
-
   }, [componenteCurricular, turma, bimestreOperacoes]);
 
   useEffect(() => {
@@ -77,7 +75,6 @@ const PeriodoEscolarListao = props => {
     } else {
       limparDadosTabSelecionada();
     }
-
   }, [bimestreOperacoes]);
 
   const obterPeriodoSelecionado = id => {

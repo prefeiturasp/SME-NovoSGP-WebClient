@@ -51,7 +51,6 @@ function UeDropDown({
       setListaUes([]);
       form.setFieldValue('ueId', undefined);
     }
-
   }, [dreId]);
 
   return (

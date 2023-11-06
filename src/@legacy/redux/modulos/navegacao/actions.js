@@ -5,11 +5,11 @@ export function menuRetraido(retraido) {
   };
 }
 
-export function menuSelecionado(chave){
-  return{
+export function menuSelecionado(chave) {
+  return {
     type: '@navegacao/menuSelecionado',
     payload: chave,
-  }
+  };
 }
 
 export function rotaAtiva(rota) {

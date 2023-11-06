@@ -38,7 +38,6 @@ const BimestresCartaIntencoes = props => {
     } else {
       setDesabilitarCampo(desabilitar);
     }
-
   }, [permissoesTela, id, periodoAberto, somenteConsulta]);
 
   const onChange = useCallback(

@@ -50,7 +50,6 @@ const UeComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.initialValues[nomeCampo] = undefined;
       setListaUes([]);
     }
-
   }, [anoLetivo, codigoDre]);
 
   useEffect(() => {
@@ -60,7 +59,6 @@ const UeComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
-
   }, [codigoDre, obterUes]);
 
   return (

@@ -131,15 +131,7 @@ const Container = styled.div`
 `;
 
 const SelectList = props => {
-  const {
-    dados,
-    handleChange,
-    targetKeys,
-    titulos,
-    texto,
-    codigo,
-    selecionados,
-  } = props;
+  const { dados, handleChange, targetKeys, titulos, texto, codigo } = props;
 
   const locale = {
     notFoundContent: '',

@@ -1,4 +1,4 @@
-import { Avatar, Space } from 'antd';
+import { Avatar } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import Loader from '~/componentes/loader';

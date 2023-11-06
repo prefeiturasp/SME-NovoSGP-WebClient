@@ -20,7 +20,7 @@ const GraficoQtdAtendimentosEncaminhamentosProfissional = () => {
   const [dataUltimaConsolidacao, setDataUltimaConsolidacao] = useState();
 
   const dataUltimaConsolidacaoFormatada = dataUltimaConsolidacao
-    ? moment(dataUltimaConsolidacao).format('DD/MM/YYYY HH:mm:ss')
+    ? window.moment(dataUltimaConsolidacao).format('DD/MM/YYYY HH:mm:ss')
     : '';
 
   const limparDados = () => {

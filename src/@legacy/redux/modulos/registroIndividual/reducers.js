@@ -115,9 +115,10 @@ export default function RegistroIndividual(state = inicial, action) {
         };
       }
       case '@registroIndividual/excluirRegistroAnteriorId': {
-        const items = state.dadosPrincipaisRegistroIndividual.registrosIndividuais.items.filter(
-          dados => dados.id !== action.payload
-        );
+        const items =
+          state.dadosPrincipaisRegistroIndividual.registrosIndividuais.items.filter(
+            dados => dados.id !== action.payload
+          );
         if (!items?.length) {
           return {
             ...draft,
@@ -137,18 +138,19 @@ export default function RegistroIndividual(state = inicial, action) {
         };
       }
       case '@registroIndividual/alterarRegistroAnterior': {
-        const items = state.dadosPrincipaisRegistroIndividual.registrosIndividuais.items.map(
-          dados => {
-            if (dados.id === action.payload.id) {
-              return {
-                ...dados,
-                registro: action.payload.registro,
-                auditoria: action.payload.auditoria,
-              };
+        const items =
+          state.dadosPrincipaisRegistroIndividual.registrosIndividuais.items.map(
+            dados => {
+              if (dados.id === action.payload.id) {
+                return {
+                  ...dados,
+                  registro: action.payload.registro,
+                  auditoria: action.payload.auditoria,
+                };
+              }
+              return dados;
             }
-            return dados;
-          }
-        );
+          );
         return {
           ...draft,
           dadosPrincipaisRegistroIndividual: {

@@ -22,7 +22,6 @@ const ListaoOperacoes = () => {
       limparTelaListao();
       dispatch(setLimparModoEdicaoGeral());
     };
-
   }, []);
 
   return (

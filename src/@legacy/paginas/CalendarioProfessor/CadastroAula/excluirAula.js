@@ -53,7 +53,6 @@ function ExcluirAula({
     } else {
       setOpcoesExcluirRecorrencia(listRecorrenciaInicial);
     }
-
   }, [visivel]);
 
   return (

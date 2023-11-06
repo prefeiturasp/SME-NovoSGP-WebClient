@@ -25,18 +25,19 @@ const GraficoQuantidadeTurmasPorAno = props => {
     anosEscolaresConsulta
   ) => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardInformacoesEscolares.obterQuantidadeTurmasPorAno(
-      ano,
-      dre === OPCAO_TODOS ? '' : dre,
-      ue === OPCAO_TODOS ? '' : ue,
-      mod,
-      anosEscolaresConsulta?.length === 1 &&
-        anosEscolaresConsulta[0] === OPCAO_TODOS
-        ? ''
-        : anosEscolaresConsulta
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardInformacoesEscolares.obterQuantidadeTurmasPorAno(
+        ano,
+        dre === OPCAO_TODOS ? '' : dre,
+        ue === OPCAO_TODOS ? '' : ue,
+        mod,
+        anosEscolaresConsulta?.length === 1 &&
+          anosEscolaresConsulta[0] === OPCAO_TODOS
+          ? ''
+          : anosEscolaresConsulta
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno?.data?.length) {
       setDadosGrafico(retorno.data);
@@ -80,12 +81,13 @@ const GraficoQuantidadeTurmasPorAno = props => {
 
   const obterAnosEscolares = useCallback(async () => {
     setExibirLoader(true);
-    const respota = await ServicoDashboardInformacoesEscolares.obterAnosEscolaresPorModalidade(
-      anoLetivo,
-      dreId === OPCAO_TODOS ? '' : dreId,
-      ueId === OPCAO_TODOS ? '' : ueId,
-      modalidade
-    ).catch(e => erros(e));
+    const respota =
+      await ServicoDashboardInformacoesEscolares.obterAnosEscolaresPorModalidade(
+        anoLetivo,
+        dreId === OPCAO_TODOS ? '' : dreId,
+        ueId === OPCAO_TODOS ? '' : ueId,
+        modalidade
+      ).catch(e => erros(e));
 
     if (respota?.data?.length) {
       if (respota.data.length > 1) {

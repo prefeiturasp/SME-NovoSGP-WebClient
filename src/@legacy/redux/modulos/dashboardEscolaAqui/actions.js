@@ -1,8 +1,8 @@
-export const setDadosDeLeituraDeComunicadosAgrupadosPorModalidade = payload => ({
-  type:
-    '@dashboardEscolaAqui/setDadosDeLeituraDeComunicadosAgrupadosPorModalidade',
-  payload,
-});
+export const setDadosDeLeituraDeComunicadosAgrupadosPorModalidade =
+  payload => ({
+    type: '@dashboardEscolaAqui/setDadosDeLeituraDeComunicadosAgrupadosPorModalidade',
+    payload,
+  });
 
 export const setDadosDeLeituraDeComunicadosPorTurmas = payload => ({
   type: '@dashboardEscolaAqui/setDadosDeLeituraDeComunicadosPorTurmas',

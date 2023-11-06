@@ -88,7 +88,7 @@ export const setPlanoAnualSomenteConsulta = payload => ({
   payload,
 });
 
-export const setListaComponentesCheck = payload =>({
+export const setListaComponentesCheck = payload => ({
   type: '@planoAnual/setListaComponentesCheck',
   payload,
 });

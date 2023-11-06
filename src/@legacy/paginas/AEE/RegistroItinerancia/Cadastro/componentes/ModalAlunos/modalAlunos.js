@@ -19,11 +19,10 @@ const ModalAlunos = ({
   setAlunosSelecionados,
   questoes,
   setModoEdicaoItinerancia,
-  dataVisita
+  dataVisita,
 }) => {
-  const [alunosSelecionadosModal, setAlunosSelecionadosModal] = useState(
-    alunosSelecionados
-  );
+  const [alunosSelecionadosModal, setAlunosSelecionadosModal] =
+    useState(alunosSelecionados);
   const [modoEdicao, setModoEdicao] = useState(false);
 
   const mudarLocalizador = aluno => {

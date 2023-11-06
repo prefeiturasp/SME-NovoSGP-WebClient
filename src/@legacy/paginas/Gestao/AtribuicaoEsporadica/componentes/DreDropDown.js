@@ -37,7 +37,6 @@ function DreDropDown({ form, onChange, label, desabilitado, labelRequired }) {
       form.setFieldValue('dreId', listaDres[0].valor);
       onChange(listaDres[0].valor, listaDres);
     }
-
   }, [listaDres]);
 
   useEffect(() => {
@@ -45,7 +44,6 @@ function DreDropDown({ form, onChange, label, desabilitado, labelRequired }) {
     if (!valorNuloOuVazio(form.values.dreId)) {
       onChange(form.values.dreId, listaDres);
     }
-
   }, [form.values.dreId]);
 
   return (

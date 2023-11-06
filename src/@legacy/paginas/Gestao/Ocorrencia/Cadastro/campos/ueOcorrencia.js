@@ -54,7 +54,6 @@ const UeOcorrencia = props => {
       form.initialValues[nomeCampo] = undefined;
       setListaUes([]);
     }
-
   }, [anoLetivo, dreCodigo]);
 
   useEffect(() => {
@@ -66,7 +65,6 @@ const UeOcorrencia = props => {
       form.setFieldValue(nomeCampo, undefined);
       setListaUes([]);
     }
-
   }, [dreCodigo, ocorrenciaId]);
 
   return (

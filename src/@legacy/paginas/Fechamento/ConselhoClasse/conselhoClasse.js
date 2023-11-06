@@ -101,7 +101,7 @@ const ConselhoClasse = () => {
     const resposta = await ServicoConselhoClasse.obterConselhoClasseTurmaFinal(
       turmaSelecionada.turma,
       aluno.codigoEOL,
-      aluno.desabilitado ? true : false
+      !!aluno.desabilitado
     );
 
     if (resposta?.data) {
