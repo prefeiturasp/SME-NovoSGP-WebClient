@@ -376,7 +376,7 @@ const TipoCalendarioEscolarForm = () => {
   );
 
   useEffect(() => {
-    if(!idTipoCalendario){
+    if (!idTipoCalendario) {
       obterAnosLetivos();
     }
     verificarSeSemestreEhRequerido();
@@ -446,7 +446,8 @@ const TipoCalendarioEscolarForm = () => {
                         valueOption="valor"
                         valueText="desc"
                         disabled={
-                          (idTipoCalendario > 0) || listaAnosLetivo && listaAnosLetivo.length === 1
+                          idTipoCalendario > 0 ||
+                          (listaAnosLetivo && listaAnosLetivo.length === 1)
                         }
                         onChange={onChangeAnoLetivo}
                         valueSelect={anoLetivo}
