@@ -158,11 +158,14 @@ class ServicoDashboardFrequencia {
   };
 
   obterSemanas = (anoLetivo, modalidadeTurma, semestre) => {
-    return api.get(`${urlPadrao}/filtro/anos/${anoLetivo}/modalidadeTurma/${modalidadeTurma}/semanas`,{
-      params: {
-        semestre
-      },
-    });
+    return api.get(
+      `${urlPadrao}/filtro/anos/${anoLetivo}/modalidadeTurma/${modalidadeTurma}/semanas`,
+      {
+        params: {
+          semestre,
+        },
+      }
+    );
   };
 
   obterFrequenciasConsolidadacaoDiariaPorTurmaEAno = (

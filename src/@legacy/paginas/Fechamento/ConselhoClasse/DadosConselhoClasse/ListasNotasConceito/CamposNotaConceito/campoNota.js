@@ -172,7 +172,6 @@ const CampoNota = props => {
                 desabilitarIconeExpandir ? null : onClickMostrarJustificativa
               }
             >
-
               <Tooltip
                 title="Ver Justificativa"
                 placement="bottom"
