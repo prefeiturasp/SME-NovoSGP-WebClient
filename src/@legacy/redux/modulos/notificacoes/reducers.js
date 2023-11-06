@@ -25,11 +25,8 @@ export default function notificacoes(state = inicial, action) {
         break;
       }
       case '@notificacoes/webSocketNotificacaoLida': {
-        const {
-          codigo,
-          isAnoAnterior,
-          obterListaNotificacoes,
-        } = action.payload;
+        const { codigo, isAnoAnterior, obterListaNotificacoes } =
+          action.payload;
         const estaNaLista = draft.notificacoes?.find?.(
           n => n?.codigo === codigo
         );
@@ -66,12 +63,8 @@ export default function notificacoes(state = inicial, action) {
         break;
       }
       case '@notificacoes/webSocketNotificacaoExcluida': {
-        const {
-          codigo,
-          status,
-          isAnoAnterior,
-          obterListaNotificacoes,
-        } = action.payload;
+        const { codigo, status, isAnoAnterior, obterListaNotificacoes } =
+          action.payload;
         const estaNaLista = draft.notificacoes?.find?.(
           n => n?.codigo === codigo
         );

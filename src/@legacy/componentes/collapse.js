@@ -1,10 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import shortid from 'shortid';
 import { Collapse as PainelCollapse } from 'antd';
 
-const Collapse = ({ idPaineisAbertos, onChange, posicaoIcone, children }) => {
+const Collapse = ({ idPaineisAbertos, onChange, children }) => {
   return (
     <PainelCollapse
       defaultActiveKey={idPaineisAbertos}

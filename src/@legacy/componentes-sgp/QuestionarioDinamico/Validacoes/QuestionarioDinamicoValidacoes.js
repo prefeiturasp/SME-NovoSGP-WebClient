@@ -52,9 +52,8 @@ class QuestionarioDinamicoValidacoes {
                     'validarObrigatoriedadePeriodoInicioFim',
                     'OBRIGATORIO',
                     function validar() {
-                      const { periodoInicio, periodoFim } = this.parent[
-                        questaoAtual.id
-                      ];
+                      const { periodoInicio, periodoFim } =
+                        this.parent[questaoAtual.id];
 
                       let ehValido = true;
                       if (!periodoInicio || !periodoFim) {
@@ -67,9 +66,8 @@ class QuestionarioDinamicoValidacoes {
                     'validarPeriodoInicioMaiorQueFim',
                     'PERIODO_INICIO_MAIOR_QUE_FIM',
                     function validar() {
-                      const { periodoInicio, periodoFim } = this.parent[
-                        questaoAtual.id
-                      ];
+                      const { periodoInicio, periodoFim } =
+                        this.parent[questaoAtual.id];
 
                       let ehValido = true;
                       if (periodoInicio && periodoFim) {
@@ -86,9 +84,8 @@ class QuestionarioDinamicoValidacoes {
                   );
                 break;
               case tipoQuestao.Data:
-                camposComValidacao[questaoAtual.id] = momentSchema.required(
-                  'Campo obrigatório'
-                );
+                camposComValidacao[questaoAtual.id] =
+                  momentSchema.required('Campo obrigatório');
                 break;
               default:
                 camposComValidacao[questaoAtual.id] = Yup.string()

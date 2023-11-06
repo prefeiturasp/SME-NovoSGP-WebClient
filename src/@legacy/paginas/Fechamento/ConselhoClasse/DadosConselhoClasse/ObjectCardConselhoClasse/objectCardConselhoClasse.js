@@ -59,7 +59,7 @@ const ObjectCardConselhoClasse = () => {
     }
   }, [dadosAlunoObjectCard.codigoEOL, turma, obterFrequenciaAluno]);
 
-  const gerarConselhoClasseAluno =  (dados) => {
+  const gerarConselhoClasseAluno = dados => {
     setGerandoConselhoClasse(true);
     ServicoConselhoClasse.gerarConselhoClasseAluno(
       conselhoClasseId,

@@ -12,19 +12,14 @@ import CampoNumero from '~/componentes/campoNumero';
 
 const ListaAulasPorBimestre = props => {
   const { dados, setModoEdicao, permissoesTela, somenteConsulta } = props;
-  const {
-    totalCriadasTitular,
-    totalCriadasCj,
-    totalDadas,
-    totalRepostas,
-  } = dados;
+  const { totalCriadasTitular, totalCriadasCj, totalDadas, totalRepostas } =
+    dados;
   const [totalPrevistas, setTotalPrevistas] = useState(dados.totalPrevistas);
   const [bimestres, setBimestres] = useState(dados.bimestres);
 
   useEffect(() => {
     setBimestres([...dados.bimestres]);
     setTotalPrevistas(dados.totalPrevistas);
-
   }, [dados.bimestres]);
 
   const formatarData = data => {

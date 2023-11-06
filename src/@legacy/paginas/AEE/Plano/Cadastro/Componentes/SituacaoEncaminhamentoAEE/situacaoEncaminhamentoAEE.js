@@ -17,12 +17,11 @@ const SituacaoEncaminhamentoAEE = () => {
 
     const obtemSituacaoEncaminhamento = async () => {
       dispatch(setPlanoAEESituacaoEncaminhamentoAEE());
-      const retorno = await ServicoEncaminhamentoAEE.obterAlunoSituacaoEncaminhamentoAEE(
-        {
+      const retorno =
+        await ServicoEncaminhamentoAEE.obterAlunoSituacaoEncaminhamentoAEE({
           estudanteCodigo: codigoAluno,
           ueCodigo: codigoUe,
-        }
-      );
+        });
 
       if (retorno?.data) {
         setSituacao(retorno?.data);

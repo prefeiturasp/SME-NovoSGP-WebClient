@@ -58,7 +58,7 @@ export const TabelaColunasFixas = styled.div`
     left: 0px;
     z-index: 2;
   }
-  .campo-justificativa{
+  .campo-justificativa {
     width: 50%;
     left: 0px;
     z-index: 2;

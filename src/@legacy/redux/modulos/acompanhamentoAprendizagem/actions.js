@@ -19,8 +19,7 @@ export const limparDadosAcompanhamentoAprendizagem = payload => ({
 });
 
 export const setExibirLoaderGeralAcompanhamentoAprendizagem = payload => ({
-  type:
-    '@acompanhamentoAprendizagem/setExibirLoaderGeralAcompanhamentoAprendizagem',
+  type: '@acompanhamentoAprendizagem/setExibirLoaderGeralAcompanhamentoAprendizagem',
   payload,
 });
 
@@ -35,8 +34,7 @@ export const setAcompanhamentoAprendizagemEmEdicao = payload => ({
 });
 
 export const setDesabilitarCamposAcompanhamentoAprendizagem = payload => ({
-  type:
-    '@acompanhamentoAprendizagem/setDesabilitarCamposAcompanhamentoAprendizagem',
+  type: '@acompanhamentoAprendizagem/setDesabilitarCamposAcompanhamentoAprendizagem',
   payload,
 });
 
@@ -66,13 +64,11 @@ export const setErrosAcompanhamentoAprendizagem = payload => ({
 });
 
 export const setExibirModalErrosAcompanhamentoAprendizagem = payload => ({
-  type:
-    '@acompanhamentoAprendizagem/setExibirModalErrosAcompanhamentoAprendizagem',
+  type: '@acompanhamentoAprendizagem/setExibirModalErrosAcompanhamentoAprendizagem',
   payload,
 });
 
 export const setExibirLoaderAlunosAcompanhamentoAprendizagem = payload => ({
-  type:
-    '@acompanhamentoAprendizagem/setExibirLoaderAlunosAcompanhamentoAprendizagem',
+  type: '@acompanhamentoAprendizagem/setExibirLoaderAlunosAcompanhamentoAprendizagem',
   payload,
 });

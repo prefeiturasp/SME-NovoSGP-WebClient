@@ -59,7 +59,6 @@ const TabListaoDiarioBordoCollapses = () => {
         setDadosIniciaisDiarioBordo
       );
     }
-
   }, [periodo, componenteCurricularDiarioBordo]);
 
   const perguntarSalvarObservacao = async () => {

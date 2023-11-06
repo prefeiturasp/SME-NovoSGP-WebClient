@@ -98,8 +98,10 @@ const BotoesAcoesPlanoAnual = () => {
   };
 
   const onImprimir = async () => {
-    const resultado = await ServicoPlanoAnual.imprimirPlanoAnual({ id: planejamentoAnualId }).catch(e => erros(e));
-    if (resultado?.status === HttpStatusCode.Ok) 
+    const resultado = await ServicoPlanoAnual.imprimirPlanoAnual({
+      id: planejamentoAnualId,
+    }).catch(e => erros(e));
+    if (resultado?.status === HttpStatusCode.Ok)
       sucesso(MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO);
   };
 
@@ -128,15 +130,15 @@ const BotoesAcoesPlanoAnual = () => {
       />
       <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
       <Button
-          id={SGP_BUTTON_IMPRIMIR}
-          icon="print"
-          color={Colors.Azul}
-          className="mr-2"
-          semMargemDireita
-          border
-          onClick={onImprimir}
-          disabled={ !planejamentoAnualId }
-        />
+        id={SGP_BUTTON_IMPRIMIR}
+        icon="print"
+        color={Colors.Azul}
+        className="mr-2"
+        semMargemDireita
+        border
+        onClick={onImprimir}
+        disabled={!planejamentoAnualId}
+      />
       <Button
         id={SGP_BUTTON_CANCELAR}
         label="Cancelar"

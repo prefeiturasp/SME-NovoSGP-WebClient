@@ -133,7 +133,8 @@ const RedefinirSenha = () => {
     const temAcento = valor.match(/([À-ÖØ-öø-ÿ])/);
     const espacoBranco = valor.includes(' ');
 
-    const iguais = inputConfSenhaRef.current.value === inputSenhaRef.current.value;
+    const iguais =
+      inputConfSenhaRef.current.value === inputSenhaRef.current.value;
 
     const tamanho = valor.length >= 8 && valor.length <= 12;
 
@@ -193,10 +194,10 @@ const RedefinirSenha = () => {
       setErroGeral(requisicao.erro);
     } else {
       const rf = Number.isInteger(usuario * 1)
-      ? usuario
-      : Number.isInteger(location?.state * 1)
-      ? location?.state
-      : '';
+        ? usuario
+        : Number.isInteger(location?.state * 1)
+        ? location?.state
+        : '';
 
       const requisicao = await ServicoPrimeiroAcesso.alterarSenha({
         usuario: rf,

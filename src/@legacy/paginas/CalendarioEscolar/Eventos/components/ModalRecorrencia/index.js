@@ -166,7 +166,6 @@ function ModalRecorrencia({
   };
   useEffect(() => {
     constroiValidacoes();
-
   }, []);
 
   const onSubmitRecorrencia = () => {
@@ -209,7 +208,6 @@ function ModalRecorrencia({
       onCloseModal();
       setLimparRecorrencia(false);
     }
-
   }, [limparRecorrencia]);
 
   const desabilitarData = current => {

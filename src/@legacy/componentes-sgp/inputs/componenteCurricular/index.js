@@ -62,8 +62,6 @@ export const ComponenteCurricular = ({
 
     limparDados();
     if (turmaCodigo) obterComponentesCurriculares();
-
-
   }, [turmaCodigo]);
 
   const setarNovoValor = newValue => {

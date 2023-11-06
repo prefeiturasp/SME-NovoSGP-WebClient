@@ -27,12 +27,8 @@ const ModalCadastroAtividadeContraturno = props => {
   };
 
   const validacoes = Yup.object().shape({
-    local: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
-    atividade: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
+    local: Yup.string().nullable().required('Campo obrigatório'),
+    atividade: Yup.string().nullable().required('Campo obrigatório'),
   });
 
   const fecharModal = () => {

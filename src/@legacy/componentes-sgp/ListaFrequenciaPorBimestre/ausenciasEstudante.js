@@ -47,17 +47,18 @@ const AusenciasEstudante = props => {
   const obterAusenciaMotivoPorAlunoTurmaBimestreAno = useCallback(
     async numeroPagina => {
       setExibirLoader(true);
-      const retorno = await ServicoAcompanhamentoFrequencia.obterFrequenciaDiariaAluno(
-        turmaId,
-        componenteCurricularId,
-        codigoAluno,
-        bimestre,
-        semestre,
-        numeroPagina || 1,
-        REGISTROS_POR_PAGINA
-      )
-        .catch(e => erros(e))
-        .finally(() => setExibirLoader(false));
+      const retorno =
+        await ServicoAcompanhamentoFrequencia.obterFrequenciaDiariaAluno(
+          turmaId,
+          componenteCurricularId,
+          codigoAluno,
+          bimestre,
+          semestre,
+          numeroPagina || 1,
+          REGISTROS_POR_PAGINA
+        )
+          .catch(e => erros(e))
+          .finally(() => setExibirLoader(false));
 
       if (retorno?.data) {
         setAusencias(retorno.data);

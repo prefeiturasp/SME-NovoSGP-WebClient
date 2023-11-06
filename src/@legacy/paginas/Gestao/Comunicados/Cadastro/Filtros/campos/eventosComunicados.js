@@ -9,13 +9,8 @@ const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaEventos, setListaEventos] = useState([]);
 
-  const {
-    anoLetivo,
-    codigoDre,
-    codigoUe,
-    modalidades,
-    tipoCalendarioId,
-  } = form.values;
+  const { anoLetivo, codigoDre, codigoUe, modalidades, tipoCalendarioId } =
+    form.values;
 
   const nomeCampo = 'eventoId';
 
@@ -44,7 +39,6 @@ const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaEventos([]);
       form.setFieldValue(nomeCampo, undefined);
     }
-
   }, [anoLetivo, codigoDre, codigoUe, modalidades, tipoCalendarioId]);
 
   useEffect(() => {
@@ -54,7 +48,6 @@ const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaEventos([]);
       form.setFieldValue(nomeCampo, undefined);
     }
-
   }, [tipoCalendarioId, codigoUe, modalidades, obterEventos]);
 
   return (

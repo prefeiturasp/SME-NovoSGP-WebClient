@@ -15,7 +15,6 @@ function AnoLetivoDropDown({ form, name, onChange }) {
       form.setFieldValue(name, String(anosLetivos[0].valor), false);
       onChange(String(anosLetivos[0].valor));
     }
-
   }, [anosLetivos]);
 
   return (

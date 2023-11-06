@@ -57,14 +57,12 @@ const DreReabertura = ({ form, onChangeCampos }) => {
       form.setFieldValue('dreCodigo', undefined);
       setListaDres([]);
     }
-
   }, [paramsRota, usuario.possuiPerfilSme]);
 
   useEffect(() => {
     if (!paramsRota?.id || (paramsRota?.id && dreCodigo)) {
       obterDres();
     }
-
   }, [obterDres, paramsRota]);
 
   return (

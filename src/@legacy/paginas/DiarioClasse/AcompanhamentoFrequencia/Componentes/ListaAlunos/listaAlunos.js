@@ -57,18 +57,18 @@ const ListaAlunos = props => {
   const obterAlunos = useCallback(async () => {
     setDadosBimestre([]);
     setCarregandoListaAlunos(true);
-    const retorno = await ServicoAcompanhamentoFrequencia.obterAcompanhamentoFrequenciaPorBimestre(
-      turmaSelecionada?.id,
-      componenteCurricularId,
-      bimestreSelecionado,
-      territorioSaber
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoListaAlunos(false));
+    const retorno =
+      await ServicoAcompanhamentoFrequencia.obterAcompanhamentoFrequenciaPorBimestre(
+        turmaSelecionada?.id,
+        componenteCurricularId,
+        bimestreSelecionado,
+        territorioSaber
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoListaAlunos(false));
 
     const dados = retorno?.data ? retorno?.data : [];
     setDadosBimestre(dados);
-
   }, [turmaSelecionada, componenteCurricularId, bimestreSelecionado]);
 
   useEffect(() => {

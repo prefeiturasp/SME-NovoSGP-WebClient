@@ -13,7 +13,6 @@ import {
   formatarFrequencia,
   tratarStringComponenteCurricularNome,
 } from '~/utils';
-import { useSelector } from 'react-redux';
 
 const ListaBimestre = props => {
   const {

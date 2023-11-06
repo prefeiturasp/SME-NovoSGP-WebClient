@@ -79,14 +79,12 @@ function InputRF({
       }
       form.setFieldValue(name, pessoaSelecionada?.professorRf);
     }
-
   }, [pessoaSelecionada]);
 
   useEffect(() => {
     if (form && form.initialValues) {
       setValor(form.initialValues.professorRf);
     }
-
   }, [form?.initialValues]);
 
   useEffect(() => {
@@ -96,7 +94,6 @@ function InputRF({
         setValor('');
       }
     }
-
   }, [form?.values]);
 
   return (
@@ -106,8 +103,9 @@ function InputRF({
           <Field
             name={name}
             id={id || name}
-            className={`campo ${possuiErro() ? 'is-invalid' : ''} ${className ||
-              ''} ${desabilitado ? 'desabilitado' : ''}`}
+            className={`campo ${possuiErro() ? 'is-invalid' : ''} ${
+              className || ''
+            } ${desabilitado ? 'desabilitado' : ''}`}
             component={Input}
             readOnly={desabilitado}
             onBlur={executaOnBlur}
