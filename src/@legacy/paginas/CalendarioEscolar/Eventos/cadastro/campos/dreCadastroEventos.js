@@ -53,14 +53,12 @@ const DreCadastroEventos = ({
       form.setFieldValue('dreId', undefined);
       setListaDres([]);
     }
-
   }, [eventoId, usuario.possuiPerfilSme]);
 
   useEffect(() => {
     if (!eventoId || (eventoId && dreId)) {
       obterDres();
     }
-
   }, [obterDres]);
 
   return (

@@ -45,7 +45,6 @@ export const Responsavel = React.memo(
       if (dreCodigo && ueCodigo) {
         obterResponsaveis();
       }
-
     }, [turmaCodigo, dreCodigo, ueCodigo]);
 
     return (

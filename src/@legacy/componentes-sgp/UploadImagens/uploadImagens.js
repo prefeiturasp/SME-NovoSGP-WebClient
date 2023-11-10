@@ -183,7 +183,7 @@ const UploadImagens = props => {
   };
 
   const beforeUpload = arquivo => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
       if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
         erro('Formato não permitido');
         reject(new Error(false));
@@ -194,15 +194,23 @@ const UploadImagens = props => {
         reject(new Error(false));
       }
 
-      const ehValido = await validarTamanhoMinimoAlturaLargura(arquivo);
-      if (!ehValido) {
-        erro(
-          `A resolução mínima é de ${valorMinimoAlturaLargura?.height} x ${valorMinimoAlturaLargura?.width} pixels`
-        );
-        reject(new Error(false));
-      }
-
-      resolve(true);
+      validarTamanhoMinimoAlturaLargura(arquivo)
+        .then(ehValido => {
+          if (!ehValido) {
+            erro(
+              `A resolução mínima é de ${valorMinimoAlturaLargura?.height} x ${valorMinimoAlturaLargura?.width} pixels`
+            );
+            reject(new Error(false));
+          } else {
+            resolve(true);
+          }
+        })
+        .catch(() => {
+          erro(
+            `A resolução mínima é de ${valorMinimoAlturaLargura?.height} x ${valorMinimoAlturaLargura?.width} pixels`
+          );
+          reject(new Error(false));
+        });
     });
   };
 

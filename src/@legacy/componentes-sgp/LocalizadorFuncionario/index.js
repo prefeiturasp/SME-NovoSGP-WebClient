@@ -32,9 +32,8 @@ const LocalizadorFuncionario = props => {
     codigoRF: false,
     nomeServidor: false,
   });
-  const [timeoutBuscarPorCodigoNome, setTimeoutBuscarPorCodigoNome] = useState(
-    ''
-  );
+  const [timeoutBuscarPorCodigoNome, setTimeoutBuscarPorCodigoNome] =
+    useState('');
   const [exibirLoader, setExibirLoader] = useState(false);
 
   useEffect(() => {
@@ -264,7 +263,6 @@ const LocalizadorFuncionario = props => {
         validaAntesBuscarPorCodigo(valorInicial.codigoRF);
       }
     }
-
   }, [valorInicial, dataSource, funcionarioSelecionado]);
 
   useEffect(() => {

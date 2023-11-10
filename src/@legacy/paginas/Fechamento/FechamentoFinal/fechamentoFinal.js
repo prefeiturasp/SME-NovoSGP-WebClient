@@ -127,7 +127,6 @@ const FechamentoFinal = forwardRef((props, ref) => {
         erros(e);
         carregandoFechamentoFinal(false);
       });
-
   }, [disciplinaCodigo, ehRegencia, turmaCodigo]);
 
   useImperativeHandle(ref, () => ({
@@ -145,7 +144,6 @@ const FechamentoFinal = forwardRef((props, ref) => {
     } else {
       resetarTela();
     }
-
   }, [bimestreCorrente, disciplinaCodigo]);
 
   const setDisciplinaAtiva = disciplina => {

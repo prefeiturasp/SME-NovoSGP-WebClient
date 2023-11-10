@@ -33,21 +33,11 @@ const ModalCadastroEnderecoResidencial = props => {
   };
 
   const validacoes = Yup.object().shape({
-    tipoLogradouro: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
-    logradouro: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
-    numero: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
-    complemento: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
-    bairro: Yup.string()
-      .nullable()
-      .required('Campo obrigatório'),
+    tipoLogradouro: Yup.string().nullable().required('Campo obrigatório'),
+    logradouro: Yup.string().nullable().required('Campo obrigatório'),
+    numero: Yup.string().nullable().required('Campo obrigatório'),
+    complemento: Yup.string().nullable().required('Campo obrigatório'),
+    bairro: Yup.string().nullable().required('Campo obrigatório'),
   });
 
   const fecharModal = () => {

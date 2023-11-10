@@ -76,9 +76,8 @@ const DadosAdesao = props => {
       dadosParaMapear.push(totalUsuariosValidos);
     }
 
-    const dadosMapeadosComPorcentagem = mapearParaDtoGraficoPizzaComValorEPercentual(
-      dadosParaMapear
-    );
+    const dadosMapeadosComPorcentagem =
+      mapearParaDtoGraficoPizzaComValorEPercentual(dadosParaMapear);
     setDadosGraficoAdesao(dadosMapeadosComPorcentagem);
   };
 
@@ -161,9 +160,10 @@ const DadosAdesao = props => {
 
   const obterDadosGraficoAdesaoAgrupados = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardEscolaAqui.obterDadosGraficoAdesaoAgrupados()
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardEscolaAqui.obterDadosGraficoAdesaoAgrupados()
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno && retorno.data && retorno.data.length) {
       mapearDadosGraficos(retorno.data);

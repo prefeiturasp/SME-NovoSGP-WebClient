@@ -23,9 +23,8 @@ import { erros, sucesso } from '~/servicos';
 import { OPCAO_TODOS } from '~/constantes';
 
 const ModalImpressao = ({ dadosAlunos, componenteCurricularId }) => {
-  const [incluirAlunosImpressao, setIncluirAlunosImpressao] = useState(
-    OPCAO_TODOS
-  );
+  const [incluirAlunosImpressao, setIncluirAlunosImpressao] =
+    useState(OPCAO_TODOS);
   const [alunosSelecionados, setAlunosSelecionados] = useState([]);
   const [imprimirTodosBimestres, setImprimirTodosBimestres] = useState(false);
   const [imprimirFreqDiaria, setImprimirFreqDiaria] = useState(false);

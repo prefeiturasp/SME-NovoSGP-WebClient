@@ -93,8 +93,7 @@ const DadosPlanoAnual = () => {
     if (componenteCurricular && !exibirModalCopiarConteudo) {
       obterTurmasParaCopiarConteudo();
     }
-
-  }, [exibirModalCopiarConteudo])
+  }, [exibirModalCopiarConteudo]);
 
   /**
    * carrega a lista de bimestres com os dados dos planos
@@ -126,7 +125,6 @@ const DadosPlanoAnual = () => {
         }
       });
     }
-
   }, [componenteCurricular]);
 
   return (

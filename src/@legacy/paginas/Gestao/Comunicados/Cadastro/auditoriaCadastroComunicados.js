@@ -3,14 +3,8 @@ import React from 'react';
 import { Auditoria } from '~/componentes';
 
 const AuditoriaCadastroComunicados = ({ form }) => {
-  const {
-    criadoEm,
-    criadoPor,
-    criadoRF,
-    alteradoPor,
-    alteradoEm,
-    alteradoRF,
-  } = form?.values;
+  const { criadoEm, criadoPor, criadoRF, alteradoPor, alteradoEm, alteradoRF } =
+    form?.values;
 
   return (
     <>

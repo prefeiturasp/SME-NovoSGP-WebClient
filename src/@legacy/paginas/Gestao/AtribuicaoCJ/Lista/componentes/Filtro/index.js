@@ -55,8 +55,6 @@ function Filtro({ onFiltrar }) {
       anoLetivo: anosOrdenados[0]?.valor,
       exibirHistorico: consideraHistorico,
     });
-
-
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -128,7 +126,7 @@ function Filtro({ onFiltrar }) {
               ueId={form.values.ueId}
               anoLetivo={form.values.anoLetivo}
               form={form}
-              onChange={(pessoa) => onFiltrar({...form.values, ...pessoa})}
+              onChange={pessoa => onFiltrar({ ...form.values, ...pessoa })}
             />
           </Linha>
         </Form>

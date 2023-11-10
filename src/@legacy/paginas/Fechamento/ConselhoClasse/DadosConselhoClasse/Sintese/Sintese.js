@@ -14,11 +14,8 @@ const Sintese = props => {
     store => store.conselhoClasse.dadosPrincipaisConselhoClasse
   );
 
-  const {
-    conselhoClasseId,
-    fechamentoTurmaId,
-    alunoCodigo,
-  } = dadosPrincipaisConselhoClasse;
+  const { conselhoClasseId, fechamentoTurmaId, alunoCodigo } =
+    dadosPrincipaisConselhoClasse;
 
   const cores = [
     Base.Azul,

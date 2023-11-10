@@ -20,7 +20,6 @@ const CalendarioCadastroEventos = ({
     if (!eventoId && tipoCalendarioIdRota) {
       montarTipoCalendarioPorId(tipoCalendarioIdRota, form);
     }
-
   }, [eventoId, tipoCalendarioIdRota]);
 
   useEffect(() => {
@@ -28,7 +27,6 @@ const CalendarioCadastroEventos = ({
     if (eventoId && tipoCalendarioId) {
       montarTipoCalendarioPorId(tipoCalendarioId, form);
     }
-
   }, [eventoId, tipoCalendarioId]);
 
   return (

@@ -43,7 +43,6 @@ const TabListaoFrequencia = () => {
       setListaTiposFrequencia([]);
       dispatch(setLimparModoEdicaoGeral(false));
     };
-
   }, []);
 
   const obterFrequenciasPorPeriodo = useCallback(async () => {
@@ -89,7 +88,6 @@ const TabListaoFrequencia = () => {
       limparFrequencia();
     }
     setExibirLoaderGeral(false);
-
   }, [
     dispatch,
     periodoAbertoListao,
@@ -109,7 +107,6 @@ const TabListaoFrequencia = () => {
     ) {
       obterFrequenciasPorPeriodo();
     }
-
   }, [periodo]);
 
   return (

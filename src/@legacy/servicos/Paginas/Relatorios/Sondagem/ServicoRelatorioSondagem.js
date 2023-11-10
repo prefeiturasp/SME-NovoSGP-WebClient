@@ -6,7 +6,7 @@ class ServicoRelatorioSondagem {
   gerarAnalitico = params =>
     api.post(`${urlPadrao}/sondagem/analitico`, params);
 
-  obterTipoSondagem = params =>
+  obterTipoSondagem = () =>
     api.get(`${urlPadrao}/sondagem/analitico/tiposondagem`);
 }
 

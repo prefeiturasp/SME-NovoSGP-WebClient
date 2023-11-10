@@ -1,4 +1,3 @@
-import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,8 +15,6 @@ import {
   AvisoComponenteCurricular,
   DescricaoNomeTabComponenteCurricular,
 } from './tabsComponentesCorriculares.css';
-
-const { TabPane } = Tabs;
 
 const TabsComponentesCorriculares = props => {
   const dispatch = useDispatch();

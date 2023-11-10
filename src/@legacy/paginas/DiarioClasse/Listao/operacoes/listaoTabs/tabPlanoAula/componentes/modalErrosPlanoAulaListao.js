@@ -3,9 +3,8 @@ import { ModalMultiLinhas } from '~/componentes';
 import ListaoContext from '../../../../listaoContext';
 
 const ModalErrosPlanoAulaListao = () => {
-  const { errosPlanoAulaListao, setErrosPlanoAulaListao } = useContext(
-    ListaoContext
-  );
+  const { errosPlanoAulaListao, setErrosPlanoAulaListao } =
+    useContext(ListaoContext);
 
   const onCloseErros = () => setErrosPlanoAulaListao([]);
 

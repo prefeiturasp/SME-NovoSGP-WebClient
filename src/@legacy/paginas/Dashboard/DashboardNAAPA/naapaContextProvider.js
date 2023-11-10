@@ -30,7 +30,7 @@ const NAAPAContextProvider = ({ children }) => {
         listaMesesReferencias,
         setListaMesesReferencias,
         listaMesesReferencias2,
-        setListaMesesReferencias2
+        setListaMesesReferencias2,
       }}
     >
       {children}

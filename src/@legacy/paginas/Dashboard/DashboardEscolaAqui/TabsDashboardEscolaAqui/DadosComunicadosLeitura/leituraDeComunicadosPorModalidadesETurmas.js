@@ -12,12 +12,8 @@ import {
 import GraficoBarraDashboard from '../../../ComponentesDashboard/graficoBarraDashboard';
 
 const LeituraDeComunicadosPorModalidadesETurmas = props => {
-  const {
-    chavesGrafico,
-    modoVisualizacao,
-    comunicado,
-    listaComunicado,
-  } = props;
+  const { chavesGrafico, modoVisualizacao, comunicado, listaComunicado } =
+    props;
 
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -34,20 +30,22 @@ const LeituraDeComunicadosPorModalidadesETurmas = props => {
 
   const obterDadosDeLeituraDeComunicadosPorModalidadesETurmas = useCallback(
     async dadosComunicado => {
-      const modalidadesCodigos = dadosDeLeituraDeComunicadosAgrupadosPorModalidade.map(
-        item => item.modalidadeCodigo
-      );
+      const modalidadesCodigos =
+        dadosDeLeituraDeComunicadosAgrupadosPorModalidade.map(
+          item => item.modalidadeCodigo
+        );
       if (modalidadesCodigos?.length && dadosComunicado?.id) {
         setExibirLoader(true);
-        const resposta = await ServicoDashboardEscolaAqui.obterDadosDeLeituraDeComunicadosPorModalidadeETurmas(
-          dadosComunicado.codigoDre,
-          dadosComunicado.codigoUe,
-          dadosComunicado.id,
-          modoVisualizacao,
-          modalidadesCodigos
-        )
-          .catch(e => erros(e))
-          .finally(() => setExibirLoader(false));
+        const resposta =
+          await ServicoDashboardEscolaAqui.obterDadosDeLeituraDeComunicadosPorModalidadeETurmas(
+            dadosComunicado.codigoDre,
+            dadosComunicado.codigoUe,
+            dadosComunicado.id,
+            modoVisualizacao,
+            modalidadesCodigos
+          )
+            .catch(e => erros(e))
+            .finally(() => setExibirLoader(false));
 
         if (resposta?.data?.length) {
           const dadosAgrupados = _(resposta.data)
@@ -102,7 +100,6 @@ const LeituraDeComunicadosPorModalidadesETurmas = props => {
         obterDadosDeLeituraDeComunicadosPorModalidadesETurmas(dadosComunicado);
       }
     }
-
   }, [
     modoVisualizacao,
     comunicado,
@@ -123,6 +120,9 @@ const LeituraDeComunicadosPorModalidadesETurmas = props => {
                 dadosGrafico => {
                   return (
                     <GraficoBarraDashboard
+                      key={
+                        dadosGrafico.dadosComunicadosGraficoBarras[0].modalidade
+                      }
                       titulo={`Total de leituras por Turma ${dadosGrafico.dadosComunicadosGraficoBarras[0].modalidade}`}
                       dadosGrafico={dadosGrafico.dadosComunicadosGraficoBarras}
                       chavesGrafico={chavesGrafico}

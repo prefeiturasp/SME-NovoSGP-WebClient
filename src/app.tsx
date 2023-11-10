@@ -6,11 +6,13 @@ import ReactGA from 'react-ga';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
-import Routes from 'routes';
+
 import { ThemeProvider } from 'styled-components';
+
 import GlobalStyle from '~/estilos/global';
 import { Deslogar } from '~/redux/modulos/usuario/actions';
 import { obterTrackingID } from '~/servicos/variaveis';
+import Routes from './routes';
 
 ReactGA.initialize(obterTrackingID);
 

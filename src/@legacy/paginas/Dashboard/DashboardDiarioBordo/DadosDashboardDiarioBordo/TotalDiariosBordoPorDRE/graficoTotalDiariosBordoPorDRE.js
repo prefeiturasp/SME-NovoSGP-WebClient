@@ -21,12 +21,13 @@ const GraficoTotalDiariosBordoPorDRE = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardDiarioBordo.obterTotalDiariosBordoPorDRE(
-      anoLetivo,
-      anoEscolar === OPCAO_TODOS ? '' : anoEscolar
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardDiarioBordo.obterTotalDiariosBordoPorDRE(
+        anoLetivo,
+        anoEscolar === OPCAO_TODOS ? '' : anoEscolar
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno?.data?.length) {
       setDadosGrafico(retorno.data);
@@ -44,12 +45,13 @@ const GraficoTotalDiariosBordoPorDRE = props => {
   }, [anoLetivo, anoEscolar, obterDadosGrafico]);
 
   const obterAnosEscolares = useCallback(async () => {
-    const respota = await ServicoDashboardFrequencia.obterAnosEscolaresPorModalidade(
-      anoLetivo,
-      dreId === OPCAO_TODOS ? '' : dreId,
-      ueId === OPCAO_TODOS ? '' : ueId,
-      modalidade
-    ).catch(e => erros(e));
+    const respota =
+      await ServicoDashboardFrequencia.obterAnosEscolaresPorModalidade(
+        anoLetivo,
+        dreId === OPCAO_TODOS ? '' : dreId,
+        ueId === OPCAO_TODOS ? '' : ueId,
+        modalidade
+      ).catch(e => erros(e));
 
     if (respota?.data?.length) {
       if (respota.data.length === 1) {
@@ -78,9 +80,10 @@ const GraficoTotalDiariosBordoPorDRE = props => {
 
   const obterUltimaConsolidacao = useCallback(async () => {
     if (anoLetivo) {
-      const resposta = await ServicoDashboardDiarioBordo.obterUltimaConsolidacao(
-        anoLetivo
-      ).catch(e => erros(e));
+      const resposta =
+        await ServicoDashboardDiarioBordo.obterUltimaConsolidacao(
+          anoLetivo
+        ).catch(e => erros(e));
 
       if (resposta?.data) {
         setDataUltimaConsolidacao(resposta.data);

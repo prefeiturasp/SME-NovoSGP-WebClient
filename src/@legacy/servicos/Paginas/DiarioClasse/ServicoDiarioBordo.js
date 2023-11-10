@@ -72,7 +72,7 @@ class ServicoDiarioBordo {
   };
 
   obterDiarioBordo = (aulaId, componenteCurricularId) => {
-    if(aulaId && componenteCurricularId){
+    if (aulaId && componenteCurricularId) {
       return api.get(
         `${urlPadrao}/${aulaId}?componenteCurricularId=${componenteCurricularId}`
       );

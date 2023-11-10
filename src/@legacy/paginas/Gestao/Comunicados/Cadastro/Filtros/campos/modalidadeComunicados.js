@@ -25,10 +25,11 @@ const ModalidadeComunicados = ({ form, onChangeCampos, desabilitar }) => {
 
   const obterModalidades = useCallback(async () => {
     setExibirLoader(true);
-    const resposta = await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
-      codigoUe,
-      true
-    ).finally(() => setExibirLoader(false));
+    const resposta =
+      await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(
+        codigoUe,
+        true
+      ).finally(() => setExibirLoader(false));
 
     if (resposta?.data?.length) {
       const lista = resposta.data;
@@ -47,7 +48,6 @@ const ModalidadeComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, []);
       dispatch(setListaModalidadesComunicados([]));
     }
-
   }, [codigoUe]);
 
   useEffect(() => {
@@ -57,7 +57,6 @@ const ModalidadeComunicados = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue(nomeCampo, []);
       dispatch(setListaModalidadesComunicados([]));
     }
-
   }, [codigoUe, obterModalidades]);
 
   useEffect(() => {
