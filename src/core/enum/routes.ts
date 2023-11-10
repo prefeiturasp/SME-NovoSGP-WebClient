@@ -106,6 +106,6 @@ export enum ROUTES {
   INFORMES = '/informes',
   INFORMES_NOVO = '/informes/novo',
   INFORMES_EDICAO = '/informes/:id',
-  BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES = '/busca-ativa/consulta-criancas-estudantes-ausentes',
-  BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES = '/busca-ativa/consulta-criancas-estudantes-ausentes/historico-registro-acoes',
+  BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES = '/busca-ativa/criancas-estudantes/ausentes',
+  BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES = '/busca-ativa/criancas-estudantes/ausentes/historico-registro-acoes',
 }
