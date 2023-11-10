@@ -35,10 +35,9 @@ const Auditoria = ({
     <Container ignorarMarginTop={ignorarMarginTop}>
       {!novaEstrutura && criadoPor ? (
         <div
-          className={`${className ||
-            'col-md-12 d-flex justify-content-start'} ${
-            ignorarMarginTop ? '' : 'mt-2'
-          }`}
+          className={`${
+            className || 'col-md-12 d-flex justify-content-start'
+          } ${ignorarMarginTop ? '' : 'mt-2'}`}
         >
           INSERIDO por {criadoPor}{' '}
           {rfCriado && rfCriado !== '0' && `(${rfCriado})`} em{' '}
@@ -55,8 +54,10 @@ const Auditoria = ({
       )}
       {!novaEstrutura && alteradoPor ? (
         <div
-          className={`${className ||
-            'col-xs-12 col-md-12 col-lg-12 d-flex justify-content-start'} mt-2`}
+          className={`${
+            className ||
+            'col-xs-12 col-md-12 col-lg-12 d-flex justify-content-start'
+          } mt-2`}
         >
           ALTERADO por {alteradoPor}{' '}
           {rfAlterado && rfAlterado !== '0' && `(${rfAlterado})`} em{' '}

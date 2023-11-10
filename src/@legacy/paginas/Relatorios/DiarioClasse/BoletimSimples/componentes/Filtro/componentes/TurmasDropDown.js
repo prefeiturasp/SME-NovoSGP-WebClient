@@ -44,7 +44,6 @@ function TurmasDropDown({
     } else {
       setListaTurmas([]);
     }
-
   }, [ueId, modalidadeId]);
 
   useEffect(() => {
@@ -52,7 +51,6 @@ function TurmasDropDown({
       form.setFieldValue('turmaId', listaTurmas[0].valor);
       onChange(listaTurmas[0].valor);
     }
-
   }, [listaTurmas]);
 
   return (

@@ -37,12 +37,10 @@ const CardPlanejamento = React.memo(() => {
     },
   ];
 
-  const [totalRegistrosSelecionado, setTotalRegistrosSelecionado] = useState(
-    '4'
-  );
-  const [listaRegistrosPorPaginas, setListaRegistrosPorPaginas] = useState(
-    listaRegistros
-  );
+  const [totalRegistrosSelecionado, setTotalRegistrosSelecionado] =
+    useState('4');
+  const [listaRegistrosPorPaginas, setListaRegistrosPorPaginas] =
+    useState(listaRegistros);
 
   const dispatch = useDispatch();
 
@@ -70,7 +68,6 @@ const CardPlanejamento = React.memo(() => {
       setTotalRegistrosSelecionado('4');
       setListaRegistrosPorPaginas(listaRegistros);
     }
-
   }, [dadosPlanejamentos, alterouCaixaSelecao]);
 
   return (

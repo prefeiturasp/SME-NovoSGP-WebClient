@@ -17,16 +17,17 @@ const GraficoSituacaoConselhoClasse = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardFechamento.obterSituacaoConselhoClasse(
-      anoLetivo,
-      dreId === OPCAO_TODOS ? '' : dreId,
-      ueId === OPCAO_TODOS ? '' : ueId,
-      modalidade,
-      semestre,
-      bimestre
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardFechamento.obterSituacaoConselhoClasse(
+        anoLetivo,
+        dreId === OPCAO_TODOS ? '' : dreId,
+        ueId === OPCAO_TODOS ? '' : ueId,
+        modalidade,
+        semestre,
+        bimestre
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     const dados = retorno?.data?.length ? retorno.data : [];
     setDadosGrafico(dados);

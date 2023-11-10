@@ -1,8 +1,9 @@
-import { useLocation, Navigate, Outlet } from 'react-router-dom';
-import { useAppSelector } from 'core/hooks/use-redux';
-import { ROUTES } from 'core/enum/routes';
-import React from 'react';
+import { useAppSelector } from '@/core/hooks/use-redux';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+
+import { ROUTES } from '@/core/enum/routes';
 import { RouteProps } from '@/routes/config/route-list';
+import React from 'react';
 
 interface AuthProps {
   route?: RouteProps;

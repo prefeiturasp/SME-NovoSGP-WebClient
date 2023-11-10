@@ -34,7 +34,6 @@ export class ControleEstado extends React.Component {
   acaoConfirmar = path => {
     this.fecharModal(() => {
       const { confirmar } = this.props;
-      const { lastLocation } = this.state;
       this.setState(
         {
           confirmou: true,

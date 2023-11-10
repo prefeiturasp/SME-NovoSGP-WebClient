@@ -41,8 +41,6 @@ const ListasNotasConceitos = props => {
     store => store.conselhoClasse.bimestreAtual
   );
 
-  const turmaStore = useSelector(state => state.usuario.turmaSelecionada);
-
   const dentroPeriodo = useSelector(
     store => store.conselhoClasse.dentroPeriodo
   );
@@ -58,7 +56,6 @@ const ListasNotasConceitos = props => {
     turmaCodigo,
     tipoNota,
     media,
-    alunoDesabilitado,
     conselhoClasseAlunoId,
   } = dadosPrincipaisConselhoClasse;
 

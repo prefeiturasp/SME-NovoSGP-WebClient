@@ -18,14 +18,15 @@ const GraficoDiariosBordoPreenchidosPendentes = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardDiarioBordo.obterDiariosBordoPreenchidosPendentes(
-      anoLetivo,
-      dreId === OPCAO_TODOS ? '' : dreId,
-      ueId === OPCAO_TODOS ? '' : ueId,
-      modalidade
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardDiarioBordo.obterDiariosBordoPreenchidosPendentes(
+        anoLetivo,
+        dreId === OPCAO_TODOS ? '' : dreId,
+        ueId === OPCAO_TODOS ? '' : ueId,
+        modalidade
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno?.data?.length) {
       setDadosGrafico(retorno.data);
@@ -44,9 +45,10 @@ const GraficoDiariosBordoPreenchidosPendentes = props => {
 
   const obterUltimaConsolidacao = useCallback(async () => {
     if (anoLetivo) {
-      const resposta = await ServicoDashboardDiarioBordo.obterUltimaConsolidacao(
-        anoLetivo
-      ).catch(e => erros(e));
+      const resposta =
+        await ServicoDashboardDiarioBordo.obterUltimaConsolidacao(
+          anoLetivo
+        ).catch(e => erros(e));
 
       const dados = resposta?.data || [];
 

@@ -45,7 +45,7 @@ const SiderSGP: React.FC = () => {
         }
       });
     }
-  }, [navegacaoStore.rotaAtiva, items]);
+  }, [navegacaoStore.rotaAtiva, items, dispatch]);
 
   useEffect(() => {
     const rota = navegacaoStore.rotas.get(navegacaoStore?.rotaAtiva);
@@ -116,6 +116,7 @@ const SiderSGP: React.FC = () => {
       const items = obterDadosMenus(menusValidos);
       setItems(items);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [usuario.menu]);
 
   const itemMenuEscolhido = (item: MenuItemSMEProps) => {

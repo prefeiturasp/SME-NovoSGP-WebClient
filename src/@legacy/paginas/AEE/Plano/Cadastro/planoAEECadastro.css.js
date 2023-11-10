@@ -10,8 +10,7 @@ export const Container = styled.div`
     border: solid 7px #d06d12 !important;
     border-radius: 5px !important;
   }
-`
-
+`;
 
 export const BtnExcluirDiasHorario = styled.span`
   .btn-excluir-dias-horario {

@@ -64,7 +64,6 @@ const TipoEscolaComunicados = ({
       form.setFieldValue(nomeCampo, []);
       setListaTipoEscola([]);
     }
-
   }, [codigoDre, codigoUe, modalidades]);
 
   useEffect(() => {
@@ -74,7 +73,6 @@ const TipoEscolaComunicados = ({
       form.setFieldValue(nomeCampo, []);
       setListaTipoEscola([]);
     }
-
   }, [codigoUe, obterTiposEscola]);
 
   const onChangeTipoEscola = novosValores => {

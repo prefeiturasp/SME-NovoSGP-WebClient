@@ -36,9 +36,10 @@ const LinhaConceitoFinal = props => {
                       aluno.notasBimestre &&
                       aluno.notasBimestre.length ? (
                         aluno.notasBimestre.map((item, index) => {
-                          const disciplinaTratada = tratarStringComponenteCurricularNome(
-                            item.disciplina
-                          );
+                          const disciplinaTratada =
+                            tratarStringComponenteCurricularNome(
+                              item.disciplina
+                            );
                           return (
                             <td
                               style={{

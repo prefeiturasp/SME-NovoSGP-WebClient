@@ -54,7 +54,6 @@ const DreOcorrencia = props => {
       form.setFieldValue(nomeCampo, undefined);
       setListaDres([]);
     }
-
   }, [anoLetivo]);
 
   useEffect(() => {
@@ -66,7 +65,6 @@ const DreOcorrencia = props => {
       form.setFieldValue(nomeCampo, undefined);
       setListaDres([]);
     }
-
   }, [anoLetivo, ocorrenciaId]);
 
   return (

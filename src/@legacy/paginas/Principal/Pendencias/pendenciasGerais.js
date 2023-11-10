@@ -26,16 +26,13 @@ const PendenciasGerais = () => {
   const [codigoTurma, setCodigoTurma] = useState();
   const [titulo, setTitulo] = useState('');
   const [tituloExibicao, setTituloExibicao] = useState('');
-  const [listaTipoPendenciaGrupos, setListaTipoPendenciaGrupos] = useState(
-    true
-  );
+  const [listaTipoPendenciaGrupos, setListaTipoPendenciaGrupos] =
+    useState(true);
   const [listaTurmas, setListaTurmas] = useState([]);
   const [carregandoTurmas, setCarregandoTurmas] = useState(false);
   const [carregouTurmas, setCarregouTurmas] = useState(false);
-  const [
-    carregandoTipoPendenciaGrupo,
-    setCarregandoTipoPendenciaGrupo,
-  ] = useState(false);
+  const [carregandoTipoPendenciaGrupo, setCarregandoTipoPendenciaGrupo] =
+    useState(false);
   const [timeoutTitulo, setTimeoutTitulo] = useState();
 
   const configCabecalho = {
@@ -108,7 +105,6 @@ const PendenciasGerais = () => {
     obterTipoPendenciaGrupo();
     setTipoPendenciaGrupo();
     setListaTipoPendenciaGrupos([]);
-
   }, []);
 
   const onChangeTurma = valor => setCodigoTurma(valor);

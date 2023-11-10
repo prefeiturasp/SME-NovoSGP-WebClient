@@ -232,8 +232,7 @@ const AulaDadaAulaPrevista = () => {
         const disciplina = disciplinas.data[0];
         onChangeDisciplinas(disciplina.id);
         setDesabilitarDisciplina(true);
-      }
-      else if(disciplinas?.data?.length > 1){
+      } else if (disciplinas?.data?.length > 1) {
         setDadosLista([]);
         setModoEdicao(false);
         setDisciplinaIdSelecionada(undefined);
@@ -247,7 +246,7 @@ const AulaDadaAulaPrevista = () => {
       turmaId &&
       !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)
     ) {
-      obterDisciplinas();    
+      obterDisciplinas();
     } else {
       setDadosLista([]);
       setModoEdicao(false);

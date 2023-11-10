@@ -45,7 +45,6 @@ function ModalidadesDropDown({
       form.setFieldValue('modalidadeId', listaModalidades[0].valor);
       onChange(listaModalidades[0].valor);
     }
-
   }, [listaModalidades]);
 
   useEffect(() => {
@@ -53,7 +52,6 @@ function ModalidadesDropDown({
     if (!valorNuloOuVazio(modalidadeId)) {
       onChange(modalidadeId);
     }
-
   }, [modalidadeId]);
 
   return (

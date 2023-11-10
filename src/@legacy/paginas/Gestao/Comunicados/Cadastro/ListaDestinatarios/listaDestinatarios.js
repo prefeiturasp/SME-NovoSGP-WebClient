@@ -20,7 +20,7 @@ const ListaDestinatarios = ({ form, onChangeCampos, desabilitar }) => {
       <Label text="Destinatários" />
       <div className="d-flex flex-wrap">
         {alunos.map(aluno => (
-          <Conteudo>
+          <Conteudo key={aluno?.alunoCodigo}>
             {`${aluno?.alunoNome} (${aluno?.alunoCodigo})`}
             <IconeEstilizado
               icon={faTimes}

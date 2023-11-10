@@ -8,6 +8,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'standard',
+    'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
@@ -20,6 +21,7 @@ module.exports = {
   },
   plugins: ['react', 'jsx-a11y', '@typescript-eslint'],
   rules: {
+    'react/self-closing-comp': 'error',
     'prettier/prettier': [
       'error',
       {
@@ -48,9 +50,17 @@ module.exports = {
     'jsx-a11y/aria-unsupported-elements': 'warn',
     'jsx-a11y/role-has-required-aria-props': 'warn',
     'jsx-a11y/role-supports-aria-props': 'warn',
-    'no-unused-vars': 'off',
     'react/display-name': 'off',
-    '@typescript-eslint/no-unused-vars': 'error',
+    'react/no-unknown-property': 'error',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
+    '@typescript-eslint/no-explicit-any': 'off',
   },
   settings: {
     react: {
@@ -59,15 +69,28 @@ module.exports = {
     'import/parsers': {
       [require.resolve('@typescript-eslint/parser')]: ['.ts', '.tsx', '.d.ts'],
     },
+    'import/resolver': {
+      'babel-plugin-root-import': {
+        paths: [
+          {
+            rootPathSuffix: 'src/@legacy',
+            rootPathPrefix: '~/',
+          },
+          {
+            rootPathSuffix: 'src/',
+            rootPathPrefix: '@/',
+          },
+        ],
+      },
+    },
   },
-  ignorePatterns:
-    process.env.NODE_ENV === 'production'
-      ? ['node_modules', 'build', 'yarn.lock', '*.js']
-      : ['node_modules', 'build', 'yarn.lock'],
   overrides: [
     {
       files: ['src/**/*.js'],
       rules: {
+        '@typescript-eslint/no-empty-function': 'off',
+        'no-useless-catch': 'off',
+        'react-hooks/exhaustive-deps': 'off',
         'prettier/prettier': [
           'error',
           {
@@ -75,6 +98,9 @@ module.exports = {
             printWidth: 80,
             arrowParens: 'avoid',
             endOfLine: 'auto',
+            tabWidth: 2,
+            singleQuote: true,
+            semi: true,
           },
         ],
       },

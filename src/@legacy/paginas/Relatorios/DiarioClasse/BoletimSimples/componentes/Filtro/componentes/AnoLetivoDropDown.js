@@ -32,7 +32,6 @@ function AnoLetivoDropDown({ form, onChange, consideraHistorico }) {
       form.setFieldValue('anoLetivo', '', false);
       onChange(String(''));
     }
-
   }, [listaAnosLetivo]);
 
   return (

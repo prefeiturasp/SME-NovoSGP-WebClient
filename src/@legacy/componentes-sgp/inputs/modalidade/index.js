@@ -62,7 +62,6 @@ export const Modalidade = ({
     } else {
       limparDados();
     }
-
   }, [consideraHistorico, anoLetivo, ueCodigo]);
 
   useEffect(() => {
@@ -70,7 +69,6 @@ export const Modalidade = ({
 
     limparDados();
     if (ueCodigo) obterModalidades();
-
   }, [ueCodigo]);
 
   return (

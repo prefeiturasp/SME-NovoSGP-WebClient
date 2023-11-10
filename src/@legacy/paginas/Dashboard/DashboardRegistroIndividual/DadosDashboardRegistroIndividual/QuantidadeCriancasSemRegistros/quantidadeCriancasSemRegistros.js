@@ -21,14 +21,16 @@ const QuantidadeCriancasSemRegistros = props => {
         ?.diasSemRegistro
   );
 
-  const key = `quantidade-criancas-estao-sem-registros-mais-${diasSemRegistro ||
-    0}-dias`;
+  const key = `quantidade-criancas-estao-sem-registros-mais-${
+    diasSemRegistro || 0
+  }-dias`;
 
   return (
     <div className="mt-3">
       <CardCollapse
-        titulo={`Total de crianças que estão sem registros a mais de ${diasSemRegistro ||
-          0} dias`}
+        titulo={`Total de crianças que estão sem registros a mais de ${
+          diasSemRegistro || 0
+        } dias`}
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}

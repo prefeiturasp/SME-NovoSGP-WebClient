@@ -104,7 +104,6 @@ const ListaObjetivos = React.memo(props => {
           dispatch(setExibirLoaderPlanoAnual(false));
         });
     }
-
   }, [
     dispatch,
     tabAtualComponenteCurricular,

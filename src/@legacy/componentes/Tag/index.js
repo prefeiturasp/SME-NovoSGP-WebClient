@@ -10,8 +10,9 @@ import { TagEstilo } from './styles';
 function Tag({ tipo, tamanho, fluido, centralizado, children, ...rest }) {
   return (
     <TagEstilo
-      className={`${tamanho} ${fluido && 'fluido'} ${centralizado &&
-        'centralizado'}`}
+      className={`${tamanho} ${fluido && 'fluido'} ${
+        centralizado && 'centralizado'
+      }`}
       tipo={tipo}
     >
       <AntTag {...rest}>{children}</AntTag>

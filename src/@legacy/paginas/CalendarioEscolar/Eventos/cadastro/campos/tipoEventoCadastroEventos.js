@@ -27,7 +27,6 @@ const TipoEventoCadastroEventos = ({ form, onChangeCampos, desabilitar }) => {
         form.setFieldValue('letivo', 0);
       }
     }
-
   }, [listaTipoEvento, ueId]);
 
   const filtraSomenteUE = () =>
@@ -75,7 +74,6 @@ const TipoEventoCadastroEventos = ({ form, onChangeCampos, desabilitar }) => {
     if (dreId && ueId && listaTipoEventoOrigem) {
       filtraTipoEvento(dreId, ueId);
     }
-
   }, [dreId, ueId, listaTipoEventoOrigem]);
 
   useEffect(() => {
@@ -83,7 +81,6 @@ const TipoEventoCadastroEventos = ({ form, onChangeCampos, desabilitar }) => {
       form.setFieldValue('feriadoId', '');
       form.setFieldValue('bimestre', []);
     }
-
   }, [tipoEventoId]);
 
   return (

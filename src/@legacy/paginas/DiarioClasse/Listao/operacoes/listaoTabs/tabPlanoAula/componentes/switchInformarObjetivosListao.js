@@ -18,12 +18,10 @@ const SwitchInformarObjetivosListao = ({
     dadosPlanoAula[indexPlano].checkedExibirEscolhaObjetivos;
 
   const onChangeSwitch = () => {
-    dadosPlanoAula[
-      indexPlano
-    ].objetivosAprendizagemObrigatorios = !checkedExibirEscolhaObjetivos;
-    dadosPlanoAula[
-      indexPlano
-    ].checkedExibirEscolhaObjetivos = !checkedExibirEscolhaObjetivos;
+    dadosPlanoAula[indexPlano].objetivosAprendizagemObrigatorios =
+      !checkedExibirEscolhaObjetivos;
+    dadosPlanoAula[indexPlano].checkedExibirEscolhaObjetivos =
+      !checkedExibirEscolhaObjetivos;
     setDadosPlanoAula(dadosPlanoAula);
     setCheckedExibirEscolhaObjetivos(!checkedExibirEscolhaObjetivos);
   };
