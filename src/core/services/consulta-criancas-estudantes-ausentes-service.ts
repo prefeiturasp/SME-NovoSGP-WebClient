@@ -3,10 +3,10 @@ import { EnumeradoRetornoDto } from '../dto/EnumeradoRetornoDto';
 import { FiltroObterAlunosAusentesDto } from '../dto/FiltroObterAlunosAusentesDto';
 import { obterRegistro } from './api';
 
-const URL_DEFAULT = 'v1/consulta-criancas-estudantes-ausentes';
+const URL_DEFAULT = 'v1/busca-ativa/criancas-estudantes/ausentes';
 
 const obterTurmasAlunosAusentes = (params: FiltroObterAlunosAusentesDto) =>
-  obterRegistro<AlunosAusentesDto[]>(`${URL_DEFAULT}/turma/alunos`, {
+  obterRegistro<AlunosAusentesDto[]>(URL_DEFAULT, {
     params,
   });
 
