@@ -6,7 +6,7 @@ import { obterRegistro } from './api';
 const URL_DEFAULT = 'v1/busca-ativa/criancas-estudantes/ausentes';
 
 const obterTurmasAlunosAusentes = (params: FiltroObterAlunosAusentesDto) =>
-  obterRegistro<AlunosAusentesDto[]>(`${URL_DEFAULT}/turma/alunos`, {
+  obterRegistro<AlunosAusentesDto[]>(URL_DEFAULT, {
     params,
   });
 
