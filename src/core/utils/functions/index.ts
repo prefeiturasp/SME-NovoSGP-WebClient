@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const removerTudoQueNaoEhDigito = (value: any) => `${value}`.replace(/\D/g, '');
 
 const maskTelefone = (value: string | number | undefined) =>
@@ -6,4 +8,7 @@ const maskTelefone = (value: string | number | undefined) =>
 const maskCEP = (value: string | number | undefined) =>
   `${value}`.replace(/^(\d{5})(\d{3})+?$/, '$1-$2');
 
-export { maskTelefone, removerTudoQueNaoEhDigito, maskCEP };
+const formatarDataHora = (data: string | undefined) => dayjs(data).format('DD/MM/YYYY HH:mm');
+const formatarData = (data: string | undefined) => dayjs(data).format('DD/MM/YYYY');
+
+export { maskTelefone, removerTudoQueNaoEhDigito, maskCEP, formatarDataHora, formatarData };

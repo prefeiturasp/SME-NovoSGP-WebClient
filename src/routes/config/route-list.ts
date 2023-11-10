@@ -3,6 +3,8 @@ import ListaInformes from '@/@legacy/paginas/Informes/List/listaInformes';
 import RelatorioDinamicoNAAPA from '@/@legacy/paginas/NAAPA/RelatorioDinamico/relatorioDinamicoNAAPA';
 import RelatorioOcorrencias from '@/@legacy/paginas/Relatorios/Gestao/Ocorrencias/relatorioOcorrencias';
 import RelatorioPAP from '@/@legacy/paginas/Relatorios/PAP/RelatorioPAP/relatorioPAP';
+import ConsultaCriancasEstudantesAusentes from '@/pages/busca-ativa/consulta-criancas-estudantes-ausentes/list';
+import BuscaAtivaHistoricoRegistroAcoes from '@/pages/busca-ativa/consulta-criancas-estudantes-ausentes/list/historico';
 import FormCadastroABAE from '@/pages/cadastro-abae/form';
 import ListCadastroABAE from '@/pages/cadastro-abae/list';
 import { ROUTES } from 'core/enum/routes';
@@ -1752,6 +1754,27 @@ route.set(ROUTES.INFORMES_EDICAO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.INFORMES,
+});
+
+route.set(ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES, {
+  breadcrumbName: 'Consulta de crianças/estudantes ausentes',
+  menu: ['NAAPA', 'Busca ativa'],
+  parent: '/',
+  component: ConsultaCriancasEstudantesAusentes,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
+});
+
+route.set(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES, {
+  breadcrumbName: 'Registro de ações',
+  parent: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
+  component: BuscaAtivaHistoricoRegistroAcoes,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
 });
 
 const getRoutesArray = () => {
