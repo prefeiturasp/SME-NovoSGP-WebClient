@@ -22,9 +22,9 @@ const ContainerTable = styled.div`
     .ant-table-tbody
     .ant-table-wrapper:only-child
     .ant-table {
-    margin: 14px;
-    margin-block: 14px;
-    margin-inline: 14px 0px;
+    margin: 8px;
+    margin-block: 8px;
+    margin-inline: 8px 0px;
   }
 
   tbody > tr {
@@ -77,7 +77,7 @@ const TableTurmasCriancasEstudantesAusentes: React.FC = () => {
       {
         title: 'Listagem de crianças/estudantes ausentes',
         onCell: () => ({
-          style: { cursor: 'default', background: 'white' },
+          style: { cursor: 'default', background: 'white', padding: 0 },
         }),
         render: () => {
           if (dataSource?.length && turmaSelecionada?.codigo) {
@@ -96,7 +96,7 @@ const TableTurmasCriancasEstudantesAusentes: React.FC = () => {
       <Row wrap={false}>
         <>
           <Table
-            style={{ width: '200px' }}
+            style={{ minWidth: '119px' }}
             bordered
             size="small"
             rowKey="codigo"
@@ -104,7 +104,6 @@ const TableTurmasCriancasEstudantesAusentes: React.FC = () => {
               {
                 title: 'Turmas',
                 dataIndex: 'nomeFiltro',
-                width: '200px',
               },
             ]}
             pagination={false}

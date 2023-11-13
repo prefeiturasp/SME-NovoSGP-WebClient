@@ -1,11 +1,24 @@
-import { Layout } from 'antd';
+import { Layout, SiderProps } from 'antd';
 
 import styled from 'styled-components';
 
 import SubMenu from 'antd/es/menu/SubMenu';
 import { SiderMenuStylePros, SiderSubMenuStylePros } from '.';
 
-export const SiderContainer = styled(Layout.Sider)`
+type SiderContainerProps = React.ForwardRefExoticComponent<
+  SiderProps & React.RefAttributes<HTMLDivElement> & { collapsedSider: boolean }
+>;
+export const SiderContainer = styled<SiderContainerProps>(Layout.Sider)`
+  @media screen and (max-width: 768px) {
+    .secound-child-menu-and-sub-menus {
+      display: ${(props) => (props.collapsedSider ? 'none' : 'block')};
+    }
+
+    &.ant-layout-sider {
+      height: ${(props) => (props.collapsedSider ? '0px' : '100%')};
+    }
+  }
+
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 1) !important;
   text-align: center;
   color: #fff;
@@ -94,7 +107,7 @@ export const SiderSubMenuContainer = styled(SubMenu)<SiderSubMenuStylePros>`
 
 export const SiderMenuContainer = styled.div<SiderMenuStylePros>`
   overflow: auto;
-  height: calc(100vh - 72px);
+  height: calc(100vh - 70px);
 
   ::-webkit-scrollbar {
     width: 4px;
@@ -144,7 +157,7 @@ export const SiderMenuButtonToggleStyle = styled.div<SiderMenuStylePros>`
   display: flex;
   align-items: center;
   justify-content: ${(props) => (props.collapsed ? 'center' : 'space-between')};
-  height: 72px !important;
+  height: 70px !important;
 
   img {
     font-family: 'Roboto', sans-serif;
