@@ -80,8 +80,8 @@ const CardDetalhesCriancaEstudante: React.FC<CardDetalhesCriancaEstudanteProps> 
     if (dadosEndereco?.bairro) {
       labelEndereco = `${labelEndereco} ${dadosEndereco.bairro} -`;
     }
-    if (dadosEndereco?.CEP) {
-      labelEndereco = `${labelEndereco} ${dadosEndereco.CEP} -`;
+    if (dadosEndereco?.cep) {
+      labelEndereco = `${labelEndereco} ${dadosEndereco.cep} -`;
     }
     if (dadosEndereco?.nomeMunicipio) {
       labelEndereco = `${labelEndereco} ${dadosEndereco?.nomeMunicipio}`;

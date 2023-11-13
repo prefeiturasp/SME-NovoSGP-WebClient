@@ -2,7 +2,7 @@ export type EnderecoRespostaDto = {
   nro: string;
   complemento: string;
   bairro: string;
-  CEP: number;
+  cep: number;
   nomeMunicipio: string;
   siglaUF: string;
   tipologradouro: string;
