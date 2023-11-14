@@ -161,7 +161,7 @@ const CardDetalhesCriancaEstudante: React.FC<CardDetalhesCriancaEstudanteProps> 
                   return (
                     <Col key={index}>
                       <Text strong>{obterLabelTelefoneFiliacao(item)}</Text>
-                      <Text style={{ marginLeft: 4 }}>{item?.numero}</Text>
+                      <Text style={{ marginLeft: 4 }}>{(item?.ddd || "") + (item?.numero || "")}</Text>
                     </Col>
                   );
                 })}
@@ -179,7 +179,7 @@ const CardDetalhesCriancaEstudante: React.FC<CardDetalhesCriancaEstudanteProps> 
                   return (
                     <Col key={index}>
                       <Text strong>{obterLabelTelefoneFiliacao(item)}</Text>
-                      <Text style={{ marginLeft: 4 }}>{item?.numero}</Text>
+                      <Text style={{ marginLeft: 4 }}>{(item?.ddd || "") + (item?.numero || "")}</Text>
                     </Col>
                   );
                 })}

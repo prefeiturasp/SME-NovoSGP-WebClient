@@ -1,7 +1,7 @@
 import { TipoTelefone } from '../enum/tipo-telefone-enum';
 
 export type TelefonesDto = {
-  DDD?: string;
+  ddd?: string;
   numero?: string;
   tipoTelefone?: TipoTelefone;
 };
