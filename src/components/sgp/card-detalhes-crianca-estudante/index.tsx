@@ -63,6 +63,10 @@ const CardDetalhesCriancaEstudante: React.FC<CardDetalhesCriancaEstudanteProps> 
     return `${label}:`;
   };
 
+  const obterTelefoneFormatado = (telefone: TelefonesDto) => {
+    return (telefone?.ddd || '') + (telefone?.numero || '');
+  };
+
   const obterLabelEndereco = () => {
     const dadosEndereco: EnderecoRespostaDto | undefined = dadosResponsavelFiliacao?.endereco;
 
@@ -161,7 +165,7 @@ const CardDetalhesCriancaEstudante: React.FC<CardDetalhesCriancaEstudanteProps> 
                   return (
                     <Col key={index}>
                       <Text strong>{obterLabelTelefoneFiliacao(item)}</Text>
-                      <Text style={{ marginLeft: 4 }}>{(item?.ddd || "") + (item?.numero || "")}</Text>
+                      <Text style={{ marginLeft: 4 }}>{obterTelefoneFormatado(item)}</Text>
                     </Col>
                   );
                 })}
@@ -179,7 +183,7 @@ const CardDetalhesCriancaEstudante: React.FC<CardDetalhesCriancaEstudanteProps> 
                   return (
                     <Col key={index}>
                       <Text strong>{obterLabelTelefoneFiliacao(item)}</Text>
-                      <Text style={{ marginLeft: 4 }}>{(item?.ddd || "") + (item?.numero || "")}</Text>
+                      <Text style={{ marginLeft: 4 }}>{obterTelefoneFormatado(item)}</Text>
                     </Col>
                   );
                 })}
