@@ -52,6 +52,7 @@ const Justificativa = props => {
 
   notaConceitoPosConselhoAtual.justificativa =
     notaConceitoPosConselhoAtual.justificativa ?? '';
+
   const { justificativa, auditoria, ehEdicao } = notaConceitoPosConselhoAtual;
 
   const desabilitarBtnAcoes =
