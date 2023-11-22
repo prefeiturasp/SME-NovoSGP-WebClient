@@ -1,10 +1,10 @@
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
-import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
-import { erros, ServicoComunicados } from '~/servicos';
+import { ServicoComunicados, erros } from '~/servicos';
 
 const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -12,10 +12,14 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
 
   const { anoLetivo, codigoUe, modalidades } = form.values;
 
-  const temModalidadeEja = modalidades?.find(
+  const ehEJAOuCELP = modalidades?.find(
     item =>
       Number(item) === ModalidadeEnum.EJA ||
       Number(item) === ModalidadeEnum.CELP
+  );
+
+  const ehCELP = modalidades?.find(
+    item => Number(item) === ModalidadeEnum.CELP
   );
 
   const dispatch = useDispatch();
@@ -27,7 +31,7 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
     // TODO: VERIFICAR SOBRE O CONSIDERA HISTÓRICO!
     const retorno = await ServicoComunicados.obterSemestres(
       false,
-      ModalidadeEnum.EJA,
+      ehCELP ? ModalidadeEnum.CELP : ModalidadeEnum.EJA,
       anoLetivo,
       codigoUe
     )
@@ -53,7 +57,7 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
 
   useEffect(() => {
     if (modalidades?.length) {
-      if (modalidades?.length && temModalidadeEja) {
+      if (modalidades?.length && ehEJAOuCELP) {
         obterSemestres(ModalidadeEnum.EJA);
       }
     } else {
@@ -73,14 +77,14 @@ const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
         disabled={
           !modalidades?.length ||
           listaSemestres?.length === 1 ||
-          !temModalidadeEja ||
+          !ehEJAOuCELP ||
           desabilitar
         }
         placeholder="Semestre"
         showSearch
         name={nomeCampo}
         form={form}
-        labelRequired={temModalidadeEja}
+        labelRequired={ehEJAOuCELP}
         onChange={() => {
           onChangeCampos();
           form.setFieldValue('turmas', []);
