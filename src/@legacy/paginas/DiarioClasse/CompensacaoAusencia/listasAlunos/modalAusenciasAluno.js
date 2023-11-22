@@ -208,7 +208,7 @@ const ModalAusenciasAluno = props => {
     ServicoCompensacaoAusencia.obterDatasFaltasNaoCompensadas(params)
       .then(resposta => {
         if (resposta?.data?.length) {
-          const lista = resposta.data.map((linha, index) => {
+          const lista = resposta.data.map(linha => {
             const descricaoDataAula = window
               .moment(linha?.dataAula)
               .format('DD/MM/YYYY');

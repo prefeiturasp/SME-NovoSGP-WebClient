@@ -33,10 +33,8 @@ const MarcadorPeriodoInicioFim = () => {
 
   useEffect(() => {
     if (fechamentoPeriodoInicioFim) {
-      const {
-        periodoFechamentoInicio,
-        periodoFechamentoFim,
-      } = fechamentoPeriodoInicioFim;
+      const { periodoFechamentoInicio, periodoFechamentoFim } =
+        fechamentoPeriodoInicioFim;
 
       if (periodoFechamentoInicio) {
         setDataInicio(moment(periodoFechamentoInicio).format('L'));

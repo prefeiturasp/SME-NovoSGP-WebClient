@@ -57,16 +57,16 @@ const ConsultaCriancasEstudantesAusentes: React.FC = () => {
               <SelectUE formItemProps={{ rules: [{ required: true }] }} />
             </Col>
 
-            <Col xs={24} md={10}>
+            <Col xs={24} md={12} lg={10}>
               <SelectModalidade formItemProps={{ rules: [{ required: true }] }} />
             </Col>
 
-            <Col xs={24} md={4}>
+            <Col xs={24} md={12} lg={4}>
               <SelectSemestre />
             </Col>
 
-            <Col xs={24} md={10}>
-              <Form.Item shouldUpdate>
+            <Col xs={24} md={12} lg={10}>
+              <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
                 {(form) => {
                   const modalidade = form.getFieldValue('modalidade');
 
@@ -83,7 +83,7 @@ const ConsultaCriancasEstudantesAusentes: React.FC = () => {
             </Col>
 
             <Col xs={24} md={12}>
-              <Form.Item shouldUpdate>
+              <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
                 {(form) => {
                   const turma = form.getFieldValue('turma');
 

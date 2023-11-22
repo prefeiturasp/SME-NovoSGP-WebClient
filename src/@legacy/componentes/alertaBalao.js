@@ -4,14 +4,8 @@ import styled from 'styled-components';
 import { Base } from '~/componentes/colors';
 
 const AlertaBalao = props => {
-  const {
-    maxWidth,
-    texto,
-    marginTop,
-    background,
-    color,
-    mostrarAlerta,
-  } = props;
+  const { maxWidth, texto, marginTop, background, color, mostrarAlerta } =
+    props;
 
   const SetaNotificacao = styled.div`
     padding-left: ${maxWidth / 2 + 'px'};

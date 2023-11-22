@@ -67,7 +67,6 @@ function UeDropDown({
     } else {
       setListaUes([]);
     }
-
   }, [dreId, opcaoTodas, url, modalidade]);
 
   useEffect(() => {
@@ -81,7 +80,6 @@ function UeDropDown({
       form.setFieldValue('ueId', listaUes[0].valor);
       onChange(listaUes[0].valor, listaUes);
     }
-
   }, [listaUes]);
 
   return (

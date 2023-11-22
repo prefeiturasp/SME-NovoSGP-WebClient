@@ -32,11 +32,11 @@ const ComponenteCurricularPlanoAnual = () => {
   const [listaComponenteCurricular, setListaComponenteCurricular] = useState(
     []
   );
-  const [codigoComponenteCurricular, setCodigoComponenteCurricular] = useState(
-    undefined
-  );
+  const [codigoComponenteCurricular, setCodigoComponenteCurricular] =
+    useState(undefined);
 
-  const avisoPlanoTerritorio = 'O plano anual do território do saber deve ser registrado na tela "Planejamento > Território do saber';
+  const avisoPlanoTerritorio =
+    'O plano anual do território do saber deve ser registrado na tela "Planejamento > Território do saber';
 
   const obterListaComponenteCurricular = useCallback(async () => {
     setCarregandoComponentes(true);
@@ -49,13 +49,12 @@ const ComponenteCurricularPlanoAnual = () => {
     if (resposta && resposta.data) {
       setListaComponenteCurricular(resposta.data);
       if (resposta.data.length === 1) {
-        const componente = resposta.data[0];        
-        if(componente.territorioSaber){
+        const componente = resposta.data[0];
+        if (componente.territorioSaber) {
           dispatch(limparDadosPlanoAnual());
           dispatch(setComponenteCurricularPlanoAnual(undefined));
           aviso(avisoPlanoTerritorio);
-        }else
-          dispatch(setComponenteCurricularPlanoAnual(componente));
+        } else dispatch(setComponenteCurricularPlanoAnual(componente));
       }
     } else {
       setListaComponenteCurricular([]);
@@ -70,7 +69,7 @@ const ComponenteCurricularPlanoAnual = () => {
 
   useEffect(() => {
     dispatch(setComponenteCurricularPlanoAnual(undefined));
-    setCodigoComponenteCurricular(undefined)
+    setCodigoComponenteCurricular(undefined);
     resetarInfomacoes();
     if (
       turmaSelecionada &&
@@ -99,17 +98,16 @@ const ComponenteCurricularPlanoAnual = () => {
   };
 
   const onChangeComponenteCurricular = async valor => {
-    const aposValidarSalvar = () => {      
+    const aposValidarSalvar = () => {
       if (valor) {
         const componente = listaComponenteCurricular.find(
           item => String(item.codigoComponenteCurricular) === valor
         );
-        if(componente.territorioSaber)
-          aviso(avisoPlanoTerritorio);
-        else{
+        if (componente.territorioSaber) aviso(avisoPlanoTerritorio);
+        else {
           dispatch(limparDadosPlanoAnual());
           dispatch(setComponenteCurricularPlanoAnual(componente));
-        }          
+        }
       } else {
         dispatch(limparDadosPlanoAnual());
         dispatch(setComponenteCurricularPlanoAnual(undefined));

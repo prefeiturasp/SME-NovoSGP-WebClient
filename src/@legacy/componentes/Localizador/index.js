@@ -201,7 +201,6 @@ function Localizador({
         usuarioId: '',
       });
     }
-
   }, [rfEdicao]);
 
   useEffect(() => {
@@ -212,7 +211,6 @@ function Localizador({
         ...pessoaSelecionada,
       });
     }
-
   }, [pessoaSelecionada]);
 
   useEffect(() => {
@@ -222,14 +220,12 @@ function Localizador({
         setPessoaSelecionada(form.initialValues);
       }
     }
-
   }, [form?.initialValues]);
 
   useEffect(() => {
     if (dreId && ueId && validacaoDesabilitaPerfilProfessor()) {
       onBuscarPorRF({ rf: usuarioRf });
     }
-
   }, [dreId, ueId, ehPerfilProfessor, usuarioRf, onBuscarPorRF]);
 
   useEffect(() => {
@@ -248,7 +244,6 @@ function Localizador({
         setDataSource([]);
       }
     }
-
   }, [form?.values]);
 
   useEffect(() => {

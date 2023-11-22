@@ -30,9 +30,19 @@ const CardDetalhesCriancaEstudante: React.FC<CardDetalhesCriancaEstudanteProps> 
   const celularResponsavel = dados?.celularResponsavel || '';
   const dataAtualizacaoContato = dados?.dataAtualizacaoContato || '';
 
+  const dadosResponsavelFiliacao = dados?.dadosResponsavelFiliacao;
+
+  const telefonesFiliacao1: TelefonesDto[] = dadosResponsavelFiliacao?.telefonesFiliacao1?.length
+    ? dadosResponsavelFiliacao?.telefonesFiliacao1
+    : [{}];
+
+  const telefonesFiliacao2: TelefonesDto[] = dadosResponsavelFiliacao?.telefonesFiliacao2?.length
+    ? dadosResponsavelFiliacao?.telefonesFiliacao2
+    : [{}];
+
   const dadosAlunoCard = [
     {
-      titulo: 'Detalhes de nascimento:',
+      titulo: 'Data de nascimento:',
       valor: formatarData(dados?.dataNascimento),
     },
     {
@@ -53,9 +63,12 @@ const CardDetalhesCriancaEstudante: React.FC<CardDetalhesCriancaEstudanteProps> 
     return `${label}:`;
   };
 
+  const obterTelefoneFormatado = (telefone: TelefonesDto) => {
+    return (telefone?.ddd || '') + (telefone?.numero || '');
+  };
+
   const obterLabelEndereco = () => {
-    const dadosEndereco: EnderecoRespostaDto | undefined =
-      dados?.dadosResponsavelFiliacao?.endereco;
+    const dadosEndereco: EnderecoRespostaDto | undefined = dadosResponsavelFiliacao?.endereco;
 
     let labelEndereco = '';
 
@@ -71,8 +84,8 @@ const CardDetalhesCriancaEstudante: React.FC<CardDetalhesCriancaEstudanteProps> 
     if (dadosEndereco?.bairro) {
       labelEndereco = `${labelEndereco} ${dadosEndereco.bairro} -`;
     }
-    if (dadosEndereco?.CEP) {
-      labelEndereco = `${labelEndereco} ${dadosEndereco.CEP} -`;
+    if (dadosEndereco?.cep) {
+      labelEndereco = `${labelEndereco} ${dadosEndereco.cep} -`;
     }
     if (dadosEndereco?.nomeMunicipio) {
       labelEndereco = `${labelEndereco} ${dadosEndereco?.nomeMunicipio}`;
@@ -115,10 +128,6 @@ const CardDetalhesCriancaEstudante: React.FC<CardDetalhesCriancaEstudanteProps> 
                 </Row>
                 <Row>
                   <Text strong>Telefone:</Text>
-                  <Text style={{ marginLeft: 4 }}>{}</Text>
-                </Row>
-                <Row>
-                  <Text strong>Telefone:</Text>
                   <Text style={{ marginLeft: 4 }}>
                     {celularResponsavel}
                     <span
@@ -148,15 +157,15 @@ const CardDetalhesCriancaEstudante: React.FC<CardDetalhesCriancaEstudanteProps> 
               <Row>
                 <Text strong>Nome da filiação 1:</Text>
                 <Text style={{ marginLeft: 4 }}>
-                  {dados?.dadosResponsavelFiliacao.nomeFiliacao1}
+                  {dadosResponsavelFiliacao?.nomeFiliacao1 || ''}
                 </Text>
               </Row>
               <Col>
-                {dados?.dadosResponsavelFiliacao.telefonesFiliacao1?.map((item, index) => {
+                {telefonesFiliacao1?.map((item, index) => {
                   return (
                     <Col key={index}>
                       <Text strong>{obterLabelTelefoneFiliacao(item)}</Text>
-                      <Text style={{ marginLeft: 4 }}>{item?.numero}</Text>
+                      <Text style={{ marginLeft: 4 }}>{obterTelefoneFormatado(item)}</Text>
                     </Col>
                   );
                 })}
@@ -166,15 +175,15 @@ const CardDetalhesCriancaEstudante: React.FC<CardDetalhesCriancaEstudanteProps> 
               <Row>
                 <Text strong>Nome da filiação 2:</Text>
                 <Text style={{ marginLeft: 4 }}>
-                  {dados?.dadosResponsavelFiliacao.nomeFiliacao1}
+                  {dadosResponsavelFiliacao?.nomeFiliacao2 || ''}
                 </Text>
               </Row>
               <Col>
-                {dados?.dadosResponsavelFiliacao.telefonesFiliacao1?.map((item, index) => {
+                {telefonesFiliacao2?.map((item, index) => {
                   return (
                     <Col key={index}>
                       <Text strong>{obterLabelTelefoneFiliacao(item)}</Text>
-                      <Text style={{ marginLeft: 4 }}>{item?.numero}</Text>
+                      <Text style={{ marginLeft: 4 }}>{obterTelefoneFormatado(item)}</Text>
                     </Col>
                   );
                 })}

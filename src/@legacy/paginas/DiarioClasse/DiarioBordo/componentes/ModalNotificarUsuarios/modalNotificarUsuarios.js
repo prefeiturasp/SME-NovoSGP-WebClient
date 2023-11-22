@@ -20,9 +20,8 @@ const ModalNotificarUsuarios = ({
   dreId,
   ueId,
 }) => {
-  const [usuariosSelecionados, setUsuariosSelecionados] = useState(
-    listaUsuarios
-  );
+  const [usuariosSelecionados, setUsuariosSelecionados] =
+    useState(listaUsuarios);
   const anoAtual = window.moment().format('YYYY');
   const [modoEdicao, setModoEdicao] = useState(false);
 

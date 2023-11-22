@@ -12,12 +12,8 @@ import {
 import GraficoBarraDashboard from '../../../ComponentesDashboard/graficoBarraDashboard';
 
 const LeituraDeComunicadosPorTurmas = props => {
-  const {
-    chavesGrafico,
-    modoVisualizacao,
-    comunicado,
-    listaComunicado,
-  } = props;
+  const { chavesGrafico, modoVisualizacao, comunicado, listaComunicado } =
+    props;
 
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -39,16 +35,17 @@ const LeituraDeComunicadosPorTurmas = props => {
   const obterDadosDeLeituraDeComunicadosPorTurmas = useCallback(
     async (dadosComunicado, turmasCodigo) => {
       setExibirLoader(true);
-      const resposta = await ServicoDashboardEscolaAqui.obterDadosDeLeituraDeComunicadosPorModalidadeETurmas(
-        dadosComunicado.codigoDre,
-        dadosComunicado.codigoUe,
-        dadosComunicado.id,
-        modoVisualizacao,
-        '',
-        turmasCodigo
-      )
-        .catch(e => erros(e))
-        .finally(() => setExibirLoader(false));
+      const resposta =
+        await ServicoDashboardEscolaAqui.obterDadosDeLeituraDeComunicadosPorModalidadeETurmas(
+          dadosComunicado.codigoDre,
+          dadosComunicado.codigoUe,
+          dadosComunicado.id,
+          modoVisualizacao,
+          '',
+          turmasCodigo
+        )
+          .catch(e => erros(e))
+          .finally(() => setExibirLoader(false));
 
       if (resposta?.data?.length) {
         const retornoDados = mapearParaDtoDadosComunicadosGraficoBarras(
@@ -97,7 +94,6 @@ const LeituraDeComunicadosPorTurmas = props => {
         );
       }
     }
-
   }, [comunicado, modoVisualizacao, listaComunicado, dispatch]);
 
   return dadosDeLeituraDeComunicadosPorTurmas.length ? (

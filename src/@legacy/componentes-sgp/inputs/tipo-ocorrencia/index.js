@@ -2,7 +2,7 @@ import { SGP_SELECT_TIPO_OCORRENCIA } from '@/@legacy/constantes/ids/select';
 import PropTypes from 'prop-types';
 import { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
-import { ServicoOcorrencias } from '~/servicos';
+import { ServicoOcorrencias, erros } from '~/servicos';
 
 const TipoOcorrencia = ({ form, onChange, multiple, name }) => {
   const [exibirLoader, setExibirLoader] = useState(false);

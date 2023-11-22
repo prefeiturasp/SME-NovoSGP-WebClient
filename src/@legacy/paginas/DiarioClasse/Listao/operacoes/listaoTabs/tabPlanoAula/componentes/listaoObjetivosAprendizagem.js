@@ -23,10 +23,8 @@ const ListaoObjetivosAprendizagem = props => {
 
   const [exibirModal, setExibirModal] = useState(false);
 
-  const [
-    checkedExibirEscolhaObjetivos,
-    setCheckedExibirEscolhaObjetivos,
-  ] = useState(false);
+  const [checkedExibirEscolhaObjetivos, setCheckedExibirEscolhaObjetivos] =
+    useState(false);
 
   const idsObjetivosAprendizagemSelecionados =
     dadosPlanoAula?.[indexPlano]?.idsObjetivosAprendizagemSelecionados;
@@ -42,9 +40,8 @@ const ListaoObjetivosAprendizagem = props => {
   const onChange = ids => {
     if (!desabilitarCampos) {
       const novaListaIds = [...ids];
-      dadosPlanoAula[
-        indexPlano
-      ].idsObjetivosAprendizagemSelecionados = novaListaIds;
+      dadosPlanoAula[indexPlano].idsObjetivosAprendizagemSelecionados =
+        novaListaIds;
       setIdsObjetivos(novaListaIds);
 
       dadosPlanoAula[indexPlano].alterado = true;

@@ -48,7 +48,6 @@ const DreComunicados = ({
       form.setFieldValue(nomeCampo, undefined);
       setListaDres([]);
     }
-
   }, [anoLetivo]);
 
   useEffect(() => {
@@ -58,7 +57,6 @@ const DreComunicados = ({
       form.setFieldValue(nomeCampo, undefined);
       setListaDres([]);
     }
-
   }, [anoLetivo, obterDres]);
 
   return (

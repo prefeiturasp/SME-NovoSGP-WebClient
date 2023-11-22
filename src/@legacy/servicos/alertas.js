@@ -100,7 +100,7 @@ const confirmar = (
   textoCancelar,
   primeiroExibirTextoNegrito
 ) => {
-  return new Promise((resolve, _) => {
+  return new Promise(resolve => {
     store.dispatch(
       alertaConfirmar(
         titulo,

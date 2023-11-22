@@ -10,7 +10,6 @@ import {
   setEstudantesRelatorioPAP,
   setExibirLoaderRelatorioPAP,
 } from '@/@legacy/redux/modulos/relatorioPAP/actions';
-import { ServicoCalendarios } from '@/@legacy/servicos';
 import ServicoRelatorioPAP from '@/@legacy/servicos/Paginas/Relatorios/PAP/RelatorioPAP/ServicoRelatorioPAP';
 import { Col } from 'antd';
 import { useCallback, useEffect } from 'react';
@@ -19,6 +18,7 @@ import BotaoOrdenarListaAlunosPAP from '../botaoOrdenarListaAlunosPAP';
 import ObjectCardRelatorioPAP from '../objectCardRelatorioPAP';
 import SecoesRelatorioPAP from '../secoes';
 import TabelaRetratilRelatorioPAP from '../tabelaRetratilRelatorioPAP';
+import { ServicoCalendarios, erros } from '~/servicos';
 
 const DadosRelatorioPAP = () => {
   const dispatch = useDispatch();

@@ -14,10 +14,8 @@ const DadosComunicadosTotais = props => {
     dadosGraficoTotalComunicadosEnviados,
     setDadosGraficoTotalComunicadosEnviados,
   ] = useState([]);
-  const [
-    dadosTotalComunicadosPorDRE,
-    setDadosTotalComunicadosPorDRE,
-  ] = useState([]);
+  const [dadosTotalComunicadosPorDRE, setDadosTotalComunicadosPorDRE] =
+    useState([]);
 
   const chavesGraficos = ['Vigentes', 'Expirados'];
 
@@ -67,7 +65,6 @@ const DadosComunicadosTotais = props => {
     } else {
       setDadosGraficoTotalComunicadosEnviados([]);
     }
-
   }, [codigoDre, codigoUe, anoLetivo]);
 
   const mapearParaDtoGraficoTotalComunicadosPorDRE = useCallback(dados => {
@@ -98,17 +95,17 @@ const DadosComunicadosTotais = props => {
     } else {
       setDadosTotalComunicadosPorDRE([]);
     }
-
   }, []);
 
   const obterComunicadosTotaisAgrupadosPorDre = useCallback(async () => {
     if (codigoDre === OPCAO_TODOS && codigoUe === OPCAO_TODOS && anoLetivo) {
       setExibirLoader(true);
-      const retorno = await ServicoDashboardEscolaAqui.obterComunicadosTotaisAgrupadosPorDre(
-        anoLetivo
-      )
-        .catch(e => erros(e))
-        .finally(() => setExibirLoader(false));
+      const retorno =
+        await ServicoDashboardEscolaAqui.obterComunicadosTotaisAgrupadosPorDre(
+          anoLetivo
+        )
+          .catch(e => erros(e))
+          .finally(() => setExibirLoader(false));
 
       if (retorno && retorno.data && retorno.data.length) {
         mapearParaDtoGraficoTotalComunicadosPorDRE(retorno.data);

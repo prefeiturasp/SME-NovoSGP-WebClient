@@ -299,7 +299,6 @@ class ServicoSalvarConselhoClasse {
       dadosPrincipaisConselhoClasse.fechamentoTurmaId =
         retorno.data.fechamentoTurmaId;
 
-      const { consideraHistorico } = state.usuario.turmaSelecionada;
       const bimestre =
         bimestreAtual?.valor === 'final' ? 0 : bimestreAtual?.valor;
 
@@ -310,7 +309,7 @@ class ServicoSalvarConselhoClasse {
           alunoCodigo,
           turmaCodigo,
           bimestre,
-          (dadosAlunoObjectCard.desabilitado ? true : false)
+          !!dadosAlunoObjectCard.desabilitado
         );
 
       dispatch(setDadosPrincipaisConselhoClasse(dadosPrincipaisConselhoClasse));

@@ -17,12 +17,8 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "incremental": false,
-    "baseUrl": "src",
-    "paths": {
-      "@/*": ["./*"],
-      "~/*": ["./@legacy/*"]
-    }
+    "incremental": false
   },
+  "extends": "./tsconfig.paths.json",
   "include": ["src"]
 }

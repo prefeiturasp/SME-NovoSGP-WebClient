@@ -12,7 +12,7 @@ const CampoMensagemInfantil = ({ mural, atividades }) => {
     }
 
     return mural.map(item => (
-      <div className="mb-3">
+      <div className="mb-3" key={item?.email}>
         <div>
           {`${item.email} - ${
             item?.dataPublicacao
@@ -30,7 +30,7 @@ const CampoMensagemInfantil = ({ mural, atividades }) => {
       return 'Sem dados';
     }
     return atividades.map(item => (
-      <div className="mb-3">
+      <div className="mb-3" key={item?.email}>
         <div>
           {`${item.email} - ${
             item?.dataPublicacao

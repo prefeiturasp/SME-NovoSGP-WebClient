@@ -82,7 +82,7 @@ const ListCadastroABAE: React.FC = () => {
             </Col>
 
             <Col xs={24} md={12}>
-              <Form.Item shouldUpdate>
+              <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
                 {({ getFieldsValue }) => {
                   const values = getFieldsValue();
                   const disabled = !values?.ue?.value;
@@ -104,7 +104,7 @@ const ListCadastroABAE: React.FC = () => {
             </Col>
 
             <Col xs={24} md={12}>
-              <Form.Item shouldUpdate>
+              <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
                 {({ getFieldsValue }) => {
                   const values = getFieldsValue();
                   const disabled = !values?.ue?.value;

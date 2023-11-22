@@ -82,6 +82,7 @@ const TableCriancasEstudantesAusentes: React.FC<TableCriancasEstudantesAusentesP
 
   return (
     <Table
+      style={{ minWidth: '532px' }}
       loading={loading}
       columns={columns}
       rowKey="codigoEol"

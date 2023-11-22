@@ -128,7 +128,6 @@ const MontarGraficoBarras = props => {
     } else {
       setDadosGrafico([]);
     }
-
   }, [
     anoLetivo,
     dreId,

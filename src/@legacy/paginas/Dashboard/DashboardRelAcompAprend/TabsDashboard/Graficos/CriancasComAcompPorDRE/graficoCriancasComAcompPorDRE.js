@@ -16,12 +16,13 @@ const GraficoTotalCriancasComAcompPorDRE = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardRelAcompanhamentoAprendizagem.obterTotalCriancasComAcompPorDRE(
-      anoLetivo,
-      semestre
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardRelAcompanhamentoAprendizagem.obterTotalCriancasComAcompPorDRE(
+        anoLetivo,
+        semestre
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno?.data?.length) {
       setDadosGrafico(retorno.data);

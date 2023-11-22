@@ -20,13 +20,14 @@ const DetalhesFechamento = ({ turmaId, parametrosFiltro }) => {
   const obterComponentesCurricularesFechamento = useCallback(async () => {
     setCarregandoComponetesCurriculares(true);
 
-    const resposta = await ServicoAcompanhamentoFechamento.obterComponentesCurricularesFechamento(
-      turmaId,
-      parametrosFiltro?.bimestre,
-      parametrosFiltro?.situacaoFechamento
-    )
-      .catch(e => erros(e))
-      .finally(() => setCarregandoComponetesCurriculares(false));
+    const resposta =
+      await ServicoAcompanhamentoFechamento.obterComponentesCurricularesFechamento(
+        turmaId,
+        parametrosFiltro?.bimestre,
+        parametrosFiltro?.situacaoFechamento
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoComponetesCurriculares(false));
 
     if (resposta?.data?.length) {
       setComponentesCurriculares(resposta.data);

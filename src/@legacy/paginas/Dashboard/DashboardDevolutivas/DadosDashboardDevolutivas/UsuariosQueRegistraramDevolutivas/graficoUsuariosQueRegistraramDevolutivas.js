@@ -18,13 +18,14 @@ const GraficoUsuariosQueRegistraramDevolutivas = props => {
 
   const obterDadosGrafico = useCallback(async () => {
     setExibirLoader(true);
-    const retorno = await ServicoDashboardDevolutivas.obterUsuariosQueRegistraramDevolutivas(
-      anoLetivo,
-      dreId === OPCAO_TODOS ? '' : dreId,
-      mesSelecionado
-    )
-      .catch(e => erros(e))
-      .finally(() => setExibirLoader(false));
+    const retorno =
+      await ServicoDashboardDevolutivas.obterUsuariosQueRegistraramDevolutivas(
+        anoLetivo,
+        dreId === OPCAO_TODOS ? '' : dreId,
+        mesSelecionado
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
 
     if (retorno?.data?.length) {
       setDadosGrafico(retorno.data);

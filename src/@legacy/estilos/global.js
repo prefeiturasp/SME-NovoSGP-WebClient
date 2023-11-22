@@ -3,6 +3,14 @@ import ExclamacaoCampoErro from '~/recursos/ExclamacaoCampoErro.svg';
 import { Base } from '../componentes/colors';
 
 export default createGlobalStyle`
+
+  @media screen and (min-width: 768px) {
+    .ant-layout.ant-layout-has-sider .ant-layout {
+      margin-left: 88px !important;
+    }
+  }
+
+
   *, *:before, *:after {
     box-sizing: border-box;
     margin: 0;
