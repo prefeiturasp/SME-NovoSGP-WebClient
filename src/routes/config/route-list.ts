@@ -7,6 +7,7 @@ import { ROUTES } from '@/core/enum/routes';
 import { store } from '@/core/redux';
 import ConsultaCriancasEstudantesAusentes from '@/pages/busca-ativa/consulta-criancas-estudantes-ausentes/list';
 import BuscaAtivaHistoricoRegistroAcoes from '@/pages/busca-ativa/consulta-criancas-estudantes-ausentes/list/historico';
+import BuscaAtivaHistoricoRegistroAcoesForm from '@/pages/busca-ativa/consulta-criancas-estudantes-ausentes/list/historico/form';
 import FormCadastroABAE from '@/pages/cadastro-abae/form';
 import ListCadastroABAE from '@/pages/cadastro-abae/list';
 import RotasTipo from '~/constantes/rotasTipo';
@@ -1775,6 +1776,16 @@ route.set(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
+});
+
+route.set(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_NOVO, {
+  breadcrumbName: 'Novo Registro de ações',
+  parent: ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES,
+  component: BuscaAtivaHistoricoRegistroAcoesForm,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  // temPermissionamento: true,
+  // chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
 });
 
 const getRoutesArray = () => {

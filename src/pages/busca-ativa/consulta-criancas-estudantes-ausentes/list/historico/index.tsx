@@ -76,6 +76,8 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   }, [obterDados]);
 
   const onClickVoltar = () => navigate(ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES);
+  const onClickNovoRegistroAcao = () =>
+    navigate(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_NOVO, { state: location.state });
 
   return (
     <Col>
@@ -89,6 +91,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
               <ButtonPrimary
                 id={SGP_BUTTON_BUSCA_ATIVA_NOVO_REGISTRO_ACAO}
                 disabled={!podeIncluir || somenteConsulta}
+                onClick={() => onClickNovoRegistroAcao()}
               >
                 Novo registro de ação
               </ButtonPrimary>
@@ -99,7 +102,11 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
       <CardContent>
         <Row gutter={24}>
           <Col xs={24}>
-            <CardDetalhesCriancaEstudante dados={dados} loading={loading} />
+            <CardDetalhesCriancaEstudante
+              dados={dados}
+              loading={loading}
+              titulo="Detalhes estudante/criança"
+            />
           </Col>
         </Row>
       </CardContent>
