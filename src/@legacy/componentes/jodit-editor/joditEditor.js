@@ -459,24 +459,12 @@ const JoditEditor = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (textArea?.current?.setEditorValue) {
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = value;
-
-      tempDiv.querySelectorAll('*').forEach(elemento => {
-        if (elemento.tagName.toLowerCase() !== 'img') {
-          while (elemento.attributes.length > 0) {
-            elemento.removeAttribute(elemento.attributes[0].name);
-          }
-        }
-      });
-
-      const newValue = tempDiv.innerHTML;
-
-      textArea.current.setEditorValue(newValue);
+      textArea.current.setEditorValue(value);
 
       bloquearTraducaoNavegador();
     }
   }, [textArea, value]);
+
   useEffect(() => {
     if (config && textArea?.current && textArea?.current?.type !== 'textarea') {
       textArea.current.setReadOnly(desabilitar);
