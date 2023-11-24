@@ -17,6 +17,7 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SGP_BUTTON_SALVAR_ALTERAR } from '~/constantes/ids/button';
+import BuscaAtivaRegistroAcoesFormDinamico from './form-dinamico';
 
 type BuscaAtivaRegistroAcoesFormProps = {
   onClickVoltar: () => void;
@@ -111,6 +112,10 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
 
             <Col xs={24}>
               <LocalizadorEstudante />
+            </Col>
+
+            <Col xs={24}>
+              <BuscaAtivaRegistroAcoesFormDinamico />
             </Col>
           </Row>
         </CardContent>
