@@ -1788,6 +1788,16 @@ route.set(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_NOVO, {
   // chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
 });
 
+route.set(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_EDICAO, {
+  breadcrumbName: 'Editar Registro de ações',
+  parent: ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES,
+  component: BuscaAtivaHistoricoRegistroAcoesForm,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  // temPermissionamento: true,
+  // chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
+});
+
 const getRoutesArray = () => {
   for (const [key, value] of route) {
     const rota = value;

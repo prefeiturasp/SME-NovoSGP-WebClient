@@ -47,6 +47,7 @@ const TableCriancasEstudantesAusentes: React.FC<TableCriancasEstudantesAusentesP
   const ue = Form.useWatch('ue', form);
 
   const codigoTurma = abrangenciaTurmaRetorno?.codigo;
+  const turmaId = abrangenciaTurmaRetorno?.id;
 
   const [dataSource, setDataSource] = useState<AlunosAusentesDto[]>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -95,7 +96,7 @@ const TableCriancasEstudantesAusentes: React.FC<TableCriancasEstudantesAusentesP
           onClick: () => {
             navigate(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES, {
               replace: true,
-              state: { anoLetivo, codigoTurma, codigoAluno: estudante.codigoEol },
+              state: { anoLetivo, codigoTurma, turmaId, codigoAluno: estudante.codigoEol },
             });
           },
         };

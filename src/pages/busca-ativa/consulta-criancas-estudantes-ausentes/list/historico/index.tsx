@@ -9,10 +9,11 @@ import CardDetalhesCriancaEstudante from '@/components/sgp/card-detalhes-crianca
 import { AlunoReduzidoDto } from '@/core/dto/AlunoReduzidoDto';
 import { ROUTES } from '@/core/enum/routes';
 import estudanteService from '@/core/services/estudante-service';
-import { Col, Row } from 'antd';
+import { Col, Divider, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+import BuscaAtivaHistoricoRegistroAcoesList from './list';
 
 const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const location = useLocation();
@@ -107,6 +108,8 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
               loading={loading}
               titulo="Detalhes estudante/criança"
             />
+            <Divider />
+            <BuscaAtivaHistoricoRegistroAcoesList />
           </Col>
         </Row>
       </CardContent>
