@@ -6,7 +6,11 @@ import buscaAtivaService from '@/core/services/busca-ativa-service';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { setDadosSecoesBuscaAtivaRegistroAcoes } from '~/redux/modulos/buscaAtivaRegistroAcoes/actions';
+import {
+  setDadosSecoesBuscaAtivaRegistroAcoes,
+  setExibirLoaderBuscaAtivaRegistroAcoes,
+  setLimparDadosBuscaAtivaRegistroAcoes,
+} from '~/redux/modulos/buscaAtivaRegistroAcoes/actions';
 
 const BuscaAtivaRegistroAcoesFormDinamico = () => {
   const dispatch = useDispatch();
@@ -22,7 +26,7 @@ const BuscaAtivaRegistroAcoesFormDinamico = () => {
   const questionarioId = dadosSecoesBuscaAtivaRegistroAcoes?.questionarioId;
 
   const obterQuestoes = useCallback(async () => {
-    // setExibirLoader(true);
+    dispatch(setExibirLoaderBuscaAtivaRegistroAcoes(true));
 
     const resposta = await buscaAtivaService.obterQuestionario(
       questionarioId,
@@ -35,7 +39,7 @@ const BuscaAtivaRegistroAcoesFormDinamico = () => {
       setDadosQuestionarioAtual([]);
     }
 
-    // setExibirLoader(false);
+    dispatch(setExibirLoaderBuscaAtivaRegistroAcoes(false));
   }, [questionarioId, registroAcaoId]);
 
   useEffect(() => {
@@ -54,7 +58,6 @@ const BuscaAtivaRegistroAcoesFormDinamico = () => {
   }, []);
 
   const obterSecoes = async () => {
-    // LOADER
     const resposta = await buscaAtivaService.obterSecoesDeRegistroAcao();
 
     if (resposta.sucesso && resposta.dados?.length) {
@@ -66,6 +69,13 @@ const BuscaAtivaRegistroAcoesFormDinamico = () => {
 
   useEffect(() => {
     obterSecoes();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setLimparDadosBuscaAtivaRegistroAcoes());
+      dispatch(setLimparDadosQuestionarioDinamico());
+    };
   }, []);
 
   return (

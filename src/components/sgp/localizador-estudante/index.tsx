@@ -13,7 +13,7 @@ import {
   InputProps,
   Row,
 } from 'antd';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Base } from '~/componentes';
 import { erro, erros } from '~/servicos';
 
@@ -34,7 +34,6 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
   const ueWatch = Form.useWatch('ue', form);
 
   const [loading, setLoading] = useState(false);
-  const [dataSource, setDataSource] = useState<React.ReactNode[]>([<></>]);
 
   const [desabilitarCampo, setDesabilitarCampo] = useState({
     codigo: false,
@@ -42,7 +41,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
   });
 
   const limparDados = () => {
-    setDataSource([<></>]);
+    form.setFieldValue('localizadorEstudanteDados', []);
     form.setFieldValue('localizadorEstudante', undefined);
     setDesabilitarCampo({
       nome: false,
@@ -107,8 +106,8 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
           {item.nome}
         </AutoComplete.Option>
       ));
-      setDataSource(options);
 
+      form.setFieldValue('localizadorEstudanteDados', options);
       form.setFieldValue('localizadorEstudante', primeiroEstudante);
 
       if (codigo) {
@@ -169,6 +168,10 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
       <Col xs={24} md={12} lg={10}>
         <Form.Item shouldUpdate>
           {(form) => {
+            const localizadorEstudanteDados: React.ReactNode[] = form.getFieldValue(
+              'localizadorEstudanteDados',
+            );
+
             const ue = form.getFieldValue('ue');
             const disabled = !ue?.codigo;
             return (
@@ -179,12 +182,13 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
               >
                 <AutoComplete
                   onSearch={(value: string) => onBuscarPorNome(value, form.getFieldsValue(true))}
-                  dataSource={dataSource}
+                  dataSource={localizadorEstudanteDados?.length ? localizadorEstudanteDados : []}
                   disabled={disabled || desabilitarCampo.nome}
                   {...autoCompleteNameProps}
                 >
                   <Input
                     allowClear
+                    type="text"
                     id="AUTOCOMPLETE_NOME"
                     placeholder="Digite o nome da Criança/Estudante"
                     prefix={<SearchOutlined style={{ fontSize: 16, color: Base.CinzaMenu }} />}

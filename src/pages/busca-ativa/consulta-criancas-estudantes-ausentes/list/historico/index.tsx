@@ -7,6 +7,7 @@ import CardContent from '@/components/lib/card-content';
 import HeaderPage from '@/components/lib/header-page';
 import CardDetalhesCriancaEstudante from '@/components/sgp/card-detalhes-crianca-estudante';
 import { AlunoReduzidoDto } from '@/core/dto/AlunoReduzidoDto';
+import { RegistroAcaoBuscaAtivaRespostaDto } from '@/core/dto/RegistroAcaoBuscaAtivaRespostaDto';
 import { ROUTES } from '@/core/enum/routes';
 import estudanteService from '@/core/services/estudante-service';
 import { Col, Divider, Row } from 'antd';
@@ -27,6 +28,8 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const registroAcaoBuscaAtivaResposta: RegistroAcaoBuscaAtivaRespostaDto = location.state;
+
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(
       permissoes?.[ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES],
@@ -35,20 +38,20 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     setSomenteConsulta(soConsulta);
   }, [permissoes]);
 
-  const anoLetivo = location?.state?.anoLetivo;
-  const codigoAluno = location?.state?.codigoAluno;
-  const codigoTurma = location?.state?.codigoTurma;
+  const anoLetivo = registroAcaoBuscaAtivaResposta?.anoLetivo;
+  const codigoAluno = registroAcaoBuscaAtivaResposta?.aluno?.codigoAluno || '';
+  const turmaCodigo = registroAcaoBuscaAtivaResposta?.turmaCodigo;
 
   const [dados, setDados] = useState<AlunoReduzidoDto | undefined>();
 
   const obterFrequenciaGlobalAluno = useCallback(async () => {
     const retorno = await ServicoConselhoClasse.obterFrequenciaAluno(
       codigoAluno,
-      codigoTurma,
+      turmaCodigo,
     ).catch((e) => erros(e));
 
     return retorno?.data;
-  }, [codigoTurma, codigoAluno]);
+  }, [turmaCodigo, codigoAluno]);
 
   const obterDados = useCallback(async () => {
     setLoading(true);
@@ -56,7 +59,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     const resposta = await estudanteService.obterDadosEstudante({
       anoLetivo,
       codigoAluno,
-      codigoTurma,
+      codigoTurma: turmaCodigo,
       carregarDadosResponsaveis: true,
     });
 
@@ -70,7 +73,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     }
 
     setLoading(false);
-  }, [anoLetivo, codigoAluno, codigoTurma]);
+  }, [anoLetivo, codigoAluno, turmaCodigo, obterFrequenciaGlobalAluno]);
 
   useEffect(() => {
     obterDados();
@@ -78,7 +81,9 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
 
   const onClickVoltar = () => navigate(ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES);
   const onClickNovoRegistroAcao = () =>
-    navigate(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_NOVO, { state: location.state });
+    navigate(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_NOVO, {
+      state: registroAcaoBuscaAtivaResposta,
+    });
 
   return (
     <Col>

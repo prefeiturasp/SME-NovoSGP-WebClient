@@ -1,10 +1,18 @@
 import { FiltroSecoesDeRegistroAcao } from '../dto/FiltroSecoesDeRegistroAcao';
+import { RegistroAcaoBuscaAtivaDto } from '../dto/RegistroAcaoBuscaAtivaDto';
+import { RegistroAcaoBuscaAtivaRespostaDto } from '../dto/RegistroAcaoBuscaAtivaRespostaDto';
+import { ResultadoRegistroAcaoBuscaAtivaDto } from '../dto/ResultadoRegistroAcaoBuscaAtivaDto';
 import { SecaoQuestionarioDto } from '../dto/SecaoQuestionarioDto';
-import { deletarRegistro, obterRegistro } from './api';
+import { deletarRegistro, inserirRegistro, obterRegistro } from './api';
 
 export const URL_API_BUSCA_ATIVA = 'v1/busca-ativa';
 
-const obterSecoesDeRegistroAcao = (params?: FiltroSecoesDeRegistroAcao) =>
+const salvarAtualizarRegistroAcao = (params: RegistroAcaoBuscaAtivaDto) =>
+  inserirRegistro<ResultadoRegistroAcaoBuscaAtivaDto>(`${URL_API_BUSCA_ATIVA}/registros-acao`, {
+    params,
+  });
+
+const obterSecoesDeRegistroAcao = (params: FiltroSecoesDeRegistroAcao) =>
   obterRegistro<SecaoQuestionarioDto>(`${URL_API_BUSCA_ATIVA}/registros-acao/secoes`, { params });
 
 const obterQuestionario = (questionarioId: number, registroAcaoId?: number) =>
@@ -14,12 +22,15 @@ const obterQuestionario = (questionarioId: number, registroAcaoId?: number) =>
   );
 
 const obterRegistroAcao = (registroAcaoId: number) =>
-  obterRegistro<SecaoQuestionarioDto>(`${URL_API_BUSCA_ATIVA}/registros-acao/${registroAcaoId}`);
+  obterRegistro<RegistroAcaoBuscaAtivaRespostaDto>(
+    `${URL_API_BUSCA_ATIVA}/registros-acao/${registroAcaoId}`,
+  );
 
 const excluirRegistroAcao = (registroAcaoId: number) =>
-  deletarRegistro<SecaoQuestionarioDto>(`${URL_API_BUSCA_ATIVA}/registros-acao/${registroAcaoId}`);
+  deletarRegistro<boolean>(`${URL_API_BUSCA_ATIVA}/registros-acao/${registroAcaoId}`);
 
 export default {
+  salvarAtualizarRegistroAcao,
   obterSecoesDeRegistroAcao,
   obterQuestionario,
   obterRegistroAcao,

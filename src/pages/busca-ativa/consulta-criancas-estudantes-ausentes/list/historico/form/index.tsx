@@ -1,17 +1,29 @@
+import { PermissaoAcoesDto } from '@/core/dto/PermissaoAcoes';
 import { ROUTES } from '@/core/enum/routes';
+import { useAppSelector } from '@/core/hooks/use-redux';
 import BuscaAtivaRegistroAcoesForm from '@/pages/busca-ativa/registro-acoes/form';
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 const BuscaAtivaHistoricoRegistroAcoesForm = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const usuario = useAppSelector((state) => state.usuario);
 
-  const onClickVoltar = () => {
-    navigate(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES, { state: location.state });
-  };
+  const permissoes: any = usuario?.permissoes;
 
-  return <BuscaAtivaRegistroAcoesForm onClickVoltar={onClickVoltar} />;
+  const permissoesTela: PermissaoAcoesDto =
+    permissoes[ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES];
+
+  // const permissoesTela: PermissaoAcoesDto = {
+  //   podeAlterar: true,
+  //   podeIncluir: true,
+  //   podeConsultar: true,
+  //   podeExcluir: true,
+  // };
+
+  return (
+    <BuscaAtivaRegistroAcoesForm
+      permissoesTela={permissoesTela}
+      rotaPai={ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES}
+    />
+  );
 };
 
 export default BuscaAtivaHistoricoRegistroAcoesForm;
