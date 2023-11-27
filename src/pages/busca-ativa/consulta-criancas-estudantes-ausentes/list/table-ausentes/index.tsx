@@ -2,11 +2,12 @@ import { formatarFrequencia } from '@/@legacy/utils';
 import { AbrangenciaTurmaRetornoDto } from '@/core/dto/AbrangenciaTurmaRetorno';
 import { AlunosAusentesDto } from '@/core/dto/AlunosAusentesDto';
 import { FiltroObterAlunosAusentesDto } from '@/core/dto/FiltroObterAlunosAusentesDto';
+import { RegistroAcaoBuscaAtivaRespostaDto } from '@/core/dto/RegistroAcaoBuscaAtivaRespostaDto';
 import { ROUTES } from '@/core/enum/routes';
 import consultaCriancasEstudantesAusentesService from '@/core/services/consulta-criancas-estudantes-ausentes-service';
 import { Form, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const columns: ColumnsType<AlunosAusentesDto> = [
@@ -46,7 +47,9 @@ const TableCriancasEstudantesAusentes: React.FC<TableCriancasEstudantesAusentesP
   const ausencias = Form.useWatch('ausencias', form);
   const ue = Form.useWatch('ue', form);
 
-  const codigoTurma = abrangenciaTurmaRetorno?.codigo;
+  const codigoTurma = abrangenciaTurmaRetorno?.codigo || '';
+  const turmaId = abrangenciaTurmaRetorno?.id || 0;
+  const turmaNome = abrangenciaTurmaRetorno?.nomeFiltro || '';
 
   const [dataSource, setDataSource] = useState<AlunosAusentesDto[]>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -91,11 +94,31 @@ const TableCriancasEstudantesAusentes: React.FC<TableCriancasEstudantesAusentesP
       bordered
       locale={{ emptyText: 'Sem dados' }}
       onRow={(estudante) => {
+        const values = form.getFieldsValue();
+
+        const registroAcaoBuscaAtivaResposta: RegistroAcaoBuscaAtivaRespostaDto = {
+          dreId: values?.dre?.id,
+          dreNome: values?.dre?.label,
+          dreCodigo: values?.dre?.value,
+          ueId: values?.ue?.id,
+          ueNome: values?.ue?.label,
+          ueCodigo: values?.ue?.value,
+          turmaId,
+          turmaNome,
+          turmaCodigo: codigoTurma,
+          semestre: values?.semestre?.value || '',
+          modalidade: values?.modalidade?.value,
+          anoLetivo: values?.anoLetivo,
+          aluno: {
+            codigoAluno: estudante?.codigoEol || '',
+            nome: estudante?.nome || '',
+          },
+        };
         return {
           onClick: () => {
             navigate(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES, {
               replace: true,
-              state: { anoLetivo, codigoTurma, codigoAluno: estudante.codigoEol },
+              state: registroAcaoBuscaAtivaResposta,
             });
           },
         };

@@ -7,12 +7,14 @@ import CardContent from '@/components/lib/card-content';
 import HeaderPage from '@/components/lib/header-page';
 import CardDetalhesCriancaEstudante from '@/components/sgp/card-detalhes-crianca-estudante';
 import { AlunoReduzidoDto } from '@/core/dto/AlunoReduzidoDto';
+import { RegistroAcaoBuscaAtivaRespostaDto } from '@/core/dto/RegistroAcaoBuscaAtivaRespostaDto';
 import { ROUTES } from '@/core/enum/routes';
 import estudanteService from '@/core/services/estudante-service';
-import { Col, Row } from 'antd';
+import { Col, Divider, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+import BuscaAtivaHistoricoRegistroAcoesList from './list';
 
 const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const location = useLocation();
@@ -26,6 +28,8 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const [somenteConsulta, setSomenteConsulta] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const registroAcaoBuscaAtivaResposta: RegistroAcaoBuscaAtivaRespostaDto = location.state;
+
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(
       permissoes?.[ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES],
@@ -34,20 +38,20 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     setSomenteConsulta(soConsulta);
   }, [permissoes]);
 
-  const anoLetivo = location?.state?.anoLetivo;
-  const codigoAluno = location?.state?.codigoAluno;
-  const codigoTurma = location?.state?.codigoTurma;
+  const anoLetivo = registroAcaoBuscaAtivaResposta?.anoLetivo;
+  const codigoAluno = registroAcaoBuscaAtivaResposta?.aluno?.codigoAluno || '';
+  const turmaCodigo = registroAcaoBuscaAtivaResposta?.turmaCodigo;
 
   const [dados, setDados] = useState<AlunoReduzidoDto | undefined>();
 
   const obterFrequenciaGlobalAluno = useCallback(async () => {
     const retorno = await ServicoConselhoClasse.obterFrequenciaAluno(
       codigoAluno,
-      codigoTurma,
+      turmaCodigo,
     ).catch((e) => erros(e));
 
     return retorno?.data;
-  }, [codigoTurma, codigoAluno]);
+  }, [turmaCodigo, codigoAluno]);
 
   const obterDados = useCallback(async () => {
     setLoading(true);
@@ -55,7 +59,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     const resposta = await estudanteService.obterDadosEstudante({
       anoLetivo,
       codigoAluno,
-      codigoTurma,
+      codigoTurma: turmaCodigo,
       carregarDadosResponsaveis: true,
     });
 
@@ -69,13 +73,17 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     }
 
     setLoading(false);
-  }, [anoLetivo, codigoAluno, codigoTurma]);
+  }, [anoLetivo, codigoAluno, turmaCodigo, obterFrequenciaGlobalAluno]);
 
   useEffect(() => {
     obterDados();
   }, [obterDados]);
 
   const onClickVoltar = () => navigate(ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES);
+  const onClickNovoRegistroAcao = () =>
+    navigate(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_NOVO, {
+      state: registroAcaoBuscaAtivaResposta,
+    });
 
   return (
     <Col>
@@ -89,6 +97,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
               <ButtonPrimary
                 id={SGP_BUTTON_BUSCA_ATIVA_NOVO_REGISTRO_ACAO}
                 disabled={!podeIncluir || somenteConsulta}
+                onClick={() => onClickNovoRegistroAcao()}
               >
                 Novo registro de ação
               </ButtonPrimary>
@@ -99,7 +108,13 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
       <CardContent>
         <Row gutter={24}>
           <Col xs={24}>
-            <CardDetalhesCriancaEstudante dados={dados} loading={loading} />
+            <CardDetalhesCriancaEstudante
+              dados={dados}
+              loading={loading}
+              titulo="Detalhes estudante/criança"
+            />
+            <Divider />
+            <BuscaAtivaHistoricoRegistroAcoesList />
           </Col>
         </Row>
       </CardContent>
