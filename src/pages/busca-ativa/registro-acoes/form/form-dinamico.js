@@ -20,6 +20,11 @@ const BuscaAtivaRegistroAcoesFormDinamico = () => {
     state => state.buscaAtivaRegistroAcoes?.dadosSecoesBuscaAtivaRegistroAcoes
   );
 
+  const desabilitarCamposBuscaAtivaRegistroAcoes = useSelector(
+    store =>
+      store.buscaAtivaRegistroAcoes.desabilitarCamposBuscaAtivaRegistroAcoes
+  );
+
   const [dadosQuestionarioAtual, setDadosQuestionarioAtual] = useState([]);
 
   const registroAcaoId = paramsRoute?.id || 0;
@@ -84,6 +89,7 @@ const BuscaAtivaRegistroAcoesFormDinamico = () => {
     <>
       {dadosQuestionarioAtual?.length ? (
         <QuestionarioDinamico
+          desabilitarCampos={desabilitarCamposBuscaAtivaRegistroAcoes}
           dados={dadosSecoesBuscaAtivaRegistroAcoes}
           exibirOrdemLabel={false}
           dadosQuestionarioAtual={dadosQuestionarioAtual}

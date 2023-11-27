@@ -11,6 +11,7 @@ import { validateMessages } from '@/core/constants/validate-messages';
 import { BuscaAtivaRegistroAcoesFormDto } from '@/core/dto/BuscaAtivaRegistroAcoesFormDto';
 import { PermissaoAcoesDto } from '@/core/dto/PermissaoAcoes';
 import { RegistroAcaoBuscaAtivaRespostaDto } from '@/core/dto/RegistroAcaoBuscaAtivaRespostaDto';
+import { useAppSelector } from '@/core/hooks/use-redux';
 import buscaAtivaService from '@/core/services/busca-ativa-service';
 import { Checkbox, Col, Form, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
@@ -48,6 +49,10 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
     anoLetivo: anoAtual,
     consideraHistorico: false,
   };
+
+  const desabilitarCamposBuscaAtivaRegistroAcoes = useAppSelector(
+    (store) => store.buscaAtivaRegistroAcoes.desabilitarCamposBuscaAtivaRegistroAcoes,
+  );
 
   const [formInitialValues, setFormInitialValues] = useState<BuscaAtivaRegistroAcoesFormDto>();
 
@@ -119,6 +124,7 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
           autoComplete="off"
           validateMessages={validateMessages}
           initialValues={formInitialValues || defaultInitialValues}
+          disabled={desabilitarCamposBuscaAtivaRegistroAcoes}
         >
           <HeaderPage title="Registro de ações">
             <BuscaAtivaRegistroAcoesFormBotoesAcao
@@ -132,29 +138,32 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
                 <Checkbox />
               </Form.Item>
 
-              <Col xs={24} sm={8} md={4}>
+              <Col xs={24} sm={8} md={6} lg={4}>
                 <Form.Item name="anoLetivo" label="Ano Letivo" rules={[{ required: true }]}>
                   <Select options={[{ label: anoAtual, value: anoAtual }]} disabled />
                 </Form.Item>
               </Col>
 
-              <Col xs={24} sm={24} md={10}>
-                <SelectDRE formItemProps={{ rules: [{ required: true }] }} />
+              <Col xs={24} sm={24} md={18} lg={10}>
+                <SelectDRE
+                  formItemProps={{ rules: [{ required: true }] }}
+                  selectProps={{ disabled: !!formInitialValues?.dre }}
+                />
               </Col>
 
-              <Col xs={24} sm={24} md={10}>
+              <Col xs={24} sm={24} md={12} lg={10}>
                 <SelectUE formItemProps={{ rules: [{ required: true }] }} />
               </Col>
 
-              <Col xs={24} md={12} lg={10}>
+              <Col xs={24} md={12} lg={8}>
                 <SelectModalidade formItemProps={{ rules: [{ required: true }] }} />
               </Col>
 
-              <Col xs={24} md={12} lg={4}>
+              <Col xs={24} md={12} lg={8}>
                 <SelectSemestre />
               </Col>
 
-              <Col xs={24} md={12} lg={10}>
+              <Col xs={24} md={12} lg={8}>
                 <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
                   {(form) => {
                     const modalidade = form.getFieldValue('modalidade');
@@ -162,7 +171,12 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
                     return (
                       <SelectTurma
                         formItemProps={{ rules: [{ required: true }] }}
-                        selectProps={{ disabled: !modalidade }}
+                        selectProps={{
+                          disabled:
+                            !modalidade ||
+                            desabilitarCamposBuscaAtivaRegistroAcoes ||
+                            !!formInitialValues?.turma,
+                        }}
                       />
                     );
                   }}
@@ -170,7 +184,12 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
               </Col>
 
               <Col xs={24}>
-                <LocalizadorEstudante />
+                <LocalizadorEstudante
+                  inputCodigoProps={{ disabled: !!formInitialValues?.localizadorEstudante.nome }}
+                  autoCompleteNameProps={{
+                    disabled: !!formInitialValues?.localizadorEstudante.codigo,
+                  }}
+                />
               </Col>
 
               <Col xs={24}>

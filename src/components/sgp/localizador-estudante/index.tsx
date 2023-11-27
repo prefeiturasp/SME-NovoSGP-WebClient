@@ -50,7 +50,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
   };
 
   useEffect(() => {
-    if (!ueWatch?.codigo) {
+    if (form.isFieldsTouched() && !ueWatch?.codigo) {
       limparDados();
     }
   }, [ueWatch]);
@@ -165,42 +165,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
 
   return (
     <Row gutter={24}>
-      <Col xs={24} md={12} lg={10}>
-        <Form.Item shouldUpdate>
-          {(form) => {
-            const localizadorEstudanteDados: React.ReactNode[] = form.getFieldValue(
-              'localizadorEstudanteDados',
-            );
-
-            const ue = form.getFieldValue('ue');
-            const disabled = !ue?.codigo;
-            return (
-              <Form.Item
-                label="Nome da Criança/Estudante"
-                name={['localizadorEstudante', 'nome']}
-                {...formItemAutoCompleteNameProps}
-              >
-                <AutoComplete
-                  onSearch={(value: string) => onBuscarPorNome(value, form.getFieldsValue(true))}
-                  dataSource={localizadorEstudanteDados?.length ? localizadorEstudanteDados : []}
-                  disabled={disabled || desabilitarCampo.nome}
-                  {...autoCompleteNameProps}
-                >
-                  <Input
-                    allowClear
-                    type="text"
-                    id="AUTOCOMPLETE_NOME"
-                    placeholder="Digite o nome da Criança/Estudante"
-                    prefix={<SearchOutlined style={{ fontSize: 16, color: Base.CinzaMenu }} />}
-                  />
-                </AutoComplete>
-              </Form.Item>
-            );
-          }}
-        </Form.Item>
-      </Col>
-
-      <Col xs={24} md={12} lg={10}>
+      <Col xs={24} md={12} lg={8}>
         <Form.Item shouldUpdate>
           {(form) => {
             const ue = form.getFieldValue('ue');
@@ -221,7 +186,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
                   loading={loading}
                   placeholder="Digite o Código EOL"
                   onSearch={(value: string) => onBuscarPorCodigo(value, form.getFieldsValue(true))}
-                  disabled={disabled || desabilitarCampo.codigo}
+                  disabled={disabled || desabilitarCampo.codigo || inputCodigoProps?.disabled}
                   onChange={(e) => {
                     if (!e?.target?.value?.length) {
                       limparDados();
@@ -229,6 +194,41 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
                   }}
                   {...inputCodigoProps}
                 />
+              </Form.Item>
+            );
+          }}
+        </Form.Item>
+      </Col>
+      <Col xs={24} md={12} lg={16}>
+        <Form.Item shouldUpdate>
+          {(form) => {
+            const localizadorEstudanteDados: React.ReactNode[] = form.getFieldValue(
+              'localizadorEstudanteDados',
+            );
+
+            const ue = form.getFieldValue('ue');
+            const disabled = !ue?.codigo;
+
+            return (
+              <Form.Item
+                label="Nome da Criança/Estudante"
+                name={['localizadorEstudante', 'nome']}
+                {...formItemAutoCompleteNameProps}
+              >
+                <AutoComplete
+                  onSearch={(value: string) => onBuscarPorNome(value, form.getFieldsValue(true))}
+                  dataSource={localizadorEstudanteDados?.length ? localizadorEstudanteDados : []}
+                  disabled={disabled || desabilitarCampo.nome || autoCompleteNameProps?.disabled}
+                  {...autoCompleteNameProps}
+                >
+                  <Input
+                    allowClear
+                    type="text"
+                    id="AUTOCOMPLETE_NOME"
+                    placeholder="Digite o nome da Criança/Estudante"
+                    prefix={<SearchOutlined style={{ fontSize: 16, color: Base.CinzaMenu }} />}
+                  />
+                </AutoComplete>
               </Form.Item>
             );
           }}

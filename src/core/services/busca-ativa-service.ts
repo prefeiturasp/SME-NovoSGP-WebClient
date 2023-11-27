@@ -28,7 +28,7 @@ const obterRegistroAcao = (registroAcaoId: number) =>
   );
 
 const excluirRegistroAcao = (registroAcaoId: number) =>
-  deletarRegistro<boolean>(`${URL_API_BUSCA_ATIVA}/registros-acaos/${registroAcaoId}`);
+  deletarRegistro<boolean>(`${URL_API_BUSCA_ATIVA}/registros-acao/${registroAcaoId}`);
 
 export default {
   salvarAtualizarRegistroAcao,

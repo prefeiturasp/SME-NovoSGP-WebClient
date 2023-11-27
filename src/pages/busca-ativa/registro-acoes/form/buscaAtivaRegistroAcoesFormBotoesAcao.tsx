@@ -58,7 +58,7 @@ const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
 
   const registroAcaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
-  const labelBtnCadastrarAlterar = registroAcaoId ? 'Alterar' : 'Cadastrar';
+  const labelBtnCadastrarAlterar = registroAcaoId ? 'Alterar' : 'Salvar';
 
   const disabledBtnDefault =
     desabilitarCamposBuscaAtivaRegistroAcoes || !questionarioDinamicoEmEdicao;
@@ -231,7 +231,9 @@ const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
             <ButtonSecundary
               id={SGP_BUTTON_CANCELAR}
               onClick={() => onClickCancelar()}
-              disabled={disabledBtnDefault || !form.isFieldsTouched()}
+              disabled={
+                disabledBtnDefault || (!form.isFieldsTouched() && !questionarioDinamicoEmEdicao)
+              }
             >
               Cancelar
             </ButtonSecundary>
