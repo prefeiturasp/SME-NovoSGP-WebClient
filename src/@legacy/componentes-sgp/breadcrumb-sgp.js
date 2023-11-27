@@ -4,7 +4,7 @@ import { Breadcrumb } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { obterDescricaoNomeMenu } from '~/servicos/servico-navegacao';
 import { validarNavegacaoTela } from '~/utils';
@@ -36,6 +36,7 @@ const BreadcrumbBody = styled.div`
 `;
 const BreadcrumbSgp = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const NavegacaoStore = useSelector(
     storeNavegacao => storeNavegacao.navegacao
@@ -193,11 +194,13 @@ const BreadcrumbSgp = () => {
           return (
             <Breadcrumb key={item.path}>
               <Link
+                state={location.state}
                 hidden={item.ehEstatico}
                 to={item.path}
                 onClick={async e => {
                   const pararAcao = await validarNavegacaoTela(e, item.path);
-                  if (!pararAcao) navigate(item.path);
+                  if (!pararAcao)
+                    navigate(item.path, { state: location?.state });
                 }}
               >
                 <i className={item.icone} title={item.breadcrumbName} />
