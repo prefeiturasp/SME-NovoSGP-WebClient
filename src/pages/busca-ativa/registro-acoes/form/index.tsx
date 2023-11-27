@@ -23,6 +23,7 @@ import {
   setExibirLoaderBuscaAtivaRegistroAcoes,
 } from '~/redux/modulos/buscaAtivaRegistroAcoes/actions';
 import { verificaSomenteConsulta } from '~/servicos';
+import BuscaAtivaRegistroAcoesAuditoria from './auditoria';
 import BuscaAtivaRegistroAcoesFormBotoesAcao from './buscaAtivaRegistroAcoesFormBotoesAcao';
 import BuscaAtivaRegistroAcoesFormDinamico from './form-dinamico';
 import LoaderBuscaAtivaRegistroAcoesForm from './loaderBuscaAtivaRegistroAcoesForm';
@@ -174,6 +175,10 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
 
               <Col xs={24}>
                 <BuscaAtivaRegistroAcoesFormDinamico />
+              </Col>
+
+              <Col xs={24}>
+                <BuscaAtivaRegistroAcoesAuditoria />
               </Col>
             </Row>
           </CardContent>

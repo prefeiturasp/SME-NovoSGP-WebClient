@@ -48,6 +48,8 @@ const TableCriancasEstudantesAusentes: React.FC<TableCriancasEstudantesAusentesP
   const ue = Form.useWatch('ue', form);
 
   const codigoTurma = abrangenciaTurmaRetorno?.codigo || '';
+  const turmaId = abrangenciaTurmaRetorno?.id || 0;
+  const turmaNome = abrangenciaTurmaRetorno?.nomeFiltro || '';
 
   const [dataSource, setDataSource] = useState<AlunosAusentesDto[]>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -101,8 +103,8 @@ const TableCriancasEstudantesAusentes: React.FC<TableCriancasEstudantesAusentesP
           ueId: values?.ue?.id,
           ueNome: values?.ue?.label,
           ueCodigo: values?.ue?.value,
-          turmaId: values?.turma?.id,
-          turmaNome: values?.turma?.label,
+          turmaId,
+          turmaNome,
           turmaCodigo: codigoTurma,
           semestre: values?.semestre?.value || '',
           modalidade: values?.modalidade?.value,

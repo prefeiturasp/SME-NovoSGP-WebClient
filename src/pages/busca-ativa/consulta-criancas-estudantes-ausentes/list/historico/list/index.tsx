@@ -1,5 +1,6 @@
 import { FiltroRegistrosAcaoCriancasEstudantesAusentesDto } from '@/core/dto/FiltroRegistrosAcaoCriancasEstudantesAusentesDto';
 import { RegistroAcaoBuscaAtivaCriancaEstudanteAusenteDto } from '@/core/dto/RegistroAcaoBuscaAtivaCriancaEstudanteAusenteDto';
+import { RegistroAcaoBuscaAtivaRespostaDto } from '@/core/dto/RegistroAcaoBuscaAtivaRespostaDto';
 import { ROUTES } from '@/core/enum/routes';
 import { URL_API_BUSCA_ATIVA } from '@/core/services/busca-ativa-service';
 import { formatarData } from '@/core/utils/functions';
@@ -16,8 +17,10 @@ const BuscaAtivaHistoricoRegistroAcoesList = () => {
 
   const [filtro, setFiltro] = useState<FiltroRegistrosAcaoCriancasEstudantesAusentesDto>();
 
-  const codigoAluno = location?.state?.codigoAluno;
-  const turmaId = location?.state?.turmaId;
+  const dadosRouteState: RegistroAcaoBuscaAtivaRespostaDto = location.state;
+
+  const turmaId = dadosRouteState?.turmaId;
+  const codigoAluno = dadosRouteState?.aluno?.codigoAluno;
 
   useEffect(() => {
     if (codigoAluno && turmaId) {
@@ -42,6 +45,7 @@ const BuscaAtivaHistoricoRegistroAcoesList = () => {
   const onClickEditar = (row: RegistroAcaoBuscaAtivaCriancaEstudanteAusenteDto) =>
     navigate(`${ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES}/${row.id}`, {
       replace: true,
+      state: dadosRouteState,
     });
 
   return (

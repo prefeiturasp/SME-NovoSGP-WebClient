@@ -25,13 +25,7 @@ import {
   setListaSecoesEmEdicao,
   setQuestionarioDinamicoEmEdicao,
 } from '~/redux/modulos/questionarioDinamico/actions';
-import {
-  confirmar,
-  erros,
-  setBreadcrumbManual,
-  sucesso,
-  verificaSomenteConsulta,
-} from '~/servicos';
+import { confirmar, setBreadcrumbManual, sucesso, verificaSomenteConsulta } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 
 type BuscaAtivaRegistroAcoesFormBotoesAcaoProps = {
@@ -100,12 +94,10 @@ const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
       'Você tem certeza que deseja excluir este registro?',
     );
     if (confirmado) {
-      const resultado = await buscaAtivaService.excluirRegistroAcao(registroAcaoId).catch((e) => {
-        erros(e);
-      });
+      const resultado = await buscaAtivaService.excluirRegistroAcao(registroAcaoId);
       if (resultado?.sucesso) {
         sucesso('Registro excluído com sucesso');
-        navigate(rotaPai);
+        navigate(rotaPai, { state });
       }
     }
   };
@@ -134,7 +126,7 @@ const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
     const secoesEncaminhamentoNAAPA = cloneDeep(dadosSecoesBuscaAtivaRegistroAcoes);
 
     const dadosMapeados: any = await QuestionarioDinamicoFuncoes.mapearQuestionarios(
-      secoesEncaminhamentoNAAPA,
+      [secoesEncaminhamentoNAAPA],
       validarCamposObrigatorios,
       [],
     );
@@ -142,12 +134,29 @@ const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
     const formsValidos = !!dadosMapeados?.formsValidos;
 
     if (formsValidos || dadosMapeados?.secoes?.length) {
-      const secoes: RegistroAcaoBuscaAtivaSecaoDto[] = dadosMapeados?.secoes?.length
-        ? dadosMapeados.secoes
-        : [];
+      const secoesMapCloned: any = cloneDeep(dadosMapeados.secoes);
+
+      let secoes: RegistroAcaoBuscaAtivaSecaoDto[] = [];
+
+      if (secoesMapCloned?.length) {
+        secoes = secoesMapCloned.map((secao: any) => {
+          let questoes = [];
+
+          if (secao?.questoes?.length) {
+            questoes = secao.questoes.map((questao: any) => ({
+              questaoId: questao?.questaoId,
+              resposta: questao?.resposta,
+              tipoQuestao: questao?.tipoQuestao,
+              respostaRegistroAcaoId: questao?.respostaEncaminhamentoId || 0,
+            }));
+          }
+
+          return { concluido: secao?.concluido, secaoId: secao?.secaoId, questoes };
+        });
+      }
 
       const paramsSalvar: RegistroAcaoBuscaAtivaDto = {
-        id: 0,
+        id: registroAcaoId,
         turmaId: formValues?.turma?.id,
         alunoCodigo: formValues?.localizadorEstudante?.codigo,
         alunoNome: formValues?.localizadorEstudante?.nome,
@@ -167,20 +176,20 @@ const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
         dispatch(setListaSecoesEmEdicao([]));
         dispatch(setLimparDadosBuscaAtivaRegistroAcoes());
         dispatch(setLimparDadosQuestionarioDinamico());
+
+        let mensagem = 'Registro cadastrado com sucesso';
+
+        if (registroAcaoId) {
+          mensagem = 'Registro alterado com sucesso';
+        }
+        sucesso(mensagem);
+
+        navigate(rotaPai, { state });
       }
 
       setTimeout(() => {
         dispatch(setExibirLoaderBuscaAtivaRegistroAcoes(false));
       }, 1000);
-
-      let mensagem = 'Registro cadastrado com sucesso';
-
-      if (registroAcaoId) {
-        mensagem = 'Registro alterado com sucesso';
-      }
-      sucesso(mensagem);
-
-      navigate(rotaPai);
     }
   };
 

@@ -11,13 +11,6 @@ const BuscaAtivaHistoricoRegistroAcoesForm = () => {
   const permissoesTela: PermissaoAcoesDto =
     permissoes[ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES];
 
-  // const permissoesTela: PermissaoAcoesDto = {
-  //   podeAlterar: true,
-  //   podeIncluir: true,
-  //   podeConsultar: true,
-  //   podeExcluir: true,
-  // };
-
   return (
     <BuscaAtivaRegistroAcoesForm
       permissoesTela={permissoesTela}

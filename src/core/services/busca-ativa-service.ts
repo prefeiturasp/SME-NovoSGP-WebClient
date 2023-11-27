@@ -8,9 +8,10 @@ import { deletarRegistro, inserirRegistro, obterRegistro } from './api';
 export const URL_API_BUSCA_ATIVA = 'v1/busca-ativa';
 
 const salvarAtualizarRegistroAcao = (params: RegistroAcaoBuscaAtivaDto) =>
-  inserirRegistro<ResultadoRegistroAcaoBuscaAtivaDto>(`${URL_API_BUSCA_ATIVA}/registros-acao`, {
+  inserirRegistro<ResultadoRegistroAcaoBuscaAtivaDto>(
+    `${URL_API_BUSCA_ATIVA}/registros-acao`,
     params,
-  });
+  );
 
 const obterSecoesDeRegistroAcao = (params: FiltroSecoesDeRegistroAcao) =>
   obterRegistro<SecaoQuestionarioDto>(`${URL_API_BUSCA_ATIVA}/registros-acao/secoes`, { params });
@@ -27,7 +28,7 @@ const obterRegistroAcao = (registroAcaoId: number) =>
   );
 
 const excluirRegistroAcao = (registroAcaoId: number) =>
-  deletarRegistro<boolean>(`${URL_API_BUSCA_ATIVA}/registros-acao/${registroAcaoId}`);
+  deletarRegistro<boolean>(`${URL_API_BUSCA_ATIVA}/registros-acaos/${registroAcaoId}`);
 
 export default {
   salvarAtualizarRegistroAcao,

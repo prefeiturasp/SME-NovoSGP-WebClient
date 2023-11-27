@@ -58,12 +58,14 @@ const BuscaAtivaRegistroAcoesFormDinamico = () => {
   }, []);
 
   const obterSecoes = async () => {
-    const resposta = await buscaAtivaService.obterSecoesDeRegistroAcao();
+    const resposta = await buscaAtivaService.obterSecoesDeRegistroAcao({
+      registroAcaoBuscaAtivaId: registroAcaoId,
+    });
 
     if (resposta.sucesso && resposta.dados?.length) {
       dispatch(setDadosSecoesBuscaAtivaRegistroAcoes(resposta.dados[0]));
     } else {
-      dispatch(setDadosSecoesBuscaAtivaRegistroAcoes([]));
+      dispatch(setDadosSecoesBuscaAtivaRegistroAcoes(null));
     }
   };
 
