@@ -306,7 +306,11 @@ const AcompanhamentoFechamento = () => {
             desc: item.descricao,
             valor: String(item.valor),
           }))
-          .filter(item => Number(item.valor) !== ModalidadeEnum.INFANTIL);
+          .filter(
+            item =>
+              Number(item.valor) !== ModalidadeEnum.INFANTIL &&
+              Number(item.valor) !== ModalidadeEnum.CELP
+          );
 
         setListaModalidades(lista);
         if (lista?.length === 1) {
