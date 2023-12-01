@@ -40,7 +40,7 @@ const CampoDinamicoEditor = props => {
           height="350px"
           id={id}
           form={form}
-          readonly={desabilitado}
+          desabilitar={desabilitado}
           name={String(questaoAtual?.id)}
           placeholder={questaoAtual?.placeHolder}
           value={valorInicial}
