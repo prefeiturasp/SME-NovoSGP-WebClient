@@ -343,9 +343,7 @@ const RelatorioCompensacaoAusencia = () => {
             setListaComponentesCurriculares(componentesCurriculares);
           } else {
             setListaComponentesCurriculares(disciplinas.data);
-            setComponentesCurricularesId(
-              listaComponentesCurriculares.map(m => m.codigo)
-            );
+            setComponentesCurricularesId(disciplinas.data.map(m => m.codigo));
           }
         } else {
           setListaComponentesCurriculares([]);
