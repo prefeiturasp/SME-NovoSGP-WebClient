@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
-import React from 'react';
 import { CampoData } from '~/componentes';
-import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
+import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 
 const CampoDinamicoData = props => {
   const { questaoAtual, form, label, disabled, onChange, prefixId } = props;
@@ -16,9 +15,32 @@ const CampoDinamicoData = props => {
     return false;
   };
 
+  const desabilitarAnosAnterioresEDataFutura = current => {
+    if (current) {
+      return (
+        current.year() !== window.moment().year() || current >= window.moment()
+      );
+    }
+    return false;
+  };
+
   const opcionais = questaoAtual?.opcionais
     ? JSON.parse(questaoAtual?.opcionais)
     : null;
+
+  const desabilitarDatas = () => {
+    if (
+      opcionais?.desabilitarDataFutura &&
+      opcionais?.desabilitarDataAnosAnteriores
+    ) {
+      return desabilitarAnosAnterioresEDataFutura;
+    }
+    if (opcionais?.desabilitarDataFutura) {
+      return desabilitarDataFutura;
+    }
+
+    return null;
+  };
 
   return (
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
@@ -30,9 +52,7 @@ const CampoDinamicoData = props => {
         desabilitado={disabled}
         formatoData="DD/MM/YYYY"
         name={String(questaoAtual?.id)}
-        desabilitarData={
-          opcionais?.desabilitarDataFutura ? desabilitarDataFutura : null
-        }
+        desabilitarData={desabilitarDatas()}
         placeholder={questaoAtual?.placeHolder || 'DD/MM/AAAA'}
       />
     </ColunaDimensionavel>
