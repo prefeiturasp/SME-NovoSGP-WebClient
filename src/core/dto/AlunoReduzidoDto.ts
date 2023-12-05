@@ -12,8 +12,6 @@ export type AlunoReduzidoDto = {
   turmaEscola: string;
   codigoTurma: string;
   nomeResponsavel: string;
-  email: string;
-  cpf: string;
   tipoResponsavel: string;
   celularResponsavel: string;
   dataAtualizacaoContato?: string;

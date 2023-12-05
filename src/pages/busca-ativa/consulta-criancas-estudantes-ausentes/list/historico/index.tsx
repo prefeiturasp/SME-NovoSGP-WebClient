@@ -99,8 +99,8 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
 
     const dadosResponsavel: DadosResponsavelAtualizarDto = {
       nome: `${dados?.nomeResponsavel} (${dados?.tipoResponsavel})`,
-      cpf: dados?.cpf,
-      email: dados?.email,
+      cpf: dados?.dadosResponsavelFiliacao.cpf,
+      email: dados?.dadosResponsavelFiliacao.email,
       celular,
       foneResidencial,
       foneComercial,
