@@ -77,10 +77,10 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
       (x) => x.tipoTelefone === TipoTelefone.Comercial,
     )[0];
 
-    const nrCelular = celular !== undefined ? `(${celular?.ddd}) ${celular?.numero}` : null;
+    const nrCelular = celular !== undefined ? `${celular?.ddd} ${celular?.numero}` : null;
     const nrResidencial =
-      residencial !== undefined ? `(${residencial?.ddd}) ${residencial?.numero}` : null;
-    const nrComercial = comercial !== undefined ? `(${comercial?.ddd}) ${comercial?.numero}` : null;
+      residencial !== undefined ? `${residencial?.ddd}${residencial?.numero}` : null;
+    const nrComercial = comercial !== undefined ? `${comercial?.ddd}${comercial?.numero}` : null;
 
     const dadosResponsavel = {
       nome: `${dados?.nomeResponsavel} (${dados?.tipoResponsavel})`,
@@ -151,6 +151,8 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
       if (confirmou) {
         formResponsavel.resetFields();
       }
+    } else {
+      setModalOpen(false);
     }
   };
   const onClickVoltar = () => navigate(ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES);
@@ -213,7 +215,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
           <Grid cols={12}>
             <div className="row">
               <Grid cols={6} className="mb-2">
-                <InputEmail
+                <InputTelefone
                   formItemProps={{
                     label: 'Nº do telefone residencial do responsável',
                     name: 'foneResidencial',
