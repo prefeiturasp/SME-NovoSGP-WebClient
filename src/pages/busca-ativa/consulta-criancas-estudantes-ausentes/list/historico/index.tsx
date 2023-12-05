@@ -1,7 +1,11 @@
-import BotaoVoltarPadrao from '@/@legacy/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { SGP_BUTTON_BUSCA_ATIVA_NOVO_REGISTRO_ACAO } from '@/@legacy/constantes/ids/button';
-import { erros, verificaSomenteConsulta } from '@/@legacy/servicos';
-import ServicoConselhoClasse from '@/@legacy/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
+import {
+  SGP_BUTTON_BUSCA_ATIVA_ATUALIZAR_DADOS_RESPONSAVEL,
+  SGP_BUTTON_BUSCA_ATIVA_NOVO_REGISTRO_ACAO,
+  SGP_BUTTON_CANCELAR_MODAL,
+  SGP_BUTTON_SALVAR_MODAL,
+} from '~/constantes/ids/button';
+import { confirmar, erros, verificaSomenteConsulta } from '~/servicos';
+import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import ButtonPrimary from '@/components/lib/button/primary';
 import CardContent from '@/components/lib/card-content';
 import HeaderPage from '@/components/lib/header-page';
@@ -10,16 +14,28 @@ import { AlunoReduzidoDto } from '@/core/dto/AlunoReduzidoDto';
 import { RegistroAcaoBuscaAtivaRespostaDto } from '@/core/dto/RegistroAcaoBuscaAtivaRespostaDto';
 import { ROUTES } from '@/core/enum/routes';
 import estudanteService from '@/core/services/estudante-service';
-import { Col, Divider, Row } from 'antd';
+import responsavelService from '@/core/services/reponsavel-service';
+import { Col, Divider, Form, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BuscaAtivaHistoricoRegistroAcoesList from './list';
+import { TipoTelefone } from '@/core/enum/tipo-telefone-enum';
+import { DadosResponsavelAtualizarDto } from '@/core/dto/DadosResponsavelAtualizarDto';
+import { useForm } from 'antd/es/form/Form';
+import { useSelector } from 'react-redux';
+import { validateMessages } from '@/core/constants/validate-messages';
+import { Grid } from '~/componentes';
+import InputEmail from '@/components/sgp/inputs/form/email';
+import InputTelefone from '@/components/sgp/inputs/form/telefone';
+import { SGP_INPUT_EMAIL, SGP_INPUT_TELEFONE } from '~/constantes/ids/input';
+import { maskTelefone } from '@/core/utils/functions';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import Modal from '@/components/lib/modal';
 
 const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
+  const [formResponsavel] = useForm();
   const usuario = useSelector((state: any) => state.usuario);
   const { permissoes } = usuario;
   const podeIncluir =
@@ -43,6 +59,8 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const turmaCodigo = registroAcaoBuscaAtivaResposta?.turmaCodigo;
 
   const [dados, setDados] = useState<AlunoReduzidoDto | undefined>();
+  const [formInitialValues, setFormInitialValues] = useState<DadosResponsavelAtualizarDto>();
+  const [modalOpen, setModalOpen] = useState(false);
 
   const obterFrequenciaGlobalAluno = useCallback(async () => {
     const retorno = await ServicoConselhoClasse.obterFrequenciaAluno(
@@ -52,6 +70,44 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
 
     return retorno?.data;
   }, [turmaCodigo, codigoAluno]);
+
+  const dadosResponsavelParaAtualizar = useCallback(async () => {
+    const telefonesFiliacao1 = dados?.dadosResponsavelFiliacao?.telefonesFiliacao1;
+
+    let celular = '';
+    let foneResidencial = '';
+    let foneComercial = '';
+
+    telefonesFiliacao1?.forEach((telefone) => {
+      const telefoneFormatado = telefone?.numero ? `${telefone?.ddd}${telefone?.numero}` : '';
+
+      switch (telefone?.tipoTelefone) {
+        case TipoTelefone.Celular:
+          celular = maskTelefone(telefoneFormatado);
+          break;
+        case TipoTelefone.Residencial:
+          foneResidencial = maskTelefone(telefoneFormatado);
+          break;
+        case TipoTelefone.Comercial:
+          foneComercial = maskTelefone(telefoneFormatado);
+          break;
+
+        default:
+          break;
+      }
+    });
+
+    const dadosResponsavel: DadosResponsavelAtualizarDto = {
+      nome: `${dados?.nomeResponsavel} (${dados?.tipoResponsavel})`,
+      cpf: dados?.dadosResponsavelFiliacao.cpf,
+      email: dados?.dadosResponsavelFiliacao.email,
+      celular,
+      foneResidencial,
+      foneComercial,
+    };
+
+    setFormInitialValues(dadosResponsavel);
+  }, [dados]);
 
   const obterDados = useCallback(async () => {
     setLoading(true);
@@ -66,7 +122,6 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     if (resposta.sucesso) {
       const novaFreq = await obterFrequenciaGlobalAluno();
       resposta.dados.frequencia = novaFreq;
-
       setDados(resposta.dados);
     } else {
       setDados(undefined);
@@ -75,10 +130,44 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     setLoading(false);
   }, [anoLetivo, codigoAluno, turmaCodigo, obterFrequenciaGlobalAluno]);
 
+  const salvarDadosResponsavel = useCallback(async () => {
+    formResponsavel.validateFields().then(async () => {
+      const response = await responsavelService.atualizarDadosResponsavel(
+        formResponsavel.getFieldsValue(true),
+      );
+      if (response.sucesso) {
+        setModalOpen(false);
+        obterDados();
+      }
+    });
+  }, [formResponsavel]);
+
   useEffect(() => {
     obterDados();
   }, [obterDados]);
 
+  useEffect(() => {
+    formResponsavel.resetFields();
+  }, [formResponsavel, formInitialValues]);
+
+  const abrirModal = () => {
+    dadosResponsavelParaAtualizar();
+    setModalOpen(true);
+  };
+  const onClickCancelar = async () => {
+    if (formResponsavel.isFieldsTouched()) {
+      const confirmou = await confirmar(
+        'Atenção',
+        'Você não salvou as informações preenchidas.',
+        'Deseja realmente cancelar as alterações?',
+      );
+      if (confirmou) {
+        formResponsavel.resetFields();
+      }
+    } else {
+      setModalOpen(false);
+    }
+  };
   const onClickVoltar = () => navigate(ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES);
   const onClickNovoRegistroAcao = () =>
     navigate(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_NOVO, {
@@ -86,39 +175,128 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     });
 
   return (
-    <Col>
-      <HeaderPage title="Registro de ações">
-        <Col span={24}>
-          <Row gutter={[8, 8]}>
-            <Col>
-              <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
-            </Col>
-            <Col>
-              <ButtonPrimary
-                id={SGP_BUTTON_BUSCA_ATIVA_NOVO_REGISTRO_ACAO}
-                disabled={!podeIncluir || somenteConsulta}
-                onClick={() => onClickNovoRegistroAcao()}
-              >
-                Novo registro de ação
-              </ButtonPrimary>
+    <>
+      <Modal
+        title="Atualizar dados do responsável"
+        centered
+        open={modalOpen}
+        onOk={() => salvarDadosResponsavel()}
+        onCancel={() => onClickCancelar()}
+        destroyOnClose
+        cancelButtonProps={{ disabled: loading, id: SGP_BUTTON_CANCELAR_MODAL }}
+        okButtonProps={{ disabled: loading, id: SGP_BUTTON_SALVAR_MODAL }}
+        okText="Alterar"
+        cancelText="Cancelar"
+        width={1100}
+      >
+        <Form
+          form={formResponsavel}
+          layout="vertical"
+          autoComplete="off"
+          onFinish={salvarDadosResponsavel}
+          validateMessages={validateMessages}
+          initialValues={formInitialValues}
+        >
+          <Grid cols={12}>
+            <div className="row">
+              <Grid cols={6} className="mb-2">
+                <Form.Item name="nome" label="Responsável">
+                  {formInitialValues?.nome}
+                </Form.Item>
+              </Grid>
+              <Grid cols={6} className="mb-2">
+                <Form.Item label="CPF" name="cpf">
+                  {formInitialValues?.cpf}
+                </Form.Item>
+              </Grid>
+            </div>
+          </Grid>
+          <Grid cols={12}>
+            <div className="row">
+              <Grid cols={6} className="mb-2">
+                <InputEmail
+                  formItemProps={{ label: 'E-mail do responsável' }}
+                  inputProps={{ id: SGP_INPUT_EMAIL, disabled: false }}
+                />
+              </Grid>
+              <Grid cols={6} className="mb-2">
+                <InputTelefone
+                  formItemProps={{ label: 'Nº Celular do responsável', name: 'celular' }}
+                  inputProps={{ id: SGP_INPUT_TELEFONE, disabled: false }}
+                />
+              </Grid>
+            </div>
+          </Grid>
+          <Grid cols={12}>
+            <div className="row">
+              <Grid cols={6} className="mb-2">
+                <InputTelefone
+                  formItemProps={{
+                    label: 'Nº do telefone residencial do responsável',
+                    name: 'foneResidencial',
+                    rules: [{ required: false }],
+                  }}
+                  inputProps={{ id: SGP_INPUT_EMAIL, disabled: false }}
+                />
+              </Grid>
+              <Grid cols={6} className="mb-2">
+                <InputTelefone
+                  formItemProps={{
+                    label: 'Nº do telefone comercial do responsável',
+                    rules: [{ required: false }],
+                    name: 'foneComercial',
+                  }}
+                  inputProps={{ id: SGP_INPUT_TELEFONE, disabled: false }}
+                />
+              </Grid>
+            </div>
+          </Grid>
+          <hr />
+        </Form>
+      </Modal>
+      <Col>
+        <HeaderPage title="Registro de ações">
+          <Col span={24}>
+            <Row gutter={[8, 8]}>
+              <Col>
+                <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+              </Col>
+              <Col>
+                <ButtonPrimary
+                  id={SGP_BUTTON_BUSCA_ATIVA_NOVO_REGISTRO_ACAO}
+                  disabled={!podeIncluir || somenteConsulta}
+                  onClick={() => onClickNovoRegistroAcao()}
+                >
+                  Novo registro de ação
+                </ButtonPrimary>
+              </Col>
+              <Col>
+                <ButtonPrimary
+                  id={SGP_BUTTON_BUSCA_ATIVA_ATUALIZAR_DADOS_RESPONSAVEL}
+                  disabled={!podeIncluir || somenteConsulta}
+                  onClick={() => abrirModal()}
+                >
+                  Atualizar dados do responsável
+                </ButtonPrimary>
+              </Col>
+            </Row>
+          </Col>
+        </HeaderPage>
+        <CardContent>
+          <Row gutter={24}>
+            <Col xs={24}>
+              <CardDetalhesCriancaEstudante
+                dados={dados}
+                loading={loading}
+                titulo="Detalhes estudante/criança"
+              />
+              <Divider />
+              <BuscaAtivaHistoricoRegistroAcoesList />
             </Col>
           </Row>
-        </Col>
-      </HeaderPage>
-      <CardContent>
-        <Row gutter={24}>
-          <Col xs={24}>
-            <CardDetalhesCriancaEstudante
-              dados={dados}
-              loading={loading}
-              titulo="Detalhes estudante/criança"
-            />
-            <Divider />
-            <BuscaAtivaHistoricoRegistroAcoesList />
-          </Col>
-        </Row>
-      </CardContent>
-    </Col>
+        </CardContent>
+      </Col>
+    </>
   );
 };
 
