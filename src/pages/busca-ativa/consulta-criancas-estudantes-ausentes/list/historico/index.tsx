@@ -122,7 +122,6 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     if (resposta.sucesso) {
       const novaFreq = await obterFrequenciaGlobalAluno();
       resposta.dados.frequencia = novaFreq;
-      console.log(resposta.dados);
       setDados(resposta.dados);
     } else {
       setDados(undefined);
@@ -274,7 +273,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
               <Col>
                 <ButtonPrimary
                   id={SGP_BUTTON_BUSCA_ATIVA_ATUALIZAR_DADOS_RESPONSAVEL}
-                  disabled={!podeIncluir}
+                  disabled={!podeIncluir || somenteConsulta}
                   onClick={() => abrirModal()}
                 >
                   Atualizar dados do responsável
