@@ -1,10 +1,11 @@
-import BotaoVoltarPadrao from '@/@legacy/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_BUSCA_ATIVA_ATUALIZAR_DADOS_RESPONSAVEL,
   SGP_BUTTON_BUSCA_ATIVA_NOVO_REGISTRO_ACAO,
-} from '@/@legacy/constantes/ids/button';
-import { confirmar, erros, verificaSomenteConsulta } from '@/@legacy/servicos';
-import ServicoConselhoClasse from '@/@legacy/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
+  SGP_BUTTON_CANCELAR_MODAL,
+  SGP_BUTTON_SALVAR_MODAL,
+} from '~/constantes/ids/button';
+import { confirmar, erros, verificaSomenteConsulta } from '~/servicos';
+import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import ButtonPrimary from '@/components/lib/button/primary';
 import CardContent from '@/components/lib/card-content';
 import HeaderPage from '@/components/lib/header-page';
@@ -14,7 +15,7 @@ import { RegistroAcaoBuscaAtivaRespostaDto } from '@/core/dto/RegistroAcaoBuscaA
 import { ROUTES } from '@/core/enum/routes';
 import estudanteService from '@/core/services/estudante-service';
 import responsavelService from '@/core/services/reponsavel-service';
-import { Col, Divider, Form, Modal, Row } from 'antd';
+import { Col, Divider, Form, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BuscaAtivaHistoricoRegistroAcoesList from './list';
@@ -27,6 +28,9 @@ import { Grid } from '~/componentes';
 import InputEmail from '@/components/sgp/inputs/form/email';
 import InputTelefone from '@/components/sgp/inputs/form/telefone';
 import { SGP_INPUT_EMAIL, SGP_INPUT_TELEFONE } from '~/constantes/ids/input';
+import { maskTelefone } from '@/core/utils/functions';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import Modal from '@/components/lib/modal';
 
 const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const location = useLocation();
@@ -57,6 +61,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const [dados, setDados] = useState<AlunoReduzidoDto | undefined>();
   const [formInitialValues, setFormInitialValues] = useState<DadosResponsavelAtualizarDto>();
   const [modalOpen, setModalOpen] = useState(false);
+
   const obterFrequenciaGlobalAluno = useCallback(async () => {
     const retorno = await ServicoConselhoClasse.obterFrequenciaAluno(
       codigoAluno,
@@ -67,45 +72,42 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   }, [turmaCodigo, codigoAluno]);
 
   const dadosResponsavelParaAtualizar = useCallback(async () => {
-    const celular = dados?.dadosResponsavelFiliacao?.telefonesFiliacao1?.filter(
-      (x) => x.tipoTelefone === TipoTelefone.Celular,
-    )[0];
-    const residencial = dados?.dadosResponsavelFiliacao?.telefonesFiliacao1?.filter(
-      (x) => x.tipoTelefone === TipoTelefone.Residencial,
-    )[0];
-    const comercial = dados?.dadosResponsavelFiliacao?.telefonesFiliacao1?.filter(
-      (x) => x.tipoTelefone === TipoTelefone.Comercial,
-    )[0];
+    const telefonesFiliacao1 = dados?.dadosResponsavelFiliacao?.telefonesFiliacao1;
 
-    const nrCelular = celular !== undefined ? `${celular?.ddd}${celular?.numero}` : null;
-    const nrResidencial =
-      residencial !== undefined ? `${residencial?.ddd}${residencial?.numero}` : null;
-    const nrComercial = comercial !== undefined ? `${comercial?.ddd}${comercial?.numero}` : null;
+    let celular = '';
+    let foneResidencial = '';
+    let foneComercial = '';
 
-    const dadosResponsavel = {
+    telefonesFiliacao1?.forEach((telefone) => {
+      const telefoneFormatado = telefone?.numero ? `${telefone?.ddd}${telefone?.numero}` : '';
+
+      switch (telefone?.tipoTelefone) {
+        case TipoTelefone.Celular:
+          celular = maskTelefone(telefoneFormatado);
+          break;
+        case TipoTelefone.Residencial:
+          foneResidencial = maskTelefone(telefoneFormatado);
+          break;
+        case TipoTelefone.Comercial:
+          foneComercial = maskTelefone(telefoneFormatado);
+          break;
+
+        default:
+          break;
+      }
+    });
+
+    const dadosResponsavel: DadosResponsavelAtualizarDto = {
       nome: `${dados?.nomeResponsavel} (${dados?.tipoResponsavel})`,
-      cpf: dados?.cpfResponsavel || null,
-      email: dados?.emailResponsavel || null,
-      celular: nrCelular,
-      foneResidencial: nrResidencial,
-      foneComercial: nrComercial,
-    } as DadosResponsavelAtualizarDto;
+      cpf: dados?.cpf,
+      email: dados?.email,
+      celular,
+      foneResidencial,
+      foneComercial,
+    };
 
     setFormInitialValues(dadosResponsavel);
   }, [dados]);
-
-  const salvarDadosResponsavel = useCallback(async () => {
-    formResponsavel.validateFields().then(async () => {
-      const response = await responsavelService.atualizarDadosResponsavel(
-        formResponsavel.getFieldsValue(),
-      );
-      if (response.sucesso) {
-        setModalOpen(false);
-        obterDados();
-      }
-      console.log(response);
-    });
-  }, [formResponsavel]);
 
   const obterDados = useCallback(async () => {
     setLoading(true);
@@ -120,7 +122,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     if (resposta.sucesso) {
       const novaFreq = await obterFrequenciaGlobalAluno();
       resposta.dados.frequencia = novaFreq;
-
+      console.log(resposta.dados);
       setDados(resposta.dados);
     } else {
       setDados(undefined);
@@ -128,6 +130,18 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
 
     setLoading(false);
   }, [anoLetivo, codigoAluno, turmaCodigo, obterFrequenciaGlobalAluno]);
+
+  const salvarDadosResponsavel = useCallback(async () => {
+    formResponsavel.validateFields().then(async () => {
+      const response = await responsavelService.atualizarDadosResponsavel(
+        formResponsavel.getFieldsValue(true),
+      );
+      if (response.sucesso) {
+        setModalOpen(false);
+        obterDados();
+      }
+    });
+  }, [formResponsavel]);
 
   useEffect(() => {
     obterDados();
@@ -169,7 +183,10 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
         open={modalOpen}
         onOk={() => salvarDadosResponsavel()}
         onCancel={() => onClickCancelar()}
-        okText="Atualizar"
+        destroyOnClose
+        cancelButtonProps={{ disabled: loading, id: SGP_BUTTON_CANCELAR_MODAL }}
+        okButtonProps={{ disabled: loading, id: SGP_BUTTON_SALVAR_MODAL }}
+        okText="Alterar"
         cancelText="Cancelar"
         width={1100}
       >
@@ -181,7 +198,6 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
           validateMessages={validateMessages}
           initialValues={formInitialValues}
         >
-          <hr />
           <Grid cols={12}>
             <div className="row">
               <Grid cols={6} className="mb-2">
