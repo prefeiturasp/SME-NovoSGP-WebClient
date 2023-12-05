@@ -20,13 +20,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import BuscaAtivaHistoricoRegistroAcoesList from './list';
 import { TipoTelefone } from '@/core/enum/tipo-telefone-enum';
 import { DadosResponsavelAtualizarDto } from '@/core/dto/DadosResponsavelAtualizarDto';
-import { validateMessages } from '@/core/constants/validate-messages';
 import { useForm } from 'antd/es/form/Form';
-import InputEmail from '@/components/sgp/inputs/form/email';
-import { SGP_INPUT_EMAIL, SGP_INPUT_TELEFONE } from '~/constantes/ids/input';
-import { Grid } from '~/componentes';
-import InputTelefone from '@/components/sgp/inputs/form/telefone';
 import { useSelector } from 'react-redux';
+import { validateMessages } from '@/core/constants/validate-messages';
+import { Grid } from '~/componentes';
+import InputEmail from '@/components/sgp/inputs/form/email';
+import InputTelefone from '@/components/sgp/inputs/form/telefone';
+import { SGP_INPUT_EMAIL, SGP_INPUT_TELEFONE } from '~/constantes/ids/input';
 
 const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const location = useLocation();
@@ -77,7 +77,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
       (x) => x.tipoTelefone === TipoTelefone.Comercial,
     )[0];
 
-    const nrCelular = celular !== undefined ? `${celular?.ddd} ${celular?.numero}` : null;
+    const nrCelular = celular !== undefined ? `${celular?.ddd}${celular?.numero}` : null;
     const nrResidencial =
       residencial !== undefined ? `${residencial?.ddd}${residencial?.numero}` : null;
     const nrComercial = comercial !== undefined ? `${comercial?.ddd}${comercial?.numero}` : null;
@@ -163,7 +163,82 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
 
   return (
     <>
-     
+      <Modal
+        title="Atualizar dados do responsável"
+        centered
+        open={modalOpen}
+        onOk={() => salvarDadosResponsavel()}
+        onCancel={() => onClickCancelar()}
+        okText="Atualizar"
+        cancelText="Cancelar"
+        width={1100}
+      >
+        <Form
+          form={formResponsavel}
+          layout="vertical"
+          autoComplete="off"
+          onFinish={salvarDadosResponsavel}
+          validateMessages={validateMessages}
+          initialValues={formInitialValues}
+        >
+          <hr />
+          <Grid cols={12}>
+            <div className="row">
+              <Grid cols={6} className="mb-2">
+                <Form.Item name="nome" label="Responsável">
+                  {formInitialValues?.nome}
+                </Form.Item>
+              </Grid>
+              <Grid cols={6} className="mb-2">
+                <Form.Item label="CPF" name="cpf">
+                  {formInitialValues?.cpf}
+                </Form.Item>
+              </Grid>
+            </div>
+          </Grid>
+          <Grid cols={12}>
+            <div className="row">
+              <Grid cols={6} className="mb-2">
+                <InputEmail
+                  formItemProps={{ label: 'E-mail do responsável' }}
+                  inputProps={{ id: SGP_INPUT_EMAIL, disabled: false }}
+                />
+              </Grid>
+              <Grid cols={6} className="mb-2">
+                <InputTelefone
+                  formItemProps={{ label: 'Nº Celular do responsável', name: 'celular' }}
+                  inputProps={{ id: SGP_INPUT_TELEFONE, disabled: false }}
+                />
+              </Grid>
+            </div>
+          </Grid>
+          <Grid cols={12}>
+            <div className="row">
+              <Grid cols={6} className="mb-2">
+                <InputTelefone
+                  formItemProps={{
+                    label: 'Nº do telefone residencial do responsável',
+                    name: 'foneResidencial',
+                    rules: [{ required: false }],
+                  }}
+                  inputProps={{ id: SGP_INPUT_EMAIL, disabled: false }}
+                />
+              </Grid>
+              <Grid cols={6} className="mb-2">
+                <InputTelefone
+                  formItemProps={{
+                    label: 'Nº do telefone comercial do responsável',
+                    rules: [{ required: false }],
+                    name: 'foneComercial',
+                  }}
+                  inputProps={{ id: SGP_INPUT_TELEFONE, disabled: false }}
+                />
+              </Grid>
+            </div>
+          </Grid>
+          <hr />
+        </Form>
+      </Modal>
       <Col>
         <HeaderPage title="Registro de ações">
           <Col span={24}>
