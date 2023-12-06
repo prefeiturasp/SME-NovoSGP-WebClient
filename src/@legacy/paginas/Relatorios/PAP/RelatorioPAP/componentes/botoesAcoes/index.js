@@ -46,8 +46,6 @@ const BotoesAcoesRelatorioPAP = () => {
     store => store.relatorioPAP.periodoSelecionadoPAP
   );
 
-  const periodoAberto = !!periodoSelecionadoPAP?.periodoAberto;
-
   const disabledBtnDefault =
     desabilitarCamposRelatorioPAP || !questionarioDinamicoEmEdicao;
 
@@ -62,8 +60,10 @@ const BotoesAcoesRelatorioPAP = () => {
       soConsulta ||
       (!permissoesTela?.podeAlterar && !permissoesTela?.podeIncluir);
 
+    const periodoAberto = !!periodoSelecionadoPAP?.periodoAberto;
+
     dispatch(setDesabilitarCamposRelatorioPAP(desabilitar || !periodoAberto));
-  }, [permissoesTela, periodoAberto, dispatch]);
+  }, [permissoesTela, periodoSelecionadoPAP, dispatch]);
 
   const onClickSalvar = () => ServicoRelatorioPAP.salvar();
 
