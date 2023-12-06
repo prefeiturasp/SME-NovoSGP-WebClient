@@ -252,7 +252,6 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
               </Grid>
             </div>
           </Grid>
-          <hr />
         </Form>
       </Modal>
       <Col>
