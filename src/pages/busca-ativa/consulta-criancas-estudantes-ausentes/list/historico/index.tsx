@@ -137,8 +137,8 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   }, [anoLetivo, codigoAluno, turmaCodigo, obterFrequenciaGlobalAluno]);
 
   const salvarDadosResponsavel = useCallback(async () => {
-    setLoading(true);
     formResponsavel.validateFields().then(async () => {
+      setLoading(true);
       const response = await responsavelService.atualizarDadosResponsavel(
         formResponsavel.getFieldsValue(true),
       );
