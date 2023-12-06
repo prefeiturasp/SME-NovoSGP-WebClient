@@ -15,7 +15,7 @@ import { RegistroAcaoBuscaAtivaRespostaDto } from '@/core/dto/RegistroAcaoBuscaA
 import { ROUTES } from '@/core/enum/routes';
 import estudanteService from '@/core/services/estudante-service';
 import responsavelService from '@/core/services/busca-ativa-service';
-import { Col, Divider, Form, Row } from 'antd';
+import { Col, Divider, Form, Row, Typography } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BuscaAtivaHistoricoRegistroAcoesList from './list';
@@ -24,7 +24,6 @@ import { DadosResponsavelAtualizarDto } from '@/core/dto/DadosResponsavelAtualiz
 import { useForm } from 'antd/es/form/Form';
 import { useSelector } from 'react-redux';
 import { validateMessages } from '@/core/constants/validate-messages';
-import { Grid } from '~/componentes';
 import InputEmail from '@/components/sgp/inputs/form/email';
 import InputTelefone from '@/components/sgp/inputs/form/telefone';
 import { SGP_INPUT_EMAIL, SGP_INPUT_TELEFONE } from '~/constantes/ids/input';
@@ -41,6 +40,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [formResponsavel] = useForm();
+  const { Text } = Typography;
   const usuario = useSelector((state: any) => state.usuario);
   const { permissoes } = usuario;
   const podeIncluir =
@@ -103,7 +103,8 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     });
 
     const dadosResponsavel: DadosResponsavelAtualizarDto = {
-      nome: `${dados?.nomeResponsavel} (${dados?.tipoResponsavel})`,
+      nome: dados?.nomeResponsavel,
+      tipoResponsavel: dados?.tipoResponsavel,
       cpf: dados?.dadosResponsavelFiliacao.cpf,
       email: dados?.dadosResponsavelFiliacao.email,
       celular,
@@ -202,39 +203,35 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
           validateMessages={validateMessages}
           initialValues={formInitialValues}
         >
-          <Grid cols={12}>
-            <div className="row">
-              <Grid cols={6} className="mb-2">
-                <Form.Item name="nome" label="Responsável">
-                  {formInitialValues?.nome}
-                </Form.Item>
-              </Grid>
-              <Grid cols={6} className="mb-2">
-                <Form.Item label="CPF" name="cpf">
-                  {formInitialValues?.cpf}
-                </Form.Item>
-              </Grid>
-            </div>
-          </Grid>
-          <Grid cols={12}>
-            <div className="row">
-              <Grid cols={6} className="mb-2">
+          <Col span={24}>
+            <Row gutter={24} style={{ marginBottom: 20 }}>
+              <Col span={12}>
+                <Text strong>Nome: </Text>
+                <Text>
+                  {formInitialValues?.nome} - {formInitialValues?.tipoResponsavel}
+                </Text>
+              </Col>
+              <Col span={12}>
+                <Text strong>CPF: </Text>
+                <Text>{formInitialValues?.cpf}</Text>
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col span={12}>
                 <InputEmail
                   formItemProps={{ label: 'E-mail do responsável' }}
                   inputProps={{ id: SGP_INPUT_EMAIL }}
                 />
-              </Grid>
-              <Grid cols={6} className="mb-2">
+              </Col>
+              <Col span={12}>
                 <InputTelefone
                   formItemProps={{ label: 'Nº Celular do responsável', name: 'celular' }}
                   inputProps={{ id: SGP_INPUT_TELEFONE }}
                 />
-              </Grid>
-            </div>
-          </Grid>
-          <Grid cols={12}>
-            <div className="row">
-              <Grid cols={6} className="mb-2">
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              <Col span={12}>
                 <InputTelefone
                   formItemProps={{
                     label: 'Nº do telefone residencial do responsável',
@@ -243,8 +240,8 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
                   }}
                   inputProps={{ id: SGP_INPUT_EMAIL }}
                 />
-              </Grid>
-              <Grid cols={6} className="mb-2">
+              </Col>
+              <Col span={12}>
                 <InputTelefone
                   formItemProps={{
                     label: 'Nº do telefone comercial do responsável',
@@ -253,9 +250,9 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
                   }}
                   inputProps={{ id: SGP_INPUT_TELEFONE }}
                 />
-              </Grid>
-            </div>
-          </Grid>
+              </Col>
+            </Row>
+          </Col>
         </Form>
       </Modal>
       <Col>

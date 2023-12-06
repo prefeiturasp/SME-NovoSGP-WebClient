@@ -1,5 +1,6 @@
 export type DadosResponsavelAtualizarDto = {
-  nome: string;
+  nome?: string;
+  tipoResponsavel?: string;
   cpf?: string;
   email?: string;
   celular?: string;
