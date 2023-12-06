@@ -31,7 +31,11 @@ import { SGP_INPUT_EMAIL, SGP_INPUT_TELEFONE } from '~/constantes/ids/input';
 import { maskTelefone } from '@/core/utils/functions';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Modal from '@/components/lib/modal';
-import { DESEJA_CANCELAR_ALTERACOES, INFORMACOES_NAO_FORAM_SALVAR, MENSAGEM_DE_ATENCAO } from '@/core/constants/mensagens';
+import {
+  DESEJA_CANCELAR_ALTERACOES,
+  INFORMACOES_NAO_FORAM_SALVAR,
+  MENSAGEM_DE_ATENCAO,
+} from '@/core/constants/mensagens';
 
 const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const location = useLocation();
@@ -217,13 +221,13 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
               <Grid cols={6} className="mb-2">
                 <InputEmail
                   formItemProps={{ label: 'E-mail do responsável' }}
-                  inputProps={{ id: SGP_INPUT_EMAIL, disabled: false }}
+                  inputProps={{ id: SGP_INPUT_EMAIL }}
                 />
               </Grid>
               <Grid cols={6} className="mb-2">
                 <InputTelefone
                   formItemProps={{ label: 'Nº Celular do responsável', name: 'celular' }}
-                  inputProps={{ id: SGP_INPUT_TELEFONE, disabled: false }}
+                  inputProps={{ id: SGP_INPUT_TELEFONE }}
                 />
               </Grid>
             </div>
@@ -237,7 +241,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
                     name: 'foneResidencial',
                     rules: [{ required: false }],
                   }}
-                  inputProps={{ id: SGP_INPUT_EMAIL, disabled: false }}
+                  inputProps={{ id: SGP_INPUT_EMAIL }}
                 />
               </Grid>
               <Grid cols={6} className="mb-2">
@@ -247,7 +251,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
                     rules: [{ required: false }],
                     name: 'foneComercial',
                   }}
-                  inputProps={{ id: SGP_INPUT_TELEFONE, disabled: false }}
+                  inputProps={{ id: SGP_INPUT_TELEFONE }}
                 />
               </Grid>
             </div>
