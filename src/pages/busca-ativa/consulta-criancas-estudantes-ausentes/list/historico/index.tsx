@@ -31,6 +31,7 @@ import { SGP_INPUT_EMAIL, SGP_INPUT_TELEFONE } from '~/constantes/ids/input';
 import { maskTelefone } from '@/core/utils/functions';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import Modal from '@/components/lib/modal';
+import { DESEJA_CANCELAR_ALTERACOES, INFORMACOES_NAO_FORAM_SALVAR, MENSAGEM_DE_ATENCAO } from '@/core/constants/mensagens';
 
 const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const location = useLocation();
@@ -157,9 +158,9 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const onClickCancelar = async () => {
     if (formResponsavel.isFieldsTouched()) {
       const confirmou = await confirmar(
-        'Atenção',
-        'Você não salvou as informações preenchidas.',
-        'Deseja realmente cancelar as alterações?',
+        MENSAGEM_DE_ATENCAO,
+        INFORMACOES_NAO_FORAM_SALVAR,
+        DESEJA_CANCELAR_ALTERACOES,
       );
       if (confirmou) {
         formResponsavel.resetFields();
