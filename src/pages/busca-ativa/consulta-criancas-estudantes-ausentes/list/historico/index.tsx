@@ -71,7 +71,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     return retorno?.data;
   }, [turmaCodigo, codigoAluno]);
 
-  const dadosResponsavelParaAtualizar = useCallback(async () => {
+  const dadosResponsavelParaAtualizar = useCallback(() => {
     const telefonesFiliacao1 = dados?.dadosResponsavelFiliacao?.telefonesFiliacao1;
 
     let celular = '';
