@@ -14,7 +14,7 @@ import { AlunoReduzidoDto } from '@/core/dto/AlunoReduzidoDto';
 import { RegistroAcaoBuscaAtivaRespostaDto } from '@/core/dto/RegistroAcaoBuscaAtivaRespostaDto';
 import { ROUTES } from '@/core/enum/routes';
 import estudanteService from '@/core/services/estudante-service';
-import responsavelService from '@/core/services/reponsavel-service';
+import responsavelService from '@/core/services/busca-ativa-service';
 import { Col, Divider, Form, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
