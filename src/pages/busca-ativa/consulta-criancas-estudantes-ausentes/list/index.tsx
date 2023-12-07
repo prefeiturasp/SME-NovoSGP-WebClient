@@ -11,6 +11,7 @@ import { validateMessages } from '@/core/constants/validate-messages';
 import { ROUTES } from '@/core/enum/routes';
 import { Checkbox, Col, Form, Input, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import dayjs from 'dayjs';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import TableTurmasCriancasEstudantesAusentes from './table-turmas';
@@ -18,6 +19,8 @@ import TableTurmasCriancasEstudantesAusentes from './table-turmas';
 const ConsultaCriancasEstudantesAusentes: React.FC = () => {
   const navigate = useNavigate();
   const [form] = useForm();
+
+  const anoAtual = dayjs().year();
 
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
@@ -38,7 +41,7 @@ const ConsultaCriancasEstudantesAusentes: React.FC = () => {
           layout="vertical"
           autoComplete="off"
           validateMessages={validateMessages}
-          initialValues={{ anoLetivo: 2023, consideraHistorico: false }}
+          initialValues={{ anoLetivo: anoAtual, consideraHistorico: false }}
         >
           <Row gutter={24}>
             <Form.Item name="consideraHistorico" valuePropName="checked" hidden>
