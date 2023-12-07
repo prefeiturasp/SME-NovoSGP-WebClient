@@ -1,4 +1,4 @@
-import { maskTelefone, removerTudoQueNaoEhDigito } from '@/core/utils/functions';
+import { maskTelefone } from '@/core/utils/functions';
 import { Form, FormItemProps, Input, InputProps } from 'antd';
 import React from 'react';
 
@@ -9,7 +9,7 @@ type InputTelefoneProps = {
 
 const InputTelefone: React.FC<InputTelefoneProps> = ({ inputProps, formItemProps }) => {
   const getValueFromEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = removerTudoQueNaoEhDigito(e?.target?.value);
+    const value = e?.target?.value;
     return value ? maskTelefone(value) : value;
   };
 

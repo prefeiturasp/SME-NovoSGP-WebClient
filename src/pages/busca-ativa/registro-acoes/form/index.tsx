@@ -20,11 +20,7 @@ import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
-import {
-  setDesabilitarCamposBuscaAtivaRegistroAcoes,
-  setExibirLoaderBuscaAtivaRegistroAcoes,
-} from '~/redux/modulos/buscaAtivaRegistroAcoes/actions';
-import { verificaSomenteConsulta } from '~/servicos';
+import { setExibirLoaderBuscaAtivaRegistroAcoes } from '~/redux/modulos/buscaAtivaRegistroAcoes/actions';
 import BuscaAtivaRegistroAcoesAuditoria from './auditoria';
 import BuscaAtivaRegistroAcoesFormBotoesAcao from './buscaAtivaRegistroAcoesFormBotoesAcao';
 import BuscaAtivaRegistroAcoesFormDinamico from './form-dinamico';
@@ -67,16 +63,6 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
 
   const dadosRouteState: RegistroAcaoBuscaAtivaRespostaDto = location.state;
 
-  useEffect(() => {
-    const soConsulta = verificaSomenteConsulta(permissoesTela);
-
-    const desabilitar = registroAcaoId
-      ? soConsulta || !permissoesTela?.podeIncluir
-      : soConsulta || !permissoesTela?.podeAlterar;
-
-    dispatch(setDesabilitarCamposBuscaAtivaRegistroAcoes(desabilitar));
-  }, [registroAcaoId, permissoesTela]);
-
   const mapearDto = (dados: RegistroAcaoBuscaAtivaRespostaDto) => {
     const estudante = { codigo: dados?.aluno?.codigoAluno || '', nome: dados?.aluno?.nome || '' };
 
@@ -85,7 +71,7 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
       anoLetivo: dados?.anoLetivo,
       dre: { id: dados?.dreId, value: dados?.dreCodigo },
       ue: { id: dados?.ueId, value: dados?.ueCodigo },
-      modalidade: { value: dados?.modalidade },
+      modalidade: { value: dados?.modalidade?.toString() },
       turma: { id: dados?.turmaId, value: dados?.turmaCodigo },
       localizadorEstudanteDados: [estudante],
       localizadorEstudante: estudante,
@@ -154,20 +140,38 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
               <Col xs={24} sm={24} md={18} lg={10}>
                 <SelectDRE
                   formItemProps={{ rules: [{ required: true }] }}
-                  selectProps={{ disabled: !!formInitialValues?.dre }}
+                  selectProps={{
+                    disabled: !!formInitialValues?.dre || desabilitarCamposBuscaAtivaRegistroAcoes,
+                  }}
                 />
               </Col>
 
               <Col xs={24} sm={24} md={12} lg={10}>
-                <SelectUE formItemProps={{ rules: [{ required: true }] }} />
+                <SelectUE
+                  formItemProps={{ rules: [{ required: true }] }}
+                  selectProps={{
+                    disabled: !!formInitialValues?.ue || desabilitarCamposBuscaAtivaRegistroAcoes,
+                  }}
+                />
               </Col>
 
               <Col xs={24} md={12} lg={8}>
-                <SelectModalidade formItemProps={{ rules: [{ required: true }] }} />
+                <SelectModalidade
+                  formItemProps={{ rules: [{ required: true }] }}
+                  selectProps={{
+                    disabled:
+                      !!formInitialValues?.modalidade || desabilitarCamposBuscaAtivaRegistroAcoes,
+                  }}
+                />
               </Col>
 
               <Col xs={24} md={12} lg={8}>
-                <SelectSemestre />
+                <SelectSemestre
+                  selectProps={{
+                    disabled:
+                      !!formInitialValues?.semestre || desabilitarCamposBuscaAtivaRegistroAcoes,
+                  }}
+                />
               </Col>
 
               <Col xs={24} md={12} lg={8}>
@@ -192,9 +196,15 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
 
               <Col xs={24}>
                 <LocalizadorEstudante
-                  inputCodigoProps={{ disabled: !!formInitialValues?.localizadorEstudante.nome }}
+                  inputCodigoProps={{
+                    disabled:
+                      !!formInitialValues?.localizadorEstudante.nome ||
+                      desabilitarCamposBuscaAtivaRegistroAcoes,
+                  }}
                   autoCompleteNameProps={{
-                    disabled: !!formInitialValues?.localizadorEstudante.codigo,
+                    disabled:
+                      !!formInitialValues?.localizadorEstudante.codigo ||
+                      desabilitarCamposBuscaAtivaRegistroAcoes,
                   }}
                 />
               </Col>
