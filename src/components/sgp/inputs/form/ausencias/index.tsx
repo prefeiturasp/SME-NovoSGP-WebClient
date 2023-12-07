@@ -3,7 +3,7 @@ import consultaCriancasEstudantesAusentesService from '@/core/services/consulta-
 import { Form, FormItemProps, SelectProps } from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useState } from 'react';
-import Select from '../../select';
+import Select from '../../../../lib/inputs/select';
 
 type SelectAusenciasProps = {
   selectProps?: SelectProps;

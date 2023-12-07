@@ -1,25 +1,25 @@
 import { Loader } from '@/@legacy/componentes';
 import { FiltroHelper } from '@/@legacy/componentes-sgp';
-import { OPCAO_TODOS } from '@/@legacy/constantes';
-import { SGP_SELECT_DRE } from '@/@legacy/constantes/ids/select';
-import { api, erros } from '@/@legacy/servicos';
+import { SGP_SELECT_ANO_LETIVO } from '@/@legacy/constantes/ids/select';
+import { erros } from '@/@legacy/servicos';
 import { InitialValueConfig } from '@/core/dto/InitialValueConfig';
 import { Form, FormItemProps, SelectProps } from 'antd';
 import { useWatch } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
 import React, { useCallback, useEffect, useState } from 'react';
+import { ordenarDescPor } from '~/utils';
 import Select from '../../../../lib/inputs/select';
 
-type SelectDREProps = {
+type SelectAnoLetivoProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
-  mostrarOpcaoTodas?: boolean;
+  anoMinimo?: number;
 };
 
-const SelectDRE: React.FC<SelectDREProps> = ({
+const SelectAnoLetivo: React.FC<SelectAnoLetivoProps> = ({
   selectProps,
   formItemProps,
-  mostrarOpcaoTodas = false,
+  anoMinimo,
 }) => {
   const form = Form.useFormInstance();
 
@@ -28,63 +28,62 @@ const SelectDRE: React.FC<SelectDREProps> = ({
   const [initialValueConfig, setInitialValueConfig] = useState<InitialValueConfig>();
 
   const consideraHistorico = useWatch('consideraHistorico', form);
-  const anoLetivo = useWatch('anoLetivo', form);
 
-  const name = formItemProps?.name || 'dre';
+  const name = formItemProps?.name || 'anoLetivo';
 
-  const disabled = !anoLetivo || options?.length === 1 || selectProps?.disabled;
+  const disabled = options?.length === 1 || selectProps?.disabled;
 
   const limparDados = () => {
     form.setFieldValue(name, undefined);
+    setOptions([]);
   };
 
   const obterDados = useCallback(async () => {
     setExibirLoader(true);
 
-    const url = `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`;
-
-    const resposta = await api
-      .get(url)
+    const resposta = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
+      anoMinimo,
+    })
       .catch((e) => erros(e))
       .finally(() => setExibirLoader(false));
 
-    if (resposta?.data?.length) {
-      let lista = resposta.data.sort(FiltroHelper.ordenarLista('nome'));
+    if (resposta?.length) {
+      const anosOrdenados = ordenarDescPor(resposta, 'valor');
 
-      lista = lista.map((item: any) => ({ ...item, value: item?.codigo, label: item?.nome }));
+      if (anosOrdenados?.length) {
+        const lista = anosOrdenados.map((item: any) => ({
+          ...item,
+          value: item?.valor,
+          label: item?.desc,
+        }));
 
-      if (lista?.length === 1) {
         const fieldValue = lista[0];
-        form.setFieldValue(name, fieldValue);
+        form.setFieldValue(name, fieldValue?.value);
 
         setInitialValueConfig((item) =>
-          item?.loaded ? item : { loaded: true, value: fieldValue },
+          item?.loaded ? item : { loaded: true, value: fieldValue?.value },
         );
-      } else if (mostrarOpcaoTodas) {
-        const OPCAO_TODAS_DRE = { value: OPCAO_TODOS, label: 'Todas' };
-        lista.unshift(OPCAO_TODAS_DRE);
+        setOptions(lista);
+      } else {
+        limparDados();
       }
-
-      setOptions(lista);
     } else {
       limparDados();
     }
-  }, [anoLetivo, consideraHistorico, mostrarOpcaoTodas]);
+  }, [consideraHistorico, anoMinimo, name]);
 
   useEffect(() => {
     limparDados();
 
-    if (anoLetivo) {
-      obterDados();
-    }
-  }, [anoLetivo]);
+    obterDados();
+  }, [consideraHistorico]);
 
   return (
     <Loader loading={exibirLoader} tip="">
       <Form.Item
-        label="Diretoria Regional de Educação (DRE)"
+        label="Ano Letivo"
         name={name}
-        getValueFromEvent={(_, value) => value}
         initialValue={
           initialValueConfig?.loaded ? initialValueConfig.value : formItemProps?.initialValue
         }
@@ -94,10 +93,9 @@ const SelectDRE: React.FC<SelectDREProps> = ({
           loading={exibirLoader}
           showSearch
           allowClear
-          id={SGP_SELECT_DRE}
+          id={SGP_SELECT_ANO_LETIVO}
           options={options}
-          placeholder="Diretoria Regional de Educação (DRE)"
-          labelInValue
+          placeholder="Ano Letivo"
           {...selectProps}
           disabled={disabled}
         />
@@ -106,4 +104,4 @@ const SelectDRE: React.FC<SelectDREProps> = ({
   );
 };
 
-export default SelectDRE;
+export default SelectAnoLetivo;

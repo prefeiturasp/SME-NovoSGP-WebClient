@@ -111,4 +111,6 @@ export enum ROUTES {
   BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_NOVO = '/busca-ativa/criancas-estudantes/ausentes/historico-registro-acoes/novo',
   BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_EDICAO = '/busca-ativa/criancas-estudantes/ausentes/historico-registro-acoes/:id',
   BUSCA_ATIVA_REGISTRO_ACOES = '/busca-ativa/registro-acoes',
+  BUSCA_ATIVA_REGISTRO_ACOES_NOVO = '/busca-ativa/registro-acoes/novo',
+  BUSCA_ATIVA_REGISTRO_ACOES_EDICAO = '/busca-ativa/registro-acoes/:id',
 }
