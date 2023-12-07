@@ -8,6 +8,8 @@ import { store } from '@/core/redux';
 import ConsultaCriancasEstudantesAusentes from '@/pages/busca-ativa/consulta-criancas-estudantes-ausentes/list';
 import BuscaAtivaHistoricoRegistroAcoes from '@/pages/busca-ativa/consulta-criancas-estudantes-ausentes/list/historico';
 import BuscaAtivaHistoricoRegistroAcoesForm from '@/pages/busca-ativa/consulta-criancas-estudantes-ausentes/list/historico/form';
+import BuscaAtivaRegistroAcoesForm from '@/pages/busca-ativa/registro-acoes/form';
+import BuscaAtivaRegistroAcoesList from '@/pages/busca-ativa/registro-acoes/list';
 import FormCadastroABAE from '@/pages/cadastro-abae/form';
 import ListCadastroABAE from '@/pages/cadastro-abae/list';
 import RotasTipo from '~/constantes/rotasTipo';
@@ -1784,8 +1786,8 @@ route.set(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_NOVO, {
   component: BuscaAtivaHistoricoRegistroAcoesForm,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // temPermissionamento: true,
-  // chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
 });
 
 route.set(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_EDICAO, {
@@ -1794,8 +1796,39 @@ route.set(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_EDICAO, {
   component: BuscaAtivaHistoricoRegistroAcoesForm,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // temPermissionamento: true,
-  // chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
+});
+
+route.set(ROUTES.BUSCA_ATIVA_REGISTRO_ACOES, {
+  breadcrumbName: 'Registro de ações',
+  menu: ['NAAPA', 'Busca ativa'],
+  parent: '/',
+  component: BuscaAtivaRegistroAcoesList,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_REGISTRO_ACOES,
+});
+
+route.set(ROUTES.BUSCA_ATIVA_REGISTRO_ACOES_NOVO, {
+  breadcrumbName: 'Novo Registro de ações',
+  parent: ROUTES.BUSCA_ATIVA_REGISTRO_ACOES,
+  component: BuscaAtivaRegistroAcoesForm,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_REGISTRO_ACOES,
+});
+
+route.set(ROUTES.BUSCA_ATIVA_REGISTRO_ACOES_EDICAO, {
+  breadcrumbName: 'Editar Registro de ações',
+  parent: ROUTES.BUSCA_ATIVA_REGISTRO_ACOES,
+  component: BuscaAtivaRegistroAcoesForm,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_REGISTRO_ACOES,
 });
 
 const getRoutesArray = () => {

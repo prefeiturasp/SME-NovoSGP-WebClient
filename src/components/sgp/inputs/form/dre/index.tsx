@@ -8,7 +8,7 @@ import { Form, FormItemProps, SelectProps } from 'antd';
 import { useWatch } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
 import React, { useCallback, useEffect, useState } from 'react';
-import Select from '../../select';
+import Select from '../../../../lib/inputs/select';
 
 type SelectDREProps = {
   selectProps?: SelectProps;
