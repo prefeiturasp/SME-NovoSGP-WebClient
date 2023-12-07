@@ -8,7 +8,7 @@ import SelectAnoLetivo from '@/components/sgp/inputs/form/anoLetivo';
 import DataFim from '@/components/sgp/inputs/form/data-fim';
 import DataInicio from '@/components/sgp/inputs/form/data-inicio';
 import SelectDRE from '@/components/sgp/inputs/form/dre';
-import RadioEntrouContatoFamiliaPor from '@/components/sgp/inputs/form/entrou-contato-familia-por';
+import SelectEntrouContatoFamiliaPor from '@/components/sgp/inputs/form/entrou-contato-familia-por';
 import CheckboxExibirHistorico from '@/components/sgp/inputs/form/exibir-historico';
 import SelectModalidade from '@/components/sgp/inputs/form/modalidade';
 import SelectSemestre from '@/components/sgp/inputs/form/semestre';
@@ -23,7 +23,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { verificaSomenteConsulta } from '~/servicos';
 import ListaPaginadaBuscaAtivaRegistroAcoes from './lista-paginada';
-import { OrdemProcedimentoRealizadoEnum } from '@/core/enum/ordem-procedimento-realizado-enum';
 
 const BuscaAtivaRegistroAcoesList: React.FC = () => {
   const navigate = useNavigate();
@@ -74,7 +73,6 @@ const BuscaAtivaRegistroAcoesList: React.FC = () => {
           validateMessages={validateMessages}
           initialValues={{
             consideraHistorico: false,
-            ordemProcedimentoRealizado: OrdemProcedimentoRealizadoEnum.Nenhum,
           }}
         >
           <Row gutter={[16, 8]}>
@@ -167,8 +165,8 @@ const BuscaAtivaRegistroAcoesList: React.FC = () => {
                     />
                   </Col>
 
-                  <Col xs={24} sm={16} md={12}>
-                    <RadioEntrouContatoFamiliaPor radioGroupProps={{ disabled }} />
+                  <Col xs={24} md={12} lg={8}>
+                    <SelectEntrouContatoFamiliaPor selectProps={{ disabled }} />
                   </Col>
                 </Row>
               );

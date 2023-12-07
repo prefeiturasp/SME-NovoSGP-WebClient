@@ -1,24 +1,22 @@
+import Select from '@/components/lib/inputs/select';
 import {
   OrdemProcedimentoRealizadoEnum,
   OrdemProcedimentoRealizadoEnumDisplay,
 } from '@/core/enum/ordem-procedimento-realizado-enum';
-import { CheckboxOptionType, Form, FormItemProps, Radio, RadioGroupProps } from 'antd';
+import { Form, FormItemProps, SelectProps } from 'antd';
+import { DefaultOptionType } from 'antd/es/select';
 import React from 'react';
-import { SGP_RADIO_RADIO_ENTROU_CONTATO_FAMILIA_POR } from '~/constantes/ids/radio';
+import { SGP_SELECT_ENTROU_CONTATO_FAMILIA_POR } from '~/constantes/ids/select';
 
-type RadioEntrouContatoFamiliaPorProps = {
-  radioGroupProps?: RadioGroupProps;
+type SelectEntrouContatoFamiliaPorProps = {
+  selectProps?: SelectProps;
   formItemProps?: FormItemProps;
 };
-const RadioEntrouContatoFamiliaPor: React.FC<RadioEntrouContatoFamiliaPorProps> = ({
+const SelectEntrouContatoFamiliaPor: React.FC<SelectEntrouContatoFamiliaPorProps> = ({
   formItemProps,
-  radioGroupProps,
+  selectProps,
 }) => {
-  const options: Array<CheckboxOptionType | string | number> = [
-    {
-      label: OrdemProcedimentoRealizadoEnumDisplay[OrdemProcedimentoRealizadoEnum.Nenhum],
-      value: OrdemProcedimentoRealizadoEnum.Nenhum,
-    },
+  const options: DefaultOptionType[] = [
     {
       label: OrdemProcedimentoRealizadoEnumDisplay[OrdemProcedimentoRealizadoEnum.Telefone],
       value: OrdemProcedimentoRealizadoEnum.Telefone,
@@ -35,12 +33,14 @@ const RadioEntrouContatoFamiliaPor: React.FC<RadioEntrouContatoFamiliaPorProps> 
       label="Você entrou em contato com a família por meio de:"
       {...formItemProps}
     >
-      <Radio.Group
+      <Select
+        allowClear
         options={options}
-        id={SGP_RADIO_RADIO_ENTROU_CONTATO_FAMILIA_POR}
-        {...radioGroupProps}
+        placeholder="Selecione uma opção"
+        id={SGP_SELECT_ENTROU_CONTATO_FAMILIA_POR}
+        {...selectProps}
       />
     </Form.Item>
   );
 };
-export default RadioEntrouContatoFamiliaPor;
+export default SelectEntrouContatoFamiliaPor;
