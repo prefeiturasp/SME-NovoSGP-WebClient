@@ -42,7 +42,7 @@ const SelectAnoLetivo: React.FC<SelectAnoLetivoProps> = ({
     setExibirLoader(true);
 
     const resposta = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico,
+      consideraHistorico: !!consideraHistorico,
       anoMinimo,
     })
       .catch((e) => erros(e))

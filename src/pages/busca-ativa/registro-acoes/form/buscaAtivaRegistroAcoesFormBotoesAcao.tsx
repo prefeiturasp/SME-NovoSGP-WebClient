@@ -26,7 +26,6 @@ import {
   setQuestionarioDinamicoEmEdicao,
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, setBreadcrumbManual, sucesso, verificaSomenteConsulta } from '~/servicos';
-import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 
 type BuscaAtivaRegistroAcoesFormBotoesAcaoProps = {
   permissoesTela: PermissaoAcoesDto;
@@ -112,9 +111,7 @@ const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
         'Deseja realmente cancelar as alterações?',
       );
       if (confirmou) {
-        QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico(
-          ServicoNAAPA.removerArquivo,
-        );
+        QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico();
         form.resetFields();
       }
     }
