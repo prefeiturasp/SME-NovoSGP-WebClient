@@ -154,7 +154,9 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
               <Col xs={24} sm={24} md={18} lg={10}>
                 <SelectDRE
                   formItemProps={{ rules: [{ required: true }] }}
-                  selectProps={{ disabled: !!formInitialValues?.dre }}
+                  selectProps={{
+                    disabled: !!formInitialValues?.dre || desabilitarCamposBuscaAtivaRegistroAcoes,
+                  }}
                 />
               </Col>
 
@@ -192,9 +194,15 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
 
               <Col xs={24}>
                 <LocalizadorEstudante
-                  inputCodigoProps={{ disabled: !!formInitialValues?.localizadorEstudante.nome }}
+                  inputCodigoProps={{
+                    disabled:
+                      !!formInitialValues?.localizadorEstudante.nome ||
+                      desabilitarCamposBuscaAtivaRegistroAcoes,
+                  }}
                   autoCompleteNameProps={{
-                    disabled: !!formInitialValues?.localizadorEstudante.codigo,
+                    disabled:
+                      !!formInitialValues?.localizadorEstudante.codigo ||
+                      desabilitarCamposBuscaAtivaRegistroAcoes,
                   }}
                 />
               </Col>

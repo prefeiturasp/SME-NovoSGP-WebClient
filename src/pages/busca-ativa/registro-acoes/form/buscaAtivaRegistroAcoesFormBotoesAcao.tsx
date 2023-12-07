@@ -88,6 +88,8 @@ const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
   }, [registroAcaoId, permissoesTela, dispatch]);
 
   const onClickExcluir = async () => {
+    if (desabilitarCamposBuscaAtivaRegistroAcoes) return;
+
     const confirmado = await confirmar(
       'Excluir',
       '',
@@ -194,7 +196,10 @@ const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
   };
 
   const onClickVoltar = async () => {
-    if (questionarioDinamicoEmEdicao || form.isFieldsTouched()) {
+    if (
+      !desabilitarCamposBuscaAtivaRegistroAcoes &&
+      (questionarioDinamicoEmEdicao || form.isFieldsTouched())
+    ) {
       const confirmou = await confirmar(
         'Atenção',
         '',
