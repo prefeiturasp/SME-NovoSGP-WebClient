@@ -1,9 +1,10 @@
+import { DadosResponsavelAtualizarDto } from '../dto/DadosResponsavelAtualizarDto';
 import { FiltroSecoesDeRegistroAcao } from '../dto/FiltroSecoesDeRegistroAcao';
 import { RegistroAcaoBuscaAtivaDto } from '../dto/RegistroAcaoBuscaAtivaDto';
 import { RegistroAcaoBuscaAtivaRespostaDto } from '../dto/RegistroAcaoBuscaAtivaRespostaDto';
 import { ResultadoRegistroAcaoBuscaAtivaDto } from '../dto/ResultadoRegistroAcaoBuscaAtivaDto';
 import { SecaoQuestionarioDto } from '../dto/SecaoQuestionarioDto';
-import { deletarRegistro, inserirRegistro, obterRegistro } from './api';
+import { alterarRegistro, deletarRegistro, inserirRegistro, obterRegistro } from './api';
 
 export const URL_API_BUSCA_ATIVA = 'v1/busca-ativa';
 
@@ -30,10 +31,14 @@ const obterRegistroAcao = (registroAcaoId: number) =>
 const excluirRegistroAcao = (registroAcaoId: number) =>
   deletarRegistro<boolean>(`${URL_API_BUSCA_ATIVA}/registros-acao/${registroAcaoId}`);
 
+const atualizarDadosResponsavel = (params: DadosResponsavelAtualizarDto) =>
+  alterarRegistro<boolean>(`${URL_API_BUSCA_ATIVA}/criancas-estudantes/responsaveis`, params);
+
 export default {
   salvarAtualizarRegistroAcao,
   obterSecoesDeRegistroAcao,
   obterQuestionario,
   obterRegistroAcao,
   excluirRegistroAcao,
+  atualizarDadosResponsavel,
 };

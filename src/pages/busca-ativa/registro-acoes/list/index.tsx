@@ -113,6 +113,7 @@ const BuscaAtivaRegistroAcoesList: React.FC = () => {
 
                   return (
                     <SelectTurma
+                      mostrarOpcaoTodas
                       formItemProps={{ rules: [{ required: true }] }}
                       selectProps={{
                         disabled: !modalidade,
