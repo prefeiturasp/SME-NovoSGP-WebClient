@@ -1,7 +1,7 @@
 import { LISTA_UF } from '@/core/constants/lista-uf';
 import { Form, FormItemProps, SelectProps } from 'antd';
 import React from 'react';
-import Select from '../../select';
+import Select from '../../../../lib/inputs/select';
 
 type InputEstadoProps = {
   selectProps: SelectProps;

@@ -26,7 +26,6 @@ import {
   setQuestionarioDinamicoEmEdicao,
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, setBreadcrumbManual, sucesso, verificaSomenteConsulta } from '~/servicos';
-import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 
 type BuscaAtivaRegistroAcoesFormBotoesAcaoProps = {
   permissoesTela: PermissaoAcoesDto;
@@ -88,6 +87,8 @@ const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
   }, [registroAcaoId, permissoesTela, dispatch]);
 
   const onClickExcluir = async () => {
+    if (desabilitarCamposBuscaAtivaRegistroAcoes) return;
+
     const confirmado = await confirmar(
       'Excluir',
       '',
@@ -110,9 +111,7 @@ const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
         'Deseja realmente cancelar as alterações?',
       );
       if (confirmou) {
-        QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico(
-          ServicoNAAPA.removerArquivo,
-        );
+        QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico();
         form.resetFields();
       }
     }
@@ -194,7 +193,10 @@ const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
   };
 
   const onClickVoltar = async () => {
-    if (questionarioDinamicoEmEdicao || form.isFieldsTouched()) {
+    if (
+      !desabilitarCamposBuscaAtivaRegistroAcoes &&
+      (questionarioDinamicoEmEdicao || form.isFieldsTouched())
+    ) {
       const confirmou = await confirmar(
         'Atenção',
         '',
