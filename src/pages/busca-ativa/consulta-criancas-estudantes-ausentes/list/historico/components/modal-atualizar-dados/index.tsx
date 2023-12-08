@@ -34,7 +34,6 @@ const ModalAtualizarDados: React.FC<ModalAtualizarDadosProps> = ({
         okButtonProps={{ disabled: loading, id: SGP_BUTTON_SALVAR_MODAL }}
         okText="Atualizar"
         cancelText="Cancelar"
-        width={1100}
       >
         <Form
           form={formResponsavel}
