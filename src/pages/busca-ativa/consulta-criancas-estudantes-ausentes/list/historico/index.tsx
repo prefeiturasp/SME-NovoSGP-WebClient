@@ -1,8 +1,6 @@
 import {
   SGP_BUTTON_BUSCA_ATIVA_ATUALIZAR_DADOS_RESPONSAVEL,
   SGP_BUTTON_BUSCA_ATIVA_NOVO_REGISTRO_ACAO,
-  SGP_BUTTON_CANCELAR_MODAL,
-  SGP_BUTTON_SALVAR_MODAL,
 } from '~/constantes/ids/button';
 import { confirmar, erros, verificaSomenteConsulta } from '~/servicos';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
@@ -15,7 +13,7 @@ import { RegistroAcaoBuscaAtivaRespostaDto } from '@/core/dto/RegistroAcaoBuscaA
 import { ROUTES } from '@/core/enum/routes';
 import estudanteService from '@/core/services/estudante-service';
 import responsavelService from '@/core/services/busca-ativa-service';
-import { Col, Divider, Form, Row, Typography } from 'antd';
+import { Col, Divider, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BuscaAtivaHistoricoRegistroAcoesList from './list';
@@ -23,24 +21,19 @@ import { TipoTelefone } from '@/core/enum/tipo-telefone-enum';
 import { DadosResponsavelAtualizarDto } from '@/core/dto/DadosResponsavelAtualizarDto';
 import { useForm } from 'antd/es/form/Form';
 import { useSelector } from 'react-redux';
-import { validateMessages } from '@/core/constants/validate-messages';
-import InputEmail from '@/components/sgp/inputs/form/email';
-import InputTelefone from '@/components/sgp/inputs/form/telefone';
-import { SGP_INPUT_EMAIL, SGP_INPUT_TELEFONE } from '~/constantes/ids/input';
 import { maskTelefone } from '@/core/utils/functions';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import Modal from '@/components/lib/modal';
 import {
   DESEJA_CANCELAR_ALTERACOES,
   INFORMACOES_NAO_FORAM_SALVAR,
   MENSAGEM_DE_ATENCAO,
 } from '@/core/constants/mensagens';
+import ModalAtualizarDados from './components/modal-atualizar-dados';
 
 const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [formResponsavel] = useForm();
-  const { Text } = Typography;
   const usuario = useSelector((state: any) => state.usuario);
   const { permissoes } = usuario;
   const podeIncluir =
@@ -117,7 +110,6 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
 
   const obterDados = useCallback(async () => {
     setLoading(true);
-
     const resposta = await estudanteService.obterDadosEstudante({
       anoLetivo,
       codigoAluno,
@@ -138,13 +130,13 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
 
   const salvarDadosResponsavel = useCallback(async () => {
     formResponsavel.validateFields().then(async () => {
+      const obterTodosValoresForm = formResponsavel.getFieldsValue(true);
       setLoading(true);
-      const response = await responsavelService.atualizarDadosResponsavel(
-        formResponsavel.getFieldsValue(true),
-      );
+      const response = await responsavelService.atualizarDadosResponsavel(obterTodosValoresForm);
       if (response.sucesso) {
-        setModalOpen(false);
         obterDados();
+        setFormInitialValues(undefined);
+        setModalOpen(false);
       } else {
         setLoading(false);
       }
@@ -185,79 +177,13 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
 
   return (
     <>
-      <Modal
-        title="Atualizar dados do responsável"
-        centered
-        open={modalOpen}
-        onOk={() => salvarDadosResponsavel()}
-        onCancel={() => onClickCancelar()}
-        destroyOnClose
-        cancelButtonProps={{ disabled: loading, id: SGP_BUTTON_CANCELAR_MODAL }}
-        okButtonProps={{ disabled: loading, id: SGP_BUTTON_SALVAR_MODAL }}
-        okText="Alterar"
-        cancelText="Cancelar"
-        width={1100}
-      >
-        <Form
-          form={formResponsavel}
-          layout="vertical"
-          autoComplete="off"
-          onFinish={salvarDadosResponsavel}
-          validateMessages={validateMessages}
-          initialValues={formInitialValues}
-        >
-          <Col span={24}>
-            <Row gutter={24} style={{ marginBottom: 20 }}>
-              <Col span={12}>
-                <Text strong>Nome: </Text>
-                <Text>
-                  {formInitialValues?.nome} - {formInitialValues?.tipoResponsavel}
-                </Text>
-              </Col>
-              <Col span={12}>
-                <Text strong>CPF: </Text>
-                <Text>{formInitialValues?.cpf}</Text>
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col span={12}>
-                <InputEmail
-                  formItemProps={{ label: 'E-mail do responsável' }}
-                  inputProps={{ id: SGP_INPUT_EMAIL }}
-                />
-              </Col>
-              <Col span={12}>
-                <InputTelefone
-                  formItemProps={{ label: 'Nº Celular do responsável', name: 'celular' }}
-                  inputProps={{ id: SGP_INPUT_TELEFONE }}
-                />
-              </Col>
-            </Row>
-            <Row gutter={24}>
-              <Col span={12}>
-                <InputTelefone
-                  formItemProps={{
-                    label: 'Nº do telefone residencial do responsável',
-                    name: 'foneResidencial',
-                    rules: [{ required: false }],
-                  }}
-                  inputProps={{ id: SGP_INPUT_EMAIL }}
-                />
-              </Col>
-              <Col span={12}>
-                <InputTelefone
-                  formItemProps={{
-                    label: 'Nº do telefone comercial do responsável',
-                    rules: [{ required: false }],
-                    name: 'foneComercial',
-                  }}
-                  inputProps={{ id: SGP_INPUT_TELEFONE }}
-                />
-              </Col>
-            </Row>
-          </Col>
-        </Form>
-      </Modal>
+      <ModalAtualizarDados
+        modalOpen={modalOpen}
+        salvarDadosResponsavel={salvarDadosResponsavel}
+        onClickCancelar={onClickCancelar}
+        formInitialValues={formInitialValues}
+        loading={loading}
+      />
       <Col>
         <HeaderPage title="Registro de ações">
           <Col span={24}>
