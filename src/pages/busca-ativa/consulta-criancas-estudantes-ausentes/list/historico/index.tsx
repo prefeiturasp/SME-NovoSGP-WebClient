@@ -19,7 +19,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import BuscaAtivaHistoricoRegistroAcoesList from './list';
 import { TipoTelefone } from '@/core/enum/tipo-telefone-enum';
 import { DadosResponsavelAtualizarDto } from '@/core/dto/DadosResponsavelAtualizarDto';
-import { useForm } from 'antd/es/form/Form';
 import { useSelector } from 'react-redux';
 import { maskTelefone } from '@/core/utils/functions';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -33,7 +32,6 @@ import ModalAtualizarDados from './components/modal-atualizar-dados';
 const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [formResponsavel] = useForm();
   const usuario = useSelector((state: any) => state.usuario);
   const { permissoes } = usuario;
   const podeIncluir =
@@ -128,11 +126,11 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     setLoading(false);
   }, [anoLetivo, codigoAluno, turmaCodigo, obterFrequenciaGlobalAluno]);
 
-  const salvarDadosResponsavel = useCallback(async () => {
+  const salvarDadosResponsavel = useCallback(async (formResponsavel: any) => {
+    const values = formResponsavel.getFieldsValue(true);
     formResponsavel.validateFields().then(async () => {
-      const obterTodosValoresForm = formResponsavel.getFieldsValue(true);
       setLoading(true);
-      const response = await responsavelService.atualizarDadosResponsavel(obterTodosValoresForm);
+      const response = await responsavelService.atualizarDadosResponsavel(values);
       if (response.sucesso) {
         obterDados();
         setFormInitialValues(undefined);
@@ -141,21 +139,17 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
         setLoading(false);
       }
     });
-  }, [formResponsavel]);
+  }, []);
 
   useEffect(() => {
     obterDados();
   }, [obterDados]);
 
-  useEffect(() => {
-    formResponsavel.resetFields();
-  }, [formResponsavel, formInitialValues]);
-
   const abrirModal = () => {
     dadosResponsavelParaAtualizar();
     setModalOpen(true);
   };
-  const onClickCancelar = async () => {
+  const onClickCancelar = async (formResponsavel: any) => {
     if (formResponsavel.isFieldsTouched()) {
       const confirmou = await confirmar(
         MENSAGEM_DE_ATENCAO,
@@ -163,9 +157,11 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
         DESEJA_CANCELAR_ALTERACOES,
       );
       if (confirmou) {
+        setFormInitialValues(undefined);
         formResponsavel.resetFields();
       }
     } else {
+      setFormInitialValues(undefined);
       setModalOpen(false);
     }
   };
@@ -177,13 +173,16 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
 
   return (
     <>
-      <ModalAtualizarDados
-        modalOpen={modalOpen}
-        salvarDadosResponsavel={salvarDadosResponsavel}
-        onClickCancelar={onClickCancelar}
-        formInitialValues={formInitialValues}
-        loading={loading}
-      />
+      {modalOpen && formInitialValues ? (
+        <ModalAtualizarDados
+          salvarDadosResponsavel={salvarDadosResponsavel}
+          onClickCancelar={onClickCancelar}
+          formInitialValues={formInitialValues}
+          loading={loading}
+        />
+      ) : (
+        <></>
+      )}
       <Col>
         <HeaderPage title="Registro de ações">
           <Col span={24}>

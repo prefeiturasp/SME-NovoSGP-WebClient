@@ -7,7 +7,6 @@ import { SGP_BUTTON_CANCELAR_MODAL, SGP_BUTTON_SALVAR_MODAL } from '~/constantes
 import { SGP_INPUT_EMAIL, SGP_INPUT_TELEFONE } from '~/constantes/ids/input';
 
 type ModalAtualizarDadosProps = {
-  modalOpen: boolean;
   salvarDadosResponsavel: any;
   onClickCancelar: any;
   formInitialValues: any;
@@ -15,22 +14,21 @@ type ModalAtualizarDadosProps = {
 };
 
 const ModalAtualizarDados: React.FC<ModalAtualizarDadosProps> = ({
-  modalOpen,
   salvarDadosResponsavel,
   onClickCancelar,
   formInitialValues,
   loading,
 }) => {
   const { Text } = Typography;
-  const formResponsavel = Form.useFormInstance();
+  const [formResponsavel] = Form.useForm();
   return (
     <>
       <Modal
         title="Atualizar dados do responsável"
         centered
-        open={modalOpen}
-        onOk={() => salvarDadosResponsavel()}
-        onCancel={() => onClickCancelar()}
+        open
+        onOk={() => salvarDadosResponsavel(formResponsavel)}
+        onCancel={() => onClickCancelar(formResponsavel)}
         destroyOnClose
         cancelButtonProps={{ disabled: loading, id: SGP_BUTTON_CANCELAR_MODAL }}
         okButtonProps={{ disabled: loading, id: SGP_BUTTON_SALVAR_MODAL }}
