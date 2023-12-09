@@ -5,7 +5,8 @@ import 'jodit/build/jodit.min.css';
 import PropTypes from 'prop-types';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { erro } from '~/servicos/alertas';
+import { api } from '~/servicos';
+import { erro, erros } from '~/servicos/alertas';
 import { urlBase } from '~/servicos/variaveis';
 import { Base } from '../colors';
 import Label from '../label';
@@ -78,6 +79,105 @@ const JoditEditor = forwardRef((props, ref) => {
       }table,link,align,undo,redo`
     : '';
 
+  const uploadImagemManual = async file => {
+    const fmData = new FormData();
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    fmData.append('file', file);
+
+    const resposta = await api
+      .post('v1/arquivos/upload', fmData, config)
+      .catch(e => erros(e));
+
+    return resposta?.data?.data?.path;
+  };
+
+  const converterImagemURLExternaParaInterna = async urlExterna => {
+    return fetch(urlExterna).then(async res => {
+      return res.blob().then(blob => {
+        const file = new File([blob], 'file.png', { type: 'image/png' });
+        return uploadImagemManual(file);
+      });
+    });
+  };
+
+  const converterUploadImagemBinariaParaURL = async base64String => {
+    const base64WithoutHeader = base64String.replace(
+      /^data:[a-zA-Z0-9]+\/[a-zA-Z0-9]+;base64,/,
+      ''
+    );
+
+    // Converte a string Base64 para um array de bytes
+    const byteCharacters = atob(base64WithoutHeader);
+
+    // Converte o array de bytes para um array de números
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+
+    // Cria um Blob a partir do array de números
+    const blob = new Blob([byteArray], 'file.png', { type: 'image/png' });
+
+    return uploadImagemManual(blob);
+  };
+
+  const replaceImageDataSrc = async html => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    const imgElements = doc.getElementsByTagName('img');
+
+    const replacementPromises = [];
+
+    for (let i = 0; i < imgElements?.length; i++) {
+      const imgSrc = imgElements[i].getAttribute('src');
+      const temBinario = !!(imgSrc && imgSrc?.startsWith('data:image/'));
+
+      const urlSGP = url.replace('/api', '');
+      const urlExterna = imgSrc && !imgSrc?.startsWith(urlSGP);
+
+      if (temBinario || urlExterna) {
+        let newSrcPromise = new Promise(resolve => resolve(''));
+
+        if (temBinario) {
+          newSrcPromise = converterUploadImagemBinariaParaURL(imgSrc);
+        }
+
+        if (urlExterna) {
+          newSrcPromise = converterImagemURLExternaParaInterna(imgSrc);
+        }
+
+        replacementPromises.push(newSrcPromise);
+
+        // Atualizar o DOM posteriormente com a URL obtida assincronamente
+        newSrcPromise.then(newSrc => {
+          imgElements[i].setAttribute('src', newSrc);
+
+          const styleAttribute = `max-width: 100%; max-height: 700px; object-fit: cover; object-position: bottom; ${
+            imagensCentralizadas ? 'display: block; margin: auto;' : ''
+          }`;
+
+          imgElements[i].setAttribute('style', styleAttribute);
+        });
+      }
+    }
+
+    const resposta = await Promise.all(replacementPromises).catch(e =>
+      erros(e)
+    );
+
+    if (resposta?.length) {
+      return doc.documentElement.innerHTML;
+    }
+
+    return html;
+  };
+
   const changeHandler = valor => {
     if (onChange) {
       onChange(valor);
@@ -131,7 +231,7 @@ const JoditEditor = forwardRef((props, ref) => {
       item.type.includes('video')
     );
 
-    const spgURL = url.replace('/api', '');
+    const urlSGP = url.replace('/api', '');
     const qtdElementoImg = temImagemNosDadosColados.length;
     const qtdElementoVideo = temVideoNosDadosColados.length;
 
@@ -144,7 +244,7 @@ const JoditEditor = forwardRef((props, ref) => {
     }
 
     if (qtdElementoImg) {
-      const regex = new RegExp(`<img[^>]*src=".*?${spgURL}/temp/.*?"[^>]*>`);
+      const regex = new RegExp(`<img[^>]*src=".*?${urlSGP}/temp/.*?"[^>]*>`);
       // eslint-disable-next-line no-undef
       const temImagemPastaTemporaria = dadosColadoHTML?.match(regex) || [];
 
@@ -444,6 +544,12 @@ const JoditEditor = forwardRef((props, ref) => {
               return false;
             }
 
+            const dadosColadoTexto = e?.clipboardData?.getData?.('text');
+
+            replaceImageDataSrc(dadosColadoTexto).then(newValue => {
+              textArea.current.setEditorValue(newValue);
+            });
+
             return true;
           });
 
@@ -459,7 +565,9 @@ const JoditEditor = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (textArea?.current?.setEditorValue) {
-      textArea.current.setEditorValue(value);
+      replaceImageDataSrc(value).then(newValue => {
+        textArea.current.setEditorValue(newValue);
+      });
 
       bloquearTraducaoNavegador();
     }

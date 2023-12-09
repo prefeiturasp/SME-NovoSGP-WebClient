@@ -44,12 +44,6 @@ const CampoPercursoIndividual = () => {
     validaPermissoes();
   }, [validaPermissoes]);
 
-  const [percursoIndividual, setPercursoIndividual] = useState();
-
-  useEffect(() => {
-    setPercursoIndividual(dadosAcompanhamentoAprendizagem?.percursoIndividual);
-  }, [dadosAcompanhamentoAprendizagem]);
-
   const onChange = valorNovo => {
     ServicoAcompanhamentoAprendizagem.atualizarDadosPorNomeCampo(
       valorNovo,
@@ -58,10 +52,12 @@ const CampoPercursoIndividual = () => {
     dispatch(setAcompanhamentoAprendizagemEmEdicao(true));
   };
 
+  console.log(dadosAcompanhamentoAprendizagem?.percursoIndividual);
+
   return (
     <JoditEditor
       id="percurso-individual-editor"
-      value={percursoIndividual}
+      value={dadosAcompanhamentoAprendizagem?.percursoIndividual}
       onChange={onChange}
       readonly={desabilitarCampo}
       mensagemErro="Campo obrigatório"
