@@ -25,7 +25,6 @@ const CampoApanhadoGeral = () => {
 
   const permissoesTela = usuario.permissoes[ROUTES.ACOMPANHAMENTO_APRENDIZAGEM];
 
-  const [valorApanhadoGeral, setValorApanhadoGeral] = useState();
   const [desabilitarCampo, setDesabilitarCampo] = useState(false);
 
   const validaPermissoes = useCallback(() => {
@@ -53,16 +52,10 @@ const CampoApanhadoGeral = () => {
         .desabilitarCamposAcompanhamentoAprendizagem
   );
 
-  useEffect(() => {
-    if (dadosApanhadoGeral) {
-      setValorApanhadoGeral(dadosApanhadoGeral?.apanhadoGeral);
-    }
-  }, [dadosApanhadoGeral]);
-
   return (
     <JoditEditor
       id="percurso-coletivo-turma-editor"
-      value={valorApanhadoGeral}
+      value={dadosApanhadoGeral?.apanhadoGeral}
       onChange={onChange}
       readonly={desabilitarCampo}
       permiteVideo={false}
