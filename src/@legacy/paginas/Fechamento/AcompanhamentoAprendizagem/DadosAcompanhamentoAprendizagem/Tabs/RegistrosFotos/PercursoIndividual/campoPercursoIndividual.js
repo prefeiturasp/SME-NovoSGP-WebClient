@@ -52,8 +52,6 @@ const CampoPercursoIndividual = () => {
     dispatch(setAcompanhamentoAprendizagemEmEdicao(true));
   };
 
-  console.log(dadosAcompanhamentoAprendizagem?.percursoIndividual);
-
   return (
     <JoditEditor
       id="percurso-individual-editor"
