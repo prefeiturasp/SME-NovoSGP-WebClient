@@ -97,33 +97,16 @@ const JoditEditor = forwardRef((props, ref) => {
   };
 
   const converterImagemURLExternaParaInterna = async urlExterna => {
+    const localFile = urlExterna?.startsWith('file:///');
+
+    if (localFile) return urlExterna;
+
     return fetch(urlExterna).then(async res => {
       return res.blob().then(blob => {
         const file = new File([blob], 'file.png', { type: 'image/png' });
         return uploadImagemManual(file);
       });
     });
-  };
-
-  const converterUploadImagemBinariaParaURL = async base64String => {
-    const base64WithoutHeader = base64String.replace(
-      /^data:[a-zA-Z0-9]+\/[a-zA-Z0-9]+;base64,/,
-      ''
-    );
-
-    // Converte a string Base64 para um array de bytes
-    const byteCharacters = atob(base64WithoutHeader);
-
-    // Converte o array de bytes para um array de números
-    const byteArray = new Uint8Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteArray[i] = byteCharacters.charCodeAt(i);
-    }
-
-    // Cria um Blob a partir do array de números
-    const blob = new Blob([byteArray], 'file.png', { type: 'image/png' });
-
-    return uploadImagemManual(blob);
   };
 
   const replaceImageDataSrc = async html => {
@@ -139,18 +122,12 @@ const JoditEditor = forwardRef((props, ref) => {
       const temBinario = !!(imgSrc && imgSrc?.startsWith('data:image/'));
 
       const urlSGP = url.replace('/api', '');
-      const urlExterna = imgSrc && !imgSrc?.startsWith(urlSGP);
+      const urlExterna = !temBinario && imgSrc && !imgSrc?.startsWith(urlSGP);
 
       if (temBinario || urlExterna) {
         let newSrcPromise = new Promise(resolve => resolve(''));
 
-        if (temBinario) {
-          newSrcPromise = converterUploadImagemBinariaParaURL(imgSrc);
-        }
-
-        if (urlExterna) {
-          newSrcPromise = converterImagemURLExternaParaInterna(imgSrc);
-        }
+        newSrcPromise = converterImagemURLExternaParaInterna(imgSrc);
 
         replacementPromises.push(newSrcPromise);
 
@@ -231,7 +208,6 @@ const JoditEditor = forwardRef((props, ref) => {
       item.type.includes('video')
     );
 
-    const urlSGP = url.replace('/api', '');
     const qtdElementoImg = temImagemNosDadosColados.length;
     const qtdElementoVideo = temVideoNosDadosColados.length;
 
@@ -241,17 +217,6 @@ const JoditEditor = forwardRef((props, ref) => {
       erro('Não é possível inserir arquivo');
 
       return false;
-    }
-
-    if (qtdElementoImg) {
-      const regex = new RegExp(`<img[^>]*src=".*?${urlSGP}/temp/.*?"[^>]*>`);
-      // eslint-disable-next-line no-undef
-      const temImagemPastaTemporaria = dadosColadoHTML?.match(regex) || [];
-
-      if (temImagemPastaTemporaria.length) {
-        erro('Não é possível inserir este arquivo');
-        return false;
-      }
     }
 
     if (qtdElementoImg && qtdMaxImg) {
@@ -284,6 +249,7 @@ const JoditEditor = forwardRef((props, ref) => {
     countHTMLChars: false,
     buttons: BOTOES_PADRAO,
     showWordsCounter: false,
+    showCharsCounter: false,
     buttonsXS: BOTOES_PADRAO,
     buttonsMD: BOTOES_PADRAO,
     buttonsSM: BOTOES_PADRAO,
@@ -293,8 +259,8 @@ const JoditEditor = forwardRef((props, ref) => {
     enableDragAndDropFileToEditor: true,
     askBeforePasteHTML: valideClipboardHTML,
     // iframe: true, // TODO bug jodit-react
-    defaultActionOnPaste: 'insert_clear_html',
-    defaultActionOnPasteFromWord: 'insert_as_text',
+    defaultActionOnPaste: '',
+    defaultActionOnPasteFromWord: 'insert_clear_html',
     disablePlugins: ['image-properties', disablePlugins],
     iframeStyle: `${iframeStyle} img{max-width: 100%;max-height: 700px;object-fit: cover;}`,
     style: {
@@ -543,12 +509,6 @@ const JoditEditor = forwardRef((props, ref) => {
             if (verificaSeTemSvg(e) || !verificaSePodeInserirArquivo(e)) {
               return false;
             }
-
-            const dadosColadoTexto = e?.clipboardData?.getData?.('text');
-
-            replaceImageDataSrc(dadosColadoTexto).then(newValue => {
-              textArea.current.setEditorValue(newValue);
-            });
 
             return true;
           });
