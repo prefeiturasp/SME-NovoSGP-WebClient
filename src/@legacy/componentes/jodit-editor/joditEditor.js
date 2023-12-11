@@ -10,6 +10,7 @@ import { erro, erros } from '~/servicos/alertas';
 import { urlBase } from '~/servicos/variaveis';
 import { Base } from '../colors';
 import Label from '../label';
+import { clone } from 'lodash';
 
 const Campo = styled.div`
   .jodit-container {
@@ -36,6 +37,92 @@ const Campo = styled.div`
     padding-inline-start: 40px;
   }
 `;
+
+const temBinarioNaUrl = imgSrc =>
+  !!(imgSrc && imgSrc?.startsWith('data:image/'));
+
+const ehUrlExterna = imgSrc => {
+  const urlSGP = clone(urlBase).replace('/api', '');
+
+  return imgSrc && !imgSrc?.startsWith(urlSGP);
+};
+
+export const temBinarioOuUrlExterna = imgSrc =>
+  temBinarioNaUrl(imgSrc) || ehUrlExterna(imgSrc);
+
+const uploadImagemManual = async file => {
+  const fmData = new FormData();
+  const config = {
+    headers: {
+      'content-type': 'multipart/form-data',
+    },
+  };
+  fmData.append('file', file);
+
+  const resposta = await api
+    .post('v1/arquivos/upload', fmData, config)
+    .catch(e => erros(e));
+
+  return resposta?.data?.data?.path;
+};
+
+const converterImagemURLExternaParaInterna = async urlExterna => {
+  const localFile = urlExterna?.startsWith('file:///');
+
+  if (localFile) return urlExterna;
+
+  return fetch(urlExterna).then(async res => {
+    return res.blob().then(blob => {
+      const file = new File([blob], 'file.png', { type: 'image/png' });
+      return uploadImagemManual(file);
+    });
+  });
+};
+
+export const validarUploadImagensExternasEBinarias = async (
+  html,
+  imagensCentralizadas
+) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  const imgElements = doc.getElementsByTagName('img');
+
+  const replacementPromises = [];
+
+  for (let i = 0; i < imgElements?.length; i++) {
+    const imgSrc = imgElements[i].getAttribute('src');
+
+    const binarioOuUrlExterna = temBinarioOuUrlExterna(imgSrc);
+
+    if (binarioOuUrlExterna) {
+      let newSrcPromise = new Promise(resolve => resolve(''));
+
+      newSrcPromise = converterImagemURLExternaParaInterna(imgSrc);
+
+      replacementPromises.push(newSrcPromise);
+
+      // Atualizar o DOM posteriormente com a URL obtida assincronamente
+      newSrcPromise.then(newSrc => {
+        imgElements[i].setAttribute('src', newSrc);
+
+        const styleAttribute = `max-width: 100%; max-height: 700px; object-fit: cover; object-position: bottom; ${
+          imagensCentralizadas ? 'display: block; margin: auto;' : ''
+        }`;
+
+        imgElements[i].setAttribute('style', styleAttribute);
+      });
+    }
+  }
+
+  const resposta = await Promise.all(replacementPromises).catch(e => erros(e));
+
+  if (resposta?.length) {
+    return doc.documentElement.innerHTML;
+  }
+
+  return html;
+};
 
 let CHANGE_DEBOUNCE_FLAG;
 const TAMANHO_MAXIMO_UPLOAD_MB = 10;
@@ -78,105 +165,6 @@ const JoditEditor = forwardRef((props, ref) => {
         permiteInserirArquivo ? 'file,' : ''
       }table,link,align,undo,redo`
     : '';
-
-  const uploadImagemManual = async file => {
-    const fmData = new FormData();
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    fmData.append('file', file);
-
-    const resposta = await api
-      .post('v1/arquivos/upload', fmData, config)
-      .catch(e => erros(e));
-
-    return resposta?.data?.data?.path;
-  };
-
-  const converterImagemURLExternaParaInterna = async urlExterna => {
-    return fetch(urlExterna).then(async res => {
-      return res.blob().then(blob => {
-        const file = new File([blob], 'file.png', { type: 'image/png' });
-        return uploadImagemManual(file);
-      });
-    });
-  };
-
-  const converterUploadImagemBinariaParaURL = async base64String => {
-    const base64WithoutHeader = base64String.replace(
-      /^data:[a-zA-Z0-9]+\/[a-zA-Z0-9]+;base64,/,
-      ''
-    );
-
-    // Converte a string Base64 para um array de bytes
-    const byteCharacters = atob(base64WithoutHeader);
-
-    // Converte o array de bytes para um array de números
-    const byteArray = new Uint8Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteArray[i] = byteCharacters.charCodeAt(i);
-    }
-
-    // Cria um Blob a partir do array de números
-    const blob = new Blob([byteArray], 'file.png', { type: 'image/png' });
-
-    return uploadImagemManual(blob);
-  };
-
-  const replaceImageDataSrc = async html => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-
-    const imgElements = doc.getElementsByTagName('img');
-
-    const replacementPromises = [];
-
-    for (let i = 0; i < imgElements?.length; i++) {
-      const imgSrc = imgElements[i].getAttribute('src');
-      const temBinario = !!(imgSrc && imgSrc?.startsWith('data:image/'));
-
-      const urlSGP = url.replace('/api', '');
-      const urlExterna = imgSrc && !imgSrc?.startsWith(urlSGP);
-
-      if (temBinario || urlExterna) {
-        let newSrcPromise = new Promise(resolve => resolve(''));
-
-        if (temBinario) {
-          newSrcPromise = converterUploadImagemBinariaParaURL(imgSrc);
-        }
-
-        if (urlExterna) {
-          newSrcPromise = converterImagemURLExternaParaInterna(imgSrc);
-        }
-
-        replacementPromises.push(newSrcPromise);
-
-        // Atualizar o DOM posteriormente com a URL obtida assincronamente
-        newSrcPromise.then(newSrc => {
-          imgElements[i].setAttribute('src', newSrc);
-
-          const styleAttribute = `max-width: 100%; max-height: 700px; object-fit: cover; object-position: bottom; ${
-            imagensCentralizadas ? 'display: block; margin: auto;' : ''
-          }`;
-
-          imgElements[i].setAttribute('style', styleAttribute);
-        });
-      }
-    }
-
-    const resposta = await Promise.all(replacementPromises).catch(e =>
-      erros(e)
-    );
-
-    if (resposta?.length) {
-      return doc.documentElement.innerHTML;
-    }
-
-    return html;
-  };
 
   const changeHandler = valor => {
     if (onChange) {
@@ -231,7 +219,6 @@ const JoditEditor = forwardRef((props, ref) => {
       item.type.includes('video')
     );
 
-    const urlSGP = url.replace('/api', '');
     const qtdElementoImg = temImagemNosDadosColados.length;
     const qtdElementoVideo = temVideoNosDadosColados.length;
 
@@ -241,17 +228,6 @@ const JoditEditor = forwardRef((props, ref) => {
       erro('Não é possível inserir arquivo');
 
       return false;
-    }
-
-    if (qtdElementoImg) {
-      const regex = new RegExp(`<img[^>]*src=".*?${urlSGP}/temp/.*?"[^>]*>`);
-      // eslint-disable-next-line no-undef
-      const temImagemPastaTemporaria = dadosColadoHTML?.match(regex) || [];
-
-      if (temImagemPastaTemporaria.length) {
-        erro('Não é possível inserir este arquivo');
-        return false;
-      }
     }
 
     if (qtdElementoImg && qtdMaxImg) {
@@ -284,6 +260,7 @@ const JoditEditor = forwardRef((props, ref) => {
     countHTMLChars: false,
     buttons: BOTOES_PADRAO,
     showWordsCounter: false,
+    showCharsCounter: false,
     buttonsXS: BOTOES_PADRAO,
     buttonsMD: BOTOES_PADRAO,
     buttonsSM: BOTOES_PADRAO,
@@ -293,8 +270,8 @@ const JoditEditor = forwardRef((props, ref) => {
     enableDragAndDropFileToEditor: true,
     askBeforePasteHTML: valideClipboardHTML,
     // iframe: true, // TODO bug jodit-react
-    defaultActionOnPaste: 'insert_clear_html',
-    defaultActionOnPasteFromWord: 'insert_as_text',
+    defaultActionOnPaste: '',
+    defaultActionOnPasteFromWord: 'insert_clear_html',
     disablePlugins: ['image-properties', disablePlugins],
     iframeStyle: `${iframeStyle} img{max-width: 100%;max-height: 700px;object-fit: cover;}`,
     style: {
@@ -544,12 +521,6 @@ const JoditEditor = forwardRef((props, ref) => {
               return false;
             }
 
-            const dadosColadoTexto = e?.clipboardData?.getData?.('text');
-
-            replaceImageDataSrc(dadosColadoTexto).then(newValue => {
-              textArea.current.setEditorValue(newValue);
-            });
-
             return true;
           });
 
@@ -565,9 +536,11 @@ const JoditEditor = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (textArea?.current?.setEditorValue) {
-      replaceImageDataSrc(value).then(newValue => {
-        textArea.current.setEditorValue(newValue);
-      });
+      validarUploadImagensExternasEBinarias(value, imagensCentralizadas).then(
+        newValue => {
+          textArea.current.setEditorValue(newValue);
+        }
+      );
 
       bloquearTraducaoNavegador();
     }

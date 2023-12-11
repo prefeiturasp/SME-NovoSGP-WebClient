@@ -16,6 +16,7 @@ import {
   setDadosApanhadoGeral,
   setExibirLoaderGeralAcompanhamentoAprendizagem,
   setExibirLoaderAlunosAcompanhamentoAprendizagem,
+  setExibirLoaderAtualizandoUrlImagensRAA,
 } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import {
   resetarDadosRegistroIndividual,
@@ -44,6 +45,10 @@ import ModalErrosAcompanhamentoAprendizagem from './modalErrosAcompanhamentoApre
 import Button from '~/componentes/button';
 import { Colors, ModalConteudoHtml, Label } from '~/componentes';
 import AlertaDentroPeriodo from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/AlertaPeriodoEncerrado';
+import {
+  temBinarioOuUrlExterna,
+  validarUploadImagensExternasEBinarias,
+} from '~/componentes/jodit-editor/joditEditor';
 
 const AcompanhamentoAprendizagem = () => {
   const dispatch = useDispatch();
@@ -251,6 +256,65 @@ const AcompanhamentoAprendizagem = () => {
             );
 
         if (retorno?.data) {
+          const dadosEstudantesPromises = [];
+          dispatch(setExibirLoaderAtualizandoUrlImagensRAA(true));
+
+          retorno.data.forEach(estudante => {
+            const estudantePromise =
+              ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
+                turmaSelecionada?.id,
+                estudante?.codigoEOL,
+                semestreConsulta,
+                componenteCurricularSelecionado
+              );
+
+            dadosEstudantesPromises.push(estudantePromise);
+
+            estudantePromise.then(async dadosEstudante => {
+              let percursoIndividual = dadosEstudante?.percursoIndividual;
+
+              if (percursoIndividual) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(
+                  percursoIndividual,
+                  'text/html'
+                );
+
+                const imgElements = doc.getElementsByTagName('img');
+                if (imgElements?.length) {
+                  const arrayImgElements = Array.from(imgElements);
+
+                  const binarioOuUrlExterna = arrayImgElements?.find(img => {
+                    return temBinarioOuUrlExterna(img?.src);
+                  });
+
+                  if (binarioOuUrlExterna) {
+                    percursoIndividual =
+                      await validarUploadImagensExternasEBinarias(
+                        percursoIndividual
+                      );
+
+                    const params = {
+                      ...dadosEstudante,
+                      turmaId: turmaSelecionada?.id,
+                      semestre: semestreConsulta,
+                      alunoCodigo: estudante?.codigoEOL,
+                      percursoIndividual,
+                    };
+
+                    await ServicoAcompanhamentoAprendizagem.salvarAcompanhamentoAprendizagem(
+                      params
+                    );
+                  }
+                }
+              }
+            });
+          });
+
+          await Promise.all(dadosEstudantesPromises).catch(e => erros(e));
+
+          dispatch(setExibirLoaderAtualizandoUrlImagensRAA(false));
+
           dispatch(setAlunosAcompanhamentoAprendizagem(retorno.data));
           const primeiroEstudanteAtivo = retorno.data.find(
             item => item.situacaoCodigo === situacaoMatriculaAluno.Ativo
@@ -265,7 +329,13 @@ const AcompanhamentoAprendizagem = () => {
       }
     },
 
-    [anoLetivo, dispatch, turma, resetarInfomacoes]
+    [
+      anoLetivo,
+      dispatch,
+      turma,
+      resetarInfomacoes,
+      componenteCurricularSelecionado,
+    ]
   );
 
   useEffect(() => {
