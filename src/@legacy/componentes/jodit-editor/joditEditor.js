@@ -10,6 +10,7 @@ import { erro, erros } from '~/servicos/alertas';
 import { urlBase } from '~/servicos/variaveis';
 import { Base } from '../colors';
 import Label from '../label';
+import { clone } from 'lodash';
 
 const Campo = styled.div`
   .jodit-container {
@@ -36,6 +37,92 @@ const Campo = styled.div`
     padding-inline-start: 40px;
   }
 `;
+
+const temBinarioNaUrl = imgSrc =>
+  !!(imgSrc && imgSrc?.startsWith('data:image/'));
+
+const ehUrlExterna = imgSrc => {
+  const urlSGP = clone(urlBase).replace('/api', '');
+
+  return imgSrc && !imgSrc?.startsWith(urlSGP);
+};
+
+export const temBinarioOuUrlExterna = imgSrc =>
+  temBinarioNaUrl(imgSrc) || ehUrlExterna(imgSrc);
+
+const uploadImagemManual = async file => {
+  const fmData = new FormData();
+  const config = {
+    headers: {
+      'content-type': 'multipart/form-data',
+    },
+  };
+  fmData.append('file', file);
+
+  const resposta = await api
+    .post('v1/arquivos/upload', fmData, config)
+    .catch(e => erros(e));
+
+  return resposta?.data?.data?.path;
+};
+
+const converterImagemURLExternaParaInterna = async urlExterna => {
+  const localFile = urlExterna?.startsWith('file:///');
+
+  if (localFile) return urlExterna;
+
+  return fetch(urlExterna).then(async res => {
+    return res.blob().then(blob => {
+      const file = new File([blob], 'file.png', { type: 'image/png' });
+      return uploadImagemManual(file);
+    });
+  });
+};
+
+export const validarUploadImagensExternasEBinarias = async (
+  html,
+  imagensCentralizadas
+) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  const imgElements = doc.getElementsByTagName('img');
+
+  const replacementPromises = [];
+
+  for (let i = 0; i < imgElements?.length; i++) {
+    const imgSrc = imgElements[i].getAttribute('src');
+
+    const binarioOuUrlExterna = temBinarioOuUrlExterna(imgSrc);
+
+    if (binarioOuUrlExterna) {
+      let newSrcPromise = new Promise(resolve => resolve(''));
+
+      newSrcPromise = converterImagemURLExternaParaInterna(imgSrc);
+
+      replacementPromises.push(newSrcPromise);
+
+      // Atualizar o DOM posteriormente com a URL obtida assincronamente
+      newSrcPromise.then(newSrc => {
+        imgElements[i].setAttribute('src', newSrc);
+
+        const styleAttribute = `max-width: 100%; max-height: 700px; object-fit: cover; object-position: bottom; ${
+          imagensCentralizadas ? 'display: block; margin: auto;' : ''
+        }`;
+
+        imgElements[i].setAttribute('style', styleAttribute);
+      });
+    }
+  }
+
+  const resposta = await Promise.all(replacementPromises).catch(e => erros(e));
+
+  if (resposta?.length) {
+    return doc.documentElement.innerHTML;
+  }
+
+  return html;
+};
 
 let CHANGE_DEBOUNCE_FLAG;
 const TAMANHO_MAXIMO_UPLOAD_MB = 10;
@@ -78,82 +165,6 @@ const JoditEditor = forwardRef((props, ref) => {
         permiteInserirArquivo ? 'file,' : ''
       }table,link,align,undo,redo`
     : '';
-
-  const uploadImagemManual = async file => {
-    const fmData = new FormData();
-    const config = {
-      headers: {
-        'content-type': 'multipart/form-data',
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    fmData.append('file', file);
-
-    const resposta = await api
-      .post('v1/arquivos/upload', fmData, config)
-      .catch(e => erros(e));
-
-    return resposta?.data?.data?.path;
-  };
-
-  const converterImagemURLExternaParaInterna = async urlExterna => {
-    const localFile = urlExterna?.startsWith('file:///');
-
-    if (localFile) return urlExterna;
-
-    return fetch(urlExterna).then(async res => {
-      return res.blob().then(blob => {
-        const file = new File([blob], 'file.png', { type: 'image/png' });
-        return uploadImagemManual(file);
-      });
-    });
-  };
-
-  const replaceImageDataSrc = async html => {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-
-    const imgElements = doc.getElementsByTagName('img');
-
-    const replacementPromises = [];
-
-    for (let i = 0; i < imgElements?.length; i++) {
-      const imgSrc = imgElements[i].getAttribute('src');
-      const temBinario = !!(imgSrc && imgSrc?.startsWith('data:image/'));
-
-      const urlSGP = url.replace('/api', '');
-      const urlExterna = !temBinario && imgSrc && !imgSrc?.startsWith(urlSGP);
-
-      if (temBinario || urlExterna) {
-        let newSrcPromise = new Promise(resolve => resolve(''));
-
-        newSrcPromise = converterImagemURLExternaParaInterna(imgSrc);
-
-        replacementPromises.push(newSrcPromise);
-
-        // Atualizar o DOM posteriormente com a URL obtida assincronamente
-        newSrcPromise.then(newSrc => {
-          imgElements[i].setAttribute('src', newSrc);
-
-          const styleAttribute = `max-width: 100%; max-height: 700px; object-fit: cover; object-position: bottom; ${
-            imagensCentralizadas ? 'display: block; margin: auto;' : ''
-          }`;
-
-          imgElements[i].setAttribute('style', styleAttribute);
-        });
-      }
-    }
-
-    const resposta = await Promise.all(replacementPromises).catch(e =>
-      erros(e)
-    );
-
-    if (resposta?.length) {
-      return doc.documentElement.innerHTML;
-    }
-
-    return html;
-  };
 
   const changeHandler = valor => {
     if (onChange) {
@@ -525,9 +536,12 @@ const JoditEditor = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (textArea?.current?.setEditorValue) {
-      replaceImageDataSrc(value).then(newValue => {
-        textArea.current.setEditorValue(newValue);
-      });
+      validarUploadImagensExternasEBinarias(value, imagensCentralizadas).then(
+        newValue => {
+          textArea.current.setEditorValue(newValue);
+        }
+      );
+      textArea.current.setEditorValue(value);
 
       bloquearTraducaoNavegador();
     }
