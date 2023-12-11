@@ -1,11 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { ROUTES } from '@/core/enum/routes';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Colors, Label, ModalConteudoHtml } from '~/componentes';
 import { AlertaPermiteSomenteTurmaInfantil } from '~/componentes-sgp';
+import AlertaDentroPeriodo from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/AlertaPeriodoEncerrado';
 import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
+import Button from '~/componentes/button';
 import Card from '~/componentes/card';
+import Loader from '~/componentes/loader';
 import SelectComponent from '~/componentes/select';
-import { ROUTES } from '@/core/enum/routes';
 import situacaoMatriculaAluno from '~/dtos/situacaoMatriculaAluno';
 import {
   limparDadosAcompanhamentoAprendizagem,
@@ -14,9 +18,8 @@ import {
   setCodigoAlunoSelecionado,
   setDadosAlunoObjectCard,
   setDadosApanhadoGeral,
-  setExibirLoaderGeralAcompanhamentoAprendizagem,
   setExibirLoaderAlunosAcompanhamentoAprendizagem,
-  setExibirLoaderAtualizandoUrlImagensRAA,
+  setExibirLoaderGeralAcompanhamentoAprendizagem,
 } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import {
   resetarDadosRegistroIndividual,
@@ -24,35 +27,23 @@ import {
   setDadosAlunoObjectCard as setDadosAlunoObjectCardRegistroIndividual,
 } from '~/redux/modulos/registroIndividual/actions';
 import {
-  ehTurmaInfantil,
   ServicoCalendarios,
   ServicoDisciplina,
+  ehTurmaInfantil,
   verificaSomenteConsulta,
 } from '~/servicos';
-import Loader from '~/componentes/loader';
-import { erros } from '~/servicos/alertas';
 import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
-import { Container } from './acompanhamentoAprendizagem.css';
+import { erros } from '~/servicos/alertas';
 import ApanhadoGeral from './DadosAcompanhamentoAprendizagem/ApanhadoGeral/apanhadoGeral';
 import BotaoGerarRelatorioAprendizagem from './DadosAcompanhamentoAprendizagem/BotaoGerarRelatorioAprendizagem/botaoGerarRelatorioAprendizagem';
 import BotaoOrdenarListaAlunos from './DadosAcompanhamentoAprendizagem/BotaoOrdenarListaAlunos/botaoOrdenarListaAlunos';
 import BotoesAcoesAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/BotoesAcoes/botoesAcoesAcompanhamentoAprendizagem';
-import DadosAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/dadosAcompanhamentoAprendizagem';
 import ObjectCardAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/ObjectCardAcompanhamentoAprendizagem/objectCardAcompanhamentoAprendizagem';
 import TabelaRetratilAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/TabelaRetratilAcompanhamentoAprendizagem/tabelaRetratilAcompanhamentoAprendizagem';
+import DadosAcompanhamentoAprendizagem from './DadosAcompanhamentoAprendizagem/dadosAcompanhamentoAprendizagem';
+import { Container } from './acompanhamentoAprendizagem.css';
 import LoaderAcompanhamentoAprendizagem from './loaderAcompanhamentoAprendizagem';
 import ModalErrosAcompanhamentoAprendizagem from './modalErrosAcompanhamentoAprendizagem';
-import Button from '~/componentes/button';
-import { Colors, ModalConteudoHtml, Label } from '~/componentes';
-import AlertaDentroPeriodo from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/AlertaPeriodoEncerrado';
-import {
-  temBinarioOuUrlExterna,
-  validarUploadImagensExternasEBinarias,
-} from '~/componentes/jodit-editor/joditEditor';
-
-const AcompanhamentoAprendizagem = () => {
-  const dispatch = useDispatch();
-
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const { turma, anoLetivo } = turmaSelecionada;
@@ -256,65 +247,6 @@ const AcompanhamentoAprendizagem = () => {
             );
 
         if (retorno?.data) {
-          const dadosEstudantesPromises = [];
-          dispatch(setExibirLoaderAtualizandoUrlImagensRAA(true));
-
-          retorno.data.forEach(estudante => {
-            const estudantePromise =
-              ServicoAcompanhamentoAprendizagem.obterAcompanhamentoEstudante(
-                turmaSelecionada?.id,
-                estudante?.codigoEOL,
-                semestreConsulta,
-                componenteCurricularSelecionado
-              );
-
-            dadosEstudantesPromises.push(estudantePromise);
-
-            estudantePromise.then(async dadosEstudante => {
-              let percursoIndividual = dadosEstudante?.percursoIndividual;
-
-              if (percursoIndividual) {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(
-                  percursoIndividual,
-                  'text/html'
-                );
-
-                const imgElements = doc.getElementsByTagName('img');
-                if (imgElements?.length) {
-                  const arrayImgElements = Array.from(imgElements);
-
-                  const binarioOuUrlExterna = arrayImgElements?.find(img => {
-                    return temBinarioOuUrlExterna(img?.src);
-                  });
-
-                  if (binarioOuUrlExterna) {
-                    percursoIndividual =
-                      await validarUploadImagensExternasEBinarias(
-                        percursoIndividual
-                      );
-
-                    const params = {
-                      ...dadosEstudante,
-                      turmaId: turmaSelecionada?.id,
-                      semestre: semestreConsulta,
-                      alunoCodigo: estudante?.codigoEOL,
-                      percursoIndividual,
-                    };
-
-                    await ServicoAcompanhamentoAprendizagem.salvarAcompanhamentoAprendizagem(
-                      params
-                    );
-                  }
-                }
-              }
-            });
-          });
-
-          await Promise.all(dadosEstudantesPromises).catch(e => erros(e));
-
-          dispatch(setExibirLoaderAtualizandoUrlImagensRAA(false));
-
           dispatch(setAlunosAcompanhamentoAprendizagem(retorno.data));
           const primeiroEstudanteAtivo = retorno.data.find(
             item => item.situacaoCodigo === situacaoMatriculaAluno.Ativo
@@ -329,13 +261,7 @@ const AcompanhamentoAprendizagem = () => {
       }
     },
 
-    [
-      anoLetivo,
-      dispatch,
-      turma,
-      resetarInfomacoes,
-      componenteCurricularSelecionado,
-    ]
+    [anoLetivo, dispatch, turma, resetarInfomacoes]
   );
 
   useEffect(() => {

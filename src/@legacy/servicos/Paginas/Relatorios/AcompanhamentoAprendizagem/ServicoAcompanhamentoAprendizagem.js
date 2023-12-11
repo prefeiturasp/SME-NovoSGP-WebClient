@@ -1,9 +1,4 @@
 import { store } from '@/core/redux';
-import { HttpStatusCode } from 'axios';
-import {
-  temBinarioOuUrlExterna,
-  validarUploadImagensExternasEBinarias,
-} from '~/componentes/jodit-editor/joditEditor';
 import {
   setAcompanhamentoAprendizagemEmEdicao,
   setApanhadoGeralEmEdicao,
@@ -286,65 +281,16 @@ class ServicoAcompanhamentoAprendizagem {
     const { dispatch } = store;
     dispatch(setExibirLoaderGeralAcompanhamentoAprendizagem(true));
     dispatch(setDadosApanhadoGeral({}));
-    const retorno = await api.get(url).catch(e => erros(e));
+    const retorno = await api
+      .get(url)
+      .catch(e => erros(e))
+      .finally(() =>
+        dispatch(setExibirLoaderGeralAcompanhamentoAprendizagem(false))
+      );
 
     if (retorno?.data) {
-      let newData = retorno.data;
-
-      let apanhadoGeral = newData?.apanhadoGeral;
-
-      if (apanhadoGeral) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(apanhadoGeral, 'text/html');
-
-        const imgElements = doc.getElementsByTagName('img');
-
-        if (imgElements?.length) {
-          const arrayImgElements = Array.from(imgElements);
-
-          const binarioOuUrlExterna = arrayImgElements?.find(img => {
-            return temBinarioOuUrlExterna(img?.src);
-          });
-
-          if (binarioOuUrlExterna) {
-            apanhadoGeral = await validarUploadImagensExternasEBinarias(
-              apanhadoGeral,
-              true
-            );
-
-            const paramsApanhadoGeral = {
-              turmaId,
-              semestre,
-              apanhadoGeral,
-              acompanhamentoTurmaId: retorno.data?.acompanhamentoTurmaId || 0,
-            };
-
-            const retornoApanhadoGeral = await this.salvarApanhadoGeral(
-              paramsApanhadoGeral
-            ).catch(e => erros(e));
-
-            const salvouApanhadoGeral =
-              retornoApanhadoGeral?.status === HttpStatusCode.Ok;
-
-            if (salvouApanhadoGeral) {
-              paramsApanhadoGeral.auditoria = retornoApanhadoGeral.data;
-              paramsApanhadoGeral.acompanhamentoTurmaId =
-                retornoApanhadoGeral.data.id;
-              paramsApanhadoGeral.apanhadoGeral =
-                retornoApanhadoGeral.data.apanhadoGeral;
-
-              newData = paramsApanhadoGeral;
-
-              dispatch(setApanhadoGeralEmEdicao(false));
-            }
-          }
-        }
-      }
-
-      dispatch(setDadosApanhadoGeral({ ...newData }));
+      dispatch(setDadosApanhadoGeral({ ...retorno.data }));
     }
-
-    dispatch(setExibirLoaderGeralAcompanhamentoAprendizagem(false));
   };
 
   gerar = params => {

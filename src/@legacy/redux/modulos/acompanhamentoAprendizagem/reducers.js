@@ -15,7 +15,6 @@ const inicial = {
   errosAcompanhamentoAprendizagem: [],
   exibirModalErrosAcompanhamentoAprendizagem: false,
   exibirLoaderAlunosAcompanhamentoAprendizagem: false,
-  exibirLoaderAtualizandoUrlImagensRAA: false,
 };
 
 export default function AcompanhamentoAprendizagem(state = inicial, action) {
@@ -115,12 +114,6 @@ export default function AcompanhamentoAprendizagem(state = inicial, action) {
         return {
           ...draft,
           exibirLoaderAlunosAcompanhamentoAprendizagem: action.payload,
-        };
-      }
-      case '@acompanhamentoAprendizagem/setExibirLoaderAtualizandoUrlImagensRAA': {
-        return {
-          ...draft,
-          exibirLoaderAtualizandoUrlImagensRAA: action.payload,
         };
       }
 

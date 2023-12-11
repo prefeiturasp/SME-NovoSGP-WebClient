@@ -72,8 +72,3 @@ export const setExibirLoaderAlunosAcompanhamentoAprendizagem = payload => ({
   type: '@acompanhamentoAprendizagem/setExibirLoaderAlunosAcompanhamentoAprendizagem',
   payload,
 });
-
-export const setExibirLoaderAtualizandoUrlImagensRAA = payload => ({
-  type: '@acompanhamentoAprendizagem/setExibirLoaderAtualizandoUrlImagensRAA',
-  payload,
-});
