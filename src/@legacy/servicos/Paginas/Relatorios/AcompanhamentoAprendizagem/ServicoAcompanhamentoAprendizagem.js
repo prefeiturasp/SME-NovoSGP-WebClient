@@ -308,7 +308,8 @@ class ServicoAcompanhamentoAprendizagem {
 
           if (binarioOuUrlExterna) {
             apanhadoGeral = await validarUploadImagensExternasEBinarias(
-              apanhadoGeral
+              apanhadoGeral,
+              true
             );
 
             const paramsApanhadoGeral = {

@@ -9,8 +9,16 @@ import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/Aco
 const CampoPercursoIndividual = () => {
   const dispatch = useDispatch();
 
-  const dadosAcompanhamentoAprendizagem = useSelector(
-    store => store.acompanhamentoAprendizagem.dadosAcompanhamentoAprendizagem
+  const percursoIndividual = useSelector(
+    store =>
+      store.acompanhamentoAprendizagem?.dadosAcompanhamentoAprendizagem
+        ?.percursoIndividual
+  );
+
+  const acompanhamentoAlunoId = useSelector(
+    store =>
+      store.acompanhamentoAprendizagem?.dadosAcompanhamentoAprendizagem
+        ?.acompanhamentoAlunoId
   );
 
   const desabilitarCamposAcompanhamentoAprendizagem = useSelector(
@@ -33,12 +41,12 @@ const CampoPercursoIndividual = () => {
   const validaPermissoes = useCallback(() => {
     const somenteConsulta = verificaSomenteConsulta(permissoesTela);
 
-    const desabilitar = dadosAcompanhamentoAprendizagem?.acompanhamentoAlunoId
+    const desabilitar = acompanhamentoAlunoId
       ? somenteConsulta || !permissoesTela.podeIncluir
       : somenteConsulta || !permissoesTela.podeAlterar;
 
     setDesabilitarCampo(desabilitar);
-  }, [dadosAcompanhamentoAprendizagem, permissoesTela]);
+  }, [acompanhamentoAlunoId, permissoesTela]);
 
   useEffect(() => {
     validaPermissoes();
@@ -55,7 +63,7 @@ const CampoPercursoIndividual = () => {
   return (
     <JoditEditor
       id="percurso-individual-editor"
-      value={dadosAcompanhamentoAprendizagem?.percursoIndividual}
+      value={percursoIndividual}
       onChange={onChange}
       readonly={desabilitarCampo}
       mensagemErro="Campo obrigatório"

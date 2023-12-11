@@ -329,7 +329,13 @@ const AcompanhamentoAprendizagem = () => {
       }
     },
 
-    [anoLetivo, dispatch, turma, resetarInfomacoes]
+    [
+      anoLetivo,
+      dispatch,
+      turma,
+      resetarInfomacoes,
+      componenteCurricularSelecionado,
+    ]
   );
 
   useEffect(() => {

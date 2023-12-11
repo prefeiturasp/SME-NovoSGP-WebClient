@@ -541,7 +541,6 @@ const JoditEditor = forwardRef((props, ref) => {
           textArea.current.setEditorValue(newValue);
         }
       );
-      textArea.current.setEditorValue(value);
 
       bloquearTraducaoNavegador();
     }
