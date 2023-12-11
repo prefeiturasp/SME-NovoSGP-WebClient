@@ -69,7 +69,8 @@ const uploadImagemManual = async file => {
 const converterImagemURLExternaParaInterna = async urlExterna => {
   const localFile =
     urlExterna?.startsWith('file:///') ||
-    urlExterna?.startsWith('blob:https://web.whatsapp.com/');
+    urlExterna?.startsWith('blob:https://web.whatsapp.com/') ||
+    urlExterna?.startsWith(' https://attachment.outlook.live.net');
 
   if (localFile) return urlExterna;
 
@@ -108,7 +109,7 @@ export const validarUploadImagensExternasEBinarias = async (
       newSrcPromise.then(newSrc => {
         imgElements[i].setAttribute('src', newSrc);
 
-        const styleAttribute = `max-width: 100%; max-height: 700px; object-fit: cover; object-position: bottom; ${
+        const styleAttribute = `max-width: 100%; height: 700px; object-fit: cover; object-position: bottom; ${
           imagensCentralizadas ? 'display: block; margin: auto;' : ''
         }`;
 
@@ -372,7 +373,7 @@ const JoditEditor = forwardRef((props, ref) => {
             textArea.current.selection.insertHTML(
               `<img src="${
                 dados.path
-              }" style="max-width: 100%; max-height: 700px; object-fit: cover; object-position: bottom; ${
+              }" style="max-width: 100%; height: 700px; object-fit: cover; object-position: bottom; ${
                 imagensCentralizadas ? 'display: block; margin: auto;' : ''
               }"/>`
             );
