@@ -2,7 +2,7 @@ import { store } from '@/core/redux';
 import { HttpStatusCode } from 'axios';
 import {
   temBinarioOuUrlExterna,
-  validarUploadImagensExternasEBinariasconver,
+  validarUploadImagensExternasEBinarias,
 } from '~/componentes/jodit-editor/joditEditor';
 import {
   setAcompanhamentoAprendizagemEmEdicao,
@@ -307,7 +307,7 @@ class ServicoAcompanhamentoAprendizagem {
           });
 
           if (binarioOuUrlExterna) {
-            apanhadoGeral = await validarUploadImagensExternasEBinariasconver(
+            apanhadoGeral = await validarUploadImagensExternasEBinarias(
               apanhadoGeral
             );
 

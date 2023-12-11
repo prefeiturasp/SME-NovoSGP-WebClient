@@ -47,7 +47,7 @@ import { Colors, ModalConteudoHtml, Label } from '~/componentes';
 import AlertaDentroPeriodo from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/componentes/DiaCompleto/componentes/AlertaPeriodoEncerrado';
 import {
   temBinarioOuUrlExterna,
-  validarUploadImagensExternasEBinariasconver,
+  validarUploadImagensExternasEBinarias,
 } from '~/componentes/jodit-editor/joditEditor';
 
 const AcompanhamentoAprendizagem = () => {
@@ -290,7 +290,7 @@ const AcompanhamentoAprendizagem = () => {
 
                   if (binarioOuUrlExterna) {
                     percursoIndividual =
-                      await validarUploadImagensExternasEBinariasconver(
+                      await validarUploadImagensExternasEBinarias(
                         percursoIndividual
                       );
 
