@@ -67,7 +67,9 @@ const uploadImagemManual = async file => {
 };
 
 const converterImagemURLExternaParaInterna = async urlExterna => {
-  const localFile = urlExterna?.startsWith('file:///');
+  const localFile =
+    urlExterna?.startsWith('file:///') ||
+    urlExterna?.startsWith('blob:https://web.whatsapp.com/');
 
   if (localFile) return urlExterna;
 
