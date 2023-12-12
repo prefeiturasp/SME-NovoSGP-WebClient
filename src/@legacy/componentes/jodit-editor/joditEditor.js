@@ -71,7 +71,6 @@ const converterImagemURLExternaParaInterna = async urlExterna => {
     urlExterna?.startsWith('file:///') ||
     urlExterna?.startsWith('blob:https://web.whatsapp.com/') ||
     urlExterna?.startsWith('https://attachment.outlook.live.net') ||
-    urlExterna?.startsWith('https://lh3.googleusercontent.com/') ||
     urlExterna?.startsWith('https://accounts.google.com');
 
   if (localFile) return urlExterna;
