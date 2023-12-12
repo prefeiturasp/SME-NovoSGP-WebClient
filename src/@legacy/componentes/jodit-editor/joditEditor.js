@@ -5,10 +5,12 @@ import 'jodit/build/jodit.min.css';
 import PropTypes from 'prop-types';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { erro } from '~/servicos/alertas';
+import { api } from '~/servicos';
+import { erro, erros } from '~/servicos/alertas';
 import { urlBase } from '~/servicos/variaveis';
 import { Base } from '../colors';
 import Label from '../label';
+import { clone } from 'lodash';
 
 const Campo = styled.div`
   .jodit-container {
@@ -35,6 +37,96 @@ const Campo = styled.div`
     padding-inline-start: 40px;
   }
 `;
+
+const temBinarioNaUrl = imgSrc =>
+  !!(imgSrc && imgSrc?.startsWith('data:image/'));
+
+const ehUrlExterna = imgSrc => {
+  const urlSGP = clone(urlBase).replace('/api', '');
+
+  return imgSrc && !imgSrc?.startsWith(urlSGP);
+};
+
+export const temBinarioOuUrlExterna = imgSrc =>
+  temBinarioNaUrl(imgSrc) || ehUrlExterna(imgSrc);
+
+const uploadImagemManual = async file => {
+  const fmData = new FormData();
+  const config = {
+    headers: {
+      'content-type': 'multipart/form-data',
+    },
+  };
+  fmData.append('file', file);
+
+  const resposta = await api
+    .post('v1/arquivos/upload', fmData, config)
+    .catch(e => erros(e));
+
+  return resposta?.data?.data?.path;
+};
+
+const converterImagemURLExternaParaInterna = async urlExterna => {
+  const localFile =
+    urlExterna?.startsWith('file:///') ||
+    urlExterna?.startsWith('blob:https://web.whatsapp.com/') ||
+    urlExterna?.startsWith('https://attachment.outlook.live.net') ||
+    urlExterna?.startsWith('https://accounts.google.com');
+
+  if (localFile) return urlExterna;
+
+  return fetch(urlExterna).then(async res => {
+    return res.blob().then(blob => {
+      const file = new File([blob], 'file.png', { type: 'image/png' });
+      return uploadImagemManual(file);
+    });
+  });
+};
+
+export const validarUploadImagensExternasEBinarias = async (
+  html,
+  imagensCentralizadas
+) => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  const imgElements = doc.getElementsByTagName('img');
+
+  const replacementPromises = [];
+
+  for (let i = 0; i < imgElements?.length; i++) {
+    const imgSrc = imgElements[i].getAttribute('src');
+
+    const binarioOuUrlExterna = temBinarioOuUrlExterna(imgSrc);
+
+    if (binarioOuUrlExterna) {
+      let newSrcPromise = new Promise(resolve => resolve(''));
+
+      newSrcPromise = converterImagemURLExternaParaInterna(imgSrc);
+
+      replacementPromises.push(newSrcPromise);
+
+      // Atualizar o DOM posteriormente com a URL obtida assincronamente
+      newSrcPromise.then(newSrc => {
+        imgElements[i].setAttribute('src', newSrc);
+
+        const styleAttribute = `max-width: 100%; height: auto; min-height: 100%; object-fit: cover; object-position: bottom; ${
+          imagensCentralizadas ? 'display: block; margin: auto;' : ''
+        }`;
+
+        imgElements[i].setAttribute('style', styleAttribute);
+      });
+    }
+  }
+
+  const resposta = await Promise.all(replacementPromises).catch(e => erros(e));
+
+  if (resposta?.length) {
+    return doc.documentElement.innerHTML;
+  }
+
+  return html;
+};
 
 let CHANGE_DEBOUNCE_FLAG;
 const TAMANHO_MAXIMO_UPLOAD_MB = 10;
@@ -131,7 +223,6 @@ const JoditEditor = forwardRef((props, ref) => {
       item.type.includes('video')
     );
 
-    const spgURL = url.replace('/api', '');
     const qtdElementoImg = temImagemNosDadosColados.length;
     const qtdElementoVideo = temVideoNosDadosColados.length;
 
@@ -141,17 +232,6 @@ const JoditEditor = forwardRef((props, ref) => {
       erro('Não é possível inserir arquivo');
 
       return false;
-    }
-
-    if (qtdElementoImg) {
-      const regex = new RegExp(`<img[^>]*src=".*?${spgURL}/temp/.*?"[^>]*>`);
-      // eslint-disable-next-line no-undef
-      const temImagemPastaTemporaria = dadosColadoHTML?.match(regex) || [];
-
-      if (temImagemPastaTemporaria.length) {
-        erro('Não é possível inserir este arquivo');
-        return false;
-      }
     }
 
     if (qtdElementoImg && qtdMaxImg) {
@@ -184,6 +264,7 @@ const JoditEditor = forwardRef((props, ref) => {
     countHTMLChars: false,
     buttons: BOTOES_PADRAO,
     showWordsCounter: false,
+    showCharsCounter: false,
     buttonsXS: BOTOES_PADRAO,
     buttonsMD: BOTOES_PADRAO,
     buttonsSM: BOTOES_PADRAO,
@@ -193,8 +274,8 @@ const JoditEditor = forwardRef((props, ref) => {
     enableDragAndDropFileToEditor: true,
     askBeforePasteHTML: valideClipboardHTML,
     // iframe: true, // TODO bug jodit-react
-    defaultActionOnPaste: 'insert_clear_html',
-    defaultActionOnPasteFromWord: 'insert_as_text',
+    defaultActionOnPaste: '',
+    defaultActionOnPasteFromWord: 'insert_clear_html',
     disablePlugins: ['image-properties', disablePlugins],
     iframeStyle: `${iframeStyle} img{max-width: 100%;max-height: 700px;object-fit: cover;}`,
     style: {
@@ -293,7 +374,7 @@ const JoditEditor = forwardRef((props, ref) => {
             textArea.current.selection.insertHTML(
               `<img src="${
                 dados.path
-              }" style="max-width: 100%; max-height: 700px; object-fit: cover; object-position: bottom; ${
+              }" style="max-width: 100%; height: auto; min-height: 100%; object-fit: cover; object-position: bottom; ${
                 imagensCentralizadas ? 'display: block; margin: auto;' : ''
               }"/>`
             );
@@ -459,7 +540,11 @@ const JoditEditor = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (textArea?.current?.setEditorValue) {
-      textArea.current.setEditorValue(value);
+      validarUploadImagensExternasEBinarias(value, imagensCentralizadas).then(
+        newValue => {
+          textArea.current.setEditorValue(newValue);
+        }
+      );
 
       bloquearTraducaoNavegador();
     }
