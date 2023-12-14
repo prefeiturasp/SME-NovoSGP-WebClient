@@ -28,7 +28,12 @@ const BtnReabrirEncaminhamentoNAAPA = () => {
   const codigoSituacaoMatricula =
     dadosEncaminhamentoNAAPA?.aluno?.codigoSituacaoMatricula;
 
-  const alunoAtivo = codigoSituacaoMatricula === situacaoMatriculaAluno.Ativo;
+  const alunoAtivo =
+    codigoSituacaoMatricula === situacaoMatriculaAluno.Ativo ||
+    situacaoMatriculaAluno.PendenteRematricula ||
+    situacaoMatriculaAluno.Rematriculado ||
+    situacaoMatriculaAluno.SemContinuidade ||
+    situacaoMatriculaAluno.Concluido;
 
   const [exibirLoaderReabrir, setExibirLoaderReabrir] = useState(false);
 
