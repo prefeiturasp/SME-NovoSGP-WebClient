@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { ROUTES } from '@/core/enum/routes';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { JoditEditor } from '~/componentes';
-import { ROUTES } from '@/core/enum/routes';
 import { setApanhadoGeralEmEdicao } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import { verificaSomenteConsulta } from '~/servicos';
 import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
@@ -9,20 +9,22 @@ import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/Aco
 const CampoApanhadoGeral = () => {
   const dispatch = useDispatch();
 
-  const dadosApanhadoGeral = useSelector(
-    store => store.acompanhamentoAprendizagem.dadosApanhadoGeral
+  const acompanhamentoAprendizagem = useSelector(
+    store => store.acompanhamentoAprendizagem
   );
 
-  const qtdMaxImagensCampoPercursoColetivo = useSelector(
-    store =>
-      store.acompanhamentoAprendizagem?.qtdMaxImagensCampoPercursoColetivo
-  );
+  const dadosApanhadoGeral = acompanhamentoAprendizagem?.dadosApanhadoGeral;
+
+  const qtdMaxImagensCampoPercursoColetivo =
+    acompanhamentoAprendizagem?.qtdMaxImagensCampoPercursoColetivo;
+
+  const apanhadoGeralEmEdicao =
+    acompanhamentoAprendizagem?.apanhadoGeralEmEdicao;
 
   const usuario = useSelector(store => store.usuario);
 
   const permissoesTela = usuario.permissoes[ROUTES.ACOMPANHAMENTO_APRENDIZAGEM];
 
-  const [valorApanhadoGeral, setValorApanhadoGeral] = useState();
   const [desabilitarCampo, setDesabilitarCampo] = useState(false);
 
   const validaPermissoes = useCallback(() => {
@@ -50,28 +52,18 @@ const CampoApanhadoGeral = () => {
         .desabilitarCamposAcompanhamentoAprendizagem
   );
 
-  const validarSeTemErro = (valorHtml, texto) => {
-    return !valorHtml || !texto;
-  };
-
-  useEffect(() => {
-    if (dadosApanhadoGeral) {
-      setValorApanhadoGeral(dadosApanhadoGeral?.apanhadoGeral);
-    }
-  }, [dadosApanhadoGeral]);
-
   return (
     <JoditEditor
       id="percurso-coletivo-turma-editor"
-      value={valorApanhadoGeral}
+      value={dadosApanhadoGeral?.apanhadoGeral}
       onChange={onChange}
       readonly={desabilitarCampo}
       permiteVideo={false}
       qtdMaxImg={qtdMaxImagensCampoPercursoColetivo}
       imagensCentralizadas
       desabilitar={desabilitarCamposAcompanhamentoAprendizagem}
-      validarSeTemErro={validarSeTemErro}
       mensagemErro="Campo obrigatório"
+      temErro={apanhadoGeralEmEdicao && !dadosApanhadoGeral?.apanhadoGeral}
     />
   );
 };
