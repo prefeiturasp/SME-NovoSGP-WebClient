@@ -11,6 +11,7 @@ import { validateMessages } from '@/core/constants/validate-messages';
 import { ROUTES } from '@/core/enum/routes';
 import { Checkbox, Col, Form, Input, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -26,6 +27,8 @@ const ListCadastroABAE: React.FC = () => {
   const podeIncluir = permissoes?.[ROUTES.CADASTRO_ABAE]?.podeIncluir;
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
+
+  const anoAtual = dayjs().year();
 
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
@@ -62,7 +65,7 @@ const ListCadastroABAE: React.FC = () => {
           layout="vertical"
           autoComplete="off"
           validateMessages={validateMessages}
-          initialValues={{ anoLetivo: 2023, consideraHistorico: false, situacao: true }}
+          initialValues={{ anoLetivo: anoAtual, consideraHistorico: false, situacao: true }}
         >
           <Row gutter={24}>
             <Form.Item name="consideraHistorico" valuePropName="checked" hidden>

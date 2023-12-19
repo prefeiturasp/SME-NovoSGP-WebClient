@@ -8,7 +8,7 @@ import SelectAnoLetivo from '@/components/sgp/inputs/form/anoLetivo';
 import DataFim from '@/components/sgp/inputs/form/data-fim';
 import DataInicio from '@/components/sgp/inputs/form/data-inicio';
 import SelectDRE from '@/components/sgp/inputs/form/dre';
-import RadioEntrouContatoFamiliaPor from '@/components/sgp/inputs/form/entrou-contato-familia-por';
+import SelectEntrouContatoFamiliaPor from '@/components/sgp/inputs/form/entrou-contato-familia-por';
 import CheckboxExibirHistorico from '@/components/sgp/inputs/form/exibir-historico';
 import SelectModalidade from '@/components/sgp/inputs/form/modalidade';
 import SelectSemestre from '@/components/sgp/inputs/form/semestre';
@@ -17,13 +17,12 @@ import SelectUE from '@/components/sgp/inputs/form/ue';
 import { validateMessages } from '@/core/constants/validate-messages';
 import { ROUTES } from '@/core/enum/routes';
 import { Col, Form, Input, Row } from 'antd';
-import { useForm } from 'antd/es/form/Form';
+import { useForm, useWatch } from 'antd/es/form/Form';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { verificaSomenteConsulta } from '~/servicos';
 import ListaPaginadaBuscaAtivaRegistroAcoes from './lista-paginada';
-import { OrdemProcedimentoRealizadoEnum } from '@/core/enum/ordem-procedimento-realizado-enum';
 
 const BuscaAtivaRegistroAcoesList: React.FC = () => {
   const navigate = useNavigate();
@@ -36,6 +35,8 @@ const BuscaAtivaRegistroAcoesList: React.FC = () => {
   const podeIncluir = permissoesTela?.podeIncluir;
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
+
+  const turma = useWatch('turma', form);
 
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
@@ -74,7 +75,6 @@ const BuscaAtivaRegistroAcoesList: React.FC = () => {
           validateMessages={validateMessages}
           initialValues={{
             consideraHistorico: false,
-            ordemProcedimentoRealizado: OrdemProcedimentoRealizadoEnum.Nenhum,
           }}
         >
           <Row gutter={[16, 8]}>
@@ -125,55 +125,46 @@ const BuscaAtivaRegistroAcoesList: React.FC = () => {
             </Col>
           </Row>
 
-          <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
-            {() => {
-              const turma = form.getFieldValue('turma');
-              const disabled = !turma?.value;
+          <Row gutter={[16, 8]}>
+            <Col xs={24} md={12}>
+              <Form.Item
+                label="Nome da Criança/Estudante"
+                name="nomeEstudanteCrianca"
+                rules={[{ min: 3 }]}
+              >
+                <Input
+                  type="text"
+                  placeholder="Nome da Criança/Estudante"
+                  id={SGP_INPUT_NOME}
+                  disabled={!turma?.value}
+                  allowClear
+                  prefix={<i className="fa fa-search fa-lg" />}
+                />
+              </Form.Item>
+            </Col>
 
-              return (
-                <Row gutter={[16, 8]}>
-                  <Col xs={24} md={12}>
-                    <Form.Item
-                      label="Nome da Criança/Estudante"
-                      name="nomeEstudanteCrianca"
-                      rules={[{ min: 3 }]}
-                    >
-                      <Input
-                        type="text"
-                        placeholder="Nome da Criança/Estudante"
-                        id={SGP_INPUT_NOME}
-                        disabled={disabled}
-                        allowClear
-                        prefix={<i className="fa fa-search fa-lg" />}
-                      />
-                    </Form.Item>
-                  </Col>
+            <Col xs={24} sm={12} md={6}>
+              <DataInicio
+                formItemProps={{ label: 'Período' }}
+                datePickerProps={{ disabled: !turma?.value }}
+                desabilitarDataFutura
+                validarInicioMaiorQueFim
+              />
+            </Col>
 
-                  <Col xs={24} sm={12} md={6}>
-                    <DataInicio
-                      formItemProps={{ label: 'Período' }}
-                      datePickerProps={{ disabled }}
-                      desabilitarDataFutura
-                      validarInicioMaiorQueFim
-                    />
-                  </Col>
+            <Col xs={24} sm={12} md={6}>
+              <DataFim
+                formItemProps={{ label: ' ' }}
+                datePickerProps={{ disabled: !turma?.value }}
+                desabilitarDataFutura
+                validarFimMenorQueInicio
+              />
+            </Col>
 
-                  <Col xs={24} sm={12} md={6}>
-                    <DataFim
-                      formItemProps={{ label: ' ' }}
-                      datePickerProps={{ disabled }}
-                      desabilitarDataFutura
-                      validarFimMenorQueInicio
-                    />
-                  </Col>
-
-                  <Col xs={24} sm={16} md={12}>
-                    <RadioEntrouContatoFamiliaPor radioGroupProps={{ disabled }} />
-                  </Col>
-                </Row>
-              );
-            }}
-          </Form.Item>
+            <Col xs={24} md={12} lg={8}>
+              <SelectEntrouContatoFamiliaPor selectProps={{ disabled: !turma?.value }} />
+            </Col>
+          </Row>
 
           <Row>
             <Col xs={24}>

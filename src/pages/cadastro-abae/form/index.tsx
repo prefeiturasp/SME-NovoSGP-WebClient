@@ -40,6 +40,7 @@ import { ROUTES } from '@/core/enum/routes';
 import abaeService from '@/core/services/abae-service';
 import { Checkbox, Col, Form, Input, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -57,6 +58,8 @@ const FormCadastroABAE: React.FC = () => {
   const id = paramsRoute?.id || 0;
 
   const [formInitialValues, setFormInitialValues] = useState<CadastroAcessoABAEFormDto>();
+
+  const anoAtual = dayjs().year();
 
   const auditoria: any = {
     criadoPor: formInitialValues?.criadoPor,
@@ -176,7 +179,7 @@ const FormCadastroABAE: React.FC = () => {
         onFinish={salvar}
         validateMessages={validateMessages}
         initialValues={{
-          anoLetivo: 2023,
+          anoLetivo: anoAtual,
           consideraHistorico: false,
           situacao: true,
           ...formInitialValues,

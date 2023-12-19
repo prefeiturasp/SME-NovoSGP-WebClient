@@ -18,10 +18,10 @@ import _ from 'lodash';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Base, Button, Colors, DataTable } from '~/componentes';
-import RelatorioDinamicoNAAPACardTotalizador from './relatorioDinamicoNAAPACardTotalizador';
-import RelatorioDinamicoNAAPAContext from './relatorioDinamicoNAAPAContext';
+import RelatorioDinamicoNAAPACardTotalizador from '../relatorioDinamicoNAAPACardTotalizador';
+import RelatorioDinamicoNAAPAContext from '../relatorioDinamicoNAAPAContext';
 
-const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
+const RelatorioDinamicoNAAPALista = ({ form, dadosSecoes }) => {
   const consideraHistorico = form.values?.consideraHistorico;
   const anoLetivo = form.values?.anoLetivo;
   const dreCodigo = form.values?.dreCodigo;
@@ -29,7 +29,6 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
   const ueCodigo = form.values?.ueCodigo;
   const listaUes = form.values?.listaUes;
   const modalidade = form.values?.modalidade;
-  const semestre = form.values?.semestre;
   const anosEscolaresCodigos = form.values?.anosEscolaresCodigos;
 
   const {
@@ -105,71 +104,84 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosQuestionario }) => {
     async (pagina, registrosPagina) => {
       const dadosMapeados =
         await QuestionarioDinamicoFuncoes.mapearQuestionarios(
-          dadosQuestionario,
+          dadosSecoes,
           true
         );
 
       const formsValidos = !!dadosMapeados?.formsValidos;
-      if (!(formsValidos || dadosMapeados?.secoes?.length)) return;
 
-      const params = {
-        historico: consideraHistorico,
-        anoLetivo,
-        dreId: '',
-        ueId: '',
-        modalidade: modalidade === OPCAO_TODOS ? '' : modalidade,
-        semestre,
-        anos: [],
-        filtroAvancado: [],
-      };
+      if (formsValidos || dadosMapeados?.secoes?.length) {
+        const params = {
+          historico: consideraHistorico,
+          anoLetivo,
+          dreId: '',
+          ueId: '',
+          modalidade: modalidade === OPCAO_TODOS ? '' : modalidade,
+          anos: [],
+          filtroAvancado: [],
+        };
 
-      if (dreCodigo !== OPCAO_TODOS) {
-        params.dreId = listaDres?.find?.(dre => dre?.codigo === dreCodigo)?.id;
-      }
+        if (dreCodigo !== OPCAO_TODOS) {
+          params.dreId = listaDres?.find?.(
+            dre => dre?.codigo === dreCodigo
+          )?.id;
+        }
 
-      if (ueCodigo !== OPCAO_TODOS) {
-        params.ueId = listaUes?.find?.(ue => ue?.codigo === ueCodigo)?.id;
-      }
+        if (ueCodigo !== OPCAO_TODOS) {
+          params.ueId = listaUes?.find?.(ue => ue?.codigo === ueCodigo)?.id;
+        }
 
-      if (anosEscolaresCodigos?.length) {
-        params.anos =
-          anosEscolaresCodigos[0] === OPCAO_TODOS ? [] : anosEscolaresCodigos;
-      }
+        if (anosEscolaresCodigos?.length) {
+          params.anos =
+            anosEscolaresCodigos[0] === OPCAO_TODOS ? [] : anosEscolaresCodigos;
+        }
 
-      if (dadosMapeados?.secoes?.[0]?.questoes?.length) {
-        params.filtroAvancado = dadosMapeados.secoes[0].questoes.filter(
-          questao => questao?.resposta
-        );
-      }
+        if (dadosMapeados?.secoes?.[0]?.questoes?.length) {
+          let filtroAvancado = [];
 
-      setExibirLoader(true);
+          dadosMapeados.secoes.forEach(secao => {
+            const questoesComResposta = secao.questoes.filter(
+              questao => questao?.resposta
+            );
+            secao.questoes = questoesComResposta;
 
-      const resposta = await ServicoRelatorioDinamicoNAAPA.obterDados(
-        params,
-        pagina,
-        registrosPagina
-      ).catch(e => erros(e));
+            if (secao.questoes?.length) {
+              filtroAvancado = [...filtroAvancado, ...secao.questoes];
+            }
+          });
 
-      if (resposta?.status === HttpStatusCode.Ok) {
-        const encaminhamentosNAAPAPaginado =
-          resposta?.data?.encaminhamentosNAAPAPaginado;
+          params.filtroAvancado = filtroAvancado;
+        }
 
-        if (encaminhamentosNAAPAPaginado?.items?.length) {
-          setNumeroRegistros(encaminhamentosNAAPAPaginado?.totalRegistros);
-          setDesabilitarGerar(false);
+        setExibirLoader(true);
+
+        const resposta = await ServicoRelatorioDinamicoNAAPA.obterDados(
+          params,
+          pagina,
+          registrosPagina
+        ).catch(e => erros(e));
+
+        if (resposta?.status === HttpStatusCode.Ok) {
+          const encaminhamentosNAAPAPaginado =
+            resposta?.data?.encaminhamentosNAAPAPaginado;
+
+          if (encaminhamentosNAAPAPaginado?.items?.length) {
+            setNumeroRegistros(encaminhamentosNAAPAPaginado?.totalRegistros);
+            setDesabilitarGerar(false);
+          } else {
+            setNumeroRegistros(0);
+          }
+
+          setDataSource(resposta.data);
         } else {
+          setDataSource([]);
           setNumeroRegistros(0);
         }
 
-        setDataSource(resposta.data);
-      } else {
-        setDataSource([]);
-        setNumeroRegistros(0);
+        setExibirLoader(false);
       }
-
-      setExibirLoader(false);
     },
-    [anoLetivo, modalidade, dreCodigo, ueCodigo, anosEscolaresCodigos, semestre]
+    [anoLetivo, modalidade, dreCodigo, ueCodigo, anosEscolaresCodigos]
   );
 
   useEffect(() => {

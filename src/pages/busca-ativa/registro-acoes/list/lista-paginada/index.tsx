@@ -7,10 +7,9 @@ import { formatarData } from '@/core/utils/functions';
 import { useWatch } from 'antd/es/form/Form';
 import useFormInstance from 'antd/es/form/hooks/useFormInstance';
 import { ColumnsType } from 'antd/es/table';
+import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
-import { OrdemProcedimentoRealizadoEnum } from '@/core/enum/ordem-procedimento-realizado-enum';
 
 const columns: ColumnsType<RegistroAcaoBuscaAtivaListagemDto> = [
   {
@@ -67,7 +66,7 @@ const ListaPaginadaBuscaAtivaRegistroAcoes: React.FC = () => {
       form.setFieldValue('nomeEstudanteCrianca', '');
       form.setFieldValue('dataInicio', undefined);
       form.setFieldValue('dataFim', undefined);
-      form.setFieldValue('ordemProcedimentoRealizado', OrdemProcedimentoRealizadoEnum.Nenhum);
+      form.setFieldValue('ordemProcedimentoRealizado', undefined);
     }
   }, [form, turma]);
 

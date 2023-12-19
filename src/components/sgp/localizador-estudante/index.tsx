@@ -32,6 +32,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
   const form = Form.useFormInstance();
 
   const ueWatch = Form.useWatch('ue', form);
+  const turmaWatch = Form.useWatch('turma', form);
 
   const [loading, setLoading] = useState(false);
 
@@ -54,6 +55,12 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
       limparDados();
     }
   }, [ueWatch]);
+
+  useEffect(() => {
+    if (form.isFieldsTouched()) {
+      limparDados();
+    }
+  }, [turmaWatch]);
 
   const obterDados = async (parametros: {
     codigo?: string;
@@ -163,6 +170,10 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
     });
   };
 
+  const onSelectNome = (value: string, option: any) => {
+    form.setFieldValue('localizadorEstudante', { codigo: option.key, nome: value });
+  };
+
   return (
     <Row gutter={24}>
       <Col xs={24} md={12} lg={8}>
@@ -219,6 +230,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
                   onSearch={(value: string) => onBuscarPorNome(value, form.getFieldsValue(true))}
                   dataSource={localizadorEstudanteDados?.length ? localizadorEstudanteDados : []}
                   disabled={disabled || desabilitarCampo.nome || autoCompleteNameProps?.disabled}
+                  onSelect={onSelectNome}
                   {...autoCompleteNameProps}
                 >
                   <Input

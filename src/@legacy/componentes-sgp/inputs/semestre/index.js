@@ -1,9 +1,10 @@
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
+import { cloneDeep } from 'lodash';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { SGP_SELECT_SEMESTRE } from '~/constantes/ids/select';
-import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros } from '~/servicos';
 
 export const Semestre = ({
@@ -23,9 +24,17 @@ export const Semestre = ({
 
   const setInitialValues = !form?.values?.modoEdicao;
 
-  const ehEJAouCelp =
+  let ehEJAouCelp =
     Number(modalidade) === ModalidadeEnum.EJA ||
     Number(modalidade) === ModalidadeEnum.CELP;
+
+  if (modalidade?.length && Array.isArray(modalidade)) {
+    ehEJAouCelp = !!modalidade.find(
+      valor =>
+        Number(valor) === ModalidadeEnum.EJA ||
+        Number(valor) === ModalidadeEnum.CELP
+    );
+  }
 
   const limparDados = () => {
     form.setFieldValue(nameList, []);
@@ -37,10 +46,26 @@ export const Semestre = ({
 
     setExibirLoader(true);
 
+    let modalidadeConsulta = cloneDeep(modalidade);
+
+    if (Array.isArray(modalidade) && ehEJAouCelp) {
+      const ejaCelp = modalidadeConsulta.filter(
+        valor =>
+          Number(valor) === ModalidadeEnum.EJA ||
+          Number(valor) === ModalidadeEnum.CELP
+      );
+      if (ejaCelp?.length === 1) {
+        modalidadeConsulta = ejaCelp[0];
+      }
+      if (ejaCelp?.length === 2) {
+        modalidadeConsulta = undefined;
+      }
+    }
+
     const retorno = await AbrangenciaServico.obterSemestres(
       consideraHistorico,
       anoLetivo,
-      modalidade,
+      modalidadeConsulta,
       dreCodigo === OPCAO_TODOS ? '' : dreCodigo,
       ueCodigo === OPCAO_TODOS ? '' : ueCodigo
     )
