@@ -1,4 +1,3 @@
-import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { Formik } from 'formik';
 import { useContext } from 'react';
 import * as Yup from 'yup';
@@ -20,30 +19,6 @@ const RelatorioDinamicoNAAPAConteudo = () => {
     dreCodigo: Yup.string().required(textoCampoObrigatorio),
     ueCodigo: Yup.string().required(textoCampoObrigatorio),
     modalidade: Yup.string().required(textoCampoObrigatorio),
-    semestre: Yup.string()
-      .nullable()
-      .test(
-        'validaSeEjaSelecionado',
-        textoCampoObrigatorio,
-        function validar() {
-          const { modalidade, semestre } = this.parent;
-
-          const ehEJAouCelp = !!modalidade.find(
-            valor =>
-              Number(valor) === ModalidadeEnum.EJA ||
-              Number(valor) === ModalidadeEnum.CELP
-          );
-
-          let ehValido = true;
-          if (!ehEJAouCelp) {
-            return ehValido;
-          }
-          if (!semestre) {
-            ehValido = false;
-          }
-          return ehValido;
-        }
-      ),
     anosEscolaresCodigos: Yup.string().required(textoCampoObrigatorio),
   });
 
