@@ -44,10 +44,9 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosSecoes }) => {
   const [numeroRegistros, setNumeroRegistros] = useState(1);
   const [exibirLoader, setExibirLoader] = useState(false);
 
-  const todosEmModalidade = !!modalidade?.find(
-    item => String(item) === OPCAO_TODOS
-  );
-
+  const todosEmModalidade =
+    modalidade?.length > 1 ||
+    !!modalidade?.find(item => String(item) === OPCAO_TODOS);
   const encaminhamentosNAAPAIds = dataSource?.encaminhamentosNAAPAIds;
   const encaminhamentosNAAPAPaginado = dataSource?.encaminhamentosNAAPAPaginado;
 
