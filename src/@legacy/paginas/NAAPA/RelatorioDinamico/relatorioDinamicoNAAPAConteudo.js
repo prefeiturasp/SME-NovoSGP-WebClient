@@ -27,12 +27,15 @@ const RelatorioDinamicoNAAPAConteudo = () => {
         textoCampoObrigatorio,
         function validar() {
           const { modalidade, semestre } = this.parent;
-          const temModalidadeEjaOuCelp =
-            Number(modalidade) === ModalidadeEnum.EJA ||
-            Number(modalidade) === ModalidadeEnum.CELP;
+
+          const ehEJAouCelp = !!modalidade.find(
+            valor =>
+              Number(valor) === ModalidadeEnum.EJA ||
+              Number(valor) === ModalidadeEnum.CELP
+          );
 
           let ehValido = true;
-          if (!temModalidadeEjaOuCelp) {
+          if (!ehEJAouCelp) {
             return ehValido;
           }
           if (!semestre) {

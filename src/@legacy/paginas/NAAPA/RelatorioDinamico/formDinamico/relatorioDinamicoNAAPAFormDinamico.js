@@ -8,9 +8,10 @@ import { Col, Row } from 'antd';
 import { HttpStatusCode } from 'axios';
 import PropTypes from 'prop-types';
 import { useCallback, useContext, useEffect, useState } from 'react';
+import { OPCAO_TODOS } from '~/constantes';
+import RelatorioDinamicoNAAPAContext from '../relatorioDinamicoNAAPAContext';
 import CollapseRelatorioDinamicoNAAPAFormDinamico from './collapseFormDinamico';
 import RelatorioDinamicoNAAPALista from './relatorioDinamicoNAAPALista';
-import RelatorioDinamicoNAAPAContext from '../relatorioDinamicoNAAPAContext';
 
 const RelatorioDinamicoNAAPAFormDinamico = props => {
   const { setListaSecoesParaDesabilitar } = useContext(
@@ -29,8 +30,14 @@ const RelatorioDinamicoNAAPAFormDinamico = props => {
   const obterQuestoes = useCallback(async () => {
     setExibirLoader(true);
 
+    const todosEmModalidade = modalidade?.find(
+      item => String(item) === OPCAO_TODOS
+    );
+
+    const modalidadesId = todosEmModalidade ? [] : modalidade;
+
     const resposta = await ServicoRelatorioDinamicoNAAPA.obterQuestoes(
-      modalidade
+      modalidadesId
     ).catch(e => erros(e));
 
     if (resposta?.status === HttpStatusCode.Ok) {
@@ -43,7 +50,7 @@ const RelatorioDinamicoNAAPAFormDinamico = props => {
   }, [modalidade]);
 
   useEffect(() => {
-    if (modalidade) {
+    if (modalidade?.length) {
       obterQuestoes();
     } else {
       setDadosSecoes([]);
@@ -76,7 +83,7 @@ const RelatorioDinamicoNAAPAFormDinamico = props => {
               setListaSecoesParaDesabilitar([]);
             }}
             border
-            disabled={!modalidade}
+            disabled={!modalidade?.length}
           />
         </Col>
 

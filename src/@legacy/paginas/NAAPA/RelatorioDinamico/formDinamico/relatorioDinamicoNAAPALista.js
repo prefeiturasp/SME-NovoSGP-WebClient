@@ -44,12 +44,16 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosSecoes }) => {
   const [numeroRegistros, setNumeroRegistros] = useState(1);
   const [exibirLoader, setExibirLoader] = useState(false);
 
+  const todosEmModalidade = !!modalidade?.find(
+    item => String(item) === OPCAO_TODOS
+  );
+
   const encaminhamentosNAAPAIds = dataSource?.encaminhamentosNAAPAIds;
   const encaminhamentosNAAPAPaginado = dataSource?.encaminhamentosNAAPAPaginado;
 
-  const exibirCardsPorModalidade = modalidade && modalidade === OPCAO_TODOS;
+  const exibirCardsPorModalidade = todosEmModalidade;
 
-  let exibirCardsPorAno = modalidade && modalidade !== OPCAO_TODOS;
+  let exibirCardsPorAno = !todosEmModalidade;
 
   if (exibirCardsPorAno) {
     const anosTodasSelecionado =
@@ -111,12 +115,14 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosSecoes }) => {
       const formsValidos = !!dadosMapeados?.formsValidos;
 
       if (formsValidos || dadosMapeados?.secoes?.length) {
+        const modalidades = todosEmModalidade ? [] : modalidade;
+
         const params = {
           historico: consideraHistorico,
           anoLetivo,
           dreId: '',
           ueId: '',
-          modalidade: modalidade === OPCAO_TODOS ? '' : modalidade,
+          modalidades,
           anos: [],
           filtroAvancado: [],
         };
