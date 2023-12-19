@@ -1,9 +1,9 @@
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import PropTypes from 'prop-types';
 import { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { SGP_SELECT_ANO_ESCOLAR } from '~/constantes/ids/select';
-import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 
@@ -17,6 +17,7 @@ export const AnoEscolar = ({
   labelRequired,
   mostrarOpcaoTodas,
   nameList,
+  validarSemestre,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -26,9 +27,19 @@ export const AnoEscolar = ({
 
   const setInitialValues = !form?.values?.modoEdicao;
 
-  const ehEJAouCelp =
+  const modalidadeMultiplas = Array.isArray(modalidade);
+
+  let ehEJAouCelp =
     Number(modalidade) === ModalidadeEnum.EJA ||
     Number(modalidade) === ModalidadeEnum.CELP;
+
+  if (modalidadeMultiplas) {
+    ehEJAouCelp = !!modalidade.find(
+      valor =>
+        Number(valor) === ModalidadeEnum.EJA ||
+        Number(valor) === ModalidadeEnum.CELP
+    );
+  }
 
   const limparDados = () => {
     form.setFieldValue(nameList, []);
@@ -36,13 +47,23 @@ export const AnoEscolar = ({
   };
 
   const obterAnosEscolares = useCallback(async () => {
-    if (!anoLetivo || !ueCodigo || !modalidade) return;
+    const semModalidadeSelecionada =
+      (modalidadeMultiplas && !modalidade?.length) || !modalidade;
 
-    if (ehEJAouCelp && !semestre) return;
+    if (!anoLetivo || !ueCodigo || semModalidadeSelecionada) return;
+
+    if (validarSemestre && ehEJAouCelp && !semestre) return;
 
     const OPCAO_TODOS_ANOS = { valor: OPCAO_TODOS, descricao: 'Todos' };
 
-    if (modalidade === OPCAO_TODOS) {
+    const modalidadeEhTodos =
+      modalidade === OPCAO_TODOS ||
+      (modalidadeMultiplas && modalidade?.[0] === OPCAO_TODOS);
+
+    const maisDeUmaModalidadeSelecionada =
+      modalidadeMultiplas && modalidade?.length > 1;
+
+    if (modalidadeEhTodos || maisDeUmaModalidadeSelecionada) {
       const codigoAtual = multiple ? [OPCAO_TODOS] : OPCAO_TODOS;
 
       form.setFieldValue(nameList, [OPCAO_TODOS_ANOS]);
@@ -52,9 +73,13 @@ export const AnoEscolar = ({
 
     setExibirLoader(true);
 
+    const modalidadeConsulta = modalidadeMultiplas
+      ? modalidade?.[0]
+      : modalidade;
+
     const retorno = await AbrangenciaServico.buscarAnosEscolares(
       ueCodigo,
-      modalidade,
+      modalidadeConsulta,
       consideraHistorico,
       anoLetivo
     )
@@ -89,12 +114,21 @@ export const AnoEscolar = ({
     if (form.initialValues[nameList]?.length && setInitialValues) return;
 
     limparDados();
-    if (modalidade) obterAnosEscolares();
+
+    let carregarDados = false;
+
+    if (modalidadeMultiplas) {
+      carregarDados = modalidade?.length > 0;
+    } else {
+      carregarDados = !!modalidade;
+    }
+
+    if (carregarDados) obterAnosEscolares();
   }, [modalidade, semestre]);
 
   const desabilitar =
     !modalidade ||
-    (ehEJAouCelp && !semestre) ||
+    (validarSemestre && ehEJAouCelp && !semestre) ||
     listaAnosEscolares?.length === 1 ||
     disabled;
 
@@ -145,6 +179,7 @@ AnoEscolar.propTypes = {
   mostrarOpcaoTodas: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
   nameList: PropTypes.string,
+  validarSemestre: PropTypes.bool,
 };
 
 AnoEscolar.defaultProps = {
@@ -157,4 +192,5 @@ AnoEscolar.defaultProps = {
   onChange: () => null,
   mostrarOpcaoTodas: true,
   nameList: 'listaAnosEscolares',
+  validarSemestre: true,
 };

@@ -9,7 +9,9 @@ import RelatorioDinamicoNAAPAContext from './relatorioDinamicoNAAPAContext';
 const RelatorioDinamicoNAAPABotoesAcoes = ({ form }) => {
   const navigate = useNavigate();
 
-  const { setDataSource } = useContext(RelatorioDinamicoNAAPAContext);
+  const { setDataSource, setListaSecoesParaDesabilitar } = useContext(
+    RelatorioDinamicoNAAPAContext
+  );
 
   const onClickVoltar = () => navigate(URL_HOME);
 
@@ -17,6 +19,7 @@ const RelatorioDinamicoNAAPABotoesAcoes = ({ form }) => {
     form.setFieldValue('modoEdicao', false);
     form.resetForm();
     setDataSource([]);
+    setListaSecoesParaDesabilitar([]);
   };
 
   return (
