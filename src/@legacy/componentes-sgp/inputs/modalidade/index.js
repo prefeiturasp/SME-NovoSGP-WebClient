@@ -4,6 +4,7 @@ import { OPCAO_TODOS } from '~/constantes';
 import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_MODALIDADE } from '~/constantes/ids/select';
 import { erros, ServicoFiltroRelatorio } from '~/servicos';
+import { onchangeMultiSelect } from '~/utils';
 
 export const Modalidade = ({
   name,
@@ -14,6 +15,7 @@ export const Modalidade = ({
   labelRequired,
   mostrarOpcaoTodas,
   nameList,
+  multiple,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -45,10 +47,13 @@ export const Modalidade = ({
       const lista = resposta.data;
 
       if (lista?.length === 1) {
+        let valorAtual = String(lista[0]?.valor);
+        valorAtual = multiple ? [valorAtual] : valorAtual;
+
         if (setInitialValues) {
-          form.initialValues[name] = String(lista[0]?.valor);
+          form.initialValues[name] = valorAtual;
         }
-        form.setFieldValue(name, String(lista[0]?.valor));
+        form.setFieldValue(name, valorAtual);
       } else if (mostrarOpcaoTodas) {
         const OPCAO_TODAS_TURMA = { valor: OPCAO_TODOS, descricao: 'Todas' };
 
@@ -71,6 +76,11 @@ export const Modalidade = ({
     if (ueCodigo) obterModalidades();
   }, [ueCodigo]);
 
+  const setarNovoValor = newValue => {
+    form.setFieldValue(name, newValue || '');
+    form.setFieldTouched(name, true, true);
+  };
+
   return (
     <Loader loading={exibirLoader} ignorarTip>
       <SelectComponent
@@ -79,6 +89,7 @@ export const Modalidade = ({
         label="Modalidade"
         valueOption="valor"
         valueText="descricao"
+        multiple={multiple}
         showSearch={showSearch}
         lista={listaModalidades}
         id={SGP_SELECT_MODALIDADE}
@@ -89,9 +100,13 @@ export const Modalidade = ({
         onChange={newValue => {
           form.setFieldValue('modoEdicao', true);
 
-          form.setFieldValue(name, newValue);
-          form.setFieldTouched(name, true, true);
-          onChange(newValue);
+          if (multiple) {
+            onchangeMultiSelect(newValue, form.values[name], setarNovoValor);
+            onChange(newValue);
+          } else {
+            setarNovoValor(newValue);
+            onChange(newValue);
+          }
         }}
       />
     </Loader>
@@ -107,6 +122,7 @@ Modalidade.propTypes = {
   mostrarOpcaoTodas: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
   nameList: PropTypes.string,
+  multiple: PropTypes.bool,
 };
 
 Modalidade.defaultProps = {
@@ -118,4 +134,5 @@ Modalidade.defaultProps = {
   onChange: () => null,
   mostrarOpcaoTodas: true,
   nameList: 'listaModalidades',
+  multiple: false,
 };
