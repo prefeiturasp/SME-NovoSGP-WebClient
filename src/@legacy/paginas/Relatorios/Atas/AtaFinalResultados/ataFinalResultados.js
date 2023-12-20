@@ -235,7 +235,7 @@ const AtaFinalResultados = () => {
 
           if (ehEja && !semestreSelecionado) return;
 
-          // lista.unshift({ nomeFiltro: 'Todas', valor: OPCAO_TODOS });
+          lista.unshift({ nomeFiltro: 'Todas', valor: OPCAO_TODOS });
 
           setListaTurmas(lista);
 
