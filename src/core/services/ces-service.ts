@@ -1,8 +1,9 @@
 import { InternalAxiosRequestConfig } from 'axios';
 import { api } from '~/servicos';
+import { tokenCES, urlApiCES } from '~/servicos/variaveis';
 
-const CES_URL = process.env.REACT_APP_CES_URL || '';
-const CES_TOKEN = process.env.REACT_APP_CES_TOKEN || '';
+const CES_URL = urlApiCES;
+const CES_TOKEN = tokenCES;
 
 // Serviço destinado a API de pesquisas https://ces.sme.prefeitura.sp.gov.br
 
