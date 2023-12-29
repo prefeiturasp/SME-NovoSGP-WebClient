@@ -373,9 +373,11 @@ const RelatorioPlanejamentoDiario = () => {
           })
         );
 
+        /*
         if (turmas.length > 1) {
           turmas.unshift({ valor: OPCAO_TODOS, nomeFiltro: 'Todas' });
         }
+        */
         setListaTurmas(turmas);
         if (turmas.length === 1) {
           setTurmaId(turmas[0].valor);
