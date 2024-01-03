@@ -15,7 +15,7 @@ const salvarAtualizarRegistroAcao = (params: RegistroAcaoBuscaAtivaDto) =>
   );
 
 const obterSecoesDeRegistroAcao = (params: FiltroSecoesDeRegistroAcao) =>
-  obterRegistro<SecaoQuestionarioDto>(`${URL_API_BUSCA_ATIVA}/registros-acao/secoes`, { params });
+  obterRegistro<SecaoQuestionarioDto[]>(`${URL_API_BUSCA_ATIVA}/registros-acao/secoes`, { params });
 
 const obterQuestionario = (questionarioId: number, registroAcaoId?: number) =>
   obterRegistro<SecaoQuestionarioDto>(
