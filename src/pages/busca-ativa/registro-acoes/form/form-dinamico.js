@@ -7,7 +7,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-  setDadosSecoesBuscaAtivaRegistroAcoes,
   setExibirLoaderBuscaAtivaRegistroAcoes,
   setLimparDadosBuscaAtivaRegistroAcoes,
 } from '~/redux/modulos/buscaAtivaRegistroAcoes/actions';
@@ -55,28 +54,6 @@ const BuscaAtivaRegistroAcoesFormDinamico = () => {
       dispatch(setLimparDadosQuestionarioDinamico());
     }
   }, [questionarioId, obterQuestoes]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(setLimparDadosQuestionarioDinamico());
-    };
-  }, []);
-
-  const obterSecoes = async () => {
-    const resposta = await buscaAtivaService.obterSecoesDeRegistroAcao({
-      registroAcaoBuscaAtivaId: registroAcaoId,
-    });
-
-    if (resposta.sucesso && resposta.dados?.length) {
-      dispatch(setDadosSecoesBuscaAtivaRegistroAcoes(resposta.dados[0]));
-    } else {
-      dispatch(setDadosSecoesBuscaAtivaRegistroAcoes(null));
-    }
-  };
-
-  useEffect(() => {
-    obterSecoes();
-  }, []);
 
   useEffect(() => {
     return () => {
