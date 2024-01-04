@@ -40,6 +40,7 @@ import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { removerTagsHtml } from '~/utils';
 import DadosPlanejamentoDiarioBordo from './DadosPlanejamentoDiarioBordo/dadosPlanejamentoDiarioBordo';
+import { ANO_BASE_DEVOLUTIVA_UNIFICADA } from '~/constantes';
 
 const DevolutivasForm = () => {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ const DevolutivasForm = () => {
     store => store.filtro.modalidades
   );
   const turmaCodigo = turmaSelecionada ? turmaSelecionada.turma : 0;
+  const anoLetivo = turmaSelecionada ? turmaSelecionada?.anoLetivo : 0;
 
   const numeroRegistros = useSelector(
     store => store.devolutivas.numeroRegistros
@@ -357,20 +359,18 @@ const DevolutivasForm = () => {
       }
       setValoresIniciais(inicial);
     }
-  }, [
-    codigoComponenteCurricular,
-    listaComponenteCurriculare,
-    setarValoresIniciaisRegistroNovo,
-    idDevolutiva,
-  ]);
+  }, [codigoComponenteCurricular, listaComponenteCurriculare, idDevolutiva]);
 
   const obterComponentesCurriculares = useCallback(async () => {
     setCodigoComponenteCurricular(undefined);
+
+    setModoEdicao(false);
+
     setCarregandoGeral(true);
     dispatch(limparDadosPlanejamento());
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
       turmaCodigo,
-      false
+      anoLetivo >= ANO_BASE_DEVOLUTIVA_UNIFICADA
     ).catch(e => erros(e));
 
     if (componentes?.data?.length) {
@@ -379,13 +379,16 @@ const DevolutivasForm = () => {
         setCodigoComponenteCurricular(
           String(componentes.data[0].codigoComponenteCurricular)
         );
+      } else {
+        refForm.setFieldValue('codigoComponenteCurricular', undefined);
+        setCodigoComponenteCurricular(undefined);
       }
     } else {
       setListaComponenteCurriculare([]);
     }
 
     setCarregandoGeral(false);
-  }, [turmaCodigo, dispatch]);
+  }, [turmaCodigo, anoLetivo, turmaSelecionada, dispatch]);
 
   useEffect(() => {
     if (turmaCodigo && turmaInfantil) {
