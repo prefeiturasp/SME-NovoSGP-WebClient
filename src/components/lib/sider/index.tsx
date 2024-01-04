@@ -126,7 +126,7 @@ const Sider: React.FC<MenuSMEProps> = ({
         if (onClickMenuButtonToggle) onClickMenuButtonToggle(true);
       }}
     >
-      <SiderMenuButtonToggleStyle collapsed={collapsed}>
+      <SiderMenuButtonToggleStyle collapsed={collapsed} id="sider-menu-button-toggle">
         {collapsed ? null : <img src={logoMenu} alt="logo-menu" />}
         <Button
           type="text"
