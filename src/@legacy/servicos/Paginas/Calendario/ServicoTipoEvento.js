@@ -1,8 +1,14 @@
 import api from '~/servicos/api';
 
+const urlPadrao = `v1/calendarios/eventos/tipos`;
+
 class ServicoTipoEvento {
   salvar = async (id, evento) => {
-    const url = `v1/calendarios/eventos/tipos/${id}`;
+    let url = urlPadrao;
+    if (id) {
+      url = `${url}/${id}`;
+    }
+
     const metodo = id ? 'put' : 'post';
     return api[metodo](url, evento);
   };
