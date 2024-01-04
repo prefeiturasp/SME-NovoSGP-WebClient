@@ -30,11 +30,12 @@ import { confirmar, setBreadcrumbManual, sucesso, verificaSomenteConsulta } from
 type BuscaAtivaRegistroAcoesFormBotoesAcaoProps = {
   permissoesTela: PermissaoAcoesDto;
   rotaPai: string;
+  obterSecoes: () => void;
 };
 
 const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
   BuscaAtivaRegistroAcoesFormBotoesAcaoProps
-> = ({ permissoesTela, rotaPai }) => {
+> = ({ permissoesTela, rotaPai, obterSecoes }) => {
   const paramsRoute = useParams();
   const { pathname, state } = useLocation();
 
@@ -113,6 +114,11 @@ const BuscaAtivaRegistroAcoesFormBotoesAcao: React.FC<
       if (confirmou) {
         QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico();
         form.resetFields();
+
+        dispatch(setLimparDadosBuscaAtivaRegistroAcoes());
+        dispatch(setLimparDadosQuestionarioDinamico());
+
+        obterSecoes();
       }
     }
   };

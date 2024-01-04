@@ -20,7 +20,10 @@ import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useParams } from 'react-router-dom';
-import { setExibirLoaderBuscaAtivaRegistroAcoes } from '~/redux/modulos/buscaAtivaRegistroAcoes/actions';
+import {
+  setDadosSecoesBuscaAtivaRegistroAcoes,
+  setExibirLoaderBuscaAtivaRegistroAcoes,
+} from '~/redux/modulos/buscaAtivaRegistroAcoes/actions';
 import BuscaAtivaRegistroAcoesAuditoria from './auditoria';
 import BuscaAtivaRegistroAcoesFormBotoesAcao from './buscaAtivaRegistroAcoesFormBotoesAcao';
 import BuscaAtivaRegistroAcoesFormDinamico from './form-dinamico';
@@ -108,6 +111,22 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
     form.resetFields();
   }, [form, formInitialValues]);
 
+  const obterSecoes = useCallback(async () => {
+    const resposta = await buscaAtivaService.obterSecoesDeRegistroAcao({
+      registroAcaoBuscaAtivaId: registroAcaoId,
+    });
+
+    if (resposta.sucesso && resposta.dados?.length) {
+      dispatch(setDadosSecoesBuscaAtivaRegistroAcoes(resposta.dados[0]));
+    } else {
+      dispatch(setDadosSecoesBuscaAtivaRegistroAcoes(null));
+    }
+  }, [dispatch, registroAcaoId]);
+
+  useEffect(() => {
+    obterSecoes();
+  }, [obterSecoes]);
+
   return (
     <LoaderBuscaAtivaRegistroAcoesForm>
       <Col>
@@ -123,6 +142,7 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
             <BuscaAtivaRegistroAcoesFormBotoesAcao
               permissoesTela={permissoesTela}
               rotaPai={rotaPai}
+              obterSecoes={obterSecoes}
             />
           </HeaderPage>
           <CardContent>
