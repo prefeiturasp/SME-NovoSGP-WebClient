@@ -681,7 +681,11 @@ const DevolutivasForm = () => {
                       id="disciplina"
                       lista={listaComponenteCurriculare || []}
                       valueOption="codigoComponenteCurricular"
-                      valueText="nomeComponenteInfantil"
+                      valueText={
+                        anoLetivo >= ANO_BASE_DEVOLUTIVA_UNIFICADA
+                          ? 'nome'
+                          : 'nomeComponenteInfantil'
+                      }
                       placeholder="Selecione um componente curricular"
                       disabled={
                         !turmaInfantil ||
