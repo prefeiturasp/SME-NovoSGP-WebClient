@@ -245,7 +245,11 @@ const DevolutivasLista = () => {
                 id="disciplina"
                 lista={listaComponenteCurriculare || []}
                 valueOption="codigoComponenteCurricular"
-                valueText="nomeComponenteInfantil"
+                valueText={
+                  anoLetivo >= ANO_BASE_DEVOLUTIVA_UNIFICADA
+                    ? 'nome'
+                    : 'nomeComponenteInfantil'
+                }
                 valueSelect={componenteCurricularSelecionado}
                 onChange={onChangeComponenteCurricular}
                 placeholder="Selecione um componente curricular"
