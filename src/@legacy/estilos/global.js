@@ -26,8 +26,12 @@ export default createGlobalStyle`
     height: 100%;
     letter-spacing: normal;
     line-height: normal;
-    @media (max-width: 767.98px) {
+    @media (max-width: 768px) {
       height: auto;
+
+      #sider-menu-button-toggle {
+        height: 140px !important;
+      }
     }
   }
   body {

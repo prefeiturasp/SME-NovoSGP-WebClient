@@ -12,6 +12,7 @@ import Button from '~/componentes/button';
 import Card from '~/componentes/card';
 import { Colors } from '~/componentes/colors';
 import SelectComponent from '~/componentes/select';
+import { ANO_BASE_DEVOLUTIVA_UNIFICADA } from '~/constantes';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes/url';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
@@ -30,6 +31,8 @@ const DevolutivasLista = () => {
     store => store.filtro.modalidades
   );
   const turmaCodigo = turmaSelecionada ? turmaSelecionada.turma : 0;
+  const anoLetivo = turmaSelecionada ? turmaSelecionada?.anoLetivo : 0;
+
   const [listaComponenteCurriculare, setListaComponenteCurriculare] =
     useState();
   const [componenteCurricularSelecionado, setComponenteCurricularSelecionado] =
@@ -137,7 +140,7 @@ const DevolutivasLista = () => {
     setCarregandoGeral(true);
     const componentes = await ServicoDisciplina.obterDisciplinasPorTurma(
       turmaCodigo,
-      false
+      anoLetivo >= ANO_BASE_DEVOLUTIVA_UNIFICADA
     ).catch(e => erros(e));
 
     if (componentes?.data?.length) {
@@ -152,7 +155,7 @@ const DevolutivasLista = () => {
     }
 
     setCarregandoGeral(false);
-  }, [turmaCodigo]);
+  }, [anoLetivo, turmaCodigo]);
 
   useEffect(() => {
     if (turmaCodigo && turmaInfantil) {
@@ -242,7 +245,11 @@ const DevolutivasLista = () => {
                 id="disciplina"
                 lista={listaComponenteCurriculare || []}
                 valueOption="codigoComponenteCurricular"
-                valueText="nomeComponenteInfantil"
+                valueText={
+                  anoLetivo >= ANO_BASE_DEVOLUTIVA_UNIFICADA
+                    ? 'nome'
+                    : 'nomeComponenteInfantil'
+                }
                 valueSelect={componenteCurricularSelecionado}
                 onChange={onChangeComponenteCurricular}
                 placeholder="Selecione um componente curricular"
