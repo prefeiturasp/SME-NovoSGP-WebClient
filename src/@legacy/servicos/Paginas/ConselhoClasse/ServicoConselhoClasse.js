@@ -195,17 +195,10 @@ class ServicoConselhoClasse {
     alunoCodigo,
     consideraHistorico
   ) => {
-    const state = store.getState();
-    const { conselhoClasse } = state;
-    const bimestreAtual = conselhoClasse?.bimestreAtual;
-
-    if (bimestreAtual?.valor !== 'final') {
-      return api.get(
-        `/v1/conselhos-classe/turmas/${turmaCodigo}/alunos/${alunoCodigo}/consideraHistorico` +
-          `/${consideraHistorico}`
-      );
-    }
-    return null;
+    return api.get(
+      `/v1/conselhos-classe/turmas/${turmaCodigo}/alunos/${alunoCodigo}/consideraHistorico` +
+        `/${consideraHistorico}`
+    );
   };
 
   obterListaAnotacoesRecomendacoes = async () => {
