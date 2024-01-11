@@ -14,8 +14,12 @@ const MarcadorParecerConclusivo = () => {
   const dadosPrincipaisConselhoClasse = useSelector(
     store => store.conselhoClasse.dadosPrincipaisConselhoClasse
   );
-  const { conselhoClasseId, fechamentoTurmaId, alunoCodigo } =
-    dadosPrincipaisConselhoClasse;
+  const {
+    conselhoClasseId,
+    fechamentoTurmaId,
+    alunoCodigo,
+    conselhoClasseAlunoId,
+  } = dadosPrincipaisConselhoClasse;
 
   const marcadorParecerConclusivo = useSelector(
     store => store.conselhoClasse.marcadorParecerConclusivo
@@ -73,7 +77,8 @@ const MarcadorParecerConclusivo = () => {
       bimestreAtual?.valor === 'final' &&
       conselhoClasseId &&
       fechamentoTurmaId &&
-      alunoCodigo;
+      alunoCodigo &&
+      conselhoClasseAlunoId;
 
     setExibirIconeSincronizar(exibir);
   }, [bimestreAtual]);
