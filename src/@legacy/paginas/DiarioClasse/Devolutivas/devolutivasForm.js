@@ -381,7 +381,8 @@ const DevolutivasForm = () => {
           String(componentes.data[0].codigoComponenteCurricular)
         );
       } else {
-        refForm?.setFieldValue('codigoComponenteCurricular', undefined);
+        refForm?.setFieldValue &&
+          refForm.setFieldValue('codigoComponenteCurricular', undefined);
         setCodigoComponenteCurricular(undefined);
       }
     } else {
