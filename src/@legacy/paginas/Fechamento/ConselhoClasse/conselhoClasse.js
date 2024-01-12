@@ -111,11 +111,7 @@ const ConselhoClasse = () => {
         conselhoClasseAlunoId,
         tipoNota,
       } = resposta?.data;
-      if (
-        fechamentoTurmaId !== 0 &&
-        conselhoClasseId !== 0 &&
-        conselhoClasseAlunoId
-      ) {
+      if (fechamentoTurmaId !== 0 && conselhoClasseId !== 0) {
         const retorno =
           await servicoSalvarConselhoClasse.validaParecerConclusivo(
             conselhoClasseId,
