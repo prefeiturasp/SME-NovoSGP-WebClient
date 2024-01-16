@@ -505,6 +505,7 @@ const RelatorioParecerConclusivo = () => {
       parecerConclusivoId:
         parecerConclusivoId === OPCAO_TODOS ? 0 : parecerConclusivoId,
       tipoFormatoRelatorio: formato,
+      historico: consideraHistorico,
     };
     await ServicoRelatorioParecerConclusivo.gerar(params)
       .then(() => {
