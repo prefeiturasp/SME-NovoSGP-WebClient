@@ -42,5 +42,8 @@ export const SGPTheme: ThemeConfigSME = {
       controlItemBgActive: Base.Roxo,
       controlItemBgHover: Base.Roxo,
     },
+    Modal: {
+      zIndexPopupBase: 9999,
+    },
   },
 };
