@@ -228,10 +228,13 @@ const ListaPaginada = props => {
         }}
         onChange={executaPaginacao}
         loading={carregando}
-        expandedRowRender={expandedRowRender}
         expandIconAsCell={false}
-        expandIcon={expandIcon}
-        expandedRowKeys={expandedRowKeys}
+        expandable={{
+          expandedRowRender,
+          expandIcon,
+          expandedRowKeys,
+          showExpandColumn: false,
+        }}
       />
     </Container>
   );
