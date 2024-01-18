@@ -309,6 +309,7 @@ const DevolutivasForm = () => {
       const numeroEscolhido = numero || numeroRegistros || 4;
       const retorno = await ServicoDiarioBordo.obterPlanejamentosPorDevolutiva(
         idDevolutiva,
+        anoLetivo,
         pagina || 1,
         numeroEscolhido
       ).catch(e => erros(e));
@@ -321,7 +322,7 @@ const DevolutivasForm = () => {
         dispatch(limparDadosPlanejamento());
       }
     },
-    [idDevolutiva, numeroRegistros, dispatch]
+    [idDevolutiva, numeroRegistros, dispatch, anoLetivo]
   );
 
   useEffect(() => {
@@ -380,7 +381,8 @@ const DevolutivasForm = () => {
           String(componentes.data[0].codigoComponenteCurricular)
         );
       } else {
-        refForm.setFieldValue('codigoComponenteCurricular', undefined);
+        refForm?.setFieldValue &&
+          refForm.setFieldValue('codigoComponenteCurricular', undefined);
         setCodigoComponenteCurricular(undefined);
       }
     } else {
