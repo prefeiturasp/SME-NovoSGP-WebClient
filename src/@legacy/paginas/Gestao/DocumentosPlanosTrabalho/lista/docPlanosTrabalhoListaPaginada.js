@@ -178,7 +178,14 @@ const DocPlanosTrabalhoListaPaginada = props => {
     } else {
       setFiltros({});
     }
-  }, [ueCodigo, dreCodigo, tipoDocumentoId, classificacaoId, listaUes]);
+  }, [
+    ueCodigo,
+    dreCodigo,
+    tipoDocumentoId,
+    classificacaoId,
+    listaDres,
+    listaUes,
+  ]);
 
   useEffect(() => {
     filtrar();
@@ -233,7 +240,7 @@ const DocPlanosTrabalhoListaPaginada = props => {
       colunas={colunas}
       filtro={filtros}
       onClick={(linha, colunaClicada) => onClickEditar(linha, colunaClicada)}
-      filtroEhValido={!!filtros?.ueId}
+      filtroEhValido={!!filtros?.anoLetivo}
       expandedRowKeys={
         expandedRowKeys?.documentoId ? [expandedRowKeys.documentoId] : []
       }
