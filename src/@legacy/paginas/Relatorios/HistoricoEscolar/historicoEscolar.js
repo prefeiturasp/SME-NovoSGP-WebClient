@@ -211,7 +211,9 @@ const HistoricoEscolar = () => {
           .finally(() => setCarregandoModalidades(false));
 
         if (resposta?.data?.length) {
-          const lista = resposta.data;
+          const lista = resposta.data.filter(
+            item => Number(item.valor) !== ModalidadeEnum.CELP
+          );
 
           if (lista?.length === 1) {
             setModalidadeId(lista[0].valor);

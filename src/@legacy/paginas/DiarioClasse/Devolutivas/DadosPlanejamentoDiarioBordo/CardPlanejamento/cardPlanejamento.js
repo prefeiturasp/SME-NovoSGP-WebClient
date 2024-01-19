@@ -21,19 +21,19 @@ const CardPlanejamento = React.memo(() => {
   const listaRegistros = [
     {
       valor: 1,
-      descricao: '1 registro por página',
+      descricao: '1 dia por página',
     },
     {
       valor: 2,
-      descricao: '2 registros por página',
+      descricao: '2 dias por página',
     },
     {
       valor: 3,
-      descricao: '3 registros por página',
+      descricao: '3 dias por página',
     },
     {
       valor: 4,
-      descricao: '4 registros por página',
+      descricao: '4 dias por página',
     },
   ];
 

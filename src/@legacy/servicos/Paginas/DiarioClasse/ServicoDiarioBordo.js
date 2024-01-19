@@ -104,13 +104,14 @@ class ServicoDiarioBordo {
 
   obterPlanejamentosPorDevolutiva = (
     idDevolutiva,
+    anoLetivo,
     numeroPagina,
     numeroRegistros
   ) => {
-    const url = `${urlPadrao}/devolutivas/${idDevolutiva}?numeroPagina=${
-      numeroPagina || 1
-    }&NumeroRegistros=${numeroRegistros}`;
-    return api.get(url);
+    const url = `${urlPadrao}/devolutivas/${idDevolutiva}`;
+    return api.get(url, {
+      params: { anoLetivo, numeroRegistros, numeroPagina: numeroPagina || 1 },
+    });
   };
 
   obterTitulosDiarioBordo = ({

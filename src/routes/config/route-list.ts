@@ -1,8 +1,17 @@
+import InformesCadastro from '@/@legacy/paginas/Informes/Form/informesCadastro';
+import ListaInformes from '@/@legacy/paginas/Informes/List/listaInformes';
 import RelatorioDinamicoNAAPA from '@/@legacy/paginas/NAAPA/RelatorioDinamico/relatorioDinamicoNAAPA';
 import RelatorioOcorrencias from '@/@legacy/paginas/Relatorios/Gestao/Ocorrencias/relatorioOcorrencias';
 import RelatorioPAP from '@/@legacy/paginas/Relatorios/PAP/RelatorioPAP/relatorioPAP';
 import { ROUTES } from '@/core/enum/routes';
 import { store } from '@/core/redux';
+import ConsultaCriancasEstudantesAusentes from '@/pages/busca-ativa/consulta-criancas-estudantes-ausentes/list';
+import BuscaAtivaHistoricoRegistroAcoes from '@/pages/busca-ativa/consulta-criancas-estudantes-ausentes/list/historico';
+import BuscaAtivaHistoricoRegistroAcoesForm from '@/pages/busca-ativa/consulta-criancas-estudantes-ausentes/list/historico/form';
+import BuscaAtivaRegistroAcoesForm from '@/pages/busca-ativa/registro-acoes/form';
+import BuscaAtivaRegistroAcoesList from '@/pages/busca-ativa/registro-acoes/list';
+import FormCadastroABAE from '@/pages/cadastro-abae/form';
+import ListCadastroABAE from '@/pages/cadastro-abae/list';
 import RotasTipo from '~/constantes/rotasTipo';
 import EncaminhamentoAEECadastro from '~/paginas/AEE/Encaminhamento/Cadastro/encaminhamentoAEECadastro';
 import EncaminhamentoAEELista from '~/paginas/AEE/Encaminhamento/Lista/encaminhamentoAEELista';
@@ -1684,6 +1693,142 @@ route.set(ROUTES.RELATORIO_DINAMICO_NAAPA, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_DINAMICO_NAAPA,
+});
+
+route.set(ROUTES.CADASTRO_ABAE, {
+  breadcrumbName: 'Cadastro de ABAE',
+  menu: ['Gestão'],
+  parent: '/',
+  component: ListCadastroABAE,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.CADASTRO_ABAE,
+});
+
+route.set(ROUTES.CADASTRO_ABAE_NOVO, {
+  breadcrumbName: 'Cadastro de ABAE',
+  menu: ['Gestão'],
+  parent: '/',
+  component: FormCadastroABAE,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.CADASTRO_ABAE,
+});
+
+route.set(ROUTES.CADASTRO_ABAE_EDICAO, {
+  breadcrumbName: 'Cadastro de ABAE',
+  menu: ['Gestão'],
+  parent: '/',
+  component: FormCadastroABAE,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.CADASTRO_ABAE,
+});
+
+route.set(ROUTES.INFORMES, {
+  breadcrumbName: 'Informes',
+  menu: ['Gestão'],
+  parent: '/',
+  component: ListaInformes,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.INFORMES,
+});
+
+route.set(ROUTES.INFORMES_NOVO, {
+  breadcrumbName: 'Novo',
+  parent: ROUTES.INFORMES,
+  component: InformesCadastro,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.INFORMES,
+});
+
+route.set(ROUTES.INFORMES_EDICAO, {
+  breadcrumbName: 'Editar',
+  parent: ROUTES.INFORMES,
+  component: InformesCadastro,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.INFORMES,
+});
+
+route.set(ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES, {
+  breadcrumbName: 'Consulta de crianças/estudantes ausentes',
+  menu: ['NAAPA', 'Busca ativa'],
+  parent: '/',
+  component: ConsultaCriancasEstudantesAusentes,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
+});
+
+route.set(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES, {
+  breadcrumbName: 'Registro de ações',
+  parent: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
+  component: BuscaAtivaHistoricoRegistroAcoes,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
+});
+
+route.set(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_NOVO, {
+  breadcrumbName: 'Novo Registro de ações',
+  parent: ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES,
+  component: BuscaAtivaHistoricoRegistroAcoesForm,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
+});
+
+route.set(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_EDICAO, {
+  breadcrumbName: 'Editar Registro de ações',
+  parent: ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES,
+  component: BuscaAtivaHistoricoRegistroAcoesForm,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES,
+});
+
+route.set(ROUTES.BUSCA_ATIVA_REGISTRO_ACOES, {
+  breadcrumbName: 'Registro de ações',
+  menu: ['NAAPA', 'Busca ativa'],
+  parent: '/',
+  component: BuscaAtivaRegistroAcoesList,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_REGISTRO_ACOES,
+});
+
+route.set(ROUTES.BUSCA_ATIVA_REGISTRO_ACOES_NOVO, {
+  breadcrumbName: 'Novo Registro de ações',
+  parent: ROUTES.BUSCA_ATIVA_REGISTRO_ACOES,
+  component: BuscaAtivaRegistroAcoesForm,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_REGISTRO_ACOES,
+});
+
+route.set(ROUTES.BUSCA_ATIVA_REGISTRO_ACOES_EDICAO, {
+  breadcrumbName: 'Editar Registro de ações',
+  parent: ROUTES.BUSCA_ATIVA_REGISTRO_ACOES,
+  component: BuscaAtivaRegistroAcoesForm,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.BUSCA_ATIVA_REGISTRO_ACOES,
 });
 
 const getRoutesArray = () => {

@@ -5,7 +5,15 @@ import { store } from '@/core/redux';
 import Filtro from '../filtro';
 import LogoDoSgp from '~/recursos/LogoDoSgp.svg';
 import NavbarNotificacoes from '../IconeNotificacoes/navbar-notificacoes';
-import { Nav, Botao, Botoes, Logo, Icone, Texto, Div } from './navbar.css';
+import {
+  Nav,
+  Botao,
+  Botoes,
+  Logo,
+  Icone,
+  Texto,
+  ContainerFiltroPrincipal,
+} from './navbar.css';
 
 import Perfil from '../perfil';
 import { Deslogar, removerTurma } from '~/redux/modulos/usuario/actions';
@@ -96,7 +104,7 @@ const Navbar = () => {
         )}
         <Nav className="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top py-0">
           <div className="container-fluid h-100">
-            <div>
+            <div className="logo-navbar">
               <Link
                 style={{
                   display: 'flex',
@@ -109,46 +117,44 @@ const Navbar = () => {
                   if (!pararAcao) navigate(URL_HOME);
                 }}
               >
-                <Logo
-                  src={LogoDoSgp}
-                  alt="SGP"
-                  className="mx-xl-auto mx-lg-auto mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 d-block"
-                />
+                <Logo src={LogoDoSgp} alt="SGP" />
               </Link>
             </div>
-            <div className="d-flex w-100 h-100 position-relative">
-              <div className="d-flex justify-content-end col-xl-12 p-0">
-                <Botoes className="align-self-xl-center align-self-lg-center align-self-md-center align-self-sm-center mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0">
-                  <ul className="list-inline p-0 m-0 d-flex align-items-center">
-                    <li className="list-inline-item mr-4">
-                      <Perfil />
-                    </li>
-                    <li className="list-inline-item mr-4">
-                      <NavbarNotificacoes
-                        Botao={Botao}
-                        Icone={Icone}
-                        Texto={Texto}
-                      />
-                    </li>
-                    <li className="list-inline-item">
-                      <Botao
-                        className="text-center"
-                        onClick={onClickSair}
-                        id={SGP_BUTTON_SAIR}
-                      >
-                        <Icone className="fa fa-power-off fa-lg" />
-                        <Texto className="d-block mt-1">Sair</Texto>
-                      </Botao>
-                    </li>
-                  </ul>
-                </Botoes>
-              </div>
-              <Div
+
+            <div className="d-flex align-items-center justify-content-between w-100">
+              <ContainerFiltroPrincipal
                 retraido={retraido}
-                className="d-flex align-self-xl-center align-self-lg-center align-self-md-center align-self-sm-center w-100 position-absolute mb-sm-2 mb-md-2"
+                className="position-relative"
               >
                 <Filtro />
-              </Div>
+              </ContainerFiltroPrincipal>
+              <Botoes className="align-self-xl-center align-self-lg-center align-self-md-center align-self-sm-center mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0">
+                <ul className="list-inline p-0 m-0 d-flex align-items-center">
+                  <li className="list-inline-item mr-4 botao-perfil-usuario">
+                    <Perfil />
+                  </li>
+                  <li className="list-inline-item mr-4">
+                    <NavbarNotificacoes
+                      Botao={Botao}
+                      Icone={Icone}
+                      Texto={Texto}
+                    />
+                  </li>
+                  <li className="list-inline-item">
+                    <Botao
+                      className="text-center"
+                      onClick={onClickSair}
+                      id={SGP_BUTTON_SAIR}
+                    >
+                      <Icone className="fa fa-power-off fa-lg" />
+                      <Texto className="d-block mt-1">Sair</Texto>
+                    </Botao>
+                  </li>
+                </ul>
+              </Botoes>
+            </div>
+            <div className="w-100 justify-content-end linha-perfil-usuario">
+              <Perfil />
             </div>
           </div>
         </Nav>

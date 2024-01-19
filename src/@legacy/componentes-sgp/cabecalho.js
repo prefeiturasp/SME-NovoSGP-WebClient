@@ -44,6 +44,14 @@ const Container = styled.div`
     padding-bottom: 0.5rem !important;
   }
 
+  .ant-affix {
+    top: ${props => (props?.acessoAdmin ? '114.15px' : '70px')} !important;
+
+    @media (max-width: 768px) {
+      top: ${props => (props?.acessoAdmin ? '184.15px' : '140px')} !important;
+    }
+  }
+
   padding-bottom: 8px;
   margin-right: -32px;
   margin-left: -32px;
@@ -100,15 +108,10 @@ const Cabecalho = ({
       <div className="d-flex">{children}</div>
     </div>
   );
-  const offsetTop = usuario?.acessoAdmin ? 114.15 : 70;
 
   return (
-    <Container className={classes}>
-      {removeAffix ? (
-        componentePadrao
-      ) : (
-        <Affix offsetTop={offsetTop}>{componentePadrao}</Affix>
-      )}
+    <Container className={classes} acessoAdmin={!!usuario?.acessoAdmin}>
+      {removeAffix ? componentePadrao : <Affix>{componentePadrao}</Affix>}
     </Container>
   );
 };

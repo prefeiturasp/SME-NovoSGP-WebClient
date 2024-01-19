@@ -11,3 +11,4 @@ export const TIPO_CLASSIFICACAO = {
   DOCUMENTOS_DA_TURMA: 'Documentos da Turma',
 };
 export const CRIANCAS_ESTUDANTES_SELECIONADOS = '1';
+export const ANO_BASE_DEVOLUTIVA_UNIFICADA = '2024';

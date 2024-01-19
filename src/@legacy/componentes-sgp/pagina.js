@@ -14,7 +14,7 @@ const Pagina = () => {
     <CapturaErros navigate={navigate}>
       <Layout hasSider style={{ minHeight: '100vh' }}>
         <SiderSGP />
-        <Layout style={{ marginLeft: '88px' }}>
+        <Layout>
           <Navbar />
           <Content style={{ margin: '16px 32px' }}>
             <Conteudo />
