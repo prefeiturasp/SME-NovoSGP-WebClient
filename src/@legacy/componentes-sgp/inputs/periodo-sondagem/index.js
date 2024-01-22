@@ -10,7 +10,8 @@ export const PeriodoSondagem = ({ form, onChange }) => {
   const tipoSondagem = form.values?.tipoSondagem;
   const anoLetivo = form.values?.anoLetivo;
 
-  const ANO_LETIVO_IAD_BIMESTRE = 2022;
+  const ANO_LETIVO_IAD_BIMESTRAL = 2022;
+  const ANO_LETIVO_IAD_LP_SEMESTRAL = 2024;
 
   const tipoEhMatematica = tipo => {
     switch (Number(tipo)) {
@@ -24,28 +25,59 @@ export const PeriodoSondagem = ({ form, onChange }) => {
     }
   };
 
+  const tipoEhPortugues = tipo => {
+    switch (Number(tipo)) {
+      case TIPO_SONDAGEM.LP_CapacidadeLeitura:
+      case TIPO_SONDAGEM.LP_ProducaoTexto:
+      case TIPO_SONDAGEM.LP_LeituraVozAlta:
+      case TIPO_SONDAGEM.LP_Escrita:
+      case TIPO_SONDAGEM.LP_Leitura:
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  const tipoEhPortuguesIAD = tipo => {
+    switch (Number(tipo)) {
+      case TIPO_SONDAGEM.LP_CapacidadeLeitura:
+      case TIPO_SONDAGEM.LP_ProducaoTexto:
+      case TIPO_SONDAGEM.LP_LeituraVozAlta:
+        return true;
+      default:
+        return false;
+    }
+  };
+
   const obterPeriodos = useCallback(async () => {
     let listaSemestreBimestre = [];
 
     const ehMatematica = tipoEhMatematica(tipoSondagem);
+    const ehPortugues = tipoEhPortugues(tipoSondagem);
 
     let ehSemestre = ehMatematica;
 
     if (ehMatematica) {
-      if (anoLetivo < ANO_LETIVO_IAD_BIMESTRE) {
+      if (anoLetivo < ANO_LETIVO_IAD_BIMESTRAL) {
         ehSemestre = true;
-      } else if (anoLetivo === ANO_LETIVO_IAD_BIMESTRE) {
+      } else if (anoLetivo === ANO_LETIVO_IAD_BIMESTRAL) {
         ehSemestre = false;
       } else if (
-        anoLetivo > ANO_LETIVO_IAD_BIMESTRE &&
+        anoLetivo > ANO_LETIVO_IAD_BIMESTRAL &&
         TIPO_SONDAGEM.MAT_IAD === Number(tipoSondagem)
       ) {
         ehSemestre = true;
       } else {
         ehSemestre = false;
       }
+    } else if (ehPortugues) {
+      ehSemestre = false;
+      if (
+        anoLetivo >= ANO_LETIVO_IAD_LP_SEMESTRAL &&
+        tipoEhPortuguesIAD(tipoSondagem)
+      )
+        ehSemestre = true;
     }
-
     if (ehSemestre) {
       listaSemestreBimestre = [
         { descricao: '1º Semestre', valor: '1' },
