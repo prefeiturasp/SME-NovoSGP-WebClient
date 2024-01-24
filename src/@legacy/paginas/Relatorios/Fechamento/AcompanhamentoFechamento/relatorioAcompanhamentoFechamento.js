@@ -15,7 +15,7 @@ import {
   FiltroHelper,
 } from '~/componentes-sgp';
 
-import { OPCAO_TODOS } from '~/constantes/constantes';
+import { OPCAO_TODOS, ANO_INICIO_INFANTIL } from '~/constantes/constantes';
 import {
   statusAcompanhamentoConselhoClasse,
   statusAcompanhamentoFechamento,
@@ -152,6 +152,7 @@ const AcompanhamentoFechamento = () => {
 
     const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
       consideraHistorico: true,
+      anoMinimo: ANO_INICIO_INFANTIL,
     });
     const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
       consideraHistorico: false,
@@ -767,9 +768,7 @@ const AcompanhamentoFechamento = () => {
                     valueOption="valor"
                     valueText="desc"
                     disabled={
-                      !consideraHistorico ||
-                      listaAnosLetivo?.length === 1 ||
-                      desabilitarCampos
+                      listaAnosLetivo?.length === 1 || desabilitarCampos
                     }
                     onChange={onChangeAnoLetivo}
                     valueSelect={anoLetivo}
