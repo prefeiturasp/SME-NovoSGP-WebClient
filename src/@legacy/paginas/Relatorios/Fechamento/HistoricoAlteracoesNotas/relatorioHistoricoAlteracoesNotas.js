@@ -5,7 +5,7 @@ import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import Alert from '~/componentes/alert';
 import Card from '~/componentes/card';
 import { URL_HOME } from '~/constantes';
-import { OPCAO_TODOS } from '~/constantes/constantes';
+import { OPCAO_TODOS, ANO_INICIO_INFANTIL } from '~/constantes/constantes';
 import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros, sucesso } from '~/servicos/alertas';
@@ -305,9 +305,11 @@ const RelatorioHistoricoAlteracoesNotas = () => {
 
     const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
       consideraHistorico: true,
+      anoMinimo: ANO_INICIO_INFANTIL,
     });
     const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
       consideraHistorico: false,
+      anoMinimo: ANO_INICIO_INFANTIL,
     });
 
     anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
@@ -579,7 +581,7 @@ const RelatorioHistoricoAlteracoesNotas = () => {
                 lista={listaAnosLetivo}
                 valueOption="valor"
                 valueText="desc"
-                disabled={!consideraHistorico || listaAnosLetivo?.length === 1}
+                disabled={listaAnosLetivo?.length === 1}
                 onChange={onChangeAnoLetivo}
                 valueSelect={anoLetivo}
                 placeholder="Ano letivo"
