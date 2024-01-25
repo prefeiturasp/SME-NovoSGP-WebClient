@@ -38,6 +38,8 @@ const InputCEP: React.FC<InputCEPProps> = ({ inputProps, formItemProps }) => {
         form.setFieldValue('endereco', data?.logradouro);
         form.setFieldValue('complemento', data?.complemento);
 
+        form.validateFields(['estado', 'bairro', 'cidade', 'endereco']);
+
         if (resposta.status === HttpStatusCode.NoContent) {
           form.getFieldInstance('endereco').focus();
         }
