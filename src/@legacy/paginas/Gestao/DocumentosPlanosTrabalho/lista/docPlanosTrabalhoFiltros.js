@@ -1,39 +1,43 @@
-import PropTypes from 'prop-types';
 import { Col, Row } from 'antd';
-import React from 'react';
-import { ExibirHistorico, AnoLetivo, Dre, Ue } from '~/componentes-sgp/inputs';
+import PropTypes from 'prop-types';
+import { AnoLetivo, Dre, ExibirHistorico, Ue } from '~/componentes-sgp/inputs';
 import { ClassificacaoDocumento } from '~/componentes-sgp/inputs/classificacaoDocumento';
 import { TipoDocumento } from '~/componentes-sgp/inputs/tipoDocumento';
+import DocPlanosTrabalhoListaPaginada from './docPlanosTrabalhoListaPaginada';
 
 const DocPlanosTrabalhoFiltros = props => {
   const { form } = props;
 
   return (
-    <Col span={24}>
+    <Col xs={24}>
       <Row gutter={[16, 16]}>
-        <Col sm={24}>
-          <ExibirHistorico form={form} />
+        <Col xs={24}>
+          <Row>
+            <ExibirHistorico form={form} />
+          </Row>
         </Col>
-      </Row>
 
-      <Row gutter={[16, 16]}>
-        <Col sm={24} md={8} lg={4}>
+        <Col xs={24} sm={8} md={4}>
           <AnoLetivo form={form} />
         </Col>
-        <Col sm={24} md={24} lg={10}>
-          <Dre form={form} mostrarOpcaoTodas={false} />
-        </Col>
-        <Col sm={24} md={24} lg={10}>
-          <Ue form={form} mostrarOpcaoTodas={false} />
-        </Col>
-      </Row>
 
-      <Row gutter={[16, 16]}>
-        <Col sm={24} md={12}>
+        <Col xs={24} sm={24} md={10}>
+          <Dre form={form} />
+        </Col>
+
+        <Col xs={24} sm={24} md={10}>
+          <Ue form={form} />
+        </Col>
+
+        <Col xs={24} sm={12}>
           <TipoDocumento form={form} />
         </Col>
-        <Col sm={24} md={12}>
+
+        <Col xs={24} sm={12}>
           <ClassificacaoDocumento form={form} />
+        </Col>
+        <Col xs={24}>
+          <DocPlanosTrabalhoListaPaginada form={form} />
         </Col>
       </Row>
     </Col>

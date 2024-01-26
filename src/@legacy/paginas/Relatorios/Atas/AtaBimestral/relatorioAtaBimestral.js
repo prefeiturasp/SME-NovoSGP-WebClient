@@ -1,4 +1,5 @@
 import { ROUTES } from '@/core/enum/routes';
+import { TipoTurmaEnum } from '@/core/enum/tipo-turma-enum';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -296,6 +297,13 @@ const RelatorioAtaBimestral = () => {
     async (modalidadeSelecionada, anoLetivoSelecionado, ue) => {
       setCarregandoSemestres(true);
 
+      const tiposTurmas = [
+        TipoTurmaEnum.REGULAR,
+        TipoTurmaEnum.EDFISICA,
+        TipoTurmaEnum.ITINERARIOS2AANO,
+      ];
+      if (Number(modalidadeSelecionada) === ModalidadeEnum.CELP)
+        tiposTurmas.push(TipoTurmaEnum.PROGRAMA);
       const [primeiroSemestre, segundoSemestre] = await Promise.all([
         AbrangenciaServico.buscarTurmas(
           ue,
@@ -304,7 +312,7 @@ const RelatorioAtaBimestral = () => {
           anoLetivoSelecionado,
           consideraHistorico,
           false,
-          [1, 2, 7]
+          tiposTurmas
         ),
         AbrangenciaServico.buscarTurmas(
           ue,
@@ -313,7 +321,7 @@ const RelatorioAtaBimestral = () => {
           anoLetivoSelecionado,
           consideraHistorico,
           false,
-          [1, 2, 7]
+          tiposTurmas
         ),
       ])
         .catch(e => erros(e))
@@ -404,7 +412,7 @@ const RelatorioAtaBimestral = () => {
     [anoLetivo, consideraHistorico, ehModalidadeInfantil]
   );
 
-  const obterTurmasEJA = useCallback(
+  const obterTurmasModalidadeSemestral = useCallback(
     async (semestreSelecionado, listaTurmasPorSemestreSelecionada) => {
       if (
         Object.keys(listaTurmasPorSemestreSelecionada)?.length &&
@@ -440,7 +448,7 @@ const RelatorioAtaBimestral = () => {
   }, [
     modalidadeId,
     ueCodigo,
-    obterTurmasEJA,
+    obterTurmasModalidadeSemestral,
     obterTurmas,
     ehModalidadeEjaOuCelp,
   ]);
@@ -453,14 +461,14 @@ const RelatorioAtaBimestral = () => {
       Object.keys(listaTurmasPorSemestre)?.length &&
       semestre
     ) {
-      obterTurmasEJA(semestre, listaTurmasPorSemestre);
+      obterTurmasModalidadeSemestral(semestre, listaTurmasPorSemestre);
     }
   }, [
     listaTurmasPorSemestre,
     modalidadeId,
     semestre,
     ueCodigo,
-    obterTurmasEJA,
+    obterTurmasModalidadeSemestral,
     ehModalidadeEjaOuCelp,
   ]);
 

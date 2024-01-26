@@ -3,6 +3,14 @@ import ExclamacaoCampoErro from '~/recursos/ExclamacaoCampoErro.svg';
 import { Base } from '../componentes/colors';
 
 export default createGlobalStyle`
+
+  @media screen and (min-width: 768px) {
+    .ant-layout.ant-layout-has-sider .ant-layout {
+      margin-left: 88px !important;
+    }
+  }
+
+
   *, *:before, *:after {
     box-sizing: border-box;
     margin: 0;
@@ -18,8 +26,12 @@ export default createGlobalStyle`
     height: 100%;
     letter-spacing: normal;
     line-height: normal;
-    @media (max-width: 767.98px) {
+    @media (max-width: 768px) {
       height: auto;
+
+      #sider-menu-button-toggle {
+        height: 140px !important;
+      }
     }
   }
   body {
@@ -257,6 +269,10 @@ export default createGlobalStyle`
       height: 38px !important;
       align-items: center !important;
     }
+  }
+
+  .ant-form-item-label {
+    font-weight: 700;
   }
 
   /* Antd V5 End */

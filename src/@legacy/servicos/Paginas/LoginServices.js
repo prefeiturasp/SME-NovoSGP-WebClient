@@ -15,6 +15,7 @@ import {
   setDadosFiltroAutenticacaoFrequencia,
   setLimparTurmaFiltroAutenticacaoFrequencia,
 } from '../../redux/modulos/turmaFiltroAutenticacaoFrequencia/actions';
+import { criarUsuarioCES } from '@/core/services/ces-service';
 
 class LoginService {
   autenticar = async props => {
@@ -71,6 +72,8 @@ class LoginService {
             store.dispatch(setarPerfis(perfis));
             store.dispatch(perfilSelecionado(selecionado));
             store.dispatch(setTrocouPerfil(true));
+
+            criarUsuarioCES(dados.usuarioRf);
           }
 
           if (tokenIntegracaoFrequencia) {

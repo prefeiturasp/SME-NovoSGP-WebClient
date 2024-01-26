@@ -129,12 +129,17 @@ const AbrangenciaServico = {
       `v1/abrangencias/${consideraHistorico}/ues/${codigoUe}/modalidades/${modalidade}/turmas/anos/${anoLetivo}`
     );
   },
-  obterSemestres(consideraHistorico, anoLetivo, modalidade, dre, ue) {
-    const url = `v1/abrangencias/${consideraHistorico}/semestres?anoLetivo=${anoLetivo}&modalidade=${
-      modalidade || 0
-    }&dreCodigo=${dre}&ueCodigo=${ue}`;
-
-    return api.get(url);
+  obterSemestres(
+    consideraHistorico,
+    anoLetivo,
+    modalidade,
+    dreCodigo,
+    ueCodigo
+  ) {
+    const url = `v1/abrangencias/${consideraHistorico}/semestres`;
+    return api.get(url, {
+      params: { anoLetivo, modalidade, dreCodigo, ueCodigo },
+    });
   },
 };
 

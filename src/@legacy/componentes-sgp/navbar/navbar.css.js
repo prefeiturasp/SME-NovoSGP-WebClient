@@ -6,8 +6,22 @@ export const Nav = styled.nav`
   height: 70px !important;
   padding-left: 15px !important;
   padding-right: 15px !important;
-  @media (max-width: 767.98px) {
+
+  .linha-perfil-usuario {
+    display: none !important;
+  }
+
+  @media (max-width: 768px) {
     height: 140px !important;
+
+    .logo-navbar,
+    .botao-perfil-usuario {
+      display: none;
+    }
+
+    .linha-perfil-usuario {
+      display: flex !important;
+    }
   }
 `;
 
@@ -20,7 +34,6 @@ export const Logo = styled.img`
 `;
 
 export const Botoes = styled.div`
-  height: 55px !important;
   z-index: 101;
 `;
 
@@ -46,11 +59,12 @@ export const Texto = styled.span`
   font-size: 10px !important;
 `;
 
-export const Div = styled.div`
+export const ContainerFiltroPrincipal = styled.div`
   margin-left: 30px;
+  width: 50%;
+  margin-right: 15px;
   @media (max-width: 767.98px) {
-    left: 50%;
-    margin-left: 0 !important;
-    transform: translateX(-50%) translateY(-0.5rem);
+    margin-left: 88px;
+    width: 100%;
   }
 `;
