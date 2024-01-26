@@ -382,21 +382,9 @@ const RelatorioLeitura = () => {
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
-    let anosLetivos = [];
 
-    const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: true,
-    });
-    const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: false,
-    });
-
-    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
-
-    anosLetivoSemHistorico.forEach(ano => {
-      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
-        anosLetivos.push(ano);
-      }
+    const anosLetivos = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
     });
 
     if (!anosLetivos.length) {
@@ -406,7 +394,7 @@ const RelatorioLeitura = () => {
       });
     }
 
-    if (anosLetivos && anosLetivos.length) {
+    if (anosLetivos?.length) {
       const temAnoAtualNaLista = anosLetivos.find(
         item => String(item.valor) === String(anoAtual)
       );
@@ -416,7 +404,7 @@ const RelatorioLeitura = () => {
 
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnosLetivos(false);
-  }, [anoAtual]);
+  }, [consideraHistorico, anoAtual]);
 
   useEffect(() => {
     obterAnosLetivos();
@@ -687,9 +675,7 @@ const RelatorioLeitura = () => {
                   lista={listaAnosLetivo}
                   valueOption="valor"
                   valueText="desc"
-                  disabled={
-                    !consideraHistorico || listaAnosLetivo?.length === 1
-                  }
+                  disabled={listaAnosLetivo?.length === 1}
                   onChange={onChangeAnoLetivo}
                   valueSelect={anoLetivo}
                   placeholder="Ano letivo"

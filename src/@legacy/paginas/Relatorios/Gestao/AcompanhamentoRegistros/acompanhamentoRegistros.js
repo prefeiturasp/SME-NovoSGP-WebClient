@@ -19,7 +19,7 @@ import {
   sucesso,
 } from '~/servicos';
 import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
-import { onchangeMultiSelect, ordenarListaMaiorParaMenor } from '~/utils';
+import { onchangeMultiSelect } from '~/utils';
 import { OPCAO_TODOS } from '~/constantes';
 import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { useNavigate } from 'react-router-dom';
@@ -94,24 +94,9 @@ const AcompanhamentoRegistros = () => {
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnos(true);
-    let anosLetivos = [];
 
-    const [anosLetivoComHistorico, anosLetivoSemHistorico] = await Promise.all([
-      FiltroHelper.obterAnosLetivos({
-        consideraHistorico: true,
-      }),
-      FiltroHelper.obterAnosLetivos({
-        consideraHistorico: false,
-      }),
-    ])
-      .catch(e => erros(e))
-      .finally(() => setCarregandoAnos(false));
-    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
-
-    anosLetivoSemHistorico.forEach(ano => {
-      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
-        anosLetivos.push(ano);
-      }
+    const anosLetivos = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
     });
 
     if (!anosLetivos.length) {
@@ -129,8 +114,9 @@ const AcompanhamentoRegistros = () => {
       else setAnoLetivo(anosLetivos[0].valor);
     }
 
-    setListaAnosLetivo(ordenarListaMaiorParaMenor(anosLetivos, 'valor'));
-  }, [anoAtual]);
+    setListaAnosLetivo(anosLetivos);
+    setCarregandoAnos(false);
+  }, [consideraHistorico, anoAtual]);
 
   useEffect(() => {
     obterAnosLetivos();
@@ -592,9 +578,7 @@ const AcompanhamentoRegistros = () => {
                   valueOption="valor"
                   valueText="desc"
                   disabled={
-                    !consideraHistorico ||
-                    !listaAnosLetivo?.length ||
-                    listaAnosLetivo?.length === 1
+                    !listaAnosLetivo?.length || listaAnosLetivo?.length === 1
                   }
                   onChange={onChangeAnoLetivo}
                   valueSelect={anoLetivo}

@@ -148,21 +148,9 @@ const AcompanhamentoFechamento = () => {
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
-    let anosLetivos = [];
 
-    const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: true,
-    });
-    const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: false,
-    });
-
-    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
-
-    anosLetivoSemHistorico.forEach(ano => {
-      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
-        anosLetivos.push(ano);
-      }
+    const anosLetivos = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
     });
 
     if (!anosLetivos.length) {
@@ -172,7 +160,7 @@ const AcompanhamentoFechamento = () => {
       });
     }
 
-    if (anosLetivos && anosLetivos.length) {
+    if (anosLetivos?.length) {
       const temAnoAtualNaLista = anosLetivos.find(
         item => String(item.valor) === String(anoAtual)
       );
@@ -182,7 +170,7 @@ const AcompanhamentoFechamento = () => {
 
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnosLetivos(false);
-  }, [anoAtual]);
+  }, [consideraHistorico, anoAtual]);
 
   useEffect(() => {
     obterAnosLetivos();
@@ -767,9 +755,7 @@ const AcompanhamentoFechamento = () => {
                     valueOption="valor"
                     valueText="desc"
                     disabled={
-                      !consideraHistorico ||
-                      listaAnosLetivo?.length === 1 ||
-                      desabilitarCampos
+                      listaAnosLetivo?.length === 1 || desabilitarCampos
                     }
                     onChange={onChangeAnoLetivo}
                     valueSelect={anoLetivo}
