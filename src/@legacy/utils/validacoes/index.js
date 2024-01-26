@@ -58,3 +58,17 @@ export const ocultarColunaAvaliacaoComponenteRegencia = (
 
   return false;
 };
+
+export const validaAntesDoSubmit = (form, initialValues, acaoPosValidar) => {
+  const arrayCampos = Object.keys(initialValues);
+  arrayCampos.forEach(campo => {
+    form.setFieldTouched(campo, true, true);
+  });
+  setTimeout(() => {
+    form.validateForm().then(errors => {
+      if (Object.keys(errors).length === 0) {
+        acaoPosValidar(form?.values);
+      }
+    });
+  }, 500);
+};

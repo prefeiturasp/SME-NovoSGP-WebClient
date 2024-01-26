@@ -5,6 +5,7 @@ const RelatorioDinamicoNAAPAContextProvider: React.FC<PropsWithChildren> = ({ ch
   const [dataSource, setDataSource] = useState([]);
   const [gerandoRelatorio, setGerandoRelatorio] = useState(false);
   const [desabilitarGerar, setDesabilitarGerar] = useState(false);
+  const [listaSecoesParaDesabilitar, setListaSecoesParaDesabilitar] = useState([]);
 
   const inicial = {
     modoEdicao: false,
@@ -20,6 +21,7 @@ const RelatorioDinamicoNAAPAContextProvider: React.FC<PropsWithChildren> = ({ ch
     listaSemestres: [],
     anosEscolaresCodigos: undefined,
     listaAnosEscolares: [],
+    listaSecoesParaDesabilitar: [],
   };
 
   const [initialValues] = useState(inicial);
@@ -34,6 +36,8 @@ const RelatorioDinamicoNAAPAContextProvider: React.FC<PropsWithChildren> = ({ ch
         desabilitarGerar,
         setDesabilitarGerar,
         initialValues,
+        setListaSecoesParaDesabilitar,
+        listaSecoesParaDesabilitar,
       }}
     >
       {children}

@@ -1,16 +1,18 @@
+import { SGPTheme } from '@/core/config/theme';
+import { persistor, store } from '@/core/redux';
+import { ConfigProvider } from 'antd';
 import React from 'react';
+import ReactGA from 'react-ga';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import ReactGA from 'react-ga';
 import { PersistGate } from 'redux-persist/integration/react';
+
+import { ThemeProvider } from 'styled-components';
+
+import GlobalStyle from '~/estilos/global';
+import { Deslogar } from '~/redux/modulos/usuario/actions';
 import { obterTrackingID } from '~/servicos/variaveis';
 import Routes from './routes';
-import GlobalStyle from '~/estilos/global';
-import { store, persistor } from '@/core/redux';
-import { Deslogar } from '~/redux/modulos/usuario/actions';
-import { ConfigProvider } from 'antd';
-import ThemeProviders from '@/core/providers/theme-providers';
-import { SGPTheme } from '@/core/config/theme';
 
 ReactGA.initialize(obterTrackingID);
 
@@ -40,7 +42,7 @@ const App: React.FC = () => {
 
   return (
     <ConfigProvider theme={SGPTheme}>
-      <ThemeProviders>
+      <ThemeProvider theme={SGPTheme}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <BrowserRouter>
@@ -49,7 +51,7 @@ const App: React.FC = () => {
             </BrowserRouter>
           </PersistGate>
         </Provider>
-      </ThemeProviders>
+      </ThemeProvider>
     </ConfigProvider>
   );
 };
