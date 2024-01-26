@@ -144,7 +144,7 @@ const SiderSGP: React.FC = () => {
         openKeys,
         selectedKeys: navegacaoStore.menuSelecionado,
       }}
-      styleSider={{ zIndex: 30001 }}
+      styleSider={{ zIndex: 9999 }}
       items={items}
       logoMenu={LogoMenuSGP}
     />

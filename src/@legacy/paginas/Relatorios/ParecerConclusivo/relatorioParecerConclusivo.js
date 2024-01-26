@@ -248,16 +248,20 @@ const RelatorioParecerConclusivo = () => {
 
   const obterModalidades = useCallback(async () => {
     setCarregandoModalidades(true);
-    const resposta =
+    const { data } =
       await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ueId)
         .catch(e => erros(e))
         .finally(() => setCarregandoModalidades(false));
 
-    if (resposta?.data?.length) {
-      if (resposta?.data?.length === 1) {
-        setModalidadeId(resposta.data[0].valor);
+    if (data?.length) {
+      const lista = data.filter(
+        item => Number(item.valor) !== ModalidadeEnum.CELP
+      );
+
+      if (lista.length === 1) {
+        setModalidadeId(lista[0].valor);
       }
-      setListaModalidades(resposta.data);
+      setListaModalidades(lista);
     } else {
       setListaModalidades([]);
       setModalidadeId();
@@ -505,6 +509,7 @@ const RelatorioParecerConclusivo = () => {
       parecerConclusivoId:
         parecerConclusivoId === OPCAO_TODOS ? 0 : parecerConclusivoId,
       tipoFormatoRelatorio: formato,
+      historico: consideraHistorico,
     };
     await ServicoRelatorioParecerConclusivo.gerar(params)
       .then(() => {

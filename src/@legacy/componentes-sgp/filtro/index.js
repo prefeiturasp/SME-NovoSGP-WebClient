@@ -1245,7 +1245,7 @@ const Filtro = () => {
   ]);
 
   return (
-    <Container className="position-relative w-100" id="containerFiltro">
+    <Container id="containerFiltro">
       <form className="w-100" onSubmit={aoSubmeterAutocomplete}>
         <div className="form-group mb-0 w-100 position-relative">
           <Busca className="fa fa-search fa-lg bg-transparent position-absolute text-center" />
@@ -1294,6 +1294,7 @@ const Filtro = () => {
         {alternarFocoBusca && (
           <div
             ref={divBuscaRef}
+            style={{ zIndex: 1 }}
             className="container d-block position-absolute bg-white shadow rounded mt-1 px-3 pt-4 pb-1"
           >
             <div className="form-row">

@@ -47,6 +47,12 @@ const Campo = styled.div`
     background-position: right calc(0.375em + 0.1875rem) center !important;
     border-color: #dc3545 !important;
   }
+
+  .desabilitado {
+    cursor: not-allowed !important;
+    color: rgba(0, 0, 0, 0.25) !important;
+    background: rgba(0, 0, 0, 0.04) !important;
+  }
 `;
 
 const CampoTexto = React.forwardRef((props, ref) => {

@@ -114,12 +114,19 @@ const Sider: React.FC<MenuSMEProps> = ({
 
   return (
     <SiderContainer
+      collapsedSider={collapsed}
       width={collapsed ? 90 : 264}
       style={{ ...styleSider }}
       trigger={null}
       collapsible
+      collapsed={false}
+      breakpoint="md"
+      onCollapse={() => {
+        setCollapsed(true);
+        if (onClickMenuButtonToggle) onClickMenuButtonToggle(true);
+      }}
     >
-      <SiderMenuButtonToggleStyle collapsed={collapsed}>
+      <SiderMenuButtonToggleStyle collapsed={collapsed} id="sider-menu-button-toggle">
         {collapsed ? null : <img src={logoMenu} alt="logo-menu" />}
         <Button
           type="text"
@@ -132,7 +139,7 @@ const Sider: React.FC<MenuSMEProps> = ({
         />
       </SiderMenuButtonToggleStyle>
 
-      <SiderMenuContainer collapsed={collapsed}>
+      <SiderMenuContainer collapsed={collapsed} className="secound-child-menu-and-sub-menus">
         <Menu
           mode="inline"
           {...menuProps}

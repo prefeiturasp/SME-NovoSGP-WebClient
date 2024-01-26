@@ -69,7 +69,7 @@ const RelatorioDinamicoNAAPACardTotalizador: React.FC<
         ) : (
           <></>
         )}
-        {exibirCardsPorModalidade ? (
+        {exibirCardsPorModalidade && totalRegistroPorModalidadesAno?.length ? (
           <>
             <Col xs={24}>
               <TitleCard>Total por modalidade</TitleCard>
@@ -91,7 +91,7 @@ const RelatorioDinamicoNAAPACardTotalizador: React.FC<
           <></>
         )}
 
-        {exibirCardsPorAno ? (
+        {exibirCardsPorAno && totalRegistroPorModalidadesAno?.length ? (
           <>
             <Col xs={24}>
               <TitleCard>Total por ano</TitleCard>

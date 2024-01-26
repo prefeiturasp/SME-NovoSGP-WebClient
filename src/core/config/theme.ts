@@ -1,11 +1,22 @@
 import { Base } from '@/@legacy/componentes';
 import { ThemeConfig } from 'antd';
+import { Colors } from '../styles/colors';
 
-export type ThemeConfigSME = {
+export type ThemeConfigCustomColors = {
   colors: {
     colorPrimaryDark: string;
   };
-} & ThemeConfig;
+};
+
+export type ThemeConfigCustomButton = {
+  components: {
+    Button?: {
+      defaultHoverColor: string;
+    };
+  };
+};
+
+export type ThemeConfigSME = ThemeConfigCustomColors & ThemeConfig & ThemeConfigCustomButton;
 
 export const SGPTheme: ThemeConfigSME = {
   colors: {
@@ -18,11 +29,21 @@ export const SGPTheme: ThemeConfigSME = {
     borderRadius: 4,
     controlHeight: 38,
     colorTextPlaceholder: Base.CinzaDivisor,
+    colorError: Colors.ERROR,
   },
   components: {
+    Button: {
+      defaultHoverColor: Colors.BLUE,
+    },
+    Form: {
+      paddingXS: 2,
+    },
     Select: {
       controlItemBgActive: Base.Roxo,
       controlItemBgHover: Base.Roxo,
+    },
+    Modal: {
+      zIndexPopupBase: 9999,
     },
   },
 };
