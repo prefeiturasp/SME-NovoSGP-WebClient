@@ -163,7 +163,7 @@ route.set(ROUTES.RELATORIO_BOLETIM_SIMPLES, {
 });
 
 route.set(ROUTES.ACOMPANHAMENTO_COMUNICADOS, {
-  breadcrumbName: 'Comunicados',
+  breadcrumbName: 'Comunicados (Escola aqui)',
   menu: ['Gestão'],
   parent: '/',
   component: ComunicadosLista,
