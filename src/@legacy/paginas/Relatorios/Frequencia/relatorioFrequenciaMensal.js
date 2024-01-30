@@ -101,25 +101,10 @@ const RelatorioFrequenciaMensal = () => {
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnos(true);
-    let anosLetivos = [];
 
-    const [anosLetivoComHistorico, anosLetivoSemHistorico] = await Promise.all([
-      FiltroHelper.obterAnosLetivos({
-        consideraHistorico: true,
-        anoMinimo: ANO_MINIMO,
-      }),
-      FiltroHelper.obterAnosLetivos({
-        consideraHistorico: false,
-      }),
-    ])
-      .catch(e => erros(e))
-      .finally(() => setCarregandoAnos(false));
-    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
-
-    anosLetivoSemHistorico.forEach(ano => {
-      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
-        anosLetivos.push(ano);
-      }
+    const anosLetivos = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
+      anoMinimo: ANO_MINIMO,
     });
 
     if (!anosLetivos.length) {
@@ -138,7 +123,8 @@ const RelatorioFrequenciaMensal = () => {
     }
 
     setListaAnosLetivo(ordenarListaMaiorParaMenor(anosLetivos, 'valor'));
-  }, [anoAtual]);
+    setCarregandoAnos(false);
+  }, [consideraHistorico, anoAtual]);
 
   useEffect(() => {
     obterAnosLetivos();
@@ -515,9 +501,7 @@ const RelatorioFrequenciaMensal = () => {
                   valueOption="valor"
                   valueText="desc"
                   disabled={
-                    !consideraHistorico ||
-                    !listaAnosLetivo?.length ||
-                    listaAnosLetivo?.length === 1
+                    !listaAnosLetivo?.length || listaAnosLetivo?.length === 1
                   }
                   onChange={onChangeAnoLetivo}
                   valueSelect={anoLetivo}
