@@ -15,7 +15,7 @@ import {
   FiltroHelper,
 } from '~/componentes-sgp';
 
-import { OPCAO_TODOS, ANO_INICIO_INFANTIL } from '~/constantes/constantes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import {
   statusAcompanhamentoConselhoClasse,
   statusAcompanhamentoFechamento,
@@ -148,22 +148,9 @@ const AcompanhamentoFechamento = () => {
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
-    let anosLetivos = [];
 
-    const anosLetivoComHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: true,
-      anoMinimo: ANO_INICIO_INFANTIL,
-    });
-    const anosLetivoSemHistorico = await FiltroHelper.obterAnosLetivos({
-      consideraHistorico: false,
-    });
-
-    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
-
-    anosLetivoSemHistorico.forEach(ano => {
-      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
-        anosLetivos.push(ano);
-      }
+    const anosLetivos = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
     });
 
     if (!anosLetivos.length) {
@@ -173,7 +160,7 @@ const AcompanhamentoFechamento = () => {
       });
     }
 
-    if (anosLetivos && anosLetivos.length) {
+    if (anosLetivos?.length) {
       const temAnoAtualNaLista = anosLetivos.find(
         item => String(item.valor) === String(anoAtual)
       );
@@ -183,7 +170,7 @@ const AcompanhamentoFechamento = () => {
 
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnosLetivos(false);
-  }, [anoAtual]);
+  }, [consideraHistorico, anoAtual]);
 
   useEffect(() => {
     obterAnosLetivos();
