@@ -15,7 +15,7 @@ import {
   FiltroHelper,
 } from '~/componentes-sgp';
 
-import { OPCAO_TODOS, ANO_INICIO_INFANTIL } from '~/constantes/constantes';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 import {
   statusAcompanhamentoConselhoClasse,
   statusAcompanhamentoFechamento,
