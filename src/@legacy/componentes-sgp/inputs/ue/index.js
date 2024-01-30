@@ -15,6 +15,7 @@ export const Ue = ({
   mostrarOpcaoTodas,
   nameList,
   parametrosOpcionais,
+  touchedInitialValue,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -59,6 +60,10 @@ export const Ue = ({
           form.initialValues[name] = String(lista[0]?.codigo);
         }
         form.setFieldValue(name, String(lista[0]?.codigo));
+
+        if (touchedInitialValue) {
+          form.setFieldTouched(name, true, true);
+        }
       } else if (mostrarOpcaoTodas) {
         lista.unshift(OPCAO_TODAS_UE);
       }
@@ -114,6 +119,7 @@ Ue.propTypes = {
   mostrarOpcaoTodas: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
   nameList: PropTypes.string,
+  touchedInitialValue: PropTypes.bool,
 };
 
 Ue.defaultProps = {
@@ -125,4 +131,5 @@ Ue.defaultProps = {
   onChange: () => null,
   mostrarOpcaoTodas: true,
   nameList: 'listaUes',
+  touchedInitialValue: false,
 };

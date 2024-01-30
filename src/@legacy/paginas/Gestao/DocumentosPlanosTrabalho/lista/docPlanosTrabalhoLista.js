@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { ROUTES } from '@/core/enum/routes';
 import { Formik } from 'formik';
-import * as Yup from 'yup';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import * as Yup from 'yup';
 import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import { verificaSomenteConsulta } from '~/servicos';
 import DocPlanosTrabalhoBotoesAcoes from './docPlanosTrabalhoBotoesAcoes';
 import DocPlanosTrabalhoFiltros from './docPlanosTrabalhoFiltros';
-import { ROUTES } from '@/core/enum/routes';
-import { verificaSomenteConsulta } from '~/servicos';
-import DocPlanosTrabalhoListaPaginada from './docPlanosTrabalhoListaPaginada';
 
 const DocPlanosTrabalhoLista = () => {
   const usuario = useSelector(store => store.usuario);
@@ -63,7 +62,6 @@ const DocPlanosTrabalhoLista = () => {
 
           <Card padding="24px 24px">
             <DocPlanosTrabalhoFiltros form={form} />
-            <DocPlanosTrabalhoListaPaginada form={form} />
           </Card>
         </>
       )}

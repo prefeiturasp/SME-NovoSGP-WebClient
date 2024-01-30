@@ -4,16 +4,13 @@ import PropTypes from 'prop-types';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
-import situacaoMatriculaAluno from '~/dtos/situacaoMatriculaAluno';
 import {
-  setConselhoClasseEmEdicao,
   setDadosIniciaisListasNotasConceitos,
   setDadosListasNotasConceitos,
   setPodeEditarNota,
 } from '~/redux/modulos/conselhoClasse/actions';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import { erros } from '~/servicos/alertas';
-import { valorNuloOuVazio } from '~/utils/funcoes/gerais';
 import ListasCarregar from './listasCarregar';
 
 const ListasNotasConceitos = props => {
@@ -41,10 +38,6 @@ const ListasNotasConceitos = props => {
     store => store.conselhoClasse.bimestreAtual
   );
 
-  const dentroPeriodo = useSelector(
-    store => store.conselhoClasse.dentroPeriodo
-  );
-
   const podeEditarNota = useSelector(
     store => store.conselhoClasse.podeEditarNota
   );
@@ -56,7 +49,6 @@ const ListasNotasConceitos = props => {
     turmaCodigo,
     tipoNota,
     media,
-    conselhoClasseAlunoId,
   } = dadosPrincipaisConselhoClasse;
 
   const [exibir, setExibir] = useState(false);
@@ -95,97 +87,6 @@ const ListasNotasConceitos = props => {
     return true;
   };
 
-  const estaNoPeriodoOuFechamento = () => {
-    const hoje = moment().format('MM-DD-YYYY');
-    if (fechamentoPeriodoInicioFim) {
-      const { periodoFechamentoInicio, periodoFechamentoFim } =
-        fechamentoPeriodoInicioFim;
-
-      if (periodoFechamentoInicio && periodoFechamentoFim) {
-        const inicioF = moment(periodoFechamentoInicio).format('MM-DD-YYYY');
-        const finalF = moment(periodoFechamentoFim).format('MM-DD-YYYY');
-        const emFechamento = hoje >= inicioF && hoje <= finalF;
-        return dentroPeriodo || emFechamento;
-      }
-    }
-    return dentroPeriodo;
-  };
-
-  const habilitaConselhoClasse = dados => {
-    let notasFechamentosPreenchidas = true;
-
-    dados.notasConceitos.forEach(notasConceitos =>
-      notasConceitos.componentesCurriculares.forEach(
-        componentesCurriculares => {
-          if (
-            bimestreSelecionado?.valor === 'final' &&
-            componentesCurriculares?.notaPosConselho &&
-            valorNuloOuVazio(componentesCurriculares?.notaPosConselho?.nota)
-          ) {
-            notasFechamentosPreenchidas = false;
-          } else {
-            componentesCurriculares.notasFechamentos.forEach(
-              notasFechamentos => {
-                if (valorNuloOuVazio(notasFechamentos.notaConceito)) {
-                  notasFechamentosPreenchidas = false;
-                }
-              }
-            );
-          }
-        }
-      )
-    );
-    dados.notasConceitos.forEach(notasConceitos =>
-      notasConceitos.componenteRegencia?.componentesCurriculares.forEach(cc => {
-        if (
-          bimestreSelecionado?.valor === 'final' &&
-          cc?.notaPosConselho &&
-          valorNuloOuVazio(cc?.notaPosConselho?.nota)
-        ) {
-          notasFechamentosPreenchidas = false;
-        } else {
-          cc.notasFechamentos.forEach(nf => {
-            if (valorNuloOuVazio(nf.notaConceito)) {
-              notasFechamentosPreenchidas = false;
-            }
-          });
-        }
-      })
-    );
-    let validarDataSituacao = false;
-    if (dadosAlunoObjectCard?.situacaoCodigo) {
-      switch (dadosAlunoObjectCard?.situacaoCodigo) {
-        case situacaoMatriculaAluno.Ativo:
-        case situacaoMatriculaAluno.PendenteRematricula:
-        case situacaoMatriculaAluno.Rematriculado:
-        case situacaoMatriculaAluno.SemContinuidade:
-          validarDataSituacao = false;
-          break;
-        default:
-          validarDataSituacao = true;
-          break;
-      }
-    }
-
-    let alunoDentroDoPeriodoDoBimestre = true;
-    if (validarDataSituacao) {
-      alunoDentroDoPeriodoDoBimestre =
-        alunoDentroDoPeriodoDoBimestreOuFechamento();
-    }
-    const periodoAbertoOuEmFechamento = estaNoPeriodoOuFechamento();
-
-    let emEdicao = false;
-    if (
-      !conselhoClasseAlunoId &&
-      notasFechamentosPreenchidas &&
-      alunoDentroDoPeriodoDoBimestre &&
-      periodoAbertoOuEmFechamento
-    ) {
-      emEdicao = true;
-    }
-    dispatch(setConselhoClasseEmEdicao(emEdicao));
-  };
-
   const obterDadosLista = useCallback(async () => {
     setCarregando(true);
     const resultado =
@@ -207,7 +108,6 @@ const ListasNotasConceitos = props => {
       dispatch(setPodeEditarNota(resultado.data.podeEditarNota));
       setDadosArredondamento(resultado.data?.dadosArredondamento);
       setExibir(true);
-      if (bimestreSelecionado?.valor) habilitaConselhoClasse(resultado.data);
     } else {
       setExibir(false);
     }
