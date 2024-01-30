@@ -88,6 +88,9 @@ const EventosCadastroForm = () => {
   const [recorrencia, setRecorrencia] = useState(null);
   const [showModalRecorrencia, setShowModalRecorrencia] = useState(false);
   const [auditoriaEventos, setAuditoriaEventos] = useState({});
+  const [anoLetivoSelecionado, setAnoLetivoSelecionado] = useState(
+    window.moment().year()
+  );
   const [eventoTipoFeriadoSelecionado, setEventoTipoFeriadoSelecionado] =
     useState(false);
   const [
@@ -155,6 +158,7 @@ const EventosCadastroForm = () => {
     if (tipoCalendario) {
       tipoCalendario.id = String(tipoCalendario.id);
       tipoCalendario.descricaoTipoCalendario = `${tipoCalendario.anoLetivo} - ${tipoCalendario.nome} - ${tipoCalendario.descricaoPeriodo}`;
+      setAnoLetivoSelecionado(tipoCalendario.anoLetivo);
       form.initialValues.tipoCalendarioId = tipoCalendario.id;
       form.setFieldValue('tipoCalendarioId', tipoCalendario.id);
       setListaCalendarios([{ ...tipoCalendario }]);
@@ -272,8 +276,8 @@ const EventosCadastroForm = () => {
   const desabilitarData = current => {
     if (current) {
       return (
-        current < window.moment().startOf('year') ||
-        current > window.moment().endOf('year')
+        current.year() < anoLetivoSelecionado ||
+        current.year() > anoLetivoSelecionado
       );
     }
     return false;
@@ -302,7 +306,7 @@ const EventosCadastroForm = () => {
   }, [recorrencia]);
 
   const onClickCopiarEvento = async () => {
-    const anoAtual = window.moment().format('YYYY');
+    const anoAtual = anoLetivoSelecionado;
     const tiposCalendario = await api
       .get(
         usuarioStore && turmaSelecionada?.anoLetivo
@@ -837,6 +841,7 @@ const EventosCadastroForm = () => {
                         formatoData="DD/MM/YYYY"
                         name="dataFim"
                         onChange={onChangeCampos}
+                        desabilitarData={desabilitarData}
                         desabilitado={desabilitarCampos || !podeAlterarEvento}
                         labelRequired
                       />

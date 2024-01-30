@@ -298,10 +298,12 @@ const AtribuicaoCJ = () => {
         await ServicoFiltroRelatorio.obterModalidadesPorAbrangencia(ue);
 
       if (data) {
-        const lista = data.map(item => ({
-          desc: item.descricao,
-          valor: String(item.valor),
-        }));
+        const lista = data
+          .filter(item => Number(item.valor) !== ModalidadeEnum.CELP)
+          .map(item => ({
+            desc: item.descricao,
+            valor: String(item.valor),
+          }));
 
         if (lista?.length && lista?.length === 1) {
           setModalidadeId(lista[0].valor);

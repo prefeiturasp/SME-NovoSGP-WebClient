@@ -33,7 +33,7 @@ const CardsDashboard = () => {
               return (
                 <CardLink
                   key={shortid.generate()}
-                  cols={[4, 4, 4, 12]}
+                  cols={[4, 4, 12, 12]}
                   iconSize="40px"
                   url={item.rota}
                   disabled={

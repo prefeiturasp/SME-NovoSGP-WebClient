@@ -88,6 +88,12 @@ export const Container = styled.div`
 
   .ant-table-tbody tr.ant-table-expanded-row td {
     cursor: default !important;
+
+    .ant-table {
+      :first-child {
+        margin: 15px !important;
+      }
+    }
   }
 
   .ant-table-tbody tr.ant-table-row-selected > td {

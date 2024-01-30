@@ -345,6 +345,17 @@ const verificarDataFimMaiorInicio = (dataInicio, dataFim) => {
 
 const formatarFrequencia = frequencia => (frequencia ? `${frequencia}%` : '');
 
+const getPDFUrlBlob = data => {
+  const element = document.createElement('a');
+  document.body.appendChild(element);
+  element.style = 'display: none';
+
+  const blob = new Blob([data], { type: 'application/pdf' });
+  const url = window.URL.createObjectURL(blob);
+
+  return url;
+};
+
 export {
   validaSeObjetoEhNuloOuVazio,
   valorNuloOuVazio,
@@ -373,4 +384,5 @@ export {
   arredondarNota,
   verificarDataFimMaiorInicio,
   formatarFrequencia,
+  getPDFUrlBlob,
 };
