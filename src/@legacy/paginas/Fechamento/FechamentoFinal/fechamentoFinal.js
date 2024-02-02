@@ -133,8 +133,10 @@ const FechamentoFinal = forwardRef((props, ref) => {
     cancelar() {
       obterFechamentoFinal();
     },
-    salvarFechamentoFinal() {
-      obterFechamentoFinal();
+    salvarFechamentoFinal(consultarFechamentoFinal = true) {
+      if (consultarFechamentoFinal) {
+        obterFechamentoFinal();
+      }
     },
   }));
 
