@@ -13,13 +13,16 @@ import ServicoRelatorioDinamicoNAAPA from '@/@legacy/servicos/Paginas/Gestao/NAA
 import ServicoRelatorioEncaminhamentoNAAPA from '@/@legacy/servicos/Paginas/Relatorios/NAAPA/ServicoRelatorioEncaminhamentoNAAPA';
 import { ROUTES } from '@/core/enum/routes';
 import { Col, Pagination } from 'antd';
+import TabPane from 'antd/es/tabs/TabPane';
 import { HttpStatusCode } from 'axios';
 import _ from 'lodash';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Base, Button, Colors, DataTable } from '~/componentes';
-import RelatorioDinamicoNAAPACardTotalizador from '../relatorioDinamicoNAAPACardTotalizador';
+import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import RelatorioDinamicoNAAPAContext from '../relatorioDinamicoNAAPAContext';
+import { TabApoioAcompanhamentoCardsTotalizadores } from './tabs/tabApoioAcompanhamentoCardsTotalizadores';
+import { TabEncaminhamentoCardsTotalizadores } from './tabs/tabEncaminhamentoCardsTotalizadores';
 
 const RelatorioDinamicoNAAPALista = ({ form, dadosSecoes }) => {
   const consideraHistorico = form.values?.consideraHistorico;
@@ -232,14 +235,25 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosSecoes }) => {
   return (
     <>
       {encaminhamentosNAAPAPaginado?.items?.length ? (
-        <RelatorioDinamicoNAAPACardTotalizador
-          exibirCardsPorModalidade={exibirCardsPorModalidade}
-          exibirCardsPorAno={exibirCardsPorAno}
-          totalEncaminhamentos={dataSource?.totalRegistro}
-          totalRegistroPorModalidadesAno={
-            dataSource?.totalRegistroPorModalidadesAno
-          }
-        />
+        <ContainerTabsCard type="card">
+          <TabPane tab="Encaminhamento" key={1}>
+            <TabEncaminhamentoCardsTotalizadores
+              exibirCardsPorModalidade={exibirCardsPorModalidade}
+              exibirCardsPorAno={exibirCardsPorAno}
+              totalEncaminhamentos={dataSource?.totalRegistro}
+              totalRegistroPorModalidadesAno={
+                dataSource?.totalRegistroPorModalidadesAno
+              }
+            />
+          </TabPane>
+          <TabPane tab="Apoio e acompanhamento" key={2}>
+            <TabApoioAcompanhamentoCardsTotalizadores
+              totalRegistroPorAtendimento={
+                dataSource?.totalRegistroPorAtendimento
+              }
+            />
+          </TabPane>
+        </ContainerTabsCard>
       ) : (
         <></>
       )}
