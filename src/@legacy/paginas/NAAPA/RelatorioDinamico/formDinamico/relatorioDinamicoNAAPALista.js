@@ -248,9 +248,7 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosSecoes }) => {
           </TabPane>
           <TabPane tab="Apoio e acompanhamento" key={2}>
             <TabApoioAcompanhamentoCardsTotalizadores
-              totalRegistroPorAtendimento={
-                dataSource?.totalRegistroPorAtendimento
-              }
+              totalDeAtendimento={dataSource?.totalDeAtendimento}
             />
           </TabPane>
         </ContainerTabsCard>

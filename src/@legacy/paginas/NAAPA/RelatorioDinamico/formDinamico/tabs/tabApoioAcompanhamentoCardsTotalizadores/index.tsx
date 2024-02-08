@@ -1,17 +1,17 @@
 import { Base } from '@/@legacy/componentes';
 import { ColorsCards } from '@/@legacy/componentes/colors';
-import { TotalRegistroPorAtendimentoRelatorioDinamicoNAAPADTO } from '@/core/dto/TotalRegistroPorModalidadeRelatorioDinamicoNAAPADTO copy';
+import { TotalDeAtendimentoDto } from '@/core/dto/TotalDeAtendimentoDto';
 import { Col, Divider, Row } from 'antd';
 import React from 'react';
 import { ContainerCardTotalizador, LabelCard, TitleCard } from '../styles';
 
 type TabApoioAcompanhamentoCardsTotalizadoresProps = {
-  totalRegistroPorAtendimento: TotalRegistroPorAtendimentoRelatorioDinamicoNAAPADTO;
+  totalDeAtendimento: TotalDeAtendimentoDto;
 };
 
 export const TabApoioAcompanhamentoCardsTotalizadores: React.FC<
   TabApoioAcompanhamentoCardsTotalizadoresProps
-> = ({ totalRegistroPorAtendimento }) => {
+> = ({ totalDeAtendimento }) => {
   return (
     <Col xs={24}>
       <Row gutter={[16, 16]}>
@@ -19,20 +19,20 @@ export const TabApoioAcompanhamentoCardsTotalizadores: React.FC<
           <ContainerCardTotalizador color={Base.Roxo}>
             <LabelCard color={Base.Roxo}>Total de atendimentos</LabelCard>
             <Divider style={{ margin: '8px 0px', borderBlockStart: '1px solid #DADADA' }} />
-            {totalRegistroPorAtendimento?.total || 0}
+            {totalDeAtendimento?.total || 0}
           </ContainerCardTotalizador>
         </Col>
 
-        {totalRegistroPorAtendimento?.totalQuetoes?.length ? (
+        {totalDeAtendimento?.totalAtendimentoQuestoes?.length ? (
           <>
-            {totalRegistroPorAtendimento.totalQuetoes.map((questao) => {
+            {totalDeAtendimento.totalAtendimentoQuestoes.map((questao) => {
               return (
                 <>
                   <Col xs={24}>
                     <TitleCard>{questao?.descricao}</TitleCard>
                   </Col>
 
-                  {questao?.itens?.map((item, index) => {
+                  {questao?.totalAtendimentoQuestaoPorRespostas?.map((item, index) => {
                     const color = ColorsCards[index];
 
                     return (
