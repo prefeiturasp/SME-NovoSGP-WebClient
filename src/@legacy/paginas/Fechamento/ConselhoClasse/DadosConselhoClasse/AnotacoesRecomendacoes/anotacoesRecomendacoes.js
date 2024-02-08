@@ -23,7 +23,8 @@ import AuditoriaAnotacaoRecomendacao from './AuditoriaAnotacaoRecomendacao/audit
 import RecomendacaoAlunoFamilia from './RecomendacaoAlunoFamilia/recomendacaoAlunoFamilia';
 
 const AnotacoesRecomendacoes = props => {
-  const { codigoTurma, bimestre, setCarregandoAba } = props;
+  const { codigoTurma, bimestre, setCarregandoAba, setPermiteAcessarAbaFinal } =
+    props;
   const dispatch = useDispatch();
 
   const fechamentoPeriodoInicioFim = useSelector(
@@ -221,12 +222,14 @@ const AnotacoesRecomendacoes = props => {
       setExibir(true);
       setCarregando(false);
       setCarregandoAba(false);
+      setPermiteAcessarAbaFinal(true);
       return;
     }
     setarAuditoria({});
     setExibir(false);
     setCarregando(false);
     setCarregandoAba(false);
+    setPermiteAcessarAbaFinal(false);
   }, [
     alunoCodigo,
     conselhoClasseId,
