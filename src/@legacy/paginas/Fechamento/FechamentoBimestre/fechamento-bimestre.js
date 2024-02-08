@@ -105,7 +105,7 @@ const FechamentoBismestre = () => {
     setIdDisciplinaTerritorioSaber(undefined);
   };
 
-  const onChangeDisciplinas = id => {
+  const onChangeComponenteCurricular = id => {
     resetarTela();
 
     if (id) {
@@ -117,6 +117,25 @@ const FechamentoBismestre = () => {
     }
 
     setDisciplinaIdSelecionada(id);
+  };
+
+  const validarEdicaoOnChangeDisciplina = async id => {
+    if (emEdicao) {
+      const confirmado = await confirmar(
+        'Atenção',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
+      if (confirmado) {
+        const salvou = await salvarFechamentoFinal();
+        if (salvou) {
+          onChangeComponenteCurricular(id);
+        }
+      } else {
+        onChangeComponenteCurricular(id);
+      }
+    } else {
+      onChangeComponenteCurricular(id);
+    }
   };
 
   const onClickVoltar = async () => {
@@ -248,17 +267,19 @@ const FechamentoBismestre = () => {
     }
   };
 
-  const salvarFechamentoFinal = async () => {
+  const salvarFechamentoFinal = async consultarFechamentoFinal => {
     fechamentoFinal.turmaCodigo = turmaSelecionada.turma;
     fechamentoFinal.ehRegencia = ehRegencia;
     fechamentoFinal.disciplinaId = disciplinaIdSelecionada;
     setCarregandoBimestres(true);
-    ServicoFechamentoFinal.salvar(fechamentoFinal)
+    return ServicoFechamentoFinal.salvar(fechamentoFinal)
       .then(result => {
         sucesso(result.data.mensagemConsistencia);
         trocarEstadoEmEdicao(false);
         dispatch(setExpandirLinha([]));
-        refFechamentoFinal.current.salvarFechamentoFinal();
+        refFechamentoFinal.current.salvarFechamentoFinal(
+          consultarFechamentoFinal
+        );
         return result.data;
       })
       .catch(e => {
@@ -274,7 +295,7 @@ const FechamentoBismestre = () => {
         'Suas alterações não foram salvas, deseja salvar agora?'
       );
       if (confirmado) {
-        const salvou = await salvarFechamentoFinal();
+        const salvou = await salvarFechamentoFinal(false);
         if (salvou) {
           onConfirmouTrocarTab(numeroBimestre);
           trocarEstadoEmEdicao(false);
@@ -355,7 +376,7 @@ const FechamentoBismestre = () => {
                     valueOption="id"
                     valueText="nome"
                     valueSelect={disciplinaIdSelecionada}
-                    onChange={onChangeDisciplinas}
+                    onChange={validarEdicaoOnChangeDisciplina}
                     placeholder="Selecione um componente curricular"
                     disabled={
                       desabilitarDisciplina ||
@@ -479,26 +500,28 @@ const FechamentoBismestre = () => {
                     key="final"
                     disabled={!disciplinaIdSelecionada}
                   >
-                    <FechamentoFinal
-                      turmaCodigo={turmaSelecionada.turma}
-                      disciplinaCodigo={
-                        idDisciplinaTerritorioSaber ?? disciplinaIdSelecionada
-                      }
-                      ehRegencia={ehRegencia}
-                      turmaPrograma={turmaPrograma}
-                      onChange={onChangeFechamentoFinal}
-                      ref={refFechamentoFinal}
-                      desabilitarCampo={
-                        !podeIncluir || !podeAlterar || somenteConsulta
-                      }
-                      somenteConsulta={somenteConsulta}
-                      carregandoFechamentoFinal={carregando =>
-                        setCarregandoBimestres(carregando)
-                      }
-                      bimestreCorrente={bimestreCorrente}
-                      registraFrequencia={registraFrequencia}
-                      semestre={turmaSelecionada.periodo}
-                    />
+                    {bimestreCorrente && (
+                      <FechamentoFinal
+                        turmaCodigo={turmaSelecionada.turma}
+                        disciplinaCodigo={
+                          idDisciplinaTerritorioSaber ?? disciplinaIdSelecionada
+                        }
+                        ehRegencia={ehRegencia}
+                        turmaPrograma={turmaPrograma}
+                        onChange={onChangeFechamentoFinal}
+                        ref={refFechamentoFinal}
+                        desabilitarCampo={
+                          !podeIncluir || !podeAlterar || somenteConsulta
+                        }
+                        somenteConsulta={somenteConsulta}
+                        carregandoFechamentoFinal={carregando =>
+                          setCarregandoBimestres(carregando)
+                        }
+                        bimestreCorrente={bimestreCorrente}
+                        registraFrequencia={registraFrequencia}
+                        semestre={turmaSelecionada.periodo}
+                      />
+                    )}
                   </TabPane>
                 </ContainerTabsCard>
                 {!bimestreCorrente && (
