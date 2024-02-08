@@ -12,6 +12,7 @@ import BuscaAtivaRegistroAcoesForm from '@/pages/busca-ativa/registro-acoes/form
 import BuscaAtivaRegistroAcoesList from '@/pages/busca-ativa/registro-acoes/list';
 import FormCadastroABAE from '@/pages/cadastro-abae/form';
 import ListCadastroABAE from '@/pages/cadastro-abae/list';
+import { ListRegistroColetivo } from '@/pages/naapa/registro-coletivo/list';
 import RotasTipo from '~/constantes/rotasTipo';
 import EncaminhamentoAEECadastro from '~/paginas/AEE/Encaminhamento/Cadastro/encaminhamentoAEECadastro';
 import EncaminhamentoAEELista from '~/paginas/AEE/Encaminhamento/Lista/encaminhamentoAEELista';
@@ -1829,6 +1830,18 @@ route.set(ROUTES.BUSCA_ATIVA_REGISTRO_ACOES_EDICAO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.BUSCA_ATIVA_REGISTRO_ACOES,
+});
+
+route.set(ROUTES.NAAPA_REGISTRO_COLETIVO, {
+  breadcrumbName: 'Registro coletivo',
+  menu: ['NAAPA'],
+  parent: '/',
+  component: ListRegistroColetivo,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  // TODO
+  // temPermissionamento: true,
+  chavePermissao: ROUTES.NAAPA_REGISTRO_COLETIVO,
 });
 
 const getRoutesArray = () => {
