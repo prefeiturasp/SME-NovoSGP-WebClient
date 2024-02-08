@@ -4,48 +4,17 @@ import { TotalRegistroPorModalidadeRelatorioDinamicoNAAPADTO } from '@/core/dto/
 import { ModalidadeEnumDisplay } from '@/core/enum/modalidade-enum';
 import { Col, Divider, Row } from 'antd';
 import React from 'react';
-import styled from 'styled-components';
+import { ContainerCardTotalizador, LabelCard, TitleCard } from '../styles';
 
-type ContainerProps = {
-  color: string;
-  height?: string;
-};
-
-const ContainerCardTotalizador = styled.div<ContainerProps>`
-  height: ${(props) => props?.height || '129px'};
-  border-radius: 4px;
-  border: 2px solid ${(props) => props?.color};
-  border-left: 8px solid ${(props) => props?.color};
-  font-size: 48px;
-  font-weight: 700;
-  color: ${(props) => props?.color};
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 15px;
-`;
-
-const TitleCard = styled.div`
-  font-weight: 700;
-  font-size: 14px;
-  color: #42474a;
-`;
-
-const LabelCard = styled.div<ContainerProps>`
-  font-weight: 700;
-  font-size: 14px;
-  color: ${(props) => props?.color};
-`;
-
-type RelatorioDinamicoNAAPACardTotalizadorProps = {
+type TabEncaminhamentoCardsTotalizadoresProps = {
   totalRegistroPorModalidadesAno: TotalRegistroPorModalidadeRelatorioDinamicoNAAPADTO[];
   totalEncaminhamentos: number;
   exibirCardsPorModalidade: boolean;
   exibirCardsPorAno: boolean;
 };
 
-const RelatorioDinamicoNAAPACardTotalizador: React.FC<
-  RelatorioDinamicoNAAPACardTotalizadorProps
+export const TabEncaminhamentoCardsTotalizadores: React.FC<
+  TabEncaminhamentoCardsTotalizadoresProps
 > = ({
   totalEncaminhamentos,
   totalRegistroPorModalidadesAno,
@@ -57,11 +26,10 @@ const RelatorioDinamicoNAAPACardTotalizador: React.FC<
       <Row gutter={[16, 16]}>
         {totalEncaminhamentos ? (
           <>
-            <Col xs={24}>
-              <TitleCard>Total de encaminhamentos</TitleCard>
-            </Col>
             <Col xs={24} sm={12} md={6}>
-              <ContainerCardTotalizador color={Base.Roxo} height="85px">
+              <ContainerCardTotalizador color={Base.Roxo}>
+                <LabelCard color={Base.Roxo}>Total de encaminhamentos</LabelCard>
+                <Divider style={{ margin: '8px 0px', borderBlockStart: '1px solid #DADADA' }} />
                 {totalEncaminhamentos || 0}
               </ContainerCardTotalizador>
             </Col>
@@ -116,5 +84,3 @@ const RelatorioDinamicoNAAPACardTotalizador: React.FC<
     </Col>
   );
 };
-
-export default RelatorioDinamicoNAAPACardTotalizador;
