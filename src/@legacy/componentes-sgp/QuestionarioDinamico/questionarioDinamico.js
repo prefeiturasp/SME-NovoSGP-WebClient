@@ -84,6 +84,7 @@ const QuestionarioDinamico = props => {
             valorRespostaAtual = String(resposta[0].opcaoRespostaId || '');
             break;
           case tipoQuestao.ComboMultiplaEscolha:
+          case tipoQuestao.ComboMultiplaEscolhaMes:
             valorRespostaAtual = resposta.map(r => String(r.opcaoRespostaId));
             break;
           case tipoQuestao.Checkbox:
@@ -148,6 +149,7 @@ const QuestionarioDinamico = props => {
       if (
         valorRespostaAtual?.length &&
         (questaoAtual?.tipoQuestao === tipoQuestao.ComboMultiplaEscolha ||
+          questaoAtual?.tipoQuestao === tipoQuestao.ComboMultiplaEscolhaMes ||
           questaoAtual?.tipoQuestao === tipoQuestao.Checkbox)
       ) {
         const idsQuestoesComplementares = valorRespostaAtual.filter(
@@ -465,6 +467,7 @@ const QuestionarioDinamico = props => {
         campoAtual = campoAtendimentoClinico(params);
         break;
       case tipoQuestao.ComboMultiplaEscolha:
+      case tipoQuestao.ComboMultiplaEscolhaMes:
         campoAtual = (
           <CampoDinamicoComboMultiplaEscolha
             {...params}
