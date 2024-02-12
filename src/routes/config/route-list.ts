@@ -12,6 +12,7 @@ import BuscaAtivaRegistroAcoesForm from '@/pages/busca-ativa/registro-acoes/form
 import BuscaAtivaRegistroAcoesList from '@/pages/busca-ativa/registro-acoes/list';
 import FormCadastroABAE from '@/pages/cadastro-abae/form';
 import ListCadastroABAE from '@/pages/cadastro-abae/list';
+import { FormRegistroColetivo } from '@/pages/naapa/registro-coletivo/form';
 import { ListRegistroColetivo } from '@/pages/naapa/registro-coletivo/list';
 import RotasTipo from '~/constantes/rotasTipo';
 import EncaminhamentoAEECadastro from '~/paginas/AEE/Encaminhamento/Cadastro/encaminhamentoAEECadastro';
@@ -1708,9 +1709,8 @@ route.set(ROUTES.CADASTRO_ABAE, {
 });
 
 route.set(ROUTES.CADASTRO_ABAE_NOVO, {
-  breadcrumbName: 'Cadastro de ABAE',
-  menu: ['Gestão'],
-  parent: '/',
+  breadcrumbName: 'Novo Cadastro de ABAE',
+  parent: ROUTES.CADASTRO_ABAE,
   component: FormCadastroABAE,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
@@ -1720,8 +1720,7 @@ route.set(ROUTES.CADASTRO_ABAE_NOVO, {
 
 route.set(ROUTES.CADASTRO_ABAE_EDICAO, {
   breadcrumbName: 'Cadastro de ABAE',
-  menu: ['Gestão'],
-  parent: '/',
+  parent: ROUTES.CADASTRO_ABAE,
   component: FormCadastroABAE,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
@@ -1837,6 +1836,28 @@ route.set(ROUTES.NAAPA_REGISTRO_COLETIVO, {
   menu: ['NAAPA'],
   parent: '/',
   component: ListRegistroColetivo,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  // TODO
+  // temPermissionamento: true,
+  chavePermissao: ROUTES.NAAPA_REGISTRO_COLETIVO,
+});
+
+route.set(ROUTES.NAAPA_REGISTRO_COLETIVO_NOVO, {
+  breadcrumbName: 'Novo Registro coletivo',
+  parent: ROUTES.NAAPA_REGISTRO_COLETIVO,
+  component: FormRegistroColetivo,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  // TODO
+  // temPermissionamento: true,
+  chavePermissao: ROUTES.NAAPA_REGISTRO_COLETIVO,
+});
+
+route.set(ROUTES.NAAPA_REGISTRO_COLETIVO_EDICAO, {
+  breadcrumbName: 'Editar Registro coletivo',
+  parent: ROUTES.NAAPA_REGISTRO_COLETIVO,
+  component: FormRegistroColetivo,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   // TODO

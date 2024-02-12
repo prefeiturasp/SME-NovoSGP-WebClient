@@ -3,19 +3,11 @@ import BotaoExcluirPadrao from '@/@legacy/componentes-sgp/BotoesAcaoPadrao/botao
 import BotaoVoltarPadrao from '@/@legacy/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { SGP_BUTTON_CANCELAR, SGP_BUTTON_SALVAR_ALTERAR } from '@/@legacy/constantes/ids/button';
 import {
-  SGP_INPUT_BAIRRO,
-  SGP_INPUT_CEP,
-  SGP_INPUT_CIDADE,
-  SGP_INPUT_COMPLEMENTO,
-  SGP_INPUT_CPF,
-  SGP_INPUT_EMAIL,
-  SGP_INPUT_ENDERECO,
-  SGP_INPUT_NOME,
-  SGP_INPUT_NUMERO,
-  SGP_INPUT_TELEFONE,
+  SGP_INPUT_NUMERO_CUIDADORES_RESPONSAVEIS_ENVOLVIDOS,
+  SGP_INPUT_NUMERO_EDUCADORES_ENVOLVIDOS,
+  SGP_INPUT_NUMERO_EDUCANDOS_ENVOLVIDOS,
+  SGP_INPUT_QUANTIDADE_PARTICIPANTES,
 } from '@/@legacy/constantes/ids/input';
-import { SGP_RADIO_ATIVO_INATIVO } from '@/@legacy/constantes/ids/radio';
-import { SGP_SELECT_UF } from '@/@legacy/constantes/ids/select';
 import {
   confirmar,
   setBreadcrumbManual,
@@ -26,33 +18,30 @@ import ButtonPrimary from '@/components/lib/button/primary';
 import ButtonSecundary from '@/components/lib/button/secundary';
 import CardContent from '@/components/lib/card-content';
 import HeaderPage from '@/components/lib/header-page';
-import InputBairro from '@/components/sgp/inputs/form/bairro';
-import InputCEP from '@/components/sgp/inputs/form/cep';
-import InputCidade from '@/components/sgp/inputs/form/cidade';
-import InputComplemento from '@/components/sgp/inputs/form/complemento';
-import InputCPF from '@/components/sgp/inputs/form/cpf';
+import DataInicio from '@/components/sgp/inputs/form/data-inicio';
 import SelectDRE from '@/components/sgp/inputs/form/dre';
-import InputEmail from '@/components/sgp/inputs/form/email';
-import InputEndereco from '@/components/sgp/inputs/form/endereco';
-import InputEstado from '@/components/sgp/inputs/form/estado';
 import InputNumero from '@/components/sgp/inputs/form/numero';
-import RadioSituacaoAtivoInativo from '@/components/sgp/inputs/form/situacao-ativo-inativo/radio-situacao-ativo-inativo';
-import InputTelefone from '@/components/sgp/inputs/form/telefone';
+import {
+  SelectTipoReuniao,
+  SelectTipoReuniaoFormItem,
+} from '@/components/sgp/inputs/form/tipo-reuniao';
 import SelectUE from '@/components/sgp/inputs/form/ue';
 import { validateMessages } from '@/core/constants/validate-messages';
-import { CadastroAcessoABAEDto, CadastroAcessoABAEFormDto } from '@/core/dto/CadastroAcessoABAEDto';
+import { dayjs } from '@/core/date/dayjs';
 import { ROUTES } from '@/core/enum/routes';
-import abaeService from '@/core/services/abae-service';
+import { useAppSelector } from '@/core/hooks/use-redux';
+import registroColetivoService from '@/core/services/registro-coletivo-service';
 import { Checkbox, Col, Form, Input, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { SGP_TEXT_AREA_OBSERVACAO } from '~/constantes/ids/text-area';
+import { EditorDescricaoAcao } from './components/editor';
+import { UploadArquivosSGP } from '@/components/sgp/upload';
 
-const FormCadastroABAE: React.FC = () => {
-  const usuarioStore = useSelector((store: any) => store?.usuario);
-  const permissoesTela = usuarioStore.permissoes[ROUTES.CADASTRO_ABAE];
+export const FormRegistroColetivo: React.FC = () => {
+  const usuarioStore = useAppSelector((store: any) => store?.usuario);
+  const permissoesTela = usuarioStore.permissoes[ROUTES.NAAPA_REGISTRO_COLETIVO];
 
   const [form] = useForm();
   const navigate = useNavigate();
@@ -63,7 +52,7 @@ const FormCadastroABAE: React.FC = () => {
 
   const id = paramsRoute?.id || 0;
 
-  const [formInitialValues, setFormInitialValues] = useState<CadastroAcessoABAEFormDto>();
+  const [formInitialValues, setFormInitialValues] = useState<any>();
 
   const anoAtual = dayjs().year();
 
@@ -76,24 +65,39 @@ const FormCadastroABAE: React.FC = () => {
     alteradoRf: formInitialValues?.alteradoRF,
   };
 
-  const tituloPagina = paramsRoute?.id ? 'Cadastro de ABAE' : 'Novo Cadastro de ABAE';
+  const tituloPagina = paramsRoute?.id ? 'Novo Registro coletivo' : 'Editar Registro coletivo';
 
   const carregarDados = useCallback(async () => {
-    const resposta = await abaeService.buscarPorId(id);
+    const resposta = await registroColetivoService.buscarPorId(id);
 
     if (resposta.sucesso) {
-      const dados: CadastroAcessoABAEFormDto = {
+      // TODO
+      const dados: any = {
         ...resposta.dados,
         dre: { id: resposta.dados.dreId, value: resposta.dados.dreCodigo },
         ue: { id: resposta.dados.ueId, value: resposta.dados.ueCodigo },
       };
+
+      if (dados?.arquivos?.length) {
+        dados.arquivos = dados.arquivos.map((item: any) => ({
+          xhr: item?.codigo,
+          name: item?.nome,
+          id: item?.id,
+          status: 'done',
+        }));
+      }
+
       setFormInitialValues(dados);
     }
   }, [id]);
 
   useEffect(() => {
     if (id) {
-      setBreadcrumbManual(location.pathname, 'Cadastro de ABAE', ROUTES.CADASTRO_ABAE);
+      setBreadcrumbManual(
+        location.pathname,
+        'Editar Registro coletivo',
+        ROUTES.NAAPA_REGISTRO_COLETIVO,
+      );
     }
   }, [id, location]);
 
@@ -113,7 +117,9 @@ const FormCadastroABAE: React.FC = () => {
     const desabilitar = id
       ? soConsulta || !permissoesTela?.podeIncluir
       : soConsulta || !permissoesTela?.podeAlterar;
-    setDesabilitarCampos(desabilitar);
+
+    // TODO
+    // setDesabilitarCampos(desabilitar);
   }, [id, permissoesTela]);
 
   const onClickCancelar = async () => {
@@ -129,22 +135,30 @@ const FormCadastroABAE: React.FC = () => {
     }
   };
 
-  const salvar = async (values: CadastroAcessoABAEFormDto) => {
+  const salvar = async () => {
     let response = null;
-    const valoresSalvar: CadastroAcessoABAEDto = { ...values, id };
+    const values = form.getFieldsValue(true);
+
+    const valoresSalvar: any = { ...values, id };
 
     valoresSalvar.dreId = values.dre.id;
     valoresSalvar.ueId = values.ue.id;
 
-    if (id) {
-      response = await abaeService.alterar(valoresSalvar);
+    if (valoresSalvar?.arquivos?.length) {
+      valoresSalvar.arquivos = valoresSalvar.arquivos?.map((item: any) => item?.id);
     } else {
-      response = await abaeService.incluir(valoresSalvar);
+      valoresSalvar.arquivos = [];
+    }
+
+    if (id) {
+      response = await registroColetivoService.alterar(valoresSalvar);
+    } else {
+      response = await registroColetivoService.incluir(valoresSalvar);
     }
 
     if (response.sucesso) {
       sucesso(`Registro ${id ? 'alterado' : 'inserido'} com sucesso!`);
-      navigate(ROUTES.CADASTRO_ABAE);
+      navigate(ROUTES.NAAPA_REGISTRO_COLETIVO);
     }
   };
 
@@ -159,10 +173,10 @@ const FormCadastroABAE: React.FC = () => {
       if (confirmou) {
         form.submit();
       } else {
-        navigate(ROUTES.CADASTRO_ABAE);
+        navigate(ROUTES.NAAPA_REGISTRO_COLETIVO);
       }
     } else {
-      navigate(ROUTES.CADASTRO_ABAE);
+      navigate(ROUTES.NAAPA_REGISTRO_COLETIVO);
     }
   };
 
@@ -173,11 +187,11 @@ const FormCadastroABAE: React.FC = () => {
       'Você tem certeza que deseja excluir este registro?',
     );
     if (confirmado) {
-      const resultado = await abaeService.excluir(id);
+      const resultado = await registroColetivoService.excluir(id);
 
       if (resultado?.sucesso) {
         sucesso('Registro excluído com sucesso');
-        navigate(ROUTES.CADASTRO_ABAE);
+        navigate(ROUTES.NAAPA_REGISTRO_COLETIVO);
       }
     }
   };
@@ -193,7 +207,6 @@ const FormCadastroABAE: React.FC = () => {
         initialValues={{
           anoLetivo: anoAtual,
           consideraHistorico: false,
-          situacao: true,
           ...formInitialValues,
         }}
       >
@@ -252,87 +265,111 @@ const FormCadastroABAE: React.FC = () => {
               <Col xs={24} md={12}>
                 <SelectDRE
                   formItemProps={{ rules: [{ required: true }] }}
-                  selectProps={{ disabled: desabilitarCampos || !!id }}
+                  selectProps={{ disabled: desabilitarCampos }}
                 />
               </Col>
 
               <Col xs={24} md={12}>
                 <SelectUE
                   formItemProps={{ rules: [{ required: true }] }}
-                  selectProps={{ disabled: desabilitarCampos || !!id }}
+                  selectProps={{ disabled: desabilitarCampos }}
+                  mostrarOpcaoTodas
                 />
               </Col>
 
-              <Col xs={24} md={12}>
-                <Form.Item label="Nome" name="nome" rules={[{ required: true }]}>
-                  <Input
-                    maxLength={100}
-                    id={SGP_INPUT_NOME}
-                    placeholder="Informe o nome"
+              <Col xs={24} sm={12} md={6}>
+                <SelectTipoReuniaoFormItem>
+                  <SelectTipoReuniao disabled={desabilitarCampos} />
+                </SelectTipoReuniaoFormItem>
+              </Col>
+
+              <Col xs={24} sm={12} md={6}>
+                <DataInicio
+                  formItemProps={{ label: 'Data' }}
+                  datePickerProps={{ disabled: desabilitarCampos, placeholder: 'Data' }}
+                  desabilitarDataFutura
+                />
+              </Col>
+
+              <Col xs={24} sm={12} md={12} lg={6}>
+                <InputNumero
+                  formItemProps={{
+                    name: 'quantidadeParticipantes',
+                    label: 'Quantidade de participantes',
+                  }}
+                  inputProps={{
+                    maxLength: 999,
+                    disabled: desabilitarCampos,
+                    id: SGP_INPUT_QUANTIDADE_PARTICIPANTES,
+                    placeholder: 'Quantidade de participantes',
+                  }}
+                />
+              </Col>
+
+              <Col xs={24} sm={12} md={12} lg={6}>
+                <InputNumero
+                  formItemProps={{
+                    name: 'numeroEducadoresEnvolvidos',
+                    label: 'Nº de educadores envolvidos',
+                  }}
+                  inputProps={{
+                    maxLength: 999,
+                    disabled: desabilitarCampos,
+                    id: SGP_INPUT_NUMERO_EDUCADORES_ENVOLVIDOS,
+                    placeholder: 'Nº de educadores envolvidos',
+                  }}
+                />
+              </Col>
+
+              <Col xs={24} sm={12} md={12} lg={6}>
+                <InputNumero
+                  formItemProps={{
+                    name: 'numeroEducandosEnvolvidos',
+                    label: 'Nº de educandos envolvidos',
+                  }}
+                  inputProps={{
+                    maxLength: 999,
+                    disabled: desabilitarCampos,
+                    id: SGP_INPUT_NUMERO_EDUCANDOS_ENVOLVIDOS,
+                    placeholder: 'Nº de educandos envolvidos',
+                  }}
+                />
+              </Col>
+
+              <Col xs={24} sm={12} md={8}>
+                <InputNumero
+                  formItemProps={{
+                    name: 'numeroCuidadoresResponsaveisEnvolvidos',
+                    label: 'Nº de cuidadores/responsáveis envolvidos',
+                  }}
+                  inputProps={{
+                    maxLength: 999,
+                    disabled: desabilitarCampos,
+                    id: SGP_INPUT_NUMERO_CUIDADORES_RESPONSAVEIS_ENVOLVIDOS,
+                    placeholder: 'Nº de cuidadores/responsáveis envolvidos',
+                  }}
+                />
+              </Col>
+
+              <Col xs={24}>
+                <EditorDescricaoAcao />
+              </Col>
+
+              <Col xs={24}>
+                <Form.Item label="Observações" name="observacao">
+                  <Input.TextArea
+                    id={SGP_TEXT_AREA_OBSERVACAO}
+                    placeholder="Observações"
                     disabled={desabilitarCampos}
                   />
                 </Form.Item>
               </Col>
-
-              <Col xs={24} md={12}>
-                <InputCPF
-                  inputProps={{
-                    id: SGP_INPUT_CPF,
-                    disabled: desabilitarCampos || !!id,
+              <Col xs={24}>
+                <UploadArquivosSGP
+                  formItemProps={{
+                    name: 'anexos',
+                    label: 'Anexos',
                   }}
-                />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <InputEmail inputProps={{ id: SGP_INPUT_EMAIL, disabled: desabilitarCampos }} />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <InputTelefone
-                  inputProps={{ id: SGP_INPUT_TELEFONE, disabled: desabilitarCampos }}
-                />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <InputCEP
-                  inputProps={{
-                    id: SGP_INPUT_CEP,
-                    disabled: desabilitarCampos,
-                  }}
-                />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <InputEndereco
-                  inputProps={{ id: SGP_INPUT_ENDERECO, disabled: desabilitarCampos }}
-                />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <InputNumero inputProps={{ id: SGP_INPUT_NUMERO, disabled: desabilitarCampos }} />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <InputComplemento
-                  inputProps={{ id: SGP_INPUT_COMPLEMENTO, disabled: desabilitarCampos }}
-                />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <InputBairro inputProps={{ id: SGP_INPUT_BAIRRO, disabled: desabilitarCampos }} />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <InputCidade inputProps={{ id: SGP_INPUT_CIDADE, disabled: desabilitarCampos }} />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <InputEstado selectProps={{ id: SGP_SELECT_UF, disabled: desabilitarCampos }} />
-              </Col>
-
-              <Col xs={24} md={12}>
-                <RadioSituacaoAtivoInativo
-                  radioGroupProps={{ id: SGP_RADIO_ATIVO_INATIVO, disabled: desabilitarCampos }}
                 />
               </Col>
             </Row>
@@ -343,5 +380,3 @@ const FormCadastroABAE: React.FC = () => {
     </Col>
   );
 };
-
-export default FormCadastroABAE;
