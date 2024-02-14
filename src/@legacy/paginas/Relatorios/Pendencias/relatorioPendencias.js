@@ -24,10 +24,7 @@ import {
   ServicoFiltroRelatorio,
 } from '~/servicos';
 
-import {
-  onchangeMultiSelect,
-  ordenarListaMaiorParaMenor,
-} from '~/utils/funcoes/gerais';
+import { onchangeMultiSelect } from '~/utils/funcoes/gerais';
 import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const RelatorioPendencias = () => {
@@ -353,24 +350,9 @@ const RelatorioPendencias = () => {
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnos(true);
-    let anosLetivos = [];
 
-    const [anosLetivoComHistorico, anosLetivoSemHistorico] = await Promise.all([
-      FiltroHelper.obterAnosLetivos({
-        consideraHistorico: true,
-      }),
-      FiltroHelper.obterAnosLetivos({
-        consideraHistorico: false,
-      }),
-    ])
-      .catch(e => erros(e))
-      .finally(() => setCarregandoAnos(false));
-    anosLetivos = anosLetivos.concat(anosLetivoComHistorico);
-
-    anosLetivoSemHistorico.forEach(ano => {
-      if (!anosLetivoComHistorico.find(a => a.valor === ano.valor)) {
-        anosLetivos.push(ano);
-      }
+    const anosLetivos = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
     });
 
     if (!anosLetivos.length) {
@@ -388,8 +370,9 @@ const RelatorioPendencias = () => {
       else setAnoLetivo(anosLetivos[0].valor);
     }
 
-    setListaAnosLetivo(ordenarListaMaiorParaMenor(anosLetivos, 'valor'));
-  }, [anoAtual]);
+    setListaAnosLetivo(anosLetivos);
+    setCarregandoAnos(false);
+  }, [consideraHistorico, anoAtual]);
 
   useEffect(() => {
     obterAnosLetivos();
@@ -669,9 +652,7 @@ const RelatorioPendencias = () => {
                   valueOption="valor"
                   valueText="desc"
                   disabled={
-                    !consideraHistorico ||
-                    !listaAnosLetivo?.length ||
-                    listaAnosLetivo?.length === 1
+                    !listaAnosLetivo?.length || listaAnosLetivo?.length === 1
                   }
                   onChange={onChangeAnoLetivo}
                   valueSelect={anoLetivo}

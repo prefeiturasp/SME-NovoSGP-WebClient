@@ -12,6 +12,7 @@ import BuscaAtivaRegistroAcoesForm from '@/pages/busca-ativa/registro-acoes/form
 import BuscaAtivaRegistroAcoesList from '@/pages/busca-ativa/registro-acoes/list';
 import FormCadastroABAE from '@/pages/cadastro-abae/form';
 import ListCadastroABAE from '@/pages/cadastro-abae/list';
+import { DashboardBuscaAtiva } from '@/pages/dashboards/naapa/busca-ativa';
 import RotasTipo from '~/constantes/rotasTipo';
 import EncaminhamentoAEECadastro from '~/paginas/AEE/Encaminhamento/Cadastro/encaminhamentoAEECadastro';
 import EncaminhamentoAEELista from '~/paginas/AEE/Encaminhamento/Lista/encaminhamentoAEELista';
@@ -163,7 +164,7 @@ route.set(ROUTES.RELATORIO_BOLETIM_SIMPLES, {
 });
 
 route.set(ROUTES.ACOMPANHAMENTO_COMUNICADOS, {
-  breadcrumbName: 'Comunicados',
+  breadcrumbName: 'Comunicados (Escola aqui)',
   menu: ['Gestão'],
   parent: '/',
   component: ComunicadosLista,
@@ -1829,6 +1830,17 @@ route.set(ROUTES.BUSCA_ATIVA_REGISTRO_ACOES_EDICAO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.BUSCA_ATIVA_REGISTRO_ACOES,
+});
+
+route.set(ROUTES.DASHBOARD_NAAPA_BUSCA_ATIVA, {
+  breadcrumbName: 'Busca Ativa',
+  menu: ['Gráficos'],
+  parent: '/',
+  component: DashboardBuscaAtiva,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.DASHBOARD_NAAPA_BUSCA_ATIVA,
 });
 
 const getRoutesArray = () => {
