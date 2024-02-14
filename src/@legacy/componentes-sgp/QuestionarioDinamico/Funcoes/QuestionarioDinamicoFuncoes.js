@@ -617,6 +617,7 @@ class QuestionarioDinamicoFuncoes {
                 }
                 break;
               case tipoQuestao.ComboMultiplaEscolha:
+              case tipoQuestao.ComboMultiplaEscolhaMes:
                 if (campos[key]?.length) {
                   questao.resposta = campos[key];
                 } else {
@@ -677,6 +678,7 @@ class QuestionarioDinamicoFuncoes {
               });
             } else if (
               (questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha ||
+                questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolhaMes ||
                 questao.tipoQuestao === tipoQuestao.Checkbox) &&
               questao?.resposta?.length
             ) {
@@ -729,7 +731,9 @@ class QuestionarioDinamicoFuncoes {
               if (
                 ((!arquivoRemovido &&
                   questao.tipoQuestao === tipoQuestao.Upload) ||
-                  questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha) &&
+                  questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha ||
+                  questao.tipoQuestao ===
+                    tipoQuestao.ComboMultiplaEscolhaMes) &&
                 !questao.resposta
               ) {
                 questao = null;
@@ -782,6 +786,7 @@ class QuestionarioDinamicoFuncoes {
         return 'RADIO';
       case tipoQuestao.Combo:
       case tipoQuestao.ComboMultiplaEscolha:
+      case tipoQuestao.ComboMultiplaEscolhaMes:
       case tipoQuestao.PeriodoEscolar:
         return 'SELECT';
       case tipoQuestao.Checkbox:

@@ -272,6 +272,7 @@ class ServicoEncaminhamentoAEE {
                 }
                 break;
               case tipoQuestao.ComboMultiplaEscolha:
+              case tipoQuestao.ComboMultiplaEscolhaMes:
                 if (campos[key]?.length) {
                   questao.resposta = campos[key];
                 } else {
@@ -318,6 +319,7 @@ class ServicoEncaminhamentoAEE {
               });
             } else if (
               (questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha ||
+                questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolhaMes ||
                 questao.tipoQuestao === tipoQuestao.Checkbox) &&
               questao?.resposta?.length
             ) {
@@ -363,7 +365,9 @@ class ServicoEncaminhamentoAEE {
               if (
                 ((!arquivoRemovido &&
                   questao.tipoQuestao === tipoQuestao.Upload) ||
-                  questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha) &&
+                  questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha ||
+                  questao.tipoQuestao ===
+                    tipoQuestao.ComboMultiplaEscolhaMes) &&
                 !questao.resposta
               ) {
                 questao = null;
