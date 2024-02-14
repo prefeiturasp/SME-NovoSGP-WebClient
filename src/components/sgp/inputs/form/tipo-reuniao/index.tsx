@@ -9,11 +9,11 @@ const SelectTipoReuniao: React.FC<SelectProps> = ({ ...rest }) => {
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
   const obterDados = async () => {
-    const resposta = await registroColetivoService.onterTipoReuniao();
+    const resposta = await registroColetivoService.obterTipoDeReuniaoNAAPA();
     if (resposta.sucesso) {
       const newOptions = resposta.dados.map((item) => ({
-        label: item.descricao,
-        value: item.valor,
+        label: item.titulo,
+        value: item.id,
       }));
       setOptions(newOptions);
     } else {
@@ -30,7 +30,6 @@ const SelectTipoReuniao: React.FC<SelectProps> = ({ ...rest }) => {
       showSearch
       allowClear
       id={SGP_SELECT_TIPO_REUNIAO}
-      mode="multiple"
       options={options}
       placeholder="Tipo de reunião"
       {...rest}
@@ -39,7 +38,7 @@ const SelectTipoReuniao: React.FC<SelectProps> = ({ ...rest }) => {
 };
 
 const SelectTipoReuniaoFormItem: React.FC<FormItemProps> = ({ children, ...rest }) => (
-  <Form.Item label="Tipo de reunião" name="tipoReuniao" {...rest}>
+  <Form.Item label="Tipo de reunião" name="tipoReuniaoId" {...rest}>
     {children}
   </Form.Item>
 );

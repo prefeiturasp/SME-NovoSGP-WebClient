@@ -1838,8 +1838,7 @@ route.set(ROUTES.NAAPA_REGISTRO_COLETIVO, {
   component: ListRegistroColetivo,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // TODO
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: ROUTES.NAAPA_REGISTRO_COLETIVO,
 });
 
@@ -1849,8 +1848,7 @@ route.set(ROUTES.NAAPA_REGISTRO_COLETIVO_NOVO, {
   component: FormRegistroColetivo,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // TODO
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: ROUTES.NAAPA_REGISTRO_COLETIVO,
 });
 
@@ -1860,8 +1858,7 @@ route.set(ROUTES.NAAPA_REGISTRO_COLETIVO_EDICAO, {
   component: FormRegistroColetivo,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  // TODO
-  // temPermissionamento: true,
+  temPermissionamento: true,
   chavePermissao: ROUTES.NAAPA_REGISTRO_COLETIVO,
 });
 

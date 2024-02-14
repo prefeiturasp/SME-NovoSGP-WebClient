@@ -29,7 +29,8 @@ export const ListRegistroColetivo: React.FC = () => {
 
   const usuario = useSelector((state: any) => state.usuario);
   const { permissoes } = usuario;
-  const podeIncluir = permissoes?.[ROUTES.CADASTRO_ABAE]?.podeIncluir;
+
+  const podeIncluir = permissoes?.[ROUTES.NAAPA_REGISTRO_COLETIVO]?.podeIncluir;
 
   const [somenteConsulta, setSomenteConsulta] = useState(false);
 
@@ -120,8 +121,8 @@ export const ListRegistroColetivo: React.FC = () => {
             </Col>
 
             <Col xs={24} md={12}>
-              <SelectTipoReuniaoFormItem>
-                <SelectTipoReuniao disabled={!ue?.value} />
+              <SelectTipoReuniaoFormItem name="tiposReuniaoId">
+                <SelectTipoReuniao disabled={!ue?.value} mode="multiple" />
               </SelectTipoReuniaoFormItem>
             </Col>
 
