@@ -50,13 +50,25 @@ const downloadBlob = (data: any, fileName: string) => {
   document.body.removeChild(a);
 };
 
-export const ContainerDraggerUpload = styled(Dragger)`
+type ContainerDraggerUploadProps = {
+  readOnly: boolean;
+};
+export const ContainerDraggerUpload = styled(Dragger)<ContainerDraggerUploadProps>`
   &.ant-upload-wrapper
     .ant-upload-list
     .ant-upload-list-item
     .ant-upload-list-item-actions
     .ant-upload-list-item-action {
     opacity: 1;
+  }
+
+  .ant-upload-btn {
+    pointer-events: ${(props) => (props.readOnly ? 'none' : 'auto')} !important;
+    opacity: ${(props) => (props.readOnly ? '0.6' : '1')} !important;
+  }
+
+  .ant-upload-drag {
+    cursor: ${(props) => (props.readOnly ? 'not-allowed' : 'pointer')} !important;
   }
 `;
 
@@ -132,7 +144,8 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
     uploadService(fmData, config)
       .then((resposta: any) => {
         if (resposta?.status === HttpStatusCode.Ok || resposta?.sucesso) {
-          const codigo = resposta?.data?.codigo || resposta?.dados?.codigo || resposta.data;
+          const codigo =
+            resposta?.data?.codigo || resposta?.dados?.codigo || resposta.data || resposta.dados;
           const id = resposta?.data?.id || resposta?.dados?.id;
           file.id = id;
           onSuccess(file, codigo);
@@ -210,14 +223,16 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
       <ContainerDraggerUpload
         name="file"
         listType="text"
+        readOnly={!!draggerProps?.disabled}
         fileList={listaDeArquivos}
-        showUploadList={{ showDownloadIcon: true }}
+        showUploadList={{ showDownloadIcon: true, showRemoveIcon: !draggerProps?.disabled }}
         onRemove={draggerProps?.onRemove || onRemoveDefault}
         onChange={draggerProps?.onChange || onChangeDefault}
         onDownload={draggerProps?.onDownload || onDownloadDefault}
         beforeUpload={draggerProps?.beforeUpload || beforeUploadDefault}
         customRequest={draggerProps?.customRequest || customRequestDefault}
         {...draggerProps}
+        disabled={false}
       >
         <p className="ant-upload-drag-icon">
           <InboxOutlined />

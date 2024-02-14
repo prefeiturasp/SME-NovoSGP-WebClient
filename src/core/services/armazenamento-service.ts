@@ -3,11 +3,11 @@ import { inserirRegistro } from './api';
 
 const URL_DEFAULT = 'v1/armazenamento';
 
-const fazerUploadArquivo = (formData: FormData, configuracaoHeader: any) =>
-  inserirRegistro(URL_DEFAULT, formData, configuracaoHeader);
+const fazerUploadArquivo = (formData: FormData, configuracaoHeader: any, url?: string) =>
+  inserirRegistro(url || URL_DEFAULT, formData, configuracaoHeader);
 
-const obterArquivoParaDownload = (codigoArquivo: string) => {
-  return api.get(`${URL_DEFAULT}/${codigoArquivo}`, {
+const obterArquivoParaDownload = (codigoArquivo: string, url?: string) => {
+  return api.get(`${url || URL_DEFAULT}/${codigoArquivo}`, {
     responseType: 'arraybuffer',
   });
 };

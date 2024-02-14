@@ -7,17 +7,22 @@ import React from 'react';
 type UploadArquivosCDEPProps = {
   formItemProps: FormItemProps & { name: string };
   draggerProps?: DraggerProps;
+  urlUpload?: string;
 };
 export const UploadArquivosSGP: React.FC<UploadArquivosCDEPProps> = ({
   formItemProps,
   draggerProps,
+  urlUpload,
 }) => {
+  const uploadService = (formData: FormData, configuracaoHeader: any) =>
+    armazenamentoService.fazerUploadArquivo(formData, configuracaoHeader, urlUpload);
+
   return (
     <UploadArquivosSME
       formItemProps={formItemProps}
       draggerProps={draggerProps}
       tiposArquivosPermitidos=""
-      uploadService={armazenamentoService.fazerUploadArquivo}
+      uploadService={uploadService}
       downloadService={armazenamentoService.obterArquivoParaDownload}
       tamanhoMaxUploadPorArquivo={100}
     />
