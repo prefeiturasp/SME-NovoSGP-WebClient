@@ -54,6 +54,10 @@ const ConselhoClasse = () => {
     store => store.conselhoClasse.dadosAlunoObjectCard
   );
 
+  const resetarInfomacoes = useCallback(() => {
+    dispatch(limparDadosConselhoClasse());
+  }, [dispatch]);
+
   const obterListaAlunos = useCallback(async () => {
     dispatch(setDadosInconsistenciasEstudantes([]));
     dispatch(setExibirLoaderGeralConselhoClasse(true));
@@ -65,13 +69,13 @@ const ConselhoClasse = () => {
     if (retorno && retorno.data) {
       dispatch(setAlunosConselhoClasse(retorno.data));
       setExibirListas(true);
+    } else {
+      dispatch(setAlunosConselhoClasse([]));
+      setExibirListas(false);
+      resetarInfomacoes();
     }
     dispatch(setExibirLoaderGeralConselhoClasse(false));
   }, [anoLetivo, dispatch, turma, periodo]);
-
-  const resetarInfomacoes = useCallback(() => {
-    dispatch(limparDadosConselhoClasse());
-  }, [dispatch]);
 
   useEffect(() => {
     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
