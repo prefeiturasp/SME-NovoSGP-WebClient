@@ -20,7 +20,7 @@ export const GraficoBarras: React.FC<GraficoBarrasProps> = (props) => {
   const {
     legendVisible = true,
     labelVisible = true,
-    xAxisVisible = false,
+    xAxisVisible = true,
     radius = [4, 4, 0, 0],
     showTitle = true,
     colors = CoresGraficos,
