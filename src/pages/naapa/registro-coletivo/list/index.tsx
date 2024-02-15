@@ -14,6 +14,7 @@ import {
 } from '@/components/sgp/inputs/form/tipo-reuniao';
 import SelectUE from '@/components/sgp/inputs/form/ue';
 import { validateMessages } from '@/core/constants/validate-messages';
+import { Dayjs, dayjs } from '@/core/date/dayjs';
 import { ROUTES } from '@/core/enum/routes';
 import { Col, Form, Row } from 'antd';
 import { useForm, useWatch } from 'antd/es/form/Form';
@@ -35,6 +36,7 @@ export const ListRegistroColetivo: React.FC = () => {
   const [somenteConsulta, setSomenteConsulta] = useState(false);
 
   const ue = useWatch('ue', form);
+  const anoLetivo = useWatch('anoLetivo', form);
 
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
@@ -52,6 +54,33 @@ export const ListRegistroColetivo: React.FC = () => {
       form.setFieldValue('tipoReuniao', undefined);
     }
   }, [ue, form]);
+
+  const validarDesabilitarDatas = (data?: Dayjs) => {
+    if (data) {
+      const hoje = dayjs();
+      const ano = dayjs(`${anoLetivo}-01-01`);
+      const anoSelecionadoIgualAnoDataAtual = ano.year() === data.year();
+      const anoDataAtualMenorAnoSelecionado = data.year() < ano.year();
+      const anoSelecionadoIgualAnoHoje = ano.year() === hoje.year();
+
+      if (anoDataAtualMenorAnoSelecionado) return true;
+
+      if (anoSelecionadoIgualAnoDataAtual && !anoSelecionadoIgualAnoHoje) {
+        const menorQueAnoAtual = data.isBefore(ano.startOf('year'), 'day');
+        const maiorQueAnoAtual = data.isAfter(ano.endOf('year'), 'day');
+
+        return menorQueAnoAtual || maiorQueAnoAtual;
+      }
+
+      return (
+        !anoSelecionadoIgualAnoHoje ||
+        data.isAfter(dayjs(), 'day') ||
+        data.isBefore(ano.startOf('year'), 'day')
+      );
+    }
+
+    return false;
+  };
 
   return (
     <Col>
@@ -108,6 +137,7 @@ export const ListRegistroColetivo: React.FC = () => {
               <DataInicio
                 formItemProps={{ label: 'Data da reunião' }}
                 datePickerProps={{ disabled: !ue?.value }}
+                desabilitarData={validarDesabilitarDatas}
                 validarInicioMaiorQueFim
               />
             </Col>
@@ -116,6 +146,7 @@ export const ListRegistroColetivo: React.FC = () => {
               <DataFim
                 formItemProps={{ label: ' ' }}
                 datePickerProps={{ disabled: !ue?.value }}
+                desabilitarData={validarDesabilitarDatas}
                 validarFimMenorQueInicio
               />
             </Col>
