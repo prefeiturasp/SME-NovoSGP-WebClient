@@ -114,4 +114,7 @@ export enum ROUTES {
   BUSCA_ATIVA_REGISTRO_ACOES_NOVO = '/busca-ativa/registro-acoes/novo',
   BUSCA_ATIVA_REGISTRO_ACOES_EDICAO = '/busca-ativa/registro-acoes/:id',
   DASHBOARD_NAAPA_BUSCA_ATIVA = '/dashboard/busca-ativa',
+  NAAPA_REGISTRO_COLETIVO = '/naapa/registro-coletivo',
+  NAAPA_REGISTRO_COLETIVO_NOVO = '/naapa/registro-coletivo/novo',
+  NAAPA_REGISTRO_COLETIVO_EDICAO = '/naapa/registro-coletivo/:id',
 }
