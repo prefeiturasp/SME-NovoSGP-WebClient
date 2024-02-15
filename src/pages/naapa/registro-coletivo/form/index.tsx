@@ -90,8 +90,17 @@ export const FormRegistroColetivo: React.FC = () => {
 
       const dadosMapeados: RegistroColetivoCompletoFormDto = {
         id: dados.id,
-        dre: { value: resposta.dados.codigoDre, label: resposta.dados.nomeDre },
-        ue: resposta.dados.ues.map((ue) => ({ value: ue.codigo, label: ue.nomeFormatado })),
+        anoLetivo: dados.anoLetivo,
+        dre: {
+          id: resposta.dados.dreId,
+          value: resposta.dados.codigoDre,
+          label: resposta.dados.nomeDre,
+        },
+        ue: resposta.dados.ues.map((ue) => ({
+          id: ue.id,
+          value: ue.codigo,
+          label: ue.nomeFormatado,
+        })),
         tipoReuniaoId: dados.tipoReuniaoId,
         dataRegistro: dayjs(dados.dataRegistro),
         quantidadeParticipantes: dados.quantidadeParticipantes,
