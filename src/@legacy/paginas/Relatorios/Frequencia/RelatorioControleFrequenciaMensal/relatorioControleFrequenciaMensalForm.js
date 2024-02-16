@@ -17,7 +17,6 @@ import {
 import { SelectComponent } from '@/@legacy/componentes';
 import { SGP_SELECT_ESTUDANTE_CRIANCA } from '@/@legacy/constantes/ids/select';
 import { Meses } from '@/@legacy/componentes-sgp/inputs/meses';
-import { FormatoRelatorio } from '@/@legacy/componentes-sgp/inputs/formato-arquivo-relatorio';
 import RelatorioControleFrequenciaMensalEstudantes from './relatorioControleFrequenciaMensalEstudantes';
 
 const RelatorioControleFrequenciaMensalForm = props => {
@@ -96,14 +95,6 @@ const RelatorioControleFrequenciaMensalForm = props => {
 
         <Col sm={24} md={12} lg={10}>
           <Meses form={form} onChange={() => onChangeCampos()} />
-        </Col>
-
-        <Col sm={24} md={12} lg={4}>
-          <FormatoRelatorio
-            form={form}
-            onChange={() => onChangeCampos()}
-            disabled
-          />
         </Col>
 
         {form?.values?.turmaCodigo &&
