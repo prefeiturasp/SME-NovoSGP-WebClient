@@ -7,7 +7,6 @@ import RelatorioControleFrequenciaMensalBotoesAcoes from './relatorioControleFre
 import RelatorioControleFrequenciaMensalForm from './relatorioControleFrequenciaMensalForm';
 import { OPCAO_TODOS } from '@/@legacy/constantes';
 import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
-import { TIPO_FORMATO_RELATORIO } from '@/core/enum/tipo-formato-relatorio';
 
 const RelatorioControleFrequenciaMensal = () => {
   const [gerandoRelatorio, setGerandoRelatorio] = useState(false);
@@ -29,7 +28,6 @@ const RelatorioControleFrequenciaMensal = () => {
     listaTurmas: [],
     criancasEstudantes: OPCAO_TODOS,
     mesesReferencias: undefined,
-    tipoFormatoRelatorio: TIPO_FORMATO_RELATORIO.XLSX.toString(),
     codigosEstudantes: undefined,
   };
 
@@ -66,7 +64,6 @@ const RelatorioControleFrequenciaMensal = () => {
     turmaCodigo: Yup.string().required(textoCampoObrigatorio),
     criancasEstudantes: Yup.string().required(textoCampoObrigatorio),
     mesesReferencias: Yup.string().required(textoCampoObrigatorio),
-    tipoFormatoRelatorio: Yup.string().required(textoCampoObrigatorio),
   });
 
   const onChangeCampos = () => setDesabilitarGerar(false);
