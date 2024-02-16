@@ -77,7 +77,7 @@ const RelatorioControleFrequenciaMensalForm = props => {
           />
         </Col>
 
-        <Col sm={24} md={12} lg={10}>
+        <Col sm={24} md={12} lg={8}>
           <SelectComponent
             form={form}
             name="criancasEstudantes"
@@ -93,7 +93,7 @@ const RelatorioControleFrequenciaMensalForm = props => {
           />
         </Col>
 
-        <Col sm={24} md={12} lg={10}>
+        <Col sm={24} md={12} lg={6}>
           <Meses form={form} onChange={() => onChangeCampos()} />
         </Col>
 
