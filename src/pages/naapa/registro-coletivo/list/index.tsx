@@ -13,6 +13,7 @@ import {
   SelectTipoReuniaoFormItem,
 } from '@/components/sgp/inputs/form/tipo-reuniao';
 import SelectUE from '@/components/sgp/inputs/form/ue';
+import { ANO_INICIO_REGISTRO_COLETIVO_NAAPA } from '@/core/constants/contants';
 import { validateMessages } from '@/core/constants/validate-messages';
 import { Dayjs, dayjs } from '@/core/date/dayjs';
 import { ROUTES } from '@/core/enum/routes';
@@ -120,7 +121,10 @@ export const ListRegistroColetivo: React.FC = () => {
 
           <Row gutter={[16, 8]}>
             <Col xs={24} sm={8} md={4}>
-              <SelectAnoLetivo formItemProps={{ rules: [{ required: true }] }} />
+              <SelectAnoLetivo
+                formItemProps={{ rules: [{ required: true }] }}
+                anoMinimo={ANO_INICIO_REGISTRO_COLETIVO_NAAPA}
+              />
             </Col>
 
             <Col xs={24} md={10}>
