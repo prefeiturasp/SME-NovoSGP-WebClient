@@ -51,7 +51,7 @@ export const ListRegistroColetivo: React.FC = () => {
     if (!ue?.value) {
       form.setFieldValue('dataInicio', undefined);
       form.setFieldValue('dataFim', undefined);
-      form.setFieldValue('tipoReuniao', undefined);
+      form.setFieldValue('tiposReuniaoId', undefined);
     }
   }, [ue, form]);
 
