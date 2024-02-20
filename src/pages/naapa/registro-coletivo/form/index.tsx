@@ -432,6 +432,7 @@ export const FormRegistroColetivo: React.FC = () => {
                     placeholder="Observações"
                     disabled={desabilitarCampos}
                     maxLength={1000}
+                    rows={5}
                   />
                 </Form.Item>
               </Col>
