@@ -185,7 +185,6 @@ const UploadArquivos = props => {
         form.setFieldTouched(name, true);
       }
     }
-
     setListaDeArquivos(novoMap);
     onChangeListaArquivos(novoMap);
   };
