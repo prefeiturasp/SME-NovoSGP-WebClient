@@ -73,7 +73,6 @@ const ListaHistoricoAtendimentosPaginada = ({
   });
 
   const onClickExpandir = (expandir, linha, qtdAquivos) => {
-    console.log('expandir');
     if (qtdAquivos > 1 && expandir) {
       setExpandedRowKeys({
         id: linha?.auditoria.id,
@@ -142,7 +141,6 @@ const ListaHistoricoAtendimentosPaginada = ({
         expandedRowKeys={expandedRowKeys?.id ? [expandedRowKeys.id] : []}
         expandedRowRender={expandedRowRender}
         mapearNovoDto={data => {
-          console.log(data);
           return data?.length
             ? data.map(linha => {
                 return {
