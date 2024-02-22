@@ -15,6 +15,8 @@ export const EditorDescricaoAcao = ({ disabled = false }) => (
         >
           <JoditEditor
             temErro={temErro}
+            height="400px"
+            overflowY="auto"
             id={SGP_JODIT_EDITOR_DESCRICAO_ACAO}
             desabilitar={disabled}
           />

@@ -40,6 +40,10 @@ const Campo = styled.div`
   .desabilitar {
     cursor: not-allowed !important;
   }
+
+  .jodit-ui-messages {
+    display: none;
+  }
 `;
 
 const temBinarioNaUrl = imgSrc =>

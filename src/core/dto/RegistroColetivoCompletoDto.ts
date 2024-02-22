@@ -7,8 +7,10 @@ import { AnexoFormDto } from './AnexoFormDto';
 
 export type RegistroColetivoCompletoDto = {
   id: number;
+  anoLetivo: number;
   codigoDre: string;
   nomeDre: string;
+  dreId: number;
   tipoReuniaoId: number;
   tipoReuniaoDescricao: string;
   dataRegistro: string;
@@ -24,6 +26,7 @@ export type RegistroColetivoCompletoDto = {
 
 export type RegistroColetivoCompletoFormDto = {
   id: number;
+  anoLetivo: number;
   dre: DefaultOptionType;
   ue: DefaultOptionType[];
   tipoReuniaoId: number;

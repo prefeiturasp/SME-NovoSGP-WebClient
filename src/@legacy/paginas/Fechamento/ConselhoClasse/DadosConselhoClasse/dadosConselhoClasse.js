@@ -58,6 +58,7 @@ const DadosConselhoClasse = props => {
   const [semDados, setSemDados] = useState(true);
   const [carregando, setCarregando] = useState(false);
   const [turmaAtual, setTurmaAtual] = useState(0);
+  const [permiteAcessarAbaFinal, setPermiteAcessarAbaFinal] = useState(true);
 
   const naoEhEjaOuCelp =
     Number(modalidade) !== ModalidadeEnum.EJA &&
@@ -277,19 +278,31 @@ const DadosConselhoClasse = props => {
     return !semDados &&
       String(turmaSelecionada.turma) === String(turmaAtual) ? (
       <>
-        <AlertaDentroPeriodo />
-        <MarcadorPeriodoInicioFim />
-        <ListasNotasConceitos bimestreSelecionado={bimestreAtual} />
-        <Sintese
-          ehFinal={bimestreAtual.valor === 'final'}
-          bimestreSelecionado={bimestreAtual.valor}
-          turmaId={turmaSelecionada.turma}
-        />
+        {permiteAcessarAbaFinal && !carregando ? (
+          <>
+            <AlertaDentroPeriodo />
+            <MarcadorPeriodoInicioFim />
+            <ListasNotasConceitos bimestreSelecionado={bimestreAtual} />
+            <Sintese
+              ehFinal={bimestreAtual.valor === 'final'}
+              bimestreSelecionado={bimestreAtual.valor}
+              turmaId={turmaSelecionada.turma}
+            />
+          </>
+        ) : (
+          <></>
+        )}
         <AnotacoesRecomendacoes
           bimestre={bimestreAtual}
           codigoTurma={turmaCodigo}
           setCarregandoAba={setCarregando}
+          setPermiteAcessarAbaFinal={setPermiteAcessarAbaFinal}
         />
+        {!permiteAcessarAbaFinal && !carregando ? (
+          <div className="text-center">Sem acesso a esta aba</div>
+        ) : (
+          <></>
+        )}
       </>
     ) : semDados && !carregando ? (
       <div className="text-center">Sem dados</div>

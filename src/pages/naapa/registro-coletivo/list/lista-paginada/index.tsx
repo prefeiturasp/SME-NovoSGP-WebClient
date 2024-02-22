@@ -73,23 +73,28 @@ export const ListaPaginadaRegistroColetivo: React.FC = () => {
     const temValoresIniciais = anoLetivo && dre?.id && ue?.value;
 
     if (form.isFieldsTouched() || temValoresIniciais) {
-      form.validateFields().then((values) => {
-        const filtro: FiltroRegistroColetivoDto = {
-          dreId: values?.dre?.id,
-          ueId: values?.ue?.id,
-          tiposReuniaoId: values?.tiposReuniaoId,
-        };
+      form
+        .validateFields()
+        .then((values) => {
+          const filtro: FiltroRegistroColetivoDto = {
+            dreId: values?.dre?.id,
+            ueId: values?.ue?.id,
+            tiposReuniaoId: values?.tiposReuniaoId,
+          };
 
-        if (values?.dataInicio) {
-          filtro.dataReuniaoInicio = dayjs(values.dataInicio).format('YYYY-MM-DD');
-        }
+          if (values?.dataInicio) {
+            filtro.dataReuniaoInicio = dayjs(values.dataInicio).format('YYYY-MM-DD');
+          }
 
-        if (values?.dataFim) {
-          filtro.dataReuniaoFim = dayjs(values.dataFim).format('YYYY-MM-DD');
-        }
+          if (values?.dataFim) {
+            filtro.dataReuniaoFim = dayjs(values.dataFim).format('YYYY-MM-DD');
+          }
 
-        setFiltro({ ...filtro });
-      });
+          setFiltro({ ...filtro });
+        })
+        .catch(() => {
+          setFiltro(undefined);
+        });
     } else {
       setFiltro(undefined);
     }
@@ -106,6 +111,7 @@ export const ListaPaginadaRegistroColetivo: React.FC = () => {
       id={SGP_TABLE_REGISTRO_COLETIVO}
       colunas={columns}
       filtro={filtro}
+      limparDados={!filtro}
       filtroEhValido={!!filtro}
       onClick={onClickEditar}
     />

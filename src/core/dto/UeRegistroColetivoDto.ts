@@ -1,5 +1,6 @@
 export type UeRegistroColetivoDto = {
-  codigo: number;
+  id: number;
+  codigo: string;
   nome: string;
   tipoEscola: number;
   nomeFormatado: string;
