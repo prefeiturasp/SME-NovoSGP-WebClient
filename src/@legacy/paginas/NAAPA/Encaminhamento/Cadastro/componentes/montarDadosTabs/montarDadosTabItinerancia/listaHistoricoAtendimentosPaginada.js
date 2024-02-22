@@ -86,7 +86,10 @@ const ListaHistoricoAtendimentosPaginada = ({
     const executarClick =
       colunaClicada?.target?.id === SGP_BUTTON_DOWNLOAD_ARQUIVO ||
       colunaClicada?.target?.parentElement?.id === SGP_BUTTON_DOWNLOAD_ARQUIVO;
-    if (!executarClick) setAtendimentoId(linha?.auditoria?.id);
+    if (!executarClick) {
+      setExpandedRowKeys();
+      setAtendimentoId(linha?.auditoria?.id);
+    }
   };
 
   const filtrar = useCallback(() => {
