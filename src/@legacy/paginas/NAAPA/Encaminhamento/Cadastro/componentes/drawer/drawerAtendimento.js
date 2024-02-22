@@ -13,6 +13,29 @@ import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import DrawerAtendimentoBotoesAcao from './drawerAtendimentoBotoesAcao';
 import LoaderDrawerAtendimento from './loaderDrawerAtendimento';
 import { DrawerContainer } from './styles';
+import { store } from '@/core/redux';
+
+const onClose = async (onClickSalvar, onCloseDrawer) => {
+  const state = store.getState();
+  const { questionarioDinamico } = state;
+  const { questionarioDinamicoEmEdicao } = questionarioDinamico;
+
+  if (questionarioDinamicoEmEdicao) {
+    const confirmou = await confirmar(
+      'Atenção',
+      '',
+      'Suas alterações não foram salvas, deseja salvar agora?'
+    );
+
+    if (confirmou) {
+      onClickSalvar();
+    } else {
+      onCloseDrawer();
+    }
+  } else {
+    onCloseDrawer();
+  }
+};
 
 const DrawerAtendimento = ({
   dadosTab,
@@ -28,10 +51,6 @@ const DrawerAtendimento = ({
 
   const { aluno, turma, anoLetivo } = useSelector(
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
-  );
-
-  const questionarioDinamicoEmEdicao = useSelector(
-    store => store.questionarioDinamico.questionarioDinamicoEmEdicao
   );
 
   const exibirLoaderDrawerAtendimento = useSelector(
@@ -83,26 +102,6 @@ const DrawerAtendimento = ({
     }
   };
 
-  const onClose = async () => {
-    if (exibirLoaderDrawerAtendimento) return;
-
-    if (questionarioDinamicoEmEdicao) {
-      const confirmou = await confirmar(
-        'Atenção',
-        '',
-        'Suas alterações não foram salvas, deseja salvar agora?'
-      );
-
-      if (confirmou) {
-        onClickSalvar();
-      } else {
-        onCloseDrawer();
-      }
-    } else {
-      onCloseDrawer();
-    }
-  };
-
   useEffect(() => {
     if (questionarioId && mostrarDrawer) {
       obterDadosAtendimento();
@@ -113,7 +112,10 @@ const DrawerAtendimento = ({
     <DrawerContainer
       width={720}
       zIndex={1100}
-      onClose={onClose}
+      onClose={() => {
+        if (exibirLoaderDrawerAtendimento) return;
+        onClose(onClickSalvar, onCloseDrawer);
+      }}
       title="Atendimento"
       open={mostrarDrawer}
       bodyStyle={{ paddingBottom: 80 }}
@@ -125,11 +127,13 @@ const DrawerAtendimento = ({
           exibirOrdemLabel={false}
           codigoTurma={turma?.codigo}
           codigoAluno={aluno?.codigoAluno}
-          urlUpload="v1/encaminhamento-naapa/upload"
+          urlUpload="v1/encaminhamento-naapa/secoes-itinerancia/upload"
           dadosQuestionarioAtual={dadosQuestionarioAtual?.questoes}
           prefixId={`${SGP_SECAO}_${dadosTab?.nomeComponente}`}
           desabilitarCampos={desabilitarCamposEncaminhamentoNAAPA}
-          funcaoRemoverArquivoCampoUpload={ServicoNAAPA.removerArquivo}
+          funcaoRemoverArquivoCampoUpload={
+            ServicoNAAPA.removerArquivoItinerancia
+          }
           onChangeQuestionario={() => {
             QuestionarioDinamicoFuncoes.guardarSecaoEmEdicao(dadosTab?.id);
           }}

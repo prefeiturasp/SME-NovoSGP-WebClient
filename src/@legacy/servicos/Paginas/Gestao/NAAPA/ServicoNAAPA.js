@@ -53,6 +53,10 @@ class ServicoNAAPA {
   removerArquivo = arquivoCodigo =>
     api.delete(`${URL_PADRAO}/arquivo?arquivoCodigo=${arquivoCodigo}`);
 
+  removerArquivoItinerancia = arquivoCodigo =>
+    api.delete(`${URL_PADRAO}/secoes-itinerancia
+                /arquivo?arquivoCodigo=${arquivoCodigo}`);
+
   excluirEncaminhamento = id => api.delete(`${URL_PADRAO}/${id}`);
 
   salvarEncaminhamento = async (
