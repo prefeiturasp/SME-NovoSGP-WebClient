@@ -12,6 +12,7 @@ import { erros } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import MontarDadosTabItinerancia from './montarDadosTabItinerancia/montarDadosTabItinerancia';
 import MontarDadosTabSelecionada from './montarDadosTabSelecionada';
+import { MontarDadosTabBuscaAtiva } from './montarDadosTabBuscaAtiva';
 
 const { TabPane } = Tabs;
 
@@ -102,6 +103,12 @@ const MontarDadosTabs = () => {
             </TabPane>
           );
         })}
+
+        <TabPane tab="Busca ativa escolar" key="BUSCA_ATIVA_ESCOLAR">
+          {tabAtivaEncaminhamentoNAAPA === 'BUSCA_ATIVA_ESCOLAR' && (
+            <MontarDadosTabBuscaAtiva />
+          )}
+        </TabPane>
       </ContainerTabsCard>
 
       {!tabAtivaEncaminhamentoNAAPA && (
