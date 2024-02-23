@@ -1,8 +1,9 @@
 import buscaAtivaService from '@/core/services/busca-ativa-service';
-import { Col } from 'antd';
+import { Col, Row } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
-import { Loader } from '~/componentes';
+import { Auditoria, Button, Colors, Loader } from '~/componentes';
 import QuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
+import { SGP_BUTTON_VOLTAR } from '~/constantes/ids/button';
 import { SGP_SECAO } from '~/constantes/ids/questionario-dinamico';
 import { DrawerContainer } from '../../../drawer/styles';
 
@@ -73,16 +74,40 @@ export const DrawerBuscaAtivaRegistroAcoesForm = ({
         title="Busca ativa - Registro de ações"
         open={mostrarDrawer}
         bodyStyle={{ paddingBottom: 80 }}
+        footer={
+          <Row justify="end">
+            <Button
+              id={SGP_BUTTON_VOLTAR}
+              icon="arrow-left"
+              color={Colors.Azul}
+              border
+              onClick={onCloseDrawer}
+              label="Voltar"
+            />
+          </Row>
+        }
       >
         <Loader loading={exibirLoader}>
           {dadosQuestionarioAtual?.length ? (
-            <QuestionarioDinamico
-              desabilitarCampos
-              dados={dadosSecoesBuscaAtivaRegistroAcoes}
-              exibirOrdemLabel={false}
-              dadosQuestionarioAtual={dadosQuestionarioAtual}
-              prefixId={`${SGP_SECAO}_BUSCA_ATIVA_REGISTRO_ACOES`}
-            />
+            <>
+              <QuestionarioDinamico
+                desabilitarCampos
+                dados={dadosSecoesBuscaAtivaRegistroAcoes}
+                exibirOrdemLabel={false}
+                dadosQuestionarioAtual={dadosQuestionarioAtual}
+                prefixId={`${SGP_SECAO}_BUSCA_ATIVA_REGISTRO_ACOES`}
+              />
+
+              <Row gutter={[16, 4]}>
+                {dadosSecoesBuscaAtivaRegistroAcoes?.auditoria?.criadoEm && (
+                  <Auditoria
+                    {...dadosSecoesBuscaAtivaRegistroAcoes?.auditoria}
+                    ignorarMarginTop
+                    novaEstrutura
+                  />
+                )}
+              </Row>
+            </>
           ) : (
             <></>
           )}
