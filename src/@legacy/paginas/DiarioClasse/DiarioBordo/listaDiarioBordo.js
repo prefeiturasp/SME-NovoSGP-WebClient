@@ -90,6 +90,13 @@ const ListaDiarioBordo = () => {
     setCarregandoGeral(false);
   }, [turma]);
 
+  const valorComponenteAExibir =
+    listaComponenteCurriculares?.length === 1
+      ? listaComponenteCurriculares[0].nomeComponenteInfantil != null
+        ? 'nomeComponenteInfantil'
+        : 'nome'
+      : 'nomeComponenteInfantil';
+
   useEffect(() => {
     const naoSetarSomenteConsultaNoStore = !ehTurmaInfantil(
       modalidadesFiltroPrincipal,
@@ -394,7 +401,7 @@ const ListaDiarioBordo = () => {
                 name="disciplinaId"
                 lista={listaComponenteCurriculares || []}
                 valueOption="codigoComponenteCurricular"
-                valueText="nomeComponenteInfantil"
+                valueText={valorComponenteAExibir}
                 valueSelect={componenteCurricularSelecionado}
                 onChange={onChangeComponenteCurricular}
                 placeholder="Selecione um componente curricular"
