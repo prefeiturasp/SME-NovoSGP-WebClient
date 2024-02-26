@@ -17,6 +17,7 @@ import {
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
+import { ImprimirAnexosNAAPAEnum } from '@/core/enum/imprimir-anexos-naapa-enum';
 
 const URL_PADRAO = 'v1/encaminhamento-naapa';
 
@@ -45,9 +46,10 @@ class ServicoNAAPA {
       }`
     );
 
-  imprimir = idsSelecionados =>
+  imprimir = (idsSelecionados, imprimirAnexos = ImprimirAnexosNAAPAEnum.Nao) =>
     api.post(`${URL_PADRAO}/imprimir-detalhado`, {
       encaminhamentoNaapaIds: idsSelecionados,
+      imprimirAnexos,
     });
 
   removerArquivo = arquivoCodigo =>
@@ -377,6 +379,9 @@ class ServicoNAAPA {
     api.get(
       `${URL_PADRAO}/aluno/${codigoEstudante}/existe-encaminhamento-ativo`
     );
+
+  obterTiposImpressaoAnexos = encaminhamentoId =>
+    api.get(`${URL_PADRAO}/${encaminhamentoId}/imprimirAnexos`);
 }
 
 export default new ServicoNAAPA();
