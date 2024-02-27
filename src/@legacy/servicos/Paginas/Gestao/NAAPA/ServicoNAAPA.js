@@ -381,7 +381,7 @@ class ServicoNAAPA {
     );
 
   obterTiposImpressaoAnexos = encaminhamentoId =>
-    api.get(`${URL_PADRAO}/${encaminhamentoId}/imprimirAnexos`);
+    api.get(`${URL_PADRAO}/${encaminhamentoId}/anexos/tipos-impressao`);
 }
 
 export default new ServicoNAAPA();
