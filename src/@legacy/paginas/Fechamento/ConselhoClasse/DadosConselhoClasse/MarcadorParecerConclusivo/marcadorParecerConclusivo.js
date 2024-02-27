@@ -68,6 +68,10 @@ const MarcadorParecerConclusivo = () => {
     }
   }, [marcadorParecerConclusivo]);
 
+  useEffect(() => {
+    setEditandoParecer(false);
+  }, [marcadorParecerConclusivo, exibirIconeSincronizar]);
+
   const montarDescricao = () => {
     if (gerandoParecerConclusivo) {
       return 'Gerando parecer conclusivo';
@@ -107,6 +111,7 @@ const MarcadorParecerConclusivo = () => {
 
   const onClickCancelarEditarParecer = () => {
     setEditandoParecer(!editandoParecer);
+    setParecerSelecionado(marcadorParecerConclusivo?.id || undefined);
   };
 
   const onClickSalvarEdicaoParecer = async () => {
