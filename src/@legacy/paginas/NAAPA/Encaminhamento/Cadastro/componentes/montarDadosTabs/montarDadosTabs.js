@@ -78,7 +78,7 @@ const MontarDadosTabs = () => {
           const questionarioId = tab?.questionarioId;
           const nomeTab = tab?.nome;
           const ehTabItinerancia =
-            tab?.nomeComponente === 'QUESTOES_ITINERACIA';
+            tab?.nomeComponente === 'QUESTOES_ITINERANCIA';
           const desabilitarTabItinerancia =
             ehTabItinerancia &&
             (!situacao || Number(situacao) === situacaoNAAPA.Rascunho);
