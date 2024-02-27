@@ -16,7 +16,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     turmaId,
     situacao,
     anoLetivo,
-    nomeAluno,
+    codigoNomeAluno,
     prioridade,
     consideraHistorico,
     dataAberturaQueixaFim,
@@ -43,10 +43,22 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
       ),
     },
     {
+      title: 'Turma',
+      dataIndex: 'turma',
+    },
+    {
       title: 'Data de entrada da queixa',
       dataIndex: 'dataAberturaQueixaInicio',
       render: dataInicio =>
         dataInicio ? window.moment(dataInicio).format('DD/MM/YYYY') : '',
+    },
+    {
+      title: 'Data do último atendimento',
+      dataIndex: 'dataUltimoAtendimento',
+      render: ultimoAtendimento =>
+        ultimoAtendimento
+          ? window.moment(ultimoAtendimento).format('DD/MM/YYYY')
+          : '',
     },
     {
       title: 'Prioridade',
@@ -72,7 +84,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
       dreId: dre?.id,
       codigoUe: ue?.codigo,
       turmaId: turmaId === OPCAO_TODOS ? '' : turmaId,
-      nomeAluno,
+      codigoNomeAluno,
       dataAberturaQueixaInicio: dataAberturaQueixaInicio
         ? dataAberturaQueixaInicio.format('YYYY-MM-DD')
         : '',
@@ -98,7 +110,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     dre,
     ue,
     turmaId,
-    nomeAluno,
+    codigoNomeAluno,
     dataAberturaQueixaInicio,
     dataAberturaQueixaFim,
     situacao,

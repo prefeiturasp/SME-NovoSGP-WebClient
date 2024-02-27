@@ -45,7 +45,7 @@ const ListaEncaminhamentoNAAPA = () => {
   const [dre, setDre] = useState();
   const [ue, setUe] = useState();
   const [turmaId, setTurmaId] = useState();
-  const [nomeAluno, setNomeAluno] = useState('');
+  const [codigoNomeAluno, setCodigoNomeAluno] = useState('');
   const [dataAberturaQueixaInicio, setDataAberturaQueixaInicio] = useState();
   const [dataAberturaQueixaFim, setDataAberturaQueixaFim] = useState();
   const [situacao, setSituacao] = useState();
@@ -53,7 +53,7 @@ const ListaEncaminhamentoNAAPA = () => {
   const [exibirEncaminhamentosEncerrados, setExibirEncaminhamentosEncerrados] =
     useState(false);
 
-  const [nomeAlunoExibicao, setNomeAlunoExibicao] = useState('');
+  const [codigoNomeAlunoExibicao, setCodigoNomeAlunoExibicao] = useState('');
   const [timeoutDebounce, setTimeoutDebounce] = useState();
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -236,8 +236,8 @@ const ListaEncaminhamentoNAAPA = () => {
   }, []);
 
   const limparCamposSemConsulta = () => {
-    setNomeAluno('');
-    setNomeAlunoExibicao('');
+    setCodigoNomeAluno('');
+    setCodigoNomeAlunoExibicao('');
     setDataAberturaQueixaInicio('');
     setDataAberturaQueixaFim('');
     setSituacao();
@@ -324,9 +324,9 @@ const ListaEncaminhamentoNAAPA = () => {
     }
   };
 
-  const onChangeNomeAluno = e => {
-    setNomeAlunoExibicao(e?.target?.value);
-    onChangeDebounce(e?.target?.value, setNomeAluno);
+  const onChangeCodigoNomeAluno = e => {
+    setCodigoNomeAlunoExibicao(e?.target?.value);
+    onChangeDebounce(e?.target?.value, setCodigoNomeAluno);
   };
 
   const dataFimMaiorInicio = verificarDataFimMaiorInicio(
@@ -429,11 +429,11 @@ const ListaEncaminhamentoNAAPA = () => {
               allowClear
               iconeBusca
               desabilitado={!ue?.codigo}
-              value={nomeAlunoExibicao}
+              value={codigoNomeAlunoExibicao}
               label="Criança/Estudante"
-              onChange={onChangeNomeAluno}
+              onChange={onChangeCodigoNomeAluno}
               id={SGP_INPUT_NOME_CRIANCA_ESTUDANTE}
-              placeholder="Procure pelo nome da Criança/Estudante"
+              placeholder="Procure pelo código ou nome da Criança/Estudante"
             />
           </Col>
 
@@ -511,7 +511,7 @@ const ListaEncaminhamentoNAAPA = () => {
               turmaId={turmaId}
               situacao={situacao}
               anoLetivo={anoLetivo}
-              nomeAluno={nomeAluno}
+              codigoNomeAluno={codigoNomeAluno}
               prioridade={prioridade}
               consideraHistorico={consideraHistorico}
               dataAberturaQueixaFim={dataAberturaQueixaFim}

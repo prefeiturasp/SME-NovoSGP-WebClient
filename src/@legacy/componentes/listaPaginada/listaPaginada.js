@@ -127,6 +127,7 @@ const ListaPaginada = props => {
         setLinhas([]);
         setTotal(resposta.data.totalRegistros);
         let items = resposta?.data?.items;
+        console.log(items);
         if (items?.length) {
           if (mapearNovoDto) {
             items = mapearNovoDto(items);

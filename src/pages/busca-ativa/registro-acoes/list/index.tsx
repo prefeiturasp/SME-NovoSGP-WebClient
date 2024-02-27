@@ -128,13 +128,13 @@ const BuscaAtivaRegistroAcoesList: React.FC = () => {
           <Row gutter={[16, 8]}>
             <Col xs={24} md={12}>
               <Form.Item
-                label="Nome da Criança/Estudante"
-                name="nomeEstudanteCrianca"
+                label="Código ou Nome da Criança/Estudante"
+                name="codigoNomeEstudanteCrianca"
                 rules={[{ min: 3 }]}
               >
                 <Input
                   type="text"
-                  placeholder="Nome da Criança/Estudante"
+                  placeholder="Código ou Nome da Criança/Estudante"
                   id={SGP_INPUT_NOME}
                   disabled={!turma?.value}
                   allowClear

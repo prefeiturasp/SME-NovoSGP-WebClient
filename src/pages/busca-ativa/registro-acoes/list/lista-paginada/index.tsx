@@ -56,14 +56,14 @@ const ListaPaginadaBuscaAtivaRegistroAcoes: React.FC = () => {
   const turma = useWatch('turma', form);
   const dataInicio = useWatch('dataInicio', form);
   const dataFim = useWatch('dataFim', form);
-  const nomeEstudanteCrianca = useWatch('nomeEstudanteCrianca', form);
+  const codigoNomeEstudanteCrianca = useWatch('codigoNomeEstudanteCrianca', form);
   const ordemProcedimentoRealizado = useWatch('ordemProcedimentoRealizado', form);
 
   const [filtro, setFiltro] = useState<any>();
 
   useEffect(() => {
     if (!turma) {
-      form.setFieldValue('nomeEstudanteCrianca', '');
+      form.setFieldValue('codigoNomeEstudanteCrianca', '');
       form.setFieldValue('dataInicio', undefined);
       form.setFieldValue('dataFim', undefined);
       form.setFieldValue('ordemProcedimentoRealizado', undefined);
@@ -83,7 +83,7 @@ const ListaPaginadaBuscaAtivaRegistroAcoes: React.FC = () => {
           semestre: values?.semestre?.value,
           turmaId: values?.turma?.id,
           ordemProcedimentoRealizado: values?.ordemProcedimentoRealizado || null,
-          nomeAluno: values?.nomeEstudanteCrianca,
+          codigoNomeAluno: values?.codigoNomeEstudanteCrianca,
         };
 
         if (values?.dataInicio) {
@@ -107,7 +107,7 @@ const ListaPaginadaBuscaAtivaRegistroAcoes: React.FC = () => {
     turma,
     dataInicio,
     dataFim,
-    nomeEstudanteCrianca,
+    codigoNomeEstudanteCrianca,
     ordemProcedimentoRealizado,
   ]);
 
