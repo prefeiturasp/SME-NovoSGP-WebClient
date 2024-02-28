@@ -1,7 +1,11 @@
 import ButtonPrimary from '@/components/lib/button/primary';
 import ButtonSecundary from '@/components/lib/button/secundary';
 import conselhoClasseService from '@/core/services/conselho-classe-service';
-import { faEdit, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEdit,
+  faSyncAlt,
+  faTrashAlt,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Col, Row, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
@@ -21,6 +25,7 @@ const MarcadorParecerConclusivo = () => {
   const dispatch = useDispatch();
 
   const [sincronizando, setSincronizando] = useState(false);
+  const [exibirLoader, setExibirLoader] = useState(false);
   const [exibirIconeSincronizar, setExibirIconeSincronizar] = useState(false);
 
   const dadosPrincipaisConselhoClasse = useSelector(
@@ -114,17 +119,19 @@ const MarcadorParecerConclusivo = () => {
     setParecerSelecionado(marcadorParecerConclusivo?.id || undefined);
   };
 
-  const onClickSalvarEdicaoParecer = async () => {
-    setSincronizando(true);
+  const onClickSalvarEdicaoParecer = async (limparParecer = false) => {
+    setExibirLoader(true);
+
+    const params = {
+      conselhoClasseId,
+      fechamentoTurmaId,
+      alunoCodigo,
+      parecerConclusivoId: limparParecer ? null : parecerSelecionado,
+    };
 
     const resposta = await conselhoClasseService
-      .alterarParecerConclusivo({
-        conselhoClasseId,
-        fechamentoTurmaId,
-        parecerConclusivoId: parecerSelecionado,
-        alunoCodigo,
-      })
-      .finally(() => setSincronizando(false));
+      .alterarParecerConclusivo(params)
+      .finally(() => setExibirLoader(false));
 
     if (resposta?.sucesso) {
       sucesso('Parecer alterado com sucesso');
@@ -135,7 +142,7 @@ const MarcadorParecerConclusivo = () => {
 
   const onChangeParecer = value => setParecerSelecionado(value);
 
-  if (editandoParecer) {
+  if (!alunoDesabilitado && editandoParecer) {
     return (
       <Row
         wrap={false}
@@ -144,7 +151,6 @@ const MarcadorParecerConclusivo = () => {
       >
         <Col xs={24} sm={8} md={12}>
           <SelectParecerConclusivo
-            allowClear={alunoDesabilitado}
             turmaId={turmaSelecionada?.id}
             onChange={onChangeParecer}
             value={parecerSelecionado}
@@ -190,38 +196,62 @@ const MarcadorParecerConclusivo = () => {
             </LabelParecer>
           )}
           {exibirIconeSincronizar && (
-            <div style={{ gap: 12, display: 'flex', flexDirection: 'row' }}>
-              <Tooltip
-                key="GERAR"
-                title="Gerar Parecer Conclusivo"
-                getTooltipContainer={trigger => trigger.parentNode}
-              >
-                <div>
-                  <IconeEstilizado
-                    icon={faSyncAlt}
-                    onClick={sincronizar}
-                    sincronizando={sincronizando}
-                  />
-                </div>
-              </Tooltip>
-              <Tooltip
-                key="EDITAR"
-                title="Editar Parecer Conclusivo"
-                getTooltipContainer={trigger => trigger.parentNode}
-              >
-                <div>
-                  <FontAwesomeIcon
-                    icon={faEdit}
-                    onClick={onClickCancelarEditarParecer}
-                    style={{
-                      fontSize: 20,
-                      color: Base.Azul,
-                      cursor: 'pointer',
-                    }}
-                  />
-                </div>
-              </Tooltip>
-            </div>
+            <Loader loading={exibirLoader} tip="">
+              <div style={{ gap: 16, display: 'flex', flexDirection: 'row' }}>
+                <Tooltip
+                  key="GERAR"
+                  title="Gerar Parecer Conclusivo"
+                  getTooltipContainer={trigger => trigger.parentNode}
+                >
+                  <div>
+                    <IconeEstilizado
+                      icon={faSyncAlt}
+                      onClick={sincronizar}
+                      sincronizando={sincronizando}
+                    />
+                  </div>
+                </Tooltip>
+                {!alunoDesabilitado && marcadorParecerConclusivo?.id && (
+                  <Tooltip
+                    key="EDITAR"
+                    title="Editar Parecer Conclusivo"
+                    getTooltipContainer={trigger => trigger.parentNode}
+                  >
+                    <div>
+                      <FontAwesomeIcon
+                        icon={faEdit}
+                        onClick={onClickCancelarEditarParecer}
+                        style={{
+                          fontSize: 20,
+                          color: Base.Azul,
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </div>
+                  </Tooltip>
+                )}
+
+                {alunoDesabilitado && marcadorParecerConclusivo?.id && (
+                  <Tooltip
+                    key="LIMPAR"
+                    title="Limpar Parecer Conclusivo"
+                    getTooltipContainer={trigger => trigger.parentNode}
+                  >
+                    <div>
+                      <FontAwesomeIcon
+                        icon={faTrashAlt}
+                        onClick={() => onClickSalvarEdicaoParecer(true)}
+                        style={{
+                          fontSize: 20,
+                          color: Base.Vermelho,
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </div>
+                  </Tooltip>
+                )}
+              </div>
+            </Loader>
           )}
         </div>
       ) : (
