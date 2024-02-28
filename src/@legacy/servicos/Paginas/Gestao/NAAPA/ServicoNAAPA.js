@@ -56,8 +56,9 @@ class ServicoNAAPA {
     api.delete(`${URL_PADRAO}/arquivo?arquivoCodigo=${arquivoCodigo}`);
 
   removerArquivoItinerancia = arquivoCodigo =>
-    api.delete(`${URL_PADRAO}/secoes-itinerancia
-                /arquivo?arquivoCodigo=${arquivoCodigo}`);
+    api.delete(
+      `${URL_PADRAO}/secoes-itinerancia/arquivo?arquivoCodigo=${arquivoCodigo}`
+    );
 
   excluirEncaminhamento = id => api.delete(`${URL_PADRAO}/${id}`);
 
@@ -97,7 +98,7 @@ class ServicoNAAPA {
 
         const secaoInvalida = !secaoEstaEmEdicao && !secao.concluido;
         const ehSecaoItinerancia =
-          secao.nomeComponente === 'QUESTOES_ITINERACIA';
+          secao.nomeComponente === 'QUESTOES_ITINERANCIA';
         if (secaoInvalida && !ehSecaoItinerancia) {
           nomesSecoesComCamposObrigatorios.push(secao.nome);
         }
@@ -219,7 +220,7 @@ class ServicoNAAPA {
 
     if (formsValidos || dadosMapeados?.secoes?.length) {
       const tabItineranciaIndex = dadosMapeados?.secoes?.findIndex(
-        item => item.secaoNome === 'QUESTOES_ITINERACIA'
+        item => item.secaoNome === 'QUESTOES_ITINERANCIA'
       );
 
       const paramsSalvar = {
@@ -291,7 +292,7 @@ class ServicoNAAPA {
     );
 
     const secaoItinerancia =
-      secaoDestino?.nomeComponente === 'QUESTOES_ITINERACIA';
+      secaoDestino?.nomeComponente === 'QUESTOES_ITINERANCIA';
 
     if (
       secaoItinerancia &&
@@ -380,7 +381,7 @@ class ServicoNAAPA {
     );
 
   obterTiposImpressaoAnexos = encaminhamentoId =>
-    api.get(`${URL_PADRAO}/${encaminhamentoId}/imprimirAnexos`);
+    api.get(`${URL_PADRAO}/${encaminhamentoId}/anexos/tipos-impressao`);
 }
 
 export default new ServicoNAAPA();
