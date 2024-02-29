@@ -60,11 +60,13 @@ const MarcadorParecerConclusivo = () => {
 
   useEffect(() => {
     const nomeConcatenado = marcadorParecerConclusivo?.emAprovacao
-      ? `${marcadorParecerConclusivo?.nome} (Aguardando aprovação)`
-      : marcadorParecerConclusivo?.nome;
+      ? `${
+          marcadorParecerConclusivo?.nome || 'Sem parecer'
+        } (Aguardando aprovação)`
+      : marcadorParecerConclusivo?.nome || 'Sem parecer';
     const nomeParecer =
       Object.keys(marcadorParecerConclusivo).length &&
-      `Parecer conclusivo: ${nomeConcatenado || 'Sem parecer'}`;
+      `Parecer conclusivo: ${nomeConcatenado}`;
 
     setParecer(nomeParecer);
 
@@ -180,21 +182,14 @@ const MarcadorParecerConclusivo = () => {
     <>
       {parecer ? (
         <div className="col-m-12 d-flex ml-3 my-3">
-          {marcadorParecerConclusivo?.emAprovacao ? (
-            <Tooltip title="Aguardando aprovação">
-              <LabelParecer>
-                <Loader loading={gerandoParecerConclusivo} tip="">
-                  <span>{montarDescricao()}</span>
-                </Loader>
-              </LabelParecer>
-            </Tooltip>
-          ) : (
+          <Tooltip title={marcadorParecerConclusivo?.nome || 'Sem parecer'}>
             <LabelParecer>
               <Loader loading={gerandoParecerConclusivo} tip="">
                 <span>{montarDescricao()}</span>
               </Loader>
             </LabelParecer>
-          )}
+          </Tooltip>
+
           {exibirIconeSincronizar && (
             <Loader loading={exibirLoader} tip="">
               <div style={{ gap: 16, display: 'flex', flexDirection: 'row' }}>
@@ -211,7 +206,7 @@ const MarcadorParecerConclusivo = () => {
                     />
                   </div>
                 </Tooltip>
-                {!alunoDesabilitado && marcadorParecerConclusivo?.id && (
+                {!alunoDesabilitado && marcadorParecerConclusivo?.id ? (
                   <Tooltip
                     key="EDITAR"
                     title="Editar Parecer Conclusivo"
@@ -229,9 +224,11 @@ const MarcadorParecerConclusivo = () => {
                       />
                     </div>
                   </Tooltip>
+                ) : (
+                  <></>
                 )}
 
-                {alunoDesabilitado && marcadorParecerConclusivo?.id && (
+                {alunoDesabilitado && marcadorParecerConclusivo?.id ? (
                   <Tooltip
                     key="LIMPAR"
                     title="Limpar Parecer Conclusivo"
@@ -249,6 +246,8 @@ const MarcadorParecerConclusivo = () => {
                       />
                     </div>
                   </Tooltip>
+                ) : (
+                  <></>
                 )}
               </div>
             </Loader>
