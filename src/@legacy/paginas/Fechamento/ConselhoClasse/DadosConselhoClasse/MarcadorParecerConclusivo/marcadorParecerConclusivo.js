@@ -51,6 +51,10 @@ const MarcadorParecerConclusivo = () => {
     store => store.conselhoClasse.bimestreAtual
   );
 
+  const desabilitarCampos = useSelector(
+    store => store.conselhoClasse.desabilitarCampos
+  );
+
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
 
@@ -194,7 +198,7 @@ const MarcadorParecerConclusivo = () => {
             </LabelParecer>
           </Tooltip>
 
-          {exibirIconeSincronizar && (
+          {!desabilitarCampos && exibirIconeSincronizar && (
             <Loader loading={exibirLoader} tip="">
               <div style={{ gap: 16, display: 'flex', flexDirection: 'row' }}>
                 <Tooltip
