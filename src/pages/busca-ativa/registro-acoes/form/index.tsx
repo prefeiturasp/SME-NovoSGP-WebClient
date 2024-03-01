@@ -64,7 +64,17 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
 
   const registroAcaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
-  const dadosRouteState: RegistroAcaoBuscaAtivaRespostaDto = location.state;
+  const dadosRouteState: RegistroAcaoBuscaAtivaRespostaDto & { dadosFiltros: any } = location.state;
+
+  useEffect(() => {
+    if (dadosRouteState?.dadosFiltros?.dre?.id) {
+      setFormInitialValues({ ...dadosRouteState?.dadosFiltros });
+    }
+  }, [dadosRouteState]);
+
+  useEffect(() => {
+    form.resetFields();
+  }, [form, formInitialValues]);
 
   const mapearDto = (dados: RegistroAcaoBuscaAtivaRespostaDto) => {
     const estudante = { codigo: dados?.aluno?.codigoAluno || '', nome: dados?.aluno?.nome || '' };
