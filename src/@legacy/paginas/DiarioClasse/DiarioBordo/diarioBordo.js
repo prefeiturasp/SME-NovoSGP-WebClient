@@ -59,6 +59,13 @@ const DiarioBordo = () => {
   const [componenteCurricularSelecionado, setComponenteCurricularSelecionado] =
     useState();
 
+  const valorComponenteAExibir =
+    listaComponenteCurriculares?.length === 1
+      ? listaComponenteCurriculares[0].nomeComponenteInfantil != null
+        ? 'nomeComponenteInfantil'
+        : 'nome'
+      : 'nomeComponenteInfantil';
+
   const [codDisciplinaPai, setCodDisciplinaPai] = useState();
   const [dataSelecionada, setDataSelecionada] = useState();
   const [carregandoGeral, setCarregandoGeral] = useState(false);
@@ -736,7 +743,7 @@ const DiarioBordo = () => {
                         name="disciplinaId"
                         lista={listaComponenteCurriculares || []}
                         valueOption="codigoComponenteCurricular"
-                        valueText="nomeComponenteInfantil"
+                        valueText={valorComponenteAExibir}
                         valueSelect={componenteCurricularSelecionado}
                         onChange={onChangeComponenteCurricular}
                         placeholder="Selecione um componente curricular"
