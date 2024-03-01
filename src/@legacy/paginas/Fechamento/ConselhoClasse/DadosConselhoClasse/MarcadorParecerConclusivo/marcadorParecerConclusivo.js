@@ -156,7 +156,10 @@ const MarcadorParecerConclusivo = () => {
             turmaId={turmaSelecionada?.id}
             onChange={onChangeParecer}
             value={parecerSelecionado}
-            disabled={!!marcadorParecerConclusivo?.id && marcadorParecerConclusivo.id === parecerSelecionado}
+            disabled={
+              !!marcadorParecerConclusivo?.id &&
+              marcadorParecerConclusivo.id === parecerSelecionado
+            }
           />
         </Col>
         <Col>
