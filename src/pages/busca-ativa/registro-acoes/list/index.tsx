@@ -15,17 +15,22 @@ import SelectSemestre from '@/components/sgp/inputs/form/semestre';
 import SelectTurma from '@/components/sgp/inputs/form/turma';
 import SelectUE from '@/components/sgp/inputs/form/ue';
 import { validateMessages } from '@/core/constants/validate-messages';
+import { dayjs } from '@/core/date/dayjs';
 import { ROUTES } from '@/core/enum/routes';
 import { Col, Form, Input, Row } from 'antd';
 import { useForm, useWatch } from 'antd/es/form/Form';
+import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { verificaSomenteConsulta } from '~/servicos';
 import ListaPaginadaBuscaAtivaRegistroAcoes from './lista-paginada';
+import { RegistroAcaoBuscaAtivaListagemDto } from '@/core/dto/RegistroAcaoBuscaAtivaListagemDto';
 
 const BuscaAtivaRegistroAcoesList: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [form] = useForm();
 
   const usuario = useSelector((state: any) => state.usuario);
@@ -34,18 +39,69 @@ const BuscaAtivaRegistroAcoesList: React.FC = () => {
 
   const podeIncluir = permissoesTela?.podeIncluir;
 
+  const dadosRouteState: any = location.state;
+
   const [somenteConsulta, setSomenteConsulta] = useState(false);
+  const [formInitialValues, setFormInitialValues] = useState<any>({
+    consideraHistorico: false,
+  });
 
   const turma = useWatch('turma', form);
 
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
-  const onClickNovo = () => navigate(ROUTES.BUSCA_ATIVA_REGISTRO_ACOES_NOVO);
+  const mapearDadosState = () => {
+    const dadosFiltros = cloneDeep(form.getFieldsValue(true));
+
+    if (dadosFiltros.dataInicio && dadosFiltros.dataFim) {
+      dadosFiltros.dataInicio = dadosFiltros.dataInicio.toJSON();
+      dadosFiltros.dataFim = dadosFiltros.dataFim.toJSON();
+    } else {
+      dadosFiltros.dataInicio = undefined;
+      dadosFiltros.dataFim = undefined;
+    }
+
+    return dadosFiltros;
+  };
+
+  const onClickNovo = () => {
+    const dadosFiltros = mapearDadosState();
+
+    navigate(ROUTES.BUSCA_ATIVA_REGISTRO_ACOES_NOVO, {
+      state: { ...dadosRouteState, dadosFiltros },
+    });
+  };
+
+  const onClickEditar = (row: RegistroAcaoBuscaAtivaListagemDto) => {
+    const dadosFiltros = mapearDadosState();
+
+    navigate(`${ROUTES.BUSCA_ATIVA_REGISTRO_ACOES}/${row.id}`, {
+      state: { ...dadosRouteState, dadosFiltros },
+    });
+  };
 
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
     setSomenteConsulta(soConsulta);
   }, [permissoesTela]);
+
+  useEffect(() => {
+    if (dadosRouteState?.dadosFiltros?.anoLetivo) {
+      if (dadosRouteState?.dadosFiltros?.dataInicio) {
+        dadosRouteState.dadosFiltros.dataInicio = dayjs(dadosRouteState.dadosFiltros.dataInicio);
+      }
+
+      if (dadosRouteState?.dadosFiltros?.dataFim) {
+        dadosRouteState.dadosFiltros.dataFim = dayjs(dadosRouteState.dadosFiltros.dataFim);
+      }
+
+      setFormInitialValues({ ...dadosRouteState?.dadosFiltros });
+    }
+  }, [dadosRouteState]);
+
+  useEffect(() => {
+    form.resetFields();
+  }, [form, formInitialValues]);
 
   return (
     <Col>
@@ -73,9 +129,7 @@ const BuscaAtivaRegistroAcoesList: React.FC = () => {
           layout="vertical"
           autoComplete="off"
           validateMessages={validateMessages}
-          initialValues={{
-            consideraHistorico: false,
-          }}
+          initialValues={formInitialValues}
         >
           <Row gutter={[16, 8]}>
             <Col xs={24}>
@@ -168,7 +222,7 @@ const BuscaAtivaRegistroAcoesList: React.FC = () => {
 
           <Row>
             <Col xs={24}>
-              <ListaPaginadaBuscaAtivaRegistroAcoes />
+              <ListaPaginadaBuscaAtivaRegistroAcoes onClickEditar={onClickEditar} />
             </Col>
           </Row>
         </Form>

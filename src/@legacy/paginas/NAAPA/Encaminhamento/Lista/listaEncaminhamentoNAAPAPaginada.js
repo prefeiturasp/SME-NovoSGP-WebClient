@@ -23,6 +23,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     dataAberturaQueixaInicio,
     onSelecionarItems,
     exibirEncaminhamentosEncerrados,
+    obterDadosFiltros,
   } = props;
 
   const navigate = useNavigate();
@@ -133,7 +134,10 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
       filtro={filtros}
       onClick={linha => {
         store.dispatch(setTabAtivaEncaminhamentoNAAPA(0));
-        navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${linha?.id}`);
+        const dadosSalvarState = obterDadosFiltros();
+        navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${linha?.id}`, {
+          state: dadosSalvarState,
+        });
       }}
       filtroEhValido={filtroEhValido}
       multiSelecao

@@ -12,17 +12,35 @@ import { ROUTES } from '@/core/enum/routes';
 import { Checkbox, Col, Form, Input, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import TableTurmasCriancasEstudantesAusentes from './table-turmas';
 
 const ConsultaCriancasEstudantesAusentes: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [form] = useForm();
+
+  const dadosRouteState = location.state;
 
   const anoAtual = dayjs().year();
 
+  const [formInitialValues, setFormInitialValues] = useState({
+    anoLetivo: anoAtual,
+    consideraHistorico: false,
+  });
+
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+
+  useEffect(() => {
+    if (dadosRouteState?.dadosFiltros?.dre?.id) {
+      setFormInitialValues({ ...dadosRouteState?.dadosFiltros });
+    }
+  }, [dadosRouteState]);
+
+  useEffect(() => {
+    form.resetFields();
+  }, [form, formInitialValues]);
 
   return (
     <Col>
@@ -41,7 +59,7 @@ const ConsultaCriancasEstudantesAusentes: React.FC = () => {
           layout="vertical"
           autoComplete="off"
           validateMessages={validateMessages}
-          initialValues={{ anoLetivo: anoAtual, consideraHistorico: false }}
+          initialValues={formInitialValues}
         >
           <Row gutter={24}>
             <Form.Item name="consideraHistorico" valuePropName="checked" hidden>
@@ -78,7 +96,7 @@ const ConsultaCriancasEstudantesAusentes: React.FC = () => {
                       formItemProps={{ rules: [{ required: true }] }}
                       selectProps={{ disabled: !modalidade }}
                       mostrarOpcaoTodas
-                      selecionarOpcaoTodasAoCarregar
+                      selecionarOpcaoTodasAoCarregar={!dadosRouteState?.dadosFiltros?.turma?.id}
                     />
                   );
                 }}
