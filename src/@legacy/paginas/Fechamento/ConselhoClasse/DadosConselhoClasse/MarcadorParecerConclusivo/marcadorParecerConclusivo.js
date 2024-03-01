@@ -156,16 +156,16 @@ const MarcadorParecerConclusivo = () => {
             turmaId={turmaSelecionada?.id}
             onChange={onChangeParecer}
             value={parecerSelecionado}
-            disabled={
-              !!marcadorParecerConclusivo?.id &&
-              marcadorParecerConclusivo.id === parecerSelecionado
-            }
           />
         </Col>
         <Col>
           <ButtonPrimary
             id={SGP_BUTTON_SALVAR_EDICAO_PARECER_CONCLUSIVO}
             onClick={() => onClickSalvarEdicaoParecer()}
+            disabled={
+              !!marcadorParecerConclusivo?.id &&
+              marcadorParecerConclusivo.id === parecerSelecionado
+            }
           >
             Salvar
           </ButtonPrimary>
