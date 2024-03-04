@@ -1,6 +1,9 @@
 import { SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_NAAPA_ENCERRADOS } from '@/@legacy/constantes/ids/radio';
 import situacaoNAAPA from '@/@legacy/dtos/situacaoNAAPA';
-import { OrdenacaoListEncaminhamentoNAAPAEnum } from '@/core/enum/ordenacao-list-encaminhamento-naapa-enum';
+import {
+  OrdenacaoListEncaminhamentoNAAPAEnum,
+  OrdenacaoListEncaminhamentoNAAPAEnumDisplay,
+} from '@/core/enum/ordenacao-list-encaminhamento-naapa-enum';
 import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
@@ -80,7 +83,13 @@ const ListaEncaminhamentoNAAPA = () => {
   ] = useState([]);
 
   const [ordenacoesSelecionadas, setOrdenacoesSelecionadas] = useState([
-    OrdenacaoListEncaminhamentoNAAPAEnum.DataEntradaQueixaDesc,
+    {
+      value: OrdenacaoListEncaminhamentoNAAPAEnum.DataEntradaQueixaDesc,
+      label:
+        OrdenacaoListEncaminhamentoNAAPAEnumDisplay[
+          OrdenacaoListEncaminhamentoNAAPAEnum.DataEntradaQueixaDesc
+        ],
+    },
   ]);
 
   const dadosRouteState = location.state;
@@ -608,6 +617,7 @@ const ListaEncaminhamentoNAAPA = () => {
               onSelecionarItems={onSelecionarItems}
               exibirEncaminhamentosEncerrados={exibirEncaminhamentosEncerrados}
               obterDadosFiltros={obterDadosFiltros}
+              ordenacoesSelecionadas={ordenacoesSelecionadas}
             />
           </Col>
         </Row>
