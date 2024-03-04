@@ -33,7 +33,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
 
   const [filtros, setFiltros] = useState();
   const [ordenacoesSelecionadas, setOrdenacoesSelecionadas] = useState([
-    OrdenacaoListEncaminhamentoNAAPAEnum.DataEntradaQueixa,
+    OrdenacaoListEncaminhamentoNAAPAEnum.DataEntradaQueixaDesc,
   ]);
 
   const filtroEhValido = !!(anoLetivo && dre?.id && ue?.id);
