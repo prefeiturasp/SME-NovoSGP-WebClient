@@ -193,12 +193,16 @@ const ListaEncaminhamentoNAAPA = () => {
 
       if (lista?.length === 1) {
         setUe(lista[0]);
-      }
-
-      if (lista?.length > 1 && !dadosRouteState?.ue?.codigo) {
+      } else if (lista?.length > 1) {
         const ueTodos = { nome: 'Todas', codigo: OPCAO_TODOS, id: OPCAO_TODOS };
         lista.unshift(ueTodos);
-        setUe(ueTodos);
+
+        if (
+          !dadosRouteState?.ue?.codigo ||
+          dadosRouteState?.ue?.codigo === OPCAO_TODOS
+        ) {
+          setUe(ueTodos);
+        }
       }
 
       setListaUes(lista);
