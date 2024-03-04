@@ -1,5 +1,6 @@
 import { SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_NAAPA_ENCERRADOS } from '@/@legacy/constantes/ids/radio';
 import situacaoNAAPA from '@/@legacy/dtos/situacaoNAAPA';
+import { OrdenacaoListEncaminhamentoNAAPAEnum } from '@/core/enum/ordenacao-list-encaminhamento-naapa-enum';
 import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
@@ -33,6 +34,7 @@ import {
 import { AbrangenciaServico, erros, verificaSomenteConsulta } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { ordenarDescPor, verificarDataFimMaiorInicio } from '~/utils';
+import { BotaoOrdenacaoListaEncaminhamentoNAAPA } from './components/ordenacao';
 import ListaEncaminhamentoNAAPABotoesAcao from './listaEncaminhamentoNAAPABotoesAcao';
 import ListaEncaminhamentoNAAPAPaginada from './listaEncaminhamentoNAAPAPaginada';
 
@@ -77,6 +79,10 @@ const ListaEncaminhamentoNAAPA = () => {
     setIdsEncaminhamentoNAAPASelecionados,
   ] = useState([]);
 
+  const [ordenacoesSelecionadas, setOrdenacoesSelecionadas] = useState([
+    OrdenacaoListEncaminhamentoNAAPAEnum.DataEntradaQueixaDesc,
+  ]);
+
   const dadosRouteState = location.state;
 
   const opcoesEncerrados = [
@@ -117,6 +123,9 @@ const ListaEncaminhamentoNAAPA = () => {
       setExibirEncaminhamentosEncerrados(
         dadosRouteState.exibirEncaminhamentosEncerrados
       );
+
+    if (dadosRouteState?.ordenacoesSelecionadas?.length)
+      setOrdenacoesSelecionadas(dadosRouteState.ordenacoesSelecionadas);
   }, [dadosRouteState]);
 
   useEffect(() => {
@@ -397,6 +406,7 @@ const ListaEncaminhamentoNAAPA = () => {
       dataAberturaQueixaFim: dataAberturaQueixaFim
         ? dataAberturaQueixaFim?.toJSON()
         : undefined,
+      ordenacoesSelecionadas,
     };
   };
 
@@ -559,12 +569,26 @@ const ListaEncaminhamentoNAAPA = () => {
 
           <Col sm={24} lg={12}>
             <RadioGroupButton
+              desabilitado={!ue?.codigo}
               value={exibirEncaminhamentosEncerrados}
               label="Apresentar encaminhamentos encerrados"
               opcoes={opcoesEncerrados}
               id={SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_NAAPA_ENCERRADOS}
               onChange={e =>
                 setExibirEncaminhamentosEncerrados(e?.target?.value)
+              }
+            />
+          </Col>
+
+          <Col xs={24} sm={12}>
+            <BotaoOrdenacaoListaEncaminhamentoNAAPA
+              disabled={!ue?.codigo}
+              setOrdenacoesSelecionadas={setOrdenacoesSelecionadas}
+              ordenacoesSelecionadas={ordenacoesSelecionadas}
+              opcoesParaRemover={
+                ue?.codigo !== OPCAO_TODOS
+                  ? [OrdenacaoListEncaminhamentoNAAPAEnum.UE]
+                  : []
               }
             />
           </Col>
