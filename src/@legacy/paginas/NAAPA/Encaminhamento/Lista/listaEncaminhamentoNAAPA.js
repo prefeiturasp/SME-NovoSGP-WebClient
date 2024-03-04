@@ -111,8 +111,10 @@ const ListaEncaminhamentoNAAPA = () => {
 
     if (dadosRouteState?.turmaId) setTurmaId(dadosRouteState.turmaId);
 
-    if (dadosRouteState?.codigoNomeAlunoExibicao)
-      setCodigoNomeAlunoExibicao(dadosRouteState.codigoNomeAlunoExibicao);
+    if (dadosRouteState?.codigoNomeAluno) {
+      setCodigoNomeAlunoExibicao(dadosRouteState.codigoNomeAluno);
+      setCodigoNomeAluno(dadosRouteState.codigoNomeAluno);
+    }
 
     if (dadosRouteState?.dataAberturaQueixaInicio)
       setDataAberturaQueixaInicio(
@@ -405,6 +407,7 @@ const ListaEncaminhamentoNAAPA = () => {
       dre,
       ue,
       turmaId,
+      codigoNomeAluno,
       codigoNomeAlunoExibicao,
       situacao,
       prioridade,
