@@ -228,12 +228,12 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
                 <LocalizadorEstudante
                   inputCodigoProps={{
                     disabled:
-                      !!formInitialValues?.localizadorEstudante.nome ||
+                      !!formInitialValues?.localizadorEstudante?.nome ||
                       desabilitarCamposBuscaAtivaRegistroAcoes,
                   }}
                   autoCompleteNameProps={{
                     disabled:
-                      !!formInitialValues?.localizadorEstudante.codigo ||
+                      !!formInitialValues?.localizadorEstudante?.codigo ||
                       desabilitarCamposBuscaAtivaRegistroAcoes,
                   }}
                 />
