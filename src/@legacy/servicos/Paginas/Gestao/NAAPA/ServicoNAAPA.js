@@ -91,7 +91,7 @@ class ServicoNAAPA {
 
         const secaoInvalida = !secaoEstaEmEdicao && !secao.concluido;
         const ehSecaoItinerancia =
-          secao.nomeComponente === 'QUESTOES_ITINERANCIA';
+          secao.nomeComponente === 'QUESTOES_ITINERACIA';
         if (secaoInvalida && !ehSecaoItinerancia) {
           nomesSecoesComCamposObrigatorios.push(secao.nome);
         }
@@ -213,7 +213,7 @@ class ServicoNAAPA {
 
     if (formsValidos || dadosMapeados?.secoes?.length) {
       const tabItineranciaIndex = dadosMapeados?.secoes?.findIndex(
-        item => item.secaoNome === 'QUESTOES_ITINERANCIA'
+        item => item.secaoNome === 'QUESTOES_ITINERACIA'
       );
 
       const paramsSalvar = {
@@ -285,7 +285,7 @@ class ServicoNAAPA {
     );
 
     const secaoItinerancia =
-      secaoDestino?.nomeComponente === 'QUESTOES_ITINERANCIA';
+      secaoDestino?.nomeComponente === 'QUESTOES_ITINERACIA';
 
     if (
       secaoItinerancia &&
