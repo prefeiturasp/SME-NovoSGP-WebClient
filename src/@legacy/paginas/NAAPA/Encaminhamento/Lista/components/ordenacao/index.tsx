@@ -92,10 +92,16 @@ type BotaoOrdenacaoListaEncaminhamentoNAAPAProps = {
   setOrdenacoesSelecionadas: any;
   ordenacoesSelecionadas: any[];
   opcoesParaRemover?: OrdenacaoListEncaminhamentoNAAPAEnum[];
+  disabled?: boolean;
 };
 export const BotaoOrdenacaoListaEncaminhamentoNAAPA: React.FC<
   BotaoOrdenacaoListaEncaminhamentoNAAPAProps
-> = ({ setOrdenacoesSelecionadas, ordenacoesSelecionadas, opcoesParaRemover }) => {
+> = ({
+  setOrdenacoesSelecionadas,
+  ordenacoesSelecionadas,
+  opcoesParaRemover,
+  disabled = false,
+}) => {
   const [treeDataList, setTreeDataList] = useState<any[]>([]);
 
   const mapNewList = (valorComparacao: OrdenacaoListEncaminhamentoNAAPAEnum) =>
@@ -148,6 +154,7 @@ export const BotaoOrdenacaoListaEncaminhamentoNAAPA: React.FC<
         allowClear
         labelInValue
         treeCheckable
+        disabled={disabled}
         treeData={treeDataList}
         value={ordenacoesSelecionadas}
         onChange={setOrdenacoesSelecionadas}

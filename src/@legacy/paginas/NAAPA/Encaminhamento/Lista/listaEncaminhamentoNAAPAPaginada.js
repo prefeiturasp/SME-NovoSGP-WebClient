@@ -1,8 +1,6 @@
 import { NomeEstudanteLista } from '@/@legacy/componentes-sgp';
-import { OrdenacaoListEncaminhamentoNAAPAEnum } from '@/core/enum/ordenacao-list-encaminhamento-naapa-enum';
 import { ROUTES } from '@/core/enum/routes';
 import { store } from '@/core/redux';
-import { Col, Row } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ListaPaginada } from '~/componentes';
@@ -10,7 +8,6 @@ import { OPCAO_TODOS } from '~/constantes';
 import { SGP_TABLE_ENCAMINHAMENTO_NAAPA } from '~/constantes/ids/table';
 import { setTabAtivaEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { verificarDataFimMaiorInicio } from '~/utils';
-import { BotaoOrdenacaoListaEncaminhamentoNAAPA } from './components/ordenacao';
 
 const ListaEncaminhamentoNAAPAPaginada = props => {
   const {
@@ -27,14 +24,12 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     onSelecionarItems,
     exibirEncaminhamentosEncerrados,
     obterDadosFiltros,
+    ordenacoesSelecionadas,
   } = props;
 
   const navigate = useNavigate();
 
   const [filtros, setFiltros] = useState();
-  const [ordenacoesSelecionadas, setOrdenacoesSelecionadas] = useState([
-    OrdenacaoListEncaminhamentoNAAPAEnum.DataEntradaQueixa,
-  ]);
 
   const filtroEhValido = !!(anoLetivo && dre?.id && ue?.id);
 
@@ -138,39 +133,22 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
     filtros?.anoLetivo && filtros?.dreId && filtros?.codigoUe;
 
   return exibirTabela ? (
-    <>
-      <Row gutter={[16, 16]}>
-        <Col xs={24} sm={12}>
-          <BotaoOrdenacaoListaEncaminhamentoNAAPA
-            setOrdenacoesSelecionadas={setOrdenacoesSelecionadas}
-            ordenacoesSelecionadas={ordenacoesSelecionadas}
-            opcoesParaRemover={
-              ue?.codigo !== OPCAO_TODOS
-                ? [OrdenacaoListEncaminhamentoNAAPAEnum.UE]
-                : []
-            }
-          />
-        </Col>
-        <Col xs={24}>
-          <ListaPaginada
-            url="v1/encaminhamento-naapa"
-            id={SGP_TABLE_ENCAMINHAMENTO_NAAPA}
-            colunas={colunas}
-            filtro={filtros}
-            onClick={linha => {
-              store.dispatch(setTabAtivaEncaminhamentoNAAPA(0));
-              const dadosSalvarState = obterDadosFiltros();
-              navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${linha?.id}`, {
-                state: dadosSalvarState,
-              });
-            }}
-            filtroEhValido={filtroEhValido}
-            multiSelecao
-            selecionarItems={valores => onSelecionarItems(valores)}
-          />
-        </Col>
-      </Row>
-    </>
+    <ListaPaginada
+      url="v1/encaminhamento-naapa"
+      id={SGP_TABLE_ENCAMINHAMENTO_NAAPA}
+      colunas={colunas}
+      filtro={filtros}
+      onClick={linha => {
+        store.dispatch(setTabAtivaEncaminhamentoNAAPA(0));
+        const dadosSalvarState = obterDadosFiltros();
+        navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${linha?.id}`, {
+          state: dadosSalvarState,
+        });
+      }}
+      filtroEhValido={filtroEhValido}
+      multiSelecao
+      selecionarItems={valores => onSelecionarItems(valores)}
+    />
   ) : (
     <></>
   );
