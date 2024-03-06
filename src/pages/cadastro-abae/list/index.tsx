@@ -77,11 +77,11 @@ const ListCadastroABAE: React.FC = () => {
             </Form.Item>
 
             <Col xs={24} md={12}>
-              <SelectDRE formItemProps={{ rules: [{ required: true }] }} />
+              <SelectDRE formItemProps={{ rules: [{ required: true }] }} mostrarOpcaoTodas />
             </Col>
 
             <Col xs={24} md={12}>
-              <SelectUE formItemProps={{ rules: [{ required: true }] }} />
+              <SelectUE formItemProps={{ rules: [{ required: true }] }} mostrarOpcaoTodas />
             </Col>
 
             <Col xs={24} md={12}>
