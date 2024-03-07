@@ -1,3 +1,4 @@
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { ROUTES } from '@/core/enum/routes';
 import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
@@ -23,10 +24,11 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import servicoSalvarConselhoClasse from '../servicoSalvarConselhoClasse';
 import AlertaDentroPeriodo from './AlertaDentroPeriodo/alertaDentroPeriodo';
 import AnotacoesRecomendacoes from './AnotacoesRecomendacoes/anotacoesRecomendacoes';
+
+import { CollapseDadosSecaoRelatorioPAPConselhoClasse } from './DadosPAP/Collapse';
 import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
-import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const { TabPane } = Tabs;
 
@@ -292,6 +294,17 @@ const DadosConselhoClasse = props => {
         ) : (
           <></>
         )}
+
+        {!carregando &&
+        (bimestreAtual?.valor === '1' || bimestreAtual?.valor === '4') ? (
+          <CollapseDadosSecaoRelatorioPAPConselhoClasse
+            bimestre={bimestreAtual.valor}
+            codigoAluno={codigoEOL}
+          />
+        ) : (
+          <></>
+        )}
+
         <AnotacoesRecomendacoes
           bimestre={bimestreAtual}
           codigoTurma={turmaCodigo}
