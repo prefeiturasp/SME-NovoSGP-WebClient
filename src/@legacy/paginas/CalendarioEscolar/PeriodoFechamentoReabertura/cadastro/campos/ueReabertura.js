@@ -40,7 +40,7 @@ const UeReabertura = ({ form, onChangeCampos }) => {
       '',
       false,
       modalidade,
-      calendarioSelecionado.anoLetivo < new Date().getFullYear(),
+      false,
       calendarioSelecionado.anoLetivo
     )
       .catch(e => erros(e))
