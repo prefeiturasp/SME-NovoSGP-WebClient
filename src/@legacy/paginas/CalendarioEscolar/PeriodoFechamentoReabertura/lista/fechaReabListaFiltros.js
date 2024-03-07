@@ -142,7 +142,7 @@ const FechaReabListaFiltros = () => {
       '',
       false,
       modalidadeConvertida,
-      calendarioSelecionado.anoLetivo < new Date().getFullYear(),
+      false,
       calendarioSelecionado.anoLetivo
     )
       .catch(e => erros(e))
