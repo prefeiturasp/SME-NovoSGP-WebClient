@@ -66,6 +66,16 @@ const DadosConselhoClasse = props => {
     Number(modalidade) !== ModalidadeEnum.EJA &&
     Number(modalidade) !== ModalidadeEnum.CELP;
 
+  // const ehMatriculadoTurmaPAP = dadosAlunoObjectCard?.ehMatriculadoTurmaPAP;
+  // TODO - Remover valor fixo
+  const ehMatriculadoTurmaPAP = true;
+
+  const exibirDadosPAP =
+    ehMatriculadoTurmaPAP &&
+    !carregando &&
+    bimestreAtual?.valor &&
+    bimestreAtual?.valor !== 'final';
+
   const limparDadosNotaPosConselhoJustificativa = useCallback(() => {
     dispatch(setExpandirLinha([]));
     dispatch(setNotaConceitoPosConselhoAtual({}));
@@ -295,8 +305,7 @@ const DadosConselhoClasse = props => {
           <></>
         )}
 
-        {!carregando &&
-        (bimestreAtual?.valor === '1' || bimestreAtual?.valor === '4') ? (
+        {exibirDadosPAP ? (
           <CollapseDadosSecaoRelatorioPAPConselhoClasse
             bimestre={bimestreAtual.valor}
             codigoAluno={codigoEOL}

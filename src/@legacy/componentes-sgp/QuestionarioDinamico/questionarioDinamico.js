@@ -49,6 +49,8 @@ const QuestionarioDinamico = props => {
     exibirOrdemLabel,
     validarCampoObrigatorioCustomizado,
     montarComboMultiplaEscolhaComplementarComResposta, // Na base vai ter somente 2 campos com mesmo nome para essa rotina 1 obrigatório e outro não!
+    exibirLabel,
+    exibirCampoSemValor,
   } = props;
 
   const [valoresIniciais, setValoresIniciais] = useState();
@@ -255,6 +257,17 @@ const QuestionarioDinamico = props => {
   );
 
   const montarCampos = (questaoAtual, form, ordemAnterior, ordemSequencial) => {
+    const valorAtualSelecionado = form.values[questaoAtual.id];
+
+    if (!exibirCampoSemValor) {
+      if (
+        (questaoAtual?.tipoQuestao === tipoQuestao.Texto ||
+          questaoAtual?.tipoQuestao === tipoQuestao.EditorTexto) &&
+        !valorAtualSelecionado
+      )
+        return <></>;
+    }
+
     const campoQuestaoComplementar = [];
 
     const montarCampoComplementarPadrao = (vAtual, label, ordemSeq) => {
@@ -275,24 +288,25 @@ const QuestionarioDinamico = props => {
       : questaoAtual.ordem;
 
     let textoLabel = '';
+    let label = '';
 
-    if (exibirOrdemLabel) {
-      textoLabel = questaoAtual?.nome
-        ? `${ordemLabel} - ${questaoAtual.nome}`
-        : '';
-    } else {
-      textoLabel = questaoAtual.nome;
+    if (exibirLabel) {
+      if (exibirOrdemLabel) {
+        textoLabel = questaoAtual?.nome
+          ? `${ordemLabel} - ${questaoAtual.nome}`
+          : '';
+      } else {
+        textoLabel = questaoAtual.nome;
+      }
+
+      label = labelPersonalizado(
+        textoLabel,
+        questaoAtual?.observacao,
+        validarCampoObrigatorioCustomizado
+          ? validarCampoObrigatorioCustomizado(questaoAtual, form.values)
+          : questaoAtual?.obrigatorio
+      );
     }
-
-    const label = labelPersonalizado(
-      textoLabel,
-      questaoAtual?.observacao,
-      validarCampoObrigatorioCustomizado
-        ? validarCampoObrigatorioCustomizado(questaoAtual, form.values)
-        : questaoAtual?.obrigatorio
-    );
-
-    const valorAtualSelecionado = form.values[questaoAtual.id];
 
     if (
       questaoAtual?.tipoQuestao === tipoQuestao.ComboMultiplaEscolha ||
@@ -698,6 +712,8 @@ QuestionarioDinamico.propTypes = {
   exibirOrdemLabel: PropTypes.bool,
   validarCampoObrigatorioCustomizado: PropTypes.oneOfType([PropTypes.any]),
   montarComboMultiplaEscolhaComplementarComResposta: PropTypes.bool,
+  exibirLabel: PropTypes.bool,
+  exibirCampoSemValor: PropTypes.bool,
 };
 
 QuestionarioDinamico.defaultProps = {
@@ -712,9 +728,10 @@ QuestionarioDinamico.defaultProps = {
   onChangeQuestionario: () => {},
   turmaId: null,
   prefixId: '',
-  exibirOrdemLabel: true,
   validarCampoObrigatorioCustomizado: null,
   montarComboMultiplaEscolhaComplementarComResposta: true,
+  exibirLabel: true,
+  exibirCampoSemValor: true,
 };
 
 export default QuestionarioDinamico;
