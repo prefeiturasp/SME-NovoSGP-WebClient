@@ -20,9 +20,11 @@ const CampoDinamicoEditor = props => {
 
   const valorInicial = form?.initialValues?.[String(questaoAtual?.id)];
 
+  const name = String(questaoAtual?.id);
+
   useEffect(() => {
     if (resetarCampoDinamicoEditor) {
-      form?.setFieldValue(id, valorInicial);
+      form?.setFieldValue(name, valorInicial);
 
       if (textArea?.current?.setEditorValue) {
         textArea.current.setEditorValue(valorInicial);
@@ -41,7 +43,7 @@ const CampoDinamicoEditor = props => {
           id={id}
           form={form}
           desabilitar={desabilitado}
-          name={String(questaoAtual?.id)}
+          name={name}
           placeholder={questaoAtual?.placeHolder}
           value={valorInicial}
           onChange={v => {

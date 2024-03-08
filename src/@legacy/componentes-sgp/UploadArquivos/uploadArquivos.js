@@ -34,8 +34,11 @@ export const ContainerUpload = styled.div`
     opacity: 1 !important;
   }
 
-  .ant-upload-list-item-uploading .ant-upload-list-item-card-actions {
-    display: none !important;
+  .ant-upload-list-item-uploading {
+    .ant-upload-list-item-card-actions,
+    .ant-upload-list-item-actions {
+      display: none !important;
+    }
   }
 `;
 
