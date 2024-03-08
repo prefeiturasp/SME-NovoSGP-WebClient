@@ -1,4 +1,4 @@
-import { Loader } from '@/@legacy/componentes';
+import { Label, Loader } from '@/@legacy/componentes';
 import QuestionarioDinamico from '@/@legacy/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
 import { HttpStatusCode } from '@/core/enum/http-status-code';
 import { Col, Row } from 'antd';
@@ -49,20 +49,37 @@ export const MontarQuestionarioPAPConselhoClasse = ({ bimestre, codigoAluno }) =
         <>
           {dadosSecoes?.length ? (
             dadosSecoes.map((dados) => {
-              return (
-                <Row key={dados?.id}>
-                  <Col span={24}>
-                    <QuestionarioDinamico
-                      dados={dados}
-                      desabilitarCampos
-                      codigoAluno={codigoAluno}
-                      codigoTurma={turmaSelecionada?.turma}
-                      anoLetivo={turmaSelecionada?.anoLetivo}
-                      dadosQuestionarioAtual={dados?.questoes}
-                    />
-                  </Col>
-                </Row>
-              );
+              const secaoComQuestoesRespondidas = dados?.questoes?.find((questao) => {
+                const questaoRespondida = questao?.resposta?.find(
+                  (resposta) => !!(resposta?.texto || resposta?.opcaoRespostaId),
+                );
+
+                return questaoRespondida;
+              });
+
+              if (secaoComQuestoesRespondidas?.id) {
+                return (
+                  <Row key={dados?.id}>
+                    <Label text={dados?.nome} />
+                    <Col span={24}>
+                      <QuestionarioDinamico
+                        dados={dados}
+                        desabilitarCampos
+                        exibirLabel={false}
+                        exibirOrdemLabel={false}
+                        codigoAluno={codigoAluno}
+                        exibirCampoSemValor={false}
+                        codigoTurma={turmaSelecionada?.turma}
+                        anoLetivo={turmaSelecionada?.anoLetivo}
+                        dadosQuestionarioAtual={dados?.questoes}
+                        validarCampoObrigatorioCustomizado={() => false}
+                      />
+                    </Col>
+                  </Row>
+                );
+              }
+
+              return <></>;
             })
           ) : !exibirLoader ? (
             <div className="text-center">Sem dados</div>
