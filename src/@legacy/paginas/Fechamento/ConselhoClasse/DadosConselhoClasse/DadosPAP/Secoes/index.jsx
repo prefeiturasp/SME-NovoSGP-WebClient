@@ -1,4 +1,4 @@
-import { Label, Loader } from '@/@legacy/componentes';
+import { Base, CardCollapse, Label, Loader } from '@/@legacy/componentes';
 import QuestionarioDinamico from '@/@legacy/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
 import { HttpStatusCode } from '@/core/enum/http-status-code';
 import { Col, Row } from 'antd';
@@ -11,8 +11,11 @@ export const MontarQuestionarioPAPConselhoClasse = ({ bimestre, codigoAluno }) =
   const usuario = useSelector((store) => store.usuario);
   const { turmaSelecionada } = usuario;
 
+  const [exibirDados, setExibirDados] = useState(false);
   const [exibirLoader, setExibirLoader] = useState(false);
   const [dadosSecoes, setDadosSecoes] = useState([]);
+
+  const exibirCollapsePAP = !!dadosSecoes?.length;
 
   const obterQuestionario = useCallback(async () => {
     setExibirLoader(true);
@@ -43,53 +46,60 @@ export const MontarQuestionarioPAPConselhoClasse = ({ bimestre, codigoAluno }) =
     }
   }, [turmaSelecionada, bimestre, codigoAluno, obterQuestionario]);
 
+  if (!exibirCollapsePAP) return <></>;
+
+  if (exibirLoader)
+    return (
+      <div className="col-sm-12 mb-6 mt-4">
+        <Loader loading tip="Validando exibição dados elatório de PAP" />
+      </div>
+    );
+
   return (
-    <Loader loading={exibirLoader}>
-      {bimestre && codigoAluno && turmaSelecionada.turma ? (
-        <>
-          {dadosSecoes?.length ? (
-            dadosSecoes.map((dados) => {
-              const secaoComQuestoesRespondidas = dados?.questoes?.find((questao) => {
-                const questaoRespondida = questao?.resposta?.find(
-                  (resposta) => !!(resposta?.texto || resposta?.opcaoRespostaId),
-                );
+    <div className="col-sm-12 mb-2">
+      <CardCollapse
+        titulo="Relatório de PAP"
+        configCabecalho={{
+          altura: '50px',
+          corBorda: Base.AzulBordaCard,
+        }}
+        onClick={() => setExibirDados(!exibirDados)}
+        show={exibirDados}
+      >
+        {dadosSecoes.map((dados) => {
+          const secaoComQuestoesRespondidas = dados?.questoes?.find((questao) => {
+            const questaoRespondida = questao?.resposta?.find(
+              (resposta) => !!(resposta?.texto || resposta?.opcaoRespostaId),
+            );
 
-                return questaoRespondida;
-              });
+            return questaoRespondida;
+          });
 
-              if (secaoComQuestoesRespondidas?.id) {
-                return (
-                  <Row key={dados?.id}>
-                    <Label text={dados?.nome} />
-                    <Col span={24}>
-                      <QuestionarioDinamico
-                        dados={dados}
-                        desabilitarCampos
-                        exibirLabel={false}
-                        exibirOrdemLabel={false}
-                        codigoAluno={codigoAluno}
-                        exibirCampoSemValor={false}
-                        codigoTurma={turmaSelecionada?.turma}
-                        anoLetivo={turmaSelecionada?.anoLetivo}
-                        dadosQuestionarioAtual={dados?.questoes}
-                        validarCampoObrigatorioCustomizado={() => false}
-                      />
-                    </Col>
-                  </Row>
-                );
-              }
+          if (secaoComQuestoesRespondidas?.id) {
+            return (
+              <Row key={dados?.id}>
+                <Label text={dados?.nome} />
+                <Col span={24}>
+                  <QuestionarioDinamico
+                    dados={dados}
+                    desabilitarCampos
+                    exibirLabel={false}
+                    exibirOrdemLabel={false}
+                    codigoAluno={codigoAluno}
+                    exibirCampoSemValor={false}
+                    codigoTurma={turmaSelecionada?.turma}
+                    anoLetivo={turmaSelecionada?.anoLetivo}
+                    dadosQuestionarioAtual={dados?.questoes}
+                    validarCampoObrigatorioCustomizado={() => false}
+                  />
+                </Col>
+              </Row>
+            );
+          }
 
-              return <></>;
-            })
-          ) : !exibirLoader ? (
-            <div className="text-center">Sem dados</div>
-          ) : (
-            <></>
-          )}
-        </>
-      ) : (
-        <></>
-      )}
-    </Loader>
+          return <></>;
+        })}
+      </CardCollapse>
+    </div>
   );
 };

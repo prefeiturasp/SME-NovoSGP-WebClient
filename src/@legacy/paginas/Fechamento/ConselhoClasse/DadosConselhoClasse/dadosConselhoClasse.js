@@ -25,7 +25,7 @@ import servicoSalvarConselhoClasse from '../servicoSalvarConselhoClasse';
 import AlertaDentroPeriodo from './AlertaDentroPeriodo/alertaDentroPeriodo';
 import AnotacoesRecomendacoes from './AnotacoesRecomendacoes/anotacoesRecomendacoes';
 
-import { CollapseDadosSecaoRelatorioPAPConselhoClasse } from './DadosPAP/Collapse';
+import { MontarQuestionarioPAPConselhoClasse } from './DadosPAP/Secoes';
 import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
@@ -66,12 +66,8 @@ const DadosConselhoClasse = props => {
     Number(modalidade) !== ModalidadeEnum.EJA &&
     Number(modalidade) !== ModalidadeEnum.CELP;
 
-  // const ehMatriculadoTurmaPAP = dadosAlunoObjectCard?.ehMatriculadoTurmaPAP;
-  // TODO - Remover valor fixo
-  const ehMatriculadoTurmaPAP = true;
-
   const exibirDadosPAP =
-    ehMatriculadoTurmaPAP &&
+    Number(modalidade) === ModalidadeEnum.FUNDAMENTAL &&
     !carregando &&
     bimestreAtual?.valor &&
     bimestreAtual?.valor !== 'final';
@@ -306,7 +302,7 @@ const DadosConselhoClasse = props => {
         )}
 
         {exibirDadosPAP ? (
-          <CollapseDadosSecaoRelatorioPAPConselhoClasse
+          <MontarQuestionarioPAPConselhoClasse
             bimestre={bimestreAtual.valor}
             codigoAluno={codigoEOL}
           />
