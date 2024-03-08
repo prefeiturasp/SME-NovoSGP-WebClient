@@ -1,5 +1,5 @@
-import { conselhoClasseRecomendacaoTipo } from '~/dtos';
 import { store } from '@/core/redux';
+import { conselhoClasseRecomendacaoTipo } from '~/dtos';
 import {
   setListaoRecomendacoesAlunoFamilia,
   setListaTiposConceitos,
@@ -234,6 +234,15 @@ class ServicoConselhoClasse {
     api.get(
       `/v1/conselhos-classe/validar-inconsistencias/turma/${turmaId}/bimestre/${bimestre}`
     );
+
+  obterQuestionarioPAPConselhoClasse = ({
+    codigoTurmaRegular,
+    codigoAluno,
+    bimestre,
+  }) => {
+    const url = `/v1/conselhos-classe/turmas/${codigoTurmaRegular}/alunos/${codigoAluno}/relatorios-pap`;
+    return api.get(url, { params: { bimestre } });
+  };
 }
 
 export default new ServicoConselhoClasse();
