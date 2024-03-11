@@ -17,7 +17,7 @@ const maskCEP = (value: string | number | undefined) =>
 
 const formatarDataHora = (data: string | undefined) => dayjs(data).format('DD/MM/YYYY HH:mm');
 
-const formatarData = (data: string | undefined) => dayjs(data).format('DD/MM/YYYY');
+const formatarData = (data: string | undefined) => (data ? dayjs(data).format('DD/MM/YYYY') : '');
 
 export {
   maskTelefone,

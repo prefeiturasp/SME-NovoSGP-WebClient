@@ -1,23 +1,28 @@
+import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Colors } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { URL_HOME } from '~/constantes';
-import { ROUTES } from '@/core/enum/routes';
-import { useNavigate } from 'react-router-dom';
+import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import BtnImpressaoEncaminhamentoNAAPA from '../componentes/btnImpressaoNAAPA';
 
 const ListaEncaminhamentoNAAPABotoesAcao = props => {
   const navigate = useNavigate();
 
-  const { somenteConsulta, podeIncluir, idsSelecionados } = props;
+  const { somenteConsulta, podeIncluir, idsSelecionados, obterDadosFiltros } =
+    props;
 
   const desabilitarNovo = somenteConsulta || !podeIncluir;
 
   const onClickVoltar = () => navigate(URL_HOME);
 
-  const onClickNovo = () => navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/novo`);
+  const onClickNovo = () => {
+    const dadosSalvarState = obterDadosFiltros();
+    navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/novo`, {
+      state: dadosSalvarState,
+    });
+  };
 
   return (
     <Row gutter={[8, 8]} type="flex">
