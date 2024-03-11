@@ -1,13 +1,23 @@
-import { Col, Row, Tabs } from 'antd';
-import React, { useContext, useState } from 'react';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
 import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
+import { Col, Row, Tabs } from 'antd';
+import { useContext, useEffect, useState } from 'react';
+import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { OPCAO_TODOS } from '~/constantes';
+import GraficosEncaminhamento from './GraficosEncaminhamento/graficosEncaminhamento';
 import GraficosEvasaoEscolar from './GraficosEvasaoEscolar/graficosEvasaoEscolar';
 import NAAPAContext from './naapaContext';
-import GraficosEncaminhamento from './GraficosEncaminhamento/graficosEncaminhamento';
 
 const DashboardNAAPATabs = () => {
-  const { anoLetivo, dre, ue, modalidade, semestre } = useContext(NAAPAContext);
+  const {
+    anoLetivo,
+    dre,
+    ue,
+    modalidade,
+    semestre,
+    listaModalidades,
+    setListaModalidades,
+    setModalidade,
+  } = useContext(NAAPAContext);
 
   const [tabSelecionada, setTabSelecionada] = useState(0);
 
@@ -20,26 +30,15 @@ const DashboardNAAPATabs = () => {
 
   const exibirAbas = anoLetivo && dre?.codigo && ue?.codigo;
 
-  const exibirDadosRiscoAbandono =
+  const exibirDados =
     exibirAbas && modalidade && (ehModalidadeEJAouCelp ? !!semestre : true);
 
-  const montarDadosRiscoAbandono = () => {
-    if (exibirDadosRiscoAbandono) return <GraficosEvasaoEscolar />;
-
-    return (
-      <div className="text-center">
-        Para visualizar esta seção é necessário selecionar a modalidade e
-        semestre no caso de EJA
-      </div>
-    );
-  };
-
   const montarDados = () => {
-    return (
-      <>
+    if (exibirDados) {
+      return (
         <div className="col-md-12 p-0">
           {tabSelecionada === TAB_RISCO_ABANDONO ? (
-            montarDadosRiscoAbandono()
+            <GraficosEvasaoEscolar />
           ) : (
             <></>
           )}
@@ -50,13 +49,54 @@ const DashboardNAAPATabs = () => {
             <></>
           )}
         </div>
-      </>
+      );
+    }
+
+    return (
+      <div className="col-md-12 p-0">
+        <div className="text-center">
+          Para visualizar esta seção é necessário selecionar a modalidade e
+          semestre no caso de EJA
+        </div>
+      </div>
     );
   };
 
   const onChangeTab = tabAtiva => {
+    if (modalidade === OPCAO_TODOS) {
+      setModalidade(undefined);
+    }
     setTabSelecionada(tabAtiva);
   };
+
+  useEffect(() => {
+    if (listaModalidades?.length && listaModalidades?.length > 1) {
+      if (tabSelecionada === TAB_RISCO_ABANDONO) {
+        setListaModalidades(
+          listaModalidades.filter(mod => mod?.valor !== OPCAO_TODOS)
+        );
+      } else {
+        const temOpcaoTodas = listaModalidades.find(
+          mod => mod?.valor === OPCAO_TODOS
+        );
+        if (!temOpcaoTodas) {
+          const novaLista = [
+            { desc: 'Todas', valor: OPCAO_TODOS },
+            ...listaModalidades,
+          ];
+          setListaModalidades(novaLista);
+        }
+      }
+
+      if (tabSelecionada === TAB_ENCAMINHAMENTO) {
+        setModalidade(OPCAO_TODOS);
+      }
+    }
+  }, [tabSelecionada]);
+
+  useEffect(() => {
+    setTabSelecionada(0);
+  }, [ue]);
 
   return (
     <Col span={24}>

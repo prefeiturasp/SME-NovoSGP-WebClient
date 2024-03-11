@@ -6,9 +6,10 @@ import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
 import { erros } from '~/servicos';
 import ServicoDashboardNAAPA from '~/servicos/Paginas/Dashboard/ServicoDashboardNAAPA';
 import NAAPAContext from '../../naapaContext';
+import { OPCAO_TODOS } from '~/constantes';
 
 const GraficoQuantidadeEncaminhamentosNAAPA = () => {
-  const { anoLetivo, dre } = useContext(NAAPAContext);
+  const { anoLetivo, dre, modalidade } = useContext(NAAPAContext);
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -30,7 +31,8 @@ const GraficoQuantidadeEncaminhamentosNAAPA = () => {
     const retorno =
       await ServicoDashboardNAAPA.obterQuantidadeEncaminhamentosNAAPA(
         anoLetivo,
-        dre?.codigo
+        dre?.id,
+        modalidade === OPCAO_TODOS ? null : modalidade
       )
         .catch(e => erros(e))
         .finally(() => setExibirLoader(false));
@@ -46,15 +48,15 @@ const GraficoQuantidadeEncaminhamentosNAAPA = () => {
     } else {
       limparDados();
     }
-  }, [anoLetivo, dre]);
+  }, [anoLetivo, dre, modalidade]);
 
   useEffect(() => {
-    if (anoLetivo && dre) {
+    if (anoLetivo && dre && modalidade) {
       obterDadosGrafico();
     } else {
       limparDados();
     }
-  }, [anoLetivo, dre, obterDadosGrafico]);
+  }, [anoLetivo, dre, modalidade, obterDadosGrafico]);
 
   return (
     <>
