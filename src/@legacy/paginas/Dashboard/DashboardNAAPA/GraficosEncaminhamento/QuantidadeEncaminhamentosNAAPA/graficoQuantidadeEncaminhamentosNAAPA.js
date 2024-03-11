@@ -1,10 +1,11 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { TagGrafico } from '@/@legacy/componentes-sgp';
+import { TagDescricao } from '@/components/sgp/tag-totalizador';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Loader } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
 import { erros } from '~/servicos';
 import ServicoDashboardNAAPA from '~/servicos/Paginas/Dashboard/ServicoDashboardNAAPA';
 import NAAPAContext from '../../naapaContext';
-import { TagGrafico } from '@/@legacy/componentes-sgp';
 
 const GraficoQuantidadeEncaminhamentosNAAPA = () => {
   const { anoLetivo, dre } = useContext(NAAPAContext);
@@ -13,6 +14,7 @@ const GraficoQuantidadeEncaminhamentosNAAPA = () => {
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const [dataUltimaConsolidacao, setDataUltimaConsolidacao] = useState();
+  const [totaEncaminhamento, setTotaEncaminhamento] = useState();
 
   const dataUltimaConsolidacaoFormatada = dataUltimaConsolidacao
     ? window.moment(dataUltimaConsolidacao).format('DD/MM/YYYY HH:mm:ss')
@@ -35,6 +37,7 @@ const GraficoQuantidadeEncaminhamentosNAAPA = () => {
 
     if (retorno?.data?.graficos?.length) {
       setDataUltimaConsolidacao(retorno.data?.dataUltimaConsolidacao);
+      setTotaEncaminhamento(retorno.data?.totaEncaminhamento || 0);
 
       const dados = retorno.data?.graficos?.length
         ? retorno.data?.graficos
@@ -55,17 +58,30 @@ const GraficoQuantidadeEncaminhamentosNAAPA = () => {
 
   return (
     <>
-      {dataUltimaConsolidacaoFormatada ? (
-        <div className="row">
-          <div className="col-sm-12 mb-2">
-            <TagGrafico
-              valor={`Data da última atualização: ${dataUltimaConsolidacaoFormatada}`}
-            />
+      <div className="row">
+        <div className="col-sm-12">
+          <div className="d-flex pb-4">
+            <div className="col-sm-6">
+              {dadosGrafico?.length ? (
+                <TagDescricao
+                  descricao={`Total de encaminhamentos: ${totaEncaminhamento}`}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
+            <div className="col-sm-6">
+              {dataUltimaConsolidacaoFormatada ? (
+                <TagGrafico
+                  valor={`Data da última atualização: ${dataUltimaConsolidacaoFormatada}`}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
         </div>
-      ) : (
-        <></>
-      )}
+      </div>
       <Loader
         loading={exibirLoader}
         className={exibirLoader ? 'text-center' : ''}

@@ -1,3 +1,4 @@
+import { TagDescricao } from '@/components/sgp/tag-totalizador';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Base } from '~/componentes';
@@ -15,6 +16,8 @@ const QuantidadeRegistrosPAAI = props => {
   };
 
   const [exibir, setExibir] = useState(false);
+  const [semDados, setSemDados] = useState(true);
+  const [totalRegistro, setTotalRegistro] = useState();
 
   const key = 'quantidade-registros-paai';
 
@@ -32,21 +35,43 @@ const QuantidadeRegistrosPAAI = props => {
         }}
       >
         {exibir ? (
-          <MontarGraficoBarras
-            anoLetivo={anoLetivo}
-            dreId={dreId}
-            ueId={ueId}
-            mesSelecionado={mesSelecionado}
-            nomeIndiceDesc="descricao"
-            nomeValor="quantidade"
-            ServicoObterValoresGrafico={
-              ServicoDashboardRegistroItinerancia.obterQuantidadeRegistrosPAAI
-            }
-            exibirLegenda={dreId !== OPCAO_TODOS}
-            showAxisBottom={dreId === OPCAO_TODOS}
-          />
+          <>
+            {!semDados ? (
+              <div className="col-md-12">
+                <TagDescricao
+                  descricao={`Total de registros: ${totalRegistro}`}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+            <div className="col-md-12">
+              <MontarGraficoBarras
+                anoLetivo={anoLetivo}
+                dreId={dreId}
+                ueId={ueId}
+                mesSelecionado={mesSelecionado}
+                nomeIndiceDesc="descricao"
+                nomeValor="quantidade"
+                ServicoObterValoresGrafico={
+                  ServicoDashboardRegistroItinerancia.obterQuantidadeRegistrosPAAI
+                }
+                exibirLegenda={dreId !== OPCAO_TODOS}
+                showAxisBottom={dreId === OPCAO_TODOS}
+                mapearDados={resposta => {
+                  if (resposta?.dashboardItinerancias?.length) {
+                    setTotalRegistro(resposta?.totalRegistro || 0);
+                    setSemDados(false);
+                    return resposta.dashboardItinerancias;
+                  }
+                  setSemDados(true);
+                  return [];
+                }}
+              />
+            </div>
+          </>
         ) : (
-          ''
+          <></>
         )}
       </CardCollapse>
     </div>
