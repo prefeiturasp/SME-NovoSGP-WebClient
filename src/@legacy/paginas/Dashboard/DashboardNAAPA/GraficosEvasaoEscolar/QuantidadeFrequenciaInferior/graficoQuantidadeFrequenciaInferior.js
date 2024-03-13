@@ -6,6 +6,7 @@ import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { erros } from '~/servicos';
 import ServicoDashboardNAAPA from '~/servicos/Paginas/Dashboard/ServicoDashboardNAAPA';
 import NAAPAContext from '../../naapaContext';
+import { TagDescricao } from '@/components/sgp/tag-totalizador';
 
 const GraficoQuantidadeFrequenciaInferior = () => {
   const {
@@ -42,7 +43,7 @@ const GraficoQuantidadeFrequenciaInferior = () => {
         .catch(e => erros(e))
         .finally(() => setExibirLoader(false));
 
-    if (retorno?.data?.length) {
+    if (retorno?.data?.graficosFrequencia?.length) {
       setDadosGrafico(retorno.data);
     } else {
       setDadosGrafico([]);
@@ -97,14 +98,25 @@ const GraficoQuantidadeFrequenciaInferior = () => {
             allowClear={false}
           />
         </div>
+        {dadosGrafico?.graficosFrequencia?.length ? (
+          <div className="col-sm-12 mb-2 mt-2">
+            <TagDescricao
+              descricao={`Total de estudantes: ${
+                dadosGrafico?.totalEstudantes || 0
+              }`}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <Loader
         loading={exibirLoader}
         className={exibirLoader ? 'text-center' : ''}
       >
-        {dadosGrafico?.length ? (
+        {dadosGrafico?.graficosFrequencia?.length ? (
           <GraficoBarras
-            data={dadosGrafico}
+            data={dadosGrafico.graficosFrequencia}
             xAxisVisible={ue.codigo !== '-99'}
             legendVisible={false}
           />
