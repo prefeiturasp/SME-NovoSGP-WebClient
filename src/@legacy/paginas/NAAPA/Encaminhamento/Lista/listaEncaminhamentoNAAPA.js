@@ -1,6 +1,14 @@
+import { SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_NAAPA_ENCERRADOS } from '@/@legacy/constantes/ids/radio';
+import situacaoNAAPA from '@/@legacy/dtos/situacaoNAAPA';
+import {
+  OrdenacaoListEncaminhamentoNAAPAEnum,
+  OrdenacaoListEncaminhamentoNAAPAEnumDisplay,
+} from '@/core/enum/ordenacao-list-encaminhamento-naapa-enum';
+import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import {
   CampoData,
   CampoTexto,
@@ -26,16 +34,16 @@ import {
   SGP_SELECT_TURMA,
   SGP_SELECT_UE,
 } from '~/constantes/ids/select';
-import { ROUTES } from '@/core/enum/routes';
 import { AbrangenciaServico, erros, verificaSomenteConsulta } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { ordenarDescPor, verificarDataFimMaiorInicio } from '~/utils';
+import { BotaoOrdenacaoListaEncaminhamentoNAAPA } from './components/ordenacao';
 import ListaEncaminhamentoNAAPABotoesAcao from './listaEncaminhamentoNAAPABotoesAcao';
 import ListaEncaminhamentoNAAPAPaginada from './listaEncaminhamentoNAAPAPaginada';
-import { SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_NAAPA_ENCERRADOS } from '@/@legacy/constantes/ids/radio';
-import situacaoNAAPA from '@/@legacy/dtos/situacaoNAAPA';
 
 const ListaEncaminhamentoNAAPA = () => {
+  const location = useLocation();
+
   const usuario = useSelector(state => state.usuario);
   const { permissoes } = usuario;
   const { podeIncluir } = permissoes?.[ROUTES.ENCAMINHAMENTO_NAAPA];
@@ -45,7 +53,7 @@ const ListaEncaminhamentoNAAPA = () => {
   const [dre, setDre] = useState();
   const [ue, setUe] = useState();
   const [turmaId, setTurmaId] = useState();
-  const [nomeAluno, setNomeAluno] = useState('');
+  const [codigoNomeAluno, setCodigoNomeAluno] = useState('');
   const [dataAberturaQueixaInicio, setDataAberturaQueixaInicio] = useState();
   const [dataAberturaQueixaFim, setDataAberturaQueixaFim] = useState();
   const [situacao, setSituacao] = useState();
@@ -53,7 +61,7 @@ const ListaEncaminhamentoNAAPA = () => {
   const [exibirEncaminhamentosEncerrados, setExibirEncaminhamentosEncerrados] =
     useState(false);
 
-  const [nomeAlunoExibicao, setNomeAlunoExibicao] = useState('');
+  const [codigoNomeAlunoExibicao, setCodigoNomeAlunoExibicao] = useState('');
   const [timeoutDebounce, setTimeoutDebounce] = useState();
 
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
@@ -74,10 +82,62 @@ const ListaEncaminhamentoNAAPA = () => {
     setIdsEncaminhamentoNAAPASelecionados,
   ] = useState([]);
 
+  const [ordenacoesSelecionadas, setOrdenacoesSelecionadas] = useState([
+    {
+      value: OrdenacaoListEncaminhamentoNAAPAEnum.DataEntradaQueixaDesc,
+      label:
+        OrdenacaoListEncaminhamentoNAAPAEnumDisplay[
+          OrdenacaoListEncaminhamentoNAAPAEnum.DataEntradaQueixaDesc
+        ],
+    },
+  ]);
+
+  const dadosRouteState = location.state;
+
   const opcoesEncerrados = [
     { label: 'Sim', value: true },
     { label: 'Não', value: false },
   ];
+
+  useEffect(() => {
+    if (dadosRouteState?.anoLetivo) {
+      setConsideraHistorico(!!dadosRouteState.consideraHistorico);
+      setAnoLetivo(dadosRouteState.anoLetivo);
+    }
+
+    if (dadosRouteState?.dre?.codigo) setDre(dadosRouteState.dre);
+
+    if (dadosRouteState?.ue?.codigo) setUe(dadosRouteState.ue);
+
+    if (dadosRouteState?.turmaId) setTurmaId(dadosRouteState.turmaId);
+
+    if (dadosRouteState?.codigoNomeAluno) {
+      setCodigoNomeAlunoExibicao(dadosRouteState.codigoNomeAluno);
+      setCodigoNomeAluno(dadosRouteState.codigoNomeAluno);
+    }
+
+    if (dadosRouteState?.dataAberturaQueixaInicio)
+      setDataAberturaQueixaInicio(
+        window.moment(dadosRouteState.dataAberturaQueixaInicio)
+      );
+
+    if (dadosRouteState?.dataAberturaQueixaFim)
+      setDataAberturaQueixaFim(
+        window.moment(dadosRouteState.dataAberturaQueixaFim)
+      );
+
+    if (dadosRouteState?.situacao) setSituacao(dadosRouteState.situacao);
+
+    if (dadosRouteState?.prioridade) setPrioridade(dadosRouteState.prioridade);
+
+    if (dadosRouteState?.exibirEncaminhamentosEncerrados)
+      setExibirEncaminhamentosEncerrados(
+        dadosRouteState.exibirEncaminhamentosEncerrados
+      );
+
+    if (dadosRouteState?.ordenacoesSelecionadas?.length)
+      setOrdenacoesSelecionadas(dadosRouteState.ordenacoesSelecionadas);
+  }, [dadosRouteState]);
 
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(
@@ -153,12 +213,16 @@ const ListaEncaminhamentoNAAPA = () => {
 
       if (lista?.length === 1) {
         setUe(lista[0]);
-      }
-
-      if (lista?.length > 1) {
+      } else if (lista?.length > 1) {
         const ueTodos = { nome: 'Todas', codigo: OPCAO_TODOS, id: OPCAO_TODOS };
         lista.unshift(ueTodos);
-        setUe(ueTodos);
+
+        if (
+          !dadosRouteState?.ue?.codigo ||
+          dadosRouteState?.ue?.codigo === OPCAO_TODOS
+        ) {
+          setUe(ueTodos);
+        }
       }
 
       setListaUes(lista);
@@ -236,8 +300,8 @@ const ListaEncaminhamentoNAAPA = () => {
   }, []);
 
   const limparCamposSemConsulta = () => {
-    setNomeAluno('');
-    setNomeAlunoExibicao('');
+    setCodigoNomeAluno('');
+    setCodigoNomeAlunoExibicao('');
     setDataAberturaQueixaInicio('');
     setDataAberturaQueixaFim('');
     setSituacao();
@@ -324,9 +388,9 @@ const ListaEncaminhamentoNAAPA = () => {
     }
   };
 
-  const onChangeNomeAluno = e => {
-    setNomeAlunoExibicao(e?.target?.value);
-    onChangeDebounce(e?.target?.value, setNomeAluno);
+  const onChangeCodigoNomeAluno = e => {
+    setCodigoNomeAlunoExibicao(e?.target?.value);
+    onChangeDebounce(e?.target?.value, setCodigoNomeAluno);
   };
 
   const dataFimMaiorInicio = verificarDataFimMaiorInicio(
@@ -336,6 +400,28 @@ const ListaEncaminhamentoNAAPA = () => {
   const onSelecionarItems = items =>
     setIdsEncaminhamentoNAAPASelecionados(items?.map(item => item?.id));
 
+  const obterDadosFiltros = () => {
+    return {
+      consideraHistorico,
+      anoLetivo,
+      dre,
+      ue,
+      turmaId,
+      codigoNomeAluno,
+      codigoNomeAlunoExibicao,
+      situacao,
+      prioridade,
+      exibirEncaminhamentosEncerrados,
+      dataAberturaQueixaInicio: dataAberturaQueixaInicio
+        ? dataAberturaQueixaInicio?.toJSON()
+        : undefined,
+      dataAberturaQueixaFim: dataAberturaQueixaFim
+        ? dataAberturaQueixaFim?.toJSON()
+        : undefined,
+      ordenacoesSelecionadas,
+    };
+  };
+
   return (
     <>
       <Cabecalho pagina="Encaminhamento NAAPA">
@@ -343,6 +429,7 @@ const ListaEncaminhamentoNAAPA = () => {
           podeIncluir={podeIncluir}
           somenteConsulta={somenteConsulta}
           idsSelecionados={idsEncaminhamentoNAAPASelecionados}
+          obterDadosFiltros={obterDadosFiltros}
         />
       </Cabecalho>
 
@@ -429,11 +516,11 @@ const ListaEncaminhamentoNAAPA = () => {
               allowClear
               iconeBusca
               desabilitado={!ue?.codigo}
-              value={nomeAlunoExibicao}
+              value={codigoNomeAlunoExibicao}
               label="Criança/Estudante"
-              onChange={onChangeNomeAluno}
+              onChange={onChangeCodigoNomeAluno}
               id={SGP_INPUT_NOME_CRIANCA_ESTUDANTE}
-              placeholder="Procure pelo nome da Criança/Estudante"
+              placeholder="Procure pelo código ou nome da Criança/Estudante"
             />
           </Col>
 
@@ -494,12 +581,26 @@ const ListaEncaminhamentoNAAPA = () => {
 
           <Col sm={24} lg={12}>
             <RadioGroupButton
+              desabilitado={!ue?.codigo}
               value={exibirEncaminhamentosEncerrados}
               label="Apresentar encaminhamentos encerrados"
               opcoes={opcoesEncerrados}
               id={SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_NAAPA_ENCERRADOS}
               onChange={e =>
                 setExibirEncaminhamentosEncerrados(e?.target?.value)
+              }
+            />
+          </Col>
+
+          <Col xs={24} sm={12}>
+            <BotaoOrdenacaoListaEncaminhamentoNAAPA
+              disabled={!ue?.codigo}
+              setOrdenacoesSelecionadas={setOrdenacoesSelecionadas}
+              ordenacoesSelecionadas={ordenacoesSelecionadas}
+              opcoesParaRemover={
+                ue?.codigo !== OPCAO_TODOS
+                  ? [OrdenacaoListEncaminhamentoNAAPAEnum.UE]
+                  : []
               }
             />
           </Col>
@@ -511,13 +612,15 @@ const ListaEncaminhamentoNAAPA = () => {
               turmaId={turmaId}
               situacao={situacao}
               anoLetivo={anoLetivo}
-              nomeAluno={nomeAluno}
+              codigoNomeAluno={codigoNomeAluno}
               prioridade={prioridade}
               consideraHistorico={consideraHistorico}
               dataAberturaQueixaFim={dataAberturaQueixaFim}
               dataAberturaQueixaInicio={dataAberturaQueixaInicio}
               onSelecionarItems={onSelecionarItems}
               exibirEncaminhamentosEncerrados={exibirEncaminhamentosEncerrados}
+              obterDadosFiltros={obterDadosFiltros}
+              ordenacoesSelecionadas={ordenacoesSelecionadas}
             />
           </Col>
         </Row>

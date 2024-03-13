@@ -141,10 +141,10 @@ function TabelaRetratil({
     }
   };
 
-  const encontrarLinhaAluno = (listAlunos, numeroChamada) => {
+  const encontrarLinhaAluno = (listAlunos, codigoEOL) => {
     if (listAlunos !== null) {
       const encontrarAluno =
-        listAlunos?.find(nome => nome.numeroChamada === numeroChamada) ?? null;
+        listAlunos?.find(nome => nome.alunoCodigo === codigoEOL) ?? null;
       if (encontrarAluno) {
         return true;
       }
@@ -179,7 +179,7 @@ function TabelaRetratil({
                 <td>
                   {item.numeroChamada}
 
-                  {encontrarLinhaAluno(alunosValidar, item.numeroChamada) ? (
+                  {encontrarLinhaAluno(alunosValidar, item.codigoEOL) ? (
                     <Tooltip title="Ausência do percurso individual ">
                       <span className="iconeAusenciaPercurso" />
                     </Tooltip>

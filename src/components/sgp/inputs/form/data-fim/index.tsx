@@ -1,16 +1,9 @@
+import { Dayjs, dayjs } from '@/core/date/dayjs';
 import { DatePicker, DatePickerProps, Form, FormItemProps } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import { Rule } from 'antd/es/form';
-import dayjs, { Dayjs } from 'dayjs';
-import localeDayjs from 'dayjs/locale/pt-br';
-import localeData from 'dayjs/plugin/localeData';
-import weekday from 'dayjs/plugin/weekday';
 import React, { useMemo } from 'react';
 import { SGP_DATE_FIM } from '~/constantes/ids/date';
-
-dayjs.extend(weekday);
-dayjs.extend(localeData);
-dayjs.locale(localeDayjs);
 
 type DataFimProps = {
   datePickerProps?: DatePickerProps;
@@ -49,7 +42,7 @@ const DataFim: React.FC<DataFimProps> = ({
     return Promise.resolve();
   };
 
-  const validarDesabilitarDataFutura = (data?: Dayjs) => {
+  const validarDesabilitarDataFutura = (data?: any): boolean => {
     if (desabilitarDataFutura && data) {
       return data.isAfter(hoje, 'day');
     }

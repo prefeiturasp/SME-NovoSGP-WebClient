@@ -36,12 +36,14 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const { mostrarBusca, setMostrarBusca } = props;
 
   const { id } = useParams();
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const aluno = useSelector(state => state.localizarEstudante.aluno);
 
   const usuario = useSelector(state => state.usuario);
+
+  const dadosRouteState = state;
 
   const permissoesTela = usuario.permissoes[ROUTES.ENCAMINHAMENTO_NAAPA];
 
@@ -105,10 +107,10 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         const resposta = await ServicoNAAPA.salvarPadrao(encaminhamentoId);
         if (resposta?.status === 200) navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
       } else {
-        navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
+        navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
       }
     } else {
-      navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
     }
   };
 
@@ -126,7 +128,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       });
       if (resultado?.status === 200) {
         sucesso('Encaminhamento excluído com sucesso');
-        navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
+        navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
       }
     }
   };
@@ -156,7 +158,9 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       if (encaminhamentoId) {
         dispatch(setCarregarDadosEncaminhamentoNAAPA(true));
       }
-      navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`);
+      navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`, {
+        state: dadosRouteState,
+      });
     }
   };
 
@@ -167,7 +171,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       situacaoNAAPA.AguardandoAtendimento
     );
     if (resposta?.status === 200) {
-      navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
     }
   };
 

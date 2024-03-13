@@ -6,7 +6,7 @@ export type FiltroRegistrosAcaoDto = {
   dreId?: number;
   ueId?: number;
   turmaId?: number;
-  nomeAluno: string;
+  codigoNomeAluno: string;
   modalidade?: ModalidadeEnum;
   semestre: number;
   dataRegistroInicio?: string;
