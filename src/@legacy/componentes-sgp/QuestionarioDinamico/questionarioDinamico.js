@@ -29,6 +29,7 @@ import CampoDinamicoEditor from './Componentes/campoDinamicoEditor';
 import InformacoesSrmTabela from './Componentes/InformacoesSrm/InformacoesSrmTabela';
 import TurmasProgramaTabela from './Componentes/TurmasPrograma/turmasProgramaTabela';
 import TabelaFrequenciaTurmaPAP from './Componentes/TabelaFrequenciaTurmaPAP/TabelaFrequenciaTurmaPAP';
+import CampoDinamicoProfissionaisEnvolvidos from './Componentes/campoDinamicoProfissionaisEnvolvidos';
 
 const QuestionarioDinamico = props => {
   const dispatch = useDispatch();
@@ -51,6 +52,7 @@ const QuestionarioDinamico = props => {
     montarComboMultiplaEscolhaComplementarComResposta, // Na base vai ter somente 2 campos com mesmo nome para essa rotina 1 obrigatório e outro não!
     exibirLabel,
     exibirCampoSemValor,
+    codigoDre,
   } = props;
 
   const [valoresIniciais, setValoresIniciais] = useState();
@@ -118,6 +120,7 @@ const QuestionarioDinamico = props => {
           case tipoQuestao.TurmasPrograma:
           case tipoQuestao.InformacoesSrm:
           case tipoQuestao.InformacoesFrequenciaTurmaPAP:
+          case tipoQuestao.ProfissionaisEnvolvidos:
             valorRespostaAtual = resposta[0].texto
               ? JSON.parse(resposta[0].texto)
               : '';
@@ -643,6 +646,24 @@ const QuestionarioDinamico = props => {
           <TabelaFrequenciaTurmaPAP {...params} label={label?.props?.text} />
         );
         break;
+      case tipoQuestao.ProfissionaisEnvolvidos:
+        campoAtual = (
+          <CampoDinamicoProfissionaisEnvolvidos
+            {...params}
+            codigoDre={codigoDre}
+            desabilitado={desabilitarCampos}
+            onChange={valoresSelecionados => {
+              QuestionarioDinamicoFuncoes.onChangeCampoCheckboxOuComboMultiplaEscolha(
+                questaoAtual,
+                form,
+                valoresSelecionados
+              );
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
+          />
+        );
+        break;
       default:
         break;
     }
@@ -714,6 +735,7 @@ QuestionarioDinamico.propTypes = {
   montarComboMultiplaEscolhaComplementarComResposta: PropTypes.bool,
   exibirLabel: PropTypes.bool,
   exibirCampoSemValor: PropTypes.bool,
+  codigoDre: PropTypes.oneOfType([PropTypes.any]),
 };
 
 QuestionarioDinamico.defaultProps = {
@@ -732,6 +754,7 @@ QuestionarioDinamico.defaultProps = {
   montarComboMultiplaEscolhaComplementarComResposta: true,
   exibirLabel: true,
   exibirCampoSemValor: true,
+  codigoDre: '',
 };
 
 export default QuestionarioDinamico;

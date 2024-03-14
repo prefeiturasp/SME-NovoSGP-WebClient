@@ -21,6 +21,7 @@ const tipoQuestao = {
   InformacoesSrm: 20,
   InformacoesFrequenciaTurmaPAP: 21,
   ComboMultiplaEscolhaMes: 22,
+  ProfissionaisEnvolvidos: 23,
 };
 
 export default tipoQuestao;
