@@ -64,7 +64,7 @@ export const ListaEstudantesFrequenciaRiscoAbandono = ({
     });
   }
 
-  if (exibirSelectUE) {
+  if (exibirSelectDRE || exibirSelectUE) {
     colunas.push({
       title: 'Turma',
       dataIndex: 'turma',
