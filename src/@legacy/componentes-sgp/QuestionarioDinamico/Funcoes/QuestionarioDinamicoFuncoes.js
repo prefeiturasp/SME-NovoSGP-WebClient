@@ -606,6 +606,7 @@ class QuestionarioDinamicoFuncoes {
               case tipoQuestao.ContatoResponsaveis:
               case tipoQuestao.TurmasPrograma:
               case tipoQuestao.InformacoesSrm:
+              case tipoQuestao.ProfissionaisEnvolvidos:
                 questao.resposta = JSON.stringify(campos[key] || '');
                 break;
               case tipoQuestao.Upload:
@@ -788,6 +789,7 @@ class QuestionarioDinamicoFuncoes {
       case tipoQuestao.ComboMultiplaEscolha:
       case tipoQuestao.ComboMultiplaEscolhaMes:
       case tipoQuestao.PeriodoEscolar:
+      case tipoQuestao.ProfissionaisEnvolvidos:
         return 'SELECT';
       case tipoQuestao.Checkbox:
         return 'CHECKBOX';
