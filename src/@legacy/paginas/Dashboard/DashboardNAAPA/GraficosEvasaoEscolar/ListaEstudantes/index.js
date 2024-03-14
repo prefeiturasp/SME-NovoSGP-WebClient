@@ -122,6 +122,12 @@ export const ListaEstudantesFrequenciaRiscoAbandono = ({
   const filtrar = useCallback(() => {
     if (!dre?.codigo || !ue?.codigo || !modalidade) return;
 
+    if (exibirSelectDRE && !dreSelecionada) return;
+
+    if (exibirSelectUE && !ueSelecionada) return;
+
+    if (exibirSelectTurma && !turmaSelecionada) return;
+
     let dreCodigo = dre?.codigo === OPCAO_TODOS ? '' : dre?.codigo;
     let ueCodigo = ue?.codigo === OPCAO_TODOS ? '' : ue?.codigo;
     let turmaCodigo = '';
