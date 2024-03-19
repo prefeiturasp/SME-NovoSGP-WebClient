@@ -59,7 +59,6 @@ export const AnoLetivo = ({
 
     if (resposta?.length) {
       if (anoDesconsiderar) {
-        console.log('anoDesconsiderar', anoDesconsiderar);
         setarDados(resposta.filter(r => r.valor !== anoDesconsiderar));
       } else setarDados(resposta);
     } else {
