@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import { Col, Row } from 'antd';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { AnoLetivo, Dre, ExibirHistorico, Ue } from '~/componentes-sgp/inputs';
 import { TipoSondagem } from '~/componentes-sgp/inputs/tipo-sondagem';
 import { PeriodoSondagem } from '~/componentes-sgp/inputs/periodo-sondagem';
+import { FiltroHelper } from '~/componentes-sgp';
 
 const RelatorioSondagemAnaliticoForm = props => {
   const { form, onChangeCampos } = props;
@@ -14,23 +15,32 @@ const RelatorioSondagemAnaliticoForm = props => {
 
   const anoAtual = window.moment().format('YYYY');
 
-  let anosLetivos = [];
+  const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
 
-  if (consideraHistorico) {
-    let ano = anoAtual;
-    for (let i = 2019; i < anoAtual; i++) {
-      ano = ano - 1;
-      if (ano !== 2020) {
+  const obterAnosLetivos = useCallback(async () => {
+    const anosLetivosFiltro = await FiltroHelper.obterAnosLetivos({
+      consideraHistorico,
+      anoMinimo: 2019,
+    });
+
+    if (anosLetivosFiltro?.length) {
+      for (let i = 0; i < anosLetivosFiltro.length; i++) {
         // Não existiu sondagem em 2020
-        anosLetivos.push({
-          valor: ano,
-          desc: ano,
-        });
+        if (anosLetivosFiltro[i] >= 2019 && anosLetivosFiltro[i] !== 2020) {
+          listaAnosLetivo.push({
+            valor: anosLetivosFiltro[i].valor,
+            desc: anosLetivosFiltro[i].desc,
+          });
+        }
       }
+
+      setListaAnosLetivo(listaAnosLetivo);
     }
-  } else {
-    anosLetivos = [{ desc: anoAtual, valor: anoAtual }];
-  }
+  }, [consideraHistorico, anoAtual]);
+
+  useEffect(() => {
+    obterAnosLetivos();
+  }, [obterAnosLetivos]);
 
   return (
     <Col span={24}>
@@ -45,7 +55,9 @@ const RelatorioSondagemAnaliticoForm = props => {
           <AnoLetivo
             form={form}
             onChange={() => onChangeCampos()}
-            defaultDataList={anosLetivos}
+            defaultDataList={listaAnosLetivo}
+            anoMinimo={2019}
+            anoDesconsiderar={2020}
           />
         </Col>
 

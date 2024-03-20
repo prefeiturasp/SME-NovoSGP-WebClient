@@ -16,6 +16,7 @@ export const AnoLetivo = ({
   labelRequired,
   defaultDataList,
   anoMinimo,
+  anoDesconsiderar,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -57,7 +58,9 @@ export const AnoLetivo = ({
       .finally(() => setExibirLoader(false));
 
     if (resposta?.length) {
-      setarDados(resposta);
+      if (anoDesconsiderar) {
+        setarDados(resposta.filter(r => r.valor !== anoDesconsiderar));
+      } else setarDados(resposta);
     } else {
       limparDados();
     }
