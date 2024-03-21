@@ -56,11 +56,34 @@ const UeReabertura = ({ form, onChangeCampos }) => {
           form.initialValues.ueCodigo = codigo;
         }
       }
-
       setListaUes(lista);
     } else {
-      form.setFieldValue(nomeCampo, undefined);
-      setListaUes([]);
+      const respostaHistorica = await AbrangenciaServico.buscarUes(
+        dreCodigo,
+        '',
+        false,
+        modalidade,
+        true,
+        calendarioSelecionado.anoLetivo
+      )
+        .catch(e => erros(e))
+        .finally(() => setExibirLoader(false));
+      if (respostaHistorica?.data?.length) {
+        const lista = respostaHistorica.data;
+
+        if (lista?.length === 1) {
+          const { codigo } = lista[0];
+          form.setFieldValue(nomeCampo, codigo);
+          if (!paramsRota?.id) {
+            form.initialValues.ueCodigo = codigo;
+          }
+        }
+
+        setListaUes(lista);
+      } else {
+        form.setFieldValue(nomeCampo, undefined);
+        setListaUes([]);
+      }
     }
   }, [dreCodigo, calendarioSelecionado, paramsRota]);
 

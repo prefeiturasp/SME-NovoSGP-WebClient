@@ -165,8 +165,37 @@ const FechaReabListaFiltros = () => {
 
       setListaUes(lista);
     } else {
-      setCodigoUe();
-      setListaUes([]);
+      const respostaHistorica = await AbrangenciaServico.buscarUes(
+        codigoDre,
+        '',
+        false,
+        modalidadeConvertida,
+        true,
+        calendarioSelecionado.anoLetivo
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregandoUes(false));
+
+      if (respostaHistorica?.data?.length) {
+        const lista = respostaHistorica.data;
+
+        if (lista?.length === 1) {
+          const { codigo } = lista[0];
+          setCodigoUe(codigo);
+        }
+
+        if (usuario.possuiPerfilSmeOuDre && lista?.length > 1) {
+          lista.unshift(ueTodos);
+          if (codigoDre && codigoDre !== OPCAO_TODOS) {
+            setCodigoUe(OPCAO_TODOS);
+          }
+        }
+
+        setListaUes(lista);
+      } else {
+        setCodigoUe();
+        setListaUes([]);
+      }
     }
   }, [codigoDre, calendarioSelecionado, usuario]);
 
