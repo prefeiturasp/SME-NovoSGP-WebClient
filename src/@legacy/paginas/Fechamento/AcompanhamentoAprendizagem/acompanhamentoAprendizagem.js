@@ -137,7 +137,6 @@ const AcompanhamentoAprendizagem = () => {
     )
       .then(resposta => {
         if (resposta?.data) {
-          console.log(resposta?.data);
           if (
             !resposta?.data?.inconsistenciaPercursoIndividual >= 1 &&
             resposta?.data?.mensagemInconsistenciaPercursoColetivo.length === 0
