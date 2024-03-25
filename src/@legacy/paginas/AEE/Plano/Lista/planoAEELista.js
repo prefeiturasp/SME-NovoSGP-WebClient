@@ -228,6 +228,8 @@ const PlanoAEELista = () => {
         alunoCodigo: aluno,
         situacao: situa,
         exibirEncerrados,
+        anoLetivo: anoLetivo,
+        consideraHistorico: consideraHistorico
       };
 
       params.ueId = ueSelecionada?.id || 0;
@@ -401,6 +403,7 @@ const PlanoAEELista = () => {
     setListaTurmas([]);
 
     setUeId(ue);
+
     dispatch(setDadosIniciaisLocalizarEstudante({ ueId: ue, dreId }));
   };
 
