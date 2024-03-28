@@ -168,7 +168,9 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     const resposta = await ServicoNAAPA.salvarPadrao(
       encaminhamentoId,
       true,
-      situacaoNAAPA.AguardandoAtendimento
+      encaminhamentoId
+        ? dadosSituacao?.situacao
+        : situacaoNAAPA.AguardandoAtendimento
     );
     if (resposta?.status === 200) {
       navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
