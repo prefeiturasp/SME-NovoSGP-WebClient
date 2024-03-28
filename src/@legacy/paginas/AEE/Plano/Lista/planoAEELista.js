@@ -229,7 +229,7 @@ const PlanoAEELista = () => {
         situacao: situa,
         exibirEncerrados,
         anoLetivo: anoLetivo,
-        consideraHistorico: consideraHistorico
+        consideraHistorico: consideraHistorico,
       };
 
       params.ueId = ueSelecionada?.id || 0;
