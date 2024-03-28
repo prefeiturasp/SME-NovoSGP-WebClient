@@ -18,6 +18,26 @@ const UeReabertura = ({ form, onChangeCampos }) => {
 
   const nomeCampo = 'ueCodigo';
 
+  function mesclarAbrangencias(obj1, obj2) {
+    const merged = {};
+
+    for (const key in obj1) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (obj1.hasOwnProperty(key)) {
+        merged[key] = obj1[key];
+      }
+    }
+
+    for (const key in obj2) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (obj2.hasOwnProperty(key) && !merged.hasOwnProperty(key)) {
+        merged[key] = obj2[key];
+      }
+    }
+
+    return merged;
+  }
+
   const obterUes = useCallback(async () => {
     const ueTodos = { nome: 'Todas', codigo: OPCAO_TODOS };
 
@@ -46,8 +66,23 @@ const UeReabertura = ({ form, onChangeCampos }) => {
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
 
-    if (resposta?.data?.length) {
-      const lista = resposta.data;
+    const respostaHistorica = await AbrangenciaServico.buscarUes(
+      dreCodigo,
+      '',
+      false,
+      modalidade,
+      true,
+      calendarioSelecionado.anoLetivo
+    )
+      .catch(e => erros(e))
+      .finally(() => setExibirLoader(false));
+
+    const dadosUes = Object.values(
+      mesclarAbrangencias(resposta?.data, respostaHistorica?.data)
+    );
+
+    if (dadosUes?.length) {
+      const lista = dadosUes;
 
       if (lista?.length === 1) {
         const { codigo } = lista[0];
@@ -58,32 +93,8 @@ const UeReabertura = ({ form, onChangeCampos }) => {
       }
       setListaUes(lista);
     } else {
-      const respostaHistorica = await AbrangenciaServico.buscarUes(
-        dreCodigo,
-        '',
-        false,
-        modalidade,
-        true,
-        calendarioSelecionado.anoLetivo
-      )
-        .catch(e => erros(e))
-        .finally(() => setExibirLoader(false));
-      if (respostaHistorica?.data?.length) {
-        const lista = respostaHistorica.data;
-
-        if (lista?.length === 1) {
-          const { codigo } = lista[0];
-          form.setFieldValue(nomeCampo, codigo);
-          if (!paramsRota?.id) {
-            form.initialValues.ueCodigo = codigo;
-          }
-        }
-
-        setListaUes(lista);
-      } else {
-        form.setFieldValue(nomeCampo, undefined);
-        setListaUes([]);
-      }
+      form.setFieldValue(nomeCampo, undefined);
+      setListaUes([]);
     }
   }, [dreCodigo, calendarioSelecionado, paramsRota]);
 
