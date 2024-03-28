@@ -17,10 +17,6 @@ const colunas = [
     dataIndex: 'turma',
   },
   {
-    title: 'Conseguiu contato com o responsável',
-    dataIndex: 'contatoEfetuadoResponsavel',
-  },
-  {
     title: 'Procedimento realizado',
     dataIndex: 'procedimentoRealizado',
   },
