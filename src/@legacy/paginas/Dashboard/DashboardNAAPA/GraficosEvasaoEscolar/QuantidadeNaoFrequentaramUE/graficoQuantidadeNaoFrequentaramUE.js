@@ -3,6 +3,7 @@ import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
+import { OPCAO_TODOS } from '~/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardNAAPA from '~/servicos/Paginas/Dashboard/ServicoDashboardNAAPA';
 import NAAPAContext from '../../naapaContext';
@@ -16,7 +17,7 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
     ue,
     modalidade,
     semestre,
-    listaMesesReferencias2,
+    listaMesesReferencias,
   } = useContext(NAAPAContext);
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
@@ -85,11 +86,11 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
         <div className="col-sm-12 col-md-12 col-lg-3 col-xl-3 mb-2">
           <SelectComponent
             id="meses"
-            lista={listaMesesReferencias2}
+            lista={listaMesesReferencias}
             valueOption="numeroMes"
             valueText="nome"
             label="Mês de referência"
-            disabled={listaMesesReferencias2?.length === 1}
+            disabled={listaMesesReferencias?.length === 1}
             valueSelect={meseReferencia}
             onChange={mes => {
               onChangeMes(mes);
@@ -127,7 +128,9 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
               ue={ue}
               modalidade={modalidade}
               semestre={semestre}
-              meseReferencia={meseReferencia}
+              meseReferencia={
+                meseReferencia === OPCAO_TODOS ? 0 : meseReferencia
+              }
               dadosGrafico={dadosGrafico.graficosFrequencia}
               url="/v1/dashboard/naapa/frequencia/turma/evasao/sempresenca/alunos"
             />
