@@ -10,8 +10,6 @@ export type RegistroAcaoBuscaAtivaListagemDto = {
   criancaEstudante: string;
   dataRegistro: string;
   procedimentoRealizado: string;
-  contatoEfetuadoResponsavel: string;
-  criancaRetornouEscolaAposContato: string;
   nomeUsuarioCriador: string;
   inseridoPor: string;
 };
