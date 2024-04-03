@@ -284,6 +284,8 @@ const DashboardFechamentoFiltros = () => {
   }, [ue, modalidade, anoLetivo, consideraHistorico, obterSemestres]);
 
   const onChangeSemestre = valor => {
+    ServicoDashboardFechamento.atualizarFiltros('bimestre', undefined);
+    setListaBimestres([]);
     ServicoDashboardFechamento.atualizarFiltros('semestre', valor);
   };
 
@@ -296,7 +298,8 @@ const DashboardFechamentoFiltros = () => {
     const dados =
       await ServicoPeriodoEscolar.obterPeriodosPorAnoLetivoModalidade(
         modalidade,
-        anoLetivo
+        anoLetivo,
+        semestre
       ).finally(() => setCarregandoBimestres(false));
 
     if (dados?.data?.length) {
@@ -309,13 +312,16 @@ const DashboardFechamentoFiltros = () => {
       dadosBimestres.push({ valor: '0', descricao: 'Final' });
       setListaBimestres(dadosBimestres);
     } else setListaBimestres([]);
-  }, [anoLetivo, modalidade]);
+  }, [anoLetivo, modalidade, semestre]);
 
   useEffect(() => {
-    if (anoLetivo && modalidade) {
+    const validouEJAOuCELP = ehEJAOuCelp ? !!semestre : true;
+    if (anoLetivo && modalidade && validouEJAOuCELP) {
       obterBimestres();
+    } else {
+      setListaBimestres([]);
     }
-  }, [obterBimestres, anoLetivo, modalidade]);
+  }, [obterBimestres, anoLetivo, modalidade, semestre, ehEJAOuCelp]);
 
   return (
     <>
@@ -433,6 +439,7 @@ const DashboardFechamentoFiltros = () => {
               valueSelect={bimestre}
               placeholder="Selecione um bimestre"
               onChange={onChangeBimestre}
+              disabled={!modalidade || (ehEJAOuCelp && !semestre)}
             />
           </Loader>
         </div>
