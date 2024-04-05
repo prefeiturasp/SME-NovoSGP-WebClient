@@ -122,7 +122,11 @@ const ListaFrequencia = props => {
 
   const montarColunasEstudante = aluno => {
     const indexAluno = dataSource.indexOf(aluno);
-    const desabilitar = desabilitarCampos || aluno?.desabilitado;
+    const desabilitar =
+      (desabilitarCampos || aluno?.desabilitado) &&
+      !aluno?.possuiAnotacao &&
+      desabilitarModalAnotacoes;
+
     return (
       <div
         className="d-flex"
@@ -148,7 +152,11 @@ const ListaFrequencia = props => {
         <div className="d-flex justify-content-end">
           <EstudanteAtendidoAEE show={aluno?.ehAtendidoAEE} />
           <EstudanteMatriculadoPAP show={aluno?.ehMatriculadoTurmaPAP} />
-          <BotaoAnotacao indexAluno={indexAluno} ehInfantil={ehInfantil} />
+          <BotaoAnotacao
+            indexAluno={indexAluno}
+            ehInfantil={ehInfantil}
+            desabilitarCampos={desabilitarModalAnotacoes}
+          />
         </div>
       </div>
     );
