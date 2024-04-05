@@ -415,11 +415,12 @@ const RelatorioParecerConclusivo = () => {
         Number(modalidadeIdSelecionada) === ModalidadeEnum.MEDIO
           ? '0'
           : cicloSelecionado;
-      const retorno =
-        await ServicoFiltroRelatorio.obterAnosEscolaresPorAbrangencia(
-          modalidadeIdSelecionada,
-          cicloSelecionado
-        ).finally(setCarregandoAnos(false));
+      const retorno = await AbrangenciaServico.buscarAnosEscolares(
+        ueId,
+        modalidadeId,
+        consideraHistorico,
+        anoLetivo
+      ).finally(setCarregandoAnos(false));
       if (retorno?.data?.length) {
         if (retorno.data.length === 1) {
           setListaAnos(retorno.data);

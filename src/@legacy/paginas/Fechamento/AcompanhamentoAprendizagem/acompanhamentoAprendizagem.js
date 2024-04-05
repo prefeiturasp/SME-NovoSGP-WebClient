@@ -27,6 +27,7 @@ import {
   ServicoCalendarios,
   ServicoDisciplina,
   verificaSomenteConsulta,
+  aviso,
 } from '~/servicos';
 import Loader from '~/componentes/loader';
 import { erros } from '~/servicos/alertas';
@@ -82,6 +83,7 @@ const AcompanhamentoAprendizagem = () => {
   const [validarDados, setValidarDados] = useState(null);
   const [listAlunosValidarDados, setListAlunosValidar] = useState(null);
   const [carregando, setCarregando] = useState(false);
+  const [pendencia, setPendencia] = useState(true);
 
   const resetarInfomacoes = useCallback(() => {
     dispatch(limparDadosAcompanhamentoAprendizagem());
@@ -127,6 +129,7 @@ const AcompanhamentoAprendizagem = () => {
   }, [modalidadesFiltroPrincipal, turmaSelecionada]);
 
   const onClickValidar = () => {
+    setPendencia(true);
     setCarregando(true);
     ServicoAcompanhamentoAprendizagem.validarInconsistencias(
       turmaSelecionada?.id,
@@ -134,8 +137,15 @@ const AcompanhamentoAprendizagem = () => {
     )
       .then(resposta => {
         if (resposta?.data) {
-          setExibirModalValidar(true);
-          setValidarDados(resposta.data);
+          if (
+            !resposta?.data?.inconsistenciaPercursoIndividual >= 1 &&
+            resposta?.data?.mensagemInconsistenciaPercursoColetivo.length === 0
+          ) {
+            setPendencia(false);
+          } else {
+            setExibirModalValidar(true);
+            setValidarDados(resposta.data);
+          }
           setCarregando(false);
         }
         setCarregando(false);
@@ -288,6 +298,7 @@ const AcompanhamentoAprendizagem = () => {
     dispatch(setDadosApanhadoGeral({}));
     dispatch(setApanhadoGeralEmEdicao(false));
     setSemestreSelecionado(valor);
+    setPendencia(true);
   };
 
   const permiteOnChangeAluno = async () => {
@@ -358,6 +369,7 @@ const AcompanhamentoAprendizagem = () => {
           ) : (
             <></>
           )}
+          {!pendencia ? aviso('Não foram encontrado pendências') : <></>}
           {turmaSelecionada.turma ? <AlertaPermiteSomenteTurmaInfantil /> : ''}
           <ModalErrosAcompanhamentoAprendizagem />
           <LoaderAcompanhamentoAprendizagem>
