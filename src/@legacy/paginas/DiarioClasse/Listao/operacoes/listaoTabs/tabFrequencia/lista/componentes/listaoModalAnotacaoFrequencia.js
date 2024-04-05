@@ -11,7 +11,6 @@ import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 const ListaoModalAnotacaoFrequencia = ({
   dadosListaFrequencia,
   ehInfantil,
-  componenteCurricularId,
   desabilitarCampos,
   fechouModal,
 }) => {
@@ -27,8 +26,11 @@ const ListaoModalAnotacaoFrequencia = ({
     state => state.modalAnotacaoFrequencia.listaPadraoMotivoAusencia
   );
 
-  const { dadosIniciaisFrequencia, setDadosIniciaisFrequencia } =
-    useContext(ListaoContext);
+  const {
+    dadosIniciaisFrequencia,
+    setDadosIniciaisFrequencia,
+    componenteCurricular,
+  } = useContext(ListaoContext);
 
   const atualizarSePossuiAnotacao = valor => {
     const { codigoAluno } = dadosModalAnotacaoFrequencia;
@@ -50,13 +52,14 @@ const ListaoModalAnotacaoFrequencia = ({
       dadosListaFrequencia={dadosListaFrequencia}
       ehInfantil={ehInfantil}
       aulaId={dadosModalAnotacaoFrequencia?.aulaId}
-      componenteCurricularId={componenteCurricularId}
+      componenteCurricularId={componenteCurricular?.codigoComponenteCurricular}
       desabilitarCampos={desabilitarCampos}
       exibirModal={exibirModalAnotacaoFrequencia}
       setExibirModal={setExibirModalAnotacaoFrequencia}
       dadosModal={dadosModalAnotacaoFrequencia}
       setDadosModal={setDadosModalAnotacaoFrequencia}
       listaPadraoMotivoAusencia={listaPadraoMotivoAusencia}
+      exibirMotivosAusencia={!!componenteCurricular?.registraFrequencia}
       fechouModal={(salvou, excluiu) => {
         if (salvou) {
           atualizarSePossuiAnotacao(true);

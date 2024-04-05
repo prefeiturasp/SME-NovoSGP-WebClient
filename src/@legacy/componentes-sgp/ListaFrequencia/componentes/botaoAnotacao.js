@@ -12,7 +12,7 @@ import {
 import { ContainerBtbAnotacao } from '../listaFrequencia.css';
 
 const BotaoAnotacao = props => {
-  const { indexAluno, desabilitarCampos, ehInfantil } = props;
+  const { indexAluno, ehInfantil } = props;
 
   const dispatch = useDispatch();
 
@@ -30,10 +30,6 @@ const BotaoAnotacao = props => {
       ]
   );
 
-  const podeAbrirModal =
-    (aluno.permiteAnotacao && !desabilitarCampos) ||
-    (aluno.possuiAnotacao && desabilitarCampos);
-
   const onClickAnotacao = () => {
     dispatch(setDadosModalAnotacaoFrequencia(aluno));
     dispatch(setExibirModalAnotacaoFrequencia(true));
@@ -50,27 +46,20 @@ const BotaoAnotacao = props => {
       }
       placement="top"
     >
-      <div
-        className={`d-flex justify-content-end mr-2 ${
-          !podeAbrirModal ? 'desabilitar' : ''
-        }`}
-      >
+      <div className="d-flex justify-content-end mr-2 p-2">
         <ContainerBtbAnotacao
           style={{ marginTop: '-5px' }}
-          podeAbrirModal={podeAbrirModal}
           possuiAnotacao={possuiAnotacao}
           cor={cor}
           onClick={() => {
-            if (podeAbrirModal) {
-              onClickAnotacao();
-            }
+            onClickAnotacao();
           }}
         >
           {possuiAnotacao ? (
             <FontAwesomeIcon
               style={{
                 fontSize: '16px',
-                cursor: podeAbrirModal ? 'pointer' : 'not-allowed',
+                cursor: 'pointer',
                 color: cor,
                 margin: '6.5px',
               }}
@@ -80,7 +69,7 @@ const BotaoAnotacao = props => {
             <FontAwesomeIcon
               style={{
                 fontSize: '16px',
-                cursor: podeAbrirModal ? 'pointer' : 'not-allowed',
+                cursor: 'pointer',
                 color: cor,
                 margin: '6.5px',
               }}

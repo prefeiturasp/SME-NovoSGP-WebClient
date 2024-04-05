@@ -1,11 +1,12 @@
+import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
+import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Table, Tooltip } from 'antd';
-import React, { useContext, useState, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { DataTable } from '~/componentes';
 import { Ordenacao } from '~/componentes-sgp';
-import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
 import { Base } from '~/componentes/colors';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
@@ -24,7 +25,6 @@ import {
   MarcadorSituacao,
   TextoEstilizado,
 } from './listaFrequencia.css';
-import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 const ListaoListaFrequencia = () => {
   const {
@@ -52,7 +52,6 @@ const ListaoListaFrequencia = () => {
   };
 
   const atualizarDados = () => {
-    // TODO - Mover tabela para outro arquivo e renderizar ele para recarrecar somente a linha do aluno e não a tabela toda novamente!
     setDadosFrequencia({ ...dadosFrequencia });
   };
 
@@ -104,7 +103,11 @@ const ListaoListaFrequencia = () => {
             }
           }
         }}
-        desabilitar={desabilitarCampos || !aulaHeader.podeEditar}
+        desabilitar={
+          desabilitarCampos ||
+          !aulaHeader.podeEditar ||
+          !componenteCurricular?.registraFrequencia
+        }
       />
     );
   };
@@ -130,7 +133,8 @@ const ListaoListaFrequencia = () => {
         desabilitar={
           desabilitarCampos ||
           dadosDiaAula?.desabilitado ||
-          !aulasGerais.podeEditar
+          !aulasGerais.podeEditar ||
+          !componenteCurricular?.registraFrequencia
         }
       />
     );
@@ -163,7 +167,8 @@ const ListaoListaFrequencia = () => {
         desabilitar={
           desabilitarCampos ||
           dadosAula?.desabilitado ||
-          !aulasGerais.podeEditar
+          !aulasGerais.podeEditar ||
+          !componenteCurricular?.registraFrequencia
         }
       />
     );
@@ -346,17 +351,16 @@ const ListaoListaFrequencia = () => {
         <span style={{ marginLeft: 14 }}>{dataAula}</span>
 
         <ListaoBotaoAnotacao
-          desabilitarCampos={desabilitarCampos || aula.desabilitado}
+          desabilitarCampos={desabilitarCampos || !!aula?.desabilitado}
           ehInfantil={listaoEhInfantil}
-          permiteAnotacao={aula?.permiteAnotacao && aulasGerais?.podeEditar}
-          possuiAnotacao={aula?.possuiAnotacao}
+          permiteAnotacao={aulasGerais?.podeEditar}
+          possuiAnotacao={!!aula?.possuiAnotacao}
           onClickAnotacao={() => {
             dispatch(
               setDadosModalAnotacaoFrequencia({
                 ...aluno,
                 aulaId,
-                permiteAnotacao: aula?.permiteAnotacao,
-                possuiAnotacao: aula?.possuiAnotacao,
+                possuiAnotacao: !!aula?.possuiAnotacao,
                 aula,
               })
             );
@@ -434,7 +438,6 @@ const ListaoListaFrequencia = () => {
       <ListaoModalAnotacoesFrequencia
         dadosListaFrequencia={dadosFrequencia?.alunos}
         ehInfantil={listaoEhInfantil}
-        componenteCurricularId={componenteCurricular.codigoComponenteCurricular}
         desabilitarCampos={desabilitarCampos}
         fechouModal={atualizarDados}
       />
