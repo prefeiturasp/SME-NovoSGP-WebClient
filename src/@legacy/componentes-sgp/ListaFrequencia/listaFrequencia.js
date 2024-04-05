@@ -28,7 +28,6 @@ const ListaFrequencia = props => {
     temPeriodoAberto,
     ehInfantil,
     aulaId,
-    componenteCurricularId,
     setDataSource,
   } = props;
 
@@ -52,6 +51,8 @@ const ListaFrequencia = props => {
   );
 
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
+  const [desabilitarModalAnotacoes, setDesabilitarModalAnotacoes] =
+    useState(false);
   const aulaIdPodeEditar = useSelector(
     state => state.frequenciaPlanoAula?.aulaIdPodeEditar
   );
@@ -65,18 +66,16 @@ const ListaFrequencia = props => {
 
     if (desabilitar) {
       setDesabilitarCampos(desabilitar);
+      setDesabilitarModalAnotacoes(desabilitar);
       return;
     }
 
-    if (
-      !temPeriodoAberto ||
-      !aulaIdPodeEditar ||
-      desabilitaInformacoesDataFutura
-    ) {
+    if (!temPeriodoAberto || !aulaIdPodeEditar) {
       desabilitar = true;
     }
 
-    setDesabilitarCampos(desabilitar);
+    setDesabilitarModalAnotacoes(desabilitar);
+    setDesabilitarCampos(desabilitar || desabilitaInformacoesDataFutura);
   }, [frequenciaId, permissoesTela, temPeriodoAberto, componenteCurricular]);
 
   const marcaPresencaFaltaTodasAulas = (aluno, tipo) => {
@@ -149,11 +148,7 @@ const ListaFrequencia = props => {
         <div className="d-flex justify-content-end">
           <EstudanteAtendidoAEE show={aluno?.ehAtendidoAEE} />
           <EstudanteMatriculadoPAP show={aluno?.ehMatriculadoTurmaPAP} />
-          <BotaoAnotacao
-            indexAluno={indexAluno}
-            ehInfantil={ehInfantil}
-            desabilitarCampos={desabilitarCampos}
-          />
+          <BotaoAnotacao indexAluno={indexAluno} ehInfantil={ehInfantil} />
         </div>
       </div>
     );
@@ -373,8 +368,7 @@ const ListaFrequencia = props => {
         dadosListaFrequencia={dataSource}
         ehInfantil={ehInfantil}
         aulaId={aulaId}
-        componenteCurricularId={componenteCurricularId}
-        desabilitarCampos={desabilitarCampos}
+        desabilitarCampos={desabilitarModalAnotacoes}
       />
 
       <ContainerListaFrequencia className="pt-2">
@@ -399,7 +393,6 @@ ListaFrequencia.propTypes = {
   temPeriodoAberto: PropTypes.oneOfType([PropTypes.bool]),
   ehInfantil: PropTypes.oneOfType([PropTypes.bool]),
   aulaId: PropTypes.oneOfType([PropTypes.any]),
-  componenteCurricularId: PropTypes.oneOfType([PropTypes.any]),
   setDataSource: PropTypes.oneOfType([PropTypes.func]),
 };
 
@@ -410,7 +403,6 @@ ListaFrequencia.defaultProps = {
   temPeriodoAberto: false,
   ehInfantil: false,
   aulaId: '',
-  componenteCurricularId: '',
   setDataSource: () => {},
 };
 

@@ -11,7 +11,6 @@ const ModalAnotacoesListaFrequencia = ({
   dadosListaFrequencia,
   ehInfantil,
   aulaId,
-  componenteCurricularId,
   desabilitarCampos,
 }) => {
   const exibirModalAnotacaoFrequencia = useSelector(
@@ -22,17 +21,22 @@ const ModalAnotacoesListaFrequencia = ({
     state => state.frequenciaPlanoAula.dadosModalAnotacaoFrequencia
   );
 
+  const componenteCurricular = useSelector(
+    state => state.frequenciaPlanoAula.componenteCurricular
+  );
+
   return exibirModalAnotacaoFrequencia ? (
     <ModalAnotacoesFrequencia
       dadosListaFrequencia={dadosListaFrequencia}
       ehInfantil={ehInfantil}
       aulaId={aulaId}
-      componenteCurricularId={componenteCurricularId}
+      componenteCurricularId={componenteCurricular?.codigoComponenteCurricular}
       desabilitarCampos={desabilitarCampos}
       exibirModal={exibirModalAnotacaoFrequencia}
       setExibirModal={setExibirModalAnotacaoFrequencia}
       dadosModal={dadosModalAnotacaoFrequencia}
       setDadosModal={setDadosModalAnotacaoFrequencia}
+      exibirMotivosAusencia={!!componenteCurricular?.registraFrequencia}
     />
   ) : (
     <></>
