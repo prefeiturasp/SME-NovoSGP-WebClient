@@ -356,7 +356,7 @@ const ModalAnotacoesFrequencia = props => {
                         onChangeCampos();
                       }
                     }}
-                    readonly={desabilitarCampos}
+                    desabilitar={desabilitarCampos}
                     labelRequired={
                       !form?.values?.motivoAusenciaId ||
                       !!(
