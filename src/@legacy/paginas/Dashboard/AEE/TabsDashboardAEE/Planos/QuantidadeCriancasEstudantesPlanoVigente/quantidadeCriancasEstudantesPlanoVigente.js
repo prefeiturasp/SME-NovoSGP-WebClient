@@ -1,3 +1,4 @@
+import { TagDescricao } from '@/components/sgp/tag-totalizador';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Base } from '~/componentes';
@@ -14,6 +15,8 @@ const QuantidadeCriancasEstudantesPlanoVigente = props => {
   };
 
   const [exibir, setExibir] = useState(false);
+  const [semDados, setSemDados] = useState(true);
+  const [totalPlanosVigentes, setTotalPlanosVigentes] = useState();
 
   const key = 'quantidade-criancas-estudantes-plano-vigente';
 
@@ -31,18 +34,38 @@ const QuantidadeCriancasEstudantesPlanoVigente = props => {
         }}
       >
         {exibir ? (
-          <div className="col-md-12">
-            <MontarGraficoBarras
-              anoLetivo={anoLetivo}
-              dreId={dreId}
-              ueId={ueId}
-              nomeIndiceDesc="descricao"
-              nomeValor="quantidade"
-              ServicoObterValoresGrafico={
-                ServicoDashboardAEE.obterPlanosVigentes
-              }
-            />
-          </div>
+          <>
+            {!semDados ? (
+              <div className="col-md-12">
+                <TagDescricao
+                  descricao={`Total de planos vigentes: ${totalPlanosVigentes}`}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+            <div className="col-md-12">
+              <MontarGraficoBarras
+                anoLetivo={anoLetivo}
+                dreId={dreId}
+                ueId={ueId}
+                nomeIndiceDesc="descricao"
+                nomeValor="quantidade"
+                ServicoObterValoresGrafico={
+                  ServicoDashboardAEE.obterPlanosVigentes
+                }
+                mapearDados={resposta => {
+                  if (resposta?.planosVigentes?.length) {
+                    setTotalPlanosVigentes(resposta?.totalPlanosVigentes || 0);
+                    setSemDados(false);
+                    return resposta.planosVigentes;
+                  }
+                  setSemDados(true);
+                  return [];
+                }}
+              />
+            </div>
+          </>
         ) : (
           ''
         )}

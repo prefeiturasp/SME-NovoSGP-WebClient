@@ -10,12 +10,14 @@ type DataInicioProps = {
   formItemProps?: FormItemProps;
   desabilitarDataFutura?: boolean;
   validarInicioMaiorQueFim?: boolean;
+  desabilitarData?: (data?: Dayjs) => boolean;
 };
 const DataInicio: React.FC<DataInicioProps> = ({
   datePickerProps,
   formItemProps,
   desabilitarDataFutura = false,
   validarInicioMaiorQueFim = false,
+  desabilitarData,
 }) => {
   const form = Form.useFormInstance();
 
@@ -92,7 +94,7 @@ const DataInicio: React.FC<DataInicioProps> = ({
         locale={localeDatePicker}
         placeholder="Data inicial"
         getPopupContainer={(trigger: HTMLElement) => popupContainer(trigger)}
-        disabledDate={validarDesabilitarDataFutura}
+        disabledDate={desabilitarData || validarDesabilitarDataFutura}
         {...datePickerProps}
       />
     </Form.Item>

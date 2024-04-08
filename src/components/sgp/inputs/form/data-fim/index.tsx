@@ -10,12 +10,14 @@ type DataFimProps = {
   formItemProps?: FormItemProps;
   desabilitarDataFutura?: boolean;
   validarFimMenorQueInicio?: boolean;
+  desabilitarData?: (data?: Dayjs) => boolean;
 };
 const DataFim: React.FC<DataFimProps> = ({
   datePickerProps,
   formItemProps,
   desabilitarDataFutura = false,
   validarFimMenorQueInicio = false,
+  desabilitarData,
 }) => {
   const form = Form.useFormInstance();
 
@@ -92,7 +94,7 @@ const DataFim: React.FC<DataFimProps> = ({
         placeholder="Data final"
         locale={localeDatePicker}
         getPopupContainer={(trigger: HTMLElement) => popupContainer(trigger)}
-        disabledDate={validarDesabilitarDataFutura}
+        disabledDate={desabilitarData || validarDesabilitarDataFutura}
         {...datePickerProps}
       />
     </Form.Item>

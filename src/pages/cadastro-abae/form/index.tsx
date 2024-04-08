@@ -16,7 +16,12 @@ import {
 } from '@/@legacy/constantes/ids/input';
 import { SGP_RADIO_ATIVO_INATIVO } from '@/@legacy/constantes/ids/radio';
 import { SGP_SELECT_UF } from '@/@legacy/constantes/ids/select';
-import { confirmar, sucesso, verificaSomenteConsulta } from '@/@legacy/servicos';
+import {
+  confirmar,
+  setBreadcrumbManual,
+  sucesso,
+  verificaSomenteConsulta,
+} from '@/@legacy/servicos';
 import ButtonPrimary from '@/components/lib/button/primary';
 import ButtonSecundary from '@/components/lib/button/secundary';
 import CardContent from '@/components/lib/card-content';
@@ -43,7 +48,7 @@ import { useForm } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const FormCadastroABAE: React.FC = () => {
   const usuarioStore = useSelector((store: any) => store?.usuario);
@@ -52,6 +57,7 @@ const FormCadastroABAE: React.FC = () => {
   const [form] = useForm();
   const navigate = useNavigate();
   const paramsRoute = useParams();
+  const location = useLocation();
 
   const [desabilitarCampos, setDesabilitarCampos] = useState<boolean>(false);
 
@@ -84,6 +90,12 @@ const FormCadastroABAE: React.FC = () => {
       setFormInitialValues(dados);
     }
   }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      setBreadcrumbManual(location.pathname, 'Cadastro de ABAE', ROUTES.CADASTRO_ABAE);
+    }
+  }, [id, location]);
 
   useEffect(() => {
     if (id) {

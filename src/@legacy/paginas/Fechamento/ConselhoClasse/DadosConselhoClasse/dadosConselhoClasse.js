@@ -1,3 +1,4 @@
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { ROUTES } from '@/core/enum/routes';
 import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
@@ -23,10 +24,11 @@ import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import servicoSalvarConselhoClasse from '../servicoSalvarConselhoClasse';
 import AlertaDentroPeriodo from './AlertaDentroPeriodo/alertaDentroPeriodo';
 import AnotacoesRecomendacoes from './AnotacoesRecomendacoes/anotacoesRecomendacoes';
+
+import { MontarQuestionarioPAPConselhoClasse } from './DadosPAP/Secoes';
 import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
-import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const { TabPane } = Tabs;
 
@@ -63,6 +65,12 @@ const DadosConselhoClasse = props => {
   const naoEhEjaOuCelp =
     Number(modalidade) !== ModalidadeEnum.EJA &&
     Number(modalidade) !== ModalidadeEnum.CELP;
+
+  const exibirDadosPAP =
+    Number(modalidade) === ModalidadeEnum.FUNDAMENTAL &&
+    !carregando &&
+    bimestreAtual?.valor &&
+    bimestreAtual?.valor !== 'final';
 
   const limparDadosNotaPosConselhoJustificativa = useCallback(() => {
     dispatch(setExpandirLinha([]));
@@ -292,6 +300,16 @@ const DadosConselhoClasse = props => {
         ) : (
           <></>
         )}
+
+        {exibirDadosPAP ? (
+          <MontarQuestionarioPAPConselhoClasse
+            bimestre={bimestreAtual.valor}
+            codigoAluno={codigoEOL}
+          />
+        ) : (
+          <></>
+        )}
+
         <AnotacoesRecomendacoes
           bimestre={bimestreAtual}
           codigoTurma={turmaCodigo}

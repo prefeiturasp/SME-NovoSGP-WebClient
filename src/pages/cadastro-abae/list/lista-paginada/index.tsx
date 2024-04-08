@@ -6,8 +6,9 @@ import { ROUTES } from '@/core/enum/routes';
 import { Form } from 'antd';
 import { useWatch } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { OPCAO_TODOS } from '~/constantes';
 
 const ListaPaginadaCadastroABAE: React.FC = () => {
   const navigate = useNavigate();
@@ -21,37 +22,54 @@ const ListaPaginadaCadastroABAE: React.FC = () => {
 
   const [filtro, setFiltro] = useState<FiltroDreIdUeIdNomeSituacaoABAEDto>();
 
-  const columns: ColumnsType<DreUeNomeSituacaoABAEDto> = [
-    {
-      title: 'DRE',
-      dataIndex: 'dre',
-    },
-    {
-      title: 'Unidade Escolar (UE)',
-      dataIndex: 'ue',
-    },
-    {
-      title: 'Nome',
-      dataIndex: 'nome',
-    },
-    {
-      title: 'Situação',
-      dataIndex: 'situacao',
-      render: (situacao: boolean) => (situacao ? 'Ativo' : 'Inativo'),
-    },
-  ];
+  const columns = useMemo(() => {
+    const newColumns: ColumnsType<DreUeNomeSituacaoABAEDto> = [
+      {
+        title: 'Nome',
+        dataIndex: 'nome',
+      },
+      {
+        title: 'Situação',
+        dataIndex: 'situacao',
+        render: (situacao: boolean) => (situacao ? 'Ativo' : 'Inativo'),
+      },
+    ];
+
+    if (ue?.value === OPCAO_TODOS) {
+      newColumns.unshift({
+        title: 'Unidade Escolar (UE)',
+        dataIndex: 'ue',
+      });
+    }
+
+    if (dre?.value === OPCAO_TODOS) {
+      newColumns.unshift({
+        title: 'DRE',
+        dataIndex: 'dre',
+      });
+    }
+
+    return newColumns;
+  }, [ue, dre]);
 
   useEffect(() => {
-    if (form.isFieldsTouched() || (dre?.id && ue?.id)) {
-      form.validateFields().then((values) => {
-        const filtro: FiltroDreIdUeIdNomeSituacaoABAEDto = {
-          ueId: values?.ue?.id,
-          nome: values?.nome,
-          situacao: values?.situacao,
-        };
-
-        setFiltro({ ...filtro });
-      });
+    if (form.isFieldsTouched() || (dre?.value && ue?.value)) {
+      form
+        .validateFields()
+        .then((values) => {
+          const filtro: FiltroDreIdUeIdNomeSituacaoABAEDto = {
+            dreId: values?.dre?.id ?? null,
+            ueId: values?.ue?.id ?? null,
+            nome: values?.nome,
+            situacao: values?.situacao,
+          };
+          setFiltro({ ...filtro });
+        })
+        .catch(() => {
+          setFiltro(undefined);
+        });
+    } else {
+      setFiltro(undefined);
     }
   }, [ue, dre, nome, situacao]);
 
@@ -66,7 +84,8 @@ const ListaPaginadaCadastroABAE: React.FC = () => {
       id={SGP_TABLE_CADASTRO_ABAE}
       colunas={columns}
       filtro={filtro}
-      filtroEhValido={!!filtro?.ueId}
+      limparDados={!filtro}
+      filtroEhValido={!!filtro}
       onClick={onClickEditar}
     />
   );
