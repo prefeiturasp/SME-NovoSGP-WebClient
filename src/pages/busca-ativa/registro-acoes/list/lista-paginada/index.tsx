@@ -28,6 +28,10 @@ const columns: ColumnsType<RegistroAcaoBuscaAtivaListagemDto> = [
     dataIndex: 'procedimentoRealizado',
   },
   {
+    title: 'Conseguiu contato com o responsável?',
+    dataIndex: 'conseguiuContatoResponsavel',
+  },
+  {
     title: 'Inserido por',
     dataIndex: 'inseridoPor',
   },
