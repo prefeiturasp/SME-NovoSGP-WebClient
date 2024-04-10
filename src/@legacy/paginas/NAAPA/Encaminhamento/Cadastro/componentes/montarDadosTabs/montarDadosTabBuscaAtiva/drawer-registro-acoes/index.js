@@ -11,6 +11,7 @@ export const DrawerBuscaAtivaRegistroAcoesForm = ({
   mostrarDrawer,
   onCloseDrawer,
   registroAcaoId,
+  exibirCampoSemValor = true,
 }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [
@@ -96,6 +97,7 @@ export const DrawerBuscaAtivaRegistroAcoesForm = ({
                 exibirOrdemLabel={false}
                 dadosQuestionarioAtual={dadosQuestionarioAtual}
                 prefixId={`${SGP_SECAO}_BUSCA_ATIVA_REGISTRO_ACOES`}
+                exibirCampoSemValor={exibirCampoSemValor}
               />
 
               <Row gutter={[16, 4]}>
