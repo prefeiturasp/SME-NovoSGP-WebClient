@@ -106,7 +106,7 @@ const MontarDadosTabs = () => {
 
         <TabPane tab="Busca ativa escolar" key="BUSCA_ATIVA_ESCOLAR">
           {tabAtivaEncaminhamentoNAAPA === 'BUSCA_ATIVA_ESCOLAR' && (
-            <MontarDadosTabBuscaAtiva />
+            <MontarDadosTabBuscaAtiva exibirCampoSemValor={false} />
           )}
         </TabPane>
       </ContainerTabsCard>
