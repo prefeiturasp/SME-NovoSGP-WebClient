@@ -192,7 +192,6 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
         setMensagemSenhaAlterada(resposta.data.mensagem);
       })
       .catch(error => {
-        debugger; // eslint-disable-line no-debugger
         if (error?.response?.data) {
           deveAtualizarEmail = error?.response?.data?.deveAtualizarEmail;
         }
