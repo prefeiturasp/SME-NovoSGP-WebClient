@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '@/core/enum/http-status-code';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CoresGraficos, Loader } from '~/componentes';
@@ -25,6 +26,7 @@ const MontarGraficoBarras = props => {
     dreCodigo,
     exibirLegenda,
     showAxisBottom,
+    mapearDados,
   } = props;
 
   const [chavesGrafico, setChavesGrafico] = useState([]);
@@ -119,11 +121,12 @@ const MontarGraficoBarras = props => {
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
 
-    if (retorno?.data?.length) {
+    if (retorno?.status === HttpStatusCode.Ok) {
+      const dados = mapearDados ? mapearDados(retorno.data) : retorno.data;
       if (chavesGraficoAgrupado?.length) {
-        mapearDadosGraficoAgrupado(retorno.data);
+        mapearDadosGraficoAgrupado(dados);
       } else {
-        mapearDadosGraficos(retorno.data);
+        mapearDadosGraficos(dados);
       }
     } else {
       setDadosGrafico([]);
@@ -214,6 +217,7 @@ MontarGraficoBarras.propTypes = {
   ueCodigo: PropTypes.string,
   exibirLegenda: PropTypes.bool,
   showAxisBottom: PropTypes.bool,
+  mapearDados: PropTypes.oneOfType([PropTypes.any]),
 };
 
 MontarGraficoBarras.defaultProps = {
@@ -231,6 +235,7 @@ MontarGraficoBarras.defaultProps = {
   ueCodigo: '',
   exibirLegenda: false,
   showAxisBottom: true,
+  mapearDados: null,
 };
 
 export default MontarGraficoBarras;

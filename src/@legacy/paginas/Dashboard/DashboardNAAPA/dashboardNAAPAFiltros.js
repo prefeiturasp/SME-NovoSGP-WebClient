@@ -1,7 +1,10 @@
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { Col, Row } from 'antd';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { CheckboxComponent, Loader, SelectComponent } from '~/componentes';
 import { FiltroHelper } from '~/componentes-sgp';
+import { OPCAO_TODOS } from '~/constantes';
+import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 import {
   SGP_SELECT_ANO_LETIVO,
   SGP_SELECT_DRE,
@@ -9,10 +12,7 @@ import {
   SGP_SELECT_SEMESTRE,
   SGP_SELECT_UE,
 } from '~/constantes/ids/select';
-import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
-import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
-import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
+import { AbrangenciaServico, ServicoFiltroRelatorio, erros } from '~/servicos';
 import api from '~/servicos/api';
 import { obterTodosMeses, ordenarListaMaiorParaMenor } from '~/utils';
 import NAAPAContext from './naapaContext';
@@ -33,6 +33,8 @@ const DashboardNAAPAFiltros = () => {
     setSemestre,
     setListaMesesReferencias,
     setListaMesesReferencias2,
+    listaModalidades,
+    setListaModalidades,
   } = useContext(NAAPAContext);
 
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -43,7 +45,6 @@ const DashboardNAAPAFiltros = () => {
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [listaUes, setListaUes] = useState([]);
   const [carregandoModalidades, setCarregandoModalidades] = useState(false);
-  const [listaModalidades, setListaModalidades] = useState([]);
   const [carregandoSemestres, setCarregandoSemestres] = useState(false);
   const [listaSemestres, setListaSemestres] = useState([]);
 
@@ -238,6 +239,14 @@ const DashboardNAAPAFiltros = () => {
       if (lista?.length === 1) {
         setModalidade(lista[0].valor);
       }
+
+      if (lista?.length > 1) {
+        lista.unshift({
+          desc: 'Todas',
+          valor: OPCAO_TODOS,
+        });
+      }
+
       setListaModalidades(lista);
     }
   }, [ue]);
@@ -392,6 +401,7 @@ const DashboardNAAPAFiltros = () => {
               onChange={onChangeModalidade}
               valueSelect={modalidade}
               placeholder="Modalidade"
+              allowClear={false}
             />
           </Loader>
         </Col>

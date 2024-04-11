@@ -152,6 +152,7 @@ class ServicoPlanoAEE {
                 }
                 break;
               case tipoQuestao.ComboMultiplaEscolha:
+              case tipoQuestao.ComboMultiplaEscolhaMes:
                 if (campos[key]?.length) {
                   questao.resposta = campos[key];
                 } else {
@@ -167,7 +168,8 @@ class ServicoPlanoAEE {
             }
 
             if (
-              questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha &&
+              (questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha ||
+                questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolhaMes) &&
               questao?.resposta?.length
             ) {
               questao.resposta.forEach(valorSelecionado => {
@@ -205,7 +207,9 @@ class ServicoPlanoAEE {
 
               if (
                 (questao.tipoQuestao === tipoQuestao.Upload ||
-                  questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha) &&
+                  questao.tipoQuestao === tipoQuestao.ComboMultiplaEscolha ||
+                  questao.tipoQuestao ===
+                    tipoQuestao.ComboMultiplaEscolhaMes) &&
                 !questao.resposta
               ) {
                 questao = null;

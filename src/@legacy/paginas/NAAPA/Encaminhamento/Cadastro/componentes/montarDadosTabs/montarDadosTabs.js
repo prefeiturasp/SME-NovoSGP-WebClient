@@ -12,6 +12,7 @@ import { erros } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import MontarDadosTabItinerancia from './montarDadosTabItinerancia/montarDadosTabItinerancia';
 import MontarDadosTabSelecionada from './montarDadosTabSelecionada';
+import { MontarDadosTabBuscaAtiva } from './montarDadosTabBuscaAtiva';
 
 const { TabPane } = Tabs;
 
@@ -77,7 +78,7 @@ const MontarDadosTabs = () => {
           const questionarioId = tab?.questionarioId;
           const nomeTab = tab?.nome;
           const ehTabItinerancia =
-            tab?.nomeComponente === 'QUESTOES_ITINERACIA';
+            tab?.nomeComponente === 'QUESTOES_ITINERANCIA';
           const desabilitarTabItinerancia =
             ehTabItinerancia &&
             (!situacao || Number(situacao) === situacaoNAAPA.Rascunho);
@@ -102,6 +103,12 @@ const MontarDadosTabs = () => {
             </TabPane>
           );
         })}
+
+        <TabPane tab="Busca ativa escolar" key="BUSCA_ATIVA_ESCOLAR">
+          {tabAtivaEncaminhamentoNAAPA === 'BUSCA_ATIVA_ESCOLAR' && (
+            <MontarDadosTabBuscaAtiva exibirCampoSemValor={false} />
+          )}
+        </TabPane>
       </ContainerTabsCard>
 
       {!tabAtivaEncaminhamentoNAAPA && (

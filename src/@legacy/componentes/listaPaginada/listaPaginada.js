@@ -31,6 +31,7 @@ const ListaPaginada = props => {
     expandIcon,
     expandedRowKeys,
     expandedRowRender,
+    limparDados,
   } = props;
 
   const [carregando, setCarregando] = useState(false);
@@ -38,7 +39,7 @@ const ListaPaginada = props => {
   const [linhas, setLinhas] = useState([]);
   const [linhasSelecionadas, setLinhasSelecionadas] = useState([]);
 
-  const [paginaAtual, setPaginaAtual] = useState({
+  const paginacaoDefault = {
     defaultPageSize: 10,
     pageSize: 10,
     total: 0,
@@ -46,7 +47,19 @@ const ListaPaginada = props => {
     pageSizeOptions: ['10', '20', '50', '100'],
     locale: { items_per_page: 'Linhas' },
     current: 1,
-  });
+  };
+
+  const [paginaAtual, setPaginaAtual] = useState(paginacaoDefault);
+
+  useEffect(() => {
+    if (limparDados) {
+      setLinhas([]);
+      setCarregando(false);
+      setTotal(0);
+      setLinhasSelecionadas([]);
+      setPaginaAtual({ ...paginacaoDefault });
+    }
+  }, [limparDados]);
 
   const obterUrlBusca = pagina => {
     return `${url}?numeroPagina=${pagina.current}&numeroRegistros=${pagina.pageSize}`;
@@ -148,10 +161,10 @@ const ListaPaginada = props => {
   };
 
   useEffect(() => {
-    if (filtroEhValido) {
+    if (!limparDados && filtroEhValido) {
       filtrar();
     }
-  }, [filtroEhValido, paginaAtual]);
+  }, [limparDados, filtroEhValido, paginaAtual]);
 
   useEffect(() => {
     const novaPagina = { ...paginaAtual };
@@ -261,6 +274,7 @@ ListaPaginada.propTypes = {
   expandIcon: PropTypes.oneOfType([PropTypes.any]),
   expandedRowKeys: PropTypes.oneOfType([PropTypes.any]),
   expandedRowRender: PropTypes.oneOfType([PropTypes.any]),
+  limparDados: PropTypes.oneOfType([PropTypes.bool]),
 };
 
 ListaPaginada.defaultProps = {
@@ -284,6 +298,7 @@ ListaPaginada.defaultProps = {
   expandIcon: null,
   expandedRowKeys: [],
   expandedRowRender: null,
+  limparDados: false,
 };
 
 export default ListaPaginada;

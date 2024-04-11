@@ -17,6 +17,7 @@ import {
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
+import { ImprimirAnexosNAAPAEnum } from '@/core/enum/imprimir-anexos-naapa-enum';
 
 const URL_PADRAO = 'v1/encaminhamento-naapa';
 
@@ -45,13 +46,19 @@ class ServicoNAAPA {
       }`
     );
 
-  imprimir = idsSelecionados =>
+  imprimir = (idsSelecionados, imprimirAnexos = ImprimirAnexosNAAPAEnum.Nao) =>
     api.post(`${URL_PADRAO}/imprimir-detalhado`, {
       encaminhamentoNaapaIds: idsSelecionados,
+      imprimirAnexos,
     });
 
   removerArquivo = arquivoCodigo =>
     api.delete(`${URL_PADRAO}/arquivo?arquivoCodigo=${arquivoCodigo}`);
+
+  removerArquivoItinerancia = arquivoCodigo =>
+    api.delete(
+      `${URL_PADRAO}/secoes-itinerancia/arquivo?arquivoCodigo=${arquivoCodigo}`
+    );
 
   excluirEncaminhamento = id => api.delete(`${URL_PADRAO}/${id}`);
 
@@ -91,7 +98,7 @@ class ServicoNAAPA {
 
         const secaoInvalida = !secaoEstaEmEdicao && !secao.concluido;
         const ehSecaoItinerancia =
-          secao.nomeComponente === 'QUESTOES_ITINERACIA';
+          secao.nomeComponente === 'QUESTOES_ITINERANCIA';
         if (secaoInvalida && !ehSecaoItinerancia) {
           nomesSecoesComCamposObrigatorios.push(secao.nome);
         }
@@ -213,7 +220,7 @@ class ServicoNAAPA {
 
     if (formsValidos || dadosMapeados?.secoes?.length) {
       const tabItineranciaIndex = dadosMapeados?.secoes?.findIndex(
-        item => item.secaoNome === 'QUESTOES_ITINERACIA'
+        item => item.secaoNome === 'QUESTOES_ITINERANCIA'
       );
 
       const paramsSalvar = {
@@ -285,7 +292,7 @@ class ServicoNAAPA {
     );
 
     const secaoItinerancia =
-      secaoDestino?.nomeComponente === 'QUESTOES_ITINERACIA';
+      secaoDestino?.nomeComponente === 'QUESTOES_ITINERANCIA';
 
     if (
       secaoItinerancia &&
@@ -372,6 +379,14 @@ class ServicoNAAPA {
     api.get(
       `${URL_PADRAO}/aluno/${codigoEstudante}/existe-encaminhamento-ativo`
     );
+
+  obterTiposImpressaoAnexos = encaminhamentoId =>
+    api.get(`${URL_PADRAO}/${encaminhamentoId}/anexos/tipos-impressao`);
+
+  obterProfissionaisEnvolvidosAtendimento = (codigoDre, codigoUe) =>
+    api.get(`${URL_PADRAO}/secoes-itinerancia/profissionais-envolvidos`, {
+      params: { codigoDre, codigoUe },
+    });
 }
 
 export default new ServicoNAAPA();

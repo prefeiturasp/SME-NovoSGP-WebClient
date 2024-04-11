@@ -118,9 +118,6 @@ const MontarListaFrequencia = () => {
                     turmaSelecionada
                   )}
                   aulaId={aulaId}
-                  componenteCurricularId={
-                    componenteCurricular.codigoComponenteCurricular
-                  }
                   setDataSource={atualizarValoresAlterados}
                 />
 
