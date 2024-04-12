@@ -1,5 +1,6 @@
 export type FiltroDreIdUeIdNomeSituacaoABAEDto = {
-  ueId: number;
+  dreId?: number
+  ueId?: number;
   situacao: boolean;
   nome: string;
 };

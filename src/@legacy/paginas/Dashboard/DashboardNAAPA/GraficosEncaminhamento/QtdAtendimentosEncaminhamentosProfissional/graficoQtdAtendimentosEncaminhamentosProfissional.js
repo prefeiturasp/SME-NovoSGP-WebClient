@@ -9,7 +9,7 @@ import { TagGrafico } from '@/@legacy/componentes-sgp';
 import { obterTodosMeses } from '@/@legacy/utils';
 
 const GraficoQtdAtendimentosEncaminhamentosProfissional = () => {
-  const { anoLetivo, dre, ue } = useContext(NAAPAContext);
+  const { anoLetivo, dre, ue, modalidade } = useContext(NAAPAContext);
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -35,6 +35,7 @@ const GraficoQtdAtendimentosEncaminhamentosProfissional = () => {
         anoLetivo,
         dre?.id,
         ue?.id,
+        modalidade,
         meseReferencia
       )
         .catch(e => erros(e))
@@ -50,15 +51,15 @@ const GraficoQtdAtendimentosEncaminhamentosProfissional = () => {
     } else {
       limparDados();
     }
-  }, [anoLetivo, dre, ue, meseReferencia]);
+  }, [anoLetivo, dre, ue, modalidade, meseReferencia]);
 
   useEffect(() => {
-    if (anoLetivo && dre && ue && meseReferencia) {
+    if (anoLetivo && dre && ue && modalidade && meseReferencia) {
       obterDadosGrafico();
     } else {
       limparDados();
     }
-  }, [anoLetivo, dre, ue, meseReferencia, obterDadosGrafico]);
+  }, [anoLetivo, dre, ue, modalidade, meseReferencia, obterDadosGrafico]);
 
   useEffect(() => {
     const meses = obterTodosMeses();

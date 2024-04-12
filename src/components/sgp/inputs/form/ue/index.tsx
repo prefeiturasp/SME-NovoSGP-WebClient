@@ -32,6 +32,8 @@ const SelectUE: React.FC<SelectUEProps> = ({
 
   const name = formItemProps?.name || 'ue';
 
+  const isMultiple = selectProps?.mode === 'multiple';
+
   const disabled = !dre?.value || options?.length === 1 || selectProps?.disabled;
 
   const limparDados = () => {
@@ -44,11 +46,11 @@ const SelectUE: React.FC<SelectUEProps> = ({
     const OPCAO_TODAS_UE = { value: OPCAO_TODOS, label: 'Todas' };
 
     if (dre?.value === OPCAO_TODOS) {
+      const valorAtual = isMultiple ? [OPCAO_TODAS_UE] : OPCAO_TODAS_UE;
+
       setOptions([OPCAO_TODAS_UE]);
-      form.setFieldValue(name, OPCAO_TODAS_UE);
-      setInitialValueConfig((item) =>
-        item?.loaded ? item : { loaded: true, value: OPCAO_TODAS_UE },
-      );
+      form.setFieldValue(name, valorAtual);
+      setInitialValueConfig((item) => (item?.loaded ? item : { loaded: true, value: valorAtual }));
       return;
     }
 
@@ -68,10 +70,12 @@ const SelectUE: React.FC<SelectUEProps> = ({
       if (lista?.length === 1) {
         const fieldValue = lista[0];
 
-        form.setFieldValue(name, fieldValue);
+        const valorAtual = isMultiple ? [fieldValue] : fieldValue;
+
+        form.setFieldValue(name, valorAtual);
 
         setInitialValueConfig((item) =>
-          item?.loaded ? item : { loaded: true, value: fieldValue },
+          item?.loaded ? item : { loaded: true, value: valorAtual },
         );
       } else if (mostrarOpcaoTodas) {
         lista.unshift(OPCAO_TODAS_UE);

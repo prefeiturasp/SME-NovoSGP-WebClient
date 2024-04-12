@@ -28,12 +28,8 @@ const columns: ColumnsType<RegistroAcaoBuscaAtivaListagemDto> = [
     dataIndex: 'procedimentoRealizado',
   },
   {
-    title: 'O contato ocorreu com o responsável pela criança?',
-    dataIndex: 'contatoEfetuadoResponsavel',
-  },
-  {
-    title: 'Após a ligação/visita a criança retornou para escola?',
-    dataIndex: 'criancaRetornouEscolaAposContato',
+    title: 'Conseguiu contato com o responsável?',
+    dataIndex: 'conseguiuContatoResponsavel',
   },
   {
     title: 'Inserido por',

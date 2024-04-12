@@ -73,6 +73,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
     searchValue,
     setValueOnlyOnChange,
     labelRequired,
+    labelInValue,
   } = props;
 
   const { Option } = Select;
@@ -156,6 +157,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
       defaultValue={defaultValue}
       filterOption={filterOption}
       showSearch={showSearch}
+      labelInValue={labelInValue}
     >
       {opcoesLista()}
     </Field>
@@ -234,6 +236,7 @@ SelectComponent.propTypes = {
   searchValue: PropTypes.bool,
   setValueOnlyOnChange: PropTypes.bool,
   labelRequired: PropTypes.bool,
+  labelInValue: PropTypes.bool,
 };
 
 SelectComponent.defaultProps = {
@@ -244,6 +247,7 @@ SelectComponent.defaultProps = {
   setValueOnlyOnChange: false,
   labelRequired: false,
   showSearch: true,
+  labelInValue: false,
 };
 
 export default SelectComponent;

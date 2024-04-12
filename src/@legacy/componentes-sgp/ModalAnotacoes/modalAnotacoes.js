@@ -26,6 +26,7 @@ const ModalAnotacoesFrequencia = props => {
     setDadosModal,
     fechouModal,
     listaPadraoMotivoAusencia,
+    exibirMotivosAusencia = true,
   } = props;
 
   const dispatch = useDispatch();
@@ -316,28 +317,33 @@ const ModalAnotacoesFrequencia = props => {
                   permiteAlterarImagem={false}
                 />
               </div>
-              <div className="col-md-12 mt-2">
-                <Loader loading={carregandoMotivosAusencia} tip="">
-                  <SelectComponent
-                    label="Motivo de ausência"
-                    form={form}
-                    id="motivo-ausencia"
-                    name="motivoAusenciaId"
-                    lista={listaMotivoAusencia}
-                    valueOption="valor"
-                    valueText="descricao"
-                    onChange={onChangeCampos}
-                    placeholder="Selecione um motivo"
-                    disabled={desabilitarCampos}
-                    labelRequired={
-                      !form?.values?.anotacao ||
-                      !!(
-                        form?.values?.anotacao && form?.values?.motivoAusenciaId
-                      )
-                    }
-                  />
-                </Loader>
-              </div>
+              {exibirMotivosAusencia ? (
+                <div className="col-md-12 mt-2">
+                  <Loader loading={carregandoMotivosAusencia} tip="">
+                    <SelectComponent
+                      label="Motivo de ausência"
+                      form={form}
+                      id="motivo-ausencia"
+                      name="motivoAusenciaId"
+                      lista={listaMotivoAusencia}
+                      valueOption="valor"
+                      valueText="descricao"
+                      onChange={onChangeCampos}
+                      placeholder="Selecione um motivo"
+                      disabled={desabilitarCampos}
+                      labelRequired={
+                        !form?.values?.anotacao ||
+                        !!(
+                          form?.values?.anotacao &&
+                          form?.values?.motivoAusenciaId
+                        )
+                      }
+                    />
+                  </Loader>
+                </div>
+              ) : (
+                <></>
+              )}
               <div className="col-md-12 mt-2">
                 <EditorAnotacao>
                   <JoditEditor
@@ -350,7 +356,7 @@ const ModalAnotacoesFrequencia = props => {
                         onChangeCampos();
                       }
                     }}
-                    readonly={desabilitarCampos}
+                    desabilitar={desabilitarCampos}
                     labelRequired={
                       !form?.values?.motivoAusenciaId ||
                       !!(

@@ -9,6 +9,7 @@ import {
 } from '~/constantes';
 import { ServicoRelatorioFrequencia, erro, erros, sucesso } from '~/servicos';
 import { useNavigate } from 'react-router-dom';
+import { TIPO_FORMATO_RELATORIO } from '@/core/enum/tipo-formato-relatorio';
 
 const RelatorioControleFrequenciaMensalBotoesAcoes = props => {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ const RelatorioControleFrequenciaMensalBotoesAcoes = props => {
       modalidade: valuesClone?.modalidade,
       codigoTurma: valuesClone?.turmaCodigo,
       mesesReferencias: valuesClone?.mesesReferencias,
-      tipoFormatoRelatorio: valuesClone?.tipoFormatoRelatorio,
+      tipoFormatoRelatorio: TIPO_FORMATO_RELATORIO.XLSX.toString(),
     };
 
     if (valuesClone?.semestre) {

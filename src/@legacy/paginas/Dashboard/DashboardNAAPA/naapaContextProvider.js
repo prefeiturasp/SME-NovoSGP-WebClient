@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import NAAPAContext from './naapaContext';
 
 const NAAPAContextProvider = ({ children }) => {
@@ -11,6 +11,7 @@ const NAAPAContextProvider = ({ children }) => {
   const [semestre, setSemestre] = useState();
   const [listaMesesReferencias, setListaMesesReferencias] = useState([]);
   const [listaMesesReferencias2, setListaMesesReferencias2] = useState([]);
+  const [listaModalidades, setListaModalidades] = useState([]);
 
   return (
     <NAAPAContext.Provider
@@ -31,6 +32,8 @@ const NAAPAContextProvider = ({ children }) => {
         setListaMesesReferencias,
         listaMesesReferencias2,
         setListaMesesReferencias2,
+        listaModalidades,
+        setListaModalidades,
       }}
     >
       {children}

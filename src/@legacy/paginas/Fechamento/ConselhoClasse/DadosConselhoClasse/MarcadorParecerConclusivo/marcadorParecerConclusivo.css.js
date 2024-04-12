@@ -32,7 +32,7 @@ export const rotate = keyframes`
 `;
 
 export const IconeEstilizado = styled(FontAwesomeIcon)`
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
   color: ${Base.Verde};
   ${({ sincronizando }) =>
