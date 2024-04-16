@@ -17,6 +17,7 @@ const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
   );
 
   const nomeCampo = 'tipoCalendarioId';
+  const modalidadeId = 'modalidadeCalendarioId';
 
   const obterTiposCalendarios = useCallback(async () => {
     setExibirLoader(true);
@@ -47,6 +48,8 @@ const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
 
       if (lista?.length === 1) {
         const { id } = lista[0];
+        const modalidadeCalendarioId = [lista[0].modalidade];
+        form.setFieldValue(modalidadeId, modalidadeCalendarioId);
         form.setFieldValue(nomeCampo, String(id));
       }
     } else {
