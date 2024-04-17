@@ -45,16 +45,34 @@ const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaEventos([]);
       form.setFieldValue(nomeCampo, undefined);
     }
-  }, [anoLetivo, codigoDre, codigoUe, modalidades, tipoCalendarioId]);
+  }, [
+    modalidadeCalendarioId,
+    anoLetivo,
+    codigoDre,
+    codigoUe,
+    modalidades,
+    tipoCalendarioId,
+  ]);
 
   useEffect(() => {
-    if (tipoCalendarioId && codigoUe && modalidades?.length) {
+    if (
+      tipoCalendarioId &&
+      codigoUe &&
+      modalidades?.length &&
+      modalidadeCalendarioId?.length
+    ) {
       obterEventos();
     } else {
       setListaEventos([]);
       form.setFieldValue(nomeCampo, undefined);
     }
-  }, [tipoCalendarioId, codigoUe, modalidades, obterEventos]);
+  }, [
+    tipoCalendarioId,
+    modalidadeCalendarioId,
+    codigoUe,
+    modalidades,
+    obterEventos,
+  ]);
 
   return (
     <Loader loading={exibirLoader} ignorarTip>
