@@ -168,7 +168,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     const resposta = await ServicoNAAPA.salvarPadrao(
       encaminhamentoId,
       true,
-      encaminhamentoId
+      encaminhamentoId && !dadosSituacao?.situacao === situacaoNAAPA.Rascunho
         ? dadosSituacao?.situacao
         : situacaoNAAPA.AguardandoAtendimento
     );
