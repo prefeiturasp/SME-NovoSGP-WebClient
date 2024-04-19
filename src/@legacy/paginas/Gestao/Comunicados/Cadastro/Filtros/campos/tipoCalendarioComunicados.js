@@ -1,10 +1,10 @@
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
-import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
-import { erros, ServicoCalendarios } from '~/servicos';
+import { ServicoCalendarios, erros } from '~/servicos';
 
 const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -48,7 +48,7 @@ const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
 
       if (lista?.length === 1) {
         const { id } = lista[0];
-        const modalidadeCalendarioId = [lista[0].modalidade];
+        const modalidadeCalendarioId = [String(lista[0].modalidade)];
         form.setFieldValue(modalidadeId, modalidadeCalendarioId);
         form.setFieldValue(nomeCampo, String(id));
       }
