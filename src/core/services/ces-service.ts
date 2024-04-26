@@ -43,6 +43,7 @@ async function buscarPesquisa(
   identificacaoUsuario: string,
   options: InternalAxiosRequestConfig<any>,
 ) {
+  if (!CES_URL) return;
   const url = `${CES_URL}/pesquisas/?identificacao_usuario=${identificacaoUsuario}&metodo_recurso_acao=${options.method?.toUpperCase()}&recurso_acao=${endpoint}`;
   const headers = {
     method: 'GET',
@@ -66,6 +67,7 @@ async function buscarPesquisa(
 }
 
 export async function criarUsuarioCES(identificacao: string) {
+  if (!CES_URL) return;
   const url = `${CES_URL}/usuarios/`;
 
   const headers = {
