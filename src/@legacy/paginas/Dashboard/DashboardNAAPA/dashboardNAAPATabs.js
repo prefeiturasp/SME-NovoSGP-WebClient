@@ -1,7 +1,7 @@
 import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { Col, Row, Tabs } from 'antd';
 import { useContext, useEffect, useState } from 'react';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import { OPCAO_TODOS } from '~/constantes';
 import GraficosEncaminhamento from './GraficosEncaminhamento/graficosEncaminhamento';
 import GraficosEvasaoEscolar from './GraficosEvasaoEscolar/graficosEvasaoEscolar';

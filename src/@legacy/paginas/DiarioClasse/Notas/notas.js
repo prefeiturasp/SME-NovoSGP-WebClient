@@ -15,7 +15,7 @@ import Card from '~/componentes/card';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import Row from '~/componentes/row';
 import SelectComponent from '~/componentes/select';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import {
   SGP_ALERT_ALERTA_PRINCIPAL_ESCOLHER_TURMA,
   SGP_ALERT_JUSTIFICATIVA_PORCENTAGEM_NOTAS_CONCEITO,

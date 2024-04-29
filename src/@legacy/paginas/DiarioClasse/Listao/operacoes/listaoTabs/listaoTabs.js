@@ -1,7 +1,7 @@
 import { Tabs } from 'antd';
 import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import { BIMESTRE_FINAL } from '~/constantes';
 import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { ehTurmaInfantil } from '~/servicos';

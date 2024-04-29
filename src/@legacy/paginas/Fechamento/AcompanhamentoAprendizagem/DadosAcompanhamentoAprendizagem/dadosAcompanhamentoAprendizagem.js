@@ -2,7 +2,7 @@ import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import { ROUTES } from '@/core/enum/routes';
 import { setDesabilitarCamposAcompanhamentoAprendizagem } from '~/redux/modulos/acompanhamentoAprendizagem/actions';
 import { verificaSomenteConsulta } from '~/servicos';
