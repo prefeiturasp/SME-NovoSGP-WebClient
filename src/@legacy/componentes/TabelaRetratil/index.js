@@ -23,6 +23,7 @@ function TabelaRetratil({
   pularDesabilitados,
   larguraAluno,
   alunosValidar,
+  obterIconeEstudanteCustomizado,
 }) {
   const [retraido, setRetraido] = useState(false);
   const [alunoSelecionado, setAlunoSelecionado] = useState(null);
@@ -206,6 +207,11 @@ function TabelaRetratil({
                       {exibirProcessoConcluido && (
                         <i className="icone-concluido fa fa-check-circle" />
                       )}
+                      {obterIconeEstudanteCustomizado ? (
+                        obterIconeEstudanteCustomizado(item)
+                      ) : (
+                        <></>
+                      )}
                       {item.nome}
                     </div>
 
@@ -255,6 +261,7 @@ TabelaRetratil.propTypes = {
   tituloCabecalho: t.string,
   pularDesabilitados: t.bool,
   larguraAluno: t.string,
+  obterIconeEstudanteCustomizado: t.oneOfType([t.any]),
 };
 
 TabelaRetratil.defaultProps = {
@@ -267,6 +274,7 @@ TabelaRetratil.defaultProps = {
   tituloCabecalho: 'Detalhes do estudante',
   pularDesabilitados: false,
   larguraAluno: '',
+  obterIconeEstudanteCustomizado: null,
 };
 
 export default TabelaRetratil;
