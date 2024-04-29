@@ -11,4 +11,5 @@ export type SecaoQuestionarioDto = {
   nomeComponente?: string;
   ordem: number;
   tipoQuestionario: TipoQuestionario;
+  modalidadesCodigo: number[];
 };

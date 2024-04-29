@@ -20,7 +20,6 @@ const Container = styled(Modal)`
 
   .ant-modal-header {
     border-bottom: none;
-    padding-top: 27px;
     padding-bottom: 0px;
   }
 

@@ -1,6 +1,6 @@
 import { Col, Row, Tabs } from 'antd';
 import React, { useState } from 'react';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import { GraficoQuantidadeBuscaAtivaPorMotivosAusencia } from './grafico-motivos-ausencias';
 import { GraficoQuantidadeBuscaAtivaPorProcedimentosTrabalhoDre } from './grafico-procedimentos-trabalho';
 import { GraficoQuantidadeBuscaAtivaPorReflexoFrequenciaMes } from './grafico-reflexos-percentual-frequencia';

@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import { store } from '@/core/redux';
-import _, { groupBy } from 'lodash';
+import _, { cloneDeep, groupBy } from 'lodash';
 import tipoQuestao from '~/dtos/tipoQuestao';
 import {
   setExibirModalErrosQuestionarioDinamico,
@@ -607,7 +607,31 @@ class QuestionarioDinamicoFuncoes {
               case tipoQuestao.TurmasPrograma:
               case tipoQuestao.InformacoesSrm:
               case tipoQuestao.ProfissionaisEnvolvidos:
+              case tipoQuestao.AvaliacoesExternasProvaSP:
                 questao.resposta = JSON.stringify(campos[key] || '');
+                break;
+              case tipoQuestao.ComboDinamico:
+                if (campos[key]?.value) {
+                  const resposta = cloneDeep(campos[key]);
+                  questao.resposta = JSON.stringify({
+                    value: resposta?.label,
+                    index: resposta?.value,
+                  });
+                } else {
+                  questao.resposta = undefined;
+                }
+                break;
+              case tipoQuestao.ComboMultiplaEscolhaDinamico:
+                if (campos[key]?.length) {
+                  let resposta = cloneDeep(campos[key]);
+                  resposta = resposta.map(item => ({
+                    value: item?.label,
+                    index: item?.value,
+                  }));
+                  questao.resposta = JSON.stringify(resposta);
+                } else {
+                  questao.resposta = undefined;
+                }
                 break;
               case tipoQuestao.Upload:
                 if (campos[key]?.length) {
@@ -790,6 +814,8 @@ class QuestionarioDinamicoFuncoes {
       case tipoQuestao.ComboMultiplaEscolhaMes:
       case tipoQuestao.PeriodoEscolar:
       case tipoQuestao.ProfissionaisEnvolvidos:
+      case tipoQuestao.ComboDinamico:
+      case tipoQuestao.ComboMultiplaEscolhaDinamico:
         return 'SELECT';
       case tipoQuestao.Checkbox:
         return 'CHECKBOX';
@@ -803,6 +829,7 @@ class QuestionarioDinamicoFuncoes {
       case tipoQuestao.AtividadesContraturno:
       case tipoQuestao.TurmasPrograma:
       case tipoQuestao.InformacoesSrm:
+      case tipoQuestao.AvaliacoesExternasProvaSP:
         return 'TABLE';
       case tipoQuestao.Periodo:
       case tipoQuestao.Data:

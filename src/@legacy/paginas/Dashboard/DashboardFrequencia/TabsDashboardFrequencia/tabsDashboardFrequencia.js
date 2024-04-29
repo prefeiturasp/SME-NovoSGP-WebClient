@@ -7,7 +7,7 @@ import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import GraficosFrequencia from '../DadosDashboardFrequencia/graficosFrequencia';
 import GraficoCompensacaoAusencia from '../DadosDashboardCompensacaoAusencia/graficoCompensacaoAusencia';
 
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import { ContainerTabsDashboardFrequencia } from '../dashboardFrequencia.css';
 
 const TabsDashboardFrequencia = () => {
