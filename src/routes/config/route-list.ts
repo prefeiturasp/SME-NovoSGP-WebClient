@@ -129,6 +129,7 @@ import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioS
 import SemPermissao from '~/paginas/SemPermissao/sem-permissao';
 import Sondagem from '~/paginas/Sondagem/sondagem';
 import { setRotas } from '~/redux/modulos/navegacao/actions';
+import { MapeamentoEstudantes } from '@/pages/mapeamento-estudantes';
 
 export interface RouteProps {
   path: string;
@@ -1872,6 +1873,17 @@ route.set(ROUTES.NAAPA_REGISTRO_COLETIVO_EDICAO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.NAAPA_REGISTRO_COLETIVO,
+});
+
+route.set(ROUTES.MAPEAMENTO_ESTUDANTES, {
+  breadcrumbName: 'Mapeamento de estudantes',
+  menu: ['Diário de Classe'],
+  parent: '/',
+  component: MapeamentoEstudantes,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.MAPEAMENTO_ESTUDANTES,
 });
 
 const getRoutesArray = () => {
