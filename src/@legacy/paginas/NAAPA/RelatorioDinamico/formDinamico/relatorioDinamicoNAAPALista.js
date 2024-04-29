@@ -33,6 +33,10 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosSecoes }) => {
   const listaUes = form.values?.listaUes;
   const modalidade = form.values?.modalidade;
   const anosEscolaresCodigos = form.values?.anosEscolaresCodigos;
+  const situacaoIds = form.values?.situacaoIds;
+  const exibirEncerrados = form.values?.exibirEncerrados;
+  const fluxoAlertaIds = form.values?.fluxoAlertaIds;
+  const portaEntradaIds = form.values?.portaEntradaIds;
 
   const {
     dataSource,
@@ -50,7 +54,6 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosSecoes }) => {
   const todosEmModalidade =
     modalidade?.length > 1 ||
     !!modalidade?.find(item => String(item) === OPCAO_TODOS);
-  const encaminhamentosNAAPAIds = dataSource?.encaminhamentosNAAPAIds;
   const encaminhamentosNAAPAPaginado = dataSource?.encaminhamentosNAAPAPaginado;
 
   const exibirCardsPorModalidade = todosEmModalidade;
@@ -210,15 +213,20 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosSecoes }) => {
     });
   };
 
-  const onClickGerar = values => {
-    const valuesClone = _.cloneDeep(values);
-
+  const onClickGerar = () => {
     setGerandoRelatorio(true);
 
     const params = {
-      dreCodigo: valuesClone?.dreCodigo,
-      ueCodigo: valuesClone?.ueCodigo,
-      ids: encaminhamentosNAAPAIds,
+      consideraHistorico: consideraHistorico,
+      anoLetivo: anoLetivo,
+      dreCodigo: dreCodigo,
+      ueCodigo: ueCodigo,
+      modalidades: modalidade,
+      anosEscolaresCodigos: anosEscolaresCodigos,
+      situacaoIds: situacaoIds,
+      exibirEncerrados: exibirEncerrados,
+      fluxoAlertaIds: fluxoAlertaIds,
+      portaEntradaIds: portaEntradaIds,
     };
 
     ServicoRelatorioEncaminhamentoNAAPA.gerar(params)
@@ -279,7 +287,7 @@ const RelatorioDinamicoNAAPALista = ({ form, dadosSecoes }) => {
           onClick={() => onClickGerar()}
           disabled={
             desabilitarGerar ||
-            !encaminhamentosNAAPAIds?.length ||
+            !encaminhamentosNAAPAPaginado?.items?.length ||
             !form.isValid
           }
         />
