@@ -37,7 +37,8 @@ export const BotoesAcoesMapeamentoEstudantes = () => {
       );
 
       if (confirmou) {
-        const sucesso = await mapeamentoEstudantesService.salvar(false);
+        const sucesso = await mapeamentoEstudantesService.salvar(false, false, false);
+
         if (sucesso) {
           navigate(ROUTES.PRINCIPAL);
         }

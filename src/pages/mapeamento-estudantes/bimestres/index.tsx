@@ -1,24 +1,21 @@
+import Select from '@/components/lib/inputs/select';
 import { TurmaSelecionadaDTO } from '@/core/dto/TurmaSelecionadaDto';
 import { BimestreEnum, BimestreEnumDisplay } from '@/core/enum/bimestre-tab-enum';
 import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { useAppDispatch, useAppSelector } from '@/core/hooks/use-redux';
 import mapeamentoEstudantesService from '@/core/services/mapeamento-estudantes-service';
-import { Row, Tabs } from 'antd';
-import React from 'react';
-import ModalErrosQuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/Componentes/ModalErrosQuestionarioDinamico/modalErrosQuestionarioDinamico';
-import { ContainerTabsCard } from '~/componentes/tabs/style';
+import { DefaultOptionType } from 'antd/es/select';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   setBimestreSelecionado,
   setDadosSecoesMapeamentoEstudantes,
+  setEstudantesMapeamentoEstudantes,
   setMapeamentoEstudanteId,
 } from '~/redux/modulos/mapeamentoEstudantes/actions';
 import {
   setLimparDadosQuestionarioDinamico,
   setListaSecoesEmEdicao,
 } from '~/redux/modulos/questionarioDinamico/actions';
-import { FormDinamicoMapeamentoEstudantesSecoes } from '../form-dinamico-secoes';
-
-const { TabPane } = Tabs;
 
 export const BimestresMapeamentoEstudantes: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -28,6 +25,8 @@ export const BimestresMapeamentoEstudantes: React.FC = () => {
   const bimestreSelecionado = useAppSelector(
     (store) => store.mapeamentoEstudantes.bimestreSelecionado as BimestreEnum,
   );
+
+  const [listaBimestres, setListaBimestres] = useState<DefaultOptionType[]>([]);
 
   const turmaSelecionada = usuario?.turmaSelecionada as TurmaSelecionadaDTO;
   const modalidade = turmaSelecionada?.modalidade;
@@ -40,61 +39,60 @@ export const BimestresMapeamentoEstudantes: React.FC = () => {
     return !!continuar;
   };
 
-  const onChangeTab = async (bimestre: string) => {
+  const limparDados = useCallback(() => {
+    dispatch(setBimestreSelecionado(undefined));
+
+    dispatch(setDadosSecoesMapeamentoEstudantes(undefined));
+    dispatch(setMapeamentoEstudanteId(undefined));
+    dispatch(setLimparDadosQuestionarioDinamico());
+    dispatch(setEstudantesMapeamentoEstudantes([]));
+    dispatch(setListaSecoesEmEdicao([]));
+  }, [dispatch]);
+
+  const onChange = async (bimestre: string) => {
     const permiteAlterarBimestre = await permiteOnChangeBimestre();
 
     if (permiteAlterarBimestre) {
-      dispatch(setDadosSecoesMapeamentoEstudantes(undefined));
-      dispatch(setMapeamentoEstudanteId(undefined));
-      dispatch(setLimparDadosQuestionarioDinamico());
-      dispatch(setListaSecoesEmEdicao([]));
-
+      limparDados();
       dispatch(setBimestreSelecionado(bimestre));
     }
   };
 
-  const montarDados = (bimestreComparacao: BimestreEnum, children: React.ReactNode) => {
-    if (bimestreComparacao === bimestreSelecionado) return children;
+  useEffect(() => {
+    limparDados();
 
-    return <></>;
-  };
+    const newList: DefaultOptionType[] = [
+      {
+        label: BimestreEnumDisplay[BimestreEnum.BIMESTRE_1],
+        value: BimestreEnum.BIMESTRE_1,
+      },
+      {
+        label: BimestreEnumDisplay[BimestreEnum.BIMESTRE_2],
+        value: BimestreEnum.BIMESTRE_2,
+      },
+    ];
+    if (naoEhEjaOuCelp) {
+      newList.push(
+        {
+          label: BimestreEnumDisplay[BimestreEnum.BIMESTRE_3],
+          value: BimestreEnum.BIMESTRE_3,
+        },
+        {
+          label: BimestreEnumDisplay[BimestreEnum.BIMESTRE_4],
+          value: BimestreEnum.BIMESTRE_4,
+        },
+      );
+    }
+
+    setListaBimestres(newList);
+  }, [turmaSelecionada, naoEhEjaOuCelp, limparDados]);
 
   return (
-    <>
-      <ModalErrosQuestionarioDinamico
-        mensagem={`Existem campos obrigatórios no ${BimestreEnumDisplay[bimestreSelecionado]}`}
-      />
-      <ContainerTabsCard
-        type="card"
-        onChange={onChangeTab}
-        destroyInactiveTabPane
-        activeKey={bimestreSelecionado}
-      >
-        <TabPane tab={BimestreEnumDisplay[BimestreEnum.BIMESTRE_1]} key={BimestreEnum.BIMESTRE_1}>
-          {montarDados(BimestreEnum.BIMESTRE_1, <FormDinamicoMapeamentoEstudantesSecoes />)}
-        </TabPane>
-
-        <TabPane tab={BimestreEnumDisplay[BimestreEnum.BIMESTRE_2]} key={BimestreEnum.BIMESTRE_2}>
-          {montarDados(BimestreEnum.BIMESTRE_2, <FormDinamicoMapeamentoEstudantesSecoes />)}
-        </TabPane>
-
-        {naoEhEjaOuCelp ? (
-          <TabPane tab={BimestreEnumDisplay[BimestreEnum.BIMESTRE_3]} key={BimestreEnum.BIMESTRE_3}>
-            {montarDados(BimestreEnum.BIMESTRE_3, <FormDinamicoMapeamentoEstudantesSecoes />)}
-          </TabPane>
-        ) : (
-          <></>
-        )}
-
-        {naoEhEjaOuCelp ? (
-          <TabPane tab={BimestreEnumDisplay[BimestreEnum.BIMESTRE_4]} key={BimestreEnum.BIMESTRE_4}>
-            {montarDados(BimestreEnum.BIMESTRE_4, <FormDinamicoMapeamentoEstudantesSecoes />)}
-          </TabPane>
-        ) : (
-          <></>
-        )}
-      </ContainerTabsCard>
-      {!bimestreSelecionado ? <Row justify="center">Selecione um bimestre</Row> : <></>}
-    </>
+    <Select
+      options={listaBimestres}
+      onChange={onChange}
+      placeholder="Selecione um bimestre"
+      value={bimestreSelecionado}
+    />
   );
 };

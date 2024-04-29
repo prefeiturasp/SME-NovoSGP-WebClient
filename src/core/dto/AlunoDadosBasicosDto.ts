@@ -22,4 +22,5 @@ export type AlunoDadosBasicosDto = {
   dataMatricula: string;
   processoConcluido: boolean;
   desabilitado: boolean;
+  exibirIconeCustomizado?: boolean;
 };

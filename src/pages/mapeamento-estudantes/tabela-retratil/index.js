@@ -1,5 +1,6 @@
 import { useAppSelector } from '@/core/hooks/use-redux';
-import { Col, Row } from 'antd';
+import { Col, Row, Tooltip } from 'antd';
+import { Base } from '~/componentes';
 import TabelaRetratil from '~/componentes/TabelaRetratil';
 import { BotaoOrdenarMapeamentoEstudantes } from '../botao-ordenar-estudantes';
 
@@ -12,6 +13,33 @@ export const TabelaRetratilMapeamentoEstudantes = ({
     store => store.mapeamentoEstudantes?.estudantesMapeamentoEstudantes
   );
 
+  const obterIconeEstudanteCustomizado = estudante => {
+    if (!estudante?.exibirIconeCustomizado)
+      return (
+        <i
+          className="icone-concluido fa fa-check-circle"
+          style={{ marginRight: 4 }}
+        />
+      );
+
+    if (estudante?.processoConcluido)
+      return (
+        <i
+          className="icone-concluido fa fa-check-circle"
+          style={{ color: Base.LaranjaAlerta, marginRight: 4 }}
+        />
+      );
+
+    return (
+      <Tooltip title="É necessário fazer o mapeamento">
+        <i
+          className="fa fa-exclamation-triangle"
+          style={{ color: Base.LaranjaAlerta, marginRight: 4 }}
+        />
+      </Tooltip>
+    );
+  };
+
   return (
     <>
       {estudantesMapeamentoEstudantes?.length ? (
@@ -21,10 +49,11 @@ export const TabelaRetratilMapeamentoEstudantes = ({
           </Col>
           <Col xs={24}>
             <TabelaRetratil
-              onChangeAlunoSelecionado={onChangeAlunoSelecionado}
-              permiteOnChangeAluno={permiteOnChangeAluno}
               pularDesabilitados
               alunos={estudantesMapeamentoEstudantes}
+              permiteOnChangeAluno={permiteOnChangeAluno}
+              onChangeAlunoSelecionado={onChangeAlunoSelecionado}
+              obterIconeEstudanteCustomizado={obterIconeEstudanteCustomizado}
             >
               {children}
             </TabelaRetratil>

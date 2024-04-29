@@ -5,7 +5,7 @@ const inicial = {
   estudantesMapeamentoEstudantes: [],
   desabilitarCamposMapeamentoEstudantes: false,
   dadosAlunoObjectCard: {},
-  bimestreSelecionado: '',
+  bimestreSelecionado: undefined,
   dadosSecoesMapeamentoEstudantes: [],
   mapeamentoEstudanteId: undefined,
 };

@@ -32,7 +32,7 @@ export const FormDinamicoMapeamentoEstudantesSecoes: React.FC = () => {
 
   const obterIdentificador = useCallback(async () => {
     mapeamentoEstudantesService.obterIdentificador(codigoEOL, turmaId, bimestreSelecionado);
-  }, [bimestreSelecionado, turmaId, codigoEOL]);
+  }, [bimestreSelecionado, codigoEOL]);
 
   useEffect(() => {
     obterIdentificador();

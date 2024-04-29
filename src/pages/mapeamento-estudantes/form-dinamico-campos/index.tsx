@@ -3,12 +3,13 @@ import { AlunoDadosBasicosDto } from '@/core/dto/AlunoDadosBasicosDto';
 import { QuestaoDto } from '@/core/dto/QuestaoDto';
 import { SecaoQuestionarioDto } from '@/core/dto/SecaoQuestionarioDto';
 import { TurmaSelecionadaDTO } from '@/core/dto/TurmaSelecionadaDto';
-import { useAppSelector } from '@/core/hooks/use-redux';
+import { useAppDispatch, useAppSelector } from '@/core/hooks/use-redux';
 import mapeamentoEstudantesService from '@/core/services/mapeamento-estudantes-service';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import QuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
+import { setExibirLoaderMapeamentoEstudantes } from '~/redux/modulos/mapeamentoEstudantes/actions';
 
 interface FormDinamicoMapeamentoEstudantesCamposProps {
   secao: SecaoQuestionarioDto;
@@ -17,6 +18,8 @@ interface FormDinamicoMapeamentoEstudantesCamposProps {
 export const FormDinamicoMapeamentoEstudantesCampos: React.FC<
   FormDinamicoMapeamentoEstudantesCamposProps
 > = ({ secao, mapeamentoEstudanteId }) => {
+  const dispatch = useAppDispatch();
+
   const usuario = useAppSelector((store) => store.usuario);
 
   const dadosAlunoObjectCard = useAppSelector(
@@ -38,6 +41,8 @@ export const FormDinamicoMapeamentoEstudantesCampos: React.FC<
   const [questionario, setQuestionario] = useState<QuestaoDto[]>([]);
 
   const obterQuestionario = useCallback(async () => {
+    dispatch(setExibirLoaderMapeamentoEstudantes(true));
+
     const resposta = await mapeamentoEstudantesService.obterQuestionario({
       mapeamentoEstudanteId,
       questionarioId: secao.questionarioId,
@@ -51,7 +56,9 @@ export const FormDinamicoMapeamentoEstudantesCampos: React.FC<
     } else {
       setQuestionario([]);
     }
-  }, [secao, mapeamentoEstudanteId, codigoEOL, bimestreSelecionado, turmaId]);
+
+    dispatch(setExibirLoaderMapeamentoEstudantes(false));
+  }, [dispatch, secao, mapeamentoEstudanteId, codigoEOL, bimestreSelecionado]);
 
   useEffect(() => {
     obterQuestionario();
@@ -60,7 +67,7 @@ export const FormDinamicoMapeamentoEstudantesCampos: React.FC<
   if (!questionario?.length) return <></>;
 
   return (
-    <div className="col-sm-12 mb-2">
+    <div className="col-sm-12 mb-2 mt-2">
       <QuestionarioDinamico
         dados={secao}
         turmaId={turmaId}

@@ -2,7 +2,9 @@ import { store } from '@/core/redux';
 import { cloneDeep } from 'lodash';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import {
+  limparDadosMapeamentoEstudantes,
   setDadosSecoesMapeamentoEstudantes,
+  setEstudantesMapeamentoEstudantes,
   setExibirLoaderMapeamentoEstudantes,
   setMapeamentoEstudanteId,
 } from '~/redux/modulos/mapeamentoEstudantes/actions';
@@ -12,6 +14,8 @@ import {
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, sucesso } from '~/servicos';
 import { URL_API_MAPEAMENTOS_ESTUDANTES } from '../constants/urls-api';
+import { AlunoDadosBasicosDto } from '../dto/AlunoDadosBasicosDto';
+import { AlunoSinalizadoPrioridadeMapeamentoEstudanteDto } from '../dto/AlunoSinalizadoPrioridadeMapeamentoEstudanteDto';
 import { FiltroQuestoesQuestionarioMapeamentoEstudanteDto } from '../dto/FiltroQuestoesQuestionarioMapeamentoEstudanteDto';
 import { MapeamentoEstudanteDto } from '../dto/MapeamentoEstudanteDto';
 import { MapeamentoEstudanteSecaoDto } from '../dto/MapeamentoEstudanteSecaoDto';
@@ -21,6 +25,7 @@ import { ResultadoMapeamentoEstudanteDto } from '../dto/ResultadoMapeamentoEstud
 import { SecaoQuestionarioDto } from '../dto/SecaoQuestionarioDto';
 import { TurmaSelecionadaDTO } from '../dto/TurmaSelecionadaDto';
 import { inserirRegistro, obterRegistro } from './api';
+import fechamentosTurmasService from './fechamentos-turmas-service';
 
 const obterSecoesMapeamentoEstudante = async (mapeamentoEstudanteId?: number) => {
   const { dispatch } = store;
@@ -60,9 +65,8 @@ const obterIdentificador = async (
     obterSecoesMapeamentoEstudante(resposta.dados);
   } else {
     dispatch(setMapeamentoEstudanteId());
+    dispatch(setExibirLoaderMapeamentoEstudantes(false));
   }
-
-  dispatch(setExibirLoaderMapeamentoEstudantes(false));
 };
 
 const obterQuestionario = (params: FiltroQuestoesQuestionarioMapeamentoEstudanteDto) =>
@@ -73,9 +77,45 @@ const obterQuestionario = (params: FiltroQuestoesQuestionarioMapeamentoEstudante
     },
   );
 
+const obterAlunosPriorizadosMapeamentoEstudante = async (
+  turmaId: number,
+  bimestre: number | string,
+  estudantesComparacao: AlunoDadosBasicosDto[],
+) => {
+  const resposta = await obterRegistro<AlunoSinalizadoPrioridadeMapeamentoEstudanteDto[]>(
+    `${URL_API_MAPEAMENTOS_ESTUDANTES}/alunos/turmas/${turmaId}/bimestres/${bimestre}/prioridade-sinalizada`,
+  );
+  const { dispatch } = store;
+
+  if (resposta?.sucesso) {
+    const estudantesSinalizar = resposta.dados;
+
+    const newMap = estudantesComparacao.map((estudante) => {
+      const estudanteComparacao = estudantesSinalizar.find(
+        (item) => item?.codigoAluno === estudante?.codigoEOL,
+      );
+
+      if (estudanteComparacao) {
+        estudante.processoConcluido = !!estudanteComparacao?.possuiMapeamentoEstudante;
+        estudante.exibirIconeCustomizado = true;
+      } else {
+        estudante.exibirIconeCustomizado = false;
+      }
+
+      return estudante;
+    });
+    dispatch(setEstudantesMapeamentoEstudantes(newMap));
+  } else {
+    dispatch(setEstudantesMapeamentoEstudantes(estudantesComparacao));
+  }
+
+  dispatch(setExibirLoaderMapeamentoEstudantes(false));
+};
+
 const salvar = async (
   confirmarAntesSalvar = true,
   atualizarDadosAposSalvar = false,
+  atualizarSinalizacao = true,
 ): Promise<boolean> => {
   const { dispatch } = store;
 
@@ -104,6 +144,7 @@ const salvar = async (
     dadosAlunoObjectCard,
     bimestreSelecionado,
     mapeamentoEstudanteId,
+    estudantesMapeamentoEstudantes,
   } = mapeamentoEstudantes;
 
   const turmaSelecionada = usuario?.turmaSelecionada as TurmaSelecionadaDTO;
@@ -160,6 +201,14 @@ const salvar = async (
       paramsSalvar,
     );
 
+    if (atualizarSinalizacao) {
+      obterAlunosPriorizadosMapeamentoEstudante(
+        turmaId,
+        bimestreSelecionado,
+        estudantesMapeamentoEstudantes,
+      );
+    }
+
     dispatch(setExibirLoaderMapeamentoEstudantes(false));
 
     if (atualizarDadosAposSalvar && resposta?.sucesso) {
@@ -180,4 +229,41 @@ const salvar = async (
   return false;
 };
 
-export default { salvar, obterIdentificador, obterQuestionario };
+const obterEstudantes = async () => {
+  const { dispatch } = store;
+
+  const state = store.getState();
+
+  const { mapeamentoEstudantes, usuario } = state;
+
+  const turmaSelecionada = usuario.turmaSelecionada as TurmaSelecionadaDTO;
+
+  const turmaId = turmaSelecionada?.id;
+  const codigoTurma = turmaSelecionada?.turma;
+  const anoLetivo = turmaSelecionada?.anoLetivo;
+  const periodo = turmaSelecionada?.periodo;
+
+  const { estudantesMapeamentoEstudantes, bimestreSelecionado } = mapeamentoEstudantes;
+
+  if (!estudantesMapeamentoEstudantes?.length) {
+    dispatch(setExibirLoaderMapeamentoEstudantes(true));
+
+    const resposta = await fechamentosTurmasService.obterAlunos(codigoTurma, anoLetivo, periodo);
+
+    if (resposta?.sucesso) {
+      obterAlunosPriorizadosMapeamentoEstudante(turmaId, bimestreSelecionado, resposta.dados);
+    } else {
+      dispatch(limparDadosMapeamentoEstudantes());
+      dispatch(setEstudantesMapeamentoEstudantes([]));
+      dispatch(setExibirLoaderMapeamentoEstudantes(false));
+    }
+  }
+};
+
+export default {
+  salvar,
+  obterEstudantes,
+  obterQuestionario,
+  obterIdentificador,
+  obterAlunosPriorizadosMapeamentoEstudante,
+};

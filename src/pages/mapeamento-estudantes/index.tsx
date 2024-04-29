@@ -1,7 +1,8 @@
+import { AlertaSemTurmaSelecionada } from '@/components/sgp/alertas/sem-turma-selecionada';
 import { TurmaSelecionadaDTO } from '@/core/dto/TurmaSelecionadaDto';
 import { ROUTES } from '@/core/enum/routes';
 import { useAppSelector } from '@/core/hooks/use-redux';
-import { Col } from 'antd';
+import { Col, Row } from 'antd';
 import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Card } from '~/componentes';
@@ -16,10 +17,10 @@ import {
   setListaSecoesEmEdicao,
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { verificaSomenteConsulta } from '~/servicos';
+import { BimestresMapeamentoEstudantes } from './bimestres';
 import { BotoesAcoesMapeamentoEstudantes } from './botoes-acoes';
 import { DadosMapeamentoEstudantes } from './dados';
 import { LoaderMapeamentoEstudantes } from './loader';
-import { AlertaSemTurmaSelecionada } from '@/components/sgp/alertas/sem-turma-selecionada';
 
 export const MapeamentoEstudantes = () => {
   const dispatch = useDispatch();
@@ -66,7 +67,14 @@ export const MapeamentoEstudantes = () => {
         <Card padding="24px 24px">
           {turmaSelecionada?.turma ? (
             <Col xs={24}>
-              <DadosMapeamentoEstudantes />
+              <Row gutter={[16, 16]}>
+                <Col sm={24} md={6}>
+                  <BimestresMapeamentoEstudantes />
+                </Col>
+                <Col xs={24}>
+                  <DadosMapeamentoEstudantes />
+                </Col>
+              </Row>
             </Col>
           ) : (
             <></>

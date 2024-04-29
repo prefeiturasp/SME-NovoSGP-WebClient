@@ -5,22 +5,22 @@ import {
 } from '@/@legacy/redux/modulos/questionarioDinamico/actions';
 import { TurmaSelecionadaDTO } from '@/core/dto/TurmaSelecionadaDto';
 import { useAppDispatch, useAppSelector } from '@/core/hooks/use-redux';
-import fechamentosTurmasService from '@/core/services/fechamentos-turmas-service';
 
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   limparDadosMapeamentoEstudantes,
   setDadosAlunoObjectCard,
   setEstudantesMapeamentoEstudantes,
-  setExibirLoaderMapeamentoEstudantes,
 } from '~/redux/modulos/mapeamentoEstudantes/actions';
 
 import { AlunoDadosBasicosDto } from '@/core/dto/AlunoDadosBasicosDto';
+import { BimestreEnum, BimestreEnumDisplay } from '@/core/enum/bimestre-tab-enum';
 import mapeamentoEstudantesService from '@/core/services/mapeamento-estudantes-service';
-import { BimestresMapeamentoEstudantes } from '../bimestres';
+import { Col } from 'antd';
+import ModalErrosQuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/Componentes/ModalErrosQuestionarioDinamico/modalErrosQuestionarioDinamico';
+import { FormDinamicoMapeamentoEstudantesSecoes } from '../form-dinamico-secoes';
 import { ObjectCardMapeamentoEstudantes } from '../object-card';
 import { TabelaRetratilMapeamentoEstudantes } from '../tabela-retratil';
-
 export const DadosMapeamentoEstudantes = () => {
   const dispatch = useAppDispatch();
   const usuario = useAppSelector((store) => store.usuario);
@@ -29,34 +29,22 @@ export const DadosMapeamentoEstudantes = () => {
 
   const turma = turmaSelecionada?.turma;
   const anoLetivo = turmaSelecionada?.anoLetivo;
-  const periodo = turmaSelecionada?.periodo;
 
   const dadosAlunoObjectCard = useAppSelector(
     (store) => store.mapeamentoEstudantes?.dadosAlunoObjectCard as AlunoDadosBasicosDto,
   );
 
-  const obterListaAlunos = useCallback(async () => {
-    dispatch(setExibirLoaderMapeamentoEstudantes(true));
-
-    const resposta = await fechamentosTurmasService.obterAlunos(turma, anoLetivo, periodo);
-
-    if (resposta?.sucesso) {
-      dispatch(setEstudantesMapeamentoEstudantes(resposta.dados));
-    } else {
-      dispatch(limparDadosMapeamentoEstudantes());
-      dispatch(setEstudantesMapeamentoEstudantes([]));
-    }
-
-    dispatch(setExibirLoaderMapeamentoEstudantes(false));
-  }, [dispatch, turma, anoLetivo, periodo]);
+  const bimestreSelecionado = useAppSelector(
+    (store) => store.mapeamentoEstudantes.bimestreSelecionado as BimestreEnum,
+  );
 
   useEffect(() => {
-    if (turma && anoLetivo) {
-      obterListaAlunos();
+    if (turma && anoLetivo && bimestreSelecionado) {
+      mapeamentoEstudantesService.obterEstudantes();
     } else {
       dispatch(setEstudantesMapeamentoEstudantes([]));
     }
-  }, [dispatch, turma, anoLetivo, periodo, obterListaAlunos]);
+  }, [dispatch, bimestreSelecionado]);
 
   const limparDados = () => {
     dispatch(limparDadosMapeamentoEstudantes([]));
@@ -76,16 +64,10 @@ export const DadosMapeamentoEstudantes = () => {
   const permiteOnChangeAluno = async () => {
     const continuar = await mapeamentoEstudantesService.salvar();
 
-    if (continuar) {
-      dispatch(limparDadosMapeamentoEstudantes([]));
-      dispatch(setLimparDadosQuestionarioDinamico());
-      dispatch(setListaSecoesEmEdicao([]));
-
-      return true;
-    }
-
-    return false;
+    return !!continuar;
   };
+
+  if (!bimestreSelecionado) return <></>;
 
   return (
     <TabelaRetratilMapeamentoEstudantes
@@ -93,7 +75,16 @@ export const DadosMapeamentoEstudantes = () => {
       permiteOnChangeAluno={permiteOnChangeAluno}
     >
       <ObjectCardMapeamentoEstudantes />
-      {dadosAlunoObjectCard?.codigoEOL ? <BimestresMapeamentoEstudantes /> : <></>}
+      {dadosAlunoObjectCard?.codigoEOL ? (
+        <Col xs={24} style={{ padding: 12 }}>
+          <ModalErrosQuestionarioDinamico
+            mensagem={`Existem campos obrigatórios no ${BimestreEnumDisplay[bimestreSelecionado]}`}
+          />
+          <FormDinamicoMapeamentoEstudantesSecoes />
+        </Col>
+      ) : (
+        <></>
+      )}
     </TabelaRetratilMapeamentoEstudantes>
   );
 };
