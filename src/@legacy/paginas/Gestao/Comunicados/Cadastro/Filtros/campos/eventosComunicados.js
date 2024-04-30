@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { erros } from '~/servicos';
@@ -9,19 +9,25 @@ const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaEventos, setListaEventos] = useState([]);
 
-  const { anoLetivo, codigoDre, codigoUe, modalidades, tipoCalendarioId } =
-    form.values;
+  const {
+    anoLetivo,
+    codigoDre,
+    codigoUe,
+    tipoCalendarioId,
+    modalidadeCalendarioId,
+  } = form.values;
 
   const nomeCampo = 'eventoId';
 
   const obterEventos = useCallback(async () => {
+    if (!modalidadeCalendarioId) return;
     setExibirLoader(true);
     const retorno = await ServicoComunicadoEvento.listarPor({
       tipoCalendario: tipoCalendarioId,
       anoLetivo,
       codigoDre,
       codigoUe,
-      modalidades,
+      modalidades: modalidadeCalendarioId,
     })
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
@@ -39,16 +45,22 @@ const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
       setListaEventos([]);
       form.setFieldValue(nomeCampo, undefined);
     }
-  }, [anoLetivo, codigoDre, codigoUe, modalidades, tipoCalendarioId]);
+  }, [
+    modalidadeCalendarioId,
+    anoLetivo,
+    codigoDre,
+    codigoUe,
+    tipoCalendarioId,
+  ]);
 
   useEffect(() => {
-    if (tipoCalendarioId && codigoUe && modalidades?.length) {
+    if (tipoCalendarioId && codigoUe) {
       obterEventos();
     } else {
       setListaEventos([]);
       form.setFieldValue(nomeCampo, undefined);
     }
-  }, [tipoCalendarioId, codigoUe, modalidades, obterEventos]);
+  }, [tipoCalendarioId, modalidadeCalendarioId, codigoUe, obterEventos]);
 
   return (
     <Loader loading={exibirLoader} ignorarTip>
@@ -63,7 +75,7 @@ const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
         disabled={
           !tipoCalendarioId ||
           desabilitar ||
-          !modalidades?.length ||
+          !modalidadeCalendarioId?.length ||
           listaEventos?.length === 1
         }
         showSearch
