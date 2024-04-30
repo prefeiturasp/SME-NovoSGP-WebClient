@@ -9,6 +9,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   setBimestreSelecionado,
   setDadosSecoesMapeamentoEstudantes,
+  setEstudantesMapeamentoEstudantes,
   setMapeamentoEstudanteId,
 } from '~/redux/modulos/mapeamentoEstudantes/actions';
 import {
