@@ -9,7 +9,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   setBimestreSelecionado,
   setDadosSecoesMapeamentoEstudantes,
-  setEstudantesMapeamentoEstudantes,
   setMapeamentoEstudanteId,
 } from '~/redux/modulos/mapeamentoEstudantes/actions';
 import {
@@ -40,7 +39,6 @@ export const BimestresMapeamentoEstudantes: React.FC = () => {
     dispatch(setDadosSecoesMapeamentoEstudantes(undefined));
     dispatch(setMapeamentoEstudanteId(undefined));
     dispatch(setLimparDadosQuestionarioDinamico());
-    dispatch(setEstudantesMapeamentoEstudantes([]));
     dispatch(setListaSecoesEmEdicao([]));
   }, [dispatch]);
 
