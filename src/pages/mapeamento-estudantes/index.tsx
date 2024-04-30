@@ -9,6 +9,7 @@ import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import {
   limparDadosMapeamentoEstudantes,
+  setBimestreSelecionado,
   setDesabilitarCamposMapeamentoEstudantes,
   setEstudantesMapeamentoEstudantes,
 } from '~/redux/modulos/mapeamentoEstudantes/actions';
@@ -32,6 +33,7 @@ export const MapeamentoEstudantes = () => {
   const turmaSelecionada = usuario?.turmaSelecionada as TurmaSelecionadaDTO;
 
   const limparDados = useCallback(() => {
+    dispatch(setBimestreSelecionado(undefined));
     dispatch(setEstudantesMapeamentoEstudantes([]));
     dispatch(limparDadosMapeamentoEstudantes());
     dispatch(setListaSecoesEmEdicao([]));

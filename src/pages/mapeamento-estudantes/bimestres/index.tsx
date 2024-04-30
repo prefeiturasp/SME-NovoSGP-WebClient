@@ -9,7 +9,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import {
   setBimestreSelecionado,
   setDadosSecoesMapeamentoEstudantes,
-  setEstudantesMapeamentoEstudantes,
   setMapeamentoEstudanteId,
 } from '~/redux/modulos/mapeamentoEstudantes/actions';
 import {
@@ -29,9 +28,6 @@ export const BimestresMapeamentoEstudantes: React.FC = () => {
   const [listaBimestres, setListaBimestres] = useState<DefaultOptionType[]>([]);
 
   const turmaSelecionada = usuario?.turmaSelecionada as TurmaSelecionadaDTO;
-  const modalidade = turmaSelecionada?.modalidade;
-  const naoEhEjaOuCelp =
-    Number(modalidade) !== ModalidadeEnum.EJA && Number(modalidade) !== ModalidadeEnum.CELP;
 
   const permiteOnChangeBimestre = async () => {
     const continuar = await mapeamentoEstudantesService.salvar();
@@ -40,12 +36,9 @@ export const BimestresMapeamentoEstudantes: React.FC = () => {
   };
 
   const limparDados = useCallback(() => {
-    dispatch(setBimestreSelecionado(undefined));
-
     dispatch(setDadosSecoesMapeamentoEstudantes(undefined));
     dispatch(setMapeamentoEstudanteId(undefined));
     dispatch(setLimparDadosQuestionarioDinamico());
-    dispatch(setEstudantesMapeamentoEstudantes([]));
     dispatch(setListaSecoesEmEdicao([]));
   }, [dispatch]);
 
@@ -59,8 +52,6 @@ export const BimestresMapeamentoEstudantes: React.FC = () => {
   };
 
   useEffect(() => {
-    limparDados();
-
     const newList: DefaultOptionType[] = [
       {
         label: BimestreEnumDisplay[BimestreEnum.BIMESTRE_1],
@@ -71,6 +62,9 @@ export const BimestresMapeamentoEstudantes: React.FC = () => {
         value: BimestreEnum.BIMESTRE_2,
       },
     ];
+    const modalidade = turmaSelecionada?.modalidade;
+    const naoEhEjaOuCelp =
+      Number(modalidade) !== ModalidadeEnum.EJA && Number(modalidade) !== ModalidadeEnum.CELP;
     if (naoEhEjaOuCelp) {
       newList.push(
         {
@@ -85,7 +79,7 @@ export const BimestresMapeamentoEstudantes: React.FC = () => {
     }
 
     setListaBimestres(newList);
-  }, [turmaSelecionada, naoEhEjaOuCelp, limparDados]);
+  }, [turmaSelecionada]);
 
   return (
     <Select
