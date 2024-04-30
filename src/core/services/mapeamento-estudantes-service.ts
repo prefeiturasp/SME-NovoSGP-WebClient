@@ -100,6 +100,7 @@ const obterAlunosPriorizadosMapeamentoEstudante = async (
         estudante.exibirIconeCustomizado = true;
       } else {
         estudante.exibirIconeCustomizado = false;
+        estudante.processoConcluido = false;
       }
 
       return estudante;
@@ -245,7 +246,13 @@ const obterEstudantes = async () => {
 
   const { estudantesMapeamentoEstudantes, bimestreSelecionado } = mapeamentoEstudantes;
 
-  if (!estudantesMapeamentoEstudantes?.length) {
+  if (estudantesMapeamentoEstudantes?.length) {
+    obterAlunosPriorizadosMapeamentoEstudante(
+      turmaId,
+      bimestreSelecionado,
+      estudantesMapeamentoEstudantes,
+    );
+  } else {
     dispatch(setExibirLoaderMapeamentoEstudantes(true));
 
     const resposta = await fechamentosTurmasService.obterAlunos(codigoTurma, anoLetivo, periodo);
