@@ -62,7 +62,7 @@ export const DadosMapeamentoEstudantes = () => {
   };
 
   const permiteOnChangeAluno = async () => {
-    const continuar = await mapeamentoEstudantesService.salvar();
+    const continuar = await mapeamentoEstudantesService.salvar(false);
 
     return !!continuar;
   };
