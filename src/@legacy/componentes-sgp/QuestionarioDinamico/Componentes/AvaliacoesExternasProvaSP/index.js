@@ -13,7 +13,7 @@ export const AvaliacoesExternasProvaSP = props => {
   const colunas = [
     {
       title: 'Área de conhecimento',
-      dataIndex: 'areaconhecimento',
+      dataIndex: 'areaConhecimento',
     },
     {
       title: 'Proficiência',
