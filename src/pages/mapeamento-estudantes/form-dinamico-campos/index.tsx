@@ -72,7 +72,9 @@ export const FormDinamicoMapeamentoEstudantesCampos: React.FC<
         dados={secao}
         turmaId={turmaId}
         dadosQuestionarioAtual={questionario}
-        desabilitarCampos={desabilitarCamposMapeamentoEstudantes}
+        desabilitarCampos={
+          desabilitarCamposMapeamentoEstudantes || dadosAlunoObjectCard?.desabilitado
+        }
         onChangeQuestionario={() => {
           QuestionarioDinamicoFuncoes.guardarSecaoEmEdicao(secao?.id);
         }}
