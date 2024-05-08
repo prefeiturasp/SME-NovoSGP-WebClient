@@ -1,4 +1,3 @@
-import { DefaultOptionType } from 'antd/es/select';
 import dayjs from 'dayjs';
 import { cloneDeep } from 'lodash';
 import { OPCAO_TODOS } from '~/constantes';
