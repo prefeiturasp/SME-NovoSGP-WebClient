@@ -12,9 +12,11 @@ import BuscaAtivaRegistroAcoesForm from '@/pages/busca-ativa/registro-acoes/form
 import BuscaAtivaRegistroAcoesList from '@/pages/busca-ativa/registro-acoes/list';
 import FormCadastroABAE from '@/pages/cadastro-abae/form';
 import ListCadastroABAE from '@/pages/cadastro-abae/list';
+import { DashboardBuscaAtiva } from '@/pages/dashboards/naapa/busca-ativa';
+import { MapeamentoEstudantes } from '@/pages/mapeamento-estudantes';
 import { FormRegistroColetivo } from '@/pages/naapa/registro-coletivo/form';
 import { ListRegistroColetivo } from '@/pages/naapa/registro-coletivo/list';
-import { DashboardBuscaAtiva } from '@/pages/dashboards/naapa/busca-ativa';
+import { RelatorioMapeamentoEstudantes } from '@/pages/relatorios/mapeamento-estudantes';
 import RotasTipo from '~/constantes/rotasTipo';
 import EncaminhamentoAEECadastro from '~/paginas/AEE/Encaminhamento/Cadastro/encaminhamentoAEECadastro';
 import EncaminhamentoAEELista from '~/paginas/AEE/Encaminhamento/Lista/encaminhamentoAEELista';
@@ -129,7 +131,6 @@ import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioS
 import SemPermissao from '~/paginas/SemPermissao/sem-permissao';
 import Sondagem from '~/paginas/Sondagem/sondagem';
 import { setRotas } from '~/redux/modulos/navegacao/actions';
-import { MapeamentoEstudantes } from '@/pages/mapeamento-estudantes';
 
 export interface RouteProps {
   path: string;
@@ -1884,6 +1885,15 @@ route.set(ROUTES.MAPEAMENTO_ESTUDANTES, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.MAPEAMENTO_ESTUDANTES,
+});
+
+route.set(ROUTES.RELATORIO_MAPEAMENTO_ESTUDANTES, {
+  breadcrumbName: 'Mapeamento de estudantes',
+  menu: ['Relatórios', 'Diário de Classe'],
+  parent: ROUTES.PRINCIPAL,
+  component: RelatorioMapeamentoEstudantes,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.RELATORIO_MAPEAMENTO_ESTUDANTES,
 });
 
 const getRoutesArray = () => {
