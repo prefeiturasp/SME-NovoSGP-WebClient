@@ -65,7 +65,11 @@ const ModalObjetivosAprendizagem = props => {
 
   const onSelectRow = ids => {
     if (!desabilitar) {
-      setIdsSelecionados(ids);
+      if (!idsSelecionados.length) {
+        setIdsSelecionados(ids);
+      } else {
+        setIdsSelecionados(prevIds => [...(prevIds || []), ...ids]);
+      }
       setEmEdicao(true);
     }
   };

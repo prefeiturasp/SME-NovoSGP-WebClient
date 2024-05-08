@@ -1,10 +1,13 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { TagDescricao } from '@/components/sgp/tag-totalizador';
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
-import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
+import { OPCAO_TODOS } from '~/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardNAAPA from '~/servicos/Paginas/Dashboard/ServicoDashboardNAAPA';
 import NAAPAContext from '../../naapaContext';
+import { ListaEstudantesFrequenciaRiscoAbandono } from '../ListaEstudantes';
 
 const GraficoQuantidadeNaoFrequentaramUE = () => {
   const {
@@ -14,7 +17,7 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
     ue,
     modalidade,
     semestre,
-    listaMesesReferencias2,
+    listaMesesReferencias,
   } = useContext(NAAPAContext);
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
@@ -41,7 +44,7 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
         .catch(e => erros(e))
         .finally(() => setExibirLoader(false));
 
-    if (retorno?.data?.length) {
+    if (retorno?.data?.graficosFrequencia?.length) {
       setDadosGrafico(retorno.data);
     } else {
       setDadosGrafico([]);
@@ -83,11 +86,11 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
         <div className="col-sm-12 col-md-12 col-lg-3 col-xl-3 mb-2">
           <SelectComponent
             id="meses"
-            lista={listaMesesReferencias2}
+            lista={listaMesesReferencias}
             valueOption="numeroMes"
             valueText="nome"
             label="Mês de referência"
-            disabled={listaMesesReferencias2?.length === 1}
+            disabled={listaMesesReferencias?.length === 1}
             valueSelect={meseReferencia}
             onChange={mes => {
               onChangeMes(mes);
@@ -96,17 +99,42 @@ const GraficoQuantidadeNaoFrequentaramUE = () => {
             allowClear={false}
           />
         </div>
+        {dadosGrafico?.graficosFrequencia?.length ? (
+          <div className="col-sm-12 mb-2 mt-2">
+            <TagDescricao
+              descricao={`Total de estudantes: ${
+                dadosGrafico?.totalEstudantes || 0
+              }`}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       <Loader
         loading={exibirLoader}
         className={exibirLoader ? 'text-center' : ''}
       >
-        {dadosGrafico?.length ? (
-          <GraficoBarras
-            data={dadosGrafico}
-            xAxisVisible={ue.codigo !== '-99'}
-            legendVisible={false}
-          />
+        {dadosGrafico?.graficosFrequencia?.length ? (
+          <>
+            <GraficoBarras
+              data={dadosGrafico.graficosFrequencia}
+              xAxisVisible={ue.codigo !== '-99'}
+              legendVisible={false}
+            />
+            <ListaEstudantesFrequenciaRiscoAbandono
+              anoLetivo={anoLetivo}
+              dre={dre}
+              ue={ue}
+              modalidade={modalidade}
+              semestre={semestre}
+              meseReferencia={
+                meseReferencia === OPCAO_TODOS ? 0 : meseReferencia
+              }
+              dadosGrafico={dadosGrafico.graficosFrequencia}
+              url="/v1/dashboard/naapa/frequencia/turma/evasao/sempresenca/alunos"
+            />
+          </>
         ) : !exibirLoader ? (
           <div className="text-center">Sem dados</div>
         ) : (

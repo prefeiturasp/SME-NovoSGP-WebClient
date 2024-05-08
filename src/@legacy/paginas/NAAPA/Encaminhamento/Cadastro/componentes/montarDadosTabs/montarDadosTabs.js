@@ -2,7 +2,7 @@ import { Row, Tabs } from 'antd';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 import {
   setDadosSecoesEncaminhamentoNAAPA,
@@ -106,7 +106,7 @@ const MontarDadosTabs = () => {
 
         <TabPane tab="Busca ativa escolar" key="BUSCA_ATIVA_ESCOLAR">
           {tabAtivaEncaminhamentoNAAPA === 'BUSCA_ATIVA_ESCOLAR' && (
-            <MontarDadosTabBuscaAtiva />
+            <MontarDadosTabBuscaAtiva exibirCampoSemValor={false} />
           )}
         </TabPane>
       </ContainerTabsCard>

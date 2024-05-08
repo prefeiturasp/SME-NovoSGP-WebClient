@@ -7,6 +7,7 @@ import { ROUTES } from '@/core/enum/routes';
 import consultaCriancasEstudantesAusentesService from '@/core/services/consulta-criancas-estudantes-ausentes-service';
 import { Form, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import { cloneDeep } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -94,7 +95,7 @@ const TableCriancasEstudantesAusentes: React.FC<TableCriancasEstudantesAusentesP
       bordered
       locale={{ emptyText: 'Sem dados' }}
       onRow={(estudante) => {
-        const values = form.getFieldsValue();
+        const values = form.getFieldsValue(true);
 
         const registroAcaoBuscaAtivaResposta: RegistroAcaoBuscaAtivaRespostaDto = {
           dreId: values?.dre?.id,
@@ -118,7 +119,7 @@ const TableCriancasEstudantesAusentes: React.FC<TableCriancasEstudantesAusentesP
           onClick: () => {
             navigate(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES, {
               replace: true,
-              state: registroAcaoBuscaAtivaResposta,
+              state: { ...registroAcaoBuscaAtivaResposta, dadosFiltros: cloneDeep(values) },
             });
           },
         };

@@ -30,9 +30,7 @@ const BotaoAnotacao = props => {
       ]
   );
 
-  const podeAbrirModal =
-    (aluno.permiteAnotacao && !desabilitarCampos) ||
-    (aluno.possuiAnotacao && desabilitarCampos);
+  const naoPodeAbrirModal = !aluno?.possuiAnotacao && desabilitarCampos;
 
   const onClickAnotacao = () => {
     dispatch(setDadosModalAnotacaoFrequencia(aluno));
@@ -52,16 +50,15 @@ const BotaoAnotacao = props => {
     >
       <div
         className={`d-flex justify-content-end mr-2 ${
-          !podeAbrirModal ? 'desabilitar' : ''
+          naoPodeAbrirModal ? 'desabilitar' : ''
         }`}
       >
         <ContainerBtbAnotacao
           style={{ marginTop: '-5px' }}
-          podeAbrirModal={podeAbrirModal}
           possuiAnotacao={possuiAnotacao}
           cor={cor}
           onClick={() => {
-            if (podeAbrirModal) {
+            if (!naoPodeAbrirModal) {
               onClickAnotacao();
             }
           }}
@@ -70,7 +67,7 @@ const BotaoAnotacao = props => {
             <FontAwesomeIcon
               style={{
                 fontSize: '16px',
-                cursor: podeAbrirModal ? 'pointer' : 'not-allowed',
+                cursor: naoPodeAbrirModal ? 'not-allowed' : 'pointer',
                 color: cor,
                 margin: '6.5px',
               }}
@@ -80,7 +77,7 @@ const BotaoAnotacao = props => {
             <FontAwesomeIcon
               style={{
                 fontSize: '16px',
-                cursor: podeAbrirModal ? 'pointer' : 'not-allowed',
+                cursor: naoPodeAbrirModal ? 'not-allowed' : 'pointer',
                 color: cor,
                 margin: '6.5px',
               }}

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ModalMultiLinhas } from '~/componentes';
 import { setExibirModalErrosQuestionarioDinamico } from '~/redux/modulos/questionarioDinamico/actions';
 
-const ModalErrosQuestionarioDinamico = () => {
+const ModalErrosQuestionarioDinamico = ({ mensagem = '' }) => {
   const dispatch = useDispatch();
 
   const exibirModalErrosEncaminhamento = useSelector(
@@ -14,14 +14,16 @@ const ModalErrosQuestionarioDinamico = () => {
     store => store.questionarioDinamico?.nomesSecoesComCamposObrigatorios
   );
 
-  let mensagemErro = `Existem campos obrigatórios ou inválidos sem preenchimentos nas seguintes seções: `;
+  let mensagemErro =
+    mensagem ||
+    `Existem campos obrigatórios ou inválidos sem preenchimentos nas seguintes seções: `;
 
   const onCloseErros = () => {
     dispatch(setExibirModalErrosQuestionarioDinamico(false));
   };
 
   const montarModal = () => {
-    if (nomesSecoesComCamposObrigatorios?.length) {
+    if (!mensagem && nomesSecoesComCamposObrigatorios?.length) {
       nomesSecoesComCamposObrigatorios.forEach((secaoNome, index) => {
         mensagemErro += secaoNome;
         if (index + 1 < nomesSecoesComCamposObrigatorios.length) {

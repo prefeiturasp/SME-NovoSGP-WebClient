@@ -49,7 +49,7 @@ const DrawerAtendimento = ({
 
   const encaminhamentoId = id;
 
-  const { aluno, turma, anoLetivo } = useSelector(
+  const { aluno, turma, anoLetivo, dre } = useSelector(
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
   );
 
@@ -124,6 +124,7 @@ const DrawerAtendimento = ({
         <QuestionarioDinamico
           dados={dadosTab}
           anoLetivo={anoLetivo}
+          codigoDre={dre?.codigo}
           exibirOrdemLabel={false}
           codigoTurma={turma?.codigo}
           codigoAluno={aluno?.codigoAluno}

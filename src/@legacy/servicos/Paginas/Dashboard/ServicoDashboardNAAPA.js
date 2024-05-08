@@ -76,12 +76,17 @@ class ServicoDashboardNAAPA {
     });
   };
 
-  obterQuantidadeEncaminhamentosNAAPA = (anoLetivo, dreCodigo) =>
-    api.get(
-      `${URL_PADRAO}/quantidade-em-aberto?anoLetivo=${anoLetivo}&codigoDre=${dreCodigo}`
-    );
+  obterQuantidadeEncaminhamentosNAAPA = (anoLetivo, dreId, modalidade) =>
+    api.get(`${URL_PADRAO}/quantidade-em-aberto`, {
+      params: { anoLetivo, dreId, modalidade },
+    });
 
-  obterQuantidadeEncaminhamentosNAAPASituacao = (anoLetivo, dreId, ueId) => {
+  obterQuantidadeEncaminhamentosNAAPASituacao = (
+    anoLetivo,
+    dreId,
+    ueId,
+    modalidade
+  ) => {
     let url = `${URL_PADRAO}/frequencia/turma/encaminhamentosituacao?anoLetivo=${anoLetivo}`;
 
     if (dreId && dreId !== OPCAO_TODOS) {
@@ -89,6 +94,9 @@ class ServicoDashboardNAAPA {
     }
     if (ueId && ueId !== OPCAO_TODOS) {
       url += `&ueId=${ueId}`;
+    }
+    if (modalidade && modalidade !== OPCAO_TODOS) {
+      url += `&modalidade=${modalidade}`;
     }
 
     return api.get(url);
@@ -98,6 +106,7 @@ class ServicoDashboardNAAPA {
     anoLetivo,
     dreId,
     ueId,
+    modalidade,
     mes
   ) => {
     let url = `${URL_PADRAO}/quantidade-por-profissional-mes?anoLetivo=${anoLetivo}`;
@@ -108,6 +117,10 @@ class ServicoDashboardNAAPA {
 
     if (ueId && ueId !== OPCAO_TODOS) {
       url += `&ueId=${ueId}`;
+    }
+
+    if (modalidade && modalidade !== OPCAO_TODOS) {
+      url += `&modalidade=${modalidade}`;
     }
 
     if (mes && mes !== OPCAO_TODOS) {

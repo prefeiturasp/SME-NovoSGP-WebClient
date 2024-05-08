@@ -1,13 +1,14 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { TagGrafico } from '@/@legacy/componentes-sgp';
+import { TagDescricao } from '@/components/sgp/tag-totalizador';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Loader } from '~/componentes';
 import GraficoBarras from '~/componentes-sgp/Graficos/graficoBarras';
 import { erros } from '~/servicos';
 import ServicoDashboardNAAPA from '~/servicos/Paginas/Dashboard/ServicoDashboardNAAPA';
 import NAAPAContext from '../../naapaContext';
-import { TagGrafico } from '@/@legacy/componentes-sgp';
 
 const GraficoQuantidadeEncaminhamentosNAAPASituacao = () => {
-  const { anoLetivo, dre, ue } = useContext(NAAPAContext);
+  const { anoLetivo, dre, ue, modalidade } = useContext(NAAPAContext);
 
   const [dadosGrafico, setDadosGrafico] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -29,7 +30,8 @@ const GraficoQuantidadeEncaminhamentosNAAPASituacao = () => {
       await ServicoDashboardNAAPA.obterQuantidadeEncaminhamentosNAAPASituacao(
         anoLetivo,
         dre?.id,
-        ue?.id
+        ue?.id,
+        modalidade
       )
         .catch(e => erros(e))
         .finally(() => setExibirLoader(false));
@@ -44,15 +46,15 @@ const GraficoQuantidadeEncaminhamentosNAAPASituacao = () => {
     } else {
       limparDados();
     }
-  }, [anoLetivo, dre, ue]);
+  }, [anoLetivo, dre, ue, modalidade]);
 
   useEffect(() => {
-    if (anoLetivo && dre && ue) {
+    if (anoLetivo && dre && ue && modalidade) {
       obterDadosGrafico();
     } else {
       limparDados();
     }
-  }, [anoLetivo, dre, ue, obterDadosGrafico]);
+  }, [anoLetivo, dre, ue, modalidade, obterDadosGrafico]);
 
   const qtdTotalEncaminamentos = dadosGrafico?.length
     ? dadosGrafico.reduce(
@@ -63,28 +65,31 @@ const GraficoQuantidadeEncaminhamentosNAAPASituacao = () => {
 
   return (
     <>
-      {dadosGrafico?.length ? (
-        <div className="row">
-          <div className="col-sm-12">
-            <TagGrafico
-              valor={`Total de encaminhamentos: ${qtdTotalEncaminamentos}`}
-            />
+      <div className="row">
+        <div className="col-sm-12">
+          <div className="d-flex pb-4">
+            <div className="col-sm-6">
+              {dadosGrafico?.length ? (
+                <TagDescricao
+                  descricao={`Total de encaminhamentos: ${qtdTotalEncaminamentos}`}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
+            <div className="col-sm-6">
+              {dataUltimaConsolidacaoFormatada ? (
+                <TagGrafico
+                  valor={`Data da última atualização: ${dataUltimaConsolidacaoFormatada}`}
+                />
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
         </div>
-      ) : (
-        <></>
-      )}
-      {dataUltimaConsolidacaoFormatada ? (
-        <div className="row">
-          <div className="col-sm-12 mb-2">
-            <TagGrafico
-              valor={`Data da última atualização: ${dataUltimaConsolidacaoFormatada}`}
-            />
-          </div>
-        </div>
-      ) : (
-        <></>
-      )}
+      </div>
+
       <Loader
         loading={exibirLoader}
         className={exibirLoader ? 'text-center' : ''}

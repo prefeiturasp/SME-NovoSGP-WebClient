@@ -215,7 +215,7 @@ export const ContainerBtbAnotacao = styled.div`
   color: ${props => props.cor};
   border: ${props =>
     !props?.possuiAnotacao ? 'none' : `solid 1px ${props.cor}`};
-  cursor: ${props => (props.podeAbrirModal ? 'pointer' : 'not-allowed')};
+  cursor: 'pointer';
   height: 32px;
   width: 32px;
 `;

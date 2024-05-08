@@ -1,3 +1,4 @@
+import { TagDescricao } from '@/components/sgp/tag-totalizador';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Base } from '~/componentes';
@@ -14,6 +15,8 @@ const QuantidadePlanosSituacao = props => {
   };
 
   const [exibir, setExibir] = useState(false);
+  const [semDados, setSemDados] = useState(true);
+  const [totalPlanosVigentes, setTotalPlanosVigentes] = useState();
 
   const key = 'quantidade-planos-situacao';
 
@@ -31,20 +34,42 @@ const QuantidadePlanosSituacao = props => {
         }}
       >
         {exibir ? (
-          <MontarGraficoBarras
-            anoLetivo={anoLetivo}
-            dreId={dreId}
-            ueId={ueId}
-            nomeIndiceDesc="descricaoSituacao"
-            nomeValor="quantidade"
-            ServicoObterValoresGrafico={
-              ServicoDashboardAEE.obterSituacoesPlanos
-            }
-            exibirLegenda
-            showAxisBottom={false}
-          />
+          <>
+            {!semDados ? (
+              <div className="col-md-12">
+                <TagDescricao
+                  descricao={`Total de planos vigentes: ${totalPlanosVigentes}`}
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+            <div className="col-md-12">
+              <MontarGraficoBarras
+                anoLetivo={anoLetivo}
+                dreId={dreId}
+                ueId={ueId}
+                nomeIndiceDesc="descricaoSituacao"
+                nomeValor="quantidade"
+                ServicoObterValoresGrafico={
+                  ServicoDashboardAEE.obterSituacoesPlanos
+                }
+                mapearDados={resposta => {
+                  if (resposta?.situacoesPlanos?.length) {
+                    setTotalPlanosVigentes(resposta?.totalPlanosVigentes || 0);
+                    setSemDados(false);
+                    return resposta.situacoesPlanos;
+                  }
+                  setSemDados(true);
+                  return [];
+                }}
+                exibirLegenda
+                showAxisBottom={false}
+              />
+            </div>
+          </>
         ) : (
-          ''
+          <></>
         )}
       </CardCollapse>
     </div>

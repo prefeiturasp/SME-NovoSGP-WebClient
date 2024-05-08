@@ -1,5 +1,6 @@
+import { TagDescricao } from '@/components/sgp/tag-totalizador';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import MontarGraficoBarras from '~/paginas/Dashboard/ComponentesDashboard/montarGraficoBarras';
@@ -14,6 +15,11 @@ const QuantidadeEncaminhamentosSituacao = props => {
   };
 
   const [exibir, setExibir] = useState(false);
+  const [semDados, setSemDados] = useState(true);
+  const [qtdeEncaminhamentosSituacao, setQtdeEncaminhamentosSituacao] =
+    useState(0);
+  const [totalEncaminhamentosAnalise, setTotalEncaminhamentosAnalise] =
+    useState(0);
 
   const key = 'quantidade-encaminhamentos-situacao';
 
@@ -31,22 +37,55 @@ const QuantidadeEncaminhamentosSituacao = props => {
         }}
       >
         {exibir ? (
-          <div className="col-md-12">
-            <MontarGraficoBarras
-              anoLetivo={anoLetivo}
-              dreId={dreId}
-              ueId={ueId}
-              nomeIndiceDesc="descricaoSituacao"
-              nomeValor="quantidade"
-              ServicoObterValoresGrafico={
-                ServicoDashboardAEE.obterQuantidadeEncaminhamentosPorSituacao
-              }
-              exibirLegenda
-              showAxisBottom={false}
-            />
-          </div>
+          <>
+            {!semDados ? (
+              <>
+                <div className="col-md-12 mb-2">
+                  <TagDescricao
+                    descricao={`Total de encaminhamentos: ${qtdeEncaminhamentosSituacao}`}
+                  />
+                </div>
+                <div className="col-md-12">
+                  <TagDescricao
+                    descricao={`Total de encaminhamentos em análise: ${totalEncaminhamentosAnalise}`}
+                  />
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+
+            <div className="col-md-12">
+              <MontarGraficoBarras
+                anoLetivo={anoLetivo}
+                dreId={dreId}
+                ueId={ueId}
+                nomeIndiceDesc="descricaoSituacao"
+                nomeValor="quantidade"
+                ServicoObterValoresGrafico={
+                  ServicoDashboardAEE.obterQuantidadeEncaminhamentosPorSituacao
+                }
+                exibirLegenda
+                showAxisBottom={false}
+                mapearDados={resposta => {
+                  if (resposta?.situacoesEncaminhamentoAEE?.length) {
+                    setQtdeEncaminhamentosSituacao(
+                      resposta?.qtdeEncaminhamentosSituacao || 0
+                    );
+                    setTotalEncaminhamentosAnalise(
+                      resposta?.totalEncaminhamentosAnalise || 0
+                    );
+                    setSemDados(false);
+                    return resposta.situacoesEncaminhamentoAEE;
+                  }
+                  setSemDados(true);
+                  return [];
+                }}
+              />
+            </div>
+          </>
         ) : (
-          ''
+          <></>
         )}
       </CardCollapse>
     </div>

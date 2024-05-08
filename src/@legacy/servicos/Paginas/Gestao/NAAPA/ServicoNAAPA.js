@@ -382,6 +382,11 @@ class ServicoNAAPA {
 
   obterTiposImpressaoAnexos = encaminhamentoId =>
     api.get(`${URL_PADRAO}/${encaminhamentoId}/anexos/tipos-impressao`);
+
+  obterProfissionaisEnvolvidosAtendimento = (codigoDre, codigoUe) =>
+    api.get(`${URL_PADRAO}/secoes-itinerancia/profissionais-envolvidos`, {
+      params: { codigoDre, codigoUe },
+    });
 }
 
 export default new ServicoNAAPA();

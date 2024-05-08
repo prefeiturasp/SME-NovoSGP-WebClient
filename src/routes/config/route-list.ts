@@ -12,9 +12,11 @@ import BuscaAtivaRegistroAcoesForm from '@/pages/busca-ativa/registro-acoes/form
 import BuscaAtivaRegistroAcoesList from '@/pages/busca-ativa/registro-acoes/list';
 import FormCadastroABAE from '@/pages/cadastro-abae/form';
 import ListCadastroABAE from '@/pages/cadastro-abae/list';
+import { DashboardBuscaAtiva } from '@/pages/dashboards/naapa/busca-ativa';
+import { MapeamentoEstudantes } from '@/pages/mapeamento-estudantes';
 import { FormRegistroColetivo } from '@/pages/naapa/registro-coletivo/form';
 import { ListRegistroColetivo } from '@/pages/naapa/registro-coletivo/list';
-import { DashboardBuscaAtiva } from '@/pages/dashboards/naapa/busca-ativa';
+import { RelatorioMapeamentoEstudantes } from '@/pages/relatorios/mapeamento-estudantes';
 import RotasTipo from '~/constantes/rotasTipo';
 import EncaminhamentoAEECadastro from '~/paginas/AEE/Encaminhamento/Cadastro/encaminhamentoAEECadastro';
 import EncaminhamentoAEELista from '~/paginas/AEE/Encaminhamento/Lista/encaminhamentoAEELista';
@@ -1872,6 +1874,26 @@ route.set(ROUTES.NAAPA_REGISTRO_COLETIVO_EDICAO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.NAAPA_REGISTRO_COLETIVO,
+});
+
+route.set(ROUTES.MAPEAMENTO_ESTUDANTES, {
+  breadcrumbName: 'Mapeamento de estudantes',
+  menu: ['Diário de Classe'],
+  parent: '/',
+  component: MapeamentoEstudantes,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.MAPEAMENTO_ESTUDANTES,
+});
+
+route.set(ROUTES.RELATORIO_MAPEAMENTO_ESTUDANTES, {
+  breadcrumbName: 'Mapeamento de estudantes',
+  menu: ['Relatórios', 'Diário de Classe'],
+  parent: ROUTES.PRINCIPAL,
+  component: RelatorioMapeamentoEstudantes,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.RELATORIO_MAPEAMENTO_ESTUDANTES,
 });
 
 const getRoutesArray = () => {

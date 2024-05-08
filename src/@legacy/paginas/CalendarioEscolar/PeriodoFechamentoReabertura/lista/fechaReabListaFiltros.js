@@ -121,6 +121,26 @@ const FechaReabListaFiltros = () => {
     setCodigoDre(codigo);
   };
 
+  function mesclarAbrangencias(obj1, obj2) {
+    const merged = {};
+
+    for (const key in obj1) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (obj1.hasOwnProperty(key)) {
+        merged[key] = obj1[key];
+      }
+    }
+
+    for (const key in obj2) {
+      // eslint-disable-next-line no-prototype-builtins
+      if (obj2.hasOwnProperty(key) && !merged.hasOwnProperty(key)) {
+        merged[key] = obj2[key];
+      }
+    }
+
+    return merged;
+  }
+
   const obterUes = useCallback(async () => {
     const ueTodos = { nome: 'Todas', codigo: OPCAO_TODOS };
 
@@ -142,14 +162,29 @@ const FechaReabListaFiltros = () => {
       '',
       false,
       modalidadeConvertida,
-      calendarioSelecionado.anoLetivo < new Date().getFullYear(),
+      false,
       calendarioSelecionado.anoLetivo
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoUes(false));
 
-    if (resposta?.data?.length) {
-      const lista = resposta.data;
+    const respostaHistorica = await AbrangenciaServico.buscarUes(
+      codigoDre,
+      '',
+      false,
+      modalidadeConvertida,
+      true,
+      calendarioSelecionado.anoLetivo
+    )
+      .catch(e => erros(e))
+      .finally(() => setCarregandoUes(false));
+
+    const dadosUes = Object.values(
+      mesclarAbrangencias(resposta?.data, respostaHistorica?.data)
+    );
+
+    if (dadosUes?.length) {
+      const lista = dadosUes;
 
       if (lista?.length === 1) {
         const { codigo } = lista[0];

@@ -165,7 +165,13 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
       setModalOpen(false);
     }
   };
-  const onClickVoltar = () => navigate(ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES);
+
+  const onClickVoltar = () => {
+    navigate(ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES, {
+      state: registroAcaoBuscaAtivaResposta,
+    });
+  };
+
   const onClickNovoRegistroAcao = () =>
     navigate(ROUTES.BUSCA_ATIVA_HISTORICO_REGISTRO_ACOES_NOVO, {
       state: registroAcaoBuscaAtivaResposta,

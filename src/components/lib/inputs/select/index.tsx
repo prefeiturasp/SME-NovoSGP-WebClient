@@ -25,8 +25,8 @@ const Select: React.FC<SelectProps> = (props) => {
         />
       }
       {...props}
-      filterOption={filterOption}
       showSearch
+      filterOption={filterOption}
     />
   );
 };

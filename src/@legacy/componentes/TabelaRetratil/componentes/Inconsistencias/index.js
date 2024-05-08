@@ -37,6 +37,7 @@ const InconsistenciasEstudante = props => {
         id={SGP_POPOVER_INCONSISTENCIAS_ESTUDANTE}
         mouseEnterDelay={0}
         content={renderContent(alunoComInconsistencia?.inconsistencias)}
+        placement="right"
       >
         <span>
           <FiAlert className="icone-inconsistencia" />

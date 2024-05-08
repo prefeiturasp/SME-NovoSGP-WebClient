@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import {
   setBimestreAtual,
   setDadosPrincipaisConselhoClasse,
@@ -25,7 +25,7 @@ import servicoSalvarConselhoClasse from '../servicoSalvarConselhoClasse';
 import AlertaDentroPeriodo from './AlertaDentroPeriodo/alertaDentroPeriodo';
 import AnotacoesRecomendacoes from './AnotacoesRecomendacoes/anotacoesRecomendacoes';
 
-import { CollapseDadosSecaoRelatorioPAPConselhoClasse } from './DadosPAP/Collapse';
+import { MontarQuestionarioPAPConselhoClasse } from './DadosPAP/Secoes';
 import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
@@ -65,6 +65,12 @@ const DadosConselhoClasse = props => {
   const naoEhEjaOuCelp =
     Number(modalidade) !== ModalidadeEnum.EJA &&
     Number(modalidade) !== ModalidadeEnum.CELP;
+
+  const exibirDadosPAP =
+    Number(modalidade) === ModalidadeEnum.FUNDAMENTAL &&
+    !carregando &&
+    bimestreAtual?.valor &&
+    bimestreAtual?.valor !== 'final';
 
   const limparDadosNotaPosConselhoJustificativa = useCallback(() => {
     dispatch(setExpandirLinha([]));
@@ -295,9 +301,8 @@ const DadosConselhoClasse = props => {
           <></>
         )}
 
-        {!carregando &&
-        (bimestreAtual?.valor === '1' || bimestreAtual?.valor === '4') ? (
-          <CollapseDadosSecaoRelatorioPAPConselhoClasse
+        {exibirDadosPAP ? (
+          <MontarQuestionarioPAPConselhoClasse
             bimestre={bimestreAtual.valor}
             codigoAluno={codigoEOL}
           />

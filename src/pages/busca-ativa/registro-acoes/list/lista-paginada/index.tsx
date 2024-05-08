@@ -2,14 +2,12 @@ import { ListaPaginada } from '@/@legacy/componentes';
 import { SGP_TABLE_REGISTRO_ACOES } from '@/@legacy/constantes/ids/table';
 import { FiltroRegistrosAcaoDto } from '@/core/dto/FiltroRegistrosAcaoDto';
 import { RegistroAcaoBuscaAtivaListagemDto } from '@/core/dto/RegistroAcaoBuscaAtivaListagemDto';
-import { ROUTES } from '@/core/enum/routes';
 import { formatarData } from '@/core/utils/functions';
 import { useWatch } from 'antd/es/form/Form';
 import useFormInstance from 'antd/es/form/hooks/useFormInstance';
 import { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const columns: ColumnsType<RegistroAcaoBuscaAtivaListagemDto> = [
   {
@@ -30,12 +28,8 @@ const columns: ColumnsType<RegistroAcaoBuscaAtivaListagemDto> = [
     dataIndex: 'procedimentoRealizado',
   },
   {
-    title: 'O contato ocorreu com o responsável pela criança?',
-    dataIndex: 'contatoEfetuadoResponsavel',
-  },
-  {
-    title: 'Após a ligação/visita a criança retornou para escola?',
-    dataIndex: 'criancaRetornouEscolaAposContato',
+    title: 'Conseguiu contato com o responsável?',
+    dataIndex: 'conseguiuContatoResponsavel',
   },
   {
     title: 'Inserido por',
@@ -43,9 +37,13 @@ const columns: ColumnsType<RegistroAcaoBuscaAtivaListagemDto> = [
   },
 ];
 
-const ListaPaginadaBuscaAtivaRegistroAcoes: React.FC = () => {
-  const navigate = useNavigate();
+type ListaPaginadaBuscaAtivaRegistroAcoes = {
+  onClickEditar: (row: RegistroAcaoBuscaAtivaListagemDto) => void;
+};
 
+const ListaPaginadaBuscaAtivaRegistroAcoes: React.FC<ListaPaginadaBuscaAtivaRegistroAcoes> = ({
+  onClickEditar,
+}) => {
   const form = useFormInstance();
 
   const anoLetivo = useWatch('anoLetivo', form);
@@ -56,14 +54,14 @@ const ListaPaginadaBuscaAtivaRegistroAcoes: React.FC = () => {
   const turma = useWatch('turma', form);
   const dataInicio = useWatch('dataInicio', form);
   const dataFim = useWatch('dataFim', form);
-  const nomeEstudanteCrianca = useWatch('nomeEstudanteCrianca', form);
+  const codigoNomeEstudanteCrianca = useWatch('codigoNomeEstudanteCrianca', form);
   const ordemProcedimentoRealizado = useWatch('ordemProcedimentoRealizado', form);
 
   const [filtro, setFiltro] = useState<any>();
 
   useEffect(() => {
     if (!turma) {
-      form.setFieldValue('nomeEstudanteCrianca', '');
+      form.setFieldValue('codigoNomeEstudanteCrianca', '');
       form.setFieldValue('dataInicio', undefined);
       form.setFieldValue('dataFim', undefined);
       form.setFieldValue('ordemProcedimentoRealizado', undefined);
@@ -83,7 +81,7 @@ const ListaPaginadaBuscaAtivaRegistroAcoes: React.FC = () => {
           semestre: values?.semestre?.value,
           turmaId: values?.turma?.id,
           ordemProcedimentoRealizado: values?.ordemProcedimentoRealizado || null,
-          nomeAluno: values?.nomeEstudanteCrianca,
+          codigoNomeAluno: values?.codigoNomeEstudanteCrianca,
         };
 
         if (values?.dataInicio) {
@@ -107,14 +105,9 @@ const ListaPaginadaBuscaAtivaRegistroAcoes: React.FC = () => {
     turma,
     dataInicio,
     dataFim,
-    nomeEstudanteCrianca,
+    codigoNomeEstudanteCrianca,
     ordemProcedimentoRealizado,
   ]);
-
-  const onClickEditar = (row: RegistroAcaoBuscaAtivaListagemDto) =>
-    navigate(`${ROUTES.BUSCA_ATIVA_REGISTRO_ACOES}/${row.id}`, {
-      replace: true,
-    });
 
   return (
     <ListaPaginada

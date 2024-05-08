@@ -23,6 +23,7 @@ function TabelaRetratil({
   pularDesabilitados,
   larguraAluno,
   alunosValidar,
+  obterIconeEstudanteCustomizado,
 }) {
   const [retraido, setRetraido] = useState(false);
   const [alunoSelecionado, setAlunoSelecionado] = useState(null);
@@ -141,10 +142,10 @@ function TabelaRetratil({
     }
   };
 
-  const encontrarLinhaAluno = (listAlunos, numeroChamada) => {
+  const encontrarLinhaAluno = (listAlunos, codigoEOL) => {
     if (listAlunos !== null) {
       const encontrarAluno =
-        listAlunos?.find(nome => nome.numeroChamada === numeroChamada) ?? null;
+        listAlunos?.find(nome => nome.alunoCodigo === codigoEOL) ?? null;
       if (encontrarAluno) {
         return true;
       }
@@ -179,7 +180,7 @@ function TabelaRetratil({
                 <td>
                   {item.numeroChamada}
 
-                  {encontrarLinhaAluno(alunosValidar, item.numeroChamada) ? (
+                  {encontrarLinhaAluno(alunosValidar, item.codigoEOL) ? (
                     <Tooltip title="Ausência do percurso individual ">
                       <span className="iconeAusenciaPercurso" />
                     </Tooltip>
@@ -205,6 +206,11 @@ function TabelaRetratil({
                     <div>
                       {exibirProcessoConcluido && (
                         <i className="icone-concluido fa fa-check-circle" />
+                      )}
+                      {obterIconeEstudanteCustomizado ? (
+                        obterIconeEstudanteCustomizado(item)
+                      ) : (
+                        <></>
                       )}
                       {item.nome}
                     </div>
@@ -255,6 +261,7 @@ TabelaRetratil.propTypes = {
   tituloCabecalho: t.string,
   pularDesabilitados: t.bool,
   larguraAluno: t.string,
+  obterIconeEstudanteCustomizado: t.oneOfType([t.any]),
 };
 
 TabelaRetratil.defaultProps = {
@@ -267,6 +274,7 @@ TabelaRetratil.defaultProps = {
   tituloCabecalho: 'Detalhes do estudante',
   pularDesabilitados: false,
   larguraAluno: '',
+  obterIconeEstudanteCustomizado: null,
 };
 
 export default TabelaRetratil;

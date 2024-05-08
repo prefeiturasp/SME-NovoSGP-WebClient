@@ -18,7 +18,7 @@ const colunas = [
   },
   {
     title: 'Conseguiu contato com o responsável',
-    dataIndex: 'contatoEfetuadoResponsavel',
+    dataIndex: 'conseguiuContatoResponsavel',
   },
   {
     title: 'Procedimento realizado',
@@ -30,7 +30,7 @@ const colunas = [
   },
 ];
 
-export const MontarDadosTabBuscaAtiva = () => {
+export const MontarDadosTabBuscaAtiva = ({ exibirCampoSemValor = true }) => {
   const { aluno } = useSelector(
     state => state.encaminhamentoNAAPA.dadosEncaminhamentoNAAPA
   );
@@ -66,6 +66,7 @@ export const MontarDadosTabBuscaAtiva = () => {
           mostrarDrawer={mostrarDrawer}
           onCloseDrawer={onCloseDrawer}
           registroAcaoId={registroAcaoId}
+          exibirCampoSemValor={exibirCampoSemValor}
         />
       )}
       <Col xs={24}>

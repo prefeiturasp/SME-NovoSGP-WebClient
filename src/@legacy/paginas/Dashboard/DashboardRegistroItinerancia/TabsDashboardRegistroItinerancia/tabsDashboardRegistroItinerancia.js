@@ -1,7 +1,7 @@
 import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import { ContainerTabsDashboard } from '../../style';
 import GraficosRegistroItinerancia from './GraficosRegistroItinerancia/graficosRegistroItinerancia';
 
