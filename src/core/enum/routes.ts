@@ -118,4 +118,5 @@ export enum ROUTES {
   NAAPA_REGISTRO_COLETIVO_NOVO = '/naapa/registro-coletivo/novo',
   NAAPA_REGISTRO_COLETIVO_EDICAO = '/naapa/registro-coletivo/:id',
   MAPEAMENTO_ESTUDANTES = '/diario-classe/mapeamento-estudantes',
+  RELATORIO_MAPEAMENTO_ESTUDANTES = '/relatorios/diario-classe/mapeamento-estudantes',
 }

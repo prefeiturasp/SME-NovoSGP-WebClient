@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
+import { OPCAO_TODOS } from '~/constantes';
 
 const removerTudoQueNaoEhDigito = (value: any) => `${value}`.replace(/\D/g, '');
 
@@ -19,6 +21,23 @@ const formatarDataHora = (data: string | undefined) => dayjs(data).format('DD/MM
 
 const formatarData = (data: string | undefined) => (data ? dayjs(data).format('DD/MM/YYYY') : '');
 
+const onChangeMultiSelectLabelInValueOpcaoTodos = (valores: any[], valorAtual: any[]) => {
+  let valorParaSetar = valores;
+  const valorAtualTemOpcaoTodos = valorAtual?.find((item) => item?.value === OPCAO_TODOS);
+  const valoresTemOpcaoTodos = valores?.find((item) => item?.value === OPCAO_TODOS);
+
+  if (valorAtualTemOpcaoTodos) {
+    const listaSemOpcaoTodos = cloneDeep(valores).filter((item) => item?.value !== OPCAO_TODOS);
+
+    valorParaSetar = listaSemOpcaoTodos;
+  }
+  if (!valorAtualTemOpcaoTodos && valoresTemOpcaoTodos) {
+    valorParaSetar = [valoresTemOpcaoTodos];
+  }
+
+  return valorParaSetar;
+};
+
 export {
   maskTelefone,
   removerTudoQueNaoEhDigito,
@@ -26,4 +45,5 @@ export {
   formatarDataHora,
   formatarData,
   removerNumeros,
+  onChangeMultiSelectLabelInValueOpcaoTodos,
 };

@@ -20,6 +20,7 @@ import { FiltroQuestoesQuestionarioMapeamentoEstudanteDto } from '../dto/FiltroQ
 import { MapeamentoEstudanteDto } from '../dto/MapeamentoEstudanteDto';
 import { MapeamentoEstudanteSecaoDto } from '../dto/MapeamentoEstudanteSecaoDto';
 import { MapeamentoEstudanteSecaoQuestaoDto } from '../dto/MapeamentoEstudanteSecaoQuestaoDto';
+import { OpcoesRespostaFiltroRelatorioMapeamentoEstudanteDto } from '../dto/OpcoesRespostaFiltroRelatorioMapeamentoEstudanteDto';
 import { QuestaoDto } from '../dto/QuestaoDto';
 import { ResultadoMapeamentoEstudanteDto } from '../dto/ResultadoMapeamentoEstudanteDto';
 import { SecaoQuestionarioDto } from '../dto/SecaoQuestionarioDto';
@@ -267,10 +268,16 @@ const obterEstudantes = async () => {
   }
 };
 
+const obterFiltrosOpcoesRespostaMapeamentoEstudante = () =>
+  obterRegistro<OpcoesRespostaFiltroRelatorioMapeamentoEstudanteDto>(
+    `${URL_API_MAPEAMENTOS_ESTUDANTES}/relatorios/filtros/opcoes-resposta`,
+  );
+
 export default {
   salvar,
   obterEstudantes,
   obterQuestionario,
   obterIdentificador,
   obterAlunosPriorizadosMapeamentoEstudante,
+  obterFiltrosOpcoesRespostaMapeamentoEstudante,
 };
