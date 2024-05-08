@@ -21,7 +21,7 @@ import { Col, Form, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React, { useState } from 'react';
 import { Loader } from '~/componentes';
-import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO } from '~/constantes';
+import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO, OPCAO_TODOS } from '~/constantes';
 import { sucesso } from '~/servicos';
 import { RelMapeamentoEstudantesBotoesAcoes } from './botoes-acoes';
 import { RelMapeamentoEstudantesCamposFormDinamico } from './campos-form-dinamico';
@@ -37,7 +37,11 @@ export const RelatorioMapeamentoEstudantes: React.FC = () => {
 
     let turmasCodigo = [];
     if (formValues?.turmas?.length) {
-      turmasCodigo = formValues.turmas.map((turma: AbrangenciaTurmaRetornoDto) => turma.value);
+      const todosSelecionado = formValues.turmas[0]?.value === OPCAO_TODOS;
+
+      if (!todosSelecionado) {
+        turmasCodigo = formValues.turmas.map((turma: AbrangenciaTurmaRetornoDto) => turma.value);
+      }
     }
 
     const params: FiltroRelatorioMapeamentoEstudantesDto = {
