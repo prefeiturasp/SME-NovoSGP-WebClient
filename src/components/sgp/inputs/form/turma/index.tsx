@@ -11,6 +11,7 @@ import { useWatch } from 'antd/es/form/Form';
 import { DefaultOptionType } from 'antd/es/select';
 import React, { useCallback, useEffect, useState } from 'react';
 import Select from '../../../../lib/inputs/select';
+import { onChangeMultiSelectLabelInValueOpcaoTodos } from '@/core/utils/functions';
 
 type SelectTurmaProps = {
   selectProps?: SelectProps;
@@ -144,6 +145,14 @@ const SelectTurma: React.FC<SelectTurmaProps> = ({
           initialValueConfig?.loaded ? initialValueConfig.value : formItemProps?.initialValue
         }
         getValueFromEvent={(_, value) => value}
+        normalize={(values: number[], prevValues: number[]) => {
+          if (selectProps?.mode === 'multiple' && mostrarOpcaoTodas && options?.length) {
+            const newValue = onChangeMultiSelectLabelInValueOpcaoTodos(values, prevValues);
+            return newValue;
+          }
+
+          return values;
+        }}
         {...formItemProps}
       >
         <Select
