@@ -1,12 +1,12 @@
-import { useCallback, useEffect } from 'react';
 import {
   setDadosSecoesRelatorioPAP,
   setExibirLoaderRelatorioPAP,
 } from '@/@legacy/redux/modulos/relatorioPAP/actions';
 import ServicoRelatorioPAP from '@/@legacy/servicos/Paginas/Relatorios/PAP/RelatorioPAP/ServicoRelatorioPAP';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import CollapseDadosSecaoRelatorioPAP from '../dadosSecoesRelatorioPAP/collapseDadosSecaoRelatorioPAP';
 import { erros } from '~/servicos';
+import CollapseDadosSecaoRelatorioPAP from '../dadosSecoesRelatorioPAP/collapseDadosSecaoRelatorioPAP';
 
 export const SecoesRelatorioPAP = () => {
   const dispatch = useDispatch();

@@ -4,4 +4,5 @@ export interface TurmaSelecionadaDTO {
   anoLetivo: number;
   periodo?: number;
   modalidade?: string;
+  unidadeEscolar?: string;
 }

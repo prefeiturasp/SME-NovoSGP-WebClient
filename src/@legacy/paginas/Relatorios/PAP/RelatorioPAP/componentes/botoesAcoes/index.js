@@ -16,6 +16,7 @@ import {
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { BotaoCopiarPAP } from '../btn-copiar';
 
 const BotoesAcoesRelatorioPAP = () => {
   const dispatch = useDispatch();
@@ -114,6 +115,15 @@ const BotoesAcoesRelatorioPAP = () => {
           border
           onClick={() => onClickCancelar()}
           disabled={disabledBtnDefault || !estudantesRelatorioPAP.length}
+        />
+      </Col>
+      <Col>
+        <BotaoCopiarPAP
+          disabled={
+            turmaSelecionadaEhInfantil ||
+            desabilitarCamposRelatorioPAP ||
+            questionarioDinamicoEmEdicao
+          }
         />
       </Col>
       <Col>
