@@ -11,6 +11,12 @@ export const BotaoCopiarPAP = ({ disabled = true }) => {
 
   const [mostrarDrawer, setMostrarDrawer] = useState(false);
 
+  const desabilitar =
+    disabled ||
+    !estudanteSelecionadoRelatorioPAP ||
+    estudanteSelecionadoRelatorioPAP?.desabilitado ||
+    !estudanteSelecionadoRelatorioPAP?.processoConcluido;
+
   const onClickCopiar = () => {
     setMostrarDrawer(true);
   };
@@ -25,7 +31,7 @@ export const BotaoCopiarPAP = ({ disabled = true }) => {
         color={Colors.Roxo}
         border
         onClick={() => onClickCopiar()}
-        disabled={disabled || !estudanteSelecionadoRelatorioPAP}
+        disabled={desabilitar}
       />
       {mostrarDrawer && <DrawerCopiarPAP onCloseDrawer={onCloseDrawer} />}
     </>

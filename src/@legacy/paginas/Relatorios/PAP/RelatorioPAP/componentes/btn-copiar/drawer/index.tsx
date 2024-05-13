@@ -110,7 +110,8 @@ export const DrawerCopiarPAP: React.FC<DrawerCopiarPAPProps> = ({ onCloseDrawer 
     }));
 
     const questaoClonadas = cloneDeep(listaQuestoes);
-    const secoes: CopiarSecaoDto[] = _(questaoClonadas)
+    const questoesSelecionadas = questaoClonadas.filter((questao: any) => !!questao?.selecionada);
+    const secoes: CopiarSecaoDto[] = _(questoesSelecionadas)
       .groupBy((x) => x.secaoId)
       .map((questoes, secaoId) => ({ secaoId, questoes }))
       .map((secao) => ({
