@@ -14,7 +14,7 @@ export const BotaoCopiarPAP = ({ disabled = true }) => {
   const desabilitar =
     disabled ||
     !estudanteSelecionadoRelatorioPAP ||
-    // estudanteSelecionadoRelatorioPAP?.desabilitado ||
+    estudanteSelecionadoRelatorioPAP?.desabilitado ||
     !estudanteSelecionadoRelatorioPAP?.processoConcluido;
 
   const onClickCopiar = () => {
