@@ -57,6 +57,7 @@ export const ListaEstudantesPAP: React.FC<ListaEstudantesPAP> = ({
     if (retorno?.data?.length) {
       const lista: AlunoDadosBasicosDto[] = retorno.data.filter(
         (estudante: AlunoDadosBasicosDto) =>
+          !estudante?.desabilitado &&
           estudante?.codigoEOL !== estudanteSelecionadoRelatorioPAP?.codigoEOL,
       );
       setDataSource(lista);

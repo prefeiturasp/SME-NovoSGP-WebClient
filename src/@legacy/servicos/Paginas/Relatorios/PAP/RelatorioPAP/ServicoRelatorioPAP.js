@@ -185,6 +185,14 @@ class ServicoRelatorioPAP {
           estudanteAtualIndex
         ].processoConcluido = true;
 
+        if (!limparDadosAoSalvar) {
+          dispatch(
+            setEstudanteSelecionadoRelatorioPAP({
+              ...estudanteSelecionadoRelatorioPAP,
+              processoConcluido: true,
+            })
+          );
+        }
         dispatch(setEstudantesRelatorioPAP([...estudantesRelatorioPAPCloned]));
       }
 
