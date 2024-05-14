@@ -177,7 +177,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
   return (
     <Row gutter={24}>
       <Col xs={24} md={12} lg={8}>
-        <Form.Item shouldUpdate>
+        <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
           {(form) => {
             const ue = form.getFieldValue('ue');
             const disabled = !ue?.codigo;
@@ -211,7 +211,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
         </Form.Item>
       </Col>
       <Col xs={24} md={12} lg={16}>
-        <Form.Item shouldUpdate>
+        <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
           {(form) => {
             const localizadorEstudanteDados: React.ReactNode[] = form.getFieldValue(
               'localizadorEstudanteDados',
