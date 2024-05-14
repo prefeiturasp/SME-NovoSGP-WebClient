@@ -1,4 +1,5 @@
 import { CadastroAcessoABAEDto } from '../dto/CadastroAcessoABAEDto';
+import { NomeCpfABAEDto } from '../dto/NomeCpfABAEDto';
 import { alterarRegistro, deletarRegistro, inserirRegistro, obterRegistro } from './api';
 
 const URL_DEFAULT = 'v1/abae';
@@ -15,9 +16,20 @@ const buscarPorId = (id: number | string) =>
 const excluir = (id: number | string) =>
   deletarRegistro<CadastroAcessoABAEDto>(`${URL_DEFAULT}/${id}`);
 
+const buscarABAEs = (
+  codigoDre: string,
+  codigoUe: string,
+  codigoRf?: string,
+  nomeServidor?: string,
+) =>
+  obterRegistro<NomeCpfABAEDto[]>(`${URL_DEFAULT}/dres/${codigoDre}/ues/${codigoUe}/funcionarios`, {
+    params: { codigoRf, nomeServidor },
+  });
+
 export default {
   incluir,
   alterar,
   buscarPorId,
   excluir,
+  buscarABAEs,
 };

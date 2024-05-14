@@ -16,6 +16,7 @@ import { DashboardBuscaAtiva } from '@/pages/dashboards/naapa/busca-ativa';
 import { MapeamentoEstudantes } from '@/pages/mapeamento-estudantes';
 import { FormRegistroColetivo } from '@/pages/naapa/registro-coletivo/form';
 import { ListRegistroColetivo } from '@/pages/naapa/registro-coletivo/list';
+import { RelatorioNAAPABuscaAtiva } from '@/pages/relatorios/NAAPA/busca-ativa';
 import { RelatorioMapeamentoEstudantes } from '@/pages/relatorios/mapeamento-estudantes';
 import RotasTipo from '~/constantes/rotasTipo';
 import EncaminhamentoAEECadastro from '~/paginas/AEE/Encaminhamento/Cadastro/encaminhamentoAEECadastro';
@@ -1894,6 +1895,15 @@ route.set(ROUTES.RELATORIO_MAPEAMENTO_ESTUDANTES, {
   component: RelatorioMapeamentoEstudantes,
   temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_MAPEAMENTO_ESTUDANTES,
+});
+
+route.set(ROUTES.RELATORIO_BUSCA_ATIVA, {
+  breadcrumbName: 'Busca Ativa',
+  menu: ['Relatórios', 'NAAPA'],
+  parent: ROUTES.PRINCIPAL,
+  component: RelatorioNAAPABuscaAtiva,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.RELATORIO_BUSCA_ATIVA,
 });
 
 const getRoutesArray = () => {
