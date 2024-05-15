@@ -9,7 +9,7 @@ export interface FiltroRelatorioBuscasAtivasDto {
   turmasCodigo: string[];
   alunoCodigo: string;
   cpfABAE: string;
-  dataInicioResgitroAcao?: string;
+  dataInicioRegistroAcao?: string;
   dataFimRegistroAcao?: string;
   opcoesRespostaIdMotivoAusencia: number[];
 }

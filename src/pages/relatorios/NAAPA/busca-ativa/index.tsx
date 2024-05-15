@@ -65,7 +65,7 @@ export const RelatorioNAAPABuscaAtiva: React.FC = () => {
     }
 
     if (formValues?.dataInicio) {
-      params.dataInicioResgitroAcao = dayjs(formValues.dataInicio).format('YYYY-MM-DD');
+      params.dataInicioRegistroAcao = dayjs(formValues.dataInicio).format('YYYY-MM-DD');
     }
 
     if (formValues?.dataFim) {
