@@ -121,7 +121,8 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
       ));
 
       form.setFieldValue('localizadorEstudanteDados', options);
-      form.setFieldValue('localizadorEstudante', primeiroEstudante);
+      if (retorno?.data?.items?.length === 1)
+        form.setFieldValue('localizadorEstudante', primeiroEstudante);
 
       if (codigo) {
         setDesabilitarCampo({
