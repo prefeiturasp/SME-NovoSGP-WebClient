@@ -94,7 +94,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
     if (codigoTurma) {
       params.codigoTurma = codigoTurma;
     }
-    if (codigoTurmas) {
+    if (codigoTurmas?.length) {
       params.codigoTurmas = codigoTurmas;
     }
 
