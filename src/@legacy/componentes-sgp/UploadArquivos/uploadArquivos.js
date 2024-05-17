@@ -82,15 +82,13 @@ const UploadArquivos = props => {
     totalDeUploads ?? QUANTIDADE_MAXIMA_UPLOAD_FILES;
 
   useEffect(() => {
-    if (podeAdicionarAnexo()) {
-      if (defaultFileList?.length) {
-        const novoMap = defaultFileList.map(item => {
-          return { ...item, status: 'done' };
-        });
-        setListaDeArquivos(novoMap);
-      } else {
-        setListaDeArquivos([]);
-      }
+    if (defaultFileList?.length) {
+      const novoMap = defaultFileList.map(item => {
+        return { ...item, status: 'done' };
+      });
+      setListaDeArquivos(novoMap);
+    } else {
+      setListaDeArquivos([]);
     }
   }, [defaultFileList]);
 
@@ -99,8 +97,8 @@ const UploadArquivos = props => {
     return tamanhoArquivo > tamanho;
   };
 
-  const podeAdicionarAnexo = () => {
-    const retorno = listaDeArquivos?.length < totalDeArquivosNoUploado;
+  const podeAdicionarAnexo = qdadeArquivosLista => {
+    const retorno = qdadeArquivosLista < totalDeArquivosNoUploado;
     return retorno;
   };
 
@@ -118,21 +116,21 @@ const UploadArquivos = props => {
   };
 
   const beforeUploadDefault = arquivo => {
-    if (podeAdicionarAnexo()) {
-      if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
-        erro('Formato não permitido');
-        return false;
-      }
-
-      if (excedeuLimiteMaximo(arquivo)) {
-        erro(`Tamanho máximo ${tamanho} MB`);
-        return false;
-      }
-      return true;
-    } else {
+    if (!podeAdicionarAnexo(listaDeArquivos?.length)) {
       erro(`Você só pode adicionar ${totalDeArquivosNoUploado} anexos`);
       return false;
     }
+
+    if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
+      erro('Formato não permitido');
+      return false;
+    }
+
+    if (excedeuLimiteMaximo(arquivo)) {
+      erro(`Tamanho máximo ${tamanho} MB`);
+      return false;
+    }
+    return true;
   };
 
   const onDownload = arquivo => {
@@ -167,24 +165,24 @@ const UploadArquivos = props => {
   };
 
   const atualizaListaArquivos = (fileList, file) => {
-    if (podeAdicionarAnexo()) {
-      const novaLista = fileList.filter(item => item.uid !== file.uid);
-      const novoMap = [...novaLista];
-      setListaDeArquivos(novoMap);
-      onChangeListaArquivos(novoMap);
+    const novaLista = fileList.filter(item => item.uid !== file.uid);
+    const novoMap = [...novaLista];
+    setListaDeArquivos(novoMap);
+    onChangeListaArquivos(novoMap);
 
-      if (form && form.setFieldValue) {
-        form.setFieldValue(name, novoMap);
-        form.setFieldTouched(name, true);
-      }
-    } else {
-      erro(`Você só pode adicionar ${totalDeArquivosNoUploado} anexos`);
-      return false;
+    if (form && form.setFieldValue) {
+      form.setFieldValue(name, novoMap);
+      form.setFieldTouched(name, true);
     }
   };
 
   const onChange = ({ file, fileList }) => {
     const { status } = file;
+    if (!podeAdicionarAnexo(fileList.length - 1)) {
+      atualizaListaArquivos(fileList, file);
+      return;
+    }
+
     if (excedeuLimiteMaximo(file)) {
       atualizaListaArquivos(fileList, file);
       return;

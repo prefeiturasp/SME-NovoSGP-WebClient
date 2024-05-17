@@ -67,17 +67,6 @@ const InformesCadastro = () => {
     perfis: Yup.string().required(textoCampoObrigatorio),
     titulo: Yup.string().required(textoCampoObrigatorio),
     texto: Yup.string().required(textoCampoObrigatorio),
-    listaArquivos: Yup.string().test(
-      'validaListaArquivos',
-      'Campo obrigatório',
-      function validar() {
-        const { listaArquivos } = this.parent;
-        if (listaArquivos?.length > 0) {
-          return true;
-        }
-        return false;
-      }
-    ),
   });
 
   const obterDados = useCallback(async () => {
