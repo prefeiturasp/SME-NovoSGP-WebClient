@@ -54,6 +54,7 @@ const InformesCadastro = () => {
     perfis: undefined,
     titulo: '',
     texto: '',
+    listaArquivos: [],
   };
 
   const [initialValues, setInitialValues] = useState(id ? null : inicial);
@@ -86,6 +87,7 @@ const InformesCadastro = () => {
         texto: resposta.data.texto,
         dreCodigo: dreNome,
         ueCodigo: ueNome,
+        listaArquivos: [],
       };
 
       if (dreNome) {
@@ -101,6 +103,20 @@ const InformesCadastro = () => {
         valores.listaPerfis = perfis;
       }
 
+      let arquivosExistente = resposta?.data?.anexos?.length
+        ? resposta.data.anexos
+        : [];
+
+      if (arquivosExistente?.length) {
+        arquivosExistente = arquivosExistente.map(arquivo => ({
+          uid: arquivo.codigo,
+          xhr: arquivo.codigo,
+          name: arquivo.nome,
+          status: 'done',
+          documentoId: resposta.data.id,
+        }));
+      }
+      valores.listaArquivos = arquivosExistente;
       valores.auditoria = {
         ...resposta?.data?.auditoria,
         alteradoRf: resposta.data?.alteradoRF,

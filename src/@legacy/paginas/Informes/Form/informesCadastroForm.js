@@ -5,13 +5,19 @@ import PropTypes from 'prop-types';
 import { useEffect, useRef } from 'react';
 import { Auditoria, CampoTexto, JoditEditor } from '~/componentes';
 import { Dre, Ue } from '~/componentes-sgp/inputs';
+import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
+import { SGP_UPLOAD_INFORMES } from '~/constantes/ids/upload';
+import { erros, sucesso } from '~/servicos';
+import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
 
 const InformesCadastroForm = props => {
-  const { form, desabilitarCampos } = props;
+  const { form, desabilitarCampos, setExibirLoader } = props;
 
   const auditoria = form?.initialValues?.auditoria;
   const textoInicial = form?.initialValues?.texto;
   const modoEdicao = form?.values?.modoEdicao;
+  const TAMANHO_MAXIMO_UPLOAD = 10;
+  const TOTAL_ARQUIVOS_UPLOAD = 10;
 
   const editorRef = useRef(null);
 
@@ -20,6 +26,38 @@ const InformesCadastroForm = props => {
       editorRef?.current?.setEditorValue(textoInicial);
     }
   }, [modoEdicao, textoInicial]);
+
+  const tiposArquivosPermitidos =
+    '.doc, .docx, .xls, .xlsx, .pdf, .png, .jpeg , .jpg';
+  const textoFormatoUpload =
+    'Permitido somente um arquivo. Tipo permitido doc, docx, xls, xlsx, PDF, PNG, JPEG e JPG';
+
+  const onRemoveFile = async arquivo => {
+    if (!desabilitarCampos) {
+      const codigoArquivo = arquivo?.xhr;
+      if (arquivo.arquivoId) {
+        form.setFieldValue('listaArquivos', []);
+        sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
+        return true;
+      }
+      if (!codigoArquivo) return false;
+
+      setExibirLoader(true);
+
+      const resposta = await ServicoArmazenamento.removerArquivo(
+        codigoArquivo
+      ).catch(e => erros(e));
+
+      setExibirLoader(false);
+
+      if (resposta?.status === 200) {
+        sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
+        return true;
+      }
+      return false;
+    }
+    return false;
+  };
 
   return (
     <Col span={24}>
@@ -69,6 +107,26 @@ const InformesCadastroForm = props => {
             desabilitar={desabilitarCampos}
             labelRequired
             onChange={() => {
+              form.setFieldValue('modoEdicao', true);
+            }}
+          />
+        </Col>
+        <Col span={24}>
+          <UploadArquivos
+            form={form}
+            name="listaArquivos"
+            id={SGP_UPLOAD_INFORMES}
+            desabilitarGeral={desabilitarCampos}
+            desabilitarUpload={false}
+            textoFormatoUpload={textoFormatoUpload}
+            tiposArquivosPermitidos={tiposArquivosPermitidos}
+            onRemove={onRemoveFile}
+            urlUpload="v1/informes/upload"
+            tamanhoMaximoArquivo={TAMANHO_MAXIMO_UPLOAD}
+            totalDeUploads={TOTAL_ARQUIVOS_UPLOAD}
+            defaultFileList={form?.initialValues?.listaArquivos || []}
+            label="Arquivo"
+            onChangeListaArquivos={() => {
               form.setFieldValue('modoEdicao', true);
             }}
           />
