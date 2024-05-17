@@ -47,6 +47,7 @@ export const MensagemCampoObrigatorio = styled.span`
 `;
 
 const TAMANHO_MAXIMO_UPLOAD = 100;
+const QUANTIDADE_MAXIMA_UPLOAD_FILES = 100;
 
 const UploadArquivos = props => {
   const {
@@ -70,24 +71,37 @@ const UploadArquivos = props => {
     id,
     label,
     labelRequired,
+    tamanhoMaximoArquivo,
+    totalDeUploads,
   } = props;
 
   const [listaDeArquivos, setListaDeArquivos] = useState([...defaultFileList]);
 
+  const tamanho = tamanhoMaximoArquivo ?? TAMANHO_MAXIMO_UPLOAD;
+  const totalDeArquivosNoUploado =
+    totalDeUploads ?? QUANTIDADE_MAXIMA_UPLOAD_FILES;
+
   useEffect(() => {
-    if (defaultFileList?.length) {
-      const novoMap = defaultFileList.map(item => {
-        return { ...item, status: 'done' };
-      });
-      setListaDeArquivos(novoMap);
-    } else {
-      setListaDeArquivos([]);
+    if (podeAdicionarAnexo()) {
+      if (defaultFileList?.length) {
+        const novoMap = defaultFileList.map(item => {
+          return { ...item, status: 'done' };
+        });
+        setListaDeArquivos(novoMap);
+      } else {
+        setListaDeArquivos([]);
+      }
     }
   }, [defaultFileList]);
 
   const excedeuLimiteMaximo = arquivo => {
     const tamanhoArquivo = arquivo.size / 1024 / 1024;
-    return tamanhoArquivo > TAMANHO_MAXIMO_UPLOAD;
+    return tamanhoArquivo > tamanho;
+  };
+
+  const podeAdicionarAnexo = () => {
+    const retorno = listaDeArquivos?.length < totalDeArquivosNoUploado;
+    return retorno;
   };
 
   const onRemoveDefault = async arquivo => {
@@ -104,17 +118,21 @@ const UploadArquivos = props => {
   };
 
   const beforeUploadDefault = arquivo => {
-    if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
-      erro('Formato não permitido');
+    if (podeAdicionarAnexo()) {
+      if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
+        erro('Formato não permitido');
+        return false;
+      }
+
+      if (excedeuLimiteMaximo(arquivo)) {
+        erro(`Tamanho máximo ${tamanho} MB`);
+        return false;
+      }
+      return true;
+    } else {
+      erro(`Você só pode adicionar ${totalDeArquivosNoUploado} anexos`);
       return false;
     }
-
-    if (excedeuLimiteMaximo(arquivo)) {
-      erro('Tamanho máximo 100 MB');
-      return false;
-    }
-
-    return true;
   };
 
   const onDownload = arquivo => {
@@ -128,7 +146,6 @@ const UploadArquivos = props => {
 
   const customRequestDefault = options => {
     const { onSuccess, onError, file, onProgress } = options;
-
     const fmData = new FormData();
     const config = {
       headers: { 'content-type': 'multipart/form-data' },
@@ -150,20 +167,24 @@ const UploadArquivos = props => {
   };
 
   const atualizaListaArquivos = (fileList, file) => {
-    const novaLista = fileList.filter(item => item.uid !== file.uid);
-    const novoMap = [...novaLista];
-    setListaDeArquivos(novoMap);
-    onChangeListaArquivos(novoMap);
+    if (podeAdicionarAnexo()) {
+      const novaLista = fileList.filter(item => item.uid !== file.uid);
+      const novoMap = [...novaLista];
+      setListaDeArquivos(novoMap);
+      onChangeListaArquivos(novoMap);
 
-    if (form && form.setFieldValue) {
-      form.setFieldValue(name, novoMap);
-      form.setFieldTouched(name, true);
+      if (form && form.setFieldValue) {
+        form.setFieldValue(name, novoMap);
+        form.setFieldTouched(name, true);
+      }
+    } else {
+      erro(`Você só pode adicionar ${totalDeArquivosNoUploado} anexos`);
+      return false;
     }
   };
 
   const onChange = ({ file, fileList }) => {
     const { status } = file;
-
     if (excedeuLimiteMaximo(file)) {
       atualizaListaArquivos(fileList, file);
       return;

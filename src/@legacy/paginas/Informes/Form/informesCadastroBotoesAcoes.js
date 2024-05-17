@@ -85,6 +85,7 @@ const InformesCadastroBotoesAcoes = props => {
       titulo,
       perfis,
       listaPerfis,
+      listaArquivos,
     } = valores;
 
     const ueSelecionada = listaUes.find(
@@ -101,6 +102,7 @@ const InformesCadastroBotoesAcoes = props => {
       ueId: ueSelecionada.id,
       texto,
       titulo,
+      arquivos: listaArquivos.map(item => item.xhr),
     };
 
     if (perfis?.length) {
