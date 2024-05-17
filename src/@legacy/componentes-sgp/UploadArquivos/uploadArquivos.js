@@ -101,7 +101,6 @@ const UploadArquivos = props => {
 
   const podeAdicionarAnexo = () => {
     const retorno = listaDeArquivos?.length < totalDeArquivosNoUploado;
-    console.log(retorno);
     return retorno;
   };
 
@@ -169,7 +168,6 @@ const UploadArquivos = props => {
 
   const atualizaListaArquivos = (fileList, file) => {
     if (podeAdicionarAnexo()) {
-      console.log('atualizaListaArquivos');
       const novaLista = fileList.filter(item => item.uid !== file.uid);
       const novoMap = [...novaLista];
       setListaDeArquivos(novoMap);
@@ -186,10 +184,6 @@ const UploadArquivos = props => {
   };
 
   const onChange = ({ file, fileList }) => {
-    if (podeAdicionarAnexo()) {
-      console.log('saiuuuuuuuuuu');
-      return;
-    }
     const { status } = file;
     if (excedeuLimiteMaximo(file)) {
       atualizaListaArquivos(fileList, file);
@@ -215,7 +209,6 @@ const UploadArquivos = props => {
         form.setFieldTouched(name, true);
       }
     }
-    sucesso('não permitido onChange');
     setListaDeArquivos(novoMap);
     onChangeListaArquivos(novoMap);
   };
