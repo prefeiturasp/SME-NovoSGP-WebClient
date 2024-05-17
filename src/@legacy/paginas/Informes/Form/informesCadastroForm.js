@@ -17,7 +17,7 @@ const InformesCadastroForm = props => {
   const textoInicial = form?.initialValues?.texto;
   const modoEdicao = form?.values?.modoEdicao;
   const TAMANHO_MAXIMO_UPLOAD = 10;
-  const TOTAL_ARQUIVOS_UPLOAD = 1;
+  const TOTAL_ARQUIVOS_UPLOAD = 10;
 
   const editorRef = useRef(null);
 
