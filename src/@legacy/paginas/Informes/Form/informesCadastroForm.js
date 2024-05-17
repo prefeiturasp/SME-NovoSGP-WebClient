@@ -35,8 +35,7 @@ const InformesCadastroForm = props => {
   const onRemoveFile = async arquivo => {
     if (!desabilitarCampos) {
       const codigoArquivo = arquivo?.xhr;
-
-      if (arquivo.documentoId) {
+      if (arquivo.arquivoId) {
         form.setFieldValue('listaArquivos', []);
         sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
         return true;
@@ -127,7 +126,6 @@ const InformesCadastroForm = props => {
             totalDeUploads={TOTAL_ARQUIVOS_UPLOAD}
             defaultFileList={form?.initialValues?.listaArquivos || []}
             label="Arquivo"
-            labelRequired
             onChangeListaArquivos={() => {
               form.setFieldValue('modoEdicao', true);
             }}
