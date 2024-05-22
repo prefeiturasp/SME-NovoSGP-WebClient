@@ -1,5 +1,4 @@
-import { DefaultOptionType } from 'antd/es/select';
-import dayjs from 'dayjs';
+import { Dayjs, dayjs } from '@/core/date/dayjs';
 import { cloneDeep } from 'lodash';
 import { OPCAO_TODOS } from '~/constantes';
 
@@ -39,6 +38,19 @@ const onChangeMultiSelectLabelInValueOpcaoTodos = (valores: any[], valorAtual: a
   return valorParaSetar;
 };
 
+const desabilitarAnosPassadosFuturos = (dataComparacao?: Dayjs, anoLetivo?: number): boolean => {
+  if (dataComparacao) {
+    const dataHoje = anoLetivo ? dayjs(`${anoLetivo}-01-01`) : dayjs();
+
+    const ehDataAnoPassado = dataComparacao.isBefore(dataHoje.startOf('year'), 'day');
+
+    const ehDataAnoFuturo = dataComparacao.isAfter(dataHoje.endOf('year'), 'day');
+
+    return !!(ehDataAnoPassado || ehDataAnoFuturo);
+  }
+  return false;
+};
+
 export {
   maskTelefone,
   removerTudoQueNaoEhDigito,
@@ -47,4 +59,5 @@ export {
   formatarData,
   removerNumeros,
   onChangeMultiSelectLabelInValueOpcaoTodos,
+  desabilitarAnosPassadosFuturos,
 };
