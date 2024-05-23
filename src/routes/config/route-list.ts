@@ -18,6 +18,7 @@ import { FormRegistroColetivo } from '@/pages/naapa/registro-coletivo/form';
 import { ListRegistroColetivo } from '@/pages/naapa/registro-coletivo/list';
 import { RelatorioNAAPABuscaAtiva } from '@/pages/relatorios/NAAPA/busca-ativa';
 import { RelatorioMapeamentoEstudantes } from '@/pages/relatorios/mapeamento-estudantes';
+import { RelatorioProdutividade } from '@/pages/relatorios/produtividade';
 import RotasTipo from '~/constantes/rotasTipo';
 import EncaminhamentoAEECadastro from '~/paginas/AEE/Encaminhamento/Cadastro/encaminhamentoAEECadastro';
 import EncaminhamentoAEELista from '~/paginas/AEE/Encaminhamento/Lista/encaminhamentoAEELista';
@@ -1904,6 +1905,15 @@ route.set(ROUTES.RELATORIO_BUSCA_ATIVA, {
   component: RelatorioNAAPABuscaAtiva,
   temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_BUSCA_ATIVA,
+});
+
+route.set(ROUTES.RELATORIO_PRODUTIVIDADE, {
+  breadcrumbName: 'Produtividade',
+  menu: ['Relatórios', 'Frequência'],
+  parent: ROUTES.PRINCIPAL,
+  component: RelatorioProdutividade,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.RELATORIO_PRODUTIVIDADE,
 });
 
 const getRoutesArray = () => {
