@@ -1,8 +1,10 @@
+import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
+import { ROUTES } from '@/core/enum/routes';
 import { Divider } from 'antd';
 import { Form, Formik } from 'formik';
 import * as moment from 'moment';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Loader, momentSchema } from '~/componentes';
@@ -12,9 +14,9 @@ import {
   setFormComunicados,
   setModoEdicaoCadastroComunicados,
 } from '~/redux/modulos/comunicados/actions';
-import { erros, ServicoComunicados } from '~/servicos';
-import AuditoriaCadastroComunicados from '../auditoriaCadastroComunicados';
+import { ServicoComunicados, erros } from '~/servicos';
 import ListaDestinatarios from '../ListaDestinatarios/listaDestinatarios';
+import AuditoriaCadastroComunicados from '../auditoriaCadastroComunicados';
 import AnoEscolarComunicados from './campos/anoEscolarComunicados';
 import AnoLetivoComunicados from './campos/anoLetivoComunicados';
 import CriancasEstudantesComunicados from './campos/criancasEstudantesComunicados';
@@ -30,8 +32,6 @@ import TituloComunicados from './campos/tituloComunicados';
 import TurmasComunicados from './campos/turmasComunicados';
 import UeComunicados from './campos/ueComunicados';
 import InfoEstudantesReceberComunicados from './infoEstudantesReceberComunicado';
-import { ROUTES } from '@/core/enum/routes';
-import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
 const FormCadastroComunicados = props => {
   const { comunicadoId, somenteConsulta } = props;
@@ -107,7 +107,7 @@ const FormCadastroComunicados = props => {
     if (valores?.turmas?.length) {
       valores.turmas = valores.turmas.map(turma => turma?.codigoTurma);
     } else {
-      valores.turmas = [];
+      valores.turmas = [OPCAO_TODOS];
     }
 
     if (valores?.tipoCalendarioId) {
