@@ -61,12 +61,6 @@ const DadosPlanoAula = props => {
   }, [permissoesTela, somenteConsulta, dadosPlanoAula, dispatch]);
 
   useEffect(() => {
-    const ehEja = !!(
-      turmaSelecionada &&
-      (Number(turmaSelecionada.modalidade) === ModalidadeEnum.EJA ||
-        Number(turmaSelecionada.modalidade) === ModalidadeEnum.CELP)
-    );
-
     const ehMedio = !!(
       turmaSelecionada &&
       Number(turmaSelecionada.modalidade) === ModalidadeEnum.MEDIO
@@ -75,7 +69,6 @@ const DadosPlanoAula = props => {
     const esconderSwitch =
       !(componenteCurricular && componenteCurricular.possuiObjetivos) ||
       !ehProfessorCj ||
-      ehEja ||
       ehMedio;
 
     dispatch(setExibirSwitchEscolhaObjetivos(!esconderSwitch));
