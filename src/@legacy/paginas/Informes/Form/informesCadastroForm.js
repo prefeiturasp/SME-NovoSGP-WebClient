@@ -9,6 +9,7 @@ import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
 import { SGP_UPLOAD_INFORMES } from '~/constantes/ids/upload';
 import { erros, sucesso } from '~/servicos';
 import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
+import { SelectModalidadesInformes } from './components/modalidades';
 
 const InformesCadastroForm = props => {
   const { form, desabilitarCampos, setExibirLoader } = props;
@@ -76,6 +77,17 @@ const InformesCadastroForm = props => {
             form={form}
             disabled={desabilitarCampos}
             labelRequired
+          />
+        </Col>
+
+        <Col xs={24} md={12}>
+          <SelectModalidadesInformes
+            multiple
+            showSearch
+            form={form}
+            labelRequired
+            name="modalidades"
+            disabled={desabilitarCampos}
           />
         </Col>
 
