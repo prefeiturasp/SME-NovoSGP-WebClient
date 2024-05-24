@@ -7,35 +7,8 @@ import { useWatch } from 'antd/es/form/Form';
 import useFormInstance from 'antd/es/form/hooks/useFormInstance';
 import { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
-
-const columns: ColumnsType<RegistroAcaoBuscaAtivaListagemDto> = [
-  {
-    title: 'Turma',
-    dataIndex: 'turma',
-  },
-  {
-    title: 'Criança/Estudante',
-    dataIndex: 'criancaEstudante',
-  },
-  {
-    title: 'Data',
-    dataIndex: 'dataRegistro',
-    render: (dataRegistro) => formatarData(dataRegistro),
-  },
-  {
-    title: 'Você entrou em contato com a família por meio de:',
-    dataIndex: 'procedimentoRealizado',
-  },
-  {
-    title: 'Conseguiu contato com o responsável?',
-    dataIndex: 'conseguiuContatoResponsavel',
-  },
-  {
-    title: 'Inserido por',
-    dataIndex: 'inseridoPor',
-  },
-];
+import React, { useEffect, useMemo, useState } from 'react';
+import { OPCAO_TODOS } from '~/constantes';
 
 type ListaPaginadaBuscaAtivaRegistroAcoes = {
   onClickEditar: (row: RegistroAcaoBuscaAtivaListagemDto) => void;
@@ -59,6 +32,46 @@ const ListaPaginadaBuscaAtivaRegistroAcoes: React.FC<ListaPaginadaBuscaAtivaRegi
 
   const [filtro, setFiltro] = useState<any>();
 
+  const columns = useMemo(() => {
+    const newColumns: ColumnsType<RegistroAcaoBuscaAtivaListagemDto> = [
+      {
+        title: 'Turma',
+        dataIndex: 'turma',
+      },
+      {
+        title: 'Criança/Estudante',
+        dataIndex: 'criancaEstudante',
+      },
+      {
+        title: 'Data',
+        dataIndex: 'dataRegistro',
+        render: (dataRegistro) => formatarData(dataRegistro),
+      },
+      {
+        title: 'Você entrou em contato com a família por meio de:',
+        dataIndex: 'procedimentoRealizado',
+      },
+      {
+        title: 'Conseguiu contato com o responsável?',
+        dataIndex: 'conseguiuContatoResponsavel',
+      },
+      {
+        title: 'Inserido por',
+        dataIndex: 'inseridoPor',
+      },
+    ];
+
+    if (ue?.value === OPCAO_TODOS) {
+      newColumns.unshift({
+        title: 'Unidade Escolar (UE)',
+        dataIndex: 'ue',
+        width: '35%',
+      });
+    }
+
+    return newColumns;
+  }, [ue]);
+
   useEffect(() => {
     if (!turma) {
       form.setFieldValue('codigoNomeEstudanteCrianca', '');
@@ -69,14 +82,21 @@ const ListaPaginadaBuscaAtivaRegistroAcoes: React.FC<ListaPaginadaBuscaAtivaRegi
   }, [form, turma]);
 
   useEffect(() => {
-    const temValoresIniciais = anoLetivo && dre?.id && ue?.id && modalidade?.value && turma?.value;
+    const temValoresIniciais =
+      anoLetivo && dre?.id && ue?.value && modalidade?.value && turma?.value;
+
+    setFiltro(undefined);
 
     if (form.isFieldsTouched() || temValoresIniciais) {
       form.validateFields().then((values) => {
+        let ueId = null;
+        if (values?.ue?.value !== OPCAO_TODOS) {
+          ueId = values?.ue?.id;
+        }
         const filtro: FiltroRegistrosAcaoDto = {
           anoLetivo: values?.anoLetivo?.value,
           dreId: values?.dre?.id,
-          ueId: values?.ue?.id,
+          ueId,
           modalidade: values?.modalidade?.value,
           semestre: values?.semestre?.value,
           turmaId: values?.turma?.id,
@@ -115,7 +135,7 @@ const ListaPaginadaBuscaAtivaRegistroAcoes: React.FC<ListaPaginadaBuscaAtivaRegi
       id={SGP_TABLE_REGISTRO_ACOES}
       colunas={columns}
       filtro={filtro}
-      filtroEhValido={!!filtro?.ueId}
+      filtroEhValido={!!filtro}
       onClick={onClickEditar}
     />
   );
