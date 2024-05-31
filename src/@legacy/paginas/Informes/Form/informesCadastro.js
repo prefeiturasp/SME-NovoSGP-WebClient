@@ -15,6 +15,8 @@ import {
 } from '~/servicos';
 import InformesCadastroBotoesAcoes from './informesCadastroBotoesAcoes';
 import InformesCadastroForm from './informesCadastroForm';
+import { temPerfisValidosCadstroInformes } from './utils';
+import { OPCAO_TODOS } from '~/constantes';
 
 const InformesCadastro = () => {
   const location = useLocation();
@@ -52,6 +54,8 @@ const InformesCadastro = () => {
     ueCodigo: undefined,
     listaUes: [],
     perfis: undefined,
+    modalidades: undefined,
+    listaModalidades: [],
     titulo: '',
     texto: '',
     listaArquivos: [],
@@ -67,6 +71,39 @@ const InformesCadastro = () => {
     perfis: Yup.string().required(textoCampoObrigatorio),
     titulo: Yup.string().required(textoCampoObrigatorio),
     texto: Yup.string().required(textoCampoObrigatorio),
+    modalidades: Yup.string()
+      .nullable()
+      .test(
+        'validarObrigatoriedadeModalidades',
+        textoCampoObrigatorio,
+        function validar() {
+          const perfis = this.parent?.perfis?.split(',');
+          const listaPerfis = this.parent?.listaPerfis;
+          const ueCodigo = this.parent?.ueCodigo;
+          const modalidades = this.parent?.modalidades;
+
+          if (ueCodigo !== OPCAO_TODOS) {
+            return true;
+          }
+
+          if (perfis?.length) {
+            const temPerfilValido = temPerfisValidosCadstroInformes(
+              listaPerfis,
+              perfis
+            );
+
+            if (temPerfilValido) {
+              const semModalidadeSelecionada = !modalidades?.length;
+
+              if (semModalidadeSelecionada) {
+                return false;
+              }
+            }
+          }
+
+          return true;
+        }
+      ),
   });
 
   const obterDados = useCallback(async () => {
@@ -88,7 +125,12 @@ const InformesCadastro = () => {
         dreCodigo: dreNome,
         ueCodigo: ueNome,
         listaArquivos: [],
+        modalidades: [],
       };
+
+      if (resposta.data.modalidades?.length) {
+        valores.modalidades = resposta.data.modalidades;
+      }
 
       if (dreNome) {
         valores.listaDres = [{ codigo: dreNome, nome: dreNome }];
