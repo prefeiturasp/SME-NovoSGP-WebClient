@@ -147,7 +147,7 @@ const BuscaAtivaRegistroAcoesList: React.FC = () => {
             </Col>
 
             <Col xs={24} md={10}>
-              <SelectUE formItemProps={{ rules: [{ required: true }] }} />
+              <SelectUE formItemProps={{ rules: [{ required: true }] }} mostrarOpcaoTodas />
             </Col>
           </Row>
 
