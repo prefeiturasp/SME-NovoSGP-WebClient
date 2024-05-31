@@ -122,6 +122,13 @@ const InformesCadastroBotoesAcoes = props => {
       }
     }
 
+    if (
+      valores?.modalidades?.length === 1 &&
+      valores.modalidades[0] === OPCAO_TODOS
+    ) {
+      params.modalidades = [];
+    }
+
     setExibirLoader(true);
 
     const resposta = await salvarInforme(params, id)
