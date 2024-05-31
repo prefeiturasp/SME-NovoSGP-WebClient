@@ -103,6 +103,7 @@ const InformesCadastroBotoesAcoes = props => {
       texto,
       titulo,
       arquivos: listaArquivos.map(item => item.xhr),
+      modalidades: valores?.modalidades?.length ? valores.modalidades : [],
     };
 
     if (perfis?.length) {
