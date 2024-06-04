@@ -163,7 +163,9 @@ function CadastroDeAula() {
             c.codDisciplinaPai === Number(componenteCurricularId)) ||
           (c.territorioSaber &&
             c.codigoComponenteCurricularTerritorioSaber ===
-              Number(componenteCurricularId))
+              Number(componenteCurricularId) &&
+            c.codigoComponenteCurricular ===
+              c.codigoComponenteCurricularTerritorioSaber)
       );
     },
     [listaComponentes]
@@ -355,7 +357,9 @@ function CadastroDeAula() {
                   String(c.codDisciplinaPai) === respostaAula.disciplinaId) ||
                 (c.territorioSaber &&
                   String(c.codigoComponenteCurricularTerritorioSaber) ===
-                    respostaAula.disciplinaId)
+                    respostaAula.disciplinaId &&
+                  c.codigoComponenteCurricular ===
+                    c.codigoComponenteCurricularTerritorioSaber)
             );
 
             if (
