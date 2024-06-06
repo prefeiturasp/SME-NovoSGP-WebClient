@@ -1,7 +1,4 @@
-import {
-  SGP_BUTTON_BUSCA_ATIVA_ATUALIZAR_DADOS_RESPONSAVEL,
-  SGP_BUTTON_BUSCA_ATIVA_NOVO_REGISTRO_ACAO,
-} from '~/constantes/ids/button';
+import { SGP_BUTTON_BUSCA_ATIVA_NOVO_REGISTRO_ACAO } from '~/constantes/ids/button';
 import { confirmar, erros, verificaSomenteConsulta } from '~/servicos';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import ButtonPrimary from '@/components/lib/button/primary';
@@ -17,10 +14,8 @@ import { Col, Divider, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import BuscaAtivaHistoricoRegistroAcoesList from './list';
-import { TipoTelefone } from '@/core/enum/tipo-telefone-enum';
 import { DadosResponsavelAtualizarDto } from '@/core/dto/DadosResponsavelAtualizarDto';
 import { useSelector } from 'react-redux';
-import { maskTelefone } from '@/core/utils/functions';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   DESEJA_CANCELAR_ALTERACOES,
@@ -67,45 +62,6 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     return retorno?.data;
   }, [turmaCodigo, codigoAluno]);
 
-  const dadosResponsavelParaAtualizar = useCallback(() => {
-    const telefonesFiliacao1 = dados?.dadosResponsavelFiliacao?.telefonesFiliacao1;
-
-    let celular = '';
-    let foneResidencial = '';
-    let foneComercial = '';
-
-    telefonesFiliacao1?.forEach((telefone) => {
-      const telefoneFormatado = telefone?.numero ? `${telefone?.ddd}${telefone?.numero}` : '';
-
-      switch (telefone?.tipoTelefone) {
-        case TipoTelefone.Celular:
-          celular = maskTelefone(telefoneFormatado);
-          break;
-        case TipoTelefone.Residencial:
-          foneResidencial = maskTelefone(telefoneFormatado);
-          break;
-        case TipoTelefone.Comercial:
-          foneComercial = maskTelefone(telefoneFormatado);
-          break;
-
-        default:
-          break;
-      }
-    });
-
-    const dadosResponsavel: DadosResponsavelAtualizarDto = {
-      nome: dados?.nomeResponsavel,
-      tipoResponsavel: dados?.tipoResponsavel,
-      cpf: dados?.dadosResponsavelFiliacao.cpf,
-      email: dados?.dadosResponsavelFiliacao.email,
-      celular,
-      foneResidencial,
-      foneComercial,
-    };
-
-    setFormInitialValues(dadosResponsavel);
-  }, [dados]);
-
   const obterDados = useCallback(async () => {
     setLoading(true);
     const resposta = await estudanteService.obterDadosEstudante({
@@ -145,10 +101,6 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
     obterDados();
   }, [obterDados]);
 
-  const abrirModal = () => {
-    dadosResponsavelParaAtualizar();
-    setModalOpen(true);
-  };
   const onClickCancelar = async (formResponsavel: any) => {
     if (formResponsavel.isFieldsTouched()) {
       const confirmou = await confirmar(
@@ -203,15 +155,6 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
                   onClick={() => onClickNovoRegistroAcao()}
                 >
                   Novo registro de ação
-                </ButtonPrimary>
-              </Col>
-              <Col>
-                <ButtonPrimary
-                  id={SGP_BUTTON_BUSCA_ATIVA_ATUALIZAR_DADOS_RESPONSAVEL}
-                  disabled={!podeIncluir || somenteConsulta}
-                  onClick={() => abrirModal()}
-                >
-                  Atualizar dados do responsável
                 </ButtonPrimary>
               </Col>
             </Row>

@@ -3,7 +3,11 @@ import { Tabs } from 'antd';
 
 import { Base } from '../colors';
 
-export const ContainerTabsCard = styled(Tabs)`
+interface ContainerTabsCardProps {
+  width?: string;
+  border?: string;
+}
+export const ContainerTabsCard = styled(Tabs)<ContainerTabsCardProps>`
   width: 100% !important;
 
   .ant-tabs-tab-next {
@@ -19,7 +23,7 @@ export const ContainerTabsCard = styled(Tabs)`
   }
 
   .ant-tabs-tab {
-    width: ${props => (props.width ? props.width : '25%')};
+    width: ${(props) => (props.width ? props.width : '25%')};
     margin-right: 0px !important;
     border: 1px solid ${Base.CinzaDesabilitado} !important;
     white-space: nowrap;
@@ -46,18 +50,17 @@ export const ContainerTabsCard = styled(Tabs)`
   }
 
   .ant-tabs-bar {
-    margin: ${props => (props.border ? 0 : 'initial')};
+    margin: ${(props) => (props?.border ? 0 : 'initial')};
   }
 
   .ant-tabs-tabpane {
-    padding-top: ${props => (props.border ? '16px' : 'initial')};
-    border: ${props =>
-      props.border ? `1px solid ${Base.CinzaDesabilitado}` : 'initial'};
-    border-top: ${props => (props.border ? 0 : 'initial')};
+    padding-top: ${(props) => (props?.border ? '16px' : 'initial')};
+    border: ${(props) => (props?.border ? `1px solid ${Base.CinzaDesabilitado}` : 'initial')};
+    border-top: ${(props) => (props?.border ? 0 : 'initial')};
 
     form {
-      padding-left: ${props => (props.border ? '25px' : 'initial')};
-      padding-right: ${props => (props.border ? '25px' : 'initial')};
+      padding-left: ${(props) => (props?.border ? '25px' : 'initial')};
+      padding-right: ${(props) => (props?.border ? '25px' : 'initial')};
     }
   }
 

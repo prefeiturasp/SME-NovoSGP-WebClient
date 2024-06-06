@@ -1,5 +1,6 @@
 import { DadosResponsavelAtualizarDto } from '../dto/DadosResponsavelAtualizarDto';
 import { FiltroSecoesDeRegistroAcao } from '../dto/FiltroSecoesDeRegistroAcao';
+import { OpcaoRespostaSimplesDto } from '../dto/OpcaoRespostaSimplesDto';
 import { RegistroAcaoBuscaAtivaDto } from '../dto/RegistroAcaoBuscaAtivaDto';
 import { RegistroAcaoBuscaAtivaRespostaDto } from '../dto/RegistroAcaoBuscaAtivaRespostaDto';
 import { ResultadoRegistroAcaoBuscaAtivaDto } from '../dto/ResultadoRegistroAcaoBuscaAtivaDto';
@@ -34,6 +35,9 @@ const excluirRegistroAcao = (registroAcaoId: number) =>
 const atualizarDadosResponsavel = (params: DadosResponsavelAtualizarDto) =>
   alterarRegistro<boolean>(`${URL_API_BUSCA_ATIVA}/criancas-estudantes/responsaveis`, params);
 
+const obterMotivosAusencia = () =>
+  obterRegistro<OpcaoRespostaSimplesDto[]>(`${URL_API_BUSCA_ATIVA}/motivos-ausencia`);
+
 export default {
   salvarAtualizarRegistroAcao,
   obterSecoesDeRegistroAcao,
@@ -41,4 +45,5 @@ export default {
   obterRegistroAcao,
   excluirRegistroAcao,
   atualizarDadosResponsavel,
+  obterMotivosAusencia,
 };

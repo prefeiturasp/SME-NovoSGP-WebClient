@@ -1,7 +1,7 @@
 import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import { ContainerTabsDashboardEscolaAqui } from '../dashboardEscolaAqui.css';
 import DadosAdesao from './DadosAdesao/dadosAdesao';
 import DadosComunicadosLeitura from './DadosComunicadosLeitura/dadosComunicadosLeitura';

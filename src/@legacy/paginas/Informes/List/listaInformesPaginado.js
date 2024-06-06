@@ -27,6 +27,26 @@ const ListaInformesPaginado = ({ form }) => {
   const [filtro, setFiltro] = useState();
   const [filtroEhValido, setFiltroEhValido] = useState(false);
 
+  const montarBadgePorLinhar = dados => {
+    if (!dados?.length) return <></>;
+    return (
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px' }}>
+        {dados.map(item => {
+          return (
+            <Badge
+              key={item?.id}
+              role="button"
+              alt={item.nome}
+              className="badge badge-pill border text-dark bg-white font-weight-light px-2 py-1 mr-2"
+            >
+              {item.nome}
+            </Badge>
+          );
+        })}
+      </div>
+    );
+  };
+
   const colunas = [
     {
       title: 'DRE',
@@ -50,25 +70,19 @@ const ListaInformesPaginado = ({ form }) => {
           },
         };
       },
-      render: perfis => {
-        if (!perfis?.length) return <></>;
-        return (
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '3px' }}>
-            {perfis.map(perfil => {
-              return (
-                <Badge
-                  key={perfil?.id}
-                  role="button"
-                  alt={perfil.nome}
-                  className="badge badge-pill border text-dark bg-white font-weight-light px-2 py-1 mr-2"
-                >
-                  {perfil.nome}
-                </Badge>
-              );
-            })}
-          </div>
-        );
+      render: montarBadgePorLinhar,
+    },
+    {
+      title: 'Modalidade',
+      dataIndex: 'modalidades',
+      onCell: () => {
+        return {
+          style: {
+            minWidth: '400px',
+          },
+        };
       },
+      render: montarBadgePorLinhar,
     },
     {
       title: 'Título',

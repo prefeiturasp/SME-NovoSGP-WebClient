@@ -15,6 +15,7 @@ import {
 } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Base } from '~/componentes';
+import { OPCAO_TODOS } from '~/constantes';
 import { erro, erros } from '~/servicos';
 
 type LocalizadorEstudanteProps = {
@@ -68,12 +69,14 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
     anoLetivo: string;
     codigoUe: string;
     codigoTurma: string;
+    codigoTurmas: string[];
   }) => {
     const codigo = parametros?.codigo || '';
     const nome = parametros?.nome || '';
     const anoLetivo = parametros.anoLetivo;
     const codigoUe = parametros.codigoUe;
     const codigoTurma = parametros.codigoTurma;
+    const codigoTurmas = parametros.codigoTurmas;
 
     const params: FiltroBuscaEstudanteDto = {
       codigoUe,
@@ -90,6 +93,9 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
 
     if (codigoTurma) {
       params.codigoTurma = codigoTurma;
+    }
+    if (codigoTurmas?.length) {
+      params.codigoTurmas = codigoTurmas;
     }
 
     setLoading(true);
@@ -115,7 +121,8 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
       ));
 
       form.setFieldValue('localizadorEstudanteDados', options);
-      form.setFieldValue('localizadorEstudante', primeiroEstudante);
+      if (retorno?.data?.items?.length === 1)
+        form.setFieldValue('localizadorEstudante', primeiroEstudante);
 
       if (codigo) {
         setDesabilitarCampo({
@@ -143,12 +150,14 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
     }
 
     if (valorNome?.length < 3) return;
-
     obterDados({
       nome: valorNome,
       codigoTurma: values?.turma?.codigo,
       codigoUe: values?.ue?.codigo,
       anoLetivo: values?.anoLetivo,
+      codigoTurmas: values?.turmas?.find((item: any) => item.value === OPCAO_TODOS)
+        ? null
+        : values?.turmas?.map((item: any) => item.codigo),
     });
   };
 
@@ -167,6 +176,9 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
       codigoTurma: values?.turma?.codigo,
       codigoUe: values?.ue?.codigo,
       anoLetivo: values?.anoLetivo,
+      codigoTurmas: values?.turmas?.find((item: any) => item.value === OPCAO_TODOS)
+        ? null
+        : values?.turmas?.map((item: any) => item.codigo),
     });
   };
 
@@ -177,7 +189,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
   return (
     <Row gutter={24}>
       <Col xs={24} md={12} lg={8}>
-        <Form.Item shouldUpdate>
+        <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
           {(form) => {
             const ue = form.getFieldValue('ue');
             const disabled = !ue?.codigo;
@@ -211,7 +223,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
         </Form.Item>
       </Col>
       <Col xs={24} md={12} lg={16}>
-        <Form.Item shouldUpdate>
+        <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
           {(form) => {
             const localizadorEstudanteDados: React.ReactNode[] = form.getFieldValue(
               'localizadorEstudanteDados',

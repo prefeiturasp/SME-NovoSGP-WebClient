@@ -48,6 +48,7 @@ import historicoPaginado from './historico-paginado/reducers';
 import turmaFiltroAutenticacaoFrequencia from './turmaFiltroAutenticacaoFrequencia/reducers';
 import relatorioPAP from './relatorioPAP/reducers';
 import buscaAtivaRegistroAcoes from './buscaAtivaRegistroAcoes/reducers';
+import mapeamentoEstudantes from './mapeamentoEstudantes/reducers';
 
 const reducers = combineReducers({
   navegacao,
@@ -98,6 +99,7 @@ const reducers = combineReducers({
   turmaFiltroAutenticacaoFrequencia,
   relatorioPAP,
   buscaAtivaRegistroAcoes,
+  mapeamentoEstudantes,
 });
 
 const rootReducer = (state, action) => {
