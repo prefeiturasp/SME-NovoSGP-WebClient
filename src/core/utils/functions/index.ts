@@ -1,4 +1,6 @@
-import dayjs from 'dayjs';
+import { Dayjs, dayjs } from '@/core/date/dayjs';
+import { cloneDeep } from 'lodash';
+import { OPCAO_TODOS } from '~/constantes';
 
 const removerTudoQueNaoEhDigito = (value: any) => `${value}`.replace(/\D/g, '');
 
@@ -19,6 +21,36 @@ const formatarDataHora = (data: string | undefined) => dayjs(data).format('DD/MM
 
 const formatarData = (data: string | undefined) => (data ? dayjs(data).format('DD/MM/YYYY') : '');
 
+const onChangeMultiSelectLabelInValueOpcaoTodos = (valores: any[], valorAtual: any[]) => {
+  let valorParaSetar = valores;
+  const valorAtualTemOpcaoTodos = valorAtual?.find((item) => item?.value === OPCAO_TODOS);
+  const valoresTemOpcaoTodos = valores?.find((item) => item?.value === OPCAO_TODOS);
+
+  if (valorAtualTemOpcaoTodos) {
+    const listaSemOpcaoTodos = cloneDeep(valores).filter((item) => item?.value !== OPCAO_TODOS);
+
+    valorParaSetar = listaSemOpcaoTodos;
+  }
+  if (!valorAtualTemOpcaoTodos && valoresTemOpcaoTodos) {
+    valorParaSetar = [valoresTemOpcaoTodos];
+  }
+
+  return valorParaSetar;
+};
+
+const desabilitarAnosPassadosFuturos = (dataComparacao?: Dayjs, anoLetivo?: number): boolean => {
+  if (dataComparacao) {
+    const dataHoje = anoLetivo ? dayjs(`${anoLetivo}-01-01`) : dayjs();
+
+    const ehDataAnoPassado = dataComparacao.isBefore(dataHoje.startOf('year'), 'day');
+
+    const ehDataAnoFuturo = dataComparacao.isAfter(dataHoje.endOf('year'), 'day');
+
+    return !!(ehDataAnoPassado || ehDataAnoFuturo);
+  }
+  return false;
+};
+
 export {
   maskTelefone,
   removerTudoQueNaoEhDigito,
@@ -26,4 +58,6 @@ export {
   formatarDataHora,
   formatarData,
   removerNumeros,
+  onChangeMultiSelectLabelInValueOpcaoTodos,
+  desabilitarAnosPassadosFuturos,
 };

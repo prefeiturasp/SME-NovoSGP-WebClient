@@ -1,7 +1,7 @@
 import { Tabs } from 'antd';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import { setTabAtualComponenteCurricular } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 import ListaObjetivosPlanoAula from '../ListaObjetivos/listaObjetivosPlanoAula';

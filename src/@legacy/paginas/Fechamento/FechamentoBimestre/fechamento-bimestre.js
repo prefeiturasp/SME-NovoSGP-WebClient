@@ -9,7 +9,7 @@ import Cabecalho from '~/componentes-sgp/cabecalho';
 import Alert from '~/componentes/alert';
 import Card from '~/componentes/card';
 import SelectComponent from '~/componentes/select';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import { URL_HOME } from '~/constantes/url';
 import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import periodo from '~/dtos/periodo';

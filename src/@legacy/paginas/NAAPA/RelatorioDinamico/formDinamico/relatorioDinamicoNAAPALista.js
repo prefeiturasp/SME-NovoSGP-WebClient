@@ -19,7 +19,7 @@ import _ from 'lodash';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Base, Button, Colors, DataTable } from '~/componentes';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import RelatorioDinamicoNAAPAContext from '../relatorioDinamicoNAAPAContext';
 import { TabApoioAcompanhamentoCardsTotalizadores } from './tabs/tabApoioAcompanhamentoCardsTotalizadores';
 import { TabEncaminhamentoCardsTotalizadores } from './tabs/tabEncaminhamentoCardsTotalizadores';
