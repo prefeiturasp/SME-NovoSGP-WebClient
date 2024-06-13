@@ -47,6 +47,11 @@ const BotoesAcoesRelatorioPAP = () => {
     store => store.relatorioPAP.periodoSelecionadoPAP
   );
 
+  const alunoEhMatriculadoNoPAP = useSelector(
+    store =>
+      store.relatorioPAP.estudanteSelecionadoRelatorioPAP?.ehMatriculadoTurmaPAP
+  );
+
   const disabledBtnDefault =
     desabilitarCamposRelatorioPAP || !questionarioDinamicoEmEdicao;
 
@@ -58,13 +63,28 @@ const BotoesAcoesRelatorioPAP = () => {
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
     const desabilitar =
-      soConsulta ||
-      (!permissoesTela?.podeAlterar && !permissoesTela?.podeIncluir);
+      !alunoEhMatriculadoNoPAP &&
+      (!permissoesTela?.podeAlterar || !permissoesTela?.podeIncluir);
+
+    if (soConsulta) {
+      dispatch(setDesabilitarCamposRelatorioPAP(true));
+      return;
+    }
+
+    if (!alunoEhMatriculadoNoPAP) {
+      dispatch(setDesabilitarCamposRelatorioPAP(true));
+      return;
+    }
 
     const periodoAberto = !!periodoSelecionadoPAP?.periodoAberto;
 
-    dispatch(setDesabilitarCamposRelatorioPAP(desabilitar || !periodoAberto));
-  }, [permissoesTela, periodoSelecionadoPAP, dispatch]);
+    dispatch(setDesabilitarCamposRelatorioPAP(desabilitar && !periodoAberto));
+  }, [
+    permissoesTela,
+    periodoSelecionadoPAP,
+    alunoEhMatriculadoNoPAP,
+    dispatch,
+  ]);
 
   const onClickSalvar = () => ServicoRelatorioPAP.salvar();
 
