@@ -26,8 +26,8 @@ const obterSemestres = (params: ObterSemestresProps) => {
 type ObterTurmasProps = {
   ueCodigo: string;
   anoLetivo: number;
-  periodo: number;
-  modalidade: ModalidadeEnum;
+  periodo?: number;
+  modalidade: ModalidadeEnum | string;
   consideraHistorico?: boolean;
   tipos?: number[];
 };

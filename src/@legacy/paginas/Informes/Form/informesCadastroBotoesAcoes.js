@@ -85,6 +85,7 @@ const InformesCadastroBotoesAcoes = props => {
       titulo,
       perfis,
       listaPerfis,
+      listaArquivos,
     } = valores;
 
     const ueSelecionada = listaUes.find(
@@ -101,6 +102,8 @@ const InformesCadastroBotoesAcoes = props => {
       ueId: ueSelecionada.id,
       texto,
       titulo,
+      arquivos: listaArquivos.map(item => item.xhr),
+      modalidades: valores?.modalidades?.length ? valores.modalidades : [],
     };
 
     if (perfis?.length) {
@@ -117,6 +120,13 @@ const InformesCadastroBotoesAcoes = props => {
       } else {
         params.perfis = perfis.map(id => ({ id }));
       }
+    }
+
+    if (
+      valores?.modalidades?.length === 1 &&
+      valores.modalidades[0] === OPCAO_TODOS
+    ) {
+      params.modalidades = [];
     }
 
     setExibirLoader(true);

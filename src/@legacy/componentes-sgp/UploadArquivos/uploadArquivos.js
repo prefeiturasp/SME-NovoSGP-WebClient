@@ -47,6 +47,7 @@ export const MensagemCampoObrigatorio = styled.span`
 `;
 
 const TAMANHO_MAXIMO_UPLOAD = 100;
+const QUANTIDADE_MAXIMA_UPLOAD_FILES = 100;
 
 const UploadArquivos = props => {
   const {
@@ -70,9 +71,15 @@ const UploadArquivos = props => {
     id,
     label,
     labelRequired,
+    tamanhoMaximoArquivo,
+    totalDeUploads,
   } = props;
 
   const [listaDeArquivos, setListaDeArquivos] = useState([...defaultFileList]);
+
+  const tamanho = tamanhoMaximoArquivo ?? TAMANHO_MAXIMO_UPLOAD;
+  const totalDeArquivosNoUploado =
+    totalDeUploads ?? QUANTIDADE_MAXIMA_UPLOAD_FILES;
 
   useEffect(() => {
     if (defaultFileList?.length) {
@@ -87,7 +94,12 @@ const UploadArquivos = props => {
 
   const excedeuLimiteMaximo = arquivo => {
     const tamanhoArquivo = arquivo.size / 1024 / 1024;
-    return tamanhoArquivo > TAMANHO_MAXIMO_UPLOAD;
+    return tamanhoArquivo > tamanho;
+  };
+
+  const podeAdicionarAnexo = qdadeArquivosLista => {
+    const retorno = qdadeArquivosLista < totalDeArquivosNoUploado;
+    return retorno;
   };
 
   const onRemoveDefault = async arquivo => {
@@ -104,16 +116,20 @@ const UploadArquivos = props => {
   };
 
   const beforeUploadDefault = arquivo => {
+    if (!podeAdicionarAnexo(listaDeArquivos?.length)) {
+      erro(`Você só pode adicionar ${totalDeArquivosNoUploado} anexos`);
+      return false;
+    }
+
     if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
       erro('Formato não permitido');
       return false;
     }
 
     if (excedeuLimiteMaximo(arquivo)) {
-      erro('Tamanho máximo 100 MB');
+      erro(`Tamanho máximo ${tamanho} MB`);
       return false;
     }
-
     return true;
   };
 
@@ -128,7 +144,6 @@ const UploadArquivos = props => {
 
   const customRequestDefault = options => {
     const { onSuccess, onError, file, onProgress } = options;
-
     const fmData = new FormData();
     const config = {
       headers: { 'content-type': 'multipart/form-data' },
@@ -163,6 +178,10 @@ const UploadArquivos = props => {
 
   const onChange = ({ file, fileList }) => {
     const { status } = file;
+    if (!podeAdicionarAnexo(fileList.length - 1)) {
+      atualizaListaArquivos(fileList, file);
+      return;
+    }
 
     if (excedeuLimiteMaximo(file)) {
       atualizaListaArquivos(fileList, file);

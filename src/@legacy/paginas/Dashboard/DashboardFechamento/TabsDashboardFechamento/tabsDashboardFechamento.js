@@ -8,7 +8,7 @@ import GraficosFechamento from '../DadosDashboardFechamento/Fechamento/graficosF
 import GraficoSituacaoConselhoClasse from '../DadosDashboardFechamento/ConselhoClasse/graficosConselhoClasse';
 
 import { ContainerTabsDashboardFechamento } from '../dashboardFechamento.css';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 
 const TabsDashboardFechamento = () => {
   const [tabSelecionada, setTabSelecionada] = useState(0);

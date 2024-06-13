@@ -35,8 +35,8 @@ const DataTable = props => {
 
   const rowSelection = {
     selectedRowKeys,
-    onChange: ids => {
-      onSelectRow(ids);
+    onChange: (ids, record) => {
+      onSelectRow(ids, record);
     },
   };
 
@@ -50,7 +50,7 @@ const DataTable = props => {
       selected = [];
       selected.push(row[idLinha]);
     }
-    onSelectRow(selected);
+    onSelectRow(selected, row);
   };
 
   const clickRow = row => {

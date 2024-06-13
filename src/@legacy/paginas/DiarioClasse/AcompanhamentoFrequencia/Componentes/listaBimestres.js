@@ -2,7 +2,7 @@ import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ContainerTabsCard } from '~/componentes/tabs/tabs.css';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
 import { setBimestreSelecionado } from '~/redux/modulos/acompanhamentoFrequencia/actions';
 import { setExpandirLinhaAusenciaEstudante } from '~/redux/modulos/listaFrequenciaPorBimestre/actions';
 import ListaAlunos from './ListaAlunos/listaAlunos';

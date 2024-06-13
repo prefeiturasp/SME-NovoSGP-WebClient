@@ -1,35 +1,39 @@
 import { Form, Formik } from 'formik';
+import { cloneDeep } from 'lodash';
 import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Label } from '~/componentes';
 import tipoQuestao from '~/dtos/tipoQuestao';
-import AtendimentoClinicoTabela from './Componentes/AtendimentoClinico/atendimentoClinicoTabela';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
-import CampoDinamicoFrase from './Componentes/campoDinamicoFrase';
-import CampoDinamicoTexto from './Componentes/campoDinamicoTexto';
-import CampoDinamicoRadio from './Componentes/campoDinamicoRadio';
-import CampoDinamicoCombo from './Componentes/campoDinamicoCombo';
-import CampoDinamicoComboMultiplaEscolha from './Componentes/campoDinamicoComboMultiplaEscolha';
-import CampoDinamicoCheckbox from './Componentes/campoDinamicoCheckbox';
-import CampoDinamicoUploadArquivos from './Componentes/campoDinamicoUploadArquivos';
-import InformacoesEscolares from './Componentes/InformacoesEscolares/informacoesEscolares';
-import QuestionarioDinamicoFuncoes from './Funcoes/QuestionarioDinamicoFuncoes';
-import QuestionarioDinamicoValidacoes from './Validacoes/QuestionarioDinamicoValidacoes';
+import AtendimentoClinicoTabela from './Componentes/AtendimentoClinico/atendimentoClinicoTabela';
+import AtividadeContraturnoTabela from './Componentes/AtividadeContraturno/atividadeContraturnoTabela';
+import { AvaliacoesExternasProvaSP } from './Componentes/AvaliacoesExternasProvaSP';
+import ContatoResponsaveisTabela from './Componentes/ContatoResponsaveis/contatoResponsaveisTabela';
 import DiasHorariosTabela from './Componentes/DiasHorariosTabela/diasHorariosTabela';
+import EnderecoResidencialTabela from './Componentes/EnderecoResidencial/enderecoResidencialTabela';
+import InformacoesEscolares from './Componentes/InformacoesEscolares/informacoesEscolares';
+import InformacoesSrmTabela from './Componentes/InformacoesSrm/InformacoesSrmTabela';
+import TabelaFrequenciaTurmaPAP from './Componentes/TabelaFrequenciaTurmaPAP/TabelaFrequenciaTurmaPAP';
+import TurmasProgramaTabela from './Componentes/TurmasPrograma/turmasProgramaTabela';
+import CampoDinamicoCheckbox from './Componentes/campoDinamicoCheckbox';
+import CampoDinamicoCombo from './Componentes/campoDinamicoCombo';
+import { CampoDinamicoComboJSON } from './Componentes/campoDinamicoComboJSON';
+import CampoDinamicoComboMultiplaEscolha from './Componentes/campoDinamicoComboMultiplaEscolha';
+import CampoDinamicoData from './Componentes/campoDinamicoData';
+import CampoDinamicoEditor from './Componentes/campoDinamicoEditor';
+import CampoDinamicoFrase from './Componentes/campoDinamicoFrase';
+import CampoDinamicoNumerico from './Componentes/campoDinamicoNumerico';
 import CampoDinamicoPeriodo from './Componentes/campoDinamicoPeriodo';
 import CampoDinamicoPeriodoEscolar from './Componentes/campoDinamicoPeriodoEscolar';
-import CampoDinamicoNumerico from './Componentes/campoDinamicoNumerico';
-import CampoDinamicoData from './Componentes/campoDinamicoData';
-import EnderecoResidencialTabela from './Componentes/EnderecoResidencial/enderecoResidencialTabela';
-import ContatoResponsaveisTabela from './Componentes/ContatoResponsaveis/contatoResponsaveisTabela';
-import AtividadeContraturnoTabela from './Componentes/AtividadeContraturno/atividadeContraturnoTabela';
-import CampoDinamicoEditor from './Componentes/campoDinamicoEditor';
-import InformacoesSrmTabela from './Componentes/InformacoesSrm/InformacoesSrmTabela';
-import TurmasProgramaTabela from './Componentes/TurmasPrograma/turmasProgramaTabela';
-import TabelaFrequenciaTurmaPAP from './Componentes/TabelaFrequenciaTurmaPAP/TabelaFrequenciaTurmaPAP';
 import CampoDinamicoProfissionaisEnvolvidos from './Componentes/campoDinamicoProfissionaisEnvolvidos';
+import CampoDinamicoRadio from './Componentes/campoDinamicoRadio';
+import CampoDinamicoTexto from './Componentes/campoDinamicoTexto';
+import CampoDinamicoUploadArquivos from './Componentes/campoDinamicoUploadArquivos';
+import QuestionarioDinamicoFuncoes from './Funcoes/QuestionarioDinamicoFuncoes';
+import QuestionarioDinamicoValidacoes from './Validacoes/QuestionarioDinamicoValidacoes';
+import { CampoDinamicoComboJSONParecerConclusivo } from './Componentes/campoDinamicoComboJSONParecerConclusivo';
 
 const QuestionarioDinamico = props => {
   const dispatch = useDispatch();
@@ -121,9 +125,36 @@ const QuestionarioDinamico = props => {
           case tipoQuestao.InformacoesSrm:
           case tipoQuestao.InformacoesFrequenciaTurmaPAP:
           case tipoQuestao.ProfissionaisEnvolvidos:
+          case tipoQuestao.AvaliacoesExternasProvaSP:
             valorRespostaAtual = resposta[0].texto
               ? JSON.parse(resposta[0].texto)
               : '';
+            break;
+          case tipoQuestao.ComboMultiplaEscolhaDinamico:
+            if (resposta[0].texto) {
+              const lista = JSON.parse(cloneDeep(resposta[0].texto));
+              if (lista?.length) {
+                valorRespostaAtual = lista.map(item => ({
+                  label: item?.value,
+                  value: item?.index,
+                }));
+              } else {
+                valorRespostaAtual = undefined;
+              }
+            }
+            break;
+          case tipoQuestao.ComboDinamico:
+            if (resposta[0].texto) {
+              const item = JSON.parse(cloneDeep(resposta[0].texto));
+              if (item?.index) {
+                valorRespostaAtual = {
+                  label: item?.value,
+                  value: item?.index,
+                };
+              } else {
+                valorRespostaAtual = undefined;
+              }
+            }
             break;
           case tipoQuestao.Upload:
             if (resposta?.length) {
@@ -664,6 +695,52 @@ const QuestionarioDinamico = props => {
           />
         );
         break;
+      case tipoQuestao.AvaliacoesExternasProvaSP:
+        campoAtual = (
+          <AvaliacoesExternasProvaSP {...params} label={label?.props?.text} />
+        );
+        break;
+      case tipoQuestao.ComboDinamico:
+        if (
+          questaoAtual?.nomeComponente === 'PARECER_CONCLUSIVO_ANO_ANTERIOR'
+        ) {
+          campoAtual = (
+            <CampoDinamicoComboJSONParecerConclusivo
+              {...params}
+              turmaId={turmaId}
+              desabilitado={desabilitarCampos}
+              onChange={() => {
+                dispatch(setQuestionarioDinamicoEmEdicao(true));
+                onChangeQuestionario();
+              }}
+            />
+          );
+        } else {
+          campoAtual = (
+            <CampoDinamicoComboJSON
+              {...params}
+              desabilitado={desabilitarCampos}
+              onChange={() => {
+                dispatch(setQuestionarioDinamicoEmEdicao(true));
+                onChangeQuestionario();
+              }}
+            />
+          );
+        }
+        break;
+      case tipoQuestao.ComboMultiplaEscolhaDinamico:
+        campoAtual = (
+          <CampoDinamicoComboJSON
+            {...params}
+            desabilitado={desabilitarCampos}
+            multiple
+            onChange={() => {
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
+          />
+        );
+        break;
       default:
         break;
     }
@@ -714,7 +791,7 @@ const QuestionarioDinamico = props => {
       )}
     </Formik>
   ) : (
-    ''
+    <></>
   );
 };
 
