@@ -122,7 +122,7 @@ const FechaReabListaFiltros = () => {
   };
 
   function mesclarAbrangencias(obj1, obj2) {
-    const merged = {};
+    const merged = [];
 
     for (const key in obj1) {
       // eslint-disable-next-line no-prototype-builtins
@@ -133,7 +133,7 @@ const FechaReabListaFiltros = () => {
 
     for (const key in obj2) {
       // eslint-disable-next-line no-prototype-builtins
-      if (obj2.hasOwnProperty(key) && !merged.hasOwnProperty(key)) {
+      if (!merged.some(m => m.codigo === obj2[key].codigo)) {
         merged[key] = obj2[key];
       }
     }
@@ -184,7 +184,7 @@ const FechaReabListaFiltros = () => {
     );
 
     if (dadosUes?.length) {
-      const lista = dadosUes;
+      const lista = dadosUes.sort(FiltroHelper.ordenarLista('nome'));
 
       if (lista?.length === 1) {
         const { codigo } = lista[0];
