@@ -421,6 +421,7 @@ const RelatorioParecerConclusivo = () => {
         consideraHistorico,
         anoLetivo
       ).finally(setCarregandoAnos(false));
+
       if (retorno?.data?.length) {
         if (retorno.data.length === 1) {
           setListaAnos(retorno.data);
