@@ -59,6 +59,7 @@ function CadastroDeAula() {
 
   const ehReposicao = somenteReposicao === 'true';
   const permissoesTela = useSelector(state => state.usuario.permissoes);
+  const ehProfessorCj = useSelector(state => state.usuario.ehProfessorCj);
   const somenteConsulta = verificaSomenteConsulta(
     permissoesTela[ROUTES.CALENDARIO_PROFESSOR]
   );
@@ -391,7 +392,7 @@ function CadastroDeAula() {
         componentes[0],
         aulaInicial.dataAula,
         aulaInicial.tipoAula,
-        Number(aulaInicial.tipoAula) === 1
+        Number(aulaInicial.tipoAula) === 1 && !ehProfessorCj
       );
     }
   }, [id, turmaSelecionada.turma]);
