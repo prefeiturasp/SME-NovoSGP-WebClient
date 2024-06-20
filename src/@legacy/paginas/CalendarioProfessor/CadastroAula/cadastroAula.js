@@ -365,7 +365,7 @@ function CadastroDeAula() {
                 componenteSelecionado,
                 respostaAula.dataAula,
                 respostaAula.tipoAula,
-                respostaAula.tipoAula === 1
+                respostaAula.tipoAula === 1 && !ehProfessorCj
               );
             } else {
               setAula({
@@ -459,7 +459,7 @@ function CadastroDeAula() {
       componenteSelecionado,
       aula.dataAula,
       aula.tipoAula,
-      Number(aula.tipoAula) === 1
+      Number(aula.tipoAula) === 1 && !ehProfessorCj
     );
   };
 
@@ -487,7 +487,12 @@ function CadastroDeAula() {
       aula.disciplinaId
     );
     if (!modoEdicao && !aula.id)
-      carregarGrade(componenteSelecionado, data, aula.tipoAula, controlaGrade);
+      carregarGrade(
+        componenteSelecionado,
+        data,
+        aula.tipoAula,
+        controlaGrade && !ehProfessorCj
+      );
   };
 
   const onChangeTipoAula = e => {
@@ -502,7 +507,7 @@ function CadastroDeAula() {
       tipoRecorrencia = recorrencia.AULA_UNICA;
       setQuantidadeBloqueada(false);
     }
-    carregarGrade(componente, aula.dataAula, e, ehAulaNormal);
+    carregarGrade(componente, aula.dataAula, e, ehAulaNormal && !ehProfessorCj);
     setAula(aulaState => {
       return {
         ...aulaState,
