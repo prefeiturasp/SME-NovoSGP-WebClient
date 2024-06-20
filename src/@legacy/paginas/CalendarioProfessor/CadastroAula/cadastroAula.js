@@ -160,11 +160,7 @@ function CadastroDeAula() {
         c =>
           c.codigoComponenteCurricular === Number(componenteCurricularId) ||
           c.id === Number(componenteCurricularId) ||
-          (c.regencia &&
-            c.codDisciplinaPai === Number(componenteCurricularId)) ||
-          (c.territorioSaber &&
-            c.codigoComponenteCurricularTerritorioSaber ===
-              Number(componenteCurricularId))
+          (c.regencia && c.codDisciplinaPai === Number(componenteCurricularId))
       );
     },
     [listaComponentes]
@@ -353,18 +349,12 @@ function CadastroDeAula() {
                   String(respostaAula.disciplinaId) ||
                 String(c.id) === String(respostaAula.disciplinaId) ||
                 (c.regencia &&
-                  String(c.codDisciplinaPai) === respostaAula.disciplinaId) ||
-                (c.territorioSaber &&
-                  String(c.codigoComponenteCurricularTerritorioSaber) ===
-                    respostaAula.disciplinaId)
+                  String(c.codDisciplinaPai) === respostaAula.disciplinaId)
             );
 
             if (
               componenteSelecionado.codigoComponenteCurricular ==
-                respostaAula.disciplinaId ||
-              (componenteSelecionado.codigoComponenteCurricularTerritorioSaber ==
-                respostaAula.disciplinaId &&
-                componenteSelecionado.territorioSaber)
+              respostaAula.disciplinaId
             ) {
               respostaAula.disciplinaId = String(componenteSelecionado.id);
               setAula(respostaAula);
