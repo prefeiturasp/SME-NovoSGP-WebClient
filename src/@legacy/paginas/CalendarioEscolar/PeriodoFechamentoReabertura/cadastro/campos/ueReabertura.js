@@ -5,6 +5,7 @@ import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { AbrangenciaServico, erros, ServicoCalendarios } from '~/servicos';
 import FechaReabCadastroContext from '../fechaReabCadastroContext';
+import { FiltroHelper } from '~/componentes-sgp';
 
 const UeReabertura = ({ form, onChangeCampos }) => {
   const { setListaUes, listaUes, desabilitarCampos, calendarioSelecionado } =
@@ -19,7 +20,7 @@ const UeReabertura = ({ form, onChangeCampos }) => {
   const nomeCampo = 'ueCodigo';
 
   function mesclarAbrangencias(obj1, obj2) {
-    const merged = {};
+    const merged = [];
 
     for (const key in obj1) {
       // eslint-disable-next-line no-prototype-builtins
@@ -30,7 +31,7 @@ const UeReabertura = ({ form, onChangeCampos }) => {
 
     for (const key in obj2) {
       // eslint-disable-next-line no-prototype-builtins
-      if (obj2.hasOwnProperty(key) && !merged.hasOwnProperty(key)) {
+      if (!merged.some(m => m.codigo === obj2[key].codigo)) {
         merged[key] = obj2[key];
       }
     }
@@ -82,7 +83,7 @@ const UeReabertura = ({ form, onChangeCampos }) => {
     );
 
     if (dadosUes?.length) {
-      const lista = dadosUes;
+      const lista = dadosUes.sort(FiltroHelper.ordenarLista('nome'));
 
       if (lista?.length === 1) {
         const { codigo } = lista[0];
