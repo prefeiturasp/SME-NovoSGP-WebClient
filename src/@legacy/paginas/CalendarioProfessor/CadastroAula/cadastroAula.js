@@ -59,6 +59,7 @@ function CadastroDeAula() {
 
   const ehReposicao = somenteReposicao === 'true';
   const permissoesTela = useSelector(state => state.usuario.permissoes);
+  const ehProfessorCj = useSelector(state => state.usuario.ehProfessorCj);
   const somenteConsulta = verificaSomenteConsulta(
     permissoesTela[ROUTES.CALENDARIO_PROFESSOR]
   );
@@ -159,11 +160,7 @@ function CadastroDeAula() {
         c =>
           c.codigoComponenteCurricular === Number(componenteCurricularId) ||
           c.id === Number(componenteCurricularId) ||
-          (c.regencia &&
-            c.codDisciplinaPai === Number(componenteCurricularId)) ||
-          (c.territorioSaber &&
-            c.codigoComponenteCurricularTerritorioSaber ===
-              Number(componenteCurricularId))
+          (c.regencia && c.codDisciplinaPai === Number(componenteCurricularId))
       );
     },
     [listaComponentes]
@@ -352,18 +349,12 @@ function CadastroDeAula() {
                   String(respostaAula.disciplinaId) ||
                 String(c.id) === String(respostaAula.disciplinaId) ||
                 (c.regencia &&
-                  String(c.codDisciplinaPai) === respostaAula.disciplinaId) ||
-                (c.territorioSaber &&
-                  String(c.codigoComponenteCurricularTerritorioSaber) ===
-                    respostaAula.disciplinaId)
+                  String(c.codDisciplinaPai) === respostaAula.disciplinaId)
             );
 
             if (
               componenteSelecionado.codigoComponenteCurricular ==
-                respostaAula.disciplinaId ||
-              (componenteSelecionado.codigoComponenteCurricularTerritorioSaber ==
-                respostaAula.disciplinaId &&
-                componenteSelecionado.territorioSaber)
+              respostaAula.disciplinaId
             ) {
               respostaAula.disciplinaId = String(componenteSelecionado.id);
               setAula(respostaAula);
@@ -374,7 +365,7 @@ function CadastroDeAula() {
                 componenteSelecionado,
                 respostaAula.dataAula,
                 respostaAula.tipoAula,
-                respostaAula.tipoAula === 1
+                respostaAula.tipoAula === 1 && !ehProfessorCj
               );
             } else {
               setAula({
@@ -401,7 +392,7 @@ function CadastroDeAula() {
         componentes[0],
         aulaInicial.dataAula,
         aulaInicial.tipoAula,
-        Number(aulaInicial.tipoAula) === 1
+        Number(aulaInicial.tipoAula) === 1 && !ehProfessorCj
       );
     }
   }, [id, turmaSelecionada.turma]);
@@ -468,7 +459,7 @@ function CadastroDeAula() {
       componenteSelecionado,
       aula.dataAula,
       aula.tipoAula,
-      Number(aula.tipoAula) === 1
+      Number(aula.tipoAula) === 1 && !ehProfessorCj
     );
   };
 
@@ -496,7 +487,12 @@ function CadastroDeAula() {
       aula.disciplinaId
     );
     if (!modoEdicao && !aula.id)
-      carregarGrade(componenteSelecionado, data, aula.tipoAula, controlaGrade);
+      carregarGrade(
+        componenteSelecionado,
+        data,
+        aula.tipoAula,
+        controlaGrade && !ehProfessorCj
+      );
   };
 
   const onChangeTipoAula = e => {
@@ -511,7 +507,7 @@ function CadastroDeAula() {
       tipoRecorrencia = recorrencia.AULA_UNICA;
       setQuantidadeBloqueada(false);
     }
-    carregarGrade(componente, aula.dataAula, e, ehAulaNormal);
+    carregarGrade(componente, aula.dataAula, e, ehAulaNormal && !ehProfessorCj);
     setAula(aulaState => {
       return {
         ...aulaState,
