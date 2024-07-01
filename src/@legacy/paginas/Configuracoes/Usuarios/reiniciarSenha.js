@@ -195,7 +195,9 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
         if (error?.response?.data) {
           deveAtualizarEmail = error?.response?.data?.deveAtualizarEmail;
         }
-        erros(error);
+        if (!deveAtualizarEmail) {
+          erros(error);
+        }
         setCarregando(false);
       });
     if (deveAtualizarEmail) {
