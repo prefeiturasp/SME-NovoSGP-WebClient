@@ -27,6 +27,7 @@ import {
 } from '~/servicos';
 import { BotaoCustomizado } from '../registroItinerancia.css';
 import { useNavigate } from 'react-router-dom';
+import { ordenarDescPor } from '~/utils';
 
 const RegistroItineranciaAEELista = () => {
   const navigate = useNavigate();
@@ -206,7 +207,12 @@ const RegistroItineranciaAEELista = () => {
             return { desc: ano, valor: ano };
           }) || [];
       } else {
-        setCarregandoAnos(false);
+        const anosLetivo = await FiltroHelper.obterAnosLetivos({
+          consideraHistorico,
+        })
+          .catch(e => erros(e))
+          .finally(() => setCarregandoAnos(false));
+        if (anosLetivo?.length) anos = ordenarDescPor(anosLetivo, 'valor');
       }
       setListaAnosLetivo(anos);
       validarValorPadraoAnoLetivo(anos);
