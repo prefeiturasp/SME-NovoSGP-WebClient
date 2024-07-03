@@ -55,10 +55,15 @@ const buscarVersao = async () => {
   }
 };
 
+const sair = () => {
+  return api.get('v1/autenticacao/sair');
+};
+
 export {
   buscarVersao,
   obterListaSituacoes,
   obterMeusDados,
   obterPerfis,
   obterTodosPerfis,
+  sair,
 };
