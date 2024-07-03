@@ -29,6 +29,7 @@ import Alert from '~/componentes/alert';
 import LoginHelper from '~/paginas/Login/loginHelper';
 import Loader from '~/componentes/loader';
 import { SGP_BUTTON_SAIR } from '../../constantes/ids/button';
+import { sair } from '~/servicos/Paginas/ServicoUsuario';
 
 const Navbar = () => {
   const retraido = useSelector(state => state.navegacao.retraido);
@@ -42,7 +43,7 @@ const Navbar = () => {
   const onClickSair = async () => {
     const pararAcao = await validarAcaoTela();
     if (pararAcao) return;
-
+    await sair();
     store.dispatch(removerTurma());
     store.dispatch(limparDadosFiltro());
     store.dispatch(Deslogar());
