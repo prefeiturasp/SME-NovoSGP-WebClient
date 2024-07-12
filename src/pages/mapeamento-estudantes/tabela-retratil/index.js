@@ -34,7 +34,12 @@ export const TabelaRetratilMapeamentoEstudantes = ({
       <Tooltip title="É necessário fazer o mapeamento">
         <i
           className="fa fa-asterisk"
-          style={{ color: Base.VermelhoAlerta, marginRight: 4 }}
+          style={{
+            color: estudante?.alertaVermelho
+              ? Base.VermelhoAlerta
+              : Base.LaranjaAlerta,
+            marginRight: 4,
+          }}
         />
       </Tooltip>
     );
