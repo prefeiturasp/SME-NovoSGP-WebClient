@@ -14,7 +14,6 @@ import {
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, sucesso } from '~/servicos';
 import { URL_API_MAPEAMENTOS_ESTUDANTES } from '../constants/urls-api';
-import { AlunoDadosBasicosDto } from '../dto/AlunoDadosBasicosDto';
 import { AlunoSinalizadoPrioridadeMapeamentoEstudanteDto } from '../dto/AlunoSinalizadoPrioridadeMapeamentoEstudanteDto';
 import { FiltroQuestoesQuestionarioMapeamentoEstudanteDto } from '../dto/FiltroQuestoesQuestionarioMapeamentoEstudanteDto';
 import { MapeamentoEstudanteDto } from '../dto/MapeamentoEstudanteDto';
@@ -27,6 +26,7 @@ import { SecaoQuestionarioDto } from '../dto/SecaoQuestionarioDto';
 import { TurmaSelecionadaDTO } from '../dto/TurmaSelecionadaDto';
 import { inserirRegistro, obterRegistro } from './api';
 import fechamentosTurmasService from './fechamentos-turmas-service';
+import { AlunoDadosBasicosMapeamentoEstudantesDto } from '../dto/AlunoDadosBasicosMapeamentoEstudantesDto';
 
 const obterSecoesMapeamentoEstudante = async (mapeamentoEstudanteId?: number) => {
   const { dispatch } = store;
@@ -81,7 +81,7 @@ const obterQuestionario = (params: FiltroQuestoesQuestionarioMapeamentoEstudante
 const obterAlunosPriorizadosMapeamentoEstudante = async (
   turmaId: number,
   bimestre: number | string,
-  estudantesComparacao: AlunoDadosBasicosDto[],
+  estudantesComparacao: AlunoDadosBasicosMapeamentoEstudantesDto[],
 ) => {
   const resposta = await obterRegistro<AlunoSinalizadoPrioridadeMapeamentoEstudanteDto[]>(
     `${URL_API_MAPEAMENTOS_ESTUDANTES}/alunos/turmas/${turmaId}/bimestres/${bimestre}/prioridade-sinalizada`,
@@ -95,10 +95,11 @@ const obterAlunosPriorizadosMapeamentoEstudante = async (
       const estudanteComparacao = estudantesSinalizar.find(
         (item) => item?.codigoAluno === estudante?.codigoEOL,
       );
-
       if (estudanteComparacao) {
         estudante.processoConcluido = !!estudanteComparacao?.possuiMapeamentoEstudante;
         estudante.exibirIconeCustomizado = true;
+        estudante.alertaLaranja = !!estudanteComparacao.alertaLaranja;
+        estudante.alertaVermelho = !!estudanteComparacao.alertaVermelho;
       } else {
         estudante.exibirIconeCustomizado = false;
         estudante.processoConcluido = false;
