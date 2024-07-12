@@ -28,6 +28,8 @@ const RelatorioSondagemAnaliticoBotoesAcoes = props => {
       ueCodigo: valuesClone?.ueCodigo,
       tipoSondagem: valuesClone?.tipoSondagem,
       periodo: valuesClone?.periodoSondagem,
+      apresentarTurmasUesDresSemLancamento:
+        valuesClone?.apresentarTurmasUesDresSemLancamento,
     };
 
     const retorno = await ServicoRelatorioSondagem.gerarAnalitico(params).catch(
