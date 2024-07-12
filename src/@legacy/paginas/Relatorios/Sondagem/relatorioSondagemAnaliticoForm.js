@@ -89,7 +89,7 @@ const RelatorioSondagemAnaliticoForm = props => {
           <CheckboxComponent
             form={form}
             name={'apresentarTurmasUesDresSemLancamento'}
-            label="Exibir Turmas sem lançamento?"
+            label="Exibir Turmas sem lançamento"
             id={SGP_CHECKBOX_EXIBIR_TURMAS_SEM_LANCAMENTO}
             onChangeCheckbox={() => onChangeCampos()}
             disabled={false}
