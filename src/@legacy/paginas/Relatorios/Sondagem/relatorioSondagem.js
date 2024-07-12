@@ -20,6 +20,7 @@ const RelatorioSondagemAnalitico = () => {
     listaUes: [],
     tipoSondagem: undefined,
     periodoSondagem: undefined,
+    apresentarTurmasUesDresSemLancamento: true,
   };
 
   const [initialValues] = useState(inicial);
