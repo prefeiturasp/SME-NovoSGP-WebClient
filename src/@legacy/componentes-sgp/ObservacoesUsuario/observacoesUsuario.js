@@ -31,7 +31,7 @@ const ObservacoesUsuario = props => {
 
   return (
     <div className={`col-sm-12${esconderCaixaExterna ? '' : ' mb-2 mt-4'}`}>
-      {!esconderLabel && <Label text="Observações" />}
+      {!esconderLabel && <Label text="Avaliações" />}
       <ContainerObservacoesUsuario esconderCaixaExterna={esconderCaixaExterna}>
         <div style={{ margin: `${esconderCaixaExterna ? 0 : 15}px` }}>
           <CampoObservacao
