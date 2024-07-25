@@ -13,7 +13,7 @@ const ObservacoesPlanoAEE = () => {
     <CardCollapse
       id={SGP_COLLAPSE_OBSERVACOES_PLANO_AEE}
       key={`${key}-collapse-key`}
-      titulo="Observações"
+      titulo="Avaliações"
       indice={`${key}-collapse-indice`}
       alt={`${key}-alt`}
     >
