@@ -5,6 +5,8 @@ import { AnoLetivo, Dre, ExibirHistorico, Ue } from '~/componentes-sgp/inputs';
 import { TipoSondagem } from '~/componentes-sgp/inputs/tipo-sondagem';
 import { PeriodoSondagem } from '~/componentes-sgp/inputs/periodo-sondagem';
 import { FiltroHelper } from '~/componentes-sgp';
+import { CheckboxComponent } from '~/componentes';
+import { SGP_CHECKBOX_EXIBIR_TURMAS_SEM_LANCAMENTO } from '~/constantes/ids/checkbox';
 
 const RelatorioSondagemAnaliticoForm = props => {
   const { form, onChangeCampos } = props;
@@ -80,6 +82,18 @@ const RelatorioSondagemAnaliticoForm = props => {
 
         <Col sm={24} md={12}>
           <PeriodoSondagem form={form} onChange={() => onChangeCampos()} />
+        </Col>
+      </Row>
+      <Row gutter={[16, 16]}>
+        <Col sm={24}>
+          <CheckboxComponent
+            form={form}
+            name={'apresentarTurmasUesDresSemLancamento'}
+            label="Exibir Turmas sem lançamento"
+            id={SGP_CHECKBOX_EXIBIR_TURMAS_SEM_LANCAMENTO}
+            onChangeCheckbox={() => onChangeCampos()}
+            disabled={false}
+          />
         </Col>
       </Row>
     </Col>
