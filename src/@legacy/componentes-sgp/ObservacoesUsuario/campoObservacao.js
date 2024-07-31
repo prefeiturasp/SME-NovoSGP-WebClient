@@ -101,7 +101,7 @@ const CampoObservacao = props => {
   return (
     <>
       <div className={`col-md-12 pb-2 ${esconderCaixaExterna && 'p-0'}`}>
-        <Label text="Escreva uma observação" />
+        <Label text="Escreva uma avaliação" />
         <ContainerCampoObservacao
           id={SGP_TEXT_AREA_OBSERVACAO}
           autoSize={{ minRows: 4 }}
