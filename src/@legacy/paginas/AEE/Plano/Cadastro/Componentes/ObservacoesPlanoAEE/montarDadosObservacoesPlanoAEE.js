@@ -89,7 +89,7 @@ const MontarDadosObservacoesPlanoAEE = () => {
     return ServicoPlanoAEEObservacoes.salvarEditarObservacao(params)
       .then(resultado => {
         if (resultado?.status === 200) {
-          const msg = `Observação ${
+          const msg = `Avaliação ${
             obs.id ? 'alterada' : 'inserida'
           } com sucesso.`;
           sucesso(msg);
