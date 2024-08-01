@@ -50,6 +50,7 @@ const Base = {
   VermelhoNotificacao: '#B40C02',
   Vermelho: '#B40C02',
   LaranjaAlerta: '#D06D12',
+  AmareloAlerta: '#FFD700',
   VerdeBorda: '#20AA73',
   Bordo: '#864241',
   LaranjaFrequencia: '#C0630E',
