@@ -172,7 +172,7 @@ DetalhesAluno.defaultProps = {
   dados: [],
   desabilitarImprimir: true,
   onClickImprimir: () => {},
-  exibirBotaoImprimir: true,
+  exibirBotaoImprimir: false,
   exibirFrequencia: true,
   exibirResponsavel: true,
   permiteAlterarImagem: true,
