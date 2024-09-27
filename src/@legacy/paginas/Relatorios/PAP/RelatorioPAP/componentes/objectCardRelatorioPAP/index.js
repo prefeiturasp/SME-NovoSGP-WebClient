@@ -19,6 +19,7 @@ const ObjectCardRelatorioPAP = () => {
     <DetalhesAluno
       dados={estudanteSelecionadoRelatorioPAP}
       desabilitarImprimir={!relatorioPAPAlunoId}
+      exibirBotaoImprimir={false}
       onClickImprimir={gerar}
       permiteAlterarImagem={!desabilitarCamposRelatorioPAP}
     />
