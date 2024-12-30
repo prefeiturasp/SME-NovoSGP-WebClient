@@ -683,7 +683,6 @@ const RelatorioFrequencia = () => {
   const onChangeTipoValor = valor => {
     setTipoValor(valor);
     setModoEdicao(true);
-    console.log(valor);
     valor === 'percentual'
       ? setDicaDePreenchimentoValor('Digite o % de frequência global')
       : setDicaDePreenchimentoValor('Digite a quantidade de ausências');
