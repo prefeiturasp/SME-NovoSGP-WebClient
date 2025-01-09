@@ -1,84 +1,65 @@
 import React from 'react';
-import { render, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 import RelatorioFrequencia from './relatorioFrequencia';
+import { BrowserRouter } from 'react-router-dom';
 
-// Mock da funcionalidade diretamente no componente
+// Mocka a função window.matchMedia para testes
+beforeAll(() => {
+  global.matchMedia = global.matchMedia || function () {
+    return {
+      matches: false,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+    };
+  };
+});
 
+// Crie uma store mockada usando configureStore
+const mockStore = configureStore({
+  reducer: {
+    usuario: (state = { id: 1, nome: 'Test User' }) => state,  // Mock dos dados do usuário
+  },
+});
+
+// Defina os objetos de sucesso diretamente no mock
+const sucesso = {
+  sucesso: true,
+  mensagem: 'Relatório gerado com sucesso',
+};
+
+// Mocka a função de serviço
+jest.mock('~/servicos/Paginas/FiltroRelatorio/ServicoFiltroRelatorio', () => ({
+  obterModalidadesPorAbrangencia: jest.fn().mockResolvedValue([{ valor: 'M1', descricao: 'Modalidade 1' }]),
+}));
+
+jest.mock('~/servicos/Paginas/Relatorios/Frequencia/ServicoRelatorioFrequencia', () => ({
+  gerarRelatorio: jest.fn().mockResolvedValue(sucesso),
+}));
 
 describe('RelatorioFrequencia Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should render anos letivos correctly', async () => {
-   console.log('wwww')
+  it('deve renderizar corretamente o componente', () => {
+    render(
+      <Provider store={mockStore}>
+        <BrowserRouter>
+          <RelatorioFrequencia />
+        </BrowserRouter>
+      </Provider>
+    );
+
+    // Verificar se elementos básicos estão presentes
+    expect(screen.getByText(/Tipo de relatório/i)).toBeInTheDocument();
+    expect(screen.getByText(/Frequência/i)).toBeInTheDocument();
+
+    // Verificar se os campos de seleção estão presentes
+    expect(screen.getAllByText(/Ano Letivo/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/Diretoria Regional de Educação \(DRE\)/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/Unidade Escolar \(UE\)/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/Diretoria Regional de Educação \(DRE\)/i)[0]).toBeInTheDocument();
   });
-
-
-  // it('should fetch modalidades when a UE is selected', async () => {
-  //   ServicoFiltroRelatorio.obterModalidadesPorAbrangencia.mockResolvedValueOnce({
-  //     data: [{ valor: ModalidadeEnum.EJA, desc: 'EJA' }],
-  //   });
-
-  //   const { getByText } = render(<RelatorioFrequencia />);
-
-  //   await act(async () => {
-  //     // Simula a seleção de uma UE
-  //     const selectUE = getByText('Select UE');
-  //     act(() => {
-  //       selectUE.value = '12345';
-  //       selectUE.dispatchEvent(new Event('change'));
-  //     });
-  //   });
-
-  //   expect(
-  //     ServicoFiltroRelatorio.obterModalidadesPorAbrangencia
-  //   ).toHaveBeenCalledWith('12345');
-
-  //   expect(getByText('EJA')).toBeInTheDocument();
-  // });
-
-  // it('should fetch UEs when a DRE is selected', async () => {
-  //   ServicoFiltroRelatorio.obterUes.mockResolvedValueOnce({
-  //     data: [{ codigo: '6789', nome: 'UE Teste' }],
-  //   });
-
-  //   const { getByText } = render(<RelatorioFrequencia />);
-
-  //   await act(async () => {
-  //     // Simula a seleção de uma DRE
-  //     const selectDRE = getByText('Select DRE');
-  //     act(() => {
-  //       selectDRE.value = '123';
-  //       selectDRE.dispatchEvent(new Event('change'));
-  //     });
-  //   });
-
-  //   expect(ServicoFiltroRelatorio.obterUes).toHaveBeenCalledWith(
-  //     '123',
-  //     false,
-  //     undefined
-  //   );
-
-  //   expect(getByText('UE Teste')).toBeInTheDocument();
-  // });
-
-  // it('should fetch DREs on mount', async () => {
-  //   AbrangenciaServico.buscarDres.mockResolvedValueOnce({
-  //     data: [
-  //       { codigo: '1', nome: 'DRE Centro' },
-  //       { codigo: '2', nome: 'DRE Norte' },
-  //     ],
-  //   });
-
-  //   render(<RelatorioFrequencia />);
-
-  //   await act(async () => {
-  //     expect(AbrangenciaServico.buscarDres).toHaveBeenCalled();
-  //   });
-
-  //   expect(AbrangenciaServico.buscarDres).toHaveBeenCalledWith(
-  //     'v1/abrangencias/false/dres?anoLetivo=undefined'
-  //   );
-  // });
 });

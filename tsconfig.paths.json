@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": "src",  // Defina a raiz do seu projeto
     "paths": {
-      "~/*": ["./@legacy/*"],
-      "@/*": ["./*"]
+      "~/*": ["./@legacy/*"],  // Configura o alias ~ para o diretório src/@legacy
+      "@/*": ["./*"]  // Configura o alias @ para o diretório src
     }
   }
 }

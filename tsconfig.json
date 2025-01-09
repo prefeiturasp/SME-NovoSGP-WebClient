@@ -16,9 +16,9 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "incremental": false
   },
-  "extends": "./tsconfig.paths.json",
-  "include": ["src"]
+  "extends": "./tsconfig.paths.json",  // Estende a configuração de caminhos
+  "include": ["src", "__mocks__"]  // Inclui todos os arquivos dentro da pasta src
 }
