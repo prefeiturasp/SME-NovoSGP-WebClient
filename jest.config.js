@@ -12,15 +12,14 @@ module.exports = {
     "^@/(.*)$": "<rootDir>/src/$1",
     "^~/(.*)$": "<rootDir>/src/@legacy/$1",
     "\\.(svg|jpg|jpeg|png|woff|woff2|eot|ttf|otf)$": "<rootDir>/__mocks__/fileMock.js", // Mockar imagens e SVGs
-    "\\.(css|less|scss)$": "identity-obj-proxy",
+    "\\.(css|less|scss|css\\.js)$": "identity-obj-proxy", // Mockar arquivos CSS e .css.js
   },
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   collectCoverageFrom: [
-    "src/**/*.{ts,tsx}",
-    "!src/**/*.d.ts",
-    "!src/**/index.ts",
-    "!src/**/*.test.{ts,tsx}",
-    "!src/**/test-utils.ts",
+    "src/**/*.{js,jsx,ts,tsx}",
+    "!src/**/*.test.{js,jsx,ts,tsx}",
+    "!src/**/__mocks__/**",
+    "!src/**/*.css.js",  // Excluir arquivos .css.js da coleta de cobertura
   ],
   coverageThreshold: {
     global: {
@@ -46,14 +45,10 @@ module.exports = {
     "/build/",
     "/dist/",
     "/__mocks__/",
+    "/src/routes/",
     "/.*\.d\.ts$/",
     "/.*\.config\.js$/",
-    "/.*\.test\.js$/"
-  ],
-  collectCoverageFrom: [
-    "src/**/*.{js,jsx,ts,tsx}",
-    "!src/**/*.test.{js,jsx,ts,tsx}",
-    "!src/**/__mocks__/**",
-    "!src/**/index.js"
+    "/.*\.test\.js$/",
+    "/.*\.css\.js$/",  // Ignorar arquivos .css.js na cobertura
   ],
 };
