@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import CardBody from './cardBody';
 
 describe('CardBody Component', () => {
-  it('should render children correctly', () => {
+  it('sDeve renderizar o componente', () => {
     const { getByText } = render(
       <CardBody>
         <p>Test Child</p>
@@ -13,7 +13,7 @@ describe('CardBody Component', () => {
     expect(getByText('Test Child')).toBeInTheDocument();
   });
 
-  it('should apply custom className', () => {
+  it('Deve aplicar a classe custom ', () => {
     const customClass = 'custom-class';
     const { container } = render(<CardBody className={customClass} />);
 
@@ -21,14 +21,14 @@ describe('CardBody Component', () => {
     expect(container.firstChild).toHaveClass(customClass);
   });
 
-  it('should apply custom styles', () => {
+  it('Deve aplicar os estilos', () => {
     const customStyle = { backgroundColor: 'red' };
     const { container } = render(<CardBody style={customStyle} />);
 
     expect(container.firstChild).toHaveStyle(customStyle);
   });
 
-  it('should render without children when none are provided', () => {
+  it('Deve renderizar mesmo sem passar as props', () => {
     const { container } = render(<CardBody />);
 
     expect(container.firstChild).toBeInTheDocument();
