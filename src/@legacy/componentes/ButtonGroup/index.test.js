@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import ButtonGroup from './index'; // Certifique-se de ajustar o caminho, se necessário
+import ButtonGroup from './index'; 
 import { BrowserRouter } from 'react-router-dom';
 
-// Mocka a função window.matchMedia para testes
+
 beforeAll(() => {
   global.matchMedia = global.matchMedia || function () {
     return {
