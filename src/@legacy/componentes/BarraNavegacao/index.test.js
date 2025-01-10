@@ -14,7 +14,7 @@ const itens = [
 
 describe('BarraNavegacao', () => {
 
-    xit('deve renderizar corretamente', () => {
+    it('deve renderizar corretamente', () => {
         render(<BarraNavegacao itens={itens} itemAtivo={itens[0]} onChangeItem={mockOnChangeItem} />);
 
         // Verifique se os botões "Anterior" e "Próximo" estão na tela
