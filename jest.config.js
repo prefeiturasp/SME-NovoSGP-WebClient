@@ -59,6 +59,10 @@ module.exports = {
     "/.*\.d\.ts$/",
     "/.*\.config\.js$/",
     "/.*\.test\.js$/",
-    "/.*\.css\.js$/",  // Ignorar arquivos .css.js na cobertura
+    "/.*\.css\.js$/",  
+    "/src/index\\.tsx$", 
+    "/src/@types",
+    "/src/app\\.tsx$", 
+    "/.*\\/style\\.js$"
   ],
 };
