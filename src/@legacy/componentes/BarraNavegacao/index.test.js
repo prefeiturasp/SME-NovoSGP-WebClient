@@ -13,7 +13,6 @@ const itens = [
 ];
 
 describe('BarraNavegacao', () => {
-
     it('deve renderizar corretamente', () => {
         render(<BarraNavegacao itens={itens} itemAtivo={itens[0]} onChangeItem={mockOnChangeItem} />);
 
@@ -30,7 +29,6 @@ describe('BarraNavegacao', () => {
         //     expect(itemElements[index].textContent).toContain(item.descricao);
         // });
     });
-
 
     it('deve chamar onChangeItem quando um item de navegação é clicado', () => {
         render(<BarraNavegacao itens={itens} itemAtivo={itens[0]} onChangeItem={mockOnChangeItem} />);
