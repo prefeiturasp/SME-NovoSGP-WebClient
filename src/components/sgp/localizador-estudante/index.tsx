@@ -23,7 +23,7 @@ type LocalizadorEstudanteProps = {
   formItemCodigoProps?: FormItemProps;
   autoCompleteNameProps?: AutoCompleteProps;
   formItemAutoCompleteNameProps?: FormItemProps;
-  onChange?: (field: string, value: any) => void; 
+  onChange?: (field: string, value: any) => void;
 };
 const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
   inputCodigoProps,
