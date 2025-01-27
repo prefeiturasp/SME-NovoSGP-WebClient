@@ -7,6 +7,7 @@ import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
+import AlertaModalidadeInfantil from '~/componentes-sgp/AlertaModalidadeInfantil/alertaModalidadeInfantil';
 import {
   limparDadosMapeamentoEstudantes,
   setBimestreSelecionado,
@@ -22,10 +23,12 @@ import { BimestresMapeamentoEstudantes } from './bimestres';
 import { BotoesAcoesMapeamentoEstudantes } from './botoes-acoes';
 import { DadosMapeamentoEstudantes } from './dados';
 import { LoaderMapeamentoEstudantes } from './loader';
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 
 export const MapeamentoEstudantes = () => {
   const dispatch = useDispatch();
   const usuario = useAppSelector((store) => store.usuario);
+  const modalidadesFiltroPrincipal = useAppSelector((store) => store.filtro.modalidades);
 
   const permissoes = usuario.permissoes as any;
   const permissoesTela = permissoes[ROUTES.MAPEAMENTO_ESTUDANTES];
@@ -61,13 +64,15 @@ export const MapeamentoEstudantes = () => {
   return (
     <>
       <AlertaSemTurmaSelecionada />
+      <AlertaModalidadeInfantil />
       <LoaderMapeamentoEstudantes>
         <Cabecalho pagina="Mapeamento de estudantes">
           <BotoesAcoesMapeamentoEstudantes />
         </Cabecalho>
 
         <Card padding="24px 24px">
-          {turmaSelecionada?.turma ? (
+          {turmaSelecionada?.turma &&
+          !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
             <Col xs={24}>
               <Row gutter={[16, 16]}>
                 <Col sm={24} md={6}>

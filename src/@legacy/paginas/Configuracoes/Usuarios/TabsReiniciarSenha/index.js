@@ -24,7 +24,7 @@ export default function TabsReiniciarSenha() {
   const onClickVoltar = () => navigate(URL_HOME);
 
   const verificaPerfil = perfil => {
-    return perfil === 'CP' || perfil === 'AD' || perfil === 'Secretário';
+    return perfil === 'CP' || perfil === 'Secretário';
   };
 
   return (
