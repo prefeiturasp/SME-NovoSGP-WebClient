@@ -23,12 +23,14 @@ type LocalizadorEstudanteProps = {
   formItemCodigoProps?: FormItemProps;
   autoCompleteNameProps?: AutoCompleteProps;
   formItemAutoCompleteNameProps?: FormItemProps;
+  onChange?: (field: string, value: any) => void; 
 };
 const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
   inputCodigoProps,
   formItemCodigoProps,
   autoCompleteNameProps,
   formItemAutoCompleteNameProps,
+  onChange,
 }) => {
   const form = Form.useFormInstance();
 
@@ -49,6 +51,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
       nome: false,
       codigo: false,
     });
+    if (onChange) onChange('localizadorEstudante', undefined);
   };
 
   useEffect(() => {
@@ -159,6 +162,8 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
         ? null
         : values?.turmas?.map((item: any) => item.codigo),
     });
+
+    if (onChange) onChange('nome', nome);
   };
 
   const onBuscarPorCodigo = async (codigo: string, values: any) => {
@@ -180,6 +185,8 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
         ? null
         : values?.turmas?.map((item: any) => item.codigo),
     });
+
+    if (onChange) onChange('codigo', codigo);
   };
 
   const onSelectNome = (value: string, option: any) => {
@@ -196,7 +203,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
 
             return (
               <Form.Item
-                label="Código EOL"
+                label="* Código EOL"
                 name={['localizadorEstudante', 'codigo']}
                 getValueFromEvent={(e: React.ChangeEvent<HTMLInputElement>) =>
                   removerTudoQueNaoEhDigito(e?.target?.value)
@@ -214,6 +221,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
                     if (!e?.target?.value?.length) {
                       limparDados();
                     }
+                    if (onChange) onChange('codigo', e.target.value);
                   }}
                   {...inputCodigoProps}
                 />
@@ -234,7 +242,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
 
             return (
               <Form.Item
-                label="Nome da Criança/Estudante"
+                label="* Nome da Criança/Estudante"
                 name={['localizadorEstudante', 'nome']}
                 {...formItemAutoCompleteNameProps}
               >
