@@ -31,10 +31,21 @@ export const TabelaRetratilMapeamentoEstudantes = ({
       );
 
     return (
-      <Tooltip title="É necessário fazer o mapeamento">
+      <Tooltip
+        title={
+          estudante?.alertaVermelho
+            ? 'É necessário fazer o mapeamento deste estudante pois ele é não alfabético na hipótese de escrita.'
+            : 'É necessário fazer o mapeamento deste estudante pois ele é público do AEE, participa do PAP ou teve resultado abaixo do básico na PSP.'
+        }
+      >
         <i
-          className="fa fa-exclamation-triangle"
-          style={{ color: Base.LaranjaAlerta, marginRight: 4 }}
+          className="fa fa-info-circle"
+          style={{
+            color: estudante?.alertaVermelho
+              ? Base.VermelhoAlerta
+              : Base.AmareloAlerta,
+            marginRight: 4,
+          }}
         />
       </Tooltip>
     );

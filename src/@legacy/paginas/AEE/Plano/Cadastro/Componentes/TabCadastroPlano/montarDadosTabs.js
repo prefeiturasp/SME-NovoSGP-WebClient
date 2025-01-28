@@ -64,11 +64,7 @@ const MontarDadosTabs = () => {
         </TabPane>
       )}
       {temId && (
-        <TabPane
-          tab="Parecer"
-          key="3"
-          disabled={planoAEEDados?.situacao === situacaoPlanoAEE.Expirado}
-        >
+        <TabPane tab="Parecer" key="3">
           <SecaoParecerPlanoCollapse />
         </TabPane>
       )}
