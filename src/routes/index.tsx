@@ -1,5 +1,5 @@
 import { Routes as BaseRoutes, Route, Navigate, useLocation } from 'react-router-dom';
-import React, { createElement, useEffect } from 'react';
+import { createElement, useEffect } from 'react';
 import Pagina from '~/componentes-sgp/pagina';
 import RecuperarSenha from '~/paginas/RecuperarSenha';
 import { useAppSelector } from '@/core/hooks/use-redux';
