@@ -128,5 +128,8 @@
       "@babel/plugin-transform-runtime",
       "@babel/plugin-syntax-dynamic-import"
     ]
+  },
+  "resolutions": {
+    "@testing-library/dom": "9.0.0"
   }
 }
