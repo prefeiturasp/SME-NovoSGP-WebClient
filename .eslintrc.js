@@ -61,6 +61,7 @@ module.exports = {
       },
     ],
     '@typescript-eslint/no-explicit-any': 'off',
+    'no-useless-return': 'off',
   },
   settings: {
     react: {
