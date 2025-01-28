@@ -572,6 +572,7 @@ const RelatorioFrequencia = () => {
 
   const onClickGerar = async () => {
     setCarregandoGeral(true);
+    const tipoQuantidadeAusencia = tipoValor === 'absoluto' ? 1 : 2;
     const turmas = turmasCodigo === OPCAO_TODOS ? [OPCAO_TODOS] : turmasCodigo;
     const params = {
       anoLetivo,
@@ -588,7 +589,7 @@ const RelatorioFrequencia = () => {
       tipoFormatoRelatorio: formato,
       turmasPrograma,
       codigosTurma: turmas,
-      tipoValor,
+      tipoQuantidadeAusencia: tipoQuantidadeAusencia,
     };
     setCarregandoGeral(true);
     const retorno = await ServicoRelatorioFrequencia.gerar(params)
