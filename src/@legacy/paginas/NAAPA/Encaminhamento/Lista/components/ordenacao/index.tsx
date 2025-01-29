@@ -156,6 +156,7 @@ export const BotaoOrdenacaoListaEncaminhamentoNAAPA: React.FC<
         treeCheckable
         disabled={disabled}
         treeData={treeDataList}
+        // @ts-ignore
         value={ordenacoesSelecionadas}
         onChange={setOrdenacoesSelecionadas}
         onSelect={onSelect}
