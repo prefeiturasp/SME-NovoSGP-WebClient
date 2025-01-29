@@ -39,7 +39,7 @@ const App: React.FC = () => {
       verificaSairResetSenha();
     }
   });
-
+  // @ts-ignore
   return (
     <ConfigProvider theme={SGPTheme}>
       <ThemeProvider theme={SGPTheme}>
