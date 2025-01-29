@@ -42,6 +42,7 @@ export const BotoesAcoesRelatorio: React.FC<BotoesAcoesRelatorioProps> = ({ desa
         <Col>
           <ButtonSecundary
             htmlType="submit"
+            // @ts-ignore
             color={Base.Azul}
             icon={<FaPrint />}
             id={SGP_BUTTON_GERAR_RELATORIO}
