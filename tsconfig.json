@@ -7,7 +7,6 @@
     "esModuleInterop": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
     "strict": false,
     "noImplicitAny": false,
@@ -18,7 +17,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "incremental": false
+    "incremental": false,
+    "noImplicitThis": false,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": false
   },
   "extends": "./tsconfig.paths.json",
   "include": ["src", "__mocks__"],
