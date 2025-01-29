@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { CampoData } from './campoData';
 import { Formik } from 'formik';
 import moment from 'moment';

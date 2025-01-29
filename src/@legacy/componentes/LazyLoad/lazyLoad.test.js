@@ -1,8 +1,7 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import LazyLoad from './index';
-import { Loader } from '~/componentes';
 
 jest.mock('~/componentes', () => ({
   Loader: jest.fn(({ loading, tip }) => (

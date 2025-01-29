@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import CampoNumeroFormik from './campoNumeroFormik';
-import { Formik, Field } from 'formik';
+import { Formik } from 'formik';
 
 const renderWithFormik = (
   component,

@@ -1,9 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import CampoConceito from './campoConceito';
-import SelectComponent from '~/componentes/select';
-import TooltipEstudanteAusente from './tooltipEstudanteAusente';
-import TooltipStatusGsa from './tooltipStatusGsa';
 
 jest.mock('~/componentes/select', () =>
   jest.fn(({ className, disabled }) => (
@@ -48,7 +45,7 @@ describe('CampoConceito Componente', () => {
   });
 
   it('deve chamar onChangeNotaConceito quando select value mudar', () => {
-    const { getByText, container } = render(
+    const { _getByText, container } = render(
       <CampoConceito {...defaultProps} />
     );
 
