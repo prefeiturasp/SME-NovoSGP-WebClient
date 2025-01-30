@@ -1,8 +1,10 @@
-import styled from 'styled-components';
+import styled, { CSSProperties } from 'styled-components';
 
 type ContainerProps = {
   color: string;
   height?: string;
+  children?: React.ReactNode;
+  style?: CSSProperties;
 };
 
 export const ContainerCardTotalizador = styled.div<ContainerProps>`

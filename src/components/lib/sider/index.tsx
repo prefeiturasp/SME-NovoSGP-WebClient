@@ -20,6 +20,9 @@ import {
 
 export type SiderMenuStylePros = {
   collapsed: boolean;
+  children?: React.ReactNode;
+  id?: string;
+  className?: string;
 };
 
 export type SiderSubMenuStylePros = {
