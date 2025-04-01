@@ -65,13 +65,12 @@ const uploadImagemManual = async file => {
       'content-type': 'multipart/form-data',
     },
   };
-  fmData.append('file', file);
-
+  fmData.append('file', new Blob([file], { type: file.type }), file.name);
   const resposta = await api
     .post('v1/arquivos/upload', fmData, config)
     .catch(e => erros(e));
 
-  return resposta?.data?.data?.path;
+  return resposta?.data?.path;
 };
 
 const converterImagemURLExternaParaInterna = async urlExterna => {
@@ -374,17 +373,17 @@ const JoditEditor = forwardRef((props, ref) => {
       },
       defaultHandlerSuccess: dados => {
         if (dados?.path) {
+          const imageUrl = `https://${dados.path}`;
           if (dados.contentType.startsWith('video')) {
             textArea.current.selection.insertHTML(
               `<video width="600" height="240" controls><source src="${dados.path}"></video>`
             );
           } else {
             textArea.current.selection.insertHTML(
-              `<img src="${
-                dados.path
-              }" style="max-width: 100%; height: auto; min-height: 100%; object-fit: cover; object-position: bottom; ${
-                imagensCentralizadas ? 'display: block; margin: auto;' : ''
-              }"/>`
+              `<img src="${imageUrl}" 
+               style="max-width: 100%; height: auto; min-height: 100%; object-fit: cover; object-position: bottom; ${
+                 imagensCentralizadas ? 'display: block; margin: auto;' : ''
+               }"/>`
             );
           }
         }
@@ -556,7 +555,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
       bloquearTraducaoNavegador();
     }
-  }, [textArea, value]);
+  }, []);
 
   useEffect(() => {
     if (config && textArea?.current && textArea?.current?.type !== 'textarea') {
