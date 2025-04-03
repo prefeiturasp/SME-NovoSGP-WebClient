@@ -110,6 +110,12 @@ const DescricaoPlanejamento = React.memo(props => {
             mensagemErro="Campo obrigatório"
             id={`bimestre-${bimestre}-editor`}
             value={descricaoInicial}
+            readonly={
+              planoAnualSomenteConsulta ||
+              (!obterDadosComponenteAtual()?.objetivosAprendizagemId?.length &&
+                componenteCurricular.possuiObjetivos) ||
+              !periodoAberto
+            }
             onChange={v => {
               if (
                 !planoAnualSomenteConsulta &&

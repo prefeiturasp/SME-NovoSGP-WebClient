@@ -171,6 +171,9 @@ const JoditEditor = forwardRef((props, ref) => {
 
   const [validacaoComErro, setValidacaoComErro] = useState(false);
 
+  const editorInstance = useRef(null);
+  const [initialized, setInitialized] = useState(false);
+
   const BOTOES_PADRAO = !removerToolbar
     ? `bold,ul,ol,outdent,indent,font,fontsize,brush,paragraph,${
         permiteInserirArquivo ? 'file,' : ''
@@ -312,6 +315,14 @@ const JoditEditor = forwardRef((props, ref) => {
           setValidacaoComErro(validarSeTemErro(valorParaValidar));
         }
       },
+      change: newValue => {
+        if (props.form) {
+          props.form.setFieldValue(props.name, newValue);
+        }
+        if (props.onChange) {
+          props.onChange(newValue);
+        }
+      },
     },
     uploader: {
       buildData: data => {
@@ -372,24 +383,51 @@ const JoditEditor = forwardRef((props, ref) => {
         };
       },
       defaultHandlerSuccess: dados => {
+        if (!editorInstance.current) return;
+
         if (dados?.path) {
-          const imageUrl = `https://${dados.path}`;
-          if (dados.contentType.startsWith('video')) {
-            textArea.current.selection.insertHTML(
-              `<video width="600" height="240" controls><source src="${dados.path}"></video>`
-            );
-          } else {
-            textArea.current.selection.insertHTML(
-              `<img src="${imageUrl}" 
-               style="max-width: 100%; height: auto; min-height: 100%; object-fit: cover; object-position: bottom; ${
-                 imagensCentralizadas ? 'display: block; margin: auto;' : ''
-               }"/>`
-            );
+          const imageUrl = dados.path.startsWith('http')
+            ? dados.path
+            : `https://${dados.path}`;
+
+          editorInstance.current.selection.insertHTML(
+            `<img src="${imageUrl}" style="max-width:100%;height:auto;"/>`
+          );
+
+          if (props.onChange) {
+            props.onChange(editorInstance.current.value);
           }
         }
       },
     },
   };
+
+  useEffect(() => {
+    if (!initialized && textArea.current) {
+      const instance = Jodit.make(textArea.current, config);
+      editorInstance.current = instance;
+
+      if (props.value) {
+        instance.value = props.value;
+      }
+
+      if (ref) {
+        if (typeof ref === 'function') {
+          ref(instance);
+        } else {
+          ref.current = instance;
+        }
+      }
+
+      setInitialized(true);
+    }
+
+    return () => {
+      if (editorInstance.current) {
+        editorInstance.current.destruct();
+      }
+    };
+  }, []);
 
   const onChangePadrao = () => {
     const texto = textArea?.current?.text?.trim();
@@ -502,48 +540,33 @@ const JoditEditor = forwardRef((props, ref) => {
   }, [textArea]);
 
   useEffect(() => {
-    if (url) {
-      const element = textArea.current || '';
-      if (textArea?.current && config) {
-        if (textArea?.current?.type === 'textarea') {
-          textArea.current = Jodit.make(element, config);
-          const elementTextArea =
-            textArea?.current?.editorDocument?.getElementsByClassName('jodit');
-
-          if (elementTextArea?.style) {
-            elementTextArea.style.cssText = 'overflow: auto;';
-          }
-
-          if (elementTextArea) {
-            elementTextArea.translate = false;
-            elementTextArea.className = `${elementTextArea.className} notranslate`;
-          }
-
-          if (ref) {
-            if (typeof ref === 'function') {
-              ref(textArea.current);
-            } else {
-              ref.current = textArea.current;
-            }
-          }
-
-          textArea.current.events.on('beforePaste', e => {
-            if (verificaSeTemSvg(e) || !verificaSePodeInserirArquivo(e)) {
-              return false;
-            }
-
-            return true;
-          });
-
-          textArea.current.events.on('change', () => {
-            beforeOnChange();
-          });
-
-          textArea.current.workplace.tabIndex = tabIndex;
-        }
-      }
+    if (
+      initialized &&
+      editorInstance.current &&
+      props.value !== editorInstance.current.value
+    ) {
+      editorInstance.current.value = props.value || '';
     }
-  }, [textArea, url]);
+  }, [props.value, initialized]);
+
+  const renderEditor = () => (
+    <Campo>
+      <div className={className}>
+        {props.form ? (
+          <Field name={props.name} id={props.id} value={props.value || ''}>
+            {() => <textarea ref={textArea} />}
+          </Field>
+        ) : (
+          <textarea
+            id={props.id}
+            ref={textArea}
+            value={props.value || ''}
+            onChange={() => {}}
+          />
+        )}
+      </div>
+    </Campo>
+  );
 
   useEffect(() => {
     if (textArea?.current?.setEditorValue) {
@@ -555,7 +578,7 @@ const JoditEditor = forwardRef((props, ref) => {
 
       bloquearTraducaoNavegador();
     }
-  }, []);
+  }, [textArea, value]);
 
   useEffect(() => {
     if (config && textArea?.current && textArea?.current?.type !== 'textarea') {
@@ -624,8 +647,10 @@ const JoditEditor = forwardRef((props, ref) => {
 
   return (
     <>
-      {label ? <Label text={label} isRequired={labelRequired} /> : <></>}
-      {form ? editorComValidacoes() : editorSemValidacoes()}
+      {props.label && (
+        <Label text={props.label} isRequired={props.labelRequired} />
+      )}
+      {renderEditor()}
       {obterErros()}
     </>
   );
