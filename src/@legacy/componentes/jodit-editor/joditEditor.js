@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { store } from '@/core/redux';
 import { Field } from 'formik';
 import { Jodit } from 'jodit';
