@@ -811,7 +811,7 @@ const DiarioBordo = () => {
                                       dadosDiarioBordo?.nomeComponenteIrmao
                                     }
                                     value={dadosDiarioBordo?.planejamentoIrmao}
-                                    desabilitar
+                                    desabilitar={desabilitarCampos}
                                   />
                                 ) : (
                                   <></>
