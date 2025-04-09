@@ -3,7 +3,7 @@ import { setListaPadraoMotivoAusencia } from '~/redux/modulos/modalAnotacaoFrequ
 import api from '~/servicos/api';
 
 const urlPadrao = '/v1/anotacoes/alunos';
-
+const urlRegistroAcoes = '/v1/busca-ativa/registros-acao';
 class ServicoAnotacaoFrequenciaAluno {
   obterMotivosAusencia = () => {
     return api.get(`${urlPadrao}/motivos-ausencia`);
@@ -27,6 +27,11 @@ class ServicoAnotacaoFrequenciaAluno {
 
   obterAnotacao = (codigoAluno, aulaId) => {
     const url = `${urlPadrao}/${codigoAluno}/aulas/${aulaId}`;
+    return api.get(url);
+  };
+
+  obterMotivosAusenciaAbae = (codigoAluno, dataSelecionada) => {
+    const url = `${urlRegistroAcoes}?codigoNomeAluno=${codigoAluno}&dataRegistroInicio=${dataSelecionada}&dataRegistroFim=${dataSelecionada}`;
     return api.get(url);
   };
 

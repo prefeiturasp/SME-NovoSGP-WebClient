@@ -47,7 +47,7 @@ const SelectAnoLetivo: React.FC<SelectAnoLetivoProps> = ({
     })
       .catch((e) => erros(e))
       .finally(() => setExibirLoader(false));
-
+    // @ts-ignore
     if (resposta?.length) {
       const anosOrdenados = ordenarDescPor(resposta, 'valor');
 

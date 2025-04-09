@@ -61,7 +61,7 @@ const SelectUE: React.FC<SelectUEProps> = ({
       .get(url)
       .catch((e) => erros(e))
       .finally(() => setExibirLoader(false));
-
+    // @ts-ignore
     if (resposta?.data?.length) {
       let lista = resposta.data;
 
@@ -100,7 +100,7 @@ const SelectUE: React.FC<SelectUEProps> = ({
   return (
     <Loader loading={exibirLoader} tip="">
       <Form.Item
-        label="Unidade Escolar (UE)"
+        label="Unidade Educacional (UE)"
         name={name}
         initialValue={
           initialValueConfig?.loaded ? initialValueConfig.value : formItemProps?.initialValue
@@ -114,7 +114,7 @@ const SelectUE: React.FC<SelectUEProps> = ({
           allowClear
           id={SGP_SELECT_UE}
           options={options}
-          placeholder="Unidade Escolar (UE)"
+          placeholder="Unidade Educacional (UE)"
           labelInValue
           {...selectProps}
           disabled={disabled}

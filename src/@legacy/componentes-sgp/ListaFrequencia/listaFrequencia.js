@@ -29,6 +29,7 @@ const ListaFrequencia = props => {
     ehInfantil,
     aulaId,
     setDataSource,
+    dataSelecionadaMotivosAusencias,
   } = props;
 
   const dispatch = useDispatch();
@@ -377,6 +378,7 @@ const ListaFrequencia = props => {
         ehInfantil={ehInfantil}
         aulaId={aulaId}
         desabilitarCampos={desabilitarModalAnotacoes}
+        dataSelecionadaMotivosAusencias={dataSelecionadaMotivosAusencias}
       />
 
       <ContainerListaFrequencia className="pt-2">
