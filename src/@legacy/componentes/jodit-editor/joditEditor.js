@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { store } from '@/core/redux';
 import { Field } from 'formik';
 import { Jodit } from 'jodit';
@@ -583,6 +584,12 @@ const JoditEditor = forwardRef((props, ref) => {
   useEffect(() => {
     if (config && textArea?.current && textArea?.current?.type !== 'textarea') {
       textArea.current.setReadOnly(desabilitar);
+    }
+  }, [desabilitar]);
+
+  useEffect(() => {
+    if (editorInstance.current) {
+      editorInstance.current.setReadOnly(desabilitar);
     }
   }, [desabilitar]);
 
