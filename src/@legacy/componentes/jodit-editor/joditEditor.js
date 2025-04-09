@@ -587,6 +587,12 @@ const JoditEditor = forwardRef((props, ref) => {
     }
   }, [desabilitar]);
 
+  useEffect(() => {
+    if (editorInstance.current) {
+      editorInstance.current.setReadOnly(desabilitar);
+    }
+  }, [desabilitar]);
+
   const possuiErro = () => {
     return (
       (form && form.errors[name] && form.touched[name]) ||
