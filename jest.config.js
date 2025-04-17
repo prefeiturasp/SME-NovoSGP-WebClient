@@ -1,6 +1,6 @@
 module.exports = {
   collectCoverage: true,
-  coverageReporters: ['text', 'lcov', 'json'],
+  coverageReporters: ['text', 'lcov', 'json', 'html'],
   coverageDirectory: 'coverage',
   preset: 'ts-jest',
   transform: {
