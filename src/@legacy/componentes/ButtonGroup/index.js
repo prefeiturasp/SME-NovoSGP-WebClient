@@ -46,6 +46,7 @@ function ButtonGroup({
           <Button
             id={SGP_BUTTON_CANCELAR}
             label="Cancelar"
+            data-testid={SGP_BUTTON_CANCELAR}
             color={Colors.Roxo}
             border
             onClick={() => onClickCancelar(form)}
@@ -57,6 +58,7 @@ function ButtonGroup({
         <Col>
           <BotaoExcluirPadrao
             id={SGP_BUTTON_EXCLUIR}
+            data-testid={SGP_BUTTON_EXCLUIR}
             disabled={somenteConsulta || desabilitarExcluir()}
             onClick={() => onClickExcluir()}
           />
@@ -67,6 +69,7 @@ function ButtonGroup({
           <Button
             id={idBotaoPrincipal}
             label={labelBotaoPrincipal}
+            aria-label="Botao"
             color={Colors.Roxo}
             border
             bold
