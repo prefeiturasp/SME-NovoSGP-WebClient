@@ -1,3 +1,4 @@
+import React from 'react';
 import ServicoRelatorioOcorrencias from '@/@legacy/servicos/Paginas/Relatorios/Gestao/Ocorrencias/ServicoRelatorioOcorrencias';
 import { HttpStatusCode } from 'axios';
 import _ from 'lodash';
