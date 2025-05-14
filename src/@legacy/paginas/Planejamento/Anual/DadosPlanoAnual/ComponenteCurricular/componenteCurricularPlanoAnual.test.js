@@ -3,7 +3,6 @@ import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import configureStore from 'redux-mock-store';
-
 import ServicoDisciplinas from '~/servicos/Paginas/ServicoDisciplina';
 import ComponenteCurricularPlanoAnual from './ComponenteCurricularPlanoAnual';
 
@@ -306,7 +305,7 @@ describe('Componente Curricular plano anual', () => {
     expect(select).toBeDisabled();
   });
 
-  it('onChange sem edição despacha limpar + set', async () => {
+  it('onChange sem edição chama o limpar + setComponenteCurricularPlanoAnual', async () => {
     ehTurmaInfantil.mockReturnValue(false);
 
     const mockDuas = [
