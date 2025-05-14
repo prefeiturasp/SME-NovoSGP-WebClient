@@ -1,7 +1,8 @@
 import React from 'react';
-import { createStore, combineReducers } from 'redux';
+import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import configureStore from 'redux-mock-store';
 
 import ServicoDisciplinas from '~/servicos/Paginas/ServicoDisciplina';
 import ComponenteCurricularPlanoAnual from './ComponenteCurricularPlanoAnual';
@@ -34,6 +35,20 @@ jest.mock('../../servicoSalvarPlanoAnual', () => ({
 jest.mock('~/servicos/Paginas/ServicoDisciplina', () => ({
   obterDisciplinasPorTurma: jest.fn(),
 }));
+
+const mockStore = configureStore([]);
+
+const renderWithMockStore = initialState => {
+  const store = mockStore(initialState);
+  return {
+    store,
+    ...render(
+      <Provider store={store}>
+        <ComponenteCurricularPlanoAnual />
+      </Provider>
+    ),
+  };
+};
 
 const renderWithRealStore = initialState => {
   const store = createStore(rootReducer, initialState);
@@ -166,7 +181,7 @@ describe('Componente Curricular plano anual', () => {
       filtro: { modalidades: [{ desc: 'Ensino Fundamental', valor: 5 }] },
     };
 
-    renderWithRealStore(initialState);
+    renderWithMockStore(initialState);
 
     const select = await screen.findByRole('combobox', {
       id: 'componente-curricular',
@@ -225,7 +240,7 @@ describe('Componente Curricular plano anual', () => {
       filtro: { modalidades: [{ desc: 'Ensino Fundamental', valor: 5 }] },
     };
 
-    const { store } = renderWithRealStore(initialState);
+    const { store } = renderWithMockStore(initialState);
 
     await waitFor(() => {
       expect(erros).toHaveBeenCalledWith(expect.any(Error));
@@ -281,7 +296,7 @@ describe('Componente Curricular plano anual', () => {
       filtro: { modalidades: [{ desc: 'Ensino Fundamental', valor: 5 }] },
     };
 
-    renderWithRealStore(initialState);
+    renderWithMockStore(initialState);
 
     expect(ServicoDisciplinas.obterDisciplinasPorTurma).not.toHaveBeenCalled();
 
@@ -341,7 +356,7 @@ describe('Componente Curricular plano anual', () => {
       filtro: { modalidades: [{ desc: 'Ensino Fundamental', valor: 5 }] },
     };
 
-    const { store } = renderWithRealStore(initialState);
+    const { store } = renderWithMockStore(initialState);
 
     const select = await screen.findByRole('combobox', {
       id: 'componente-curricular',
@@ -351,8 +366,238 @@ describe('Componente Curricular plano anual', () => {
     fireEvent.click(option2);
 
     await waitFor(() => {
-      expect(store.getState().planoAnual.componenteCurricular).toEqual(
-        mockDuas[1]
+      const actions = store.getActions();
+      expect(actions).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            type: expect.stringContaining('setComponenteCurricularPlanoAnual'),
+            payload: mockDuas[1],
+          }),
+        ])
+      );
+    });
+  });
+
+  it('deve chamar perguntaAoSalvar e validarSalvarPlanoAnual ao trocar componente curricular com plano em edição', async () => {
+    ehTurmaInfantil.mockReturnValue(false);
+    confirmar.mockResolvedValueOnce(true);
+    servicoSalvarPlanoAnual.validarSalvarPlanoAnual.mockResolvedValueOnce(true);
+
+    const mockDuas = [
+      { id: 6, codigoComponenteCurricular: 6, nome: 'Ed. Física' },
+      { id: 7, codigoComponenteCurricular: 7, nome: 'Matemática' },
+    ];
+    ServicoDisciplinas.obterDisciplinasPorTurma.mockResolvedValueOnce({
+      data: mockDuas,
+    });
+    const initialState = {
+      planoAnual: {
+        componenteCurricular: undefined,
+        listaComponentesCurricularesPlanejamento: mockDuas,
+        bimestresPlanoAnual: [],
+        planoAnualEmEdicao: true,
+        tabAtualComponenteCurricular: [],
+        dadosBimestresPlanoAnual: [],
+        dadosEditadosBimestresPlanoAnual: [],
+        listaObjetivosAprendizagemPorComponente: [],
+        errosPlanoAnual: [],
+        exibirModalErrosPlanoAnual: false,
+        exibirCopiarConteudo: false,
+        listaTurmasParaCopiar: [],
+        ehRegistroMigrado: false,
+        planejamentoAnualId: 0,
+        planoAnualSomenteConsulta: false,
+        listaComponentesCheck: [],
+      },
+      usuario: {
+        nome: 'Professor Teste',
+        id: 1,
+        turmaSelecionada: {
+          anoLetivo: 2025,
+          modalidade: 5,
+          dre: '108200',
+          unidadeEscolar: '092967',
+          turma: '2853818',
+          ano: '7',
+          desc: 'desc',
+          periodo: 0,
+          consideraHistorico: false,
+          ensinoEspecial: false,
+          id: 4390735,
+        },
+      },
+      filtro: { modalidades: [{ desc: 'Ensino Fundamental', valor: 5 }] },
+    };
+    const { store } = renderWithMockStore(initialState);
+    const select = await screen.findByRole('combobox', {
+      id: 'componente-curricular',
+    });
+    fireEvent.mouseDown(select);
+    const option2 = await screen.findByText(/Matemática/i);
+    fireEvent.click(option2);
+    await waitFor(() => {
+      expect(confirmar).toHaveBeenCalled();
+      expect(
+        servicoSalvarPlanoAnual.validarSalvarPlanoAnual
+      ).toHaveBeenCalled();
+      const actions = store.getActions();
+      expect(actions).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            type: expect.stringContaining('setComponenteCurricularPlanoAnual'),
+            payload: mockDuas[1],
+          }),
+        ])
+      );
+    });
+  });
+
+  it('deve chamar perguntaAoSalvar e NÃO setar componente se usuário cancelar', async () => {
+    ehTurmaInfantil.mockReturnValue(false);
+    confirmar.mockResolvedValueOnce(false);
+
+    const mockDuas = [
+      { id: 6, codigoComponenteCurricular: 6, nome: 'Ed. Física' },
+      { id: 7, codigoComponenteCurricular: 7, nome: 'Matemática' },
+    ];
+    ServicoDisciplinas.obterDisciplinasPorTurma.mockResolvedValueOnce({
+      data: mockDuas,
+    });
+    const initialState = {
+      planoAnual: {
+        componenteCurricular: undefined,
+        listaComponentesCurricularesPlanejamento: mockDuas,
+        bimestresPlanoAnual: [],
+        planoAnualEmEdicao: true,
+        tabAtualComponenteCurricular: [],
+        dadosBimestresPlanoAnual: [],
+        dadosEditadosBimestresPlanoAnual: [],
+        listaObjetivosAprendizagemPorComponente: [],
+        errosPlanoAnual: [],
+        exibirModalErrosPlanoAnual: false,
+        exibirCopiarConteudo: false,
+        listaTurmasParaCopiar: [],
+        ehRegistroMigrado: false,
+        planejamentoAnualId: 0,
+        planoAnualSomenteConsulta: false,
+        listaComponentesCheck: [],
+      },
+      usuario: {
+        nome: 'Professor Teste',
+        id: 1,
+        turmaSelecionada: {
+          anoLetivo: 2025,
+          modalidade: 5,
+          dre: '108200',
+          unidadeEscolar: '092967',
+          turma: '2853818',
+          ano: '7',
+          desc: 'desc',
+          periodo: 0,
+          consideraHistorico: false,
+          ensinoEspecial: false,
+          id: 4390735,
+        },
+      },
+      filtro: { modalidades: [{ desc: 'Ensino Fundamental', valor: 5 }] },
+    };
+    const { store } = renderWithMockStore(initialState);
+    const select = await screen.findByRole('combobox', {
+      id: 'componente-curricular',
+    });
+    fireEvent.mouseDown(select);
+    const option2 = await screen.findByText(/Matemática/i);
+    fireEvent.click(option2);
+    await waitFor(() => {
+      expect(confirmar).toHaveBeenCalled();
+      expect(
+        servicoSalvarPlanoAnual.validarSalvarPlanoAnual
+      ).not.toHaveBeenCalled();
+      const actions = store.getActions();
+      expect(actions).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            type: expect.stringContaining('setComponenteCurricularPlanoAnual'),
+            payload: mockDuas[1],
+          }),
+        ])
+      );
+    });
+  });
+
+  it('deve chamar perguntaAoSalvar e NÃO setar componente se validarSalvarPlanoAnual retornar false', async () => {
+    ehTurmaInfantil.mockReturnValue(false);
+    confirmar.mockResolvedValueOnce(true);
+    servicoSalvarPlanoAnual.validarSalvarPlanoAnual.mockResolvedValueOnce(
+      false
+    );
+
+    const mockDuas = [
+      { id: 6, codigoComponenteCurricular: 6, nome: 'Ed. Física' },
+      { id: 7, codigoComponenteCurricular: 7, nome: 'Matemática' },
+    ];
+    ServicoDisciplinas.obterDisciplinasPorTurma.mockResolvedValueOnce({
+      data: mockDuas,
+    });
+    const initialState = {
+      planoAnual: {
+        componenteCurricular: undefined,
+        listaComponentesCurricularesPlanejamento: mockDuas,
+        bimestresPlanoAnual: [],
+        planoAnualEmEdicao: true,
+        tabAtualComponenteCurricular: [],
+        dadosBimestresPlanoAnual: [],
+        dadosEditadosBimestresPlanoAnual: [],
+        listaObjetivosAprendizagemPorComponente: [],
+        errosPlanoAnual: [],
+        exibirModalErrosPlanoAnual: false,
+        exibirCopiarConteudo: false,
+        listaTurmasParaCopiar: [],
+        ehRegistroMigrado: false,
+        planejamentoAnualId: 0,
+        planoAnualSomenteConsulta: false,
+        listaComponentesCheck: [],
+      },
+      usuario: {
+        nome: 'Professor Teste',
+        id: 1,
+        turmaSelecionada: {
+          anoLetivo: 2025,
+          modalidade: 5,
+          dre: '108200',
+          unidadeEscolar: '092967',
+          turma: '2853818',
+          ano: '7',
+          desc: 'desc',
+          periodo: 0,
+          consideraHistorico: false,
+          ensinoEspecial: false,
+          id: 4390735,
+        },
+      },
+      filtro: { modalidades: [{ desc: 'Ensino Fundamental', valor: 5 }] },
+    };
+    const { store } = renderWithMockStore(initialState);
+    const select = await screen.findByRole('combobox', {
+      id: 'componente-curricular',
+    });
+    fireEvent.mouseDown(select);
+    const option2 = await screen.findByText(/Matemática/i);
+    fireEvent.click(option2);
+    await waitFor(() => {
+      expect(confirmar).toHaveBeenCalled();
+      expect(
+        servicoSalvarPlanoAnual.validarSalvarPlanoAnual
+      ).toHaveBeenCalled();
+      const actions = store.getActions();
+
+      expect(actions).not.toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            type: expect.stringContaining('setComponenteCurricularPlanoAnual'),
+            payload: mockDuas[1],
+          }),
+        ])
       );
     });
   });
