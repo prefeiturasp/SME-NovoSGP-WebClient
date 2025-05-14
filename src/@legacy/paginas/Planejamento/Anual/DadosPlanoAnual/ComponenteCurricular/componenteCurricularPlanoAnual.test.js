@@ -2,6 +2,7 @@ import React from 'react';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+
 import ServicoDisciplinas from '~/servicos/Paginas/ServicoDisciplina';
 import ComponenteCurricularPlanoAnual from './ComponenteCurricularPlanoAnual';
 
@@ -9,17 +10,28 @@ import planoAnualReducer from '~/redux/modulos/anual/reducers';
 import usuarioReducer from '~/redux/modulos/usuario/reducers';
 import filtroReducer from '~/redux/modulos/filtro/reducers';
 
+import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
+import { confirmar, erros } from '~/servicos/alertas';
+import servicoSalvarPlanoAnual from '../../servicoSalvarPlanoAnual';
+
 const rootReducer = combineReducers({
   planoAnual: planoAnualReducer,
   usuario: usuarioReducer,
   filtro: filtroReducer,
 });
 
-jest.mock('~/servicos', () => ({
+jest.mock('~/servicos/Validacoes/validacoesInfatil', () => ({
+  ehTurmaInfantil: jest.fn(),
+}));
+jest.mock('~/servicos/alertas', () => ({
+  confirmar: jest.fn(),
   erros: jest.fn(),
   sucesso: jest.fn(),
 }));
-jest.mock('@/@legacy/servicos/Paginas/ServicoDisciplina', () => ({
+jest.mock('../../servicoSalvarPlanoAnual', () => ({
+  validarSalvarPlanoAnual: jest.fn(),
+}));
+jest.mock('~/servicos/Paginas/ServicoDisciplina', () => ({
   obterDisciplinasPorTurma: jest.fn(),
 }));
 
@@ -36,18 +48,24 @@ const renderWithRealStore = initialState => {
 };
 
 describe('Componente Curricular plano anual', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('quando só tiver uma disciplina ela é deixada selecionada e select fica desabilitado', async () => {
-    const mockApenasUmaDisciplina = [
+    ehTurmaInfantil.mockReturnValue(false);
+
+    const sóUma = [
       { id: 6, codigoComponenteCurricular: 6, nome: 'Ed. Física' },
     ];
     ServicoDisciplinas.obterDisciplinasPorTurma.mockResolvedValueOnce({
-      data: mockApenasUmaDisciplina,
+      data: sóUma,
     });
 
     const initialState = {
       planoAnual: {
         componenteCurricular: undefined,
-        listaComponentesCurricularesPlanejamento: mockApenasUmaDisciplina,
+        listaComponentesCurricularesPlanejamento: sóUma,
         bimestresPlanoAnual: [],
         planoAnualEmEdicao: false,
         tabAtualComponenteCurricular: [],
@@ -56,7 +74,7 @@ describe('Componente Curricular plano anual', () => {
         listaObjetivosAprendizagemPorComponente: [],
         errosPlanoAnual: [],
         exibirModalErrosPlanoAnual: false,
-        exibirModalCopiarConteudo: false,
+        exibirCopiarConteudo: false,
         listaTurmasParaCopiar: [],
         ehRegistroMigrado: false,
         planejamentoAnualId: 0,
@@ -86,9 +104,8 @@ describe('Componente Curricular plano anual', () => {
     const { store } = renderWithRealStore(initialState);
 
     await waitFor(() => {
-      const state = store.getState();
-      expect(state.planoAnual.componenteCurricular).toEqual(
-        mockApenasUmaDisciplina[0]
+      expect(store.getState().planoAnual.componenteCurricular).toEqual(
+        sóUma[0]
       );
     });
 
@@ -100,18 +117,20 @@ describe('Componente Curricular plano anual', () => {
   });
 
   it('quando tiver mais de uma disciplina, select fica habilitado e mostra todas opções', async () => {
-    const mockDuasDisciplinas = [
+    ehTurmaInfantil.mockReturnValue(false);
+
+    const duas = [
       { id: 6, codigoComponenteCurricular: 6, nome: 'Ed. Física' },
       { id: 7, codigoComponenteCurricular: 7, nome: 'Matemática' },
     ];
     ServicoDisciplinas.obterDisciplinasPorTurma.mockResolvedValueOnce({
-      data: mockDuasDisciplinas,
+      data: duas,
     });
 
     const initialState = {
       planoAnual: {
         componenteCurricular: undefined,
-        listaComponentesCurricularesPlanejamento: mockDuasDisciplinas,
+        listaComponentesCurricularesPlanejamento: duas,
         bimestresPlanoAnual: [],
         planoAnualEmEdicao: false,
         tabAtualComponenteCurricular: [],
@@ -120,7 +139,7 @@ describe('Componente Curricular plano anual', () => {
         listaObjetivosAprendizagemPorComponente: [],
         errosPlanoAnual: [],
         exibirModalErrosPlanoAnual: false,
-        exibirModalCopiarConteudo: false,
+        exibirCopiarConteudo: false,
         listaTurmasParaCopiar: [],
         ehRegistroMigrado: false,
         planejamentoAnualId: 0,
@@ -156,10 +175,185 @@ describe('Componente Curricular plano anual', () => {
 
     fireEvent.mouseDown(select);
 
-    const option1 = await screen.findByText(/Ed\. Física/i);
-    const option2 = await screen.findByText(/Matemática/i);
+    expect(await screen.findByText(/Ed\. Física/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Matemática/i)).toBeInTheDocument();
+  });
 
-    expect(option1).toBeInTheDocument();
-    expect(option2).toBeInTheDocument();
+  it('quando o fetch falhar, chama erros() e não define componente', async () => {
+    ehTurmaInfantil.mockReturnValue(false);
+
+    ServicoDisciplinas.obterDisciplinasPorTurma.mockRejectedValueOnce(
+      new Error('fail')
+    );
+
+    const initialState = {
+      planoAnual: {
+        componenteCurricular: undefined,
+        listaComponentesCurricularesPlanejamento: [],
+        bimestresPlanoAnual: [],
+        planoAnualEmEdicao: false,
+        tabAtualComponenteCurricular: [],
+        dadosBimestresPlanoAnual: [],
+        dadosEditadosBimestresPlanoAnual: [],
+        listaObjetivosAprendizagemPorComponente: [],
+        errosPlanoAnual: [],
+        exibirModalErrosPlanoAnual: false,
+        exibirCopiarConteudo: false,
+        listaTurmasParaCopiar: [],
+        ehRegistroMigrado: false,
+        planejamentoAnualId: 0,
+        planoAnualSomenteConsulta: false,
+        listaComponentesCheck: [],
+      },
+      usuario: {
+        nome: 'Professor Teste',
+        id: 1,
+        turmaSelecionada: {
+          anoLetivo: 2025,
+          modalidade: 5,
+          dre: '108200',
+          unidadeEscolar: '092967',
+          turma: '2853818',
+          ano: '7',
+          desc: 'desc',
+          periodo: 0,
+          consideraHistorico: false,
+          ensinoEspecial: false,
+          id: 4390735,
+        },
+      },
+      filtro: { modalidades: [{ desc: 'Ensino Fundamental', valor: 5 }] },
+    };
+
+    const { store } = renderWithRealStore(initialState);
+
+    await waitFor(() => {
+      expect(erros).toHaveBeenCalledWith(expect.any(Error));
+      expect(store.getState().planoAnual.componenteCurricular).toBeUndefined();
+    });
+
+    const select = await screen.findByRole('combobox', {
+      id: 'componente-curricular',
+    });
+    expect(select).toBeEnabled();
+    expect(screen.queryByText(/Ed\. Física/i)).toBeNull();
+  });
+
+  it('se for turma infantil, não chama fetch e select fica desabilitado', async () => {
+    ehTurmaInfantil.mockReturnValue(true);
+
+    const initialState = {
+      planoAnual: {
+        componenteCurricular: undefined,
+        listaComponentesCurricularesPlanejamento: [],
+        bimestresPlanoAnual: [],
+        planoAnualEmEdicao: false,
+        tabAtualComponenteCurricular: [],
+        dadosBimestresPlanoAnual: [],
+        dadosEditadosBimestresPlanoAnual: [],
+        listaObjetivosAprendizagemPorComponente: [],
+        errosPlanoAnual: [],
+        exibirModalErrosPlanoAnual: false,
+        exibirCopiarConteudo: false,
+        listaTurmasParaCopiar: [],
+        ehRegistroMigrado: false,
+        planejamentoAnualId: 0,
+        planoAnualSomenteConsulta: false,
+        listaComponentesCheck: [],
+      },
+      usuario: {
+        nome: 'Professor Teste',
+        id: 1,
+        turmaSelecionada: {
+          anoLetivo: 2025,
+          modalidade: 5,
+          dre: '108200',
+          unidadeEscolar: '092967',
+          turma: '2853818',
+          ano: '7',
+          desc: 'desc',
+          periodo: 0,
+          consideraHistorico: false,
+          ensinoEspecial: false,
+          id: 4390735,
+        },
+      },
+      filtro: { modalidades: [{ desc: 'Ensino Fundamental', valor: 5 }] },
+    };
+
+    renderWithRealStore(initialState);
+
+    expect(ServicoDisciplinas.obterDisciplinasPorTurma).not.toHaveBeenCalled();
+
+    const select = await screen.findByRole('combobox', {
+      id: 'componente-curricular',
+    });
+    expect(select).toBeDisabled();
+  });
+
+  it('onChange sem edição despacha limpar + set', async () => {
+    ehTurmaInfantil.mockReturnValue(false);
+
+    const mockDuas = [
+      { id: 6, codigoComponenteCurricular: 6, nome: 'Ed. Física' },
+      { id: 7, codigoComponenteCurricular: 7, nome: 'Matemática' },
+    ];
+    ServicoDisciplinas.obterDisciplinasPorTurma.mockResolvedValueOnce({
+      data: mockDuas,
+    });
+
+    const initialState = {
+      planoAnual: {
+        componenteCurricular: undefined,
+        listaComponentesCurricularesPlanejamento: mockDuas,
+        bimestresPlanoAnual: [],
+        planoAnualEmEdicao: false,
+        tabAtualComponenteCurricular: [],
+        dadosBimestresPlanoAnual: [],
+        dadosEditadosBimestresPlanoAnual: [],
+        listaObjetivosAprendizagemPorComponente: [],
+        errosPlanoAnual: [],
+        exibirModalErrosPlanoAnual: false,
+        exibirCopiarConteudo: false,
+        listaTurmasParaCopiar: [],
+        ehRegistroMigrado: false,
+        planejamentoAnualId: 0,
+        planoAnualSomenteConsulta: false,
+        listaComponentesCheck: [],
+      },
+      usuario: {
+        nome: 'Professor Teste',
+        id: 1,
+        turmaSelecionada: {
+          anoLetivo: 2025,
+          modalidade: 5,
+          dre: '108200',
+          unidadeEscolar: '092967',
+          turma: '2853818',
+          ano: '7',
+          desc: 'desc',
+          periodo: 0,
+          consideraHistorico: false,
+          ensinoEspecial: false,
+          id: 4390735,
+        },
+      },
+      filtro: { modalidades: [{ desc: 'Ensino Fundamental', valor: 5 }] },
+    };
+
+    const { store } = renderWithRealStore(initialState);
+
+    const select = await screen.findByRole('combobox', {
+      id: 'componente-curricular',
+    });
+    fireEvent.mouseDown(select);
+    const option2 = await screen.findByText(/Matemática/i);
+    fireEvent.click(option2);
+
+    await waitFor(() => {
+      expect(store.getState().planoAnual.componenteCurricular).toEqual(
+        mockDuas[1]
+      );
+    });
   });
 });
