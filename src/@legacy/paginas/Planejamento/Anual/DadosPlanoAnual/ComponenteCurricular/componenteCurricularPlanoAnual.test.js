@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import ServicoDisciplinas from '~/servicos/Paginas/ServicoDisciplina';
 import ComponenteCurricularPlanoAnual from './ComponenteCurricularPlanoAnual';
 
@@ -56,8 +56,6 @@ describe('Componente Curricular plano anual', () => {
         listaObjetivosAprendizagemPorComponente: [],
         errosPlanoAnual: [],
         exibirModalErrosPlanoAnual: false,
-        exibirLoaderPlanoAnual: false,
-        clicouNoBimestre: [],
         exibirModalCopiarConteudo: false,
         listaTurmasParaCopiar: [],
         ehRegistroMigrado: false,
@@ -122,8 +120,6 @@ describe('Componente Curricular plano anual', () => {
         listaObjetivosAprendizagemPorComponente: [],
         errosPlanoAnual: [],
         exibirModalErrosPlanoAnual: false,
-        exibirLoaderPlanoAnual: false,
-        clicouNoBimestre: [],
         exibirModalCopiarConteudo: false,
         listaTurmasParaCopiar: [],
         ehRegistroMigrado: false,
@@ -158,12 +154,12 @@ describe('Componente Curricular plano anual', () => {
     });
     expect(select).toBeEnabled();
 
-    select.focus();
-    select.click();
+    fireEvent.mouseDown(select);
 
-    await waitFor(() => {
-      expect(screen.getByText(/Ed\. Física/i)).toBeInTheDocument();
-      expect(screen.getByText(/Matemática/i)).toBeInTheDocument();
-    });
+    const option1 = await screen.findByText(/Ed\. Física/i);
+    const option2 = await screen.findByText(/Matemática/i);
+
+    expect(option1).toBeInTheDocument();
+    expect(option2).toBeInTheDocument();
   });
 });
