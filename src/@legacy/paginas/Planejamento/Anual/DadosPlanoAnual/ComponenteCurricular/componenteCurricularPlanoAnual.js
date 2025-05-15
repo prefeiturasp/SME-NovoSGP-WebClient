@@ -46,6 +46,9 @@ const ComponenteCurricularPlanoAnual = () => {
     if (resposta && resposta.data) {
       const lista = resposta.data.filter(d => !d.territorioSaber);
       setListaComponenteCurricular(lista);
+      if (lista.length === 1) {
+        dispatch(setComponenteCurricularPlanoAnual(lista[0]));
+      }
     } else {
       setListaComponenteCurricular([]);
       dispatch(setComponenteCurricularPlanoAnual(undefined));
