@@ -7,9 +7,8 @@ import { LocalizadorProfessorRelProdutividade } from './index';
 import { TipoRelatorioProdutividadeFrequenciaEnum } from '@/core/enum/tipo-relatorio-produtividade-frequencia-enum';
 
 jest.mock('@/components/sgp/inputs/form/localizador-professor', () => ({
-  LocalizadorProfessor: (props: any) => <div data-testid="mock-localizador-professor" {...props} />,
+  LocalizadorProfessor: () => <div data-testid="mock-localizador-professor" />,
 }));
-
 jest.mock('antd/es/form/hooks/useFormInstance', () => {
   return {
     __esModule: true,
