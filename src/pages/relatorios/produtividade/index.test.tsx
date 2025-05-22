@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { RelatorioProdutividade } from './index';
 import relatoriosService from '@/core/services/relatorios-service';
 import { sucesso } from '~/servicos';
+import { OPCAO_TODOS } from '~/constantes';
 
 jest.mock('@/components/lib/card-content', () => ({
   __esModule: true,
@@ -12,52 +14,106 @@ jest.mock('@/components/lib/header-page', () => ({
   __esModule: true,
   default: (props: any) => <div data-testid="header-page">{props.children}</div>,
 }));
+
 jest.mock('@/components/sgp/botoes-acoes/relatorio', () => ({
   __esModule: true,
   BotoesAcoesRelatorio: (props: any) => (
-    <button data-testid="btn-gerar" disabled={props.desabilitarGerar} onClick={props.onClick}>
+    <button
+      data-testid="btn-gerar"
+      type="submit"
+      disabled={props.desabilitarGerar}
+      onClick={props.onClick}
+    >
       Gerar
     </button>
   ),
 }));
-jest.mock('@/components/sgp/inputs/form/anoLetivo', () => ({
-  __esModule: true,
-  default: () => <input data-testid="ano-letivo" name="anoLetivo" />,
-}));
-jest.mock('@/components/sgp/inputs/form/dre', () => ({
-  __esModule: true,
-  default: () => <input data-testid="dre" name="dre" />,
-}));
-jest.mock('@/components/sgp/inputs/form/ue', () => ({
-  __esModule: true,
-  default: () => <input data-testid="ue" name="ue" />,
-}));
-jest.mock('@/components/sgp/inputs/form/exibir-historico', () => ({
-  __esModule: true,
-  default: () => <input data-testid="exibir-historico" name="exibirHistorico" type="checkbox" />,
-}));
-jest.mock('./components/bimestres', () => ({
-  __esModule: true,
-  SelectBimestresFrequenciaProdutividade: () => (
-    <select data-testid="bimestre" name="bimestre">
-      <option value="1">1º</option>
-    </select>
-  ),
-}));
-jest.mock('./components/professores', () => ({
-  __esModule: true,
-  LocalizadorProfessorRelProdutividade: () => (
-    <input data-testid="professor" name="localizadorProfessor" />
-  ),
-}));
-jest.mock('./components/tipo-produtividade', () => ({
-  __esModule: true,
-  SelectTipoRelatorioFrequenciaProdutividade: () => (
-    <select data-testid="tipo-prod" name="tipoRelatorioProdutividade">
-      <option value="1">Tipo</option>
-    </select>
-  ),
-}));
+jest.mock('@/components/sgp/inputs/form/anoLetivo', () => {
+  const { Form } = require('antd');
+  return {
+    __esModule: true,
+    default: () => (
+      <Form.Item name="anoLetivo">
+        <input data-testid="ano-letivo" />
+      </Form.Item>
+    ),
+  };
+});
+jest.mock('@/components/sgp/inputs/form/dre', () => {
+  const { Form } = require('antd');
+  return {
+    __esModule: true,
+    default: () => (
+      <Form.Item name={['dre', 'value']}>
+        <input data-testid="dre" />
+      </Form.Item>
+    ),
+  };
+});
+
+jest.mock('@/components/sgp/inputs/form/ue', () => {
+  const { Form } = require('antd');
+  return {
+    __esModule: true,
+    default: () => (
+      <Form.Item name={['ue', 'value']}>
+        <input data-testid="ue" />
+      </Form.Item>
+    ),
+  };
+});
+jest.mock('@/components/sgp/inputs/form/exibir-historico', () => {
+  const { Form } = require('antd');
+  return {
+    __esModule: true,
+    default: () => (
+      <Form.Item name="consideraHistorico" valuePropName="checked">
+        <input data-testid="exibir-historico" type="checkbox" />
+      </Form.Item>
+    ),
+  };
+});
+jest.mock('./components/bimestres', () => {
+  const { Form } = require('antd');
+  const OPCAO_TODOS = -99;
+  return {
+    __esModule: true,
+    SelectBimestresFrequenciaProdutividade: () => (
+      <Form.Item name="bimestre">
+        <select data-testid="bimestre">
+          <option value={OPCAO_TODOS}>Todas</option>
+          <option value="2">2º</option>
+        </select>
+      </Form.Item>
+    ),
+  };
+});
+jest.mock('./components/tipo-produtividade', () => {
+  const { Form } = require('antd');
+  const OPCAO_TODOS = -99;
+  return {
+    __esModule: true,
+    SelectTipoRelatorioFrequenciaProdutividade: () => (
+      <Form.Item name="tipoRelatorioProdutividade">
+        <select data-testid="tipo-prod">
+          <option value={OPCAO_TODOS}>Todas</option>
+          <option value="X">X</option>
+        </select>
+      </Form.Item>
+    ),
+  };
+});
+jest.mock('./components/professores', () => {
+  const { Form } = require('antd');
+  return {
+    __esModule: true,
+    LocalizadorProfessorRelProdutividade: () => (
+      <Form.Item name="localizadorProfessor">
+        <input data-testid="professor" />
+      </Form.Item>
+    ),
+  };
+});
 jest.mock('~/componentes', () => ({
   __esModule: true,
   Loader: (props: any) =>
@@ -143,6 +199,96 @@ describe('RelatorioProdutividade', () => {
     await waitFor(() => {
       expect(relatoriosService.produtividadeFrequencia).toHaveBeenCalled();
       expect(sucesso).not.toHaveBeenCalled();
+    });
+  });
+
+  it('deve habilitar o botão de gerar ao disparar onSelect', async () => {
+    (relatoriosService.produtividadeFrequencia as jest.Mock).mockResolvedValue({ sucesso: true });
+    render(<RelatorioProdutividade />);
+
+    const btn = screen.getByTestId('btn-gerar');
+    fireEvent.click(btn);
+    await waitFor(() => expect(btn).toBeDisabled());
+
+    fireEvent.select(screen.getByTestId('dre'));
+    expect(btn).not.toBeDisabled();
+  });
+
+  it('deve mapear corretamente os campos e incluir o bimestre no params', async () => {
+    (relatoriosService.produtividadeFrequencia as jest.Mock).mockResolvedValue({ sucesso: true });
+    render(<RelatorioProdutividade />);
+
+    fireEvent.change(screen.getByTestId('ano-letivo'), { target: { value: '2023' } });
+    fireEvent.change(screen.getByTestId('dre'), { target: { value: 'DRE1' } });
+    fireEvent.change(screen.getByTestId('ue'), { target: { value: 'UE1' } });
+    fireEvent.change(screen.getByTestId('bimestre'), { target: { value: '2' } });
+    fireEvent.change(screen.getByTestId('tipo-prod'), { target: { value: 'X' } });
+    fireEvent.change(screen.getByTestId('professor'), { target: { value: 'RF123' } });
+    fireEvent.click(screen.getByTestId('exibir-historico'));
+
+    fireEvent.click(screen.getByTestId('btn-gerar'));
+
+    await waitFor(() => {
+      expect(relatoriosService.produtividadeFrequencia).toHaveBeenCalledWith({
+        anoLetivo: '2023',
+        bimestre: '2',
+        tipoRelatorioProdutividade: 'X',
+        codigoDre: 'DRE1',
+        codigoUe: 'UE1',
+        rfProfessor: undefined,
+      });
+    });
+  });
+
+  it('deve enviar bimestre null quando for OPCAO_TODOS', async () => {
+    (relatoriosService.produtividadeFrequencia as jest.Mock).mockResolvedValue({ sucesso: true });
+    render(<RelatorioProdutividade />);
+
+    fireEvent.change(screen.getByTestId('ano-letivo'), { target: { value: '2024' } });
+    fireEvent.change(screen.getByTestId('bimestre'), { target: { value: OPCAO_TODOS } });
+
+    fireEvent.click(screen.getByTestId('btn-gerar'));
+
+    await waitFor(() => {
+      expect(relatoriosService.produtividadeFrequencia).toHaveBeenCalledWith(
+        expect.objectContaining({ anoLetivo: '2024', bimestre: null }),
+      );
+    });
+  });
+
+  it('deve mapear código DRE e UE nos dois casos (valor e OPCAO_TODOS)', async () => {
+    (relatoriosService.produtividadeFrequencia as jest.Mock).mockResolvedValue({ sucesso: true });
+    render(<RelatorioProdutividade />);
+
+    fireEvent.change(screen.getByTestId('dre'), { target: { value: 'DRE_ABC' } });
+    fireEvent.change(screen.getByTestId('ue'), { target: { value: 'UE_XYZ' } });
+    fireEvent.click(screen.getByTestId('btn-gerar'));
+
+    await waitFor(() => {
+      expect(relatoriosService.produtividadeFrequencia).toHaveBeenCalledWith(
+        expect.objectContaining({
+          codigoDre: 'DRE_ABC',
+          codigoUe: 'UE_XYZ',
+        }),
+      );
+    });
+
+    jest.clearAllMocks();
+    const { cleanup } = require('@testing-library/react');
+    cleanup();
+
+    render(<RelatorioProdutividade />);
+    fireEvent.change(screen.getByTestId('dre'), { target: { value: OPCAO_TODOS } });
+    fireEvent.change(screen.getByTestId('ue'), { target: { value: OPCAO_TODOS } });
+    fireEvent.click(screen.getByTestId('btn-gerar'));
+
+    await waitFor(() => {
+      expect(relatoriosService.produtividadeFrequencia).toHaveBeenCalledWith(
+        expect.objectContaining({
+          codigoDre: null,
+          codigoUe: null,
+        }),
+      );
     });
   });
 });
