@@ -59,7 +59,7 @@ describe('InputBusca Component', () => {
     expect(input).toBeDisabled();
   });
 
-  xit('should match the snapshot', () => {
+  it('should match the snapshot', () => {
     const { container } = setup();
     expect(container).toMatchSnapshot();
   });
