@@ -1,7 +1,9 @@
-FROM node:16-alpine as build-deps
+FROM node:20-alpine as build-deps
 WORKDIR /usr/src/app
 
 ENV NODE_OPTIONS --max_old_space_size=4096
+
+RUN yarn config set "strict-ssl" false
 
 COPY / .
 RUN set NODE_OPTIONS=--max_old_space_size=4096 && \
