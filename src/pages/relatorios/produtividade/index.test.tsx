@@ -33,18 +33,19 @@ jest.mock('@/components/sgp/inputs/form/anoLetivo', () => {
   return {
     __esModule: true,
     default: () => (
-      <Form.Item name="anoLetivo">
+      <Form.Item name="anoLetivo" initialValue="">
         <input data-testid="ano-letivo" />
       </Form.Item>
     ),
   };
 });
+
 jest.mock('@/components/sgp/inputs/form/dre', () => {
   const { Form } = require('antd');
   return {
     __esModule: true,
     default: () => (
-      <Form.Item name={['dre', 'value']}>
+      <Form.Item name={['dre', 'value']} initialValue="">
         <input data-testid="dre" />
       </Form.Item>
     ),
@@ -56,17 +57,19 @@ jest.mock('@/components/sgp/inputs/form/ue', () => {
   return {
     __esModule: true,
     default: () => (
-      <Form.Item name={['ue', 'value']}>
+      <Form.Item name={['ue', 'value']} initialValue="">
         <input data-testid="ue" />
       </Form.Item>
     ),
   };
 });
+
 jest.mock('@/components/sgp/inputs/form/exibir-historico', () => {
   const { Form } = require('antd');
   return {
     __esModule: true,
     default: () => (
+      // sem initialValue aqui
       <Form.Item name="consideraHistorico" valuePropName="checked">
         <input data-testid="exibir-historico" type="checkbox" />
       </Form.Item>
@@ -79,7 +82,7 @@ jest.mock('./components/bimestres', () => {
   return {
     __esModule: true,
     SelectBimestresFrequenciaProdutividade: () => (
-      <Form.Item name="bimestre">
+      <Form.Item name="bimestre" initialValue={OPCAO_TODOS}>
         <select data-testid="bimestre">
           <option value={OPCAO_TODOS}>Todas</option>
           <option value="2">2º</option>
@@ -88,13 +91,14 @@ jest.mock('./components/bimestres', () => {
     ),
   };
 });
+
 jest.mock('./components/tipo-produtividade', () => {
   const { Form } = require('antd');
   const OPCAO_TODOS = -99;
   return {
     __esModule: true,
     SelectTipoRelatorioFrequenciaProdutividade: () => (
-      <Form.Item name="tipoRelatorioProdutividade">
+      <Form.Item name="tipoRelatorioProdutividade" initialValue={OPCAO_TODOS}>
         <select data-testid="tipo-prod">
           <option value={OPCAO_TODOS}>Todas</option>
           <option value="X">X</option>
@@ -103,17 +107,19 @@ jest.mock('./components/tipo-produtividade', () => {
     ),
   };
 });
+
 jest.mock('./components/professores', () => {
   const { Form } = require('antd');
   return {
     __esModule: true,
     LocalizadorProfessorRelProdutividade: () => (
-      <Form.Item name="localizadorProfessor">
+      <Form.Item name="localizadorProfessor" initialValue="">
         <input data-testid="professor" />
       </Form.Item>
     ),
   };
 });
+
 jest.mock('~/componentes', () => ({
   __esModule: true,
   Loader: (props: any) =>
