@@ -56,6 +56,10 @@ const ListaPaginadaBuscaAtivaRegistroAcoes: React.FC<ListaPaginadaBuscaAtivaRegi
         dataIndex: 'conseguiuContatoResponsavel',
       },
       {
+        title: 'Falta da criança/estudante por motivo de',
+        dataIndex: 'descMotivoAusencia',
+      },
+      {
         title: 'Inserido por',
         dataIndex: 'inseridoPor',
       },

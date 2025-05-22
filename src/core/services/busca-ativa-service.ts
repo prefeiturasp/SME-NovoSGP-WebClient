@@ -8,6 +8,7 @@ import { SecaoQuestionarioDto } from '../dto/SecaoQuestionarioDto';
 import { alterarRegistro, deletarRegistro, inserirRegistro, obterRegistro } from './api';
 
 export const URL_API_BUSCA_ATIVA = 'v1/busca-ativa';
+export const URL_API_DEFAULT = 'v1/anotacoes/alunos';
 
 const salvarAtualizarRegistroAcao = (params: RegistroAcaoBuscaAtivaDto) =>
   inserirRegistro<ResultadoRegistroAcaoBuscaAtivaDto>(
@@ -38,6 +39,11 @@ const atualizarDadosResponsavel = (params: DadosResponsavelAtualizarDto) =>
 const obterMotivosAusencia = () =>
   obterRegistro<OpcaoRespostaSimplesDto[]>(`${URL_API_BUSCA_ATIVA}/motivos-ausencia`);
 
+const obterMotivosAusenciasModal = (codigoAluno: any, dataInicio: string, dataFim: string) =>
+  obterRegistro<any[]>(`${URL_API_DEFAULT}/${codigoAluno}/data`, {
+    params: { dataInicio, dataFim },
+  });
+
 export default {
   salvarAtualizarRegistroAcao,
   obterSecoesDeRegistroAcao,
@@ -46,4 +52,5 @@ export default {
   excluirRegistroAcao,
   atualizarDadosResponsavel,
   obterMotivosAusencia,
+  obterMotivosAusenciasModal,
 };

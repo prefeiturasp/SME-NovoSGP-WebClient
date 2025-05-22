@@ -34,8 +34,8 @@ export const TabelaRetratilMapeamentoEstudantes = ({
       <Tooltip
         title={
           estudante?.alertaVermelho
-            ? 'É necessário fazer o mapeamento deste estudante pois ele é não alfabético na hipótese de escrita.'
-            : 'É necessário fazer o mapeamento deste estudante pois ele é público do AEE, participa do PAP ou teve resultado abaixo do básico na PSP.'
+            ? 'Indicado, pois é considerado não alfabético na hipótese de escrita'
+            : 'Indicado, pois é público do AEE, Participa do PAP ou obteve resultado abaixo do básico na PSP'
         }
       >
         <i
