@@ -1,4 +1,3 @@
-// src/pages/relatorios/mapeamento-estudantes/MapeamentoEstudantes.test.tsx
 import React from 'react';
 import { render, screen, cleanup } from '@testing-library/react';
 import { useAppSelector } from '@/core/hooks/use-redux';
@@ -17,7 +16,6 @@ import {
 import { verificaSomenteConsulta, ehTurmaInfantil } from '~/servicos';
 import { ROUTES } from '@/core/enum/routes';
 
-// Mocks dos componentes usados no JSX
 jest.mock('@/components/sgp/alertas/sem-turma-selecionada', () => ({
   AlertaSemTurmaSelecionada: () => <div data-testid="alerta-sem-turma" />,
 }));
@@ -34,7 +32,6 @@ jest.mock('~/componentes-sgp', () => ({
 jest.mock('./botoes-acoes', () => ({
   BotoesAcoesMapeamentoEstudantes: () => <div data-testid="botoes-acoes" />,
 }));
-// Variáveis de controle para mocks condicionais
 let mockBimestresNull = false;
 let mockDadosNull = false;
 
@@ -44,7 +41,6 @@ jest.mock('./bimestres', () => ({
 jest.mock('./dados', () => ({
   DadosMapeamentoEstudantes: () => (mockDadosNull ? null : <div data-testid="dados" />),
 }));
-// no topo de src/pages/mapeamento-estudantes/index.test.tsx
 jest.mock('~/componentes', () => ({
   Base: {
     CinzaBordaCalendario: '#ccc',
@@ -63,7 +59,7 @@ describe('MapeamentoEstudantes', () => {
   beforeEach(() => {
     dispatchMock = jest.fn();
     (useDispatch as jest.Mock).mockReturnValue(dispatchMock);
-    dispatchMock.mockClear(); // limpa só o dispatch
+    dispatchMock.mockClear();
   });
 
   afterEach(() => {
@@ -72,21 +68,17 @@ describe('MapeamentoEstudantes', () => {
 
   function mockStore(usuarioReturn: any, modalidades: any) {
     (useAppSelector as jest.Mock).mockImplementation((selector) => {
-      // Se o selector buscar por 'usuario', retorna o mock de usuário
       if (String(selector).includes('usuario')) {
         return { permissoes: {}, ...usuarioReturn };
       }
-      // Se buscar por 'filtro.modalidades', retorna modalidades
       if (String(selector).includes('filtro') && String(selector).includes('modalidades')) {
         return modalidades;
       }
-      // Retorno padrão para outros selectors
       return undefined;
     });
   }
 
   it('chama setDesabilitarCamposMapeamentoEstudantes no useEffect com true quando sem permissão', () => {
-    // sem permissão de alterar nem incluir
     const permissoesTela = { podeAlterar: false, podeIncluir: false };
     mockStore(
       { turmaSelecionada: null, permissoes: { [ROUTES.MAPEAMENTO_ESTUDANTES]: permissoesTela } },
@@ -105,7 +97,6 @@ describe('MapeamentoEstudantes', () => {
     const turma = { turma: 'TURMA1', modalidade: 'X' };
     const permissoesTela = { podeAlterar: true, podeIncluir: false };
 
-    // 1) primeiro cenário: consulta-only=true
     mockStore(
       { turmaSelecionada: turma, permissoes: { [ROUTES.MAPEAMENTO_ESTUDANTES]: permissoesTela } },
       ['algumaModalidade'],
@@ -115,8 +106,6 @@ describe('MapeamentoEstudantes', () => {
     render(<MapeamentoEstudantes />);
     expect(dispatchMock).toHaveBeenCalledWith(setDesabilitarCamposMapeamentoEstudantes(true));
 
-    // 2) agora cenário permissão real (consulta-only=false)
-    // limpa apenas o dispatch e repõe o mock do selector
     dispatchMock.mockClear();
     mockStore(
       { turmaSelecionada: turma, permissoes: { [ROUTES.MAPEAMENTO_ESTUDANTES]: permissoesTela } },
@@ -190,7 +179,6 @@ describe('MapeamentoEstudantes', () => {
   });
 
   it('ao desmontar limpa dados via dispatch', () => {
-    // vamos verificar pelo menos uma das ações de cleanup
     const turma = { turma: 'TURMA1', modalidade: 'X' };
     mockStore(
       {
