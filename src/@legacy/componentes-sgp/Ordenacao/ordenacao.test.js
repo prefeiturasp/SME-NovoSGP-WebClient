@@ -2,12 +2,48 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import Ordenacao from './ordenacao';
 
+jest.mock('antd', () => {
+  return {
+    Dropdown: ({ children, dropdownRender, ...props }) => (
+      <div data-testid="dropdown" {...props}>
+        {typeof children === 'function' ? children() : children}
+        {dropdownRender && dropdownRender()}
+      </div>
+    ),
+    Menu: Object.assign(
+      ({ children, ...props }) => (
+        <div data-testid="menu" {...props}>
+          {children}
+        </div>
+      ),
+      {
+        Item: ({ children, onClick }) => (
+          <div onClick={onClick} role="menuitem">
+            {children}
+          </div>
+        ),
+      }
+    ),
+  };
+});
+
+jest.mock('~/componentes/button', () => props => {
+  const { border, label, ...rest } = props;
+  return <button {...rest}>{label || 'Ordenar'}</button>;
+});
+
+jest.mock('~/componentes/colors', () => ({
+  Base: { Roxo: '#800080', Branco: '#fff' },
+  Colors: { Azul: '#0000ff' },
+}));
+
 describe('Ordenacao', () => {
   const conteudo = [
     { id: 2, nome: 'B' },
     { id: 1, nome: 'A' },
     { id: 3, nome: 'C' },
   ];
+
   let retornoOrdenado;
   let onChangeOrdenacao;
 
@@ -16,12 +52,18 @@ describe('Ordenacao', () => {
     onChangeOrdenacao = jest.fn();
   });
 
-  it('deve renderizar o botão de ordenação', () => {
-    const { getByText } = render(<Ordenacao />);
+  it('renderiza botão de ordenação', () => {
+    const { getByText } = render(
+      <Ordenacao
+        conteudoParaOrdenar={[]}
+        retornoOrdenado={() => {}}
+        onChangeOrdenacao={() => {}}
+      />
+    );
     expect(getByText('Ordenar')).toBeInTheDocument();
   });
 
-  it('deve ordenar do menor para o maior', () => {
+  it('ordena do menor para o maior', () => {
     const { getByText } = render(
       <Ordenacao
         conteudoParaOrdenar={[...conteudo]}
@@ -30,7 +72,6 @@ describe('Ordenacao', () => {
         onChangeOrdenacao={onChangeOrdenacao}
       />
     );
-    fireEvent.click(getByText('Ordenar'));
     fireEvent.click(getByText('Número (Menor para o maior)'));
     expect(onChangeOrdenacao).toHaveBeenCalledWith(3);
     expect(retornoOrdenado).toHaveBeenCalledWith([
@@ -40,7 +81,7 @@ describe('Ordenacao', () => {
     ]);
   });
 
-  it('deve ordenar do maior para o menor', () => {
+  it('ordena do maior para o menor', () => {
     const { getByText } = render(
       <Ordenacao
         conteudoParaOrdenar={[...conteudo]}
@@ -49,7 +90,6 @@ describe('Ordenacao', () => {
         onChangeOrdenacao={onChangeOrdenacao}
       />
     );
-    fireEvent.click(getByText('Ordenar'));
     fireEvent.click(getByText('Número (Maior para o menor)'));
     expect(onChangeOrdenacao).toHaveBeenCalledWith(4);
     expect(retornoOrdenado).toHaveBeenCalledWith([
@@ -59,7 +99,7 @@ describe('Ordenacao', () => {
     ]);
   });
 
-  it('deve ordenar por ordem alfabética A-Z', () => {
+  it('ordena por ordem alfabética A-Z', () => {
     const { getByText } = render(
       <Ordenacao
         conteudoParaOrdenar={[...conteudo]}
@@ -68,7 +108,6 @@ describe('Ordenacao', () => {
         onChangeOrdenacao={onChangeOrdenacao}
       />
     );
-    fireEvent.click(getByText('Ordenar'));
     fireEvent.click(getByText('Por ordem alfabética (A–Z)'));
     expect(onChangeOrdenacao).toHaveBeenCalledWith(1);
     expect(retornoOrdenado).toHaveBeenCalledWith([
@@ -78,7 +117,7 @@ describe('Ordenacao', () => {
     ]);
   });
 
-  it('deve ordenar por ordem alfabética Z-A', () => {
+  it('ordena por ordem alfabética Z-A', () => {
     const { getByText } = render(
       <Ordenacao
         conteudoParaOrdenar={[...conteudo]}
@@ -87,7 +126,6 @@ describe('Ordenacao', () => {
         onChangeOrdenacao={onChangeOrdenacao}
       />
     );
-    fireEvent.click(getByText('Ordenar'));
     fireEvent.click(getByText('Por ordem alfabética (Z–A)'));
     expect(onChangeOrdenacao).toHaveBeenCalledWith(2);
     expect(retornoOrdenado).toHaveBeenCalledWith([
@@ -97,22 +135,19 @@ describe('Ordenacao', () => {
     ]);
   });
 
-  it('deve manter a ordem quando os valores de texto são iguais (A-Z)', () => {
-    const conteudoIguais = [
+  it('mantém ordem quando valores são iguais (A–Z)', () => {
+    const iguais = [
       { id: 1, nome: 'A' },
       { id: 2, nome: 'A' },
     ];
-    const retornoOrdenado = jest.fn();
-    const onChangeOrdenacao = jest.fn();
     const { getByText } = render(
       <Ordenacao
-        conteudoParaOrdenar={[...conteudoIguais]}
+        conteudoParaOrdenar={[...iguais]}
         ordenarColunaTexto="nome"
         retornoOrdenado={retornoOrdenado}
         onChangeOrdenacao={onChangeOrdenacao}
       />
     );
-    fireEvent.click(getByText('Ordenar'));
     fireEvent.click(getByText('Por ordem alfabética (A–Z)'));
     expect(retornoOrdenado).toHaveBeenCalledWith([
       { id: 1, nome: 'A' },
@@ -120,22 +155,19 @@ describe('Ordenacao', () => {
     ]);
   });
 
-  it('deve manter a ordem quando os valores de texto são iguais (Z-A)', () => {
-    const conteudoIguais = [
+  it('mantém ordem quando valores são iguais (Z–A)', () => {
+    const iguais = [
       { id: 1, nome: 'A' },
       { id: 2, nome: 'A' },
     ];
-    const retornoOrdenado = jest.fn();
-    const onChangeOrdenacao = jest.fn();
     const { getByText } = render(
       <Ordenacao
-        conteudoParaOrdenar={[...conteudoIguais]}
+        conteudoParaOrdenar={[...iguais]}
         ordenarColunaTexto="nome"
         retornoOrdenado={retornoOrdenado}
         onChangeOrdenacao={onChangeOrdenacao}
       />
     );
-    fireEvent.click(getByText('Ordenar'));
     fireEvent.click(getByText('Por ordem alfabética (Z–A)'));
     expect(retornoOrdenado).toHaveBeenCalledWith([
       { id: 1, nome: 'A' },
@@ -143,17 +175,23 @@ describe('Ordenacao', () => {
     ]);
   });
 
-  it('deve desabilitar o botão quando desabilitado', () => {
+  it('desabilita botão quando `desabilitado` for true', () => {
     const { getByText } = render(<Ordenacao desabilitado />);
     expect(getByText('Ordenar')).toBeDisabled();
   });
 
-  it('não deve abrir o menu quando desabilitado', () => {
-    const { getByText, queryByText } = render(
-      <Ordenacao desabilitado conteudoParaOrdenar={[{ id: 1, nome: 'A' }]} />
+  it('não chama nada se tentar ordenar com botão desabilitado', () => {
+    const { getByText } = render(
+      <Ordenacao
+        conteudoParaOrdenar={[{ id: 1, nome: 'A' }]}
+        retornoOrdenado={retornoOrdenado}
+        onChangeOrdenacao={onChangeOrdenacao}
+        desabilitado
+      />
     );
     const botao = getByText('Ordenar');
     fireEvent.click(botao);
-    expect(queryByText('Número (Menor para o maior)')).not.toBeInTheDocument();
+    expect(onChangeOrdenacao).not.toHaveBeenCalled();
+    expect(retornoOrdenado).not.toHaveBeenCalled();
   });
 });

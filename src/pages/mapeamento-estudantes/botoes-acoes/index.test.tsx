@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BotoesAcoesMapeamentoEstudantes } from './index';
 import { useAppSelector } from '@/core/hooks/use-redux';
 import { useNavigate } from 'react-router-dom';
@@ -54,11 +54,7 @@ function setup({ estudantes = [{}], desabilitar = false, emEdicao = true } = {})
       },
     });
   });
-  let renderResult;
-  act(() => {
-    renderResult = render(<BotoesAcoesMapeamentoEstudantes />);
-  });
-  return renderResult;
+  return render(<BotoesAcoesMapeamentoEstudantes />);
 }
 
 describe('BotoesAcoesMapeamentoEstudantes', () => {
