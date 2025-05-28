@@ -1,3 +1,4 @@
+import React from 'react';
 import { useAppDispatch, useAppSelector } from '@/core/hooks/use-redux';
 import { Ordenacao } from '~/componentes-sgp';
 import { setEstudantesMapeamentoEstudantes } from '~/redux/modulos/mapeamentoEstudantes/actions';
