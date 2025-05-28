@@ -92,6 +92,17 @@ describe('BotoesAcoesMapeamentoEstudantes', () => {
     });
   });
 
+  it('navega para principal se confirmar for falso no Voltar com edição', async () => {
+    mockConfirmar.mockResolvedValueOnce(false);
+    setup({ emEdicao: true });
+    fireEvent.click(screen.getByText('Voltar'));
+    await waitFor(() => {
+      expect(mockConfirmar).toHaveBeenCalled();
+      expect(mockSalvar).not.toHaveBeenCalled();
+      expect(mockNavigate).toHaveBeenCalled();
+    });
+  });
+
   it('aciona limpar dados ao cancelar com confirmação', async () => {
     mockConfirmar.mockResolvedValueOnce(true);
     setup({ desabilitar: false, emEdicao: true });
@@ -109,6 +120,56 @@ describe('BotoesAcoesMapeamentoEstudantes', () => {
     await waitFor(() => {
       expect(mockConfirmar).toHaveBeenCalled();
       expect(mockLimpar).not.toHaveBeenCalled();
+    });
+  });
+
+  it('não chama confirmar nem salvar e navega direto se questionarioDinamicoEmEdicao for falsy', async () => {
+    setup({ emEdicao: false });
+    fireEvent.click(screen.getByText('Voltar'));
+    await waitFor(() => {
+      expect(mockConfirmar).not.toHaveBeenCalled();
+      expect(mockSalvar).not.toHaveBeenCalled();
+      expect(mockNavigate).toHaveBeenCalled();
+    });
+  });
+
+  it('não faz nada ao clicar em Cancelar se campos estão desabilitados', async () => {
+    setup({ desabilitar: true, emEdicao: true });
+    fireEvent.click(screen.getByText('Cancelar'));
+    await waitFor(() => {
+      expect(mockConfirmar).not.toHaveBeenCalled();
+      expect(mockLimpar).not.toHaveBeenCalled();
+    });
+  });
+
+  it('não faz nada ao clicar em Cancelar se não está em edição', async () => {
+    setup({ desabilitar: false, emEdicao: false });
+    fireEvent.click(screen.getByText('Cancelar'));
+    await waitFor(() => {
+      expect(mockConfirmar).not.toHaveBeenCalled();
+      expect(mockLimpar).not.toHaveBeenCalled();
+    });
+  });
+
+  it('não chama limpar dados se usuário cancelar confirmação ao clicar em Cancelar', async () => {
+    mockConfirmar.mockResolvedValueOnce(false);
+    setup({ desabilitar: false, emEdicao: true });
+    fireEvent.click(screen.getByText('Cancelar'));
+    await waitFor(() => {
+      expect(mockConfirmar).toHaveBeenCalled();
+      expect(mockLimpar).not.toHaveBeenCalled();
+    });
+  });
+
+  it('não navega se salvar falhar após confirmação no Voltar com edição', async () => {
+    mockConfirmar.mockResolvedValueOnce(true);
+    mockSalvar.mockResolvedValueOnce(false);
+    setup({ emEdicao: true });
+    fireEvent.click(screen.getByText('Voltar'));
+    await waitFor(() => {
+      expect(mockConfirmar).toHaveBeenCalled();
+      expect(mockSalvar).toHaveBeenCalledWith(false, false, false);
+      expect(mockNavigate).not.toHaveBeenCalled();
     });
   });
 });
