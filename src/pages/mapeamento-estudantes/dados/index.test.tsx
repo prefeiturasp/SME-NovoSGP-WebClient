@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { useAppDispatch, useAppSelector } from '@/core/hooks/use-redux';
 import mapeamentoEstudantesService from '@/core/services/mapeamento-estudantes-service';

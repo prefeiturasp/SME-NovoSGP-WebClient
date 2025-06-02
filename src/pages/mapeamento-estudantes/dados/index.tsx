@@ -6,7 +6,7 @@ import {
 import { TurmaSelecionadaDTO } from '@/core/dto/TurmaSelecionadaDto';
 import { useAppDispatch, useAppSelector } from '@/core/hooks/use-redux';
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   limparDadosMapeamentoEstudantes,
   setDadosAlunoObjectCard,

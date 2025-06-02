@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, cleanup } from '@testing-library/react';
 import { useAppSelector } from '@/core/hooks/use-redux';
 import { MapeamentoEstudantes } from './index';

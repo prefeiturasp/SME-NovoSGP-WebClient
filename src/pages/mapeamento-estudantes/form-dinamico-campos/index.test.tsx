@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { useAppDispatch, useAppSelector } from '@/core/hooks/use-redux';
 import mapeamentoEstudantesService from '@/core/services/mapeamento-estudantes-service';
@@ -31,7 +30,7 @@ jest.mock('@ckeditor/ckeditor5-build-classic/build/translations/pt-br', () => ({
 
 jest.mock('@ckeditor/ckeditor5-react', () => ({
   __esModule: true,
-  default: function MockCKEditor(props: any) {
+  default: function MockCKEditor() {
     return <div data-testid="mock-ckeditor" />;
   },
 }));

@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BotoesAcoesRelatorio } from './index';
 import { useNavigate } from 'react-router-dom';

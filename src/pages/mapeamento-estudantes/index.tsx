@@ -3,7 +3,7 @@ import { TurmaSelecionadaDTO } from '@/core/dto/TurmaSelecionadaDto';
 import { ROUTES } from '@/core/enum/routes';
 import { useAppSelector } from '@/core/hooks/use-redux';
 import { Col, Row } from 'antd';
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
