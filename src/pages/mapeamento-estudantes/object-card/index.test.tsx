@@ -1,5 +1,4 @@
-import React, { act } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { useAppSelector } from '@/core/hooks/use-redux';
 import frequenciaService from '@/core/services/frequencia-service';
 import { ObjectCardMapeamentoEstudantes } from './index';

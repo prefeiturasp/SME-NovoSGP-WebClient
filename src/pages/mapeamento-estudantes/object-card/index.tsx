@@ -2,7 +2,7 @@ import { AlunoDadosBasicosDto } from '@/core/dto/AlunoDadosBasicosDto';
 import { TurmaSelecionadaDTO } from '@/core/dto/TurmaSelecionadaDto';
 import { useAppSelector } from '@/core/hooks/use-redux';
 import frequenciaService from '@/core/services/frequencia-service';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Loader } from '~/componentes';
 import DetalhesAluno from '~/componentes/Alunos/Detalhes';
 

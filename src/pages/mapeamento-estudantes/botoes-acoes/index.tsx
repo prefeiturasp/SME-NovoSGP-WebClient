@@ -1,4 +1,3 @@
-import React from 'react';
 import QuestionarioDinamicoFuncoes from '@/@legacy/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import { confirmar } from '@/@legacy/servicos';
 import { ROUTES } from '@/core/enum/routes';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BimestresMapeamentoEstudantes } from './index';
 import { useAppDispatch, useAppSelector } from '@/core/hooks/use-redux';

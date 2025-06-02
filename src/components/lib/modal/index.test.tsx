@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Modal from './index';
 
@@ -36,13 +35,13 @@ describe('Modal', () => {
         title="Custom Props"
         okText="Salvar"
         cancelText="Sair"
-        okButtonProps={{ 'data-testid': 'ok-btn', disabled: true }}
-        cancelButtonProps={{ 'data-testid': 'cancel-btn', style: { color: 'gray' } }}
+        okButtonProps={{ disabled: true }}
+        cancelButtonProps={{ style: { color: 'gray' } }}
       >
         <span>Testando props</span>
       </Modal>,
     );
-    expect(screen.getByTestId('ok-btn')).toBeDisabled();
-    expect(screen.getByTestId('cancel-btn')).toHaveStyle('color: rgb(66, 71, 74)');
+    expect(screen.getByRole('button', { name: /salvar/i })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /sair/i })).toHaveStyle('color: rgb(66, 71, 74)');
   });
 });
