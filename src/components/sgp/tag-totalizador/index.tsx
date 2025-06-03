@@ -1,5 +1,6 @@
 import { Tag } from 'antd';
 import { Base } from '~/componentes';
+import React from 'react';
 
 type TagDescricaoProps = {
   descricao?: string;
