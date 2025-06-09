@@ -7,7 +7,7 @@ import {
 
 jest.mock('./button', () => ({
   __esModule: true,
-  default: ({ onClick, label, id = '', ...props }) => (
+  default: ({ onClick, label, id = '', border, ...props }) => (
     <button onClick={onClick} id={id} {...props}>
       {label}
     </button>
