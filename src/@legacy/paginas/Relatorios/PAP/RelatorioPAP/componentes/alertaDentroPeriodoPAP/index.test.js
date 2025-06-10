@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react';
-import React from 'react';
 import AlertaDentroPeriodoPAP from './index';
 
 jest.mock('react-redux', () => ({
