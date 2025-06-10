@@ -40,6 +40,7 @@ module.exports = {
     },
   },
   extensionsToTreatAsEsm: ['.ts', '.tsx', '.jsx'],
+  coverageProvider: 'v8',
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/build/',
