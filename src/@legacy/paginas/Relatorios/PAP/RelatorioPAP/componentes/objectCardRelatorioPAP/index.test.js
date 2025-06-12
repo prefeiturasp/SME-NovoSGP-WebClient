@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react';
-import React from 'react';
 import ObjectCardRelatorioPAP from './index';
 
 jest.mock('react-redux', () => ({
@@ -11,7 +10,6 @@ jest.mock('~/componentes/Alunos/Detalhes', () => ({
     dados,
     desabilitarImprimir,
     exibirBotaoImprimir,
-    onClickImprimir,
     permiteAlterarImagem,
   }) => (
     <div
@@ -33,8 +31,8 @@ describe('ObjectCardRelatorioPAP', () => {
 
   it('renderiza DetalhesAluno com os dados do estudante e props corretas', () => {
     useSelector
-      .mockImplementationOnce(fn => ({ nome: 'Aluno Teste', codigoEOL: 123 })) // estudanteSelecionadoRelatorioPAP
-      .mockImplementationOnce(fn => false); // desabilitarCamposRelatorioPAP
+      .mockImplementationOnce(() => ({ nome: 'Aluno Teste', codigoEOL: 123 }))
+      .mockImplementationOnce(() => false);
 
     const { getByTestId } = render(<ObjectCardRelatorioPAP />);
     const detalhes = getByTestId('detalhes-aluno');
@@ -42,15 +40,15 @@ describe('ObjectCardRelatorioPAP', () => {
       'data-dados',
       JSON.stringify({ nome: 'Aluno Teste', codigoEOL: 123 })
     );
-    expect(detalhes).toHaveAttribute('data-desabilitar-imprimir', 'true'); // relatorioPAPAlunoId = 0
+    expect(detalhes).toHaveAttribute('data-desabilitar-imprimir', 'true');
     expect(detalhes).toHaveAttribute('data-exibir-botao-imprimir', 'false');
     expect(detalhes).toHaveAttribute('data-permite-alterar-imagem', 'true');
   });
 
   it('renderiza DetalhesAluno com permiteAlterarImagem false quando desabilitarCamposRelatorioPAP é true', () => {
     useSelector
-      .mockImplementationOnce(fn => ({ nome: 'Aluno Teste', codigoEOL: 123 }))
-      .mockImplementationOnce(fn => true);
+      .mockImplementationOnce(() => ({ nome: 'Aluno Teste', codigoEOL: 123 }))
+      .mockImplementationOnce(() => true);
 
     const { getByTestId } = render(<ObjectCardRelatorioPAP />);
     const detalhes = getByTestId('detalhes-aluno');
