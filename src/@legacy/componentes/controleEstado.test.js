@@ -26,7 +26,7 @@ describe('ControleEstado', () => {
     const cancelar = jest.fn();
     const confirmar = jest.fn();
     const wrapper = new ControleEstado({ when: true, cancelar, confirmar });
-    wrapper.setState = jest.fn(cb => cb && cb());
+    wrapper.setState = jest.fn((state, cb) => cb && cb());
     wrapper.state = { confirmou: false };
     const nextLocation = { pathname: '/outra' };
     wrapper.bloquearNavegacao(nextLocation);
