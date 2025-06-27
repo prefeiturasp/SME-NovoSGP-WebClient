@@ -5,7 +5,6 @@ import { Form } from 'antd';
 
 jest.mock('@/core/services/busca-ativa-service');
 jest.mock('@/components/lib/inputs/select', () => (props: any) => {
-  // Filtra apenas props válidas para <select>
   const { options, children, id, placeholder, value, onChange, 'data-testid': dataTestId } = props;
   return (
     <select
