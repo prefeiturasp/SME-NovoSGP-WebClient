@@ -1,15 +1,9 @@
-import React from 'react';
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import FormCadastroABAE from './index';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import abaeService from '@/core/services/abae-service';
-import {
-  sucesso,
-  confirmar,
-  verificaSomenteConsulta,
-  setBreadcrumbManual,
-} from '@/@legacy/servicos';
+import { verificaSomenteConsulta } from '@/@legacy/servicos';
 
 jest.mock('react-router-dom', () => ({
   useNavigate: jest.fn(),
@@ -73,7 +67,7 @@ jest.mock('@/components/lib/header-page', () => (props) => (
 ));
 jest.mock('@/components/lib/card-content', () => (props) => <div>{props.children}</div>);
 jest.mock('@/@legacy/componentes', () => ({
-  Auditoria: (props) => <div data-testid="auditoria" />,
+  Auditoria: () => <div data-testid="auditoria" />,
 }));
 jest.mock('@/@legacy/servicos', () => ({
   sucesso: jest.fn(),
