@@ -22,3 +22,8 @@ export const setLoaderBotao = payload => ({
   type: '@loader/setLoaderBotao',
   payload,
 });
+
+export const setLoaderTrocaPerfil = payload => ({
+  type: '@loader/setLoaderTrocaPerfil',
+  payload,
+});
