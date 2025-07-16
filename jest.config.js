@@ -13,6 +13,7 @@ module.exports = {
     '^~/(.*)$': '<rootDir>/src/@legacy/$1',
     '\\.(svg|jpg|jpeg|png|woff|woff2|eot|ttf|otf)$': '<rootDir>/__mocks__/fileMock.js',
     '\\.(css|less|scss|css\\.js)$': 'identity-obj-proxy',
+    '\\.(css|less|scss)$': 'identity-obj-proxy',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   collectCoverageFrom: [
@@ -40,6 +41,7 @@ module.exports = {
     },
   },
   extensionsToTreatAsEsm: ['.ts', '.tsx', '.jsx'],
+  coverageProvider: 'v8',
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/build/',
