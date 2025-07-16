@@ -13,6 +13,7 @@ import ReactGA from 'react-ga';
 
 import Auth from '@/routes/config/auth';
 import AutenticacaoFrequencia from '@/@legacy/paginas/AutenticacaoFrequencia/autenticacaoFrequencia';
+import TelaLoaderTrocaPerfil from '../@legacy/componentes-sgp/TelaLoaderTrocaPerfil';
 
 const Routes = () => {
   const location = useLocation();
@@ -24,6 +25,7 @@ const Routes = () => {
   const elementRedefinirSenha = createElement(RedefinirSenha);
   const elementRecuperarSenha = createElement(RecuperarSenha);
   const autenticacaoFrequenciaPage = createElement(AutenticacaoFrequencia);
+  const loaderTrocaPerfil = useAppSelector((state) => state.loader.loaderTrocaPerfil);
 
   const routesArray = getRoutesArray();
 
@@ -46,6 +48,7 @@ const Routes = () => {
 
   return (
     <div style={{ height: logado ? 'auto' : '100%' }}>
+      {loaderTrocaPerfil && <TelaLoaderTrocaPerfil />}
       {logado ? (
         <>
           <BaseRoutes>
