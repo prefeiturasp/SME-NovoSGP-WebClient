@@ -245,11 +245,6 @@ const RelatorioFrequencia = () => {
 
       if (lista?.length === 1) {
         setCodigoDre(lista[0].valor);
-      } else {
-        lista.unshift({
-          desc: 'Todas',
-          valor: OPCAO_TODOS,
-        });
       }
 
       setListaDres(lista);
@@ -735,18 +730,23 @@ const RelatorioFrequencia = () => {
     setModoEdicao(true);
   };
 
+  const setTodosParaTurma = useCallback((codigoUe) => {
+    if (codigoUe === OPCAO_TODOS) {
+      const OPCAO_TODAS_TURMA = { valor: OPCAO_TODOS, nomeFiltro: 'Todas' };
+      setListaTurmas([OPCAO_TODAS_TURMA]);
+      setTurmasCodigo([OPCAO_TODAS_TURMA.valor]);
+      return true;
+    }
+    return false;
+  }, []);
+
   const obterTurmas = useCallback(
     async (modalidadeSelecionada, ue, ano, semestreSelecionado, ehEja) => {
       if (ue && modalidadeSelecionada) {
         const OPCAO_TODAS_TURMA = { valor: OPCAO_TODOS, nomeFiltro: 'Todas' };
 
         if (ehEja && !semestreSelecionado) return;
-
-        if (ue === OPCAO_TODOS) {
-          setListaTurmas([OPCAO_TODAS_TURMA]);
-          setTurmasCodigo([OPCAO_TODAS_TURMA.valor]);
-          return;
-        }
+        if (setTodosParaTurma(ue)) return;
 
         setCarregandoTurmas(true);
         const { data } = await AbrangenciaServico.buscarTurmas(
@@ -795,9 +795,7 @@ const RelatorioFrequencia = () => {
       setFormato(FORMATOS.PDF);
       setTurmasPrograma(true);
 
-      if (codigoUe === OPCAO_TODOS) {
-        setTurmasCodigo(OPCAO_TODOS);
-      }
+      setTodosParaTurma(codigoUe);
       return;
     }
     setTurmasCodigo(undefined);
