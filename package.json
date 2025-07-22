@@ -6,6 +6,7 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "jest --coverage",
+    "testfile": "jest src/@legacy/servicos/Paginas/ConselhoAtaFinal/ServicoConselhoAtaFinal.test.js --no-coverage",
     "eject": "react-scripts eject",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
