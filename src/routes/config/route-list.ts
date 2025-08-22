@@ -19,6 +19,7 @@ import { ListRegistroColetivo } from '@/pages/naapa/registro-coletivo/list';
 import { RelatorioNAAPABuscaAtiva } from '@/pages/relatorios/NAAPA/busca-ativa';
 import { RelatorioMapeamentoEstudantes } from '@/pages/relatorios/mapeamento-estudantes';
 import { RelatorioProdutividade } from '@/pages/relatorios/produtividade';
+import InformacoesEducacionais from '~/paginas/Gestao/InformacoesEducacionais/informacoesEducacionais';
 import RotasTipo from '~/constantes/rotasTipo';
 import EncaminhamentoAEECadastro from '~/paginas/AEE/Encaminhamento/Cadastro/encaminhamentoAEECadastro';
 import EncaminhamentoAEELista from '~/paginas/AEE/Encaminhamento/Lista/encaminhamentoAEELista';
@@ -1762,6 +1763,17 @@ route.set(ROUTES.INFORMES_EDICAO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.INFORMES,
+});
+
+route.set('/gestao/informacoes-educacionais', {
+  breadcrumbName: 'Informações Educacionais',
+  menu: ['Gestão'],
+  parent: '/',
+  component: InformacoesEducacionais,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.INFORMES, // Temporariamente usando outra permissão para evitar o erro
 });
 
 route.set(ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES, {

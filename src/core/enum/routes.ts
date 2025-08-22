@@ -121,4 +121,5 @@ export enum ROUTES {
   RELATORIO_MAPEAMENTO_ESTUDANTES = '/relatorios/diario-classe/mapeamento-estudantes',
   RELATORIO_BUSCA_ATIVA = '/relatorios/naapa/busca-ativa',
   RELATORIO_PRODUTIVIDADE = '/relatorios/frequencia/produtividade',
+  INFORMACOES_EDUCACIONAIS = '/gestao/informacoes-educacionais',
 }
