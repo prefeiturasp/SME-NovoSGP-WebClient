@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { Card, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import InformacoesEducacionaisFiltros from './componentes/informacoesEducacionaisFiltros';
+import InformacoesEducacionaisFiltros from './componentes/Filtro/informacoesEducacionaisFiltros';
 import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorModalidade';
-import InformacoesAnaliseDeFrequencia from './componentes/InformacoesAnaliseDeFrequencia';
+import InformacoesAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { Col, Row } from 'antd';
 

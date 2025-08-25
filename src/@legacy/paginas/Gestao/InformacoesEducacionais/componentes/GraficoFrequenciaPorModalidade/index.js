@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Base } from '~/componentes';
-import CardCollapse from '~/componentes/cardCollapse';
 import GraficoFrequenciaModalidade from './graficoFrequenciaModalidade';
 
 const GraficoFrequenciaPorModalidade = props => {
-  const { anoLetivo, dreId, ueId, modalidade, semestre, tipoVisualizacao } = props;
+  const { anoLetivo, dreId, ueId, modalidade, semestre, tipoVisualizacao, periodicidade } = props;
 
   const configCabecalho = {
     altura: '44px',
@@ -26,6 +25,7 @@ const GraficoFrequenciaPorModalidade = props => {
             modalidade={modalidade}
             semestre={semestre}
             tipoVisualizacao={tipoVisualizacao}
+            periodicidade={periodicidade}
           />
         ) : (
           ''
