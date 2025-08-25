@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card } from '~/componentes';
+import { Card, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import InformacoesEducacionaisFiltros from './componentes/informacoesEducacionaisFiltros';
 import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorModalidade';
+import InformacoesAnaliseDeFrequencia from './componentes/InformacoesAnaliseDeFrequencia';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import { Col, Row } from 'antd';
 
 const InformacoesEducacionais = () => {
   const navigate = useNavigate();
@@ -17,6 +19,13 @@ const InformacoesEducacionais = () => {
   const [modalidade, setModalidade] = useState(null);
   const [semestre, setSemestre] = useState(null);
   const [tipoVisualizacao, setTipoVisualizacao] = useState('global');
+  
+  // Estado para periodicidade (Mensal ou Anual)
+  const [periodicidade, setPeriodicidade] = useState('mensal');
+  const listaPeriodicidade = [
+    { valor: 'mensal', desc: 'Mensal (ano atual)' },
+    { valor: 'anual', desc: 'Anual' }
+  ];
 
   const aoClicarBotaoVoltar = () => {
     navigate('/');
@@ -32,24 +41,42 @@ const InformacoesEducacionais = () => {
       </Cabecalho>
       <Card>
         <div className="col-md-12">
-          <InformacoesEducacionaisFiltros
-            // setAnoLetivoSelecionado={setAnoLetivo}
-            setDreSelecionada={setDre}
-            // setUeSelecionada={setUe}
-            // setModalidadeSelecionada={setModalidade}
-            // setSemestreSelecionado={setSemestre}
-            // setTipoVisualizacaoSelecionado={setTipoVisualizacao}
-          />
+          <Row gutter={[16, 16]}>
+            <Col xs={24} md={18}>
+              <InformacoesEducacionaisFiltros
+                setDreSelecionada={setDre}
+                // setTipoVisualizacaoSelecionado={setTipoVisualizacao}
+              />
+            </Col>
+            <Col xs={24} md={6}>
+              <SelectComponent
+                label=""
+                lista={listaPeriodicidade}
+                valueOption="valor"
+                valueText="desc"
+                onChange={valor => setPeriodicidade(valor)}
+                valueSelect={periodicidade}
+                placeholder="Selecione a periodicidade"
+              />
+            </Col>
+          </Row>
           
           {exibirGrafico ? (
-            <GraficoFrequenciaPorModalidade 
-              anoLetivo={anoLetivo}
-              dreId={dre?.codigo}
-              ueId={ue?.codigo}
-              modalidade={modalidade}
-              semestre={semestre}
-              tipoVisualizacao={tipoVisualizacao}
-            />
+            <>
+              <GraficoFrequenciaPorModalidade 
+                anoLetivo={anoLetivo}
+                dreId={dre?.codigo}
+                ueId={ue?.codigo}
+                modalidade={modalidade}
+                semestre={semestre}
+                tipoVisualizacao={tipoVisualizacao}
+                periodicidade={periodicidade}
+              />
+              <InformacoesAnaliseDeFrequencia
+                dreId={dre?.codigo}
+                periodicidade={periodicidade}
+              />
+            </>
           ) : (
             <div className="text-center mt-5">
               <p>Selecione os filtros acima para visualizar os dados</p>

@@ -3,107 +3,141 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '~/componentes';
 import { GraficoBarras, TagGrafico } from '~/componentes-sgp';
-import { OPCAO_TODOS } from '~/constantes/constantes';
-import { erros } from '~/servicos';
 
-const GraficoFrequenciaModalidade = props => {
-  const { anoLetivo, dreId, ueId, modalidade, semestre, tipoVisualizacao } = props;
+// Componente de gráfico de frequência por modalidade (mock)
+// Regras: 
+//  - Periodicidade 'mensal': mostrar 5 barras por mês (Fundamental, Médio, CIEJA, Infantil - Creche, Infantil - Pré-escola)
+//  - Considerar meses de Janeiro até o mês corrente do ano atual
+//  - Periodicidade 'anual': consolidado (uma barra por modalidade)
 
-  const [dadosGrafico, setDadosGrafico] = useState([]);
+const NOMES_MODALIDADES = [
+  'Fundamental',
+  'Médio',
+  'CIEJA',
+  'Infantil - Creche',
+  'Infantil - Pré-escola',
+];
+
+const coresPadrao = ['#1976D2', '#512DA8', '#00897B', '#FB8C00', '#C2185B'];
+
+const gerarMockMensal = () => {
+  const agora = moment();
+  const ano = agora.year();
+  const mesAtual = agora.month(); // 0-11
+  const baseValores = {
+    'Fundamental': 92,
+    'Médio': 89,
+    'CIEJA': 85,
+    'Infantil - Creche': 90,
+    'Infantil - Pré-escola': 88,
+  };
+  const dadosLongos = [];
+  for (let m = 0; m <= mesAtual; m += 1) {
+    const nomeMes = moment(`${ano}-${m + 1}-01`).format('MMMM'); // nome do mês capitalizado pela locale
+    NOMES_MODALIDADES.forEach(mod => {
+      const variacao = (Math.sin((m + 1) * 1.3 + mod.length) * 1.2) + (mod.length % 3) * 0.4;
+      const valor = Math.min(100, Math.max(75, baseValores[mod] + variacao));
+      dadosLongos.push({
+        mes: nomeMes.charAt(0).toUpperCase() + nomeMes.slice(1),
+        modalidade: mod,
+        valor: Number(valor.toFixed(1)),
+      });
+    });
+  }
+  return dadosLongos;
+};
+
+const gerarMockAnual = (dadosMensais) => {
+  const agrupado = {};
+  dadosMensais.forEach(r => {
+    agrupado[r.modalidade] = agrupado[r.modalidade] || { soma: 0, qtd: 0 };
+    agrupado[r.modalidade].soma += r.valor;
+    agrupado[r.modalidade].qtd += 1;
+  });
+  return Object.keys(agrupado).map(mod => ({
+    modalidade: mod,
+    valor: Number((agrupado[mod].soma / agrupado[mod].qtd).toFixed(1)),
+  }));
+};
+
+const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
+  const [dados, setDados] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
   const [dataAtual] = useState(moment().format('DD/MM/YYYY'));
 
-  // Dados mockados para demonstração
-  const dadosMock = {
-    data_atual: "2025-08-19",
-    frequencia_global: [
-      { modalidade: "Fundamental", media: 92.5 },
-      { modalidade: "Médio", media: 89.3 },
-      { modalidade: "CIEJA", media: 85.1 },
-      { modalidade: "Infantil - Creche", media: 90.2 },
-      { modalidade: "Infantil - Pré-escola", media: 87.9 }
-    ]
-  };
-
-  const obterDadosGrafico = useCallback(async () => {
+  const carregar = useCallback(async () => {
+    if (!dreId) {
+      setDados([]);
+      return;
+    }
     setExibirLoader(true);
     try {
-      // Aqui você chamaria uma API real em produção
-      // Simulando uma chamada de API com timeout
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Neste exemplo, usamos dados mockados
-      // A estrutura de dados real deve ser adaptada conforme necessário
-      const dadosFormatados = dadosMock.frequencia_global.map(item => ({
-        modalidade: item.modalidade,
-        media: item.media
-      }));
-      
-      setDadosGrafico(dadosFormatados);
-    } catch (e) {
-      erros(e);
+      // Simula atraso
+      await new Promise(r => setTimeout(r, 300));
+      const mensalLongo = gerarMockMensal();
+      if (periodicidade === 'mensal') {
+        setDados(mensalLongo);
+      } else {
+        setDados(gerarMockAnual(mensalLongo));
+      }
     } finally {
       setExibirLoader(false);
     }
-  }, [anoLetivo, dreId, ueId, modalidade, semestre, tipoVisualizacao]);
+  }, [dreId, periodicidade]);
 
   useEffect(() => {
-    if (dreId === OPCAO_TODOS) {
-      obterDadosGrafico();
-    } else {
-      setDadosGrafico([]);
-    }
-  }, [dreId, obterDadosGrafico]);
+    carregar();
+  }, [carregar]);
+
+  const ehMensal = periodicidade === 'mensal';
+
+  // const titulo = ehMensal
+  //   ? 'Frequência por Modalidade (Mensal - Ano Atual)'
+  //   : 'Frequência por Modalidade (Consolidado Anual)';
+
+  const titulo = 'Frequência'
 
   return (
-    <Loader
-      loading={exibirLoader}
-      className={exibirLoader ? 'text-center' : ''}
-    >
-      <TagGrafico
-        valor={`Dados atualizados até: ${dataAtual}`}
-      />
-      {dadosGrafico?.length ? (
+    <Loader loading={exibirLoader} className={exibirLoader ? 'text-center' : ''}>
+      <div className="mb-3">
+        <h5 className="mb-2" style={{ fontWeight: 'bold', color: '#333', marginBottom: '8px' }}>
+          {titulo}
+          </h5>
+        {/* <TagGrafico valor={`Dados mock até: ${dataAtual}`} /> */}
+      </div>
+      {dados?.length ? (
         <GraficoBarras
-          data={dadosGrafico}
-          xField="modalidade"
-          yField="media"
+          data={dados}
+          isGroup={ehMensal}
+          xField={ehMensal ? 'mes' : 'modalidade'}
+          yField="valor"
+          seriesField={ehMensal ? 'modalidade' : 'modalidade'}
+          colors={coresPadrao}
           xAxisVisible
-          isGroup={false}
-          colors={['#0288D1']}
-          tooltipRender={item => {
-            return {
-              name: item.modalidade,
-              value: `${item.media.toFixed(1)}%`
-            };
+          legendVisible
+          labelVisible
+          tooltip={{
+            formatter: (datum) => ({
+              name: datum.modalidade,
+              value: `${datum.valor}%`,
+            }),
           }}
-          legendPosition="bottom"
         />
       ) : !exibirLoader ? (
         <div className="text-center">Sem dados</div>
-      ) : (
-        ''
-      )}
+      ) : null}
     </Loader>
   );
 };
 
 GraficoFrequenciaModalidade.propTypes = {
-  anoLetivo: PropTypes.oneOfType([PropTypes.any]),
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  modalidade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  semestre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  tipoVisualizacao: PropTypes.oneOfType([PropTypes.string]),
+  periodicidade: PropTypes.string,
 };
 
 GraficoFrequenciaModalidade.defaultProps = {
-  anoLetivo: null,
   dreId: null,
-  ueId: null,
-  modalidade: null,
-  semestre: null,
-  tipoVisualizacao: 'global',
+  periodicidade: 'mensal',
 };
 
 export default GraficoFrequenciaModalidade;

@@ -18,19 +18,8 @@ const GraficoFrequenciaPorModalidade = props => {
 
   return (
     <>
-      <CardCollapse
-        titulo="Frequência global por modalidade"
-        key={`${key}-collapse-key`}
-        indice={`${key}-collapse-indice`}
-        alt={`${key}-alt`}
-        configCabecalho={configCabecalho}
-        show={exibir}
-        onClick={() => {
-          setExibir(!exibir);
-        }}
-      >
         {exibir ? (
-          <GraficoFrequenciaModalidade
+         <GraficoFrequenciaModalidade
             anoLetivo={anoLetivo}
             dreId={dreId}
             ueId={ueId}
@@ -41,7 +30,6 @@ const GraficoFrequenciaPorModalidade = props => {
         ) : (
           ''
         )}
-      </CardCollapse>
     </>
   );
 };
