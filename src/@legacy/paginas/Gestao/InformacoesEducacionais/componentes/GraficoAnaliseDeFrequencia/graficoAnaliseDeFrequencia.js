@@ -3,26 +3,36 @@ import PropTypes from 'prop-types';
 import { Col, Row } from 'antd';
 import { Loader } from '~/componentes';
 import { erros } from '~/servicos';
-import { dadosMock } from './graficoAnaliseDeFrequenciaMock';
+import ServicoFrequencia from '~/servicos/InformacoesEducacionais/ServicoFrequencia';
+import { OPCAO_TODOS } from '~/constantes/constantes';
 
 const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
   const [dados, setDados] = useState({});
   const [carregando, setCarregando] = useState(false);
 
   const obterDados = useCallback(async () => {
-    if (!dreId) {
+    if (dreId === undefined || dreId === null) {
       setDados({});
       return;
     }
-
     setCarregando(true);
     try {
-      // Simula chamada à API
-      await new Promise(resolve => setTimeout(resolve, 800));
-
-      setDados(dadosMock);
+      const dreIdFinal = dreId;
+      const ehTodas = dreIdFinal === OPCAO_TODOS || dreIdFinal === '-99';
+      const resposta = ehTodas
+        ? await ServicoFrequencia.obterFrequenciaRanking()
+        : await ServicoFrequencia.obterFrequenciaRanking(dreIdFinal);
+      if (resposta.status === 200 && resposta.data) {
+        const dadosApi = resposta.data;
+        setDados({
+          escolasEmSituacaoCritica: { dados: dadosApi.escolasEmSituacaoCritica || [], cor: '#ffebee' },
+          escolasEmAtencao: { dados: dadosApi.escolasEmAtencao || [], cor: '#fff8e1' },
+          escolasRanqueadas: { dados: dadosApi.escolasRanqueadas || [], cor: '#e8f5e8' }
+        });
+      } else setDados({});
     } catch (error) {
-      erros(error);
+      if (error.response?.data?.mensagens?.length > 0) erros(error.response.data.mensagens.join(', '));
+      else erros('Erro ao carregar análise de frequência das escolas');
       setDados({});
     } finally {
       setCarregando(false);
@@ -31,7 +41,7 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
 
   useEffect(() => {
     obterDados();
-  }, [obterDados]);
+  }, [dreId, periodicidade, obterDados]);
 
   const renderizarGrupoEscolas = (chave, grupo) => {
     if (!grupo || !grupo.dados?.length) return null;

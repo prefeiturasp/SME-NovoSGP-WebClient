@@ -258,7 +258,7 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
 
   const onChangeDre = (valor) => {
     setDre(valor);
-    obterDreSelecionado(valor);
+    if (valor && obterDreSelecionado) obterDreSelecionado(valor);
   };
 
   return (

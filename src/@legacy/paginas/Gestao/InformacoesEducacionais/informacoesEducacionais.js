@@ -14,25 +14,34 @@ const InformacoesEducacionais = () => {
 
   // Estados para armazenar valores dos filtros
   const [anoLetivo, setAnoLetivo] = useState(null);
-  const [dre, setDre] = useState({ codigo: OPCAO_TODOS });
+  // Armazena somente o código da DRE (primitivo) para garantir re-render confiável
+  const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
   const [ue, setUe] = useState({ codigo: OPCAO_TODOS });
   const [modalidade, setModalidade] = useState(null);
   const [semestre, setSemestre] = useState(null);
   const [tipoVisualizacao, setTipoVisualizacao] = useState('global');
   
-  // Estado para periodicidade (Mensal ou Anual)
+  // Estado para periodicidade (Mensal ou Anual/Global)
   const [periodicidade, setPeriodicidade] = useState('mensal');
   const listaPeriodicidade = [
     { valor: 'mensal', desc: 'Mensal (ano atual)' },
     { valor: 'anual', desc: 'Anual' }
   ];
 
+  // Callback chamado pelo filtro; recebe objeto ou código e extrai o código primitivo
+  const obterDreSelecionada = (valor) => {
+    const codigo = (valor && typeof valor === 'object') ? valor.codigo : valor;
+    if (codigo !== dreCodigo) {
+      setDreCodigo(codigo);
+    }
+  };
+
   const aoClicarBotaoVoltar = () => {
     navigate('/');
   };
 
   // Lógica para verificar se deve exibir o gráfico
-  const exibirGrafico = !!dre?.codigo;
+  const exibirGrafico = !!dreCodigo;
 
   return (
     <>
@@ -43,14 +52,11 @@ const InformacoesEducacionais = () => {
         <div className="col-md-12">
           <Row gutter={[16, 16]}>
             <Col xs={24} md={18}>
-              <InformacoesEducacionaisFiltros
-                setDreSelecionada={setDre}
-                // setTipoVisualizacaoSelecionado={setTipoVisualizacao}
-              />
+              <InformacoesEducacionaisFiltros obterDreSelecionado={obterDreSelecionada} />
             </Col>
             <Col xs={24} md={6}>
               <SelectComponent
-                label=""
+                label="Tipo de visualização"
                 lista={listaPeriodicidade}
                 valueOption="valor"
                 valueText="desc"
@@ -64,16 +70,11 @@ const InformacoesEducacionais = () => {
           {exibirGrafico ? (
             <>
               <GraficoFrequenciaPorModalidade 
-                anoLetivo={anoLetivo}
-                dreId={dre?.codigo}
-                ueId={ue?.codigo}
-                modalidade={modalidade}
-                semestre={semestre}
-                tipoVisualizacao={tipoVisualizacao}
+                dreId={dreCodigo}
                 periodicidade={periodicidade}
               />
               <GraficoAnaliseDeFrequencia
-                dreId={dre?.codigo}
+                dreId={dreCodigo}
                 periodicidade={periodicidade}
               />
             </>
