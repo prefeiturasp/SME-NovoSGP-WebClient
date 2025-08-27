@@ -5,7 +5,7 @@ import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import InformacoesEducacionaisFiltros from './componentes/Filtro/informacoesEducacionaisFiltros';
 import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorModalidade';
-import InformacoesAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia';
+import GraficoAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import { Col, Row } from 'antd';
 
@@ -72,7 +72,7 @@ const InformacoesEducacionais = () => {
                 tipoVisualizacao={tipoVisualizacao}
                 periodicidade={periodicidade}
               />
-              <InformacoesAnaliseDeFrequencia
+              <GraficoAnaliseDeFrequencia
                 dreId={dre?.codigo}
                 periodicidade={periodicidade}
               />

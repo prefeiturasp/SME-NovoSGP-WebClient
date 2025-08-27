@@ -10,11 +10,11 @@ import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
 import { Col, Row } from 'antd';
 
-const InformacoesEducacionaisFiltros = () => {
+const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
   const usuario = useSelector(store => store.usuario);
   
   // Estados dos filtros
-  const [anoLetivo, setAnoLetivo] = useState(null);
+  const [anoLetivo, setAnoLetivo] = useState(null); 
   const [dre, setDre] = useState(null);
   const [ue, setUe] = useState(null);
   const [modalidade, setModalidade] = useState(null);
@@ -256,23 +256,14 @@ const InformacoesEducacionaisFiltros = () => {
     setTipoVisualizacao(valor);
   };
 
+  const onChangeDre = (valor) => {
+    setDre(valor);
+    obterDreSelecionado(valor);
+  };
+
   return (
     <div className="col-md-12 mb-4">
       <div className="row">
-        {/* <div className="col-sm-12 col-md-6 col-lg-2 col-xl-2 mb-2">
-          <Loader loading={carregandoAnosLetivos} tip="">
-            <SelectComponent
-              label="Ano Letivo"
-              lista={listaAnosLetivo}
-              valueOption="valor"
-              valueText="desc"
-              disabled={listaAnosLetivo?.length === 1}
-              onChange={setAnoLetivo}
-              valueSelect={anoLetivo}
-              placeholder="Ano letivo"
-            />
-          </Loader>
-        </div> */}
         <div className="col-sm-12 col-md-6 col-lg-5 col-xl-5 mb-2">
           <Loader loading={carregandoDres} tip="">
             <SelectComponent
@@ -281,74 +272,13 @@ const InformacoesEducacionaisFiltros = () => {
               valueOption="codigo"
               valueText="desc"
               disabled={listaDres?.length === 1}
-              onChange={setDre}
+              onChange={onChangeDre}
               valueSelect={dre?.codigo}
               placeholder="DRE"
               showSearch
             />
           </Loader>
         </div>
-        {/* <div className="col-sm-12 col-md-6 col-lg-5 col-xl-5 mb-2">
-          <Loader loading={carregandoUes} tip="">
-            <SelectComponent
-              label="Unidade Escolar (UE)"
-              lista={listaUes}
-              valueOption="codigo"
-              valueText="desc"
-              disabled={listaUes?.length === 1}
-              onChange={setUe}
-              valueSelect={ue?.codigo}
-              placeholder="Unidade Escolar (UE)"
-              showSearch
-            />
-          </Loader>
-        </div> */}
-        {/* <div className="col-sm-12 col-md-6 col-lg-4 col-xl-4 mb-2">
-          <Loader loading={carregandoModalidades} tip="">
-            <SelectComponent
-              label="Modalidade"
-              lista={listaModalidades}
-              valueOption="valor"
-              valueText="descricao"
-              disabled={listaModalidades?.length === 1}
-              onChange={setModalidade}
-              valueSelect={modalidade}
-              placeholder="Modalidade"
-            />
-          </Loader>
-        </div> */}
-        {/* <div className="col-sm-12 col-md-3 col-lg-2 col-xl-2 mb-2">
-          <Loader loading={carregandoSemestres} tip="">
-            <SelectComponent
-              lista={listaSemestres}
-              valueOption="valor"
-              valueText="desc"
-              label="Semestre"
-              disabled={!ehEJAOuCelp || listaSemestres?.length === 1}
-              onChange={setSemestre}
-              valueSelect={semestre}
-              placeholder="Semestre"
-            />
-          </Loader>
-        </div> */}
-        {/* <div className="col-sm-12 col-md-6 col-lg-3 col-xl-3 mb-2">
-          <SelectComponent
-            label="Visualização"
-            lista={listaTiposVisualizacao}
-            valueOption="valor"
-            valueText="desc"
-            onChange={onChangeTipoVisualizacao}
-            valueSelect={tipoVisualizacao}
-            placeholder="Visualização"
-          />
-        </div> */}
-        {/* <div className="col-sm-12 col-md-3 col-lg-3 col-xl-3 mb-2">
-          <CheckboxComponent
-            label="Considerar histórico?"
-            onChangeCheckbox={onChangeConsideraHistorico}
-            checked={consideraHistorico}
-          />
-        </div> */}
       </div>
     </div>
   );

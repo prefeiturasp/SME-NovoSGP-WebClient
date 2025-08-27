@@ -3,47 +3,11 @@ import PropTypes from 'prop-types';
 import { Col, Row } from 'antd';
 import { Loader } from '~/componentes';
 import { erros } from '~/servicos';
+import { dadosMock } from './graficoAnaliseDeFrequenciaMock';
 
-const InformacoesAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
+const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
   const [dados, setDados] = useState({});
   const [carregando, setCarregando] = useState(false);
-
-  // Dados mockados baseados no design da imagem
-  const dadosMock = {
-    escolasSituacaoCritica: {
-      titulo: 'Escolas em situação crítica',
-      descricao: 'XX escolas com frequência abaixo de 85%',
-      escolas: [
-        { nome: 'EMEF Jardim São Paulo', percentual: 83 },
-        { nome: 'EMEF Itaquera', percentual: 84 },
-        { nome: 'EMEF Vila Medeiros', percentual: 84 }
-      ],
-      cor: '#ffebee' // Rosa claro
-    },
-    escolasAtencao: {
-      titulo: 'Escolas em atenção',
-      descricao: 'XX escolas com frequência entre 85% e 90%',
-      escolas: [
-        { nome: 'EMEF Campo Limpo', percentual: 89 },
-        { nome: 'EMEF Tremembé', percentual: 88 },
-        { nome: 'EMEF Pêra Marmelo', percentual: 87 },
-        { nome: 'EMEF Casa Verde', percentual: 86 },
-        { nome: 'EMEF Ermelino Matarazzo', percentual: 86 }
-      ],
-      cor: '#fff8e1' // Amarelo claro
-    },
-    melhoresFrequencias: {
-      titulo: 'Melhores frequências',
-      descricao: 'XX escolas com frequência acima de 94%',
-      escolas: [
-        { nome: 'EMEF Vila Formosa', percentual: 95 },
-        { nome: 'EMEF Vila Rubi', percentual: 95 },
-        { nome: 'EMEF Jardim Ângela', percentual: 94 },
-        { nome: 'EMEF Alto de Pinheiros', percentual: 94 }
-      ],
-      cor: '#e8f5e8' // Verde claro
-    }
-  };
 
   const obterDados = useCallback(async () => {
     if (!dreId) {
@@ -55,16 +19,7 @@ const InformacoesAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
     try {
       // Simula chamada à API
       await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // TODO: Substituir dados mock por chamada real à API quando endpoint estiver disponível
-      // const response = await ServicoInformacoesEducacionais.obterAnaliseFrequencia({
-      //   dreId,
-      //   periodicidade,
-      //   anoLetivo: new Date().getFullYear()
-      // });
-      // setDados(response.data);
-      
-      // Por enquanto, usar dados mockados
+
       setDados(dadosMock);
     } catch (error) {
       erros(error);
@@ -78,12 +33,24 @@ const InformacoesAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
     obterDados();
   }, [obterDados]);
 
-  const renderizarGrupoEscolas = (grupo) => {
-    if (!grupo || !grupo.escolas?.length) return null;
+  const renderizarGrupoEscolas = (chave, grupo) => {
+    if (!grupo || !grupo.dados?.length) return null;
+
+    const titulos = {
+      escolasEmSituacaoCritica: 'Escolas em situação crítica',
+      escolasEmAtencao: 'Escolas em atenção',
+      escolasRanqueadas: 'Melhores frequências'
+    };
+
+    const descricoes = {
+      escolasEmSituacaoCritica: ` ${grupo.dados.length} escolas com frequência abaixo de 85%`,
+      escolasEmAtencao: ` ${grupo.dados.length} escolas com frequência entre 85% e 90%`,
+      escolasRanqueadas: ` ${grupo.dados.length} escolas com frequência acima de 94%`
+    };
 
     return (
-      <Col xs={24} md={8} key={grupo.titulo}>
-        <div 
+      <Col xs={24} md={8} key={chave}>
+        <div
           className="p-3 h-100"
           style={{
             backgroundColor: grupo.cor,
@@ -92,16 +59,16 @@ const InformacoesAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
           }}
         >
           <h5 className="mb-2" style={{ fontWeight: 'bold', color: '#333' }}>
-            {grupo.titulo}
+            {titulos[chave]}
           </h5>
           <p className="mb-3 text-muted" style={{ fontSize: '0.9em' }}>
-            {grupo.descricao.replace('XX', grupo.escolas.length)}
+            {descricoes[chave]}
           </p>
           <div>
-            {grupo.escolas.map((escola, index) => (
+            {grupo.dados.map((escola, index) => (
               <div key={index} className="mb-2">
                 <span style={{ color: '#555', fontSize: '0.9em' }}>
-                  {escola.nome} <strong>({escola.percentual}%)</strong>
+                  {escola.ue} <strong>({escola.percentualFrequencia}%)</strong>
                 </span>
               </div>
             ))}
@@ -110,6 +77,7 @@ const InformacoesAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
       </Col>
     );
   };
+
 
   if (carregando) {
     return (
@@ -133,24 +101,25 @@ const InformacoesAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
           Análise dos níveis de frequência das UEs em 2025.
         </p>
       </div>
-      
+
       <Row gutter={[16, 16]}>
-        {renderizarGrupoEscolas(dados.escolasSituacaoCritica)}
-        {renderizarGrupoEscolas(dados.escolasAtencao)}
-        {renderizarGrupoEscolas(dados.melhoresFrequencias)}
+        {renderizarGrupoEscolas('escolasEmSituacaoCritica', dados.escolasEmSituacaoCritica)}
+        {renderizarGrupoEscolas('escolasEmAtencao', dados.escolasEmAtencao)}
+        {renderizarGrupoEscolas('escolasRanqueadas', dados.escolasRanqueadas)}
       </Row>
+
     </div>
   );
 };
 
-InformacoesAnaliseDeFrequencia.propTypes = {
+GraficoAnaliseDeFrequencia.propTypes = {
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   periodicidade: PropTypes.string,
 };
 
-InformacoesAnaliseDeFrequencia.defaultProps = {
+GraficoAnaliseDeFrequencia.defaultProps = {
   dreId: null,
   periodicidade: 'mensal',
 };
 
-export default InformacoesAnaliseDeFrequencia;
+export default GraficoAnaliseDeFrequencia;
