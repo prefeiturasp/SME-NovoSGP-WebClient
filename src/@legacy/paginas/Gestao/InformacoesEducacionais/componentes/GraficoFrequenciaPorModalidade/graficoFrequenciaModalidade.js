@@ -107,7 +107,7 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
   }, [dreId, periodicidade, carregarDadosApi]);
 
   const ehMensal = periodicidade === 'mensal';
-  const titulo = ehMensal ? 'Frequência Mensal' : 'Frequência Global';
+  const titulo = 'Frequência';
 
   return (
     <Loader loading={exibirLoader} className={exibirLoader ? 'text-center' : ''} tip="Carregando dados de frequência...">
@@ -116,9 +116,8 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
           {titulo}
         </h5>
         <p className="text-muted" style={{ fontSize: '0.95em', margin: 0 }}>
-          {ehMensal 
-            ? 'Frequência por modalidade de ensino nos últimos meses' 
-            : 'Frequência acumulada por modalidade de ensino'}
+          É o índice da média de frequência dos estudantes nas Unidades Educacionais da Rede Municipal de São Paulo.
+          
         </p>
       </div>
     {dados?.length ? (

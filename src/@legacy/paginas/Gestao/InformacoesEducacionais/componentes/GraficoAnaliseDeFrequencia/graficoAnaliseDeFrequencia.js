@@ -58,6 +58,9 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
       escolasRanqueadas: ` ${grupo.dados.length} escolas com frequência acima de 94%`
     };
 
+    // Altura aproximada de uma linha (~24px incluindo margem). 10 linhas -> ~240px
+    const maxAltura = 240; // pode ajustar se necessário
+
     return (
       <Col xs={24} md={8} key={chave}>
         <div
@@ -65,7 +68,9 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
           style={{
             backgroundColor: grupo.cor,
             borderRadius: '8px',
-            border: '1px solid #e0e0e0'
+            border: '1px solid #e0e0e0',
+            display: 'flex',
+            flexDirection: 'column'
           }}
         >
           <h5 className="mb-2" style={{ fontWeight: 'bold', color: '#333' }}>
@@ -74,15 +79,24 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
           <p className="mb-3 text-muted" style={{ fontSize: '0.9em' }}>
             {descricoes[chave]}
           </p>
-          <div>
+          <div style={{
+            overflowY: grupo.dados.length > 10 ? 'auto' : 'visible',
+            maxHeight: grupo.dados.length > 10 ? maxAltura : 'none',
+            paddingRight: grupo.dados.length > 10 ? '4px' : 0
+          }}>
             {grupo.dados.map((escola, index) => (
-              <div key={index} className="mb-2">
-                <span style={{ color: '#555', fontSize: '0.9em' }}>
-                  {escola.ue} <strong>({escola.percentualFrequencia}%)</strong>
+              <div key={index} className="mb-2" style={{ lineHeight: '1.2em' }}>
+                <span style={{ color: '#555', fontSize: '0.85em' }}>
+                  <strong>{index + 1}.</strong> {escola.ue} <strong>({escola.percentualFrequencia}%)</strong>
                 </span>
               </div>
             ))}
           </div>
+          {grupo.dados.length > 10 && (
+            <div className="mt-2 text-muted" style={{ fontSize: '0.7em' }}>
+              Rolagem: exibindo 10 de {grupo.dados.length}
+            </div>
+          )}
         </div>
       </Col>
     );

@@ -56,7 +56,7 @@ const InformacoesEducacionais = () => {
             </Col>
             <Col xs={24} md={6}>
               <SelectComponent
-                label="Tipo de visualização"
+                label="Período"
                 lista={listaPeriodicidade}
                 valueOption="valor"
                 valueText="desc"
