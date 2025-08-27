@@ -1,34 +1,28 @@
-import React, { useState } from 'react';
+import { Col, Row } from 'antd';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import InformacoesEducacionaisFiltros from './componentes/Filtro/informacoesEducacionaisFiltros';
-import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorModalidade';
-import GraficoAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia';
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import { Col, Row } from 'antd';
+import InformacoesEducacionaisFiltros from './componentes/Filtro/informacoesEducacionaisFiltros';
+import GraficoAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia';
+import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorModalidade';
 
 const InformacoesEducacionais = () => {
   const navigate = useNavigate();
-
-  // Estados para armazenar valores dos filtros
   const [anoLetivo, setAnoLetivo] = useState(null);
-  // Armazena somente o código da DRE (primitivo) para garantir re-render confiável
   const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
   const [ue, setUe] = useState({ codigo: OPCAO_TODOS });
   const [modalidade, setModalidade] = useState(null);
   const [semestre, setSemestre] = useState(null);
-  const [tipoVisualizacao, setTipoVisualizacao] = useState('global');
-  
-  // Estado para periodicidade (Mensal ou Anual/Global)
+  const [tipoVisualizacao, setTipoVisualizacao] = useState('global');  
   const [periodicidade, setPeriodicidade] = useState('mensal');
   const listaPeriodicidade = [
     { valor: 'mensal', desc: 'Mensal (ano atual)' },
     { valor: 'anual', desc: 'Anual' }
   ];
 
-  // Callback chamado pelo filtro; recebe objeto ou código e extrai o código primitivo
   const obterDreSelecionada = (valor) => {
     const codigo = (valor && typeof valor === 'object') ? valor.codigo : valor;
     if (codigo !== dreCodigo) {
@@ -40,7 +34,6 @@ const InformacoesEducacionais = () => {
     navigate('/');
   };
 
-  // Lógica para verificar se deve exibir o gráfico
   const exibirGrafico = !!dreCodigo;
 
   return (

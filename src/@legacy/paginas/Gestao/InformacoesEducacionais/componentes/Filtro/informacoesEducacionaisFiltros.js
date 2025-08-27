@@ -13,7 +13,6 @@ import { Col, Row } from 'antd';
 const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
   const usuario = useSelector(store => store.usuario);
   
-  // Estados dos filtros
   const [anoLetivo, setAnoLetivo] = useState(null); 
   const [dre, setDre] = useState(null);
   const [ue, setUe] = useState(null);
@@ -22,7 +21,6 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [tipoVisualizacao, setTipoVisualizacao] = useState('global');
 
-  // Listas para os selects
   const [listaAnosLetivo, setListaAnosLetivo] = useState([]);
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
