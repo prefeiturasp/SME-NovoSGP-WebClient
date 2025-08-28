@@ -44,10 +44,10 @@ const InformacoesEducacionais = () => {
       <Card>
         <div className="col-md-12">
           <Row gutter={[16, 16]}>
-            <Col xs={24} md={18}>
+            <Col xs={24} md={12} >
               <InformacoesEducacionaisFiltros obterDreSelecionado={obterDreSelecionada} />
             </Col>
-            <Col xs={24} md={6}>
+            <Col xs={24} md={12} >
               <SelectComponent
                 label="Período"
                 lista={listaPeriodicidade}
@@ -59,8 +59,10 @@ const InformacoesEducacionais = () => {
               />
             </Col>
           </Row>
-          
-          {exibirGrafico ? (
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+            {exibirGrafico ? (
             <>
               <GraficoFrequenciaPorModalidade 
                 dreId={dreCodigo}
@@ -76,6 +78,25 @@ const InformacoesEducacionais = () => {
               <p>Selecione os filtros acima para visualizar os dados</p>
             </div>
           )}
+            </Col>
+          </Row>
+          
+          {/* {exibirGrafico ? (
+            <>
+              <GraficoFrequenciaPorModalidade 
+                dreId={dreCodigo}
+                periodicidade={periodicidade}
+              />
+              <GraficoAnaliseDeFrequencia
+                dreId={dreCodigo}
+                periodicidade={periodicidade}
+              />
+            </>
+          ) : (
+            <div className="text-center mt-5">
+              <p>Selecione os filtros acima para visualizar os dados</p>
+            </div>
+          )} */}
         </div>
       </Card>
     </>

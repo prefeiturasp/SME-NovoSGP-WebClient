@@ -22,7 +22,7 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
     ];
 
     const mapa = new Map();
-    
+
     resposta.data.forEach(item => {
       const chave = `${item.ano}-${item.mes}-${item.modalidade}`;
       const existente = mapa.get(chave) || { aulas: 0, presencas: 0, modalidade: item.modalidade, mesNumero: item.mes, ano: item.ano };
@@ -121,10 +121,10 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
   return (
     <Loader loading={exibirLoader} className={exibirLoader ? 'text-center' : ''} tip="Carregando dados de frequência...">
       <div className="mb-3">
-        <h5 className="mb-2" style={{ fontWeight: 'bold', color: '#333', marginBottom: '8px' }}>
+        <h5 className="mb-2" style={{ fontWeight: 'bold', color: '#333', marginTop: '32px' }}>
           {titulo}
         </h5>
-        <p className="text-muted" style={{ fontSize: '0.95em', margin: 0 }}>
+        <p className="text-muted" style={{ fontSize: '14px', marginTop: '32px', marginBottom: '32px', color: '#42474a' }}>
           É o índice da média de frequência dos estudantes nas Unidades Educacionais da Rede Municipal de São Paulo.
           
         </p>
