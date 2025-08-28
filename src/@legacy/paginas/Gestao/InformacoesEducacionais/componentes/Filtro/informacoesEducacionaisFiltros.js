@@ -249,29 +249,6 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
     if (valor && obterDreSelecionado) obterDreSelecionado(valor);
   };
 
-  // return (
-  //   <div className="col-md-12 mb-4" >
-  //     <div className="row">
-  //       <div className="col-sm-12 col-md-6 col-lg-5 col-xl-5 mb-2">
-  //         <Loader loading={carregandoDres} tip="">
-  //           <SelectComponent
-  //             label="Selecione ou digite a DRE..."
-  //             lista={listaDres}
-  //             valueOption="codigo"
-  //             valueText="desc"
-  //             disabled={listaDres?.length === 1}
-  //             onChange={onChangeDre}
-  //             valueSelect={dre?.codigo}
-  //             placeholder="DRE"
-  //             showSearch
-  //             defaultValue={'Todas'}
-  //             allowClear={false}
-  //           />
-  //         </Loader>
-  //       </div>
-  //     </div>
-  //   </div>
-
   return (
   <Row>
     <Col span={24}>
