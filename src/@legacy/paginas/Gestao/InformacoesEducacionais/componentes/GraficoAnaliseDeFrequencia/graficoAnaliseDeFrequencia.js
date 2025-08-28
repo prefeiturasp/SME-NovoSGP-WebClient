@@ -94,11 +94,6 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
               </div>
             ))}
           </div>
-          {grupo.dados.length > 10 && (
-            <div className="mt-2 text-muted" style={{ fontSize: '0.7em' }}>
-              Rolagem: exibindo 10 de {grupo.dados.length}
-            </div>
-          )}
         </div>
       </Col>
     );
@@ -120,10 +115,10 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
   return (
     <div className="mt-4">
       <div className="mb-3">
-        <h5 style={{ fontWeight: 'bold', color: '#333', marginBottom: '8px' }}>
+        <h5 style={{ fontWeight: 'bold', color: '#333', marginTop: '32px' }}>
           Análise de frequência
         </h5>
-        <p className="text-muted" style={{ fontSize: '0.95em', margin: 0 }}>
+        <p className="text-muted" style={{ fontSize: '14px', marginTop: '32px', marginBottom: '32px', color: '#42474a' }}>
           Análise dos níveis de frequência das UEs em 2025.
         </p>
       </div>
