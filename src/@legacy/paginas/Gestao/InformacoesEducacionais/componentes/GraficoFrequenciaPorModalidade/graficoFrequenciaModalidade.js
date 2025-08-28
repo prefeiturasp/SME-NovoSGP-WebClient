@@ -14,7 +14,6 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
   const [dataAtual] = useState(moment().format('DD/MM/YYYY'));
   const [cores, setCores] = useState([]);
 
-  // Agrega dados mensais: para cada (mes, modalidade) faz média ponderada por totalAulas
   const formatarDadosMensais = (resposta) => {
     if (!resposta?.data?.length) return [];
     const nomesMes = [
@@ -33,7 +32,7 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
     });
     return Array.from(mapa.values())
       .map(r => ({
-        mes: `${String(r.mesNumero).padStart(2,'0')}/${r.ano}`, // ainda disponível se preciso
+        mes: `${String(r.mesNumero).padStart(2,'0')}/${r.ano}`, 
         mesLabel: nomesMes[r.mesNumero - 1] || r.mesNumero,
         ordemMes: r.ano * 100 + r.mesNumero, // para ordenar ano/mes
         modalidade: r.modalidade,
@@ -42,8 +41,7 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
       .sort((a,b) => a.ordemMes - b.ordemMes);
   };
 
-  // Agrega anual: consolida todas as linhas por modalidade (meses somados) usando média ponderada
-  const formatarDadosAnuais = (resposta) => {
+  const agruparDadosAnuais = (resposta) => {
     if (!resposta?.data?.length) return [];
     const mapa = new Map();
     resposta.data.forEach(item => {
@@ -61,7 +59,6 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
     }));
   };
 
-  // Carrega dados da API de acordo com a periodicidade
   const carregarDadosApi = useCallback(async () => {
     if (dreId === undefined || dreId === null) {
       setDados([]);
@@ -87,7 +84,7 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
           ? await ServicoFrequencia.obterFrequenciaGlobal()
           : await ServicoFrequencia.obterFrequenciaGlobal(dreIdFinal);
         if (resposta.status === 200 && resposta.data) {
-          const dadosFormatados = formatarDadosAnuais(resposta);
+          const dadosFormatados = agruparDadosAnuais(resposta);
           setDados(dadosFormatados);
           const modalidadesUnicas = [...new Set(dadosFormatados.map(i => i.modalidade))];
           setCores(gerarCoresDinamicas(modalidadesUnicas.length));
@@ -125,11 +122,11 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
       data={dados}
       isGroup={ehMensal ? true : false}
       xField={ehMensal ? 'mesLabel' : 'modalidade'}
-          yField="valor" // Campo do eixo Y sempre é o percentual
-          seriesField="modalidade" // Agrupa/colore por modalidade
-          colors={cores.length ? cores : undefined} // Usa cores dinâmicas se disponíveis
+          yField="valor"
+          seriesField="modalidade"
+          colors={cores.length ? cores : undefined} 
           xAxisVisible
-          legendVisible={ehMensal} // Legenda apenas para visualização mensal
+          legendVisible={ehMensal}
           labelVisible
           tooltip={{
             formatter: (datum) => ({

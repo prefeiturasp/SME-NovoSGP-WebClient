@@ -58,8 +58,7 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
       escolasRanqueadas: ` ${grupo.dados.length} escolas com frequência acima de 94%`
     };
 
-    // Altura aproximada de uma linha (~24px incluindo margem). 10 linhas -> ~240px
-    const maxAltura = 240; // pode ajustar se necessário
+    const maxAlturaDezLinhas = 240;
 
     return (
       <Col xs={24} md={8} key={chave}>
@@ -81,7 +80,7 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
           </p>
           <div style={{
             overflowY: grupo.dados.length > 10 ? 'auto' : 'visible',
-            maxHeight: grupo.dados.length > 10 ? maxAltura : 'none',
+            maxHeight: grupo.dados.length > 10 ? maxAlturaDezLinhas : 'none',
             paddingRight: grupo.dados.length > 10 ? '4px' : 0
           }}>
             {grupo.dados.map((escola, index) => (

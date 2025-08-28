@@ -2,7 +2,6 @@ import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 import GraficoAnaliseDeFrequencia from './GraficoAnaliseDeFrequencia';
 
-// Mock dos módulos externos
 jest.mock('~/servicos', () => ({
   erros: jest.fn()
 }));
@@ -65,8 +64,6 @@ describe('InformacoesAnaliseDeFrequencia', () => {
     expect(screen.getByText('Situação Crítica')).toBeInTheDocument();
     expect(screen.getByText('Atenção')).toBeInTheDocument();
     expect(screen.getByText('Melhores Frequências')).toBeInTheDocument();
-    
-    // Verifica se as escolas estão sendo renderizadas
     expect(screen.getByText('Escola A')).toBeInTheDocument();
     expect(screen.getByText('(65%)')).toBeInTheDocument();
   });
@@ -86,8 +83,6 @@ describe('InformacoesAnaliseDeFrequencia', () => {
   it('deve usar periodicidade padrão quando não informada', () => {
     const { container } = render(<GraficoAnaliseDeFrequencia dreId="123" />);
     
-    // Como periodicidade não afeta a renderização diretamente,
-    // verificamos apenas que o componente renderiza sem erro
     expect(container).not.toBeEmptyDOMElement();
   });
 });

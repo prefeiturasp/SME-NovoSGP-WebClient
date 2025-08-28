@@ -32,8 +32,6 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
   ]);
 
   const [anoAtual] = useState(moment().format('YYYY'));
-
-  // Estados para controle de carregamento
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
@@ -44,7 +42,6 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
     Number(modalidade) === ModalidadeEnum.EJA ||
     Number(modalidade) === ModalidadeEnum.CELP;
 
-  // Carrega anos letivos
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
 
@@ -59,7 +56,6 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
       });
     }
 
-    // Define o ano atual como padrão
     let valorAtual;
     if (anosLetivos?.length) {
       const temAnoAtualNaLista = anosLetivos.find(
@@ -81,7 +77,6 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
     obterAnosLetivos();
   }, [obterAnosLetivos, consideraHistorico]);
 
-  // Carrega DREs
   const obterDres = useCallback(async () => {
     if (anoLetivo) {
       setCarregandoDres(true);
@@ -129,7 +124,6 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
     }
   }, [anoLetivo, obterDres]);
 
-  // Carrega UEs
   const obterUes = useCallback(async () => {
     if (dre?.codigo) {
       if (dre?.codigo === OPCAO_TODOS) {
@@ -185,7 +179,6 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
     }
   }, [dre, obterUes]);
 
-  // Carrega modalidades
   const obterModalidades = useCallback(async () => {
     if (ue?.codigo) {
       setCarregandoModalidades(true);
@@ -222,7 +215,6 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
     }
   }, [ue, obterModalidades]);
 
-  // Carrega semestres
   const obterSemestres = useCallback(async () => {
     if (
       anoLetivo &&
