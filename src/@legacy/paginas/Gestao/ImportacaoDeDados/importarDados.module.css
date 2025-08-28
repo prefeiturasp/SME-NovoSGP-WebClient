@@ -1,0 +1,51 @@
+.circleOutlined {
+  font-size: 18px;
+  margin-left: 8px;
+}
+.textoRegistrosProcessados {
+  color: 'black';
+  font-weight: 500;
+  padding: 4;
+}
+.divProgress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.progress {
+  flex: 1;
+}
+
+.searchButton {
+  font-size: 18px;
+  border-radius: 6px;
+  padding: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.searchButtonActive {
+  color: #1677ff;
+  cursor: pointer;
+  border: 1px solid #1677ff;
+}
+
+.searchButtonInactive {
+  color: #ccc;
+  cursor: not-allowed;
+  border: 1px solid #f0f0f0;
+}
+
+.modal {
+  overflow-y: auto;
+  z-index: 1050;
+}
+.divDrawer {
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.celulaTabela {
+  padding: 12px 16px;
+}

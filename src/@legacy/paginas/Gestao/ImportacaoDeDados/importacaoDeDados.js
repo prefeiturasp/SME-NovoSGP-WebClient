@@ -1,16 +1,5 @@
 import { Cabecalho } from '~/componentes-sgp';
-import {
-  Col,
-  Row,
-  Modal,
-  Progress,
-  Tooltip,
-  Drawer,
-  Table,
-  Spin,
-  Card,
-} from 'antd';
-import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
+import { Col, Row, Modal, Progress, Tooltip, Drawer, Table, Card } from 'antd';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
@@ -38,6 +27,7 @@ import {
   ClockCircleOutlined,
 } from '@ant-design/icons';
 import api from '~/servicos/api';
+import styles from './importarDados.module.css';
 
 const StyledModalWrapper = styled.div`
   .ant-modal {
@@ -68,7 +58,8 @@ function ImportacaoDeDados() {
     ) {
       return (
         <CheckCircleOutlined
-          style={{ color: 'green', fontSize: 18, marginLeft: 8 }}
+          className={`${styles.circleOutlined}`}
+          style={{ color: 'green' }}
         />
       );
     }
@@ -79,14 +70,16 @@ function ImportacaoDeDados() {
     ) {
       return (
         <CloseCircleOutlined
-          style={{ color: 'red', fontSize: 18, marginLeft: 8 }}
+          className={`${styles.circleOutlined}`}
+          style={{ color: 'red' }}
         />
       );
     }
 
     return (
       <ClockCircleOutlined
-        style={{ color: 'gray', fontSize: 18, marginLeft: 8 }}
+        className={`${styles.circleOutlined}`}
+        style={{ color: 'gray' }}
       />
     );
   };
@@ -113,21 +106,15 @@ function ImportacaoDeDados() {
           dados.totalRegistros > 0 ? (valor / dados.totalRegistros) * 100 : 0;
 
         return (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span
-              style={{
-                color: erros > 0 ? 'black' : 'black',
-                fontWeight: 500,
-                padding: 4,
-              }}
-            >
+          <div className={`${styles.divProgress}`}>
+            <span className={`${styles.textoRegistrosProcessados}`}>
               {dados.registrosProcessados}
             </span>
             <Progress
               percent={percent}
               showInfo={false}
               strokeColor="#9254de"
-              style={{ flex: 1 }}
+              className={styles.progress}
             />
             {renderStatusIcon(dados)}
           </div>
@@ -143,18 +130,9 @@ function ImportacaoDeDados() {
         return (
           <Tooltip title={isErro ? 'Ver detalhes' : 'Sem detalhes'}>
             <SearchOutlined
-              style={{
-                fontSize: 18,
-                color: isErro ? '#1677ff' : '#ccc',
-                cursor: isErro ? 'pointer' : 'not-allowed',
-                border: `1px solid ${isErro ? '#1677ff' : '#f0f0f0'}`,
-                borderRadius: 6,
-                padding: 6,
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 0.2s',
-              }}
+              className={`${styles.searchButton} ${
+                isErro ? styles.searchButtonActive : styles.searchButtonInactive
+              }`}
               onClick={() => isErro && abrirDrawer(dados)}
             />
           </Tooltip>
@@ -167,7 +145,7 @@ function ImportacaoDeDados() {
   const [loading, setLoading] = useState(false);
   const [inconsistencias, setInconsistencias] = useState([]);
   const [arquivoSelecionado, setArquivoSelecionado] = useState(null);
-  const [paginaAtual, setPaginaAtual] = useState(1); // 👈 aqui
+  const [paginaAtual, setPaginaAtual] = useState(1);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const pageSize = 20;
 
@@ -223,11 +201,11 @@ function ImportacaoDeDados() {
           footer={null}
           onCancel={() => setOpenModal(false)}
           width={'70%'}
-          style={{ overflowY: 'auto', zIndex: 1050 }}
+          className={styles.modal}
         >
           <ModalImportarArquivo
             setarModal={setOpenModal}
-            resetarLita={setListaKey}
+            resetarLista={setListaKey}
           />
         </Modal>
       ) : (
@@ -245,7 +223,7 @@ function ImportacaoDeDados() {
         headerStyle={{ marginTop: 80 }}
       >
         {arquivoSelecionado?.nomeArquivo && (
-          <div style={{ marginBottom: 16, fontWeight: 500 }}>
+          <div className={styles.divDrawer}>
             <b>Arquivo:</b> {arquivoSelecionado.nomeArquivo}
           </div>
         )}
@@ -257,7 +235,7 @@ function ImportacaoDeDados() {
           components={{
             body: {
               cell: ({ children, ...restProps }) => (
-                <td {...restProps} style={{ padding: '12px 16px' }}>
+                <td {...restProps} className={styles.celulaTabela}>
                   {children}
                 </td>
               ),
