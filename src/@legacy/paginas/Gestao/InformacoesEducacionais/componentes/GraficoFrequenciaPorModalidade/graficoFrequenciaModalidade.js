@@ -20,7 +20,9 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
       'Janeiro','Fevereiro','Março','Abril','Maio','Junho',
       'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'
     ];
+
     const mapa = new Map();
+    
     resposta.data.forEach(item => {
       const chave = `${item.ano}-${item.mes}-${item.modalidade}`;
       const existente = mapa.get(chave) || { aulas: 0, presencas: 0, modalidade: item.modalidade, mesNumero: item.mes, ano: item.ano };
@@ -30,11 +32,12 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
       existente.presencas += Math.max(aulas - ausencias, 0);
       mapa.set(chave, existente);
     });
+
     return Array.from(mapa.values())
       .map(r => ({
         mes: `${String(r.mesNumero).padStart(2,'0')}/${r.ano}`, 
         mesLabel: nomesMes[r.mesNumero - 1] || r.mesNumero,
-        ordemMes: r.ano * 100 + r.mesNumero, // para ordenar ano/mes
+        ordemMes: r.ano * 100 + r.mesNumero,
         modalidade: r.modalidade,
         valor: r.aulas ? Number(((r.presencas / r.aulas) * 100).toFixed(2)) : 0
       }))
@@ -44,6 +47,7 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
   const agruparDadosAnuais = (resposta) => {
     if (!resposta?.data?.length) return [];
     const mapa = new Map();
+
     resposta.data.forEach(item => {
       const chave = item.modalidade;
       const existente = mapa.get(chave) || { aulas: 0, presencas: 0, modalidade: item.modalidade };
@@ -53,6 +57,7 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
       existente.presencas += Math.max(aulas - ausencias, 0);
       mapa.set(chave, existente);
     });
+
     return Array.from(mapa.values()).map(r => ({
       modalidade: r.modalidade,
       valor: r.aulas ? Number(((r.presencas / r.aulas) * 100).toFixed(2)) : 0
@@ -64,33 +69,40 @@ const GraficoFrequenciaModalidade = ({ dreId, periodicidade }) => {
       setDados([]);
       return;
     }
+
     setExibirLoader(true);
     try {
       const dreIdFinal = dreId;
       const ehTodas = dreIdFinal === OPCAO_TODOS || dreIdFinal === '-99';
       let resposta;
+
       if (periodicidade === 'mensal') {
         resposta = ehTodas
           ? await ServicoFrequencia.obterFrequenciaMensal()
           : await ServicoFrequencia.obterFrequenciaMensal(dreIdFinal);
+
         if (resposta.status === 200 && resposta.data) {
           const dadosFormatados = formatarDadosMensais(resposta);
             setDados(dadosFormatados);
             const modalidadesUnicas = [...new Set(dadosFormatados.map(i => i.modalidade))];
             setCores(gerarCoresDinamicas(modalidadesUnicas.length));
         } else setDados([]);
+
       } else {
         resposta = ehTodas
           ? await ServicoFrequencia.obterFrequenciaGlobal()
           : await ServicoFrequencia.obterFrequenciaGlobal(dreIdFinal);
+
         if (resposta.status === 200 && resposta.data) {
           const dadosFormatados = agruparDadosAnuais(resposta);
           setDados(dadosFormatados);
           const modalidadesUnicas = [...new Set(dadosFormatados.map(i => i.modalidade))];
           setCores(gerarCoresDinamicas(modalidadesUnicas.length));
+
         } else setDados([]);
       }
-    } catch (error) {
+    } 
+    catch (error) {
       if (error.response?.data?.mensagens?.length > 0) erros(error.response.data.mensagens.join(', '));
       else erros('Erro ao carregar dados de frequência');
       setDados([]);

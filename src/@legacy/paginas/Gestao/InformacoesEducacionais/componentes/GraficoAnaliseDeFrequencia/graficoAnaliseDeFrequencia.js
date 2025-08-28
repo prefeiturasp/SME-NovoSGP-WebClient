@@ -22,6 +22,7 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
       const resposta = ehTodas
         ? await ServicoFrequencia.obterFrequenciaRanking()
         : await ServicoFrequencia.obterFrequenciaRanking(dreIdFinal);
+
       if (resposta.status === 200 && resposta.data) {
         const dadosApi = resposta.data;
         setDados({
@@ -29,8 +30,10 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
           escolasEmAtencao: { dados: dadosApi.escolasEmAtencao || [], cor: '#fff8e1' },
           escolasRanqueadas: { dados: dadosApi.escolasRanqueadas || [], cor: '#e8f5e8' }
         });
+
       } else setDados({});
-    } catch (error) {
+    } 
+    catch (error) {
       if (error.response?.data?.mensagens?.length > 0) erros(error.response.data.mensagens.join(', '));
       else erros('Erro ao carregar análise de frequência das escolas');
       setDados({});
