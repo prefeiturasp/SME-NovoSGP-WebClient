@@ -29,21 +29,7 @@ import {
 import api from '~/servicos/api';
 import styles from './importarDados.module.css';
 
-const StyledModalWrapper = styled.div`
-  .ant-modal {
-    padding-top: 32px !important;
-    z-index: 1050 !important;
-  }
-  .ant-modal-wrap {
-    z-index: 1050 !important;
-  }
-  .ant-modal-mask {
-    z-index: 1050 !important;
-  }
-  && .ant-modal-header {
-    margin-top: 12px;
-  }
-`;
+import { StyledModalWrapper } from './importarDados.styled';
 
 function ImportacaoDeDados() {
   const navigate = useNavigate();

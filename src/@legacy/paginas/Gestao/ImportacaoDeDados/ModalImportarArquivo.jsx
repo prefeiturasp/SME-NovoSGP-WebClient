@@ -1,33 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Label, SelectComponent, Colors, Button } from '~/componentes';
-import { UploadOutlined } from '@ant-design/icons';
 import { Col, Row, Upload } from 'antd';
-import styled from 'styled-components';
 import api from '~/servicos/api';
-import { confirmar, erro, sucesso } from '~/servicos/alertas';
+import { sucesso } from '~/servicos/alertas';
+import styles from './importarDados.module.css';
+import { UploadFullWidth, FullWidthButton, FullWidthButton2 } from './importarDados.styled';
 
-const UploadFullWidth = styled(Upload)`
-  width: 100%;
-
-  .ant-upload,
-  .ant-upload-select,
-  .ant-upload-wrapper {
-    display: block !important;
-    width: 100% !important;
-  }
-`;
-
-const FullWidthButton = styled(Button)`
-  width: 100%;
-  display: block;
-`;
-const FullWidthButton2 = styled(Button)`
-  width: 100%;
-  display: block;
-  justify-content: start !important;
-`;
-
-function ModalImportarArquivo({ setarModal, resetarLita }) {
+function ModalImportarArquivo({ setarModal, resetarLista }) {
   const [valor, setarValor] = useState(null);
   const [ano, setarAno] = useState('');
   const [periodo, setarPeriodo] = useState(null);
@@ -45,18 +24,15 @@ function ModalImportarArquivo({ setarModal, resetarLita }) {
     setListaAnos(anos);
   }, []);
 
-  const periodoValido =
-    periodo != null && periodo !== undefined && [1, 2].includes(Number(periodo));
-
   const listaOpcoes = [
-    { id: 1, nome: 'Índice de Desenvolvimento da Educação Paulistana [IDEP]' },
-    { id: 2, nome: 'Índice de Desenvolvimento da Educação Básica [IDEB]' },
-    { id: 3, nome: 'Fluência Leitora' },
+    { id: 'IDEP', nome: 'Índice de Desenvolvimento da Educação Paulistana [IDEP]' },
+    { id: 'IDEB', nome: 'Índice de Desenvolvimento da Educação Básica [IDEB]' },
+    { id: 'FLUENCIA', nome: 'Fluência Leitora' },
   ];
 
   const listaPeriodos = [
-    { id: 1, nome: 'Avaliação de entrada' },
-    { id: 2, nome: 'Avaliação de saída' },
+    { id: 'ENTRADA', nome: 'Avaliação de entrada' },
+    { id: 'SAIDA', nome: 'Avaliação de saída' },
   ];
 
   const [arquivoSelecionado, setarArquivoSelecionado] = useState(null);
@@ -77,7 +53,7 @@ function ModalImportarArquivo({ setarModal, resetarLita }) {
 
       return false;
     },
-    onChange: (info) => {},
+    onChange: () => {},
   };
 
   const handleSubmit = async () => {
@@ -91,10 +67,7 @@ function ModalImportarArquivo({ setarModal, resetarLita }) {
       return;
     }
 
-    const valorNum = Number(valor);
-    const periodoNum = periodo != null ? Number(periodo) : null;
-
-    if (valorNum === 3 && ![1, 2].includes(periodoNum)) {
+    if (valor === 'FLUENCIA' && !['ENTRADA', 'SAIDA'].includes(periodo)) {
       alert('Selecione um período válido (entrada ou saída).');
       return;
     }
@@ -113,17 +86,17 @@ function ModalImportarArquivo({ setarModal, resetarLita }) {
       fmData.append('anoLetivo', anoNum);
 
       let url = '';
-      if (valorNum === 1) {
+      if (valor === 'IDEP') {
         url = 'v1/importar-arquivo/idep';
-      } else if (valorNum === 2) {
+      } else if (valor === 'IDEB') {
         url = 'v1/importar-arquivo/ideb';
-      } else if (valorNum === 3) {
-        if (!periodoNum || ![1, 2].includes(periodoNum)) {
+      } else if (valor === 'FLUENCIA') {
+        if (!periodo || !['ENTRADA', 'SAIDA'].includes(periodo)) {
           alert('Selecione um período válido (entrada ou saída).');
           return;
         }
         url = 'v1/importar-arquivo/fluencia-leitora';
-        const nomePeriodo = periodoNum === 1 ? 'avaliacao de entrada' : 'avaliacao de saida';
+        const nomePeriodo = periodo === 'ENTRADA' ? 'avaliacao de entrada' : 'avaliacao de saida';
         fmData.append('periodo', nomePeriodo);
       } else {
         alert('Seleção inválida.');
@@ -136,20 +109,21 @@ function ModalImportarArquivo({ setarModal, resetarLita }) {
 
       sucesso(resposta.data.mensagem || 'Arquivo importado com sucesso');
       setarModal(false);
-      resetarLita((prev) => prev + 1);
+      resetarLista((prev) => prev + 1);
     } catch (e) {
       alert(e.message || 'Erro ao enviar arquivo');
     }
   };
+
   return (
     <>
-      <div style={{ marginTop: '12px', marginBottom: '16px' }} className="ant-modal-title">
-        Importar Arquivo
-      </div>
-      <p>Selecione um item e o ano para fazer a importação do arquivo</p>
+      <div className={styles.modalTitle}>Importar Arquivo</div>
+      <p className={styles.modalDescription}>
+        Selecione um item e o ano para fazer a importação do arquivo
+      </p>
 
       <SelectComponent
-        style={{ marginBottom: 16 }}
+        className={styles.select}
         id="tipo"
         label="Selecione um item"
         lista={listaOpcoes}
@@ -168,7 +142,7 @@ function ModalImportarArquivo({ setarModal, resetarLita }) {
 
       {valor && (
         <SelectComponent
-          style={{ marginBottom: 16 }}
+          className={styles.select}
           id="ano"
           label="Selecione ou digite o ano"
           lista={listaAnos}
@@ -183,9 +157,9 @@ function ModalImportarArquivo({ setarModal, resetarLita }) {
         />
       )}
 
-      {valor == 3 && ano && (
+      {valor === 'FLUENCIA' && ano && (
         <SelectComponent
-          style={{ marginBottom: 16 }}
+          className={styles.select}
           id="periodos"
           label="Selecione o período da avaliação"
           lista={listaPeriodos}
@@ -201,18 +175,12 @@ function ModalImportarArquivo({ setarModal, resetarLita }) {
       )}
 
       {valor && ano && (
-        <div style={{ marginBottom: 16, width: '100%' }}>
-          <UploadFullWidth
-            {...uploadConfig}
-            maxCount={1}
-            showUploadList={false}
-            style={{ display: 'block', width: '100%' }}
-          >
+        <div className={styles.uploadWrapper}>
+          <UploadFullWidth {...uploadConfig} maxCount={1} showUploadList={false}>
             <Label text="Selecione um arquivo (.xlsx)" />
             <Row gutter={[4, 4]} style={{ width: '100%' }}>
               <Col span={16}>
                 <FullWidthButton2
-                  style=" 100%"
                   block
                   label={
                     arquivoSelecionado ? `${arquivoSelecionado.name}` : 'Nenhum arquivo selecionado'
@@ -232,14 +200,10 @@ function ModalImportarArquivo({ setarModal, resetarLita }) {
             </Row>
           </UploadFullWidth>
 
-          {erroArquivo && <div style={{ color: 'red', marginTop: 8 }}>{erroArquivo}</div>}
+          {erroArquivo && <div className={styles.errorMessage}>{erroArquivo}</div>}
         </div>
       )}
-      <Row
-        gutter={[8, 8]}
-        type="flex"
-        style={{ justifyContent: 'end', marginTop: '32px', marginBottom: '32px' }}
-      >
+      <Row gutter={[8, 8]} type="flex" className={styles.footerRow}>
         <Col>
           <Button
             label={'Cancelar'}
@@ -257,7 +221,7 @@ function ModalImportarArquivo({ setarModal, resetarLita }) {
                 valor &&
                 ano &&
                 arquivoSelecionado &&
-                (valor !== '3' || ['1', '2'].includes(periodo))
+                (valor !== 'FLUENCIA' || ['ENTRADA', 'SAIDA'].includes(periodo))
               )
             }
             label={'Importar Arquivo'}
