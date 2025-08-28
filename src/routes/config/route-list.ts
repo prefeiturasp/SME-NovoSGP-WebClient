@@ -88,6 +88,7 @@ import ComunicadosCadastro from '~/paginas/Gestao/Comunicados/Cadastro/cadastroC
 import ComunicadosLista from '~/paginas/Gestao/Comunicados/Lista/listaComunicados';
 import DocPlanosTrabalhoCadastro from '~/paginas/Gestao/DocumentosPlanosTrabalho/cadastro/docPlanosTrabalhoCadastro';
 import DocPlanosTrabalhoLista from '~/paginas/Gestao/DocumentosPlanosTrabalho/lista/docPlanosTrabalhoLista';
+import ImportacaoDeDados from '~/paginas/Gestao/ImportacaoDeDados/importacaoDeDados';
 import CadastroOcorrencias from '~/paginas/Gestao/Ocorrencia/CadastroOcorrencias';
 import ListaOcorrencias from '~/paginas/Gestao/Ocorrencia/lista/listaOcorrencias';
 import Login from '~/paginas/Login';
@@ -1158,6 +1159,17 @@ route.set(ROUTES.DOCUMENTOS_PLANOS_TRABALHO, {
   menu: ['Gestão'],
   parent: '/',
   component: DocPlanosTrabalhoLista,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.DOCUMENTOS_PLANOS_TRABALHO,
+});
+
+route.set(ROUTES.IMPORTACAO_DE_DADOS, {
+  breadcrumbName: 'Importação de Dados',
+  menu: ['Gestão'],
+  parent: '/',
+  component: ImportacaoDeDados,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
