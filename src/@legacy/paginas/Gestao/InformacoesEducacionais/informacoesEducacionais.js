@@ -80,23 +80,6 @@ const InformacoesEducacionais = () => {
           )}
             </Col>
           </Row>
-          
-          {/* {exibirGrafico ? (
-            <>
-              <GraficoFrequenciaPorModalidade 
-                dreId={dreCodigo}
-                periodicidade={periodicidade}
-              />
-              <GraficoAnaliseDeFrequencia
-                dreId={dreCodigo}
-                periodicidade={periodicidade}
-              />
-            </>
-          ) : (
-            <div className="text-center mt-5">
-              <p>Selecione os filtros acima para visualizar os dados</p>
-            </div>
-          )} */}
         </div>
       </Card>
     </>
