@@ -14,7 +14,7 @@ import { RegistroAcaoBuscaAtivaRespostaDto } from '@/core/dto/RegistroAcaoBuscaA
 import { ROUTES } from '@/core/enum/routes';
 import { useAppSelector } from '@/core/hooks/use-redux';
 import buscaAtivaService from '@/core/services/busca-ativa-service';
-import { Checkbox, Col, Form, Row, Modal, Button, Space, Table } from 'antd';
+import { Button, Checkbox, Col, Form, Modal, Row, Space, Table, notification } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -66,6 +66,8 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
 
   const dadosRouteState: RegistroAcaoBuscaAtivaRespostaDto = location.state;
 
+  const [codigoAlunoSelecionado, setCodigoAlunoSelecionado] = useState<string | null>(null);
+
   const mapearDto = (dados: RegistroAcaoBuscaAtivaRespostaDto) => {
     const estudante = { codigo: dados?.aluno?.codigoAluno || '', nome: dados?.aluno?.nome || '' };
 
@@ -81,6 +83,7 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
     };
 
     setFormInitialValues(newInitialValues);
+    setCodigoAlunoSelecionado(estudante.codigo);
   };
 
   const obterDados = useCallback(async () => {
@@ -129,9 +132,6 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
   const handleOk = () => {
     setIsModalOpen(false);
   };
@@ -139,10 +139,11 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
     setIsModalOpen(false);
   };
 
-  const [motivosAusenciasAnotacao, setMotivosAusenciasAnotacao] = useState<any>();
+  const [motivosAusenciasAnotacao, setMotivosAusenciasAnotacao] = useState<any[]>([]);
 
-  const handleLocalizadorChange = (_field: any, value: any) => {
-    buscarMotivosAusenciasFeitasPeloProfessor(value);
+  const handleLocalizadorChange = (_field: any, value: { codigo: string; nome: string } | null) => {
+    setCodigoAlunoSelecionado(value?.codigo || null);
+    setMotivosAusenciasAnotacao([]);
   };
 
   const dataSource = motivosAusenciasAnotacao?.map((item: any, index: any) => ({
@@ -152,21 +153,9 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
   }));
 
   const columns = [
-    {
-      title: 'Data',
-      dataIndex: 'data',
-      key: 'data',
-    },
-    {
-      title: 'Motivo',
-      dataIndex: 'motivo',
-      key: 'motivo',
-    },
+    { title: 'Data', dataIndex: 'data', key: 'data' },
+    { title: 'Motivo', dataIndex: 'motivo', key: 'motivo' },
   ];
-
-  const buscarMotivosAusenciasFeitasPeloProfessor = async (codigoAlunoEOL: any) => {
-    await obterMotivosAusenciasModal(codigoAlunoEOL);
-  };
 
   const hoje = dayjs().format('YYYY-MM-DD 00:00:00');
   const trintaDiasAtras = dayjs().subtract(30, 'day').format('YYYY-MM-DD 00:00:00');
@@ -184,15 +173,27 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
         );
 
         if (resposta?.sucesso) {
-          setMotivosAusenciasAnotacao(resposta.dados);
+          setMotivosAusenciasAnotacao(resposta.dados || []);
+          setIsModalOpen(true);
+        } else {
+          notification.error({ message: 'Não foi possível carregar o histórico.' });
         }
       }
     } catch (error) {
       console.error('Erro ao buscar motivos de ausência:', error);
+      notification.error({ message: 'Ocorreu um erro ao buscar o histórico.' });
     } finally {
       setIsLoading(false);
     }
   }, []);
+
+  const handleVisualizarHistorico = async () => {
+    if (!codigoAlunoSelecionado) {
+      notification.warning({ message: 'Nenhum estudante selecionado.' });
+      return;
+    }
+    await obterMotivosAusenciasModal(codigoAlunoSelecionado);
+  };
 
   return (
     <LoaderBuscaAtivaRegistroAcoesForm>
@@ -297,19 +298,13 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
                 />
               </Col>
 
-              <Space
-                direction="vertical"
-                size="middle"
-                style={{
-                  display: 'flex',
-                }}
-              >
+              <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
                 <Button
                   color="primary"
                   type="default"
                   size="small"
                   style={{ marginBottom: '15px', marginLeft: '10px' }}
-                  onClick={showModal}
+                  onClick={handleVisualizarHistorico}
                   loading={isLoading}
                 >
                   Visualizar histórico de ausências cadastradas pelo professor
