@@ -111,6 +111,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
       if (confirmou) {
         setFormInitialValues(undefined);
         formResponsavel.resetFields();
+        setModalOpen(false);
       }
     } else {
       setFormInitialValues(undefined);
@@ -129,9 +130,14 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
       state: registroAcaoBuscaAtivaResposta,
     });
 
+  const openModalDadosResponsavel = () => {
+    setFormInitialValues({ nome: dados.nomeResponsavel, cpf: dados.dadosResponsavelFiliacao.cpf });
+    setModalOpen(true);
+  };
+
   return (
     <>
-      {modalOpen && formInitialValues ? (
+      {modalOpen ? (
         <ModalAtualizarDados
           salvarDadosResponsavel={salvarDadosResponsavel}
           onClickCancelar={onClickCancelar}
@@ -155,6 +161,15 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
                   onClick={() => onClickNovoRegistroAcao()}
                 >
                   Novo registro de ação
+                </ButtonPrimary>
+              </Col>
+              <Col>
+                <ButtonPrimary
+                  id={SGP_BUTTON_BUSCA_ATIVA_NOVO_REGISTRO_ACAO}
+                  disabled={!podeIncluir || somenteConsulta}
+                  onClick={() => openModalDadosResponsavel()}
+                >
+                  Atualizar dados do responsável
                 </ButtonPrimary>
               </Col>
             </Row>

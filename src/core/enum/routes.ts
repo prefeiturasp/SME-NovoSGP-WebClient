@@ -56,6 +56,7 @@ export enum ROUTES {
   SONDAGEM = '/sondagem',
   HISTORICO_NOTIFICACOES = '/relatorios/notificacoes/historico-notificacoes',
   DOCUMENTOS_PLANOS_TRABALHO = '/gestao/documentos-planos-trabalho',
+  IMPORTACAO_DE_DADOS = '/gestao/importacao-de-dados',
   RELATORIO_USUARIOS = '/relatorios/gestao/usuarios',
   RELATORIO_ATRIBUICAO_CJ = '/relatorios/gestao/atribuicao-cj',
   RELATORIO_ALTERACAO_NOTAS = '/relatorios/fechamento/historico-alteracao-notas',
@@ -121,4 +122,5 @@ export enum ROUTES {
   RELATORIO_MAPEAMENTO_ESTUDANTES = '/relatorios/diario-classe/mapeamento-estudantes',
   RELATORIO_BUSCA_ATIVA = '/relatorios/naapa/busca-ativa',
   RELATORIO_PRODUTIVIDADE = '/relatorios/frequencia/produtividade',
+  INFORMACOES_EDUCACIONAIS = '/gestao/informacoes-educacionais',
 }
