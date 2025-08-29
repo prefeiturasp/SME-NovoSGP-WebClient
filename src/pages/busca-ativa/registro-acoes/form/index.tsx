@@ -139,7 +139,6 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
     setIsModalOpen(false);
   };
 
-
   const [motivosAusenciasAnotacao, setMotivosAusenciasAnotacao] = useState<any[]>([]);
 
   const handleLocalizadorChange = (_field: any, value: { codigo: string; nome: string } | null) => {
@@ -154,7 +153,6 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
   }));
 
   const columns = [
-
     {
       title: 'Data',
       dataIndex: 'data',
@@ -201,7 +199,6 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
     }
   }, []);
 
-
   const handleVisualizarHistorico = async () => {
     if (!codigoAlunoSelecionado) {
       notification.warning({ message: 'Nenhum estudante selecionado.' });
@@ -209,7 +206,6 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
     }
     await obterMotivosAusenciasModal(codigoAlunoSelecionado);
   };
-
 
   return (
     <LoaderBuscaAtivaRegistroAcoesForm>
@@ -314,9 +310,7 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
                 />
               </Col>
 
-
               <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
-
                 <Button
                   color="primary"
                   type="default"
