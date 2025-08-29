@@ -1,5 +1,5 @@
 import { useAppSelector } from '@/core/hooks/use-redux';
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { Loader } from '~/componentes';
 
 export const LoaderMapeamentoEstudantes: React.FC<PropsWithChildren> = ({ children }) => {

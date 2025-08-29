@@ -1,3 +1,4 @@
+import React from 'react';
 import { useAppSelector } from '@/core/hooks/use-redux';
 import { Col, Row, Tooltip } from 'antd';
 import { Base } from '~/componentes';

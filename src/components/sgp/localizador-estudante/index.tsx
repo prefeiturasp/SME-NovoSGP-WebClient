@@ -113,7 +113,7 @@ const LocalizadorEstudante: React.FC<LocalizadorEstudanteProps> = ({
         limparDados();
       })
       .finally(() => setLoading(false));
-
+    // @ts-ignore
     if (retorno?.data?.items?.length) {
       const primeiroEstudante = retorno.data.items[0];
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
-import { setLoaderGeral } from '~/redux/modulos/loader/actions';
+import { setLoaderGeral, setLoaderTrocaPerfil } from '~/redux/modulos/loader/actions';
 import {
   Deslogar,
   removerTurma,
@@ -44,7 +44,7 @@ const Texto = styled.div`
 const Perfil = () => {
   // eslint-disable-next-line react/prop-types
 
-  const [ocultaPerfis, setarOcultaPerfis] = useState(true);
+  const [ocultaPerfis, setarOcultaPerfis] = useState(false);
   const perfilStore = useSelector(e => e.perfil);
   const usuarioStore = useSelector(e => e.usuario);
   const navigate = useNavigate();
@@ -110,7 +110,7 @@ const Perfil = () => {
         perfilStore?.perfilSelecionado?.codigoPerfil !==
         perfilNovo[0].codigoPerfil
       ) {
-        store.dispatch(setLoaderGeral(true));
+        store.dispatch(setLoaderTrocaPerfil(true));
         api
           .put(`v1/autenticacao/perfis/${perfilNovo[0].codigoPerfil}`)
           .then(resp => {
@@ -161,7 +161,7 @@ const Perfil = () => {
             store.dispatch(perfilSelecionado(perfilNovo[0]));
             store.dispatch(setTrocouPerfil(true));
             setTimeout(() => {
-              store.dispatch(setLoaderGeral(false));
+              store.dispatch(setLoaderTrocaPerfil(false));
             }, 1000);
           })
           .catch(() => {
@@ -182,6 +182,7 @@ const Perfil = () => {
   };
 
   const onClickPerfil = async e => {
+    setarOcultaPerfis(!ocultaPerfis);
     cancelarRequisicoesPendentes();
     gravarPerfilSelecionado(e.currentTarget.accessKey);
   };
@@ -195,6 +196,7 @@ const Perfil = () => {
   return (
     <div className="position-relative">
       <Dropdown
+        open={ocultaPerfis}
         placement="bottomRight"
         trigger={['click']}
         disabled={perfilStore.perfis.length <= 1}
