@@ -1765,7 +1765,7 @@ route.set(ROUTES.INFORMES_EDICAO, {
   chavePermissao: ROUTES.INFORMES,
 });
 
-route.set('/gestao/informacoes-educacionais', {
+route.set(ROUTES.INFORMACOES_EDUCACIONAIS, {
   breadcrumbName: 'Informações Educacionais',
   menu: ['Gestão'],
   parent: '/',
@@ -1773,7 +1773,7 @@ route.set('/gestao/informacoes-educacionais', {
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: ROUTES.INFORMES, // Temporariamente usando outra permissão para evitar o erro
+  chavePermissao: ROUTES.INFORMACOES_EDUCACIONAIS,
 });
 
 route.set(ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES, {
