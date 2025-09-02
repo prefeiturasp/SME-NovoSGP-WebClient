@@ -56,7 +56,7 @@ export enum ROUTES {
   SONDAGEM = '/sondagem',
   HISTORICO_NOTIFICACOES = '/relatorios/notificacoes/historico-notificacoes',
   DOCUMENTOS_PLANOS_TRABALHO = '/gestao/documentos-planos-trabalho',
-  IMPORTACAO_DE_DADOS = '/gestao/importacao-de-dados',
+  IMPORTACAO_DADOS = '/gestao/importacao-dados',
   RELATORIO_USUARIOS = '/relatorios/gestao/usuarios',
   RELATORIO_ATRIBUICAO_CJ = '/relatorios/gestao/atribuicao-cj',
   RELATORIO_ALTERACAO_NOTAS = '/relatorios/fechamento/historico-alteracao-notas',

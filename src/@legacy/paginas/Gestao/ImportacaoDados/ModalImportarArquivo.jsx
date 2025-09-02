@@ -1,12 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Label, SelectComponent, Colors, Button } from '~/componentes';
-import { Col, Row, Upload } from 'antd';
+import { Col, Modal, Row, Upload } from 'antd';
 import api from '~/servicos/api';
 import { sucesso } from '~/servicos/alertas';
 import styles from './importarDados.module.css';
 import { UploadFullWidth, FullWidthButton, FullWidthButton2 } from './importarDados.styled';
+import { Typography } from 'antd';
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
-function ModalImportarArquivo({ setarModal, resetarLista }) {
+const { Text } = Typography;
+
+function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
   const [valor, setarValor] = useState(null);
   const [ano, setarAno] = useState('');
   const [periodo, setarPeriodo] = useState(null);
@@ -107,20 +111,78 @@ function ModalImportarArquivo({ setarModal, resetarLista }) {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      sucesso(resposta.data.mensagem || 'Arquivo importado com sucesso');
       setarModal(false);
       resetarLista((prev) => prev + 1);
+
+      Modal.success({
+        icon: null,
+        width: 420,
+        centered: true,
+        content: (
+          <div className={styles.modalSucessContainer}>
+            <CheckCircleOutlined className={styles.modalSucessIcon} />
+            <h2 className={styles.modalSucessTitle}>Arquivo importado com sucesso!</h2>
+            <p className={styles.modalSucessMessage}>
+              Para verificar possíveis inconsistências, clique em Conferir registros ou selecione o
+              carregamento na lista de importações.
+            </p>
+            <div className={styles.modalSucessActions}>
+              <Button
+                label={'Conferir registros'}
+                color={Colors.Roxo}
+                onClick={() => {
+                  abrirDrawer({ id: resposta.data.id, nomeArquivo: arquivoSelecionado.name });
+                  Modal.destroyAll();
+                }}
+              />
+              <Button
+                label={'Fechar'}
+                color={Colors.Roxo}
+                border
+                bold
+                onClick={() => Modal.destroyAll()}
+              />
+            </div>
+          </div>
+        ),
+        okButtonProps: { style: { display: 'none' } },
+      });
     } catch (e) {
-      alert(e.message || 'Erro ao enviar arquivo');
+      Modal.error({
+        icon: null,
+        width: 420,
+        centered: true,
+        content: (
+          <div className={styles.modalErrorContainer}>
+            <CloseCircleOutlined className={styles.modalErrorIcon} />
+            <h2 className={styles.modalErrorTitle}>Desculpe!</h2>
+            <p className={styles.modalErrorMessage}>
+              {e.message ||
+                'Parece que houve um problema ao importar o arquivo. Por favor, tente novamente mais tarde.'}
+            </p>
+            <div className={styles.modalErrorActions}>
+              <Button
+                border
+                bold
+                label={'Fechar'}
+                color={Colors.Roxo}
+                onClick={() => Modal.destroyAll()}
+              />
+            </div>
+          </div>
+        ),
+        okButtonProps: { style: { display: 'none' } },
+      });
     }
   };
 
   return (
     <>
-      <div className={styles.modalTitle}>Importar Arquivo</div>
-      <p className={styles.modalDescription}>
-        Selecione um item e o ano para fazer a importação do arquivo
-      </p>
+      <div className={styles.modalTitle}>Importar arquivo</div>
+
+      <Text className={styles.textoSelecione}>
+        Selecione um item e o ano para fazer a importação do arquivo.
+      </Text>
 
       <SelectComponent
         className={styles.select}
@@ -176,7 +238,7 @@ function ModalImportarArquivo({ setarModal, resetarLista }) {
 
       {valor && ano && (
         <div className={styles.uploadWrapper}>
-          <UploadFullWidth {...uploadConfig} maxCount={1} showUploadList={false}>
+          <UploadFullWidth {...uploadConfig} maxCount={1} accept=".xlsx" showUploadList={false}>
             <Label text="Selecione um arquivo (.xlsx)" />
             <Row gutter={[4, 4]} style={{ width: '100%' }}>
               <Col span={16}>
