@@ -28,10 +28,12 @@ import {
 } from '@ant-design/icons';
 import api from '~/servicos/api';
 import styles from './importarDados.module.css';
-
 import { StyledModalWrapper } from './importarDados.styled';
+import { Typography } from 'antd';
 
-function ImportacaoDeDados() {
+const { Text } = Typography;
+
+function ImportacaoDados() {
   const navigate = useNavigate();
   const [listaKey, setListaKey] = useState(0);
 
@@ -190,6 +192,7 @@ function ImportacaoDeDados() {
           className={styles.modal}
         >
           <ModalImportarArquivo
+            abrirDrawer={abrirDrawer}
             setarModal={setOpenModal}
             resetarLista={setListaKey}
           />
@@ -238,7 +241,7 @@ function ImportacaoDeDados() {
           }}
         />
       </Drawer>
-      <Cabecalho pagina="Importação de Dados">
+      <Cabecalho pagina="Importação de dados">
         <Col span={24}>
           <Row gutter={[8, 8]} type="flex">
             <Col>
@@ -269,8 +272,10 @@ function ImportacaoDeDados() {
           </Row>
         </Col>
       </Cabecalho>
-      <Card>
-        <p>Lista de importações por arquivo</p>
+      <Card className={styles.cardLista}>
+        <Text className={styles.textoLista}>
+          Lista de importações por arquivo
+        </Text>
         <ListaPaginada
           key={listaKey}
           url="v1/importar-arquivo"
@@ -283,4 +288,4 @@ function ImportacaoDeDados() {
   );
 }
 
-export default ImportacaoDeDados;
+export default ImportacaoDados;

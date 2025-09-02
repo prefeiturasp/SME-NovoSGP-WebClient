@@ -42,6 +42,14 @@
   overflow-y: auto;
   z-index: 1050;
 }
+.modal :global(.ant-modal-content) {
+  padding: 32px;
+}
+.modal :global(.ant-modal-body) {
+  display: flex;
+  flex-direction: column;
+}
+
 .divDrawer {
   margin-bottom: 16px;
   font-weight: 500;
@@ -55,11 +63,6 @@
   margin-bottom: 16px;
   font-size: 18px;
   font-weight: 600;
-}
-
-.modalDescription {
-  margin-bottom: 16px;
-  color: #555;
 }
 
 .select {
@@ -80,4 +83,74 @@
   justify-content: end;
   margin-top: 32px;
   margin-bottom: 32px;
+}
+.textoLista {
+  margin-bottom: 24px;
+  font-weight: 700;
+}
+
+.textoSelecione {
+  margin-bottom: 32px;
+}
+
+.cardLista :global(.ant-card-body) {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+}
+.modalSucessContainer {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.modalSucessIcon {
+  font-size: 48px;
+  color: #52c41a;
+  margin-bottom: 16px;
+}
+
+.modalSucessTitle {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.modalSucessMessage {
+  font-size: 14px;
+  color: #42474a;
+  margin-bottom: 24px;
+}
+
+.modalSucessActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.modalErrorContainer {
+  text-align: center;
+  padding: 10px 0;
+}
+
+.modalErrorIcon {
+  font-size: 48px;
+  color: #b40c02;
+  margin-bottom: 16px;
+}
+
+.modalErrorTitle {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.modalErrorMessage {
+  font-size: 14px;
+  color: #42474a;
+  margin-bottom: 24px;
+}
+
+.modalErrorActions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
