@@ -8,6 +8,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import InformacoesEducacionaisFiltros from './componentes/Filtro/informacoesEducacionaisFiltros';
 import GraficoAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia';
 import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorModalidade';
+import TabelaIndicadoresNivelCriticoAlfabetizacao from './componentes/TabelaIndicadoresNivelCriticoAlfabetizacao';
 
 const InformacoesEducacionais = () => {
   const navigate = useNavigate();
@@ -16,15 +17,15 @@ const InformacoesEducacionais = () => {
   const [ue, setUe] = useState({ codigo: OPCAO_TODOS });
   const [modalidade, setModalidade] = useState(null);
   const [semestre, setSemestre] = useState(null);
-  const [tipoVisualizacao, setTipoVisualizacao] = useState('global');  
+  const [tipoVisualizacao, setTipoVisualizacao] = useState('global');
   const [periodicidade, setPeriodicidade] = useState('mensal');
   const listaPeriodicidade = [
     { valor: 'mensal', desc: 'Mensal (ano atual)' },
-    { valor: 'anual', desc: 'Anual' }
+    { valor: 'anual', desc: 'Anual' },
   ];
 
-  const obterDreSelecionada = (valor) => {
-    const codigo = (valor && typeof valor === 'object') ? valor.codigo : valor;
+  const obterDreSelecionada = valor => {
+    const codigo = valor && typeof valor === 'object' ? valor.codigo : valor;
     if (codigo !== dreCodigo) {
       setDreCodigo(codigo);
     }
@@ -44,10 +45,12 @@ const InformacoesEducacionais = () => {
       <Card>
         <div className="col-md-12">
           <Row gutter={[16, 16]}>
-            <Col xs={24} md={12} >
-              <InformacoesEducacionaisFiltros obterDreSelecionado={obterDreSelecionada} />
+            <Col xs={24} md={12}>
+              <InformacoesEducacionaisFiltros
+                obterDreSelecionado={obterDreSelecionada}
+              />
             </Col>
-            <Col xs={24} md={12} >
+            <Col xs={24} md={12}>
               <SelectComponent
                 label="Período"
                 lista={listaPeriodicidade}
@@ -62,22 +65,30 @@ const InformacoesEducacionais = () => {
 
           <Row gutter={[32, 32]}>
             <Col span={24}>
-            {exibirGrafico ? (
-            <>
-              <GraficoFrequenciaPorModalidade 
-                dreId={dreCodigo}
-                periodicidade={periodicidade}
+              {exibirGrafico ? (
+                <>
+                  <GraficoFrequenciaPorModalidade
+                    dreId={dreCodigo}
+                    periodicidade={periodicidade}
+                  />
+                  <GraficoAnaliseDeFrequencia
+                    dreId={dreCodigo}
+                    periodicidade={periodicidade}
+                  />
+                </>
+              ) : (
+                <div className="text-center mt-5">
+                  <p>Selecione os filtros acima para visualizar os dados</p>
+                </div>
+              )}
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <TabelaIndicadoresNivelCriticoAlfabetizacao
+                codigoDre={dreCodigo}
               />
-              <GraficoAnaliseDeFrequencia
-                dreId={dreCodigo}
-                periodicidade={periodicidade}
-              />
-            </>
-          ) : (
-            <div className="text-center mt-5">
-              <p>Selecione os filtros acima para visualizar os dados</p>
-            </div>
-          )}
             </Col>
           </Row>
         </div>

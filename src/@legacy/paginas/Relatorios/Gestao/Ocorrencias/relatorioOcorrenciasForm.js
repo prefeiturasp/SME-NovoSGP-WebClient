@@ -1,4 +1,3 @@
-import React from 'react';
 import { DataOcorrencia } from '@/@legacy/componentes-sgp/inputs/data-ocorrencia';
 import { ImprimirDescricaoOcorrencia } from '@/@legacy/componentes-sgp/inputs/imprimir-descricao-ocorrencia';
 import TipoOcorrencia from '@/@legacy/componentes-sgp/inputs/tipo-ocorrencia';
