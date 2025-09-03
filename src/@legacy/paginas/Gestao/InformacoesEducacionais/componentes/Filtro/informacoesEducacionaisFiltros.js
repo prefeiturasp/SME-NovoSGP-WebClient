@@ -12,7 +12,7 @@ import { Col, Row } from 'antd';
 
 const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
   const usuario = useSelector(store => store.usuario);
-  const [anoLetivo, setAnoLetivo] = useState(null); 
+  const [anoLetivo, setAnoLetivo] = useState(null);
   const [dre, setDre] = useState(null);
   const [ue, setUe] = useState(null);
   const [modalidade, setModalidade] = useState(null);
@@ -26,7 +26,7 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
   const [listaSemestres, setListaSemestres] = useState([]);
   const [listaTiposVisualizacao, setListaTiposVisualizacao] = useState([
     { valor: 'global', desc: 'Global/Acumulada' },
-    { valor: 'mensal', desc: 'Mensal' }
+    { valor: 'mensal', desc: 'Mensal' },
   ]);
 
   const [anoAtual] = useState(moment().format('YYYY'));
@@ -65,7 +65,7 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
         valorAtual = anosLetivos[0].valor;
       }
     }
-    
+
     setAnoLetivo(valorAtual);
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnosLetivos(false);
@@ -100,7 +100,7 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
         }
 
         setListaDres(lista);
-        
+
         if (lista?.length === 1) {
           setDre(lista[0]);
         } else {
@@ -155,7 +155,7 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
         }
 
         setListaUes(lista);
-        
+
         if (lista?.length === 1) {
           setUe(lista[0]);
         } else {
@@ -191,7 +191,7 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
       if (resposta?.data?.length) {
         const lista = resposta.data;
         setListaModalidades(lista);
-        
+
         if (lista?.length === 1) {
           setModalidade(lista[0].valor);
         } else {
@@ -217,7 +217,8 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
     if (
       anoLetivo &&
       modalidade &&
-      (Number(modalidade) === ModalidadeEnum.EJA || Number(modalidade) === ModalidadeEnum.CELP)
+      (Number(modalidade) === ModalidadeEnum.EJA ||
+        Number(modalidade) === ModalidadeEnum.CELP)
     ) {
       setCarregandoSemestres(true);
       const resposta = await FiltroHelper.obterSemestres()
@@ -240,35 +241,35 @@ const InformacoesEducacionaisFiltros = ({ obterDreSelecionado }) => {
     setConsideraHistorico(!consideraHistorico);
   };
 
-  const onChangeTipoVisualizacao = (valor) => {
+  const onChangeTipoVisualizacao = valor => {
     setTipoVisualizacao(valor);
   };
 
-  const onChangeDre = (valor) => {
+  const onChangeDre = valor => {
     setDre(valor);
     if (valor && obterDreSelecionado) obterDreSelecionado(valor);
   };
 
   return (
-  <Row>
-    <Col span={24}>
-      <Loader loading={carregandoDres}>
-        <SelectComponent
-          label="Selecione ou digite a DRE..."
-          lista={listaDres}
-          valueOption="codigo"
-          valueText="desc"
-          disabled={listaDres?.length === 1}
-          onChange={onChangeDre}
-          valueSelect={dre?.codigo}
-          placeholder="DRE"
-          showSearch
-          defaultValue="Todas"
-          allowClear={false}
-        />
-      </Loader>
-    </Col>
-  </Row>
+    <Row>
+      <Col span={24}>
+        <Loader loading={carregandoDres}>
+          <SelectComponent
+            label="Diretoria Regional de Educação (DRE)"
+            lista={listaDres}
+            valueOption="codigo"
+            valueText="desc"
+            disabled={listaDres?.length === 1}
+            onChange={onChangeDre}
+            valueSelect={dre?.codigo}
+            placeholder="DRE"
+            showSearch
+            defaultValue="Todas"
+            allowClear={false}
+          />
+        </Loader>
+      </Col>
+    </Row>
   );
 };
 
