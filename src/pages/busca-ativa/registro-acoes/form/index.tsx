@@ -151,7 +151,7 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
     data: dayjs(item.dataAula).format('DD/MM/YYYY'),
     motivo:
       item.descricaoMotivoAusencia ||
-      (item.anotacoes ? item.anotacoes.replace('<p>', '').replace('</p>', '') : ''),
+      (item.anotacao ? item.anotacao.replace('<p>', '').replace('</p>', '') : ''),
   }));
 
   const columns = [
@@ -166,10 +166,6 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
       key: 'motivo',
     },
   ];
-
-  const buscarMotivosAusenciasFeitasPeloProfessor = async (codigoAlunoEOL: any) => {
-    await obterMotivosAusenciasModal(codigoAlunoEOL);
-  };
 
   const hoje = dayjs().format('YYYY-MM-DD 00:00:00');
   const trintaDiasAtras = dayjs().subtract(30, 'day').format('YYYY-MM-DD 00:00:00');
