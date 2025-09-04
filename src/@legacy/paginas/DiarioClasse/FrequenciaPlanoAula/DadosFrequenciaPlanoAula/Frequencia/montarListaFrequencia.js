@@ -11,6 +11,9 @@ import {
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import AuditoriaFrequencia from './auditoriaFrequencia';
+import Col from 'antd/lib/grid/col';
+import Row from '~/componentes/row';
+import { Alert } from '~/componentes';
 
 const MontarListaFrequencia = () => {
   const dispatch = useDispatch();
@@ -85,8 +88,8 @@ const MontarListaFrequencia = () => {
   return (
     <>
       {componenteCurricular?.codigoComponenteCurricular &&
-      dataSelecionada &&
-      aulaId ? (
+        dataSelecionada &&
+        aulaId ? (
         <div className="col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
           <CardCollapse
             key="frequencia-collapse"
@@ -98,6 +101,16 @@ const MontarListaFrequencia = () => {
           >
             {listaDadosFrequencia?.listaFrequencia?.length ? (
               <>
+                {listaDadosFrequencia?.componenteCurricularSugerido && (
+                  <Alert
+                    alerta={{
+                      tipo: 'warning',
+                      id: 'componente-curricular-sugerido',
+                      mensagem: `A frequência desta aula está sendo sugerida a partir do registro da aula de ${listaDadosFrequencia.componenteCurricularSugerido}. Confira, faça ajustes se necessário e salve o registro para inserir a frequência da sua aula.`,
+                      estiloTitulo: { fontSize: '16px' },
+                    }}
+                  />
+                )}
                 <Ordenacao
                   conteudoParaOrdenar={listaDadosFrequencia.listaFrequencia}
                   ordenarColunaNumero="numeroAlunoChamada"
