@@ -154,11 +154,7 @@ const GraficoFrequenciaModalidade = ({
   const titulo = 'Frequência';
 
   return (
-    <Loader
-      loading={exibirLoader}
-      className={exibirLoader ? 'text-center' : ''}
-      tip="Carregando dados de frequência..."
-    >
+    <>
       <div className="mb-3">
         <div
           style={{
@@ -206,28 +202,34 @@ const GraficoFrequenciaModalidade = ({
           </div>
         </div>
       </div>
-      {dados?.length ? (
-        <GraficoBarras
-          data={dados}
-          isGroup={ehMensal ? true : false}
-          xField={ehMensal ? 'mesLabel' : 'modalidade'}
-          yField="valor"
-          seriesField="modalidade"
-          colors={cores.length ? cores : undefined}
-          xAxisVisible
-          legendVisible={ehMensal}
-          labelVisible
-          tooltip={{
-            formatter: datum => ({
-              name: datum.modalidade,
-              value: `${datum.valor}%`,
-            }),
-          }}
-        />
-      ) : !exibirLoader ? (
-        <div className="text-center">Sem dados</div>
-      ) : null}
-    </Loader>
+      <Loader
+        loading={exibirLoader}
+        className={exibirLoader ? 'text-center' : ''}
+        tip="Carregando dados de frequência..."
+      >
+        {dados?.length ? (
+          <GraficoBarras
+            data={dados}
+            isGroup={ehMensal ? true : false}
+            xField={ehMensal ? 'mesLabel' : 'modalidade'}
+            yField="valor"
+            seriesField="modalidade"
+            colors={cores.length ? cores : undefined}
+            xAxisVisible
+            legendVisible={ehMensal}
+            labelVisible
+            tooltip={{
+              formatter: datum => ({
+                name: datum.modalidade,
+                value: `${datum.valor}%`,
+              }),
+            }}
+          />
+        ) : !exibirLoader ? (
+          <div className="text-center">Sem dados</div>
+        ) : null}
+      </Loader>
+    </>
   );
 };
 
