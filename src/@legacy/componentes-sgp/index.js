@@ -12,3 +12,4 @@ export { default as NomeEstudanteLista } from './NomeEstudanteLista/nomeEstudant
 export { default as AlertaModalidadeInfantil } from './AlertaModalidadeInfantil/alertaModalidadeInfantil';
 export { default as GraficoBarras } from './Graficos/graficoBarras';
 export { default as TagGrafico } from './TagGrafico/tagGrafico';
+export { default as GraficoBarrasHorizontal } from './Graficos/graficoBarrasHorizontal';
