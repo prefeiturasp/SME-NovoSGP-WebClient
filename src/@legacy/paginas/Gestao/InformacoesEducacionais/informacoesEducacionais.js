@@ -46,20 +46,9 @@ const InformacoesEducacionais = () => {
       <Card>
         <div className="col-md-12">
           <Row gutter={[16, 16]}>
-            <Col xs={24} md={12}>
+            <Col xs={24} md={24}>
               <InformacoesEducacionaisFiltros
                 obterDreSelecionado={obterDreSelecionada}
-              />
-            </Col>
-            <Col xs={24} md={12}>
-              <SelectComponent
-                label="Período"
-                lista={listaPeriodicidade}
-                valueOption="valor"
-                valueText="desc"
-                onChange={valor => setPeriodicidade(valor)}
-                valueSelect={periodicidade}
-                placeholder="Selecione a periodicidade"
               />
             </Col>
           </Row>
