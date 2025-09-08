@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, SelectComponent } from '~/componentes';
+import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { OPCAO_TODOS } from '~/constantes/constantes';
@@ -13,20 +13,23 @@ const InformacoesEducacionais = () => {
   const navigate = useNavigate();
   const [anoLetivo, setAnoLetivo] = useState(null);
   const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
-  const [ue, setUe] = useState({ codigo: OPCAO_TODOS });
+  const [ueCodigo, setUeCodigo] = useState(OPCAO_TODOS);
   const [modalidade, setModalidade] = useState(null);
   const [semestre, setSemestre] = useState(null);
   const [tipoVisualizacao, setTipoVisualizacao] = useState('global');
   const [periodicidade, setPeriodicidade] = useState('mensal');
-  const listaPeriodicidade = [
-    { valor: 'mensal', desc: 'Mensal' },
-    { valor: 'anual', desc: 'Global/acumulada' },
-  ];
 
   const obterDreSelecionada = valor => {
     const codigo = valor && typeof valor === 'object' ? valor.codigo : valor;
     if (codigo !== dreCodigo) {
       setDreCodigo(codigo);
+    }
+  };
+
+  const obterUeSelecionada = valor => {
+    const codigo = valor && typeof valor === 'object' ? valor.codigo : valor;
+    if (codigo !== ueCodigo) {
+      setUeCodigo(codigo);
     }
   };
 
@@ -38,52 +41,39 @@ const InformacoesEducacionais = () => {
 
   return (
     <>
-      <Cabecalho pagina="Informações Educacionais">
+      <Cabecalho pagina="Painel de Informações Educacionais">
         <BotaoVoltarPadrao onClick={aoClicarBotaoVoltar} />
       </Cabecalho>
-      <Card>
-        <div className="col-md-12">
-          <Row gutter={[16, 16]}>
-            <Col xs={24} md={12}>
-              <InformacoesEducacionaisFiltros
-                obterDreSelecionado={obterDreSelecionada}
-              />
-            </Col>
-            <Col xs={24} md={12}>
-              <SelectComponent
-                label="Período"
-                lista={listaPeriodicidade}
-                valueOption="valor"
-                valueText="desc"
-                onChange={valor => setPeriodicidade(valor)}
-                valueSelect={periodicidade}
-                placeholder="Selecione a periodicidade"
-              />
-            </Col>
-          </Row>
-
-          <Row gutter={[32, 32]}>
-            <Col span={24}>
-              {exibirGrafico ? (
-                <>
-                  <GraficoFrequenciaPorModalidade
-                    dreId={dreCodigo}
-                    periodicidade={periodicidade}
-                  />
-                  <GraficoAnaliseDeFrequencia
-                    dreId={dreCodigo}
-                    periodicidade={periodicidade}
-                  />
-                </>
-              ) : (
-                <div className="text-center mt-5">
-                  <p>Selecione os filtros acima para visualizar os dados</p>
-                </div>
-              )}
-            </Col>
-          </Row>
-        </div>
-      </Card>
+      <div className="col-md-12" style={{ padding: '24px' }}>
+        <Row gutter={[16, 16]} style={{ marginBottom: '32px' }}>
+          <Col span={24}>
+            <InformacoesEducacionaisFiltros
+              obterDreSelecionado={obterDreSelecionada}
+              obterUeSelecionada={obterUeSelecionada}
+            />
+          </Col>
+        </Row>
+        <Row gutter={[32, 32]}>
+          <Col span={24}>
+            {exibirGrafico ? (
+              <>
+                <GraficoFrequenciaPorModalidade
+                  dreId={dreCodigo}
+                  periodicidade={periodicidade}
+                />
+                <GraficoAnaliseDeFrequencia
+                  dreId={dreCodigo}
+                  periodicidade={periodicidade}
+                />
+              </>
+            ) : (
+              <div className="text-center mt-5">
+                <p>Selecione os filtros acima para visualizar os dados</p>
+              </div>
+            )}
+          </Col>
+        </Row>
+      </div>
     </>
   );
 };
