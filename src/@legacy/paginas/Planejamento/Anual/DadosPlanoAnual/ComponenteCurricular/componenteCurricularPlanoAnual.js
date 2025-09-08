@@ -5,7 +5,7 @@ import {
   limparDadosPlanoAnual,
   setComponenteCurricularPlanoAnual,
 } from '~/redux/modulos/anual/actions';
-import { confirmar, erros, aviso } from '~/servicos/alertas';
+import { confirmar, erros } from '~/servicos/alertas';
 import ServicoDisciplinas from '~/servicos/Paginas/ServicoDisciplina';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import servicoSalvarPlanoAnual from '../../servicoSalvarPlanoAnual';
@@ -35,9 +35,6 @@ const ComponenteCurricularPlanoAnual = () => {
   const [codigoComponenteCurricular, setCodigoComponenteCurricular] =
     useState(undefined);
 
-  const avisoPlanoTerritorio =
-    'O plano anual do território do saber deve ser registrado na tela "Planejamento > Território do saber';
-
   const obterListaComponenteCurricular = useCallback(async () => {
     setCarregandoComponentes(true);
     const resposta = await ServicoDisciplinas.obterDisciplinasPorTurma(
@@ -47,14 +44,10 @@ const ComponenteCurricularPlanoAnual = () => {
       setCarregandoComponentes(false);
     });
     if (resposta && resposta.data) {
-      setListaComponenteCurricular(resposta.data);
-      if (resposta.data.length === 1) {
-        const componente = resposta.data[0];
-        if (componente.territorioSaber) {
-          dispatch(limparDadosPlanoAnual());
-          dispatch(setComponenteCurricularPlanoAnual(undefined));
-          aviso(avisoPlanoTerritorio);
-        } else dispatch(setComponenteCurricularPlanoAnual(componente));
+      const lista = resposta.data.filter(d => !d.territorioSaber);
+      setListaComponenteCurricular(lista);
+      if (lista.length === 1) {
+        dispatch(setComponenteCurricularPlanoAnual(lista[0]));
       }
     } else {
       setListaComponenteCurricular([]);
@@ -103,11 +96,8 @@ const ComponenteCurricularPlanoAnual = () => {
         const componente = listaComponenteCurricular.find(
           item => String(item.codigoComponenteCurricular) === valor
         );
-        if (componente.territorioSaber) aviso(avisoPlanoTerritorio);
-        else {
-          dispatch(limparDadosPlanoAnual());
-          dispatch(setComponenteCurricularPlanoAnual(componente));
-        }
+        dispatch(limparDadosPlanoAnual());
+        dispatch(setComponenteCurricularPlanoAnual(componente));
       } else {
         dispatch(limparDadosPlanoAnual());
         dispatch(setComponenteCurricularPlanoAnual(undefined));
