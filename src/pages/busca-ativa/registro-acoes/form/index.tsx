@@ -149,7 +149,9 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
   const dataSource = motivosAusenciasAnotacao?.map((item: any, index: any) => ({
     key: index,
     data: dayjs(item.dataAula).format('DD/MM/YYYY'),
-    motivo: item.descricaoMotivoAusencia,
+    motivo:
+      item.descricaoMotivoAusencia ||
+      (item.anotacao ? item.anotacao.replace('<p>', '').replace('</p>', '') : ''),
   }));
 
   const columns = [
