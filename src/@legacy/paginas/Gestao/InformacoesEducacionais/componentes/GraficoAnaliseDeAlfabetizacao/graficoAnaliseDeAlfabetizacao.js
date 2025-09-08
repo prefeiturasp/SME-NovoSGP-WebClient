@@ -38,8 +38,9 @@ const GraficoAlfabetizacao = ({ dreId }) => {
         );
       if (resposta.status === 200 && Array.isArray(resposta.data)) {
         const dadosFormatados = resposta.data.map(item => ({
-          descricao: item.nivelAlfabetizacaoDescricao,
+          descricao: item.nivelAlfabetizacao,
           quantidade: item.totalAlunos,
+          descricaoCompleta: item.nivelAlfabetizacaoDescricao,
         }));
         setDados(dadosFormatados);
       } else {
@@ -114,14 +115,21 @@ const GraficoAlfabetizacao = ({ dreId }) => {
           xField="quantidade"
           yField="descricao"
           colors={'#6933FF'}
-          xAxisVisible
+          xAxisVisible={true}
           legendVisible={false}
           labelVisible={false}
           tooltip={{
-            formatter: datum => ({
-              name: datum.descricao,
-              value: `${datum.quantidade} alunos`,
-            }),
+            customContent: (title, items) => {
+              if (!items?.length) return '';
+              const item = items[0].data;
+              return `
+                <div style="max-width:350px; padding: 5px">
+                  <div style="font-weight: bold; margin-bottom:4px;">${item.descricao}</div>
+                  <div style="font-size:13px; margin-bottom:7px;">${item.descricaoCompleta}</div>
+                  <div style="font-weight: bold;">Quantidade de estudantes: ${item.quantidade}</div>
+                </div>
+              `;
+            },
           }}
         />
       ) : !loading ? (

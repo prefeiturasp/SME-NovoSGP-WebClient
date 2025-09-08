@@ -82,9 +82,9 @@ const InformacoesEducacionais = () => {
 
           <Row gutter={[32, 32]}>
             <Col span={24}>
-              {/* <TabelaIndicadoresNivelCriticoAlfabetizacao
+              <TabelaIndicadoresNivelCriticoAlfabetizacao
                 codigoDre={dreCodigo}
-              /> */}
+              />
             </Col>
           </Row>
         </div>
