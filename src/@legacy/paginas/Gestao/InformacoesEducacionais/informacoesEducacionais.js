@@ -8,6 +8,8 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import InformacoesEducacionaisFiltros from './componentes/Filtro/informacoesEducacionaisFiltros';
 import GraficoAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia';
 import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorModalidade';
+import TabelaIndicadoresNivelCriticoAlfabetizacao from './componentes/TabelaIndicadoresNivelCriticoAlfabetizacao/tabelaIndicadoresNivelCriticoAlfabetizacao';
+import GraficoAnaliseDeAlfabetizacao from './componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
 
 const InformacoesEducacionais = () => {
   const navigate = useNavigate();
@@ -69,6 +71,20 @@ const InformacoesEducacionais = () => {
                   <p>Selecione os filtros acima para visualizar os dados</p>
                 </div>
               )}
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <GraficoAnaliseDeAlfabetizacao dreId={dreCodigo} />
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <TabelaIndicadoresNivelCriticoAlfabetizacao
+                codigoDre={dreCodigo}
+              />
             </Col>
           </Row>
         </div>
