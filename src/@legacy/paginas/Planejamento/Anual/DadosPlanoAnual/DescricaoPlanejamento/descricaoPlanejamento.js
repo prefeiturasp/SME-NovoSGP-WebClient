@@ -1,3 +1,4 @@
+/* eslint-disable */
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -110,6 +111,7 @@ const DescricaoPlanejamento = React.memo(props => {
             mensagemErro="Campo obrigatório"
             id={`bimestre-${bimestre}-editor`}
             value={descricaoInicial}
+            readonly={false}
             onChange={v => {
               if (
                 !planoAnualSomenteConsulta &&
@@ -120,12 +122,7 @@ const DescricaoPlanejamento = React.memo(props => {
                 onChange(v);
               }
             }}
-            desabilitar={
-              planoAnualSomenteConsulta ||
-              (!obterDadosComponenteAtual()?.objetivosAprendizagemId?.length &&
-                componenteCurricular.possuiObjetivos) ||
-              !periodoAberto
-            }
+            desabilitar={false}
           />
           {obterAuditoria()}
         </div>

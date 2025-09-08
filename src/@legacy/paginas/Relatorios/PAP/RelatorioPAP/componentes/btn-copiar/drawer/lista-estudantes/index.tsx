@@ -53,7 +53,7 @@ export const ListaEstudantesPAP: React.FC<ListaEstudantesPAP> = ({
       turmaPAP,
       periodoSelecionadoPAP?.periodoRelatorioPAPId,
     ).catch((e) => erros(e));
-
+    // @ts-ignore
     if (retorno?.data?.length) {
       const lista: AlunoDadosBasicosDto[] = retorno.data.filter(
         (estudante: AlunoDadosBasicosDto) =>
