@@ -99,8 +99,10 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
             {grupo.dados.map((escola, index) => (
               <div key={index} className="mb-2" style={{ lineHeight: '1.2em' }}>
                 <span style={{ color: '#555', fontSize: '0.85em' }}>
-                  <strong>{index + 1}.</strong> {escola.ue}{' '}
-                  <strong>({escola.percentualFrequencia}%)</strong>
+                  {escola.ue}
+                  {dreId === OPCAO_TODOS && escola.dre && ` (${escola.dre})`}
+                  {' - '}
+                  {escola.percentualFrequencia?.toString()?.replace('.', ',')}%
                 </span>
               </div>
             ))}
