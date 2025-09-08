@@ -1,9 +1,10 @@
 import styled from 'styled-components';
-
-type ContainerProps = {
+import { ReactNode, HTMLAttributes } from 'react';
+interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   color: string;
   height?: string;
-};
+  children?: ReactNode;
+}
 
 export const ContainerCardTotalizador = styled.div<ContainerProps>`
   height: ${(props) => props?.height || '129px'};

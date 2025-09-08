@@ -12,6 +12,7 @@ import ServicoConselhoClasse from '@/@legacy/servicos/Paginas/ConselhoClasse/Ser
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  Base,
   Colors,
   DataTable,
   Label,
@@ -147,6 +148,9 @@ const BotaoConferirConselhoClasse = () => {
               value={bimestreSelecionado}
             />
           </Loader>
+          <label style={{ color: Base.Vermelho, fontWeight: 'bold', marginTop: '10px' }}>
+            Obs.: A conferência é baseada nos dados do dia anterior.
+          </label>
         </ModalConteudoHtml>
       ) : (
         <></>

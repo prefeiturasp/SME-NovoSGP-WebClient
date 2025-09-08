@@ -58,7 +58,7 @@ const BuscaAtivaHistoricoRegistroAcoes: React.FC = () => {
       codigoAluno,
       turmaCodigo,
     ).catch((e) => erros(e));
-
+    // @ts-ignore
     return retorno?.data;
   }, [turmaCodigo, codigoAluno]);
 
