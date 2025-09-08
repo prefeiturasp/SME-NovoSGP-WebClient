@@ -89,7 +89,7 @@ export default function AtribuicaoSupervisorLista() {
       width: '20%',
       render: text => {
         return (
-          text || <span className="texto-vermelho-negrito">NÃO ATRIBUIDO</span>
+          text || <span className="texto-vermelho-negrito">NÃO ATRIBUÍDO</span>
         );
       },
     },
@@ -99,7 +99,7 @@ export default function AtribuicaoSupervisorLista() {
       width: '35%',
       render: text => {
         return (
-          text || <span className="texto-vermelho-negrito">NÃO ATRIBUIDO</span>
+          text || <span className="texto-vermelho-negrito">NÃO ATRIBUÍDO</span>
         );
       },
     },

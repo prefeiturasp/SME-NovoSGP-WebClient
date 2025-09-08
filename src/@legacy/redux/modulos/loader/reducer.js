@@ -6,6 +6,7 @@ const inicial = {
   loaderTabela: false,
   loaderModal: false,
   loaderBotao: false,
+  loaderTrocaPerfil: false,
 };
 
 export default function Loader(state = inicial, action) {
@@ -39,6 +40,12 @@ export default function Loader(state = inicial, action) {
         return {
           ...draft,
           loaderBotao: action.payload,
+        };
+      }
+      case '@loader/setLoaderTrocaPerfil': {
+        return {
+          ...draft,
+          loaderTrocaPerfil: action.payload,
         };
       }
       default:

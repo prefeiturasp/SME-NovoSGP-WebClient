@@ -47,7 +47,7 @@ const SelectDRE: React.FC<SelectDREProps> = ({
       .get(url)
       .catch((e) => erros(e))
       .finally(() => setExibirLoader(false));
-
+    // @ts-ignore
     if (resposta?.data?.length) {
       let lista = resposta.data.sort(FiltroHelper.ordenarLista('nome'));
 
