@@ -5,6 +5,7 @@ import { Loader } from '~/componentes';
 import { erros } from '~/servicos';
 import ServicoFrequencia from '~/servicos/InformacoesEducacionais/ServicoFrequencia';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import './graficoAnaliseDeFrequencia.css';
 
 const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
   const [dados, setDados] = useState({});
@@ -90,6 +91,7 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
             {descricoes[chave]}
           </p>
           <div
+            className="scroll-clean"
             style={{
               overflowY: grupo.dados.length > 10 ? 'auto' : 'visible',
               maxHeight: grupo.dados.length > 10 ? maxAlturaDezLinhas : 'none',

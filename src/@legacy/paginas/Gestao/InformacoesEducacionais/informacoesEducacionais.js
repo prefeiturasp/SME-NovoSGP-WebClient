@@ -8,6 +8,8 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import InformacoesEducacionaisFiltros from './componentes/Filtro/informacoesEducacionaisFiltros';
 import GraficoAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia';
 import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorModalidade';
+import TabelaIndicadoresNivelCriticoAlfabetizacao from './componentes/TabelaIndicadoresNivelCriticoAlfabetizacao/tabelaIndicadoresNivelCriticoAlfabetizacao';
+import GraficoAnaliseDeAlfabetizacao from './componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
 
 const InformacoesEducacionais = () => {
   const navigate = useNavigate();
