@@ -150,6 +150,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
     } catch (e) {
       Modal.error({
         icon: null,
+        className: styles.modalError,
         width: 420,
         centered: true,
         content: (
@@ -157,8 +158,9 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
             <CloseCircleOutlined className={styles.modalErrorIcon} />
             <h2 className={styles.modalErrorTitle}>Desculpe!</h2>
             <p className={styles.modalErrorMessage}>
-              {e.message ||
-                'Parece que houve um problema ao importar o arquivo. Por favor, tente novamente mais tarde.'}
+              {
+                'Parece que houve um problema ao importar o arquivo. Por favor, tente novamente mais tarde.'
+              }
             </p>
             <div className={styles.modalErrorActions}>
               <Button
