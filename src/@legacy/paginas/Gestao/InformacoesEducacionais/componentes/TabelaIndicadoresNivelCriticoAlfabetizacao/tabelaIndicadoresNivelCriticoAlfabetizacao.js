@@ -103,7 +103,6 @@ const TabelaIndicadoresNivelCriticoAlfabetizacao = ({
         Indicadores de alfabetização crítica
       </h5>
       <p
-        className="text-muted"
         style={{
           fontSize: '14px',
           marginTop: '32px',
