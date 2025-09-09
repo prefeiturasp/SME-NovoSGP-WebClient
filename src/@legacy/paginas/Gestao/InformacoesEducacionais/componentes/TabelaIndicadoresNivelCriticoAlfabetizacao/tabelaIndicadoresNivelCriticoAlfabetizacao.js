@@ -24,7 +24,7 @@ const TabelaIndicadoresNivelCriticoAlfabetizacao = ({
       if (resposta.status === 200 && resposta.data) {
         const dadosTabela = (resposta.data || []).map((escola, index) => ({
           key: index,
-          posicao: index + 1,
+          posicao: escola.posicao,
           ue: escola.ue || 'UE TESTE',
           dre: escola.dre || 'DRE TESTE',
           totalAlunosNaoAlfabetizados: escola.totalAlunosNaoAlfabetizados || 0,
