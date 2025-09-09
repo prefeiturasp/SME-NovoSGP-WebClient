@@ -16,6 +16,9 @@ const GraficoBarrasHorizontal = ({
   showTitle = false,
   showScrollbar = false,
   tooltip,
+  xAxisTitle = '',
+  xAxisTitleColor = '',
+  xAxisLabelColor = '',
   ...rest
 }) => {
   const scrollConfig =
@@ -43,11 +46,31 @@ const GraficoBarrasHorizontal = ({
     barStyle: { radius },
     xAxis: {
       visible: xAxisVisible,
+      title: xAxisTitle
+        ? {
+            text: xAxisTitle,
+            style: {
+              fontWeight: 600,
+              fontSize: 13,
+              fill: xAxisTitleColor,
+            },
+            offset: 6,
+          }
+        : undefined,
       label: {
         style: {
           fontWeight: 'bold',
           fontSize: 12,
-          fill: Base.CinzaMako,
+          fill: xAxisLabelColor,
+        },
+      },
+    },
+    yAxis: {
+      label: {
+        style: {
+          fill: '#42474a',
+          fontWeight: 'normal',
+          fontSize: 13,
         },
       },
     },
@@ -56,7 +79,7 @@ const GraficoBarrasHorizontal = ({
           position: 'right',
           offset: 0,
           style: {
-            fill: Base.CinzaMako,
+            fill: xAxisLabelColor,
             textAlign: 'center',
             fontSize: 8.5,
             fontWeight: 600,
@@ -72,7 +95,7 @@ const GraficoBarrasHorizontal = ({
             style: {
               fontWeight: 'bold',
               fontSize: 12,
-              fill: Base.CinzaMako,
+              fill: '#42474a',
             },
           },
           marker: {
@@ -106,6 +129,9 @@ GraficoBarrasHorizontal.propTypes = {
   showTitle: PropTypes.bool,
   showScrollbar: PropTypes.bool,
   tooltip: PropTypes.object,
+  xAxisTitle: PropTypes.string,
+  xAxisTitleColor: PropTypes.string,
+  xAxisLabelColor: PropTypes.string,
 };
 
 GraficoBarrasHorizontal.defaultProps = {
@@ -122,6 +148,9 @@ GraficoBarrasHorizontal.defaultProps = {
   showTitle: false,
   showScrollbar: false,
   tooltip: null,
+  xAxisTitle: '',
+  xAxisTitleColor: '#42474a',
+  xAxisLabelColor: '#42474a',
 };
 
 export default GraficoBarrasHorizontal;

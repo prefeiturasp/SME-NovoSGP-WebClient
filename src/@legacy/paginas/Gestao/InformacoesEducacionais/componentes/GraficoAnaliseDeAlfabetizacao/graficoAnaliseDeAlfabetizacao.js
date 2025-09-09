@@ -98,7 +98,6 @@ const GraficoAlfabetizacao = ({ dreId }) => {
         </div>
       </div>
       <p
-        className="text-muted"
         style={{
           fontSize: '14px',
           marginBottom: '32px',
@@ -135,6 +134,12 @@ const GraficoAlfabetizacao = ({ dreId }) => {
       ) : !loading ? (
         <div className="text-center">Sem dados</div>
       ) : null}
+      <div
+        className="text-center"
+        style={{ color: '#42474a', fontWeight: 'bold' }}
+      >
+        Alunos
+      </div>
     </div>
   );
 };
