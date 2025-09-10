@@ -142,7 +142,12 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
   const [motivosAusenciasAnotacao, setMotivosAusenciasAnotacao] = useState<any[]>([]);
 
   const handleLocalizadorChange = (_field: any, value: { codigo: string; nome: string } | null) => {
-    setCodigoAlunoSelecionado(value?.codigo || null);
+    const codigoString =
+      typeof value === 'object' && value?.codigo
+        ? value.codigo.toString()
+        : value?.toString() || null;
+
+    setCodigoAlunoSelecionado(codigoString);
     setMotivosAusenciasAnotacao([]);
   };
 
