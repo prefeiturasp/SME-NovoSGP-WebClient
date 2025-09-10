@@ -10,10 +10,11 @@ import GraficoAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia
 import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorModalidade';
 import TabelaIndicadoresNivelCriticoAlfabetizacao from './componentes/TabelaIndicadoresNivelCriticoAlfabetizacao/tabelaIndicadoresNivelCriticoAlfabetizacao';
 import GraficoAnaliseDeAlfabetizacao from './componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
+import VisaoGeral from './componentes/VisaoGeral';
 
 const InformacoesEducacionais = () => {
   const navigate = useNavigate();
-  const [anoLetivo, setAnoLetivo] = useState(null);
+  const [anoLetivo, setAnoLetivo] = useState(2025);
   const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
   const [ue, setUe] = useState({ codigo: OPCAO_TODOS });
   const [modalidade, setModalidade] = useState(null);
@@ -37,6 +38,7 @@ const InformacoesEducacionais = () => {
   };
 
   const exibirGrafico = !!dreCodigo;
+  const exibirVisaoGeral = !!anoLetivo;
 
   return (
     <>
@@ -52,6 +54,20 @@ const InformacoesEducacionais = () => {
               />
             </Col>
           </Row>
+
+          {exibirVisaoGeral ? (            
+              <Row gutter={[32, 32]}>
+                <Col span={24}>
+                  <VisaoGeral anoLetivo={anoLetivo} dreCodigo={dreCodigo} />
+                </Col>
+              </Row>            
+          ) : (
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <p>Selecione um ano letivo para visualizar os dados.</p>
+              </Col>
+            </Row>
+          )}
 
           <Row gutter={[32, 32]}>
             <Col span={24}>

@@ -1,0 +1,109 @@
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import PropTypes from 'prop-types';
+import { Row, Col } from 'antd';
+import styled from 'styled-components';
+import IndicadorFrequenciaGlobal from './indicadorFrequenciaGlobal';
+import IndicadorIdep from './indicadorIdep';
+import ServicoVisaoGeral from '~/servicos/InformacoesEducacionais/ServicoVisaoGeral';
+import { erros } from '~/servicos';
+
+const Container = styled.div`
+  margin-top: 32px;
+  margin-bottom: 32px;
+`;
+
+const Titulo = styled.h2`
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0;
+`;
+
+const Descricao = styled.p`
+  font-size: 14px;
+  color: #42474a;
+  margin-bottom: 24px;
+`;
+
+
+const VisaoGeral = ({ anoLetivo, dreCodigo }) => {
+  const [dadosCompletos, setDadosCompletos] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const carregarDados = useCallback(async () => {
+    if (anoLetivo && dreCodigo) {
+      setLoading(true);
+      const resposta = await ServicoVisaoGeral.obterVisaoGeral(
+        anoLetivo,
+        dreCodigo
+      ).catch(e => erros(e));
+
+      if (resposta?.data) {
+        setDadosCompletos(resposta.data);
+      } else {
+        setDadosCompletos([]);
+      }
+      setLoading(false);
+    }
+  }, [anoLetivo, dreCodigo]);
+
+  useEffect(() => {
+    carregarDados();
+  }, [carregarDados]);
+
+  const dadosFormatados = useMemo(() => {
+    const dadosIdep = dadosCompletos
+      .find(item => item.indicador === 'IDEP')
+      ?.series.map(serie => ({
+        valor: serie.valor,
+        label: serie.serie,
+      })) || [];
+
+    const dadosFrequencia = dadosCompletos
+      .find(item => item.indicador === 'Frequência global')
+      ?.series.map(serie => ({
+        valor: `${serie.valor}%`,
+        label: serie.serie || '',
+      })) || [];
+
+    return { dadosIdep, dadosFrequencia };
+  }, [dadosCompletos]);
+
+  return (
+    <Container>
+      <Titulo>Visão Geral</Titulo>
+      <Descricao>
+        Aqui estão as informações resumidas de todas as escolas da rede
+        municipal de São Paulo.
+      </Descricao>
+      <div style={{ marginBottom: '16px' }}>
+        <Row gutter={[24, 24]}>
+            <Col xs={24} md={12}>
+            <IndicadorIdep dados={dadosFormatados.dadosIdep} loading={loading} />
+            </Col>
+        </Row>
+      </div>
+      <div style={{ marginBottom: '16px' }}>
+        <Row gutter={[24, 24]}>
+            <Col xs={24} md={12}>
+            <IndicadorFrequenciaGlobal
+                dados={dadosFormatados.dadosFrequencia}
+                loading={loading}
+            />
+            </Col>
+        </Row>
+      </div>
+    </Container>
+  );
+};
+
+VisaoGeral.propTypes = {
+  anoLetivo: PropTypes.string,
+  dreCodigo: PropTypes.string,
+};
+
+VisaoGeral.defaultProps = {
+  anoLetivo: null,
+  dreCodigo: null,
+};
+
+export default VisaoGeral;
