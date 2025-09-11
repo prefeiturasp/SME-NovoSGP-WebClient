@@ -17,6 +17,12 @@ import styled from 'styled-components';
 const CardEstilizado = styled(Card)`
   margin-top: 16px;
 `;
+const TituloCard = styled.h2`
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0;
+  font-size: 20px;
+`;
 
 const InformacoesEducacionais = () => {
   const navigate = useNavigate();
@@ -78,24 +84,6 @@ const InformacoesEducacionais = () => {
       </CardEstilizado>
       <CardEstilizado>
         <div className="col-md-12">
-          {exibirVisaoGeral ? (
-            <Row gutter={[32, 32]}>
-              <Col span={24}>
-                <VisaoGeral anoLetivo={anoLetivo} dreCodigo={dreCodigo} />
-              </Col>
-            </Row>
-          ) : (
-            <Row gutter={[32, 32]}>
-              <Col span={24}>
-                <p>Selecione um ano letivo para visualizar os dados.</p>
-              </Col>
-            </Row>
-          )}
-        </div>
-      </CardEstilizado>
-
-      <CardEstilizado>
-        <div className="col-md-12">
           {exibirVisaoGeral ? (            
               <Row gutter={[32, 32]}>
                 <Col span={24}>
@@ -109,16 +97,23 @@ const InformacoesEducacionais = () => {
               </Col>
             </Row>
           )}
+        </div>
+      </CardEstilizado>
+      <CardEstilizado>
+        <div className="col-md-12">
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <TituloCard>Análise detalhada</TituloCard>
+            </Col>
+          </Row>
 
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <GraficoIdep anoLetivo={anoLetivo} dreId={dreCodigo} />
             </Col>
           </Row>
-        </div>
-      </CardEstilizado>
-      <CardEstilizado>
-        <div className="col-md-12">
+          
           <Row gutter={[32, 32]}>
             <Col span={24}>
               {exibirGrafico ? (
