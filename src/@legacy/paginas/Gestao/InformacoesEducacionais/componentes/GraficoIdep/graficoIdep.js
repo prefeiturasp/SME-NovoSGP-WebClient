@@ -37,10 +37,16 @@ const GraficoIdep = ({ anoLetivo, dreId }) => {
         dreId
       );
       if (resposta.status === 200 && resposta.data?.distribuicao) {
-        const dadosFormatados = resposta.data.distribuicao.map(item => ({
-          faixa: item.faixa,
-          quantidade: item.quantidade,
-        }));
+        const dadosFormatados = resposta.data.distribuicao
+          .map(item => ({
+            faixa: item.faixa,
+            quantidade: item.quantidade,
+          }))
+          .sort((a, b) => {
+            const inicioA = parseInt(a.faixa.split('-')[0], 10);
+            const inicioB = parseInt(b.faixa.split('-')[0], 10);
+            return inicioA - inicioB;
+          });
         if (resposta.data.anoUtilizado) {
           setAnoUtilizado(resposta.data.anoUtilizado);
         }
