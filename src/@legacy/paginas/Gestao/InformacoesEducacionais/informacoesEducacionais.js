@@ -10,6 +10,7 @@ import GraficoAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia
 import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorModalidade';
 import TabelaIndicadoresNivelCriticoAlfabetizacao from './componentes/TabelaIndicadoresNivelCriticoAlfabetizacao/tabelaIndicadoresNivelCriticoAlfabetizacao';
 import GraficoAnaliseDeAlfabetizacao from './componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
+import GraficoIdep from './componentes/GraficoIdep/graficoIdep';
 import VisaoGeral from './componentes/VisaoGeral';
 
 const InformacoesEducacionais = () => {
@@ -68,6 +69,12 @@ const InformacoesEducacionais = () => {
               </Col>
             </Row>
           )}
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <GraficoIdep anoLetivo={anoLetivo} dreId={dreCodigo} />
+            </Col>
+          </Row>
 
           <Row gutter={[32, 32]}>
             <Col span={24}>
