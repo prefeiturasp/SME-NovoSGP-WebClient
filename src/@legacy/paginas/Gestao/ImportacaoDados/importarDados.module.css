@@ -128,13 +128,18 @@
 }
 .modalErrorContainer {
   text-align: center;
-  padding: 10px 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4px 0px;
 }
 
 .modalErrorIcon {
   font-size: 48px;
   color: #b40c02;
   margin-bottom: 16px;
+  justify-content: center;
 }
 
 .modalErrorTitle {
