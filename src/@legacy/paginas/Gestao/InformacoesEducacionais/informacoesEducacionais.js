@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, SelectComponent } from '~/componentes';
+import { Card } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { OPCAO_TODOS } from '~/constantes/constantes';
@@ -10,20 +10,23 @@ import GraficoAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia
 import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorModalidade';
 import TabelaIndicadoresNivelCriticoAlfabetizacao from './componentes/TabelaIndicadoresNivelCriticoAlfabetizacao/tabelaIndicadoresNivelCriticoAlfabetizacao';
 import GraficoAnaliseDeAlfabetizacao from './componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
+import GraficoIdep from './componentes/GraficoIdep/graficoIdep';
+import VisaoGeral from './componentes/VisaoGeral';
+import styled from 'styled-components';
+
+const CardEstilizado = styled(Card)`
+  margin-top: 16px;
+`;
 
 const InformacoesEducacionais = () => {
   const navigate = useNavigate();
   const [anoLetivo, setAnoLetivo] = useState(null);
   const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
-  const [ue, setUe] = useState({ codigo: OPCAO_TODOS });
+  const [ueCodigo, setUeCodigo] = useState(OPCAO_TODOS);
   const [modalidade, setModalidade] = useState(null);
   const [semestre, setSemestre] = useState(null);
   const [tipoVisualizacao, setTipoVisualizacao] = useState('global');
   const [periodicidade, setPeriodicidade] = useState('mensal');
-  const listaPeriodicidade = [
-    { valor: 'mensal', desc: 'Mensal (ano atual)' },
-    { valor: 'anual', desc: 'Anual' },
-  ];
 
   const obterDreSelecionada = valor => {
     const codigo = valor && typeof valor === 'object' ? valor.codigo : valor;
@@ -32,27 +35,76 @@ const InformacoesEducacionais = () => {
     }
   };
 
+  const obterUeSelecionada = valor => {
+    const codigo = valor && typeof valor === 'object' ? valor.codigo : valor;
+    if (codigo !== ueCodigo) {
+      setUeCodigo(codigo);
+    }
+  };
+
+  const obterAnoLetivoSelecionado = valor => {
+    if (valor !== anoLetivo) {
+      setAnoLetivo(valor);
+    }
+  };
+
   const aoClicarBotaoVoltar = () => {
     navigate('/');
   };
 
   const exibirGrafico = !!dreCodigo;
+  const exibirVisaoGeral = !!anoLetivo;
 
   return (
     <>
-      <Cabecalho pagina="Informações Educacionais">
+      <Cabecalho
+        pagina="Painel de Informações Educacionais"
+        style={{ marginBottom: '16px' }}
+      >
         <BotaoVoltarPadrao onClick={aoClicarBotaoVoltar} />
       </Cabecalho>
-      <Card>
+      <CardEstilizado>
         <div className="col-md-12">
           <Row gutter={[16, 16]}>
-            <Col xs={24} md={24}>
+            <Col span={24}>
               <InformacoesEducacionaisFiltros
                 obterDreSelecionado={obterDreSelecionada}
+                obterUeSelecionada={obterUeSelecionada}
+                obterAnoLetivoSelecionado={obterAnoLetivoSelecionado}
               />
             </Col>
           </Row>
+        </div>
+      </CardEstilizado>
+      <CardEstilizado>
+        <div className="col-md-12">
+          {exibirVisaoGeral ? (
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <VisaoGeral anoLetivo={anoLetivo} dreCodigo={dreCodigo} />
+              </Col>
+            </Row>
+          ) : (
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <p>Selecione um ano letivo para visualizar os dados.</p>
+              </Col>
+            </Row>
+          )}
+        </div>
+      </CardEstilizado>
 
+      <CardEstilizado>
+        <div className="col-md-12">
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <GraficoIdep anoLetivo={anoLetivo} dreId={dreCodigo} />
+            </Col>
+          </Row>
+        </div>
+      </CardEstilizado>
+      <CardEstilizado>
+        <div className="col-md-12">
           <Row gutter={[32, 32]}>
             <Col span={24}>
               {exibirGrafico ? (
@@ -73,7 +125,6 @@ const InformacoesEducacionais = () => {
               )}
             </Col>
           </Row>
-
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <GraficoAnaliseDeAlfabetizacao dreId={dreCodigo} />
@@ -88,7 +139,7 @@ const InformacoesEducacionais = () => {
             </Col>
           </Row>
         </div>
-      </Card>
+      </CardEstilizado>
     </>
   );
 };
