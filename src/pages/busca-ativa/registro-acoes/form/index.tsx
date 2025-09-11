@@ -207,7 +207,9 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
       notification.warning({ message: 'Nenhum estudante selecionado.' });
       return;
     }
-    await obterMotivosAusenciasModal(codigoAlunoSelecionado);
+    const codigoAluno = codigoAlunoSelecionado.trim();
+
+    await obterMotivosAusenciasModal(codigoAluno);
   };
 
   return (

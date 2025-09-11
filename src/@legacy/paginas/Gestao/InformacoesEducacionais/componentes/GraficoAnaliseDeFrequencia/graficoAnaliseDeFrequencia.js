@@ -67,7 +67,7 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
     const descricoes = {
       escolasEmSituacaoCritica: ` ${grupo.dados.length} escolas com frequência abaixo de 85%`,
       escolasEmAtencao: ` ${grupo.dados.length} escolas com frequência entre 85% e 90%`,
-      escolasRanqueadas: ` ${grupo.dados.length} escolas com frequência acima de 94%`,
+      escolasRanqueadas: ` ${grupo.dados.length} escolas com frequência acima de 90%`,
     };
 
     const maxAlturaDezLinhas = 240;
@@ -96,14 +96,15 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
               overflowY: grupo.dados.length > 10 ? 'auto' : 'visible',
               maxHeight: grupo.dados.length > 10 ? maxAlturaDezLinhas : 'none',
               paddingRight: grupo.dados.length > 10 ? '4px' : 0,
-              WebkitOverflowScrolling: 'touch',
             }}
           >
             {grupo.dados.map((escola, index) => (
               <div key={index} className="mb-2" style={{ lineHeight: '1.2em' }}>
                 <span style={{ color: '#555', fontSize: '0.85em' }}>
-                  <strong>{index + 1}.</strong> {escola.ue}{' '}
-                  <strong>({escola.percentualFrequencia}%)</strong>
+                  {escola.ue}
+                  {dreId === OPCAO_TODOS && escola.dre && ` (${escola.dre})`}
+                  {' - '}
+                  {escola.percentualFrequencia?.toString()?.replace('.', ',')}%
                 </span>
               </div>
             ))}
