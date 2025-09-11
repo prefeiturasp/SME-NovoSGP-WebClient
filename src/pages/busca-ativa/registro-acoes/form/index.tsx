@@ -66,8 +66,6 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
 
   const dadosRouteState: RegistroAcaoBuscaAtivaRespostaDto = location.state;
 
-  const [codigoAlunoSelecionado, setCodigoAlunoSelecionado] = useState<string | null>(null);
-
   const mapearDto = (dados: RegistroAcaoBuscaAtivaRespostaDto) => {
     const estudante = { codigo: dados?.aluno?.codigoAluno || '', nome: dados?.aluno?.nome || '' };
 
@@ -83,7 +81,6 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
     };
 
     setFormInitialValues(newInitialValues);
-    setCodigoAlunoSelecionado(estudante.codigo);
   };
 
   const obterDados = useCallback(async () => {
@@ -141,13 +138,7 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
 
   const [motivosAusenciasAnotacao, setMotivosAusenciasAnotacao] = useState<any[]>([]);
 
-  const handleLocalizadorChange = (_field: any, value: { codigo: string; nome: string } | null) => {
-    const codigoString =
-      typeof value === 'object' && value?.codigo
-        ? value.codigo.toString()
-        : value?.toString() || null;
-
-    setCodigoAlunoSelecionado(codigoString);
+  const handleLocalizadorChange = (_field: any) => {
     setMotivosAusenciasAnotacao([]);
   };
 
@@ -203,13 +194,14 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
   }, []);
 
   const handleVisualizarHistorico = async () => {
-    if (!codigoAlunoSelecionado) {
+    const estudanteSelecionado = form.getFieldValue('localizadorEstudante');
+
+    if (!estudanteSelecionado.codigo) {
       notification.warning({ message: 'Nenhum estudante selecionado.' });
       return;
     }
-    const codigoAluno = codigoAlunoSelecionado.trim();
 
-    await obterMotivosAusenciasModal(codigoAluno);
+    await obterMotivosAusenciasModal(estudanteSelecionado?.codigo?.toString().trim());
   };
 
   return (
