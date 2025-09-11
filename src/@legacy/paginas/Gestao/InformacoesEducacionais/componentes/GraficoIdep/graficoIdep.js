@@ -15,6 +15,7 @@ const listaPeriodicidade = [
 
 const GraficoIdep = ({ anoLetivo, dreId }) => {
   const [dados, setDados] = useState([]);
+  const [anoUtilizado, setAnoUtilizado] = useState();
   const [loading, setLoading] = useState(false);
   const [periodicidade, setPeriodicidade] = useState(
     listaPeriodicidade[0].valor
@@ -40,6 +41,9 @@ const GraficoIdep = ({ anoLetivo, dreId }) => {
           faixa: item.faixa,
           quantidade: item.quantidade,
         }));
+        if (resposta.data.anoUtilizado) {
+          setAnoUtilizado(resposta.data.anoUtilizado);
+        }
         setDados(dadosFormatados);
       } else {
         setDados([]);
@@ -116,7 +120,7 @@ const GraficoIdep = ({ anoLetivo, dreId }) => {
     <div className="grafico-idep-container">
       <div className="grafico-idep-header">
         <h5 className="grafico-idep-titulo" style={{ color: Base.CinzaMako }}>
-          IDEP ({anoLetivo})
+          IDEP {anoUtilizado && ` (${anoUtilizado})`}
         </h5>
         <div className="grafico-idep-select">
           <SelectComponent
