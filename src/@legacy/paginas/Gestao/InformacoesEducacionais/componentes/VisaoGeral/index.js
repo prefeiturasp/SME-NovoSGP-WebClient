@@ -7,15 +7,11 @@ import IndicadorIdep from './indicadorIdep';
 import ServicoVisaoGeral from '~/servicos/InformacoesEducacionais/ServicoVisaoGeral';
 import { erros } from '~/servicos';
 
-const Container = styled.div`
-  margin-top: 32px;
-  margin-bottom: 32px;
-`;
-
 const Titulo = styled.h2`
   font-weight: bold;
   color: #333;
   margin-bottom: 0;
+  font-size: 20px;
 `;
 
 const Descricao = styled.p`
@@ -69,8 +65,8 @@ const VisaoGeral = ({ anoLetivo, dreCodigo }) => {
   }, [dadosCompletos]);
 
   return (
-    <Container>
-      <Titulo>Visão Geral</Titulo>
+    <div>
+      <Titulo className="mb-2">Visão Geral</Titulo>
       <Descricao>
         Aqui estão as informações resumidas de todas as escolas da rede
         municipal de São Paulo.
@@ -92,7 +88,7 @@ const VisaoGeral = ({ anoLetivo, dreCodigo }) => {
             </Col>
         </Row>
       </div>
-    </Container>
+    </div>
   );
 };
 

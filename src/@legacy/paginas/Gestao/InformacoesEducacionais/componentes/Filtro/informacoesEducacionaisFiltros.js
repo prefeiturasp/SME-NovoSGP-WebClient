@@ -13,6 +13,7 @@ import { Col, Row } from 'antd';
 const InformacoesEducacionaisFiltros = ({
   obterDreSelecionado,
   obterUeSelecionado,
+  obterAnoLetivoSelecionado,
 }) => {
   const usuario = useSelector(store => store.usuario);
   const [anoLetivo, setAnoLetivo] = useState(null);
@@ -55,6 +56,8 @@ const InformacoesEducacionaisFiltros = ({
     setAnoLetivo(valorAtual);
     setListaAnosLetivo(anosLetivos);
     setCarregandoAnosLetivos(false);
+
+    if (obterAnoLetivoSelecionado) obterAnoLetivoSelecionado(valorAtual);
   }, [anoAtual, consideraHistorico]);
 
   useEffect(() => {
@@ -223,21 +226,18 @@ const InformacoesEducacionaisFiltros = ({
     if (ueSelecionada && obterUeSelecionado) obterUeSelecionado(ueSelecionada);
   };
 
-  const onChangeAnoLetivo = valor => setAnoLetivo(valor);
+  const onChangeAnoLetivo = valor => {
+    setAnoLetivo(valor);
+    if (obterAnoLetivoSelecionado) obterAnoLetivoSelecionado(valor);
+  };
 
   return (
-    <div
-      style={{
-        backgroundColor: '#ffffff',
-        borderRadius: '8px',
-        padding: '24px',
-        marginBottom: '24px',
-      }}
-    >
+    <div>
       <p
         style={{
           fontSize: '14px',
           marginBottom: '20px',
+          paddingTop: '8px',
           fontWeight: 400,
           color: '#42474a',
           lineHeight: 1.2,
@@ -248,6 +248,20 @@ const InformacoesEducacionaisFiltros = ({
         Educacional (UE) específica.
       </p>
       <Row gutter={[16, 16]}>
+        <Col xs={24} sm={24} md={8}>
+          <Loader loading={carregandoAnosLetivos}>
+            <SelectComponent
+              label="Ano letivo"
+              lista={listaAnosLetivo}
+              valueOption="valor"
+              valueText="desc"
+              onChange={onChangeAnoLetivo}
+              valueSelect={anoLetivo}
+              placeholder="Selecione o ano"
+              allowClear={false}
+            />
+          </Loader>
+        </Col>
         <Col xs={24} sm={24} md={8}>
           <Loader loading={carregandoDres}>
             <SelectComponent
@@ -275,21 +289,6 @@ const InformacoesEducacionaisFiltros = ({
               valueSelect={ue?.codigo}
               placeholder="Selecione uma UE"
               showSearch
-              allowClear={false}
-            />
-          </Loader>
-        </Col>
-
-        <Col xs={24} sm={24} md={8}>
-          <Loader loading={carregandoAnosLetivos}>
-            <SelectComponent
-              label="Ano letivo"
-              lista={listaAnosLetivo}
-              valueOption="valor"
-              valueText="desc"
-              onChange={onChangeAnoLetivo}
-              valueSelect={anoLetivo}
-              placeholder="Selecione o ano"
               allowClear={false}
             />
           </Loader>

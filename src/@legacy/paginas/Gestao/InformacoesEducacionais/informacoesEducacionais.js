@@ -11,10 +11,15 @@ import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorMo
 import TabelaIndicadoresNivelCriticoAlfabetizacao from './componentes/TabelaIndicadoresNivelCriticoAlfabetizacao/tabelaIndicadoresNivelCriticoAlfabetizacao';
 import GraficoAnaliseDeAlfabetizacao from './componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
 import VisaoGeral from './componentes/VisaoGeral';
+import styled from 'styled-components';
+
+const CardEstilizado = styled(Card)`
+  margin-top: 16px;
+`;
 
 const InformacoesEducacionais = () => {
   const navigate = useNavigate();
-  const [anoLetivo, setAnoLetivo] = useState(2025);
+  const [anoLetivo, setAnoLetivo] = useState(null);
   const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
   const [ueCodigo, setUeCodigo] = useState(OPCAO_TODOS);
   const [modalidade, setModalidade] = useState(null);
@@ -36,6 +41,12 @@ const InformacoesEducacionais = () => {
     }
   };
 
+  const obterAnoLetivoSelecionado = valor => {
+    if (valor !== anoLetivo) {
+      setAnoLetivo(valor);
+    }
+  };
+
   const aoClicarBotaoVoltar = () => {
     navigate('/');
   };
@@ -45,19 +56,24 @@ const InformacoesEducacionais = () => {
 
   return (
     <>
-      <Cabecalho pagina="Painel de Informações Educacionais">
+      <Cabecalho pagina="Painel de Informações Educacionais" style={{ marginBottom: '16px' }}>
         <BotaoVoltarPadrao onClick={aoClicarBotaoVoltar} />
       </Cabecalho>
-      <div className="col-md-12" style={{ padding: '24px' }}>
-        <Row gutter={[16, 16]} style={{ marginBottom: '32px' }}>
-          <Col span={24}>
-            <InformacoesEducacionaisFiltros
-              obterDreSelecionado={obterDreSelecionada}
-              obterUeSelecionada={obterUeSelecionada}
-            />
-          </Col>
-        </Row>
-
+      <CardEstilizado>
+        <div className="col-md-12">
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <InformacoesEducacionaisFiltros
+                obterDreSelecionado={obterDreSelecionada}
+                obterUeSelecionada={obterUeSelecionada}
+                obterAnoLetivoSelecionado={obterAnoLetivoSelecionado}
+              />
+            </Col>
+          </Row>
+        </div>
+      </CardEstilizado>
+      <CardEstilizado>
+        <div className="col-md-12">
         {exibirVisaoGeral ? (            
             <Row gutter={[32, 32]}>
               <Col span={24}>
@@ -71,6 +87,10 @@ const InformacoesEducacionais = () => {
             </Col>
           </Row>
         )}
+        </div>
+      </CardEstilizado>
+      <CardEstilizado>
+        <div className="col-md-12">
         <Row gutter={[32, 32]}>
           <Col span={24}>
             {exibirGrafico ? (
@@ -91,7 +111,8 @@ const InformacoesEducacionais = () => {
             )}
           </Col>
         </Row>
-      </div>
+        </div>
+      </CardEstilizado>
     </>
   );
 };
