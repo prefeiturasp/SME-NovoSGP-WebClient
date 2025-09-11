@@ -170,7 +170,6 @@ const GraficoFrequenciaModalidade = ({
               style={{
                 fontWeight: 'bold',
                 color: '#333',
-                marginTop: '32px',
                 marginBottom: 0,
               }}
             >
