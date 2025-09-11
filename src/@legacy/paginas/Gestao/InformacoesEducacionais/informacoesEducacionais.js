@@ -20,7 +20,7 @@ const CardEstilizado = styled(Card)`
 
 const InformacoesEducacionais = () => {
   const navigate = useNavigate();
-  const [anoLetivo, setAnoLetivo] = useState(2025);
+  const [anoLetivo, setAnoLetivo] = useState(null);
   const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
   const [ueCodigo, setUeCodigo] = useState(OPCAO_TODOS);
   const [modalidade, setModalidade] = useState(null);
