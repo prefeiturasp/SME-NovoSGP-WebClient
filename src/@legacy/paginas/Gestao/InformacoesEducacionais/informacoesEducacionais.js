@@ -20,7 +20,7 @@ const CardEstilizado = styled(Card)`
 
 const InformacoesEducacionais = () => {
   const navigate = useNavigate();
-  const [anoLetivo, setAnoLetivo] = useState(null);
+  const [anoLetivo, setAnoLetivo] = useState(2025);
   const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
   const [ueCodigo, setUeCodigo] = useState(OPCAO_TODOS);
   const [modalidade, setModalidade] = useState(null);
@@ -96,6 +96,20 @@ const InformacoesEducacionais = () => {
 
       <CardEstilizado>
         <div className="col-md-12">
+          {exibirVisaoGeral ? (            
+              <Row gutter={[32, 32]}>
+                <Col span={24}>
+                  <VisaoGeral anoLetivo={anoLetivo} dreCodigo={dreCodigo} />
+                </Col>
+              </Row>            
+          ) : (
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <p>Selecione um ano letivo para visualizar os dados.</p>
+              </Col>
+            </Row>
+          )}
+
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <GraficoIdep anoLetivo={anoLetivo} dreId={dreCodigo} />

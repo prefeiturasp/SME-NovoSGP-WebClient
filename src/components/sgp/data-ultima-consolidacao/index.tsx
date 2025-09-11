@@ -1,7 +1,6 @@
 import { Tag } from 'antd';
 import dayjs from 'dayjs';
 import { Base } from '~/componentes';
-import React from 'react';
 
 type TagDataUltimaConsolidacaoProps = {
   data: string;
