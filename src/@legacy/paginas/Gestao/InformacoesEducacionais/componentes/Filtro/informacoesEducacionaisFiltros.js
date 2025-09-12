@@ -265,7 +265,7 @@ const InformacoesEducacionaisFiltros = ({
         <Col xs={24} sm={24} md={8}>
           <Loader loading={carregandoDres}>
             <SelectComponent
-              label="Diretoria Regional (DRE)"
+              label="Diretoria Regional de Educação (DRE)"
               lista={listaDres}
               valueOption="codigo"
               valueText="desc"
