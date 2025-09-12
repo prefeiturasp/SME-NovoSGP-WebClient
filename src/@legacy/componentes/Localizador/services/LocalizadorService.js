@@ -52,7 +52,7 @@ class LocalizadorService {
   }
 
   buscarPessoa({ rf, nome }) {
-    api
+    return api
       .post(this.urlBuscarPessoa, { rf, nome })
       .then(resp => {
         return {
