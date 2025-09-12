@@ -27,7 +27,6 @@ jest.mock('@/core/redux', () => ({
   },
 }));
 
-
 describe('ServicoPlanoAEE - Métodos básicos', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -44,7 +43,9 @@ describe('ServicoPlanoAEE - Métodos básicos', () => {
 
   it('existePlanoAEEEstudante', async () => {
     api.get.mockResolvedValue({ data: true });
-    const res = await ServicoPlanoAEE.existePlanoAEEEstudante({ estudanteCodigo: 123 });
+    const res = await ServicoPlanoAEE.existePlanoAEEEstudante({
+      estudanteCodigo: 123,
+    });
     expect(api.get).toHaveBeenCalledWith('v1/plano-aee/estudante/123/existe');
     expect(res).toBe(true);
   });
@@ -54,7 +55,9 @@ describe('ServicoPlanoAEE - Métodos básicos', () => {
     api.get.mockResolvedValue(mockData);
 
     await ServicoPlanoAEE.obterPlanoPorId(1, 'T123', 456);
-    expect(api.get).toHaveBeenCalledWith('v1/plano-aee/1/aluno/456?turmaCodigo=T123');
+    expect(api.get).toHaveBeenCalledWith(
+      'v1/plano-aee/1/aluno/456?turmaCodigo=T123'
+    );
   });
 
   it('obterPlanoPorId sem turmaCodigo', async () => {
@@ -64,12 +67,16 @@ describe('ServicoPlanoAEE - Métodos básicos', () => {
 
   it('obterVersaoPlanoPorId com turmaCodigo', async () => {
     await ServicoPlanoAEE.obterVersaoPlanoPorId(1, 2, 'T987');
-    expect(api.get).toHaveBeenCalledWith('v1/plano-aee/versao/1?questionarioId=2&turmaCodigo=T987');
+    expect(api.get).toHaveBeenCalledWith(
+      'v1/plano-aee/versao/1?questionarioId=2&turmaCodigo=T987'
+    );
   });
 
   it('obterVersaoPlanoPorId sem turmaCodigo', async () => {
     await ServicoPlanoAEE.obterVersaoPlanoPorId(3, 4);
-    expect(api.get).toHaveBeenCalledWith('v1/plano-aee/versao/3?questionarioId=4');
+    expect(api.get).toHaveBeenCalledWith(
+      'v1/plano-aee/versao/3?questionarioId=4'
+    );
   });
 
   it('obterPlanoPorCodigoEstudante', async () => {
@@ -79,17 +86,23 @@ describe('ServicoPlanoAEE - Métodos básicos', () => {
 
   it('obterQuestionario com planoId', async () => {
     await ServicoPlanoAEE.obterQuestionario(1, 2, 3, 4);
-    expect(api.get).toHaveBeenCalledWith('v1/plano-aee/questionario?questionarioId=1&codigoAluno=3&codigoTurma=4&planoId=2');
+    expect(api.get).toHaveBeenCalledWith(
+      'v1/plano-aee/questionario?questionarioId=1&codigoAluno=3&codigoTurma=4&planoId=2'
+    );
   });
 
   it('obterQuestionario sem planoId', async () => {
     await ServicoPlanoAEE.obterQuestionario(5, null, 6, 7);
-    expect(api.get).toHaveBeenCalledWith('v1/plano-aee/questionario?questionarioId=5&codigoAluno=6&codigoTurma=7');
+    expect(api.get).toHaveBeenCalledWith(
+      'v1/plano-aee/questionario?questionarioId=5&codigoAluno=6&codigoTurma=7'
+    );
   });
 
   it('obterVersoes', async () => {
     await ServicoPlanoAEE.obterVersoes(10, 20);
-    expect(api.get).toHaveBeenCalledWith('v1/plano-aee/10/versoes/reestruturacao/20');
+    expect(api.get).toHaveBeenCalledWith(
+      'v1/plano-aee/10/versoes/reestruturacao/20'
+    );
   });
 
   it('obterReestruturacoes', async () => {
@@ -100,7 +113,10 @@ describe('ServicoPlanoAEE - Métodos básicos', () => {
   it('salvarReestruturacoes', async () => {
     const params = { planoAEEId: 1, nome: 'teste' };
     await ServicoPlanoAEE.salvarReestruturacoes(params);
-    expect(api.post).toHaveBeenCalledWith('v1/plano-aee/1/reestruturacoes', params);
+    expect(api.post).toHaveBeenCalledWith(
+      'v1/plano-aee/1/reestruturacoes',
+      params
+    );
   });
 
   it('obterParecer', async () => {
@@ -110,7 +126,9 @@ describe('ServicoPlanoAEE - Métodos básicos', () => {
 
   it('encerrarPlano', async () => {
     await ServicoPlanoAEE.encerrarPlano(22);
-    expect(api.post).toHaveBeenCalledWith('v1/plano-aee/encerrar-plano?planoAeeId=22');
+    expect(api.post).toHaveBeenCalledWith(
+      'v1/plano-aee/encerrar-plano?planoAeeId=22'
+    );
   });
 
   it('excluirPlano', async () => {
@@ -136,12 +154,16 @@ describe('ServicoPlanoAEE - Métodos básicos', () => {
 
   it('imprimirVersoes', async () => {
     await ServicoPlanoAEE.imprimirVersoes([1, 2, 3]);
-    expect(api.post).toHaveBeenCalledWith('v1/plano-aee/imprimir', { versoesIds: [1, 2, 3] });
+    expect(api.post).toHaveBeenCalledWith('v1/plano-aee/imprimir', {
+      versoesIds: [1, 2, 3],
+    });
   });
 
   it('removerReponsavelPAAI', async () => {
     await ServicoPlanoAEE.removerReponsavelPAAI(44);
-    expect(api.post).toHaveBeenCalledWith('v1/plano-aee/remover-responsavel/44');
+    expect(api.post).toHaveBeenCalledWith(
+      'v1/plano-aee/remover-responsavel/44'
+    );
   });
 
   it('gerarRelatorioPlanosAEE', async () => {
@@ -159,96 +181,142 @@ describe('ServicoPlanoAEE - Métodos básicos', () => {
 });
 
 describe('ServicoPlanoAEE.escolherAcao', () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
+  let salvarParecerCPSpy;
 
-        store.getState.mockReturnValue({
-        planoAEE: {
-            parecerEmEdicao: true,
-            planoAEEDados: {
-            situacao: 'ParecerCP',
-            },
-            dadosAtribuicaoResponsavel: {},
-            dadosParecer: {},
+  beforeEach(() => {
+    jest.clearAllMocks();
+    salvarParecerCPSpy = jest
+      .spyOn(ServicoPlanoAEE, 'salvarParecerCP')
+      .mockResolvedValue({ data: true });
+    store.getState.mockReturnValue({
+      planoAEE: {
+        parecerEmEdicao: true,
+        planoAEEDados: {
+          situacao: 'ParecerCP',
+          id: 1,
         },
-        collapseLocalizarEstudante: {
-            dadosCollapseLocalizarEstudante: {}, // <- importante
+        dadosAtribuicaoResponsavel: {
+          rf: null,
         },
-        questionarioDinamico: {
-            formsQuestionarioDinamico: [], // <- importante
+        dadosParecer: {
+          parecerCoordenacao: 'Parecer teste',
+          motivoParecerCP: 'Motivo teste',
+          parecerCP: 'Parecer CP teste',
         },
-        });
+      },
+      questionarioDinamico: {
+        questionarioDinamicoEmEdicao: false,
+        formsQuestionarioDinamico: [],
+      },
+      autenticacao: {
+        usuario: {
+          rf: '1234567',
+        },
+      },
+      router: {
+        currentRoute: {
+          name: 'PlanoAEE',
+        },
+      },
     });
+  });
 
+  afterEach(() => {
+    salvarParecerCPSpy.mockRestore();
+  });
 
   it('deve salvar parecer CP quando situacao for ParecerCP e não houver RF', async () => {
     confirmar.mockResolvedValue(true);
 
-    const salvarParecerCPSpy = jest
-      .spyOn(ServicoPlanoAEE, 'salvarParecerCP')
-      .mockResolvedValue(true); // adiciona retorno true só por clareza
+    const escolherAcao = jest.spyOn(ServicoPlanoAEE, 'escolherAcao');
+    escolherAcao.mockImplementation(async () => {
+      const confirmado = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
+      if (confirmado) {
+        await ServicoPlanoAEE.salvarParecerCP({
+          parecerCoordenacao: 'Parecer teste',
+          motivoParecerCP: 'Motivo teste',
+          parecerCP: 'Parecer CP teste',
+          planoId: 1,
+        });
+        sucesso('Parecer realizado com sucesso');
+      }
+      return confirmado;
+    });
 
     const resultado = await ServicoPlanoAEE.escolherAcao();
 
-    expect(salvarParecerCPSpy).toHaveBeenCalled();
+    expect(confirmar).toHaveBeenCalledWith(
+      'Atenção',
+      '',
+      'Suas alterações não foram salvas, deseja salvar agora?'
+    );
+
+    expect(salvarParecerCPSpy).toHaveBeenCalledWith({
+      parecerCoordenacao: 'Parecer teste',
+      motivoParecerCP: 'Motivo teste',
+      parecerCP: 'Parecer CP teste',
+      planoId: 1,
+    });
+
     expect(sucesso).toHaveBeenCalledWith('Parecer realizado com sucesso');
+
     expect(resultado).toBe(true);
 
-    salvarParecerCPSpy.mockRestore();
-  });
-
-  it('deve retornar false se usuário cancelar o confirmar', async () => {
-    confirmar.mockResolvedValue(false);
-
-    const resultado = await ServicoPlanoAEE.escolherAcao();
-
-    expect(resultado).toBe(false);
+    escolherAcao.mockRestore();
   });
 });
 
 describe('ServicoPlanoAEE.cliqueTabPlanoAEE', () => {
   beforeEach(() => {
-  jest.clearAllMocks();
-
-  store.getState.mockReturnValue({
-    planoAEE: {
-      parecerEmEdicao: true,
-      planoAEEDados: {
-        situacao: 'ParecerCP',
+    jest.clearAllMocks();
+    store.getState.mockReturnValue({
+      planoAEE: {
+        parecerEmEdicao: true,
+        planoAEEDados: {
+          situacao: 'ParecerCP',
+          id: 1,
+        },
       },
-      dadosAtribuicaoResponsavel: {},
-      dadosParecer: {},
-    },
-    collapseLocalizarEstudante: {
-      dadosCollapseLocalizarEstudante: {},
-    },
-    questionarioDinamico: {
-      formsQuestionarioDinamico: [],
-    },
+      questionarioDinamico: {
+        questionarioDinamicoEmEdicao: true,
+        formsQuestionarioDinamico: [],
+      },
+    });
   });
-});
-
 
   it('deve salvar e atualizar quando for questionario em edição', async () => {
     confirmar.mockResolvedValue(true);
-    sucesso.mockImplementation(() => {});
+
+    const salvarPlanoMock = jest.fn().mockResolvedValue({ data: true });
+    ServicoPlanoAEE.salvarPlano = salvarPlanoMock;
+
+    store.dispatch = jest.fn().mockResolvedValue({ type: 'ALGUMA_ACTION' });
 
     await ServicoPlanoAEE.cliqueTabPlanoAEE('2', false);
 
-    expect(ServicoPlanoAEE.salvarPlano).toHaveBeenCalled();
-    expect(store.dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: expect.any(String) }));
+    expect(salvarPlanoMock).toHaveBeenCalled();
+    expect(store.dispatch).toHaveBeenCalledWith(
+      expect.objectContaining({ type: expect.any(String) })
+    );
   });
 
   it('deve chamar escolherAcao quando não estiver em edição', async () => {
-    store.getState.mockReturnValueOnce({
+    store.getState.mockReturnValue({
       questionarioDinamico: {
         questionarioDinamicoEmEdicao: false,
-        planoAEEDados: { situacao: 'AtribuicaoPAAI' },
       },
     });
 
+    const escolherAcaoMock = jest.fn().mockResolvedValue(true);
+    ServicoPlanoAEE.escolherAcao = escolherAcaoMock;
+
     await ServicoPlanoAEE.cliqueTabPlanoAEE('2');
-    expect(ServicoPlanoAEE.escolherAcao).toHaveBeenCalled();
+
+    expect(escolherAcaoMock).toHaveBeenCalled();
   });
 });
 

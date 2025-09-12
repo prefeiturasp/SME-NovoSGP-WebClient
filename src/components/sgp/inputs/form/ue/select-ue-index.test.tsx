@@ -61,16 +61,12 @@ const formState = {
   consideraHistorico: false,
 };
 jest.mock('antd/es/form/Form', () => ({
-  useWatch: jest.fn((field: string) => formState[field]),
+  useWatch: (field: string) => formState[field],
 }));
 
 describe('SelectUE', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Se quiser alterar algum valor para um teste específico, faça:
-    // formState.anoLetivo = 2024;
-    // formState.dre = { value: 123 };
-    // formState.consideraHistorico = false;
   });
 
   it('renderiza Loader, Form.Item e Select', async () => {
