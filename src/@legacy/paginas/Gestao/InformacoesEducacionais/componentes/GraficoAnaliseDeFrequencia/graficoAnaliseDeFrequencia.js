@@ -5,6 +5,7 @@ import { Loader } from '~/componentes';
 import { erros } from '~/servicos';
 import ServicoFrequencia from '~/servicos/InformacoesEducacionais/ServicoFrequencia';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import './graficoAnaliseDeFrequencia.css';
 
 const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
   const [dados, setDados] = useState({});
@@ -26,15 +27,23 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
       if (resposta.status === 200 && resposta.data) {
         const dadosApi = resposta.data;
         setDados({
-          escolasEmSituacaoCritica: { dados: dadosApi.escolasEmSituacaoCritica || [], cor: '#ffebee' },
-          escolasEmAtencao: { dados: dadosApi.escolasEmAtencao || [], cor: '#fff8e1' },
-          escolasRanqueadas: { dados: dadosApi.escolasRanqueadas || [], cor: '#e8f5e8' }
+          escolasEmSituacaoCritica: {
+            dados: dadosApi.escolasEmSituacaoCritica || [],
+            cor: '#ffebee',
+          },
+          escolasEmAtencao: {
+            dados: dadosApi.escolasEmAtencao || [],
+            cor: '#fff8e1',
+          },
+          escolasRanqueadas: {
+            dados: dadosApi.escolasRanqueadas || [],
+            cor: '#e8f5e8',
+          },
         });
-
       } else setDados({});
-    } 
-    catch (error) {
-      if (error.response?.data?.mensagens?.length > 0) erros(error.response.data.mensagens.join(', '));
+    } catch (error) {
+      if (error.response?.data?.mensagens?.length > 0)
+        erros(error.response.data.mensagens.join(', '));
       else erros('Erro ao carregar análise de frequência das escolas');
       setDados({});
     } finally {
@@ -52,13 +61,13 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
     const titulos = {
       escolasEmSituacaoCritica: 'Escolas em situação crítica',
       escolasEmAtencao: 'Escolas em atenção',
-      escolasRanqueadas: 'Melhores frequências'
+      escolasRanqueadas: 'Melhores frequências',
     };
 
     const descricoes = {
       escolasEmSituacaoCritica: ` ${grupo.dados.length} escolas com frequência abaixo de 85%`,
       escolasEmAtencao: ` ${grupo.dados.length} escolas com frequência entre 85% e 90%`,
-      escolasRanqueadas: ` ${grupo.dados.length} escolas com frequência acima de 94%`
+      escolasRanqueadas: ` ${grupo.dados.length} escolas com frequência acima de 90%`,
     };
 
     const maxAlturaDezLinhas = 240;
@@ -72,7 +81,7 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
             borderRadius: '8px',
             border: '1px solid #e0e0e0',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
           }}
         >
           <h5 className="mb-2" style={{ fontWeight: 'bold', color: '#333' }}>
@@ -81,15 +90,21 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
           <p className="mb-3 text-muted" style={{ fontSize: '0.9em' }}>
             {descricoes[chave]}
           </p>
-          <div style={{
-            overflowY: grupo.dados.length > 10 ? 'auto' : 'visible',
-            maxHeight: grupo.dados.length > 10 ? maxAlturaDezLinhas : 'none',
-            paddingRight: grupo.dados.length > 10 ? '4px' : 0
-          }}>
+          <div
+            className="scroll-clean"
+            style={{
+              overflowY: grupo.dados.length > 10 ? 'auto' : 'visible',
+              maxHeight: grupo.dados.length > 10 ? maxAlturaDezLinhas : 'none',
+              paddingRight: grupo.dados.length > 10 ? '4px' : 0,
+            }}
+          >
             {grupo.dados.map((escola, index) => (
               <div key={index} className="mb-2" style={{ lineHeight: '1.2em' }}>
                 <span style={{ color: '#555', fontSize: '0.85em' }}>
-                  <strong>{index + 1}.</strong> {escola.ue} <strong>({escola.percentualFrequencia}%)</strong>
+                  {escola.ue}
+                  {dreId === OPCAO_TODOS && escola.dre && ` (${escola.dre})`}
+                  {' - '}
+                  {escola.percentualFrequencia?.toString()?.replace('.', ',')}%
                 </span>
               </div>
             ))}
@@ -99,11 +114,14 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
     );
   };
 
-
   if (carregando) {
     return (
       <div className="mt-4">
-        <Loader loading className="text-center" tip="Carregando análise de frequência..." />
+        <Loader
+          loading
+          className="text-center"
+          tip="Carregando análise de frequência..."
+        />
       </div>
     );
   }
@@ -118,17 +136,27 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
         <h5 style={{ fontWeight: 'bold', color: '#333', marginTop: '32px' }}>
           Análise de frequência
         </h5>
-        <p className="text-muted" style={{ fontSize: '14px', marginTop: '32px', marginBottom: '32px', color: '#42474a' }}>
+        <p
+          className="text-muted"
+          style={{
+            fontSize: '14px',
+            marginTop: '32px',
+            marginBottom: '32px',
+            color: '#42474a',
+          }}
+        >
           Análise dos níveis de frequência das UEs em 2025.
         </p>
       </div>
 
       <Row gutter={[16, 16]}>
-        {renderizarGrupoEscolas('escolasEmSituacaoCritica', dados.escolasEmSituacaoCritica)}
+        {renderizarGrupoEscolas(
+          'escolasEmSituacaoCritica',
+          dados.escolasEmSituacaoCritica
+        )}
         {renderizarGrupoEscolas('escolasEmAtencao', dados.escolasEmAtencao)}
         {renderizarGrupoEscolas('escolasRanqueadas', dados.escolasRanqueadas)}
       </Row>
-
     </div>
   );
 };
