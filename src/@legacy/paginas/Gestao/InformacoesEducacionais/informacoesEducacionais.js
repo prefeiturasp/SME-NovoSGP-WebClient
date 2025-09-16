@@ -13,6 +13,7 @@ import GraficoAnaliseDeAlfabetizacao from './componentes/GraficoAnaliseDeAlfabet
 import GraficoIdep from './componentes/GraficoIdep/graficoIdep';
 import VisaoGeral from './componentes/VisaoGeral';
 import styled from 'styled-components';
+import GraficoFluenciaLeitora from './componentes/GraficoFluenciaLeitora/graficoFluenciaLeitora';
 
 const CardEstilizado = styled(Card)`
   margin-top: 16px;
@@ -144,6 +145,12 @@ const InformacoesEducacionais = () => {
               <TabelaIndicadoresNivelCriticoAlfabetizacao
                 codigoDre={dreCodigo}
               />
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <GraficoFluenciaLeitora dreId={dreCodigo} />
             </Col>
           </Row>
         </div>
