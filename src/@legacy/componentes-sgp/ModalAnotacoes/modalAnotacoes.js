@@ -386,15 +386,15 @@ const ModalAnotacoesFrequencia = props => {
                 <></>
               )}
               <div className="col-md-12 mt-2">
-                {valoresIniciais.anotacao && (
-                  <EditorAnotacao>
+                <EditorAnotacao>
+                  {valoresIniciais?.motivoAusenciaId && (
                     <JoditEditor
                       label="Anotação"
                       form={form}
                       value={valoresIniciais?.anotacao}
                       name="anotacao"
                       onChange={v => {
-                        if (valoresIniciais.anotacao !== v) {
+                        if (valoresIniciais?.anotacao !== v) {
                           onChangeCampos();
                         }
                       }}
@@ -406,8 +406,8 @@ const ModalAnotacoesFrequencia = props => {
                         )
                       }
                     />
-                  </EditorAnotacao>
-                )}
+                  )}
+                </EditorAnotacao>
               </div>
               <div className="row">
                 <div
