@@ -386,26 +386,28 @@ const ModalAnotacoesFrequencia = props => {
                 <></>
               )}
               <div className="col-md-12 mt-2">
-                <EditorAnotacao>
-                  <JoditEditor
-                    label="Anotação"
-                    form={form}
-                    value={valoresIniciais?.anotacao}
-                    name="anotacao"
-                    onChange={v => {
-                      if (valoresIniciais.anotacao !== v) {
-                        onChangeCampos();
+                {valoresIniciais.anotacao && (
+                  <EditorAnotacao>
+                    <JoditEditor
+                      label="Anotação"
+                      form={form}
+                      value={valoresIniciais?.anotacao}
+                      name="anotacao"
+                      onChange={v => {
+                        if (valoresIniciais.anotacao !== v) {
+                          onChangeCampos();
+                        }
+                      }}
+                      desabilitar={desabilitarCampos}
+                      labelRequired={
+                        !form?.values?.motivoAusenciaId ||
+                        !!(
+                          form?.values?.anotacao && form?.values?.motivoAusenciaId
+                        )
                       }
-                    }}
-                    desabilitar={desabilitarCampos}
-                    labelRequired={
-                      !form?.values?.motivoAusenciaId ||
-                      !!(
-                        form?.values?.anotacao && form?.values?.motivoAusenciaId
-                      )
-                    }
-                  />
-                </EditorAnotacao>
+                    />
+                  </EditorAnotacao>
+                )}
               </div>
               <div className="row">
                 <div
@@ -413,8 +415,8 @@ const ModalAnotacoesFrequencia = props => {
                   style={{ marginTop: '-15px' }}
                 >
                   {valoresIniciais &&
-                  valoresIniciais.auditoria &&
-                  valoresIniciais.auditoria.criadoPor ? (
+                    valoresIniciais.auditoria &&
+                    valoresIniciais.auditoria.criadoPor ? (
                     <Auditoria
                       criadoPor={valoresIniciais.auditoria.criadoPor}
                       criadoEm={valoresIniciais.auditoria.criadoEm}
@@ -498,10 +500,10 @@ ModalAnotacoesFrequencia.defaultProps = {
   componenteCurricularId: '',
   desabilitarCampos: false,
   exibirModal: false,
-  setExibirModal: () => {},
+  setExibirModal: () => { },
   dadosModal: [],
-  setDadosModal: () => {},
-  fechouModal: () => {},
+  setDadosModal: () => { },
+  fechouModal: () => { },
   listaPadraoMotivoAusencia: [],
 };
 
