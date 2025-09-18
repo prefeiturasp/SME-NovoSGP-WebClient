@@ -32,6 +32,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
     { id: 'IDEP', nome: 'Índice de Desenvolvimento da Educação Paulistana [IDEP]' },
     { id: 'IDEB', nome: 'Índice de Desenvolvimento da Educação Básica [IDEB]' },
     { id: 'FLUENCIA', nome: 'Fluência Leitora' },
+    { id: 'TAXA_ALFABETIZACAO', nome: 'Taxa de alfabetização' },
   ];
 
   const listaPeriodos = [
@@ -102,6 +103,8 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         url = 'v1/importar-arquivo/fluencia-leitora';
         const nomePeriodo = periodo === 'ENTRADA' ? 'avaliacao de entrada' : 'avaliacao de saida';
         fmData.append('periodo', nomePeriodo);
+      } else if (valor === 'TAXA_ALFABETIZACAO') {
+        url = 'v1/importar-arquivo/taxa-alfabetizacao';
       } else {
         alert('Seleção inválida.');
         return;
