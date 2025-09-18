@@ -131,7 +131,7 @@ export const RelatorioNAAPABuscaAtiva: React.FC = () => {
               </Col>
 
               <Col xs={24} md={10}>
-                <SelectUE formItemProps={{ rules: [{ required: true }] }} mostrarOpcaoTodas />
+                <SelectUE formItemProps={{ rules: [{ required: true }] }} />
               </Col>
             </Row>
 
