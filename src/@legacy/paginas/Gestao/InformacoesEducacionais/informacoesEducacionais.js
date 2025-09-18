@@ -49,8 +49,9 @@ const InformacoesEducacionais = () => {
   };
 
   const obterAnoLetivoSelecionado = valor => {
-    if (valor !== anoLetivo) {
-      setAnoLetivo(valor);
+    const normalizado = valor ? String(valor) : null;
+    if (normalizado !== anoLetivo) {
+      setAnoLetivo(normalizado);
     }
   };
 
@@ -76,7 +77,8 @@ const InformacoesEducacionais = () => {
               <InformacoesEducacionaisFiltros
                 obterDreSelecionado={obterDreSelecionada}
                 obterUeSelecionada={obterUeSelecionada}
-                obterAnoLetivoSelecionado={obterAnoLetivoSelecionado}
+                setAnoLetivo={setAnoLetivo}
+                anoLetivo={anoLetivo}
               />
             </Col>
           </Row>
@@ -109,7 +111,11 @@ const InformacoesEducacionais = () => {
 
           <Row gutter={[32, 32]}>
             <Col span={24}>
-              <GraficoIdep anoLetivo={anoLetivo} dreId={dreCodigo} />
+              <GraficoIdep
+                key={`idep-${String(anoLetivo)}-${String(dreCodigo)}`}
+                anoLetivo={anoLetivo}
+                dreId={dreCodigo}
+              />
             </Col>
           </Row>
 
@@ -142,6 +148,7 @@ const InformacoesEducacionais = () => {
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <TabelaIndicadoresNivelCriticoAlfabetizacao
+                key={dreCodigo}
                 codigoDre={dreCodigo}
               />
             </Col>
