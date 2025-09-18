@@ -47,6 +47,7 @@ const VisaoGeral = ({ anoLetivo, dreCodigo }) => {
   }, [carregarDados]);
 
   const dadosFormatados = useMemo(() => {
+
     const dadosIdep =
       dadosCompletos
         .find(item => item.indicador === 'IDEP')

@@ -40,6 +40,7 @@ const InformacoesEducacionaisFiltros = ({
   const [carregandoSemestres, setCarregandoSemestres] = useState(false);
   const [listaAnos, setListaAnos] = useState([]);
 
+
   useEffect(() => {
     const anoAtual = new Date().getFullYear();
     const anos = [];

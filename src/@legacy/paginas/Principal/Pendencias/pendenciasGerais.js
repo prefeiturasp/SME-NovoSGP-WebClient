@@ -1,4 +1,5 @@
 import { Tooltip } from 'antd';
+import { WarningFilled } from '@ant-design/icons';
 import React, { useCallback, useEffect, useState } from 'react';
 import shortid from 'shortid';
 import { CampoTexto, Loader, Base } from '~/componentes';
@@ -15,6 +16,7 @@ import {
   SGP_SELECT_NOME_TIPO_PENDENCIA,
 } from '~/constantes/ids/select';
 import { Container, TextoTitulo } from './pendenciasGerais.css';
+import styles from './pendenciasGerais.module.css';
 
 const PendenciasGerais = () => {
   const [carregando, setCarregando] = useState(false);
@@ -176,6 +178,16 @@ const PendenciasGerais = () => {
           </TextoTitulo>
         ) : (
           ''
+        )}
+        {item.mensagemTooltip && (
+          <Tooltip placement="topLeft" title={item.mensagemTooltip}>
+            <WarningFilled
+              className={`${styles.warningFilled} ml-4`}
+              style={{
+                color: Base.VermelhoAlerta,
+              }}
+            />
+          </Tooltip>
         )}
       </Container>
     );

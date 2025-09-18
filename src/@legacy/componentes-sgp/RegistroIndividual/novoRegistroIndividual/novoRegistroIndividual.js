@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import shortid from 'shortid';
-import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
