@@ -14,9 +14,10 @@ const InformacoesEducacionaisFiltros = ({
   obterDreSelecionado,
   obterUeSelecionado,
   obterAnoLetivoSelecionado,
+  setAnoLetivo,
+  anoLetivo,
 }) => {
   const usuario = useSelector(store => store.usuario);
-  const [anoLetivo, setAnoLetivo] = useState(null);
   const anoMinimo = 2019;
   const [dre, setDre] = useState(null);
   const [ue, setUe] = useState(null);
@@ -37,6 +38,20 @@ const InformacoesEducacionaisFiltros = ({
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [carregandoModalidades, setCarregandoModalidades] = useState(false);
   const [carregandoSemestres, setCarregandoSemestres] = useState(false);
+  const [listaAnos, setListaAnos] = useState([]);
+
+
+  useEffect(() => {
+    const anoAtual = new Date().getFullYear();
+    const anos = [];
+    let id = 1;
+
+    for (let a = anoAtual; a >= 2019 && anos.length < 10; a--) {
+      anos.push({ id: id++, nome: String(a) });
+    }
+
+    setListaAnos(anos);
+  }, []);
 
   const obterAnosLetivos = useCallback(async () => {
     setCarregandoAnosLetivos(true);
@@ -54,7 +69,6 @@ const InformacoesEducacionaisFiltros = ({
     const valorAtual = temAnoAtualNaLista ? anoAtual : anosLetivos[0].valor;
 
     setAnoLetivo(valorAtual);
-    setListaAnosLetivo(anosLetivos);
     setCarregandoAnosLetivos(false);
 
     if (obterAnoLetivoSelecionado) obterAnoLetivoSelecionado(valorAtual);
@@ -251,14 +265,17 @@ const InformacoesEducacionaisFiltros = ({
         <Col xs={24} sm={24} md={8}>
           <Loader loading={carregandoAnosLetivos}>
             <SelectComponent
+              id="ano"
               label="Ano letivo"
-              lista={listaAnosLetivo}
-              valueOption="valor"
-              valueText="desc"
-              onChange={onChangeAnoLetivo}
               valueSelect={anoLetivo}
               placeholder="Selecione o ano"
               allowClear={false}
+              lista={listaAnos}
+              valueOption="nome"
+              valueText="nome"
+              onChange={e => {
+                setAnoLetivo(e);
+              }}
             />
           </Loader>
         </Col>

@@ -49,8 +49,9 @@ const InformacoesEducacionais = () => {
   };
 
   const obterAnoLetivoSelecionado = valor => {
-    if (valor !== anoLetivo) {
-      setAnoLetivo(valor);
+    const normalizado = valor ? String(valor) : null;
+    if (normalizado !== anoLetivo) {
+      setAnoLetivo(normalizado);
     }
   };
 
@@ -76,7 +77,44 @@ const InformacoesEducacionais = () => {
               <InformacoesEducacionaisFiltros
                 obterDreSelecionado={obterDreSelecionada}
                 obterUeSelecionada={obterUeSelecionada}
-                obterAnoLetivoSelecionado={obterAnoLetivoSelecionado}
+                setAnoLetivo={setAnoLetivo}
+                anoLetivo={anoLetivo}
+              />
+            </Col>
+          </Row>
+        </div>
+      </CardEstilizado>
+      <CardEstilizado>
+        <div className="col-md-12">
+          {exibirVisaoGeral ? (
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <VisaoGeral anoLetivo={anoLetivo} dreCodigo={dreCodigo} />
+              </Col>
+            </Row>
+          ) : (
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <p>Selecione um ano letivo para visualizar os dados.</p>
+              </Col>
+            </Row>
+          )}
+        </div>
+      </CardEstilizado>
+      <CardEstilizado>
+        <div className="col-md-12">
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <TituloCard>Análise detalhada</TituloCard>
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <GraficoIdep
+                key={`idep-${String(anoLetivo)}-${String(dreCodigo)}`}
+                anoLetivo={anoLetivo}
+                dreId={dreCodigo}
               />
             </Col>
           </Row>
@@ -143,6 +181,7 @@ const InformacoesEducacionais = () => {
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <TabelaIndicadoresNivelCriticoAlfabetizacao
+                key={dreCodigo}
                 codigoDre={dreCodigo}
               />
             </Col>
