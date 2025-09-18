@@ -20,10 +20,10 @@ const Descricao = styled.p`
   margin-bottom: 24px;
 `;
 
-
 const VisaoGeral = ({ anoLetivo, dreCodigo }) => {
   const [dadosCompletos, setDadosCompletos] = useState([]);
   const [loading, setLoading] = useState(false);
+  const ordem = ['Anos iniciais', 'Anos finais'];
 
   const carregarDados = useCallback(async () => {
     if (anoLetivo && dreCodigo) {
@@ -47,19 +47,22 @@ const VisaoGeral = ({ anoLetivo, dreCodigo }) => {
   }, [carregarDados]);
 
   const dadosFormatados = useMemo(() => {
-    const dadosIdep = dadosCompletos
-      .find(item => item.indicador === 'IDEP')
-      ?.series.map(serie => ({
-        valor: serie.valor,
-        label: serie.serie,
-      })) || [];
+    const dadosIdep =
+      dadosCompletos
+        .find(item => item.indicador === 'IDEP')
+        ?.series.map(serie => ({
+          valor: serie.valor,
+          label: serie.serie,
+        }))
+        .sort((a, b) => ordem.indexOf(a.label) - ordem.indexOf(b.label)) || [];
 
-    const dadosFrequencia = dadosCompletos
-      .find(item => item.indicador === 'Frequência global')
-      ?.series.map(serie => ({
-        valor: `${serie.valor}%`,
-        label: serie.serie || '',
-      })) || [];
+    const dadosFrequencia =
+      dadosCompletos
+        .find(item => item.indicador === 'Frequência global')
+        ?.series.map(serie => ({
+          valor: `${serie.valor}%`,
+          label: serie.serie || '',
+        })) || [];
 
     return { dadosIdep, dadosFrequencia };
   }, [dadosCompletos]);
@@ -73,19 +76,22 @@ const VisaoGeral = ({ anoLetivo, dreCodigo }) => {
       </Descricao>
       <div style={{ marginBottom: '16px' }}>
         <Row gutter={[24, 24]}>
-            <Col xs={24} md={12}>
-            <IndicadorIdep dados={dadosFormatados.dadosIdep} loading={loading} />
-            </Col>
+          <Col xs={24} md={12}>
+            <IndicadorIdep
+              dados={dadosFormatados.dadosIdep}
+              loading={loading}
+            />
+          </Col>
         </Row>
       </div>
       <div style={{ marginBottom: '16px' }}>
         <Row gutter={[24, 24]}>
-            <Col xs={24} md={12}>
+          <Col xs={24} md={12}>
             <IndicadorFrequenciaGlobal
-                dados={dadosFormatados.dadosFrequencia}
-                loading={loading}
+              dados={dadosFormatados.dadosFrequencia}
+              loading={loading}
             />
-            </Col>
+          </Col>
         </Row>
       </div>
     </div>

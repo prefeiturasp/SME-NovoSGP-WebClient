@@ -49,8 +49,9 @@ const InformacoesEducacionais = () => {
   };
 
   const obterAnoLetivoSelecionado = valor => {
-    if (valor !== anoLetivo) {
-      setAnoLetivo(valor);
+    const normalizado = valor ? String(valor) : null;
+    if (normalizado !== anoLetivo) {
+      setAnoLetivo(normalizado);
     }
   };
 
@@ -76,7 +77,8 @@ const InformacoesEducacionais = () => {
               <InformacoesEducacionaisFiltros
                 obterDreSelecionado={obterDreSelecionada}
                 obterUeSelecionada={obterUeSelecionada}
-                obterAnoLetivoSelecionado={obterAnoLetivoSelecionado}
+                setAnoLetivo={setAnoLetivo}
+                anoLetivo={anoLetivo}
               />
             </Col>
           </Row>
@@ -84,12 +86,12 @@ const InformacoesEducacionais = () => {
       </CardEstilizado>
       <CardEstilizado>
         <div className="col-md-12">
-          {exibirVisaoGeral ? (            
-              <Row gutter={[32, 32]}>
-                <Col span={24}>
-                  <VisaoGeral anoLetivo={anoLetivo} dreCodigo={dreCodigo} />
-                </Col>
-              </Row>            
+          {exibirVisaoGeral ? (
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <VisaoGeral anoLetivo={anoLetivo} dreCodigo={dreCodigo} />
+              </Col>
+            </Row>
           ) : (
             <Row gutter={[32, 32]}>
               <Col span={24}>
@@ -101,7 +103,6 @@ const InformacoesEducacionais = () => {
       </CardEstilizado>
       <CardEstilizado>
         <div className="col-md-12">
-
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <TituloCard>Análise detalhada</TituloCard>
@@ -110,10 +111,14 @@ const InformacoesEducacionais = () => {
 
           <Row gutter={[32, 32]}>
             <Col span={24}>
-              <GraficoIdep anoLetivo={anoLetivo} dreId={dreCodigo} />
+              <GraficoIdep
+                key={`idep-${String(anoLetivo)}-${String(dreCodigo)}`}
+                anoLetivo={anoLetivo}
+                dreId={dreCodigo}
+              />
             </Col>
           </Row>
-          
+
           <Row gutter={[32, 32]}>
             <Col span={24}>
               {exibirGrafico ? (
@@ -143,6 +148,7 @@ const InformacoesEducacionais = () => {
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <TabelaIndicadoresNivelCriticoAlfabetizacao
+                key={dreCodigo}
                 codigoDre={dreCodigo}
               />
             </Col>

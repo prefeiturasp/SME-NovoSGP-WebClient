@@ -63,7 +63,7 @@ const GraficoIdep = ({ anoLetivo, dreId }) => {
     } finally {
       setLoading(false);
     }
-  }, [dreId, periodicidade]);
+  }, [anoLetivo, dreId, periodicidade]);
 
   const handleSelectChange = valor => {
     if (valor == null) {
@@ -81,7 +81,7 @@ const GraficoIdep = ({ anoLetivo, dreId }) => {
 
   useEffect(() => {
     buscarDados();
-  }, [dreId, periodicidade, buscarDados]);
+  }, [anoLetivo, dreId, periodicidade, buscarDados]);
 
   const config = {
     data: dados,
