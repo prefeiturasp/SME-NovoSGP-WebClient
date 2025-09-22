@@ -100,7 +100,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
           return;
         }
         url = 'v1/importar-arquivo/fluencia-leitora';
-        const nomePeriodo = periodo === 'ENTRADA' ? 'avaliacao de entrada' : 'avaliacao de saida';
+        const nomePeriodo = periodo === 'ENTRADA' ? 1 : 2;
         fmData.append('periodo', nomePeriodo);
       } else {
         alert('Seleção inválida.');
