@@ -55,7 +55,6 @@ const RelatorioFrequencia = () => {
   const [componentesCurriculares, setComponentesCurriculares] =
     useState(undefined);
   const [condicao, setCondicao] = useState(undefined);
-  const [tipoValor, setTipoValor] = useState('Absoluto');
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [desabilitarTipoRelatorio, setDesabilitarTipoRelatorio] =
     useState(false);
@@ -80,9 +79,6 @@ const RelatorioFrequencia = () => {
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [desabilitarSemestre, setDesabilitarSemestre] = useState(false);
   const [modoEdicao, setModoEdicao] = useState(false);
-  const [dicaDePreenchimentoValor, setDicaDePreenchimentoValor] = useState(
-    'Digite a quantidade de ausências'
-  );
 
   const TIPO_RELATORIO = useMemo(
     () => ({
@@ -123,11 +119,6 @@ const RelatorioFrequencia = () => {
     { valor: '2', desc: 'Maior ' },
     { valor: '3', desc: 'Menor' },
     { valor: OPCAO_TODOS_ESTUDANTES, desc: 'Todos os estudantes' },
-  ]);
-
-  const [listaCondicaoTipo] = useState([
-    { valor: 'absoluto', desc: 'Absoluto' },
-    { valor: 'percentual', desc: 'Percentual ' },
   ]);
 
   const obterAnosLetivos = useCallback(
@@ -515,8 +506,7 @@ const RelatorioFrequencia = () => {
       !componentesCurriculares ||
       !bimestres ||
       !condicao ||
-      !formato ||
-      !tipoValor;
+      !formato;
 
     if (!desabilitar && condicao !== OPCAO_TODOS_ESTUDANTES) {
       desabilitar = !valorCondicao;
@@ -567,7 +557,6 @@ const RelatorioFrequencia = () => {
 
   const onClickGerar = async () => {
     setCarregandoGeral(true);
-    const tipoQuantidadeAusencia = tipoValor === 'absoluto' ? 1 : 2;
     const turmas = turmasCodigo === OPCAO_TODOS ? [OPCAO_TODOS] : turmasCodigo;
     const params = {
       anoLetivo,
@@ -584,7 +573,6 @@ const RelatorioFrequencia = () => {
       tipoFormatoRelatorio: formato,
       turmasPrograma,
       codigosTurma: turmas,
-      tipoQuantidadeAusencia: tipoQuantidadeAusencia,
     };
     setCarregandoGeral(true);
     const retorno = await ServicoRelatorioFrequencia.gerar(params)
@@ -674,14 +662,6 @@ const RelatorioFrequencia = () => {
   const onChangeCondicao = valor => {
     setCondicao(valor);
     setModoEdicao(true);
-  };
-
-  const onChangeTipoValor = valor => {
-    setTipoValor(valor);
-    setModoEdicao(true);
-    valor === 'percentual'
-      ? setDicaDePreenchimentoValor('Digite o % de frequência global')
-      : setDicaDePreenchimentoValor('Digite a quantidade de ausências');
   };
 
   const onChangeComparacao = valor => {
@@ -1053,7 +1033,7 @@ const RelatorioFrequencia = () => {
                 </Loader>
               </Col>
 
-              <Col sm={24} md={12} xl={4}>
+              <Col sm={24} md={12} xl={8}>
                 <SelectComponent
                   lista={listaCondicao}
                   valueOption="valor"
@@ -1065,19 +1045,6 @@ const RelatorioFrequencia = () => {
                   placeholder="Selecione a condição"
                 />
               </Col>
-
-              <Col sm={24} md={12} xl={4}>
-                <SelectComponent
-                  lista={listaCondicaoTipo}
-                  valueOption="valor"
-                  valueText="desc"
-                  label="Tipo de Valor"
-                  disabled={condicao === OPCAO_TODOS_ESTUDANTES}
-                  valueSelect={tipoValor}
-                  onChange={onChangeTipoValor}
-                  placeholder="Selecione o tipo "
-                />
-              </Col>
             </Row>
 
             <Row gutter={[16, 16]}>
@@ -1086,9 +1053,9 @@ const RelatorioFrequencia = () => {
                   onChange={onChangeComparacao}
                   value={valorCondicao}
                   min={0}
-                  label="Valor"
+                  label="Quantidade de ausências"
                   className="w-100"
-                  placeholder={dicaDePreenchimentoValor}
+                  placeholder="Digite a quantidade de ausências"
                   ehDecimal={false}
                   disabled={condicao === OPCAO_TODOS_ESTUDANTES}
                 />

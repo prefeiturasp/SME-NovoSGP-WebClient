@@ -25,7 +25,6 @@ import {
   MarcadorSituacao,
   TextoEstilizado,
 } from './listaFrequencia.css';
-import { IconeDiaComPendencia } from '~/componentes-sgp/Calendario/componentes/MesCompleto/componentes/Dias/styles';
 
 const ListaoListaFrequencia = () => {
   const {
@@ -246,15 +245,6 @@ const ListaoListaFrequencia = () => {
           <div>
             <div style={{ fontSize: 16, marginRight: 3, marginLeft }}>
               {aula?.dataAula}
-              {aula?.componenteCurricularSugerido && (
-                <Tooltip
-                  title={`A frequência desta aula está sendo sugerida a partir do registro da aula de ${aula?.componenteCurricularSugerido}. Confira, faça ajustes se necessário e salve o registro para inserir a frequência da sua aula.`}
-                  placement="top"
-                  destroyTooltipOnHide
-                >
-                  <IconeDiaComPendencia className="fas fa-exclamation-triangle ml-1" />
-                </Tooltip>
-              )}
             </div>
             {ehAulaReposicao ? <ReposicaoLabel /> : <></>}
           </div>

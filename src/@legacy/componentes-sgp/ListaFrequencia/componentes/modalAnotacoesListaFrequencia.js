@@ -12,7 +12,6 @@ const ModalAnotacoesListaFrequencia = ({
   ehInfantil,
   aulaId,
   desabilitarCampos,
-  dataSelecionadaMotivosAusencias,
 }) => {
   const exibirModalAnotacaoFrequencia = useSelector(
     state => state.frequenciaPlanoAula.exibirModalAnotacaoFrequencia
@@ -38,7 +37,6 @@ const ModalAnotacoesListaFrequencia = ({
       dadosModal={dadosModalAnotacaoFrequencia}
       setDadosModal={setDadosModalAnotacaoFrequencia}
       exibirMotivosAusencia={!!componenteCurricular?.registraFrequencia}
-      dataSelecionadaMotivosAusencias={dataSelecionadaMotivosAusencias}
     />
   ) : (
     <></>
