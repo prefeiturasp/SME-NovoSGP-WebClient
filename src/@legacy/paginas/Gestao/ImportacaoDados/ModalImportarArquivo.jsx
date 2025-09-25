@@ -6,7 +6,7 @@ import { sucesso } from '~/servicos/alertas';
 import styles from './importarDados.module.css';
 import { UploadFullWidth, FullWidthButton, FullWidthButton2 } from './importarDados.styled';
 import { Typography } from 'antd';
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, CloseCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -28,9 +28,13 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
     setListaAnos(anos);
   }, []);
 
-  const listaOpcoes = [
-    { id: 'IDEP', nome: 'Índice de Desenvolvimento da Educação Paulistana [IDEP]' },
+  const listaTiposImportacao = [
     { id: 'IDEB', nome: 'Índice de Desenvolvimento da Educação Básica [IDEB]' },
+    { id: 'IDEP', nome: 'Índice de Desenvolvimento da Educação Paulistana [IDEP]' },
+    { id: 'PROFICIENCIA_IDEB', nome: 'Proficiência IDEB' },
+    { id: 'PROFICIENCIA_IDEP', nome: 'Proficiência IDEP' },
+    { id: 'BOLETIM_IDEB', nome: 'Boletim IDEB' },
+    { id: 'BOLETIM_IDEP', nome: 'Boletim IDEP' },
     { id: 'FLUENCIA', nome: 'Fluência Leitora' },
   ];
 
@@ -42,26 +46,62 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
   const [arquivoSelecionado, setarArquivoSelecionado] = useState(null);
   const [erroArquivo, setarErroArquivo] = useState(null);
 
+  const isBoletim = valor === 'BOLETIM_IDEB' || valor === 'BOLETIM_IDEP';
+
   const uploadConfig = {
-    beforeUpload: (file) => {
-      const isXlsx =
-        file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-
-      if (!isXlsx) {
-        setarErroArquivo(`Formato Inválido: Anexe um arquivo .xlsx`);
-        setarArquivoSelecionado(null);
-      } else {
+    beforeUpload: (file, fileList) => {
+      if (isBoletim) {
+        const isPdf = file.type === 'application/pdf';
+        if (!isPdf) {
+          setarErroArquivo('Formato Inválido: Anexe apenas arquivos .pdf');
+          return Upload.LIST_IGNORE;
+        }
+        if (fileList.length > 100) {
+          setarErroArquivo('Você pode selecionar no máximo 100 arquivos.');
+          return Upload.LIST_IGNORE;
+        }
         setarErroArquivo('');
-        setarArquivoSelecionado(file);
+        setarArquivoSelecionado((prev) => {
+          const files = prev ? [...prev] : [];
+          if (!files.find(f => f.name === file.name && f.lastModified === file.lastModified)) {
+            files.push(file);
+          }
+          return files.slice(0, 100);
+        });
+      } else {
+        const isXlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        if (!isXlsx) {
+          setarErroArquivo('Formato Inválido: Anexe um arquivo .xlsx');
+          setarArquivoSelecionado(null);
+        } else {
+          setarErroArquivo('');
+          setarArquivoSelecionado(file);
+        }
       }
-
       return false;
     },
-    onChange: () => {},
+    onRemove: (file) => {
+      if (isBoletim) {
+        setarArquivoSelecionado((prev) => prev ? prev.filter(f => f.uid !== file.uid) : []);
+      } else {
+        setarArquivoSelecionado(null);
+      }
+    },
+    multiple: isBoletim,
+    maxCount: isBoletim ? 100 : 1,
+    accept: isBoletim ? '.pdf' : '.xlsx',
+    showUploadList: isBoletim
+      ? {
+          showRemoveIcon: true,
+          showPreviewIcon: false,
+          showDownloadIcon: false,
+          removeIcon: undefined,
+        }
+      : false,
   };
 
   const handleSubmit = async () => {
-    if (!arquivoSelecionado) {
+    if (!arquivoSelecionado || (isBoletim && (!Array.isArray(arquivoSelecionado) || arquivoSelecionado.length === 0))) {
       alert('Selecione um arquivo antes de enviar.');
       return;
     }
@@ -81,20 +121,37 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
       alert('Ano inválido.');
       return;
     }
-    const anoNum = Number(anoSelecionado.nome);
+    const anoNum = String(anoSelecionado.nome);
 
     try {
       const fmData = new FormData();
-      fmData.append('arquivo', arquivoSelecionado);
-      fmData.append('FileName', arquivoSelecionado.name);
-      fmData.append('anoLetivo', anoNum);
-
       let url = '';
-      if (valor === 'IDEP') {
-        url = 'v1/importar-arquivo/idep';
-      } else if (valor === 'IDEB') {
-        url = 'v1/importar-arquivo/ideb';
-      } else if (valor === 'FLUENCIA') {
+      let config = {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      };
+
+      if (isBoletim) {
+        arquivoSelecionado.forEach((file) => {
+          fmData.append('boletins', file);
+        });
+        fmData.append('FileName', arquivoSelecionado[0].name);
+      } else {
+        fmData.append('arquivo', arquivoSelecionado);
+        fmData.append('FileName', arquivoSelecionado.name);
+        
+        
+      }
+
+      const urlMap = {
+        'IDEP': 'v1/importar-arquivo/idep',
+        'IDEB': 'v1/importar-arquivo/ideb',
+        'BOLETIM_IDEB': 'v1/importar-arquivo/boletim-ideb',
+        'BOLETIM_IDEP': 'v1/importar-arquivo/boletim-idep',
+        'PROFICIENCIA_IDEP': 'v1/importar-arquivo/proficiencia-idep',
+        'PROFICIENCIA_IDEB': 'v1/importar-arquivo/proficiencia-ideb',
+      };
+
+      if (valor === 'FLUENCIA') {
         if (!periodo || !['ENTRADA', 'SAIDA'].includes(periodo)) {
           alert('Selecione um período válido (entrada ou saída).');
           return;
@@ -102,14 +159,17 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         url = 'v1/importar-arquivo/fluencia-leitora';
         const nomePeriodo = periodo === 'ENTRADA' ? 1 : 2;
         fmData.append('periodo', nomePeriodo);
+      } else if (urlMap[valor]) {
+        url = urlMap[valor];
+        if (isBoletim) {
+          url += `?ano=${encodeURIComponent(anoNum)}`;
+        }
       } else {
         alert('Seleção inválida.');
         return;
       }
 
-      const resposta = await api.post(url, fmData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const resposta = await api.post(url, fmData, config);
 
       setarModal(false);
       resetarLista((prev) => prev + 1);
@@ -131,7 +191,12 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
                 label={'Conferir registros'}
                 color={Colors.Roxo}
                 onClick={() => {
-                  abrirDrawer({ id: resposta.data.id, nomeArquivo: arquivoSelecionado.name });
+                  abrirDrawer({
+                    id: resposta.data.id,
+                    nomeArquivo: isBoletim
+                      ? arquivoSelecionado.map(f => f.name).join(', ')
+                      : arquivoSelecionado.name
+                  });
                   Modal.destroyAll();
                 }}
               />
@@ -190,7 +255,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         className={styles.select}
         id="tipo"
         label="Selecione um item"
-        lista={listaOpcoes}
+        lista={listaTiposImportacao}
         valueOption="id"
         valueText="nome"
         onChange={(e) => {
@@ -240,30 +305,103 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
 
       {valor && ano && (
         <div className={styles.uploadWrapper}>
-          <UploadFullWidth {...uploadConfig} maxCount={1} accept=".xlsx" showUploadList={false}>
-            <Label text="Selecione um arquivo (.xlsx)" />
-            <Row gutter={[4, 4]} style={{ width: '100%' }}>
-              <Col span={16}>
-                <FullWidthButton2
-                  block
-                  label={
-                    arquivoSelecionado ? `${arquivoSelecionado.name}` : 'Nenhum arquivo selecionado'
-                  }
-                  color={Colors.CinzaBotao}
-                  border
-                />
-              </Col>
-              <Col span={8}>
-                <FullWidthButton
-                  label={'Escolher Arquivo'}
-                  icon="upload"
-                  color={Colors.Roxo}
-                  border
-                />
-              </Col>
-            </Row>
-          </UploadFullWidth>
-
+          {isBoletim ? (
+            <UploadFullWidth
+              {...uploadConfig}
+              multiple
+              fileList={
+                arquivoSelecionado
+                  ? arquivoSelecionado.map((file, idx) => {
+                      return {
+                        ...file,
+                        uid: file.uid || `${file.name || 'arquivo'}-${file.lastModified || idx}`,
+                        name: file.name || (file.originFileObj && file.originFileObj.name) || `Arquivo ${idx + 1}`,
+                        status: 'done',
+                      };
+                    })
+                  : []
+              }
+              onRemove={(file) => {
+                setarArquivoSelecionado((prev) =>
+                  prev ? prev.filter(f =>
+                    (f.uid || `${f.name}-${f.lastModified}`) !== file.uid
+                  ) : []
+                );
+              }}
+              itemRender={(originNode, file) => (
+                <div
+                  className={styles.selectedFileItem}
+                  style={{ display: isBoletim ? 'none' : 'flex' }}
+                >
+                  <span className={styles.selectedFileName}>{file.name || 'Arquivo sem nome'}</span>
+                </div>
+              )}
+            >
+              <Label text="Selecione até 100 arquivos (.pdf)" />
+              {arquivoSelecionado && Array.isArray(arquivoSelecionado) && arquivoSelecionado.length > 0 && (
+                <div className={styles.selectedFilesList}>
+                  {arquivoSelecionado.map((file, idx) => (
+                    <div
+                      className={`${styles.selectedFileItem} ${styles.selectedFileItemHover}`}
+                      key={file.uid || `${file.name}-${file.lastModified || idx}`}
+                      style={{ display: 'flex' }}
+                    >
+                      <span className={styles.selectedFileName}>{file.name || `Arquivo ${idx + 1}`}</span>
+                      <DeleteOutlined
+                        className={styles.selectedFileRemoveIcon}
+                        title="Remover arquivo"
+                        onMouseDown={e => e.preventDefault()}
+                        onClick={e => {
+                          e.stopPropagation();
+                          setarArquivoSelecionado(prev =>
+                            prev ? prev.filter(f =>
+                              (f.uid || `${f.name}-${f.lastModified}`) !== (file.uid || `${file.name}-${file.lastModified}`)
+                            ) : []
+                          );
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+              <Row gutter={[4, 4]} style={{ width: '100%' }}>
+                <Col span={24}>
+                  <FullWidthButton
+                    label="Escolher Arquivos"
+                    icon="upload"
+                    color={Colors.Roxo}
+                    border
+                  />
+                </Col>
+              </Row>
+            </UploadFullWidth>
+          ) : (
+            <UploadFullWidth {...uploadConfig} multiple={false}>
+              <Label text="Selecione um arquivo (.xlsx)" />
+              <Row gutter={[4, 4]} style={{ width: '100%' }}>
+                <Col span={16}>
+                  <FullWidthButton2
+                    block
+                    label={
+                      arquivoSelecionado
+                        ? arquivoSelecionado.name
+                        : 'Nenhum arquivo selecionado'
+                    }
+                    color={Colors.CinzaBotao}
+                    border
+                  />
+                </Col>
+                <Col span={8}>
+                  <FullWidthButton
+                    label="Escolher Arquivo"
+                    icon="upload"
+                    color={Colors.Roxo}
+                    border
+                  />
+                </Col>
+              </Row>
+            </UploadFullWidth>
+          )}
           {erroArquivo && <div className={styles.errorMessage}>{erroArquivo}</div>}
         </div>
       )}
