@@ -12,6 +12,7 @@ import TabelaIndicadoresNivelCriticoAlfabetizacao from './componentes/TabelaIndi
 import GraficoAnaliseDeAlfabetizacao from './componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
 import GraficoIdep from './componentes/GraficoIdep/graficoIdep';
 import VisaoGeral from './componentes/VisaoGeral';
+import TabelaIndicadoresPap from './componentes/TabelaIndicadoresPap/tabelaIndicadoresPap';
 import styled from 'styled-components';
 
 const CardEstilizado = styled(Card)`
@@ -76,7 +77,7 @@ const InformacoesEducacionais = () => {
             <Col span={24}>
               <InformacoesEducacionaisFiltros
                 obterDreSelecionado={obterDreSelecionada}
-                obterUeSelecionada={obterUeSelecionada}
+                obterUeSelecionado={obterUeSelecionada}
                 setAnoLetivo={setAnoLetivo}
                 anoLetivo={anoLetivo}
               />
@@ -150,6 +151,16 @@ const InformacoesEducacionais = () => {
               <TabelaIndicadoresNivelCriticoAlfabetizacao
                 key={dreCodigo}
                 codigoDre={dreCodigo}
+              />
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <TabelaIndicadoresPap
+                key={dreCodigo}
+                codigoDre={dreCodigo}
+                codigoUe={ueCodigo}
               />
             </Col>
           </Row>

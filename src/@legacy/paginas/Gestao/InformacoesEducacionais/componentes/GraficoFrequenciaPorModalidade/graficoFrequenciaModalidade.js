@@ -18,8 +18,8 @@ const GraficoFrequenciaModalidade = ({
   const [cores, setCores] = useState([]);
   const [periodicidade, setPeriodicidade] = useState(periodicidadeProp);
   const listaPeriodicidade = [
-    { valor: 'mensal', desc: 'Mensal' },
-    { valor: 'anual', desc: 'Global/Acumulada' },
+    { valor: 'mensal', desc: 'Mensal (ano atual)' },
+    { valor: 'anual', desc: 'Anual' },
   ];
 
   const formatarDadosMensais = resposta => {
@@ -170,6 +170,7 @@ const GraficoFrequenciaModalidade = ({
               style={{
                 fontWeight: 'bold',
                 color: '#333',
+                marginTop: '32px',
                 marginBottom: 0,
               }}
             >
