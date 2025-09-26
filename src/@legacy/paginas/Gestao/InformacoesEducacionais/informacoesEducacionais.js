@@ -77,7 +77,7 @@ const InformacoesEducacionais = () => {
               <InformacoesEducacionaisFiltros
                 obterDreSelecionado={obterDreSelecionada}
                 obterUeSelecionada={obterUeSelecionada}
-                setAnoLetivo={setAnoLetivo}
+                setAnoLetivo={obterAnoLetivoSelecionado}
                 anoLetivo={anoLetivo}
               />
             </Col>
@@ -130,6 +130,7 @@ const InformacoesEducacionais = () => {
                   <GraficoAnaliseDeFrequencia
                     dreId={dreCodigo}
                     periodicidade={periodicidade}
+                    anoLetivo={anoLetivo}
                   />
                 </>
               ) : (
@@ -150,6 +151,8 @@ const InformacoesEducacionais = () => {
               <TabelaIndicadoresNivelCriticoAlfabetizacao
                 key={dreCodigo}
                 codigoDre={dreCodigo}
+                codigoUe={ueCodigo}
+                anoLetivo={anoLetivo}
               />
             </Col>
           </Row>

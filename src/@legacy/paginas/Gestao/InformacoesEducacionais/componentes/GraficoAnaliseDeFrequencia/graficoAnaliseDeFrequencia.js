@@ -7,7 +7,7 @@ import ServicoFrequencia from '~/servicos/InformacoesEducacionais/ServicoFrequen
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import './graficoAnaliseDeFrequencia.css';
 
-const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
+const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade, anoLetivo }) => {
   const [dados, setDados] = useState({});
   const [carregando, setCarregando] = useState(false);
 
@@ -21,8 +21,12 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
       const dreIdFinal = dreId;
       const ehTodas = dreIdFinal === OPCAO_TODOS || dreIdFinal === '-99';
       const resposta = ehTodas
-        ? await ServicoFrequencia.obterFrequenciaRanking()
-        : await ServicoFrequencia.obterFrequenciaRanking(dreIdFinal);
+        ? await ServicoFrequencia.obterFrequenciaRanking(anoLetivo)
+        : await ServicoFrequencia.obterFrequenciaRanking(
+            dreIdFinal,
+            null,
+            anoLetivo
+          );
 
       if (resposta.status === 200 && resposta.data) {
         const dadosApi = resposta.data;
@@ -53,7 +57,7 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade }) => {
 
   useEffect(() => {
     obterDados();
-  }, [dreId, periodicidade, obterDados]);
+  }, [dreId, periodicidade, obterDados, anoLetivo]);
 
   const renderizarGrupoEscolas = (chave, grupo) => {
     if (!grupo || !grupo.dados?.length) return null;
