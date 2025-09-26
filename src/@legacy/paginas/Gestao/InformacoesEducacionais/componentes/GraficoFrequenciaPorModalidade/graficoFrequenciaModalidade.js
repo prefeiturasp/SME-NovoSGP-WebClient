@@ -11,6 +11,8 @@ import { gerarCoresDinamicas } from '~/utils/coresDinamicas';
 const GraficoFrequenciaModalidade = ({
   dreId,
   periodicidade: periodicidadeProp = 'mensal',
+  anoLetivo,
+  ueId,
 }) => {
   const [dados, setDados] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -106,7 +108,11 @@ const GraficoFrequenciaModalidade = ({
 
       if (periodicidade === 'mensal') {
         resposta = ehTodas
-          ? await ServicoFrequencia.obterFrequenciaMensal()
+          ? await ServicoFrequencia.obterFrequenciaMensal(
+              dreIdFinal,
+              ueId,
+              anoLetivo
+            )
           : await ServicoFrequencia.obterFrequenciaMensal(dreIdFinal);
 
         if (resposta.status === 200 && resposta.data) {

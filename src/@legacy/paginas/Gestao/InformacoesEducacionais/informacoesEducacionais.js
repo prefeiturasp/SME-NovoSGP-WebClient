@@ -127,6 +127,8 @@ const InformacoesEducacionais = () => {
                   <GraficoFrequenciaPorModalidade
                     dreId={dreCodigo}
                     periodicidade={periodicidade}
+                    ueId={ueCodigo}
+                    anoLetivo={anoLetivo}
                   />
                   <GraficoAnaliseDeFrequencia
                     dreId={dreCodigo}

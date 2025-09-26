@@ -15,7 +15,7 @@ class ServicoFrequencia {
     return api.get(url);
   };
 
-  obterFrequenciaMensal = (codigoDre, codigoUe) => {
+  obterFrequenciaMensal = (codigoDre, codigoUe, anoLetivo) => {
     const params = new URLSearchParams();
 
     if (codigoDre) params.append('codigoDre', codigoDre);
