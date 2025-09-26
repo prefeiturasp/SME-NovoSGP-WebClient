@@ -159,3 +159,52 @@
   flex-direction: column;
   gap: 10px;
 }
+
+.selectedFilesList {
+  background: #f6f7fb;
+  border: 1px solid #e0e0e0;
+  border-radius: .25rem;
+  padding: 4px;
+  margin-bottom: 12px;
+  max-height: 220px;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.selectedFileItem {
+  color: #A4A4A4;
+  font-size: 14px;
+  padding: 2px 8px;
+  border-bottom: 1px solid #ececec;
+  display: flex;
+  align-items: center;
+  word-break: break-all;
+  transition: background 0.18s, padding 0.18s;
+  cursor: pointer;
+  border-radius: .25rem;
+}
+
+.selectedFileItem.selectedFileItemHover:hover {
+  background: #edeafd;
+}
+
+.selectedFileItem:last-child {
+  border-bottom: none;
+}
+
+.selectedFileName {
+  flex: 1;
+  color: #A4A4A4;
+  font-weight: 500;
+}
+
+.selectedFileRemoveIcon {
+  margin-left: 8px;
+  cursor: pointer;
+  color: #B40C02;
+  font-size: 16px;
+  transition: color 0.2s;
+}
+.selectedFileRemoveIcon:hover {
+  color: #ff4d4f;
+}
