@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import {
   CampoNumero,
   Card,
@@ -71,6 +71,19 @@ const RelatorioFrequenciaMensal = () => {
   const [apenasAlunosPercentualAbaixoDe, setApenasAlunosPercentualAbaixoDe] =
     useState();
   const [modoEdicao, setModoEdicao] = useState(false);
+
+  useEffect(() => {
+    if (ueId === OPCAO_TODOS) {
+      setTipoFormatoRelatorio('4');
+    }
+  }, [dreId, ueId]);
+
+  const listaFormatosFiltrada = useMemo(() => {
+    if (ueId === OPCAO_TODOS) {
+      return [{ valor: '4', desc: 'EXCEL' }];
+    }
+    return listaFormatos;
+  }, [ueId]);
 
   const ehEjaOuCelp =
     Number(modalidadeId) === ModalidadeEnum.EJA ||
@@ -642,7 +655,7 @@ const RelatorioFrequenciaMensal = () => {
             <Col sm={24} md={12} xl={8}>
               <SelectComponent
                 label="Formato"
-                lista={listaFormatos}
+                lista={listaFormatosFiltrada}
                 valueOption="valor"
                 valueText="desc"
                 valueSelect={tipoFormatoRelatorio}
