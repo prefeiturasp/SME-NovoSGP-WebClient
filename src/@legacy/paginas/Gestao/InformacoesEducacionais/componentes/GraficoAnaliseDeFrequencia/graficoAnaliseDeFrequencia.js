@@ -7,7 +7,12 @@ import ServicoFrequencia from '~/servicos/InformacoesEducacionais/ServicoFrequen
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import './graficoAnaliseDeFrequencia.css';
 
-const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade, anoLetivo }) => {
+const GraficoAnaliseDeFrequencia = ({
+  dreId,
+  periodicidade,
+  anoLetivo,
+  ueId,
+}) => {
   const [dados, setDados] = useState({});
   const [carregando, setCarregando] = useState(false);
 
@@ -21,10 +26,10 @@ const GraficoAnaliseDeFrequencia = ({ dreId, periodicidade, anoLetivo }) => {
       const dreIdFinal = dreId;
       const ehTodas = dreIdFinal === OPCAO_TODOS || dreIdFinal === '-99';
       const resposta = ehTodas
-        ? await ServicoFrequencia.obterFrequenciaRanking(anoLetivo)
+        ? await ServicoFrequencia.obterFrequenciaRanking(dreId, ueId, anoLetivo)
         : await ServicoFrequencia.obterFrequenciaRanking(
             dreIdFinal,
-            null,
+            ueId,
             anoLetivo
           );
 

@@ -134,6 +134,7 @@ const InformacoesEducacionais = () => {
                     dreId={dreCodigo}
                     periodicidade={periodicidade}
                     anoLetivo={anoLetivo}
+                    ueId={ueCodigo}
                   />
                 </>
               ) : (
