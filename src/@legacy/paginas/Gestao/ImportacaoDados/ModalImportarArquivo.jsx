@@ -152,7 +152,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         BOLETIM_IDEP: 'v1/importar-arquivo/boletim-idep',
         PROFICIENCIA_IDEP: 'v1/importar-arquivo/proficiencia-idep',
         PROFICIENCIA_IDEB: 'v1/importar-arquivo/proficiencia-ideb',
-        TAXA_ALFABETIZACAO: 'v1/importar-arquivo/taxa-alfabetizacao',
+        TAXA_ALFABETIZACAO: 'v1/importar-arquivo/alfabetizacao',
       };
 
       if (valor === 'FLUENCIA') {
@@ -168,6 +168,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         if (isBoletim) {
           url += `?ano=${encodeURIComponent(anoNum)}`;
         }
+        fmData.append('anoLetivo', encodeURIComponent(anoNum));
       } else {
         alert('Seleção inválida.');
         return;
