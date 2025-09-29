@@ -113,7 +113,11 @@ const GraficoFrequenciaModalidade = ({
               ueId,
               anoLetivo
             )
-          : await ServicoFrequencia.obterFrequenciaMensal(dreIdFinal);
+          : await ServicoFrequencia.obterFrequenciaMensal(
+              dreIdFinal,
+              ueId,
+              anoLetivo
+            );
 
         if (resposta.status === 200 && resposta.data) {
           const dadosFormatados = formatarDadosMensais(resposta);

@@ -58,7 +58,7 @@ const GraficoAnaliseDeFrequencia = ({
     } finally {
       setCarregando(false);
     }
-  }, [dreId, periodicidade]);
+  }, [dreId, periodicidade, anoLetivo]);
 
   useEffect(() => {
     obterDados();
