@@ -60,8 +60,8 @@ const InformacoesEducacionais = () => {
     navigate('/');
   };
 
-  const exibirGrafico = !!dreCodigo;
-  const exibirVisaoGeral = !!anoLetivo;
+  const exibirVisaoGeral = anoLetivo !== null && anoLetivo !== '';
+  const exibirGrafico = !!dreCodigo && anoLetivo !== null && anoLetivo !== '';
 
   return (
     <>

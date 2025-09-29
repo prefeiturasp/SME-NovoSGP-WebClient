@@ -125,7 +125,11 @@ const GraficoFrequenciaModalidade = ({
         } else setDados([]);
       } else {
         resposta = ehTodas
-          ? await ServicoFrequencia.obterFrequenciaGlobal()
+          ? await ServicoFrequencia.obterFrequenciaGlobal(
+              dreIdFinal,
+              ueId,
+              anoLetivo
+            )
           : await ServicoFrequencia.obterFrequenciaGlobal(dreIdFinal);
 
         if (resposta.status === 200 && resposta.data) {

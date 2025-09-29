@@ -14,6 +14,7 @@ const TabelaIndicadoresNivelCriticoAlfabetizacao = ({
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const obterDados = useCallback(async () => {
+    if (!anoLetivo) return;
     setExibirLoader(true);
     try {
       const resposta =
@@ -22,7 +23,6 @@ const TabelaIndicadoresNivelCriticoAlfabetizacao = ({
           codigoUe,
           anoLetivo
         );
-
       if (resposta.status === 200 && resposta.data) {
         const dadosTabela = (resposta.data || []).map((escola, index) => ({
           key: index,
@@ -32,7 +32,6 @@ const TabelaIndicadoresNivelCriticoAlfabetizacao = ({
           totalAlunosNaoAlfabetizados: escola.totalAlunosNaoAlfabetizados || 0,
           percentualTotalAlunos: escola.percentualTotalAlunos || 0,
         }));
-
         setDados(dadosTabela);
       } else {
         setDados([]);
@@ -46,11 +45,13 @@ const TabelaIndicadoresNivelCriticoAlfabetizacao = ({
     } finally {
       setExibirLoader(false);
     }
-  }, []);
+  }, [anoLetivo, codigoDre, codigoUe]);
 
   useEffect(() => {
-    obterDados();
-  }, [anoLetivo, codigoDre]);
+    if (anoLetivo) {
+      obterDados();
+    }
+  }, [anoLetivo, codigoDre, codigoUe, obterDados]);
 
   const colunas = [
     {
