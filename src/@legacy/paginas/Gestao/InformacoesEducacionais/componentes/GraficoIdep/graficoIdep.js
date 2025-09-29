@@ -88,7 +88,9 @@ const GraficoIdep = ({ anoLetivo, dreId }) => {
     xField: 'faixa',
     yField: 'quantidade',
     smooth: true,
-    areaStyle: { fill: 'l(270) 0:#e0c3fc 1:#8ec5fc' },
+    areaStyle: {
+      fill: 'l(90) 0:rgba(105,51,255,0.2) 0.26:rgba(105,51,255,0.2) 1:rgba(105,51,255,0)',
+    },
     line: { color: Base.Roxo },
     point: {
       size: 4,
