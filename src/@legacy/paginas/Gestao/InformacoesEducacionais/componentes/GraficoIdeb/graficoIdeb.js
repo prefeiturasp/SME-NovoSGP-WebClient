@@ -1,28 +1,25 @@
-import './graficoIdep.css';
+import './graficoIdeb.css';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '~/componentes';
 import { erros } from '~/servicos';
-import ServicoIdepGrafico from '~/servicos/InformacoesEducacionais/ServicoIdepGrafico';
+import ServicoIdebGrafico from '~/servicos/InformacoesEducacionais/ServicoIdebGrafico';
 import { SelectComponent } from '~/componentes';
 import { Area } from '@ant-design/plots';
 import { Base, Colors } from '~/componentes/colors';
 
-const listaPeriodicidade = [
+const listaSerie = [
   { valor: 1, desc: 'Anos iniciais (1º a 5º anos)' },
-  { valor: 2, desc: 'Anos finais (6º a 9 º anos)' },
+  { valor: 2, desc: 'Anos finais (6º a 9º anos)' },
+  { valor: 3, desc: 'Ensino médio (1º a 3º séries)' },
 ];
 
-const GraficoIdep = ({ anoLetivo, dreId }) => {
+const GraficoIdeb = ({ anoLetivo, dreId }) => {
   const [dados, setDados] = useState([]);
   const [anoUtilizado, setAnoUtilizado] = useState();
   const [loading, setLoading] = useState(false);
-  const [periodicidade, setPeriodicidade] = useState(
-    listaPeriodicidade[0].valor
-  );
-  const [periodicidadeTexto, setPeriodicidadeTexto] = useState(
-    listaPeriodicidade[0].desc
-  );
+  const [serie, setSerie] = useState(listaSerie[0].valor);
+  const [serieTexto, setSerieTexto] = useState(listaSerie[0].desc);
 
   const buscarDados = useCallback(async () => {
     if (!dreId) {
@@ -31,9 +28,9 @@ const GraficoIdep = ({ anoLetivo, dreId }) => {
     }
     setLoading(true);
     try {
-      const resposta = await ServicoIdepGrafico.obterIdepGrafico(
+      const resposta = await ServicoIdebGrafico.obterIdebGrafico(
         anoLetivo,
-        periodicidade,
+        serie,
         dreId
       );
       if (resposta.status === 200 && resposta.data?.distribuicao) {
@@ -57,31 +54,29 @@ const GraficoIdep = ({ anoLetivo, dreId }) => {
     } catch (error) {
       const msg =
         error.response?.data?.mensagens?.join(', ') ||
-        'Erro ao carregar dados de IDEP';
+        'Erro ao carregar dados de ideb';
       erros(msg);
       setDados([]);
     } finally {
       setLoading(false);
     }
-  }, [dreId, periodicidade]);
+  }, [dreId, serie]);
 
   const handleSelectChange = valor => {
     if (valor == null) {
-      setPeriodicidade(null);
-      setPeriodicidadeTexto(null);
+      setSerie(null);
+      setSerieTexto(null);
       return;
     }
 
-    const selecionado = listaPeriodicidade.find(
-      item => item.valor === Number(valor)
-    );
-    setPeriodicidade(Number(valor));
-    setPeriodicidadeTexto(selecionado ? selecionado.desc : '');
+    const selecionado = listaSerie.find(item => item.valor === Number(valor));
+    setSerie(Number(valor));
+    setSerieTexto(selecionado ? selecionado.desc : '');
   };
 
   useEffect(() => {
     buscarDados();
-  }, [dreId, periodicidade, buscarDados]);
+  }, [dreId, serie, buscarDados]);
 
   const config = {
     data: dados,
@@ -89,21 +84,21 @@ const GraficoIdep = ({ anoLetivo, dreId }) => {
     yField: 'quantidade',
     smooth: true,
     areaStyle: {
-      fill: 'l(90) 0:rgba(105,51,255,0.2) 0.26:rgba(105,51,255,0.2) 1:rgba(105,51,255,0)',
+      fill: 'l(90) 0:rgba(255,243,205,1) 0.51:rgba(255,243,205,1) 1:rgba(255,243,205,0)',
     },
-    line: { color: Base.Roxo },
+    line: { color: '#856404' },
     point: {
       size: 4,
       shape: 'circle',
-      style: { fill: Base.Branco, stroke: Base.Roxo, lineWidth: 2 },
+      style: { fill: Base.Branco, stroke: '#856404', lineWidth: 2 },
     },
     tooltip: {
       showMarkers: true,
       customContent: (title, items) => {
         if (!items || items.length === 0) return '';
         const item = items[0];
-        return `<div class="grafico-idep-tooltip">
-          <div style="color: ${Base.Roxo};"><strong>IDEP:</strong> ${item.data.faixa}</div>
+        return `<div class="grafico-ideb-tooltip">
+          <div style="color: #856404;"><strong>IDEB:</strong> ${item.data.faixa}</div>
           <div style="color: ${Base.CinzaMako};"><strong>Quantidade de UEs:</strong> ${item.data.quantidade}</div>
         </div>`;
       },
@@ -125,27 +120,27 @@ const GraficoIdep = ({ anoLetivo, dreId }) => {
   };
 
   return (
-    <div className="grafico-idep-container">
-      <div className="grafico-idep-header">
-        <h5 className="grafico-idep-titulo" style={{ color: Base.CinzaMako }}>
-          IDEP {anoUtilizado && ` (${anoUtilizado})`}
+    <div className="grafico-ideb-container">
+      <div className="grafico-ideb-header">
+        <h5 className="grafico-ideb-titulo" style={{ color: Base.CinzaMako }}>
+          IDEB {anoUtilizado && ` (${anoUtilizado})`}
         </h5>
-        <div className="grafico-idep-select">
+        <div className="grafico-ideb-select">
           <SelectComponent
-            lista={listaPeriodicidade}
+            id="select-serie"
+            lista={listaSerie}
             valueOption="valor"
             valueText="desc"
             onChange={handleSelectChange}
-            valueSelect={periodicidadeTexto}
-            placeholder="Selecione o período"
+            valueSelect={serieTexto}
+            placeholder="Selecione a série"
           />
         </div>
       </div>
 
-      <p className="grafico-idep-descricao" style={{ color: Base.CinzaMako }}>
-        O Índice de Desenvolvimento da Educação Paulistana é medido a partir dos
-        resultados das avaliações da Prova São Paulo e dos resultados das taxas
-        de aprovação.
+      <p className="grafico-ideb-descricao" style={{ color: Base.CinzaMako }}>
+        O Índice de Desenvolvimento da Educação Básica é medido a partir das
+        médias de desempenho no Sistema de Avaliação da Educação Básica (SAEB).
       </p>
 
       {loading ? (
@@ -159,12 +154,12 @@ const GraficoIdep = ({ anoLetivo, dreId }) => {
   );
 };
 
-GraficoIdep.propTypes = {
+GraficoIdeb.propTypes = {
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
-GraficoIdep.defaultProps = {
+GraficoIdeb.defaultProps = {
   dreId: null,
 };
 
-export default GraficoIdep;
+export default GraficoIdeb;
