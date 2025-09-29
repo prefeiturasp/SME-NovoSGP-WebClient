@@ -7,6 +7,7 @@ import IndicadorIdep from './indicadorIdep';
 import IndicadorIdeb from './indicadorIdeb';
 import ServicoVisaoGeral from '~/servicos/InformacoesEducacionais/ServicoVisaoGeral';
 import { erros } from '~/servicos';
+import IndicadorTaxaAlfabetizacao from './IndicadorTaxaAlfabetizacao';
 
 const Titulo = styled.h2`
   font-weight: bold;
@@ -23,6 +24,7 @@ const Descricao = styled.p`
 
 const VisaoGeral = ({ anoLetivo, dreCodigo }) => {
   const [dadosCompletos, setDadosCompletos] = useState([]);
+  const [dadosTaxaAlfabetizacao, setDadosTaxaAlfabetizacao] = useState([]);
   const [loading, setLoading] = useState(false);
   const ordem = ['Anos iniciais', 'Anos finais'];
 
@@ -46,6 +48,37 @@ const VisaoGeral = ({ anoLetivo, dreCodigo }) => {
   useEffect(() => {
     carregarDados();
   }, [carregarDados]);
+
+  const carregarDadosTaxaAlfabetizacao = useCallback(async () => {
+    if (anoLetivo) {
+      setLoading(true);
+
+      let resposta;
+      if (dreCodigo !== '-99') {
+        resposta = await ServicoVisaoGeral.obterVisaoGeralTaxaAlfabetizacao(
+          anoLetivo,
+          dreCodigo
+        ).catch(e => erros(e));
+      } else {
+        resposta = await ServicoVisaoGeral.obterVisaoGeralTaxaAlfabetizacao(
+          anoLetivo
+        ).catch(e => erros(e));
+      }
+
+      if (resposta?.data !== undefined && resposta?.data !== null) {
+        const valorFormatado = Number(resposta.data).toFixed(2);
+        setDadosTaxaAlfabetizacao([{ valor: `${valorFormatado}%`, label: '' }]);
+      } else {
+        setDadosTaxaAlfabetizacao([]);
+      }
+
+      setLoading(false);
+    }
+  }, [anoLetivo, dreCodigo]);
+
+  useEffect(() => {
+    carregarDadosTaxaAlfabetizacao();
+  }, [carregarDadosTaxaAlfabetizacao]);
 
   const dadosFormatados = useMemo(() => {
     const dadosIdep =
@@ -106,6 +139,13 @@ const VisaoGeral = ({ anoLetivo, dreCodigo }) => {
           <Col xs={24} md={12}>
             <IndicadorFrequenciaGlobal
               dados={dadosFormatados.dadosFrequencia}
+              loading={loading}
+            />
+          </Col>
+
+          <Col xs={24} md={12}>
+            <IndicadorTaxaAlfabetizacao
+              dados={dadosTaxaAlfabetizacao}
               loading={loading}
             />
           </Col>
