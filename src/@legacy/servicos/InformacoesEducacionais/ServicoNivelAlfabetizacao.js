@@ -4,8 +4,8 @@ class ServicoNivelAlfabetizacao {
   obterIndicadoresAlfabetizacaoCritica = (codigoDre, codigoUe, anoLetivo) => {
     const params = new URLSearchParams();
 
-    if (codigoDre) params.append('codigoDre', codigoDre);
-    if (codigoUe) params.append('codigoUe', codigoUe);
+    if (codigoDre && codigoDre !== '-99') params.append('codigoDre', codigoDre);
+    if (codigoUe && codigoUe !== '-99') params.append('codigoUe', codigoUe);
     if (anoLetivo) params.append('anoLetivo', anoLetivo);
 
     const queryString = params.toString();
