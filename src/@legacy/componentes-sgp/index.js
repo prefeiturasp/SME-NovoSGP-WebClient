@@ -13,3 +13,4 @@ export { default as AlertaModalidadeInfantil } from './AlertaModalidadeInfantil/
 export { default as GraficoBarras } from './Graficos/graficoBarras';
 export { default as TagGrafico } from './TagGrafico/tagGrafico';
 export { default as GraficoBarrasHorizontal } from './Graficos/graficoBarrasHorizontal';
+export { default as GraficoBarrasVertical } from './Graficos/graficoBarrasVertical';
