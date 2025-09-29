@@ -467,6 +467,12 @@ const RelatorioFrequenciaMensal = () => {
     ehEjaOuCelp,
   ]);
 
+  function toArray(value) {
+    if (Array.isArray(value)) return value;
+    if (value === null || value === undefined) return [];
+    return [value];
+  }
+
   const gerar = async () => {
     setCarregandoGerar(true);
 
@@ -478,7 +484,7 @@ const RelatorioFrequenciaMensal = () => {
       modalidade: modalidadeId,
       codigosTurmas: turmasCodigo,
       semestre,
-      mesesReferencias,
+      mesesReferencias: toArray(mesesReferencias),
       apenasAlunosPercentualAbaixoDe,
       tipoFormatoRelatorio,
     };
