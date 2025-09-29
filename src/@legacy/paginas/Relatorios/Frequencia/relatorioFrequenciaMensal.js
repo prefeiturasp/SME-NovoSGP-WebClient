@@ -72,18 +72,34 @@ const RelatorioFrequenciaMensal = () => {
     useState();
   const [modoEdicao, setModoEdicao] = useState(false);
 
-  useEffect(() => {
-    if (ueId === OPCAO_TODOS) {
-      setTipoFormatoRelatorio('4');
-    }
+  const apenasExcelUmMes = useMemo(() => {
+    return (
+      dreId === OPCAO_TODOS || (dreId !== OPCAO_TODOS && ueId === OPCAO_TODOS)
+    );
   }, [dreId, ueId]);
 
+  useEffect(() => {
+    if (apenasExcelUmMes) {
+      setTipoFormatoRelatorio('4');
+    }
+  }, [apenasExcelUmMes]);
+
+  useEffect(() => {
+    if (
+      apenasExcelUmMes &&
+      Array.isArray(mesesReferencias) &&
+      mesesReferencias.length > 1
+    ) {
+      setMesesReferencias([mesesReferencias[0]]);
+    }
+  }, [apenasExcelUmMes, mesesReferencias]);
+
   const listaFormatosFiltrada = useMemo(() => {
-    if (ueId === OPCAO_TODOS) {
+    if (apenasExcelUmMes) {
       return [{ valor: '4', desc: 'EXCEL' }];
     }
     return listaFormatos;
-  }, [ueId]);
+  }, [apenasExcelUmMes, listaFormatos]);
 
   const ehEjaOuCelp =
     Number(modalidadeId) === ModalidadeEnum.EJA ||
@@ -627,7 +643,7 @@ const RelatorioFrequenciaMensal = () => {
                   disabled={
                     !turmasCodigo?.length || listaMesesReferencias?.length === 1
                   }
-                  multiple
+                  multiple={!apenasExcelUmMes}
                   valueSelect={mesesReferencias}
                   onChange={valores => {
                     onchangeMultiSelect(valores, mesesReferencias, onChangeMes);
