@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '~/componentes';
-import { GraficoBarras } from '~/componentes-sgp';
+import { GraficoBarrasVertical } from '~/componentes-sgp';
 import { erros } from '~/servicos';
 import ServicoFluenciaLeituraGrafico from '~/servicos/InformacoesEducacionais/ServicoFluenciaLeituraGrafico';
 import { SelectComponent } from '~/componentes';
 
 const listaPeriodicidade = [
-  { valor: 1, desc: 'Avaliação de entrada (março)' },
-  { valor: 2, desc: 'Avaliação de saída (novembro)' },
+  { valor: 1, desc: 'Avaliação de entrada' },
+  { valor: 2, desc: 'Avaliação de saída ' },
 ];
 
 const GraficoFluenciaLeitora = ({ dreId, ueId, anoLetivo }) => {
@@ -39,10 +39,13 @@ const GraficoFluenciaLeitora = ({ dreId, ueId, anoLetivo }) => {
 
       if (resposta.status === 200 && Array.isArray(resposta.data)) {
         const dadosFormatados = resposta.data.map(item => ({
-          descricao: `${item.nomeFluencia} (${item.descricaoFluencia})`,
+          descricao: item.descricaoFluencia
+            ? `${item.nomeFluencia} (${item.descricaoFluencia})`
+            : item.nomeFluencia,
           quantidade: item.quantidadeAlunos,
-          percentual: item.percentual,
+          percentual: Number(item.percentual),
         }));
+
         setDados(dadosFormatados);
       } else {
         setDados([]);
@@ -115,37 +118,24 @@ const GraficoFluenciaLeitora = ({ dreId, ueId, anoLetivo }) => {
         <div className="text-center">Sem dados</div>
       )}
       {dados.length > 0 && (
-        <GraficoBarras
+        <GraficoBarrasVertical
           data={dados}
-          xField="quantidade"
-          yField="descricao"
-          colors={'#6933FF'}
-          xAxisVisible={true}
-          legendVisible={false}
+          xField="descricao"
+          yField="quantidade"
+          xAxisTitle="Níveis fluência leitora"
+          yAxisTitle="Quantidade de estudantes"
           labelVisible={true}
+          legendVisible={false}
+          colors={['#6933FF']}
+          showScrollbar={false}
+          showTitle={false}
           label={{
-            formatter: data => `${data.quantidade} (${data.percentual}%)`,
-          }}
-          tooltip={{
-            customContent: (title, items) => {
-              if (!items?.length) return '';
-              const item = items[0].data;
-              return `
-                <div style="max-width:350px; padding: 5px">
-                  <div style="font-weight: bold; margin-bottom:4px;">${item.descricao}</div>
-                  <div style="font-size:13px;">Quantidade de estudantes: ${item.quantidade} (${item.percentual}%)</div>
-                </div>
-              `;
-            },
+            position: 'top',
+            formatter: x =>
+              `${x.quantidade.toLocaleString()} (${x.percentual.toFixed(1)}%)`,
           }}
         />
       )}
-      <div
-        className="text-center"
-        style={{ color: '#42474a', fontWeight: 'bold' }}
-      >
-        Níveis fluência leitora
-      </div>
     </div>
   );
 };
