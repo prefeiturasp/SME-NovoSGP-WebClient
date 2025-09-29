@@ -36,6 +36,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
     { id: 'BOLETIM_IDEB', nome: 'Boletim IDEB' },
     { id: 'BOLETIM_IDEP', nome: 'Boletim IDEP' },
     { id: 'FLUENCIA', nome: 'Fluência Leitora' },
+    { id: 'TAXA_ALFABETIZACAO', nome: 'Taxa de alfabetização' },
   ];
 
   const listaPeriodos = [
@@ -63,13 +64,18 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         setarErroArquivo('');
         setarArquivoSelecionado((prev) => {
           const files = prev ? [...prev] : [];
-          if (!files.find(f => f.name === file.name && f.lastModified === file.lastModified)) {
+
+          if (!files.find((f) => f.name === file.name && f.lastModified === file.lastModified)) {
+
             files.push(file);
           }
           return files.slice(0, 100);
         });
       } else {
-        const isXlsx = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+        const isXlsx =
+          file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
         if (!isXlsx) {
           setarErroArquivo('Formato Inválido: Anexe um arquivo .xlsx');
           setarArquivoSelecionado(null);
@@ -82,7 +88,9 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
     },
     onRemove: (file) => {
       if (isBoletim) {
-        setarArquivoSelecionado((prev) => prev ? prev.filter(f => f.uid !== file.uid) : []);
+
+        setarArquivoSelecionado((prev) => (prev ? prev.filter((f) => f.uid !== file.uid) : []));
+
       } else {
         setarArquivoSelecionado(null);
       }
@@ -101,7 +109,12 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
   };
 
   const handleSubmit = async () => {
-    if (!arquivoSelecionado || (isBoletim && (!Array.isArray(arquivoSelecionado) || arquivoSelecionado.length === 0))) {
+
+    if (
+      !arquivoSelecionado ||
+      (isBoletim && (!Array.isArray(arquivoSelecionado) || arquivoSelecionado.length === 0))
+    ) {
+
       alert('Selecione um arquivo antes de enviar.');
       return;
     }
@@ -138,18 +151,17 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
       } else {
         fmData.append('arquivo', arquivoSelecionado);
         fmData.append('FileName', arquivoSelecionado.name);
-        
-        
       }
-
+      
       const urlMap = {
-        'IDEP': 'v1/importar-arquivo/idep',
-        'IDEB': 'v1/importar-arquivo/ideb',
-        'BOLETIM_IDEB': 'v1/importar-arquivo/boletim-ideb',
-        'BOLETIM_IDEP': 'v1/importar-arquivo/boletim-idep',
-        'PROFICIENCIA_IDEP': 'v1/importar-arquivo/proficiencia-idep',
-        'PROFICIENCIA_IDEB': 'v1/importar-arquivo/proficiencia-ideb',
-      };
+        IDEP: 'v1/importar-arquivo/idep',
+        IDEB: 'v1/importar-arquivo/ideb',
+        BOLETIM_IDEB: 'v1/importar-arquivo/boletim-ideb',
+        BOLETIM_IDEP: 'v1/importar-arquivo/boletim-idep',
+        PROFICIENCIA_IDEP: 'v1/importar-arquivo/proficiencia-idep',
+        PROFICIENCIA_IDEB: 'v1/importar-arquivo/proficiencia-ideb',
+        TAXA_ALFABETIZACAO: 'v1/importar-arquivo/alfabetizacao',
+      }
 
       if (valor === 'FLUENCIA') {
         if (!periodo || !['ENTRADA', 'SAIDA'].includes(periodo)) {
@@ -164,6 +176,9 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         if (isBoletim) {
           url += `?ano=${encodeURIComponent(anoNum)}`;
         }
+
+        fmData.append('anoLetivo', encodeURIComponent(anoNum));
+
       } else {
         alert('Seleção inválida.');
         return;
@@ -194,8 +209,8 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
                   abrirDrawer({
                     id: resposta.data.id,
                     nomeArquivo: isBoletim
-                      ? arquivoSelecionado.map(f => f.name).join(', ')
-                      : arquivoSelecionado.name
+                      ? arquivoSelecionado.map((f) => f.name).join(', ')
+                      : arquivoSelecionado.name,
                   });
                   Modal.destroyAll();
                 }}
@@ -315,7 +330,11 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
                       return {
                         ...file,
                         uid: file.uid || `${file.name || 'arquivo'}-${file.lastModified || idx}`,
-                        name: file.name || (file.originFileObj && file.originFileObj.name) || `Arquivo ${idx + 1}`,
+                        name:
+                          file.name ||
+                          (file.originFileObj && file.originFileObj.name) ||
+                          `Arquivo ${idx + 1}`,
+
                         status: 'done',
                       };
                     })
@@ -323,9 +342,10 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
               }
               onRemove={(file) => {
                 setarArquivoSelecionado((prev) =>
-                  prev ? prev.filter(f =>
-                    (f.uid || `${f.name}-${f.lastModified}`) !== file.uid
-                  ) : []
+
+                  prev
+                    ? prev.filter((f) => (f.uid || `${f.name}-${f.lastModified}`) !== file.uid)
+                    : [],
                 );
               }}
               itemRender={(originNode, file) => (
@@ -338,32 +358,41 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
               )}
             >
               <Label text="Selecione até 100 arquivos (.pdf)" />
-              {arquivoSelecionado && Array.isArray(arquivoSelecionado) && arquivoSelecionado.length > 0 && (
-                <div className={styles.selectedFilesList}>
-                  {arquivoSelecionado.map((file, idx) => (
-                    <div
-                      className={`${styles.selectedFileItem} ${styles.selectedFileItemHover}`}
-                      key={file.uid || `${file.name}-${file.lastModified || idx}`}
-                      style={{ display: 'flex' }}
-                    >
-                      <span className={styles.selectedFileName}>{file.name || `Arquivo ${idx + 1}`}</span>
-                      <DeleteOutlined
-                        className={styles.selectedFileRemoveIcon}
-                        title="Remover arquivo"
-                        onMouseDown={e => e.preventDefault()}
-                        onClick={e => {
-                          e.stopPropagation();
-                          setarArquivoSelecionado(prev =>
-                            prev ? prev.filter(f =>
-                              (f.uid || `${f.name}-${f.lastModified}`) !== (file.uid || `${file.name}-${file.lastModified}`)
-                            ) : []
-                          );
-                        }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              )}
+              {arquivoSelecionado &&
+                Array.isArray(arquivoSelecionado) &&
+                arquivoSelecionado.length > 0 && (
+                  <div className={styles.selectedFilesList}>
+                    {arquivoSelecionado.map((file, idx) => (
+                      <div
+                        className={`${styles.selectedFileItem} ${styles.selectedFileItemHover}`}
+                        key={file.uid || `${file.name}-${file.lastModified || idx}`}
+                        style={{ display: 'flex' }}
+                      >
+                        <span className={styles.selectedFileName}>
+                          {file.name || `Arquivo ${idx + 1}`}
+                        </span>
+                        <DeleteOutlined
+                          className={styles.selectedFileRemoveIcon}
+                          title="Remover arquivo"
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setarArquivoSelecionado((prev) =>
+                              prev
+                                ? prev.filter(
+                                    (f) =>
+                                      (f.uid || `${f.name}-${f.lastModified}`) !==
+                                      (file.uid || `${file.name}-${file.lastModified}`),
+                                  )
+                                : [],
+                            );
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
               <Row gutter={[4, 4]} style={{ width: '100%' }}>
                 <Col span={24}>
                   <FullWidthButton
@@ -383,9 +412,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
                   <FullWidthButton2
                     block
                     label={
-                      arquivoSelecionado
-                        ? arquivoSelecionado.name
-                        : 'Nenhum arquivo selecionado'
+                      arquivoSelecionado ? arquivoSelecionado.name : 'Nenhum arquivo selecionado'
                     }
                     color={Colors.CinzaBotao}
                     border

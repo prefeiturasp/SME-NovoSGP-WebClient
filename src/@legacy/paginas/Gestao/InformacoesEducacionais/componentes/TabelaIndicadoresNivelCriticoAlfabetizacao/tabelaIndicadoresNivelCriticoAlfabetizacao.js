@@ -8,6 +8,7 @@ import ServicoNivelAlfabetizacao from '~/servicos/InformacoesEducacionais/Servic
 const TabelaIndicadoresNivelCriticoAlfabetizacao = ({
   codigoDre,
   codigoUe,
+  anoLetivo,
 }) => {
   const [dados, setDados] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -18,7 +19,8 @@ const TabelaIndicadoresNivelCriticoAlfabetizacao = ({
       const resposta =
         await ServicoNivelAlfabetizacao.obterIndicadoresAlfabetizacaoCritica(
           codigoDre,
-          codigoUe
+          codigoUe,
+          anoLetivo
         );
 
       if (resposta.status === 200 && resposta.data) {
@@ -48,7 +50,7 @@ const TabelaIndicadoresNivelCriticoAlfabetizacao = ({
 
   useEffect(() => {
     obterDados();
-  }, [codigoDre]);
+  }, [anoLetivo, codigoDre]);
 
   const colunas = [
     {
