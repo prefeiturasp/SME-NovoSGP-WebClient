@@ -14,6 +14,7 @@ import GraficoIdep from './componentes/GraficoIdep/graficoIdep';
 import VisaoGeral from './componentes/VisaoGeral';
 import TabelaIndicadoresPap from './componentes/TabelaIndicadoresPap/tabelaIndicadoresPap';
 import styled from 'styled-components';
+import GraficoFluenciaLeitora from './componentes/GraficoFluenciaLeitora/graficoFluenciaLeitora';
 
 const CardEstilizado = styled(Card)`
   margin-top: 16px;
@@ -167,6 +168,16 @@ const InformacoesEducacionais = () => {
                 key={dreCodigo}
                 codigoDre={dreCodigo}
                 codigoUe={ueCodigo}
+              />
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <GraficoFluenciaLeitora
+                dreId={dreCodigo}
+                ueId={ueCodigo}
+                anoLetivo={anoLetivo}
               />
             </Col>
           </Row>
