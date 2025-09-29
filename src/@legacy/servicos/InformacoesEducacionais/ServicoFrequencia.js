@@ -4,8 +4,8 @@ class ServicoFrequencia {
   obterFrequenciaGlobal = (codigoDre, codigoUe) => {
     const params = new URLSearchParams();
 
-    if (codigoDre) params.append('codigoDre', codigoDre);
-    if (codigoUe) params.append('codigoUe', codigoUe);
+    if (codigoDre && codigoDre !== '-99') params.append('codigoDre', codigoDre);
+    if (codigoUe && codigoUe !== '-99') params.append('codigoUe', codigoUe);
 
     const queryString = params.toString();
     const url = queryString
@@ -15,11 +15,12 @@ class ServicoFrequencia {
     return api.get(url);
   };
 
-  obterFrequenciaMensal = (codigoDre, codigoUe) => {
+  obterFrequenciaMensal = (codigoDre, codigoUe, anoLetivo) => {
     const params = new URLSearchParams();
 
-    if (codigoDre) params.append('codigoDre', codigoDre);
-    if (codigoUe) params.append('codigoUe', codigoUe);
+    if (codigoDre && codigoDre !== '-99') params.append('codigoDre', codigoDre);
+    if (codigoUe && codigoUe !== '-99') params.append('codigoUe', codigoUe);
+    if (anoLetivo) params.append('anoLetivo', anoLetivo);
 
     const queryString = params.toString();
     const url = queryString
@@ -29,11 +30,12 @@ class ServicoFrequencia {
     return api.get(url);
   };
 
-  obterFrequenciaRanking = (codigoDre, codigoUe) => {
+  obterFrequenciaRanking = (codigoDre, codigoUe, anoLetivo) => {
     const params = new URLSearchParams();
 
-    if (codigoDre) params.append('codigoDre', codigoDre);
-    if (codigoUe) params.append('codigoUe', codigoUe);
+    if (codigoDre && codigoDre !== '-99') params.append('codigoDre', codigoDre);
+    if (codigoUe && codigoUe !== '-99') params.append('codigoUe', codigoUe);
+    if (anoLetivo) params.append('anoLetivo', anoLetivo);
 
     const queryString = params.toString();
     const url = queryString

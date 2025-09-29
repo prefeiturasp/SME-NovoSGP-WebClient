@@ -1,11 +1,12 @@
 import api from '../api';
 
 class ServicoNivelAlfabetizacao {
-  obterIndicadoresAlfabetizacaoCritica = (codigoDre, codigoUe) => {
+  obterIndicadoresAlfabetizacaoCritica = (codigoDre, codigoUe, anoLetivo) => {
     const params = new URLSearchParams();
 
     if (codigoDre) params.append('codigoDre', codigoDre);
     if (codigoUe) params.append('codigoUe', codigoUe);
+    if (anoLetivo) params.append('anoLetivo', anoLetivo);
 
     const queryString = params.toString();
     const url = queryString

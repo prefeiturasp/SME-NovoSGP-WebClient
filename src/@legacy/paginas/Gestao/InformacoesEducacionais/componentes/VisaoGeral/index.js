@@ -4,6 +4,7 @@ import { Row, Col } from 'antd';
 import styled from 'styled-components';
 import IndicadorFrequenciaGlobal from './indicadorFrequenciaGlobal';
 import IndicadorIdep from './indicadorIdep';
+import IndicadorIdeb from './indicadorIdeb';
 import ServicoVisaoGeral from '~/servicos/InformacoesEducacionais/ServicoVisaoGeral';
 import { erros } from '~/servicos';
 
@@ -64,7 +65,16 @@ const VisaoGeral = ({ anoLetivo, dreCodigo }) => {
           label: serie.serie || '',
         })) || [];
 
-    return { dadosIdep, dadosFrequencia };
+    const dadosIdeb =
+      dadosCompletos
+        .find(item => item.indicador === 'IDEB')
+        ?.series.map(serie => ({
+          valor: serie.valor,
+          label: serie.serie,
+        }))
+        .sort((a, b) => ordem.indexOf(a.label) - ordem.indexOf(b.label)) || [];
+
+    return { dadosIdep, dadosFrequencia, dadosIdeb };
   }, [dadosCompletos]);
 
   return (
@@ -75,10 +85,17 @@ const VisaoGeral = ({ anoLetivo, dreCodigo }) => {
         municipal de São Paulo.
       </Descricao>
       <div style={{ marginBottom: '16px' }}>
-        <Row gutter={[24, 24]}>
+        <Row gutter={[24]}>
           <Col xs={24} md={12}>
             <IndicadorIdep
               dados={dadosFormatados.dadosIdep}
+              loading={loading}
+            />
+          </Col>
+
+          <Col xs={24} md={12}>
+            <IndicadorIdeb
+              dados={dadosFormatados.dadosIdeb}
               loading={loading}
             />
           </Col>
