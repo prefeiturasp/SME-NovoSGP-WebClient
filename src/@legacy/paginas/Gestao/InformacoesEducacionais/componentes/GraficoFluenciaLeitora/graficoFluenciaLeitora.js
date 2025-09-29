@@ -1,18 +1,17 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader } from '~/componentes';
-import { GraficoBarrasHorizontal } from '~/componentes-sgp';
+import { GraficoBarras } from '~/componentes-sgp';
 import { erros } from '~/servicos';
-import ServicoAlfabetizacaoGrafico from '~/servicos/InformacoesEducacionais/ServicoAlfabetizacaoGrafico';
+import ServicoFluenciaLeituraGrafico from '~/servicos/InformacoesEducacionais/ServicoFluenciaLeituraGrafico';
 import { SelectComponent } from '~/componentes';
 
 const listaPeriodicidade = [
-  { valor: 1, desc: '1º bimestre' },
-  { valor: 2, desc: '2º bimestre' },
-  { valor: 3, desc: '3º bimestre' },
-  { valor: 4, desc: '4º bimestre' },
+  { valor: 1, desc: 'Avaliação de entrada (março)' },
+  { valor: 2, desc: 'Avaliação de saída (novembro)' },
 ];
-const GraficoFluenciaLeitora = ({ dreId }) => {
+
+const GraficoFluenciaLeitora = ({ dreId, ueId, anoLetivo }) => {
   const [bimestre, setBimestre] = useState(1);
   const [dados, setDados] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,16 +30,18 @@ const GraficoFluenciaLeitora = ({ dreId }) => {
     setLoading(true);
     try {
       const resposta =
-        await ServicoAlfabetizacaoGrafico.obterAlfabetizacaoGrafico(
+        await ServicoFluenciaLeituraGrafico.obterFluenciaLeituraGrafico(
           dreId,
-          null,
-          periodicidade
+          ueId,
+          periodicidade,
+          anoLetivo
         );
+
       if (resposta.status === 200 && Array.isArray(resposta.data)) {
         const dadosFormatados = resposta.data.map(item => ({
-          descricao: item.nivelAlfabetizacao,
-          quantidade: item.totalAlunos,
-          descricaoCompleta: item.nivelAlfabetizacaoDescricao,
+          descricao: `${item.nomeFluencia} (${item.descricaoFluencia})`,
+          quantidade: item.quantidadeAlunos,
+          percentual: item.percentual,
         }));
         setDados(dadosFormatados);
       } else {
@@ -55,7 +56,7 @@ const GraficoFluenciaLeitora = ({ dreId }) => {
     } finally {
       setLoading(false);
     }
-  }, [dreId, periodicidade]);
+  }, [dreId, periodicidade, ueId, anoLetivo]);
 
   const handleSelectChange = valor => {
     const selecionado = listaPeriodicidade.find(
@@ -67,7 +68,7 @@ const GraficoFluenciaLeitora = ({ dreId }) => {
 
   useEffect(() => {
     buscarDados();
-  }, [dreId, periodicidade, buscarDados]);
+  }, [dreId, periodicidade, ueId, anoLetivo, buscarDados]);
 
   return (
     <div className="mb-3">
@@ -109,15 +110,22 @@ const GraficoFluenciaLeitora = ({ dreId }) => {
         por crianças na faixa etária da alfabetização.
       </p>
 
-      {dados.length ? (
-        <GraficoBarrasHorizontal
+      {loading && <Loader />}
+      {!loading && dados.length === 0 && (
+        <div className="text-center">Sem dados</div>
+      )}
+      {dados.length > 0 && (
+        <GraficoBarras
           data={dados}
           xField="quantidade"
           yField="descricao"
           colors={'#6933FF'}
           xAxisVisible={true}
           legendVisible={false}
-          labelVisible={false}
+          labelVisible={true}
+          label={{
+            formatter: data => `${data.quantidade} (${data.percentual}%)`,
+          }}
           tooltip={{
             customContent: (title, items) => {
               if (!items?.length) return '';
@@ -125,16 +133,13 @@ const GraficoFluenciaLeitora = ({ dreId }) => {
               return `
                 <div style="max-width:350px; padding: 5px">
                   <div style="font-weight: bold; margin-bottom:4px;">${item.descricao}</div>
-                  <div style="font-size:13px; margin-bottom:7px;">${item.descricaoCompleta}</div>
-                  <div style="font-weight: bold;">Quantidade de estudantes: ${item.quantidade}</div>
+                  <div style="font-size:13px;">Quantidade de estudantes: ${item.quantidade} (${item.percentual}%)</div>
                 </div>
               `;
             },
           }}
         />
-      ) : !loading ? (
-        <div className="text-center">Sem dados</div>
-      ) : null}
+      )}
       <div
         className="text-center"
         style={{ color: '#42474a', fontWeight: 'bold' }}
@@ -147,10 +152,14 @@ const GraficoFluenciaLeitora = ({ dreId }) => {
 
 GraficoFluenciaLeitora.propTypes = {
   dreId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  ueId: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  anoLetivo: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 GraficoFluenciaLeitora.defaultProps = {
   dreId: null,
+  ueId: null,
+  anoLetivo: new Date().getFullYear(),
 };
 
 export default GraficoFluenciaLeitora;

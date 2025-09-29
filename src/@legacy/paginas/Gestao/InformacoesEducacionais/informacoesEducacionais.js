@@ -150,7 +150,11 @@ const InformacoesEducacionais = () => {
 
           <Row gutter={[32, 32]}>
             <Col span={24}>
-              <GraficoFluenciaLeitora dreId={dreCodigo} />
+              <GraficoFluenciaLeitora
+                dreId={dreCodigo}
+                ueId={ueCodigo}
+                anoLetivo={anoLetivo}
+              />
             </Col>
           </Row>
         </div>
