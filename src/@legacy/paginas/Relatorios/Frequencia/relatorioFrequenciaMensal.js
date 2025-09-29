@@ -489,14 +489,6 @@ const RelatorioFrequenciaMensal = () => {
       tipoFormatoRelatorio,
     };
 
-    if (dreId === '-99') {
-      delete params.codigoDre;
-    }
-
-    if (ueId === '-99') {
-      delete params.codigoUe;
-    }
-
     await ServicoRelatorioFrequencia.gerar(params, true)
       .then(() => {
         sucesso(
