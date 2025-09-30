@@ -19,6 +19,7 @@ import { ListRegistroColetivo } from '@/pages/naapa/registro-coletivo/list';
 import { RelatorioNAAPABuscaAtiva } from '@/pages/relatorios/NAAPA/busca-ativa';
 import { RelatorioMapeamentoEstudantes } from '@/pages/relatorios/mapeamento-estudantes';
 import { RelatorioProdutividade } from '@/pages/relatorios/produtividade';
+import InformacoesEducacionais from '~/paginas/Gestao/InformacoesEducacionais/informacoesEducacionais';
 import RotasTipo from '~/constantes/rotasTipo';
 import EncaminhamentoAEECadastro from '~/paginas/AEE/Encaminhamento/Cadastro/encaminhamentoAEECadastro';
 import EncaminhamentoAEELista from '~/paginas/AEE/Encaminhamento/Lista/encaminhamentoAEELista';
@@ -88,6 +89,7 @@ import ComunicadosCadastro from '~/paginas/Gestao/Comunicados/Cadastro/cadastroC
 import ComunicadosLista from '~/paginas/Gestao/Comunicados/Lista/listaComunicados';
 import DocPlanosTrabalhoCadastro from '~/paginas/Gestao/DocumentosPlanosTrabalho/cadastro/docPlanosTrabalhoCadastro';
 import DocPlanosTrabalhoLista from '~/paginas/Gestao/DocumentosPlanosTrabalho/lista/docPlanosTrabalhoLista';
+import ImportacaoDados from '~/paginas/Gestao/ImportacaoDados/importacaoDados';
 import CadastroOcorrencias from '~/paginas/Gestao/Ocorrencia/CadastroOcorrencias';
 import ListaOcorrencias from '~/paginas/Gestao/Ocorrencia/lista/listaOcorrencias';
 import Login from '~/paginas/Login';
@@ -1164,6 +1166,17 @@ route.set(ROUTES.DOCUMENTOS_PLANOS_TRABALHO, {
   chavePermissao: ROUTES.DOCUMENTOS_PLANOS_TRABALHO,
 });
 
+route.set(ROUTES.IMPORTACAO_DADOS, {
+  breadcrumbName: 'Importação de Dados',
+  menu: ['Gestão'],
+  parent: '/',
+  component: ImportacaoDados,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.IMPORTACAO_DADOS,
+});
+
 route.set(`${ROUTES.DOCUMENTOS_PLANOS_TRABALHO}/novo`, {
   breadcrumbName: 'Upload do arquivo',
   parent: ROUTES.DOCUMENTOS_PLANOS_TRABALHO,
@@ -1762,6 +1775,17 @@ route.set(ROUTES.INFORMES_EDICAO, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.INFORMES,
+});
+
+route.set(ROUTES.INFORMACOES_EDUCACIONAIS, {
+  breadcrumbName: 'Informações Educacionais',
+  menu: ['Gestão'],
+  parent: '/',
+  component: InformacoesEducacionais,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.INFORMACOES_EDUCACIONAIS,
 });
 
 route.set(ROUTES.BUSCA_ATIVA_CONSULTA_CRIANCAS_ESTUDANTES_AUSENTES, {

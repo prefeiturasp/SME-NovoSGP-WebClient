@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import {
   CampoNumero,
   Card,
@@ -71,6 +71,35 @@ const RelatorioFrequenciaMensal = () => {
   const [apenasAlunosPercentualAbaixoDe, setApenasAlunosPercentualAbaixoDe] =
     useState();
   const [modoEdicao, setModoEdicao] = useState(false);
+
+  const apenasExcelUmMes = useMemo(() => {
+    return (
+      dreId === OPCAO_TODOS || (dreId !== OPCAO_TODOS && ueId === OPCAO_TODOS)
+    );
+  }, [dreId, ueId]);
+
+  useEffect(() => {
+    if (apenasExcelUmMes) {
+      setTipoFormatoRelatorio('4');
+    }
+  }, [apenasExcelUmMes]);
+
+  useEffect(() => {
+    if (
+      apenasExcelUmMes &&
+      Array.isArray(mesesReferencias) &&
+      mesesReferencias.length > 1
+    ) {
+      setMesesReferencias([mesesReferencias[0]]);
+    }
+  }, [apenasExcelUmMes, mesesReferencias]);
+
+  const listaFormatosFiltrada = useMemo(() => {
+    if (apenasExcelUmMes) {
+      return [{ valor: '4', desc: 'EXCEL' }];
+    }
+    return listaFormatos;
+  }, [apenasExcelUmMes, listaFormatos]);
 
   const ehEjaOuCelp =
     Number(modalidadeId) === ModalidadeEnum.EJA ||
@@ -438,6 +467,12 @@ const RelatorioFrequenciaMensal = () => {
     ehEjaOuCelp,
   ]);
 
+  function toArray(value) {
+    if (Array.isArray(value)) return value;
+    if (value === null || value === undefined) return [];
+    return [value];
+  }
+
   const gerar = async () => {
     setCarregandoGerar(true);
 
@@ -449,7 +484,7 @@ const RelatorioFrequenciaMensal = () => {
       modalidade: modalidadeId,
       codigosTurmas: turmasCodigo,
       semestre,
-      mesesReferencias,
+      mesesReferencias: toArray(mesesReferencias),
       apenasAlunosPercentualAbaixoDe,
       tipoFormatoRelatorio,
     };
@@ -614,7 +649,7 @@ const RelatorioFrequenciaMensal = () => {
                   disabled={
                     !turmasCodigo?.length || listaMesesReferencias?.length === 1
                   }
-                  multiple
+                  multiple={!apenasExcelUmMes}
                   valueSelect={mesesReferencias}
                   onChange={valores => {
                     onchangeMultiSelect(valores, mesesReferencias, onChangeMes);
@@ -642,7 +677,7 @@ const RelatorioFrequenciaMensal = () => {
             <Col sm={24} md={12} xl={8}>
               <SelectComponent
                 label="Formato"
-                lista={listaFormatos}
+                lista={listaFormatosFiltrada}
                 valueOption="valor"
                 valueText="desc"
                 valueSelect={tipoFormatoRelatorio}

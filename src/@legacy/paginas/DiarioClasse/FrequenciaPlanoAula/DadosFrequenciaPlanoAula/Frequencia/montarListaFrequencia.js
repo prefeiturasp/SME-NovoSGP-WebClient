@@ -119,7 +119,6 @@ const MontarListaFrequencia = () => {
                   )}
                   aulaId={aulaId}
                   setDataSource={atualizarValoresAlterados}
-                  dataSelecionadaMotivosAusencias={dataSelecionada}
                 />
 
                 {listaDadosFrequencia?.criadoEm && <AuditoriaFrequencia />}

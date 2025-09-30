@@ -100,7 +100,7 @@ const SelectUE: React.FC<SelectUEProps> = ({
   return (
     <Loader loading={exibirLoader} tip="">
       <Form.Item
-        label="Unidade Educacional (UE)"
+        label="Unidade Escolar (UE)"
         name={name}
         initialValue={
           initialValueConfig?.loaded ? initialValueConfig.value : formItemProps?.initialValue
@@ -114,7 +114,7 @@ const SelectUE: React.FC<SelectUEProps> = ({
           allowClear
           id={SGP_SELECT_UE}
           options={options}
-          placeholder="Unidade Educacional (UE)"
+          placeholder="Unidade Escolar (UE)"
           labelInValue
           {...selectProps}
           disabled={disabled}
