@@ -419,7 +419,9 @@ const RelatorioFrequenciaMensal = () => {
     if (turmasCodigo?.length) {
       const meses = obterTodosMeses();
       delete meses[0];
-      meses.unshift({ numeroMes: OPCAO_TODOS, nome: 'Todos' });
+      if (!apenasExcelUmMes) {
+        meses.unshift({ numeroMes: OPCAO_TODOS, nome: 'Todos' });
+      }
       setListaMesesReferencias(meses);
     } else {
       setListaMesesReferencias([]);
