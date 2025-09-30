@@ -153,7 +153,7 @@ const GraficoFrequenciaModalidade = ({
     } finally {
       setExibirLoader(false);
     }
-  }, [dreId, periodicidade]);
+  }, [dreId, periodicidade, anoLetivo]);
 
   useEffect(() => {
     carregarDadosApi();
