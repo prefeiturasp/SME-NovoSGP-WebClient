@@ -7,6 +7,7 @@ import styles from './importarDados.module.css';
 import { UploadFullWidth, FullWidthButton, FullWidthButton2 } from './importarDados.styled';
 import { Typography } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -15,6 +16,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
   const [ano, setarAno] = useState('');
   const [periodo, setarPeriodo] = useState(null);
   const [listaAnos, setListaAnos] = useState([]);
+  const [enviando, setEnviando] = useState(false);
 
   useEffect(() => {
     const anoAtual = new Date().getFullYear();
@@ -84,6 +86,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
     const anoNum = Number(anoSelecionado.nome);
 
     try {
+      setEnviando(true);
       const fmData = new FormData();
       fmData.append('arquivo', arquivoSelecionado);
       fmData.append('FileName', arquivoSelecionado.name);
@@ -175,6 +178,8 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         ),
         okButtonProps: { style: { display: 'none' } },
       });
+    } finally {
+      setEnviando(false);
     }
   };
 
@@ -279,8 +284,9 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         </Col>
         <Col>
           <Button
-            icon="upload"
+            icon={enviando ? <LoadingOutlined spin /> : 'upload'}
             disabled={
+              enviando ||
               !(
                 valor &&
                 ano &&
