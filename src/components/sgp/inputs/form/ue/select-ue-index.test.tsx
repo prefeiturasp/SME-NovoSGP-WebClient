@@ -61,16 +61,12 @@ const formState = {
   consideraHistorico: false,
 };
 jest.mock('antd/es/form/Form', () => ({
-  useWatch: jest.fn((field: string) => formState[field]),
+  useWatch: (field: string) => formState[field],
 }));
 
 describe('SelectUE', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Se quiser alterar algum valor para um teste específico, faça:
-    // formState.anoLetivo = 2024;
-    // formState.dre = { value: 123 };
-    // formState.consideraHistorico = false;
   });
 
   it('renderiza Loader, Form.Item e Select', async () => {
@@ -97,7 +93,7 @@ describe('SelectUE', () => {
         { codigo: 2, nome: 'UE 2', value: 2, label: 'UE 2' },
       ]);
       expect(select.getAttribute('id')).toBe('select-ue');
-      expect(select.getAttribute('placeholder')).toBe('Unidade Escolar (UE)');
+      expect(select.getAttribute('placeholder')).toBe('Unidade Educacional (UE)');
     });
   });
 
