@@ -66,13 +66,11 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
           const files = prev ? [...prev] : [];
 
           if (!files.find((f) => f.name === file.name && f.lastModified === file.lastModified)) {
-
             files.push(file);
           }
           return files.slice(0, 100);
         });
       } else {
-
         const isXlsx =
           file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
@@ -88,9 +86,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
     },
     onRemove: (file) => {
       if (isBoletim) {
-
         setarArquivoSelecionado((prev) => (prev ? prev.filter((f) => f.uid !== file.uid) : []));
-
       } else {
         setarArquivoSelecionado(null);
       }
@@ -109,12 +105,10 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
   };
 
   const handleSubmit = async () => {
-
     if (
       !arquivoSelecionado ||
       (isBoletim && (!Array.isArray(arquivoSelecionado) || arquivoSelecionado.length === 0))
     ) {
-
       alert('Selecione um arquivo antes de enviar.');
       return;
     }
@@ -152,7 +146,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         fmData.append('arquivo', arquivoSelecionado);
         fmData.append('FileName', arquivoSelecionado.name);
       }
-      
+
       const urlMap = {
         IDEP: 'v1/importar-arquivo/idep',
         IDEB: 'v1/importar-arquivo/ideb',
@@ -161,7 +155,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         PROFICIENCIA_IDEP: 'v1/importar-arquivo/proficiencia-idep',
         PROFICIENCIA_IDEB: 'v1/importar-arquivo/proficiencia-ideb',
         TAXA_ALFABETIZACAO: 'v1/importar-arquivo/alfabetizacao',
-      }
+      };
 
       if (valor === 'FLUENCIA') {
         if (!periodo || !['ENTRADA', 'SAIDA'].includes(periodo)) {
@@ -170,20 +164,18 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         }
         url = 'v1/importar-arquivo/fluencia-leitora';
         const nomePeriodo = periodo === 'ENTRADA' ? 1 : 2;
-        fmData.append('periodo', nomePeriodo);
+        fmData.append('tipoAvaliacao', nomePeriodo);
       } else if (urlMap[valor]) {
         url = urlMap[valor];
         if (isBoletim) {
           url += `?ano=${encodeURIComponent(anoNum)}`;
         }
-
-        fmData.append('anoLetivo', encodeURIComponent(anoNum));
-
       } else {
         alert('Seleção inválida.');
         return;
       }
 
+      fmData.append('anoLetivo', encodeURIComponent(anoNum));
       const resposta = await api.post(url, fmData, config);
 
       setarModal(false);
@@ -342,7 +334,6 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
               }
               onRemove={(file) => {
                 setarArquivoSelecionado((prev) =>
-
                   prev
                     ? prev.filter((f) => (f.uid || `${f.name}-${f.lastModified}`) !== file.uid)
                     : [],
