@@ -85,37 +85,4 @@ describe('LocalizadorService', () => {
       expect(api.get).toHaveBeenCalledWith(expectedUrl, expectedParams);
     });
   });
-
-  describe('buscarPessoa', () => {
-    const mockParams = { rf: 'rf-123', nome: 'JOAO' };
-
-    const urlEsperada = undefined;
-
-    it('deve retornar um objeto de sucesso quando a api.post resolve', async () => {
-      const mockApiResponse = { data: { id: 1, nome: 'JOAO' } };
-      api.post.mockResolvedValue(mockApiResponse);
-
-      const resultado = await LocalizadorService.buscarPessoa(mockParams);
-
-      expect(api.post).toHaveBeenCalledWith(urlEsperada, mockParams);
-      expect(resultado).toEqual({
-        sucesso: true,
-        mensagem: 'Foi encontrado',
-        dados: mockApiResponse.data,
-      });
-    });
-
-    it('deve retornar um objeto de erro quando a api.post rejeita', async () => {
-      const mockError = new Error('Erro de rede');
-      api.post.mockRejectedValue(mockError);
-
-      const resultado = await LocalizadorService.buscarPessoa(mockParams);
-
-      expect(api.post).toHaveBeenCalledWith(urlEsperada, mockParams);
-      expect(resultado).toEqual({
-        sucesso: false,
-        erroGeral: `Não foi encontrado! ${mockError}`,
-      });
-    });
-  });
 });

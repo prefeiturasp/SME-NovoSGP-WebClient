@@ -111,8 +111,8 @@ InputNome.propTypes = {
 InputNome.defaultProps = {
   dataSource: [],
   pessoaSelecionada: {},
-  onSelect: () => {},
-  onChange: () => {},
+  onSelect: {},
+  onChange: {},
   desabilitado: false,
   regexIgnore: '',
   placeholder: '',

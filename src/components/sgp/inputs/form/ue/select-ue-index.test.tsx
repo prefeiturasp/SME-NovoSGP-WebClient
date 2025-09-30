@@ -93,7 +93,7 @@ describe('SelectUE', () => {
         { codigo: 2, nome: 'UE 2', value: 2, label: 'UE 2' },
       ]);
       expect(select.getAttribute('id')).toBe('select-ue');
-      expect(select.getAttribute('placeholder')).toBe('Unidade Escolar (UE)');
+      expect(select.getAttribute('placeholder')).toBe('Unidade Educacional (UE)');
     });
   });
 

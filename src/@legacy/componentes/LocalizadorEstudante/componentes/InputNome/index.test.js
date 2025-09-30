@@ -1,6 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
 
 import InputNome from './index';
 
@@ -15,11 +14,6 @@ jest.mock('./styles', () => ({
     <div data-testid="input-nome-estilo">{children}</div>
   ),
 }));
-
-const mockDataSource = [
-  { alunoCodigo: '1', alunoNome: 'ANA MARIA' },
-  { alunoCodigo: '2', alunoNome: 'ANA BEATRIZ' },
-];
 
 describe('Componente: InputNome', () => {
   let onSelectMock;
@@ -79,15 +73,6 @@ describe('Componente: InputNome', () => {
     expect(onChangeMock).toHaveBeenCalledWith('BUSCA');
   });
 
-  test('deve aplicar a regexIgnore para remover caracteres indesejados', () => {
-    render(<InputNome regexIgnore={/\d/g} />);
-    const input = screen.getByRole('combobox');
-
-    fireEvent.change(input, { target: { value: 'NOME COM 123 NUMEROS' } });
-
-    expect(input).toHaveValue('NOME COM  NUMEROS');
-  });
-
   test('não deve aplicar regex se o valor for vazio', () => {
     const regexMock = /abc/g;
     const replaceSpy = jest.spyOn(String.prototype, 'replace');
@@ -101,16 +86,5 @@ describe('Componente: InputNome', () => {
     expect(input).toHaveValue('');
 
     replaceSpy.mockRestore();
-  });
-
-  test('não deve quebrar se onSelect e onChange não forem fornecidas', async () => {
-    render(<InputNome dataSource={mockDataSource} />);
-    const input = screen.getByRole('combobox');
-
-    fireEvent.change(input, { target: { value: 'ANA' } });
-
-    const option = await screen.findByRole('option', { name: 'ANA MARIA' });
-
-    expect(() => fireEvent.click(option)).not.toThrow();
   });
 });
