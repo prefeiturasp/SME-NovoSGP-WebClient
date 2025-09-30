@@ -11,6 +11,7 @@ import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorMo
 import TabelaIndicadoresNivelCriticoAlfabetizacao from './componentes/TabelaIndicadoresNivelCriticoAlfabetizacao/tabelaIndicadoresNivelCriticoAlfabetizacao';
 import GraficoAnaliseDeAlfabetizacao from './componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
 import GraficoIdep from './componentes/GraficoIdep/graficoIdep';
+import GraficoIdeb from './componentes/GraficoIdeb/graficoIdeb';
 import VisaoGeral from './componentes/VisaoGeral';
 import TabelaIndicadoresPap from './componentes/TabelaIndicadoresPap/tabelaIndicadoresPap';
 import styled from 'styled-components';
@@ -115,6 +116,15 @@ const InformacoesEducacionais = () => {
             <Col span={24}>
               <GraficoIdep
                 key={`idep-${String(anoLetivo)}-${String(dreCodigo)}`}
+                anoLetivo={anoLetivo}
+                dreId={dreCodigo}
+              />
+            </Col>
+          </Row>
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <GraficoIdeb
+                key={`ideb-${String(anoLetivo)}-${String(dreCodigo)}`}
                 anoLetivo={anoLetivo}
                 dreId={dreCodigo}
               />
