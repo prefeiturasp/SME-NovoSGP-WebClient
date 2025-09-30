@@ -12,6 +12,10 @@ import SelectComponent from '~/componentes/select';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import ServicoAnotacaoFrequenciaAluno from '~/servicos/Paginas/DiarioClasse/ServicoAnotacaoFrequenciaAluno';
 import { EditorAnotacao } from './modalAnotacoes.css';
+import moment from 'moment';
+import 'moment/locale/pt-br';
+import { Typography } from 'antd';
+const { Text } = Typography;
 
 const ModalAnotacoesFrequencia = props => {
   const {
@@ -27,6 +31,7 @@ const ModalAnotacoesFrequencia = props => {
     fechouModal,
     listaPadraoMotivoAusencia,
     exibirMotivosAusencia = true,
+    dataSelecionadaMotivosAusencias,
   } = props;
 
   const dispatch = useDispatch();
@@ -55,6 +60,7 @@ const ModalAnotacoesFrequencia = props => {
   const [refForm, setRefForm] = useState({});
   const [valoresIniciais, setValoresIniciais] = useState(iniciar);
   const [loaderSalvarEditar, setLoaderSalvarEditar] = useState(false);
+  const [motivosAusenciaAbae, setMotivosAusenciaAbae] = useState([]);
 
   const validacoes = Yup.object().shape(
     {
@@ -109,6 +115,24 @@ const ModalAnotacoesFrequencia = props => {
     }
   }, [aulaId, dadosModal]);
 
+  const obterMotivosAusenciasAbae = useCallback(async () => {
+    const resultado =
+      await ServicoAnotacaoFrequenciaAluno.obterMotivosAusenciaAbae(
+        dadosModal?.codigoAluno,
+        moment(dataSelecionadaMotivosAusencias).format('YYYY-MM-DD HH:mm:ss')
+      ).catch(e => erros(e));
+
+    if (resultado && resultado.data) {
+      const registrosFiltrados = resultado.data.items.filter(
+        item => item.descMotivoAusencia
+      );
+
+      setMotivosAusenciaAbae(registrosFiltrados);
+    } else {
+      setMotivosAusenciaAbae({});
+    }
+  }, []);
+
   const obterListaMotivosAusencia = async () => {
     const retorno =
       await ServicoAnotacaoFrequenciaAluno.obterMotivosAusencia().catch(e =>
@@ -150,6 +174,7 @@ const ModalAnotacoesFrequencia = props => {
     if (dadosModal?.codigoAluno) {
       obterAnotacao();
       montarDadosAluno();
+      obterMotivosAusenciasAbae();
     }
   }, [dadosModal, obterAnotacao, montarDadosAluno]);
 
@@ -317,6 +342,22 @@ const ModalAnotacoesFrequencia = props => {
                   permiteAlterarImagem={false}
                 />
               </div>
+
+              {motivosAusenciaAbae.length > 0 ? (
+                <div className="col-md-12 mt-2">
+                  {' '}
+                  <strong>Motivos de ausência cadastrado pelo ABAE</strong>
+                </div>
+              ) : (
+                ''
+              )}
+              {motivosAusenciaAbae.map(item => (
+                <div className="col-md-12 mt-2" key={item.id}>
+                  {' '}
+                  <Text>{item.descMotivoAusencia}</Text>
+                </div>
+              ))}
+
               {exibirMotivosAusencia ? (
                 <div className="col-md-12 mt-2">
                   <Loader loading={carregandoMotivosAusencia} tip="">
@@ -346,24 +387,26 @@ const ModalAnotacoesFrequencia = props => {
               )}
               <div className="col-md-12 mt-2">
                 <EditorAnotacao>
-                  <JoditEditor
-                    label="Anotação"
-                    form={form}
-                    value={valoresIniciais?.anotacao}
-                    name="anotacao"
-                    onChange={v => {
-                      if (valoresIniciais.anotacao !== v) {
-                        onChangeCampos();
+                  {valoresIniciais?.motivoAusenciaId && (
+                    <JoditEditor
+                      label="Anotação"
+                      form={form}
+                      value={valoresIniciais?.anotacao}
+                      name="anotacao"
+                      onChange={v => {
+                        if (valoresIniciais?.anotacao !== v) {
+                          onChangeCampos();
+                        }
+                      }}
+                      desabilitar={desabilitarCampos}
+                      labelRequired={
+                        !form?.values?.motivoAusenciaId ||
+                        !!(
+                          form?.values?.anotacao && form?.values?.motivoAusenciaId
+                        )
                       }
-                    }}
-                    desabilitar={desabilitarCampos}
-                    labelRequired={
-                      !form?.values?.motivoAusenciaId ||
-                      !!(
-                        form?.values?.anotacao && form?.values?.motivoAusenciaId
-                      )
-                    }
-                  />
+                    />
+                  )}
                 </EditorAnotacao>
               </div>
               <div className="row">
@@ -372,8 +415,8 @@ const ModalAnotacoesFrequencia = props => {
                   style={{ marginTop: '-15px' }}
                 >
                   {valoresIniciais &&
-                  valoresIniciais.auditoria &&
-                  valoresIniciais.auditoria.criadoPor ? (
+                    valoresIniciais.auditoria &&
+                    valoresIniciais.auditoria.criadoPor ? (
                     <Auditoria
                       criadoPor={valoresIniciais.auditoria.criadoPor}
                       criadoEm={valoresIniciais.auditoria.criadoEm}
@@ -457,10 +500,10 @@ ModalAnotacoesFrequencia.defaultProps = {
   componenteCurricularId: '',
   desabilitarCampos: false,
   exibirModal: false,
-  setExibirModal: () => {},
+  setExibirModal: () => { },
   dadosModal: [],
-  setDadosModal: () => {},
-  fechouModal: () => {},
+  setDadosModal: () => { },
+  fechouModal: () => { },
   listaPadraoMotivoAusencia: [],
 };
 
