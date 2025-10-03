@@ -87,6 +87,7 @@ const InformacoesEducacionais = () => {
           </Row>
         </div>
       </CardEstilizado>
+
       <CardEstilizado>
         <div className="col-md-12">
           {exibirVisaoGeral ? (
