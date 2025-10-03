@@ -155,6 +155,7 @@ const InformacoesEducacionais = () => {
               )}
             </Col>
           </Row>
+
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <GraficoAnaliseDeAlfabetizacao dreId={dreCodigo} />
