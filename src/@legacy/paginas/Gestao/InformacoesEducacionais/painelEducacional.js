@@ -1,0 +1,89 @@
+import { Col, Row } from 'antd';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Cabecalho } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import { OPCAO_TODOS } from '~/constantes/constantes';
+import InformacoesEducacionaisFiltros from './VisaoSmeDre/componentes/Filtro/informacoesEducacionaisFiltros';
+import InformacoesEducacionais from './VisaoSmeDre/informacoesEducacionais';
+import { CardEstilizado } from './shared/styles';
+import DetalhesUnidadeEducacional from './VisaoUe/detalhesUnidadeEducacional';
+
+export default function PainelEducacional() {
+  const navigate = useNavigate();
+  const [anoLetivo, setAnoLetivo] = useState(null);
+  const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
+  const [ueCodigo, setUeCodigo] = useState(OPCAO_TODOS);
+  const [modalidade, setModalidade] = useState(null);
+  const [semestre, setSemestre] = useState(null);
+  const [tipoVisualizacao, setTipoVisualizacao] = useState('global');
+  const [periodicidade, setPeriodicidade] = useState('mensal');
+  const aoClicarBotaoVoltar = () => {
+    navigate('/');
+  };
+
+  const obterDreSelecionada = valor => {
+    const codigo = valor && typeof valor === 'object' ? valor.codigo : valor;
+    if (codigo !== dreCodigo) {
+      setDreCodigo(codigo);
+    }
+  };
+
+  const obterUeSelecionada = valor => {
+    const codigo = valor && typeof valor === 'object' ? valor.codigo : valor;
+    if (codigo !== ueCodigo) {
+      setUeCodigo(codigo);
+    }
+  };
+
+  const obterAnoLetivoSelecionado = valor => {
+    const normalizado = valor ? String(valor) : null;
+    if (normalizado !== anoLetivo) {
+      setAnoLetivo(normalizado);
+    }
+  };
+
+  const title =
+    ueCodigo !== OPCAO_TODOS
+      ? 'Detalhes da Unidade Educacional'
+      : 'Painel de Informações Educacionais';
+
+  return (
+    <>
+      <Cabecalho
+        pagina="Detalhes da Unidade Educacional"
+        style={{ marginBottom: '16px' }}
+      >
+        <BotaoVoltarPadrao onClick={aoClicarBotaoVoltar} />
+      </Cabecalho>
+      <CardEstilizado>
+        <div className="col-md-12">
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <InformacoesEducacionaisFiltros
+                obterDreSelecionado={obterDreSelecionada}
+                setAnoLetivo={obterAnoLetivoSelecionado}
+                obterUeSelecionado={obterUeSelecionada}
+                anoLetivo={anoLetivo}
+              />
+            </Col>
+          </Row>
+        </div>
+      </CardEstilizado>
+
+      {ueCodigo === OPCAO_TODOS ? (
+        <InformacoesEducacionais
+          anoLetivo={anoLetivo}
+          dreCodigo={dreCodigo}
+          ueCodigo={ueCodigo}
+          modalidade={modalidade}
+          semestre={semestre}
+          tipoVisualizacao={tipoVisualizacao}
+          periodicidade={periodicidade}
+        />
+      ) : (
+        <DetalhesUnidadeEducacional ueCodigo={ueCodigo} anoLetivo={anoLetivo} />
+      )}
+    </>
+  );
+}
