@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd';
-import { CardEstilizado, TituloCard } from '../styles';
+import { CardEstilizado, TituloCard } from '../shared/styles';
 import GraficoAnaliseDeAlfabetizacao from './componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
 import GraficoAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia';
 import GraficoFluenciaLeitora from './componentes/GraficoFluenciaLeitora/graficoFluenciaLeitora';

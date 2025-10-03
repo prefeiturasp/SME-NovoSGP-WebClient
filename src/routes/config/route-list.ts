@@ -133,7 +133,7 @@ import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioS
 import SemPermissao from '~/paginas/SemPermissao/sem-permissao';
 import Sondagem from '~/paginas/Sondagem/sondagem';
 import { setRotas } from '~/redux/modulos/navegacao/actions';
-import InformacoesEducacionais from '~/paginas/Gestao/InformacoesEducacionais/painelEducacional';
+import InformacoesEducacionais from '~/paginas/Gestao/InformacoesEducacionais/PainelEducacional/painelEducacional';
 import ImportacaoDados from '~/paginas/Gestao/ImportacaoDados/importacaoDados';
 
 export interface RouteProps {

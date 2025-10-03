@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import InformacoesEducacionaisFiltros from './VisaoSmeDre/componentes/Filtro/informacoesEducacionaisFiltros';
-import InformacoesEducacionais from './VisaoSmeDre/informacoesEducacionais';
-import { CardEstilizado } from './styles';
+import InformacoesEducacionaisFiltros from '../VisaoSmeDre/componentes/Filtro/informacoesEducacionaisFiltros';
+import InformacoesEducacionais from '../VisaoSmeDre/informacoesEducacionais';
+import { CardEstilizado } from '../shared/styles';
 
 export default function PainelEducacional() {
   const navigate = useNavigate();
