@@ -1,92 +1,30 @@
 import { Col, Row } from 'antd';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card } from '~/componentes';
-import { Cabecalho } from '~/componentes-sgp';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { OPCAO_TODOS } from '~/constantes/constantes';
-import InformacoesEducacionaisFiltros from './componentes/Filtro/informacoesEducacionaisFiltros';
-import GraficoAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia';
-import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorModalidade';
-import TabelaIndicadoresNivelCriticoAlfabetizacao from './componentes/TabelaIndicadoresNivelCriticoAlfabetizacao/tabelaIndicadoresNivelCriticoAlfabetizacao';
+import { CardEstilizado, TituloCard } from '../shared/styles';
 import GraficoAnaliseDeAlfabetizacao from './componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
-import GraficoIdep from './componentes/GraficoIdep/graficoIdep';
-import GraficoIdeb from './componentes/GraficoIdeb/graficoIdeb';
-import VisaoGeral from './componentes/VisaoGeral';
-import TabelaIndicadoresPap from './componentes/TabelaIndicadoresPap/tabelaIndicadoresPap';
-import styled from 'styled-components';
+import GraficoAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia';
 import GraficoFluenciaLeitora from './componentes/GraficoFluenciaLeitora/graficoFluenciaLeitora';
+import GraficoFrequenciaPorModalidade from './componentes/GraficoFrequenciaPorModalidade';
+import GraficoIdeb from './componentes/GraficoIdeb/graficoIdeb';
+import GraficoIdep from './componentes/GraficoIdep/graficoIdep';
+import TabelaIndicadoresNivelCriticoAlfabetizacao from './componentes/TabelaIndicadoresNivelCriticoAlfabetizacao/tabelaIndicadoresNivelCriticoAlfabetizacao';
+import TabelaIndicadoresPap from './componentes/TabelaIndicadoresPap/tabelaIndicadoresPap';
+import VisaoGeral from './componentes/VisaoGeral';
+import PropTypes from 'prop-types';
 
-const CardEstilizado = styled(Card)`
-  margin-top: 16px;
-`;
-const TituloCard = styled.h2`
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 0;
-  font-size: 20px;
-`;
-
-const InformacoesEducacionais = () => {
-  const navigate = useNavigate();
-  const [anoLetivo, setAnoLetivo] = useState(null);
-  const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
-  const [ueCodigo, setUeCodigo] = useState(OPCAO_TODOS);
-  const [modalidade, setModalidade] = useState(null);
-  const [semestre, setSemestre] = useState(null);
-  const [tipoVisualizacao, setTipoVisualizacao] = useState('global');
-  const [periodicidade, setPeriodicidade] = useState('mensal');
-
-  const obterDreSelecionada = valor => {
-    const codigo = valor && typeof valor === 'object' ? valor.codigo : valor;
-    if (codigo !== dreCodigo) {
-      setDreCodigo(codigo);
-    }
-  };
-
-  const obterUeSelecionada = valor => {
-    const codigo = valor && typeof valor === 'object' ? valor.codigo : valor;
-    if (codigo !== ueCodigo) {
-      setUeCodigo(codigo);
-    }
-  };
-
-  const obterAnoLetivoSelecionado = valor => {
-    const normalizado = valor ? String(valor) : null;
-    if (normalizado !== anoLetivo) {
-      setAnoLetivo(normalizado);
-    }
-  };
-
-  const aoClicarBotaoVoltar = () => {
-    navigate('/');
-  };
-
+export default function InformacoesEducacionais({
+  anoLetivo,
+  dreCodigo,
+  ueCodigo,
+  modalidade,
+  semestre,
+  tipoVisualizacao,
+  periodicidade,
+}) {
   const exibirGrafico = !!dreCodigo;
   const exibirVisaoGeral = !!anoLetivo;
 
   return (
     <>
-      <Cabecalho
-        pagina="Painel de Informações Educacionais"
-        style={{ marginBottom: '16px' }}
-      >
-        <BotaoVoltarPadrao onClick={aoClicarBotaoVoltar} />
-      </Cabecalho>
-      <CardEstilizado>
-        <div className="col-md-12">
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <InformacoesEducacionaisFiltros
-                obterDreSelecionado={obterDreSelecionada}
-                setAnoLetivo={obterAnoLetivoSelecionado}
-                obterUeSelecionado={obterUeSelecionada}
-                anoLetivo={anoLetivo}
-              />
-            </Col>
-          </Row>
-        </div>
-      </CardEstilizado>
       <CardEstilizado>
         <div className="col-md-12">
           {exibirVisaoGeral ? (
@@ -196,6 +134,24 @@ const InformacoesEducacionais = () => {
       </CardEstilizado>
     </>
   );
+}
+
+InformacoesEducacionais.propTypes = {
+  anoLetivo: PropTypes.string,
+  dreCodigo: PropTypes.string,
+  ueCodigo: PropTypes.string,
+  modalidade: PropTypes.string,
+  semestre: PropTypes.string,
+  tipoVisualizacao: PropTypes.string,
+  periodicidade: PropTypes.string,
 };
 
-export default InformacoesEducacionais;
+InformacoesEducacionais.defaultProps = {
+  anoLetivo: null,
+  dreCodigo: null,
+  ueCodigo: null,
+  modalidade: null,
+  semestre: null,
+  tipoVisualizacao: null,
+  periodicidade: null,
+};
