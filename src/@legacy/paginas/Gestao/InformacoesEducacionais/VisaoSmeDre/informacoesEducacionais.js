@@ -1,7 +1,5 @@
 import { Col, Row } from 'antd';
-import { Cabecalho } from '~/componentes-sgp';
-import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import InformacoesEducacionaisFiltros from './componentes/Filtro/informacoesEducacionaisFiltros';
+import { CardEstilizado, TituloCard } from '../styles';
 import GraficoAnaliseDeAlfabetizacao from './componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
 import GraficoAnaliseDeFrequencia from './componentes/GraficoAnaliseDeFrequencia';
 import GraficoFluenciaLeitora from './componentes/GraficoFluenciaLeitora/graficoFluenciaLeitora';
@@ -11,34 +9,22 @@ import GraficoIdep from './componentes/GraficoIdep/graficoIdep';
 import TabelaIndicadoresNivelCriticoAlfabetizacao from './componentes/TabelaIndicadoresNivelCriticoAlfabetizacao/tabelaIndicadoresNivelCriticoAlfabetizacao';
 import TabelaIndicadoresPap from './componentes/TabelaIndicadoresPap/tabelaIndicadoresPap';
 import VisaoGeral from './componentes/VisaoGeral';
+import PropTypes from 'prop-types';
 
-const InformacoesEducacionais = () => {
+const InformacoesEducacionais = ({
+  anoLetivo,
+  dreCodigo,
+  ueCodigo,
+  modalidade,
+  semestre,
+  tipoVisualizacao,
+  periodicidade,
+}) => {
   const exibirGrafico = !!dreCodigo;
   const exibirVisaoGeral = !!anoLetivo;
 
   return (
     <>
-      <Cabecalho
-        pagina="Painel de Informações Educacionais"
-        style={{ marginBottom: '16px' }}
-      >
-        <BotaoVoltarPadrao onClick={aoClicarBotaoVoltar} />
-      </Cabecalho>
-      <CardEstilizado>
-        <div className="col-md-12">
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <InformacoesEducacionaisFiltros
-                obterDreSelecionado={obterDreSelecionada}
-                setAnoLetivo={obterAnoLetivoSelecionado}
-                obterUeSelecionado={obterUeSelecionada}
-                anoLetivo={anoLetivo}
-              />
-            </Col>
-          </Row>
-        </div>
-      </CardEstilizado>
-
       <CardEstilizado>
         <div className="col-md-12">
           {exibirVisaoGeral ? (
@@ -148,6 +134,26 @@ const InformacoesEducacionais = () => {
       </CardEstilizado>
     </>
   );
+};
+
+InformacoesEducacionais.propTypes = {
+  anoLetivo: PropTypes.string,
+  dreCodigo: PropTypes.string,
+  ueCodigo: PropTypes.string,
+  modalidade: PropTypes.string,
+  semestre: PropTypes.string,
+  tipoVisualizacao: PropTypes.string,
+  periodicidade: PropTypes.string,
+};
+
+InformacoesEducacionais.defaultProps = {
+  anoLetivo: null,
+  dreCodigo: null,
+  ueCodigo: null,
+  modalidade: null,
+  semestre: null,
+  tipoVisualizacao: null,
+  periodicidade: null,
 };
 
 export default InformacoesEducacionais;

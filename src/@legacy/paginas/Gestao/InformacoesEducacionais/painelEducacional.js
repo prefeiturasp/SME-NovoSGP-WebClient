@@ -1,24 +1,15 @@
 import { Col, Row } from 'antd';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import InformacoesEducacionaisFiltros from './VisaoSmeDre/componentes/Filtro/informacoesEducacionaisFiltros';
-import { useNavigate } from 'react-router-dom';
-import { Card } from '~/componentes';
-import styled from 'styled-components';
-import { useState } from 'react';
 import { OPCAO_TODOS } from '~/constantes/constantes';
-
-const CardEstilizado = styled(Card)`
-  margin-top: 16px;
-`;
-const TituloCard = styled.h2`
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 0;
-  font-size: 20px;
-`;
+import InformacoesEducacionaisFiltros from './VisaoSmeDre/componentes/Filtro/informacoesEducacionaisFiltros';
+import InformacoesEducacionais from './VisaoSmeDre/informacoesEducacionais';
+import { CardEstilizado } from './styles';
 
 export default function PainelEducacional() {
+  const navigate = useNavigate();
   const [anoLetivo, setAnoLetivo] = useState(null);
   const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
   const [ueCodigo, setUeCodigo] = useState(OPCAO_TODOS);
@@ -73,6 +64,16 @@ export default function PainelEducacional() {
           </Row>
         </div>
       </CardEstilizado>
+
+      <InformacoesEducacionais
+        anoLetivo={anoLetivo}
+        dreCodigo={dreCodigo}
+        ueCodigo={ueCodigo}
+        modalidade={modalidade}
+        semestre={semestre}
+        tipoVisualizacao={tipoVisualizacao}
+        periodicidade={periodicidade}
+      />
     </>
   );
 }
