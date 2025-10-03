@@ -11,7 +11,7 @@ import TabelaIndicadoresPap from './componentes/TabelaIndicadoresPap/tabelaIndic
 import VisaoGeral from './componentes/VisaoGeral';
 import PropTypes from 'prop-types';
 
-const InformacoesEducacionais = ({
+export default function InformacoesEducacionais({
   anoLetivo,
   dreCodigo,
   ueCodigo,
@@ -19,7 +19,7 @@ const InformacoesEducacionais = ({
   semestre,
   tipoVisualizacao,
   periodicidade,
-}) => {
+}) {
   const exibirGrafico = !!dreCodigo;
   const exibirVisaoGeral = !!anoLetivo;
 
@@ -134,7 +134,7 @@ const InformacoesEducacionais = ({
       </CardEstilizado>
     </>
   );
-};
+}
 
 InformacoesEducacionais.propTypes = {
   anoLetivo: PropTypes.string,
@@ -155,5 +155,3 @@ InformacoesEducacionais.defaultProps = {
   tipoVisualizacao: null,
   periodicidade: null,
 };
-
-export default InformacoesEducacionais;

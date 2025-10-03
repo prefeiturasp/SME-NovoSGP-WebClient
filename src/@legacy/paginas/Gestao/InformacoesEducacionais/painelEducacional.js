@@ -4,9 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import InformacoesEducacionaisFiltros from '../VisaoSmeDre/componentes/Filtro/informacoesEducacionaisFiltros';
-import InformacoesEducacionais from '../VisaoSmeDre/informacoesEducacionais';
-import { CardEstilizado } from '../shared/styles';
+import InformacoesEducacionaisFiltros from './VisaoSmeDre/componentes/Filtro/informacoesEducacionaisFiltros';
+import InformacoesEducacionais from './VisaoSmeDre/informacoesEducacionais';
+import { CardEstilizado } from './shared/styles';
+import DetalhesUnidadeEducacional from './VisaoUe/detalhesUnidadeEducacional';
 
 export default function PainelEducacional() {
   const navigate = useNavigate();
@@ -42,10 +43,15 @@ export default function PainelEducacional() {
     }
   };
 
+  const title =
+    ueCodigo !== OPCAO_TODOS
+      ? 'Detalhes da Unidade Educacional'
+      : 'Painel de Informações Educacionais';
+
   return (
     <>
       <Cabecalho
-        pagina="Painel de Informações Educacionais"
+        pagina="Detalhes da Unidade Educacional"
         style={{ marginBottom: '16px' }}
       >
         <BotaoVoltarPadrao onClick={aoClicarBotaoVoltar} />
@@ -65,15 +71,19 @@ export default function PainelEducacional() {
         </div>
       </CardEstilizado>
 
-      <InformacoesEducacionais
-        anoLetivo={anoLetivo}
-        dreCodigo={dreCodigo}
-        ueCodigo={ueCodigo}
-        modalidade={modalidade}
-        semestre={semestre}
-        tipoVisualizacao={tipoVisualizacao}
-        periodicidade={periodicidade}
-      />
+      {ueCodigo === OPCAO_TODOS ? (
+        <InformacoesEducacionais
+          anoLetivo={anoLetivo}
+          dreCodigo={dreCodigo}
+          ueCodigo={ueCodigo}
+          modalidade={modalidade}
+          semestre={semestre}
+          tipoVisualizacao={tipoVisualizacao}
+          periodicidade={periodicidade}
+        />
+      ) : (
+        <DetalhesUnidadeEducacional ueCodigo={ueCodigo} anoLetivo={anoLetivo} />
+      )}
     </>
   );
 }
