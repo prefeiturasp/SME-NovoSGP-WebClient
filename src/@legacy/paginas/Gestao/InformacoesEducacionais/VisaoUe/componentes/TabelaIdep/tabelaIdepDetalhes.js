@@ -15,136 +15,188 @@ const cabecalhoDescricao = (
   </div>
 );
 
-const columns = [
-  {
-    title: 'Ano letivo',
-    dataIndex: 'anoLetivo',
-    key: 'anoLetivo',
-    align: 'center',
-    width: 90,
-  },
-  {
-    title: 'IDEP',
-    children: [
-      {
-        title: 'Anos iniciais\n(1º a 5º anos)',
-        dataIndex: 'idepIniciais',
-        key: 'idepIniciais',
-        align: 'center',
-        width: 80,
-      },
-      {
-        title: 'Anos finais\n(6º a 9º anos)',
-        dataIndex: 'idepFinais',
-        key: 'idepFinais',
-        align: 'center',
-        width: 80,
-      },
-      {
-        title: 'Alfabetizados',
-        dataIndex: 'alfabetizados',
-        key: 'alfabetizados',
-        align: 'center',
-        width: 90,
-      },
-    ],
-  },
-  {
-    title: 'Proficência média',
-    children: [
-      {
-        title: 'Anos iniciais\n(1º a 5º ano)',
-        children: [
-          {
-            title: 'LP',
-            dataIndex: 'profIniciaisLP',
-            key: 'profIniciaisLP',
-            align: 'center',
-            width: 70,
-          },
-          {
-            title: 'MT',
-            dataIndex: 'profIniciaisMT',
-            key: 'profIniciaisMT',
-            align: 'center',
-            width: 70,
-          },
-          {
-            title: 'CN',
-            dataIndex: 'profIniciaisCN',
-            key: 'profIniciaisCN',
-            align: 'center',
-            width: 70,
-          },
-        ],
-      },
-      {
-        title: 'Anos finais\n(6º a 9º ano)',
-        children: [
-          {
-            title: 'LP',
-            dataIndex: 'profFinaisLP',
-            key: 'profFinaisLP',
-            align: 'center',
-            width: 70,
-          },
-          {
-            title: 'MT',
-            dataIndex: 'profFinaisMT',
-            key: 'profFinaisMT',
-            align: 'center',
-            width: 70,
-          },
-          {
-            title: 'CN',
-            dataIndex: 'profFinaisCN',
-            key: 'profFinaisCN',
-            align: 'center',
-            width: 70,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: 'Boletim',
-    dataIndex: 'boletim',
-    key: 'boletim',
-    align: 'center',
-    width: 70,
-    render: (_, record) => (
-      <Tooltip title="Visualizar boletim">
-        <EyeOutlined className="boletim-icone" />
-      </Tooltip>
-    ),
-  },
-];
+const mapearDadosParaTabela = (dadosJson = []) => {
+  if (!Array.isArray(dadosJson)) return [];
 
-// Exemplo de dados mockados (ajuste para usar dados reais depois)
-const dataSource = [
-  {
-    key: 1,
-    anoLetivo: 2025,
-    idepIniciais: 10,
-    idepFinais: 9,
-    alfabetizados: '100%',
-    profIniciaisLP: 168.3,
-    profIniciaisMT: 152.6,
-    profIniciaisCN: 170.1,
-    profFinaisLP: 170.1,
-    profFinaisMT: 152.6,
-    profFinaisCN: 168.3,
-    boletim: '',
-  },
-];
+  return dadosJson.map((item, index) => {
+    const profIniciaisLP =
+      item.proficiencia?.anosIniciais?.find(
+        i => i.componenteCurricular === 'PT'
+      )?.percentual || 0;
 
-export default function TabelaIdepDetalhes() {
+    const profIniciaisMT =
+      item.proficiencia?.anosIniciais?.find(
+        i => i.componenteCurricular === 'MT'
+      )?.percentual || 0;
+
+    const profIniciaisCN =
+      item.proficiencia?.anosIniciais?.find(
+        i => i.componenteCurricular === 'CN'
+      )?.percentual || 0;
+
+    const profFinaisLP =
+      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 'PT')
+        ?.percentual || 0;
+
+    const profFinaisMT =
+      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 'MT')
+        ?.percentual || 0;
+
+    const profFinaisCN =
+      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 'CN')
+        ?.percentual || 0;
+
+    return {
+      key: index,
+      anoLetivo: item.anoLetivo,
+      percentualInicial: item.percentualInicial,
+      percentualFinal: item.percentualFinal,
+      profIniciaisLP,
+      profIniciaisMT,
+      profIniciaisCN,
+      profFinaisLP,
+      profFinaisMT,
+      profFinaisCN,
+      boletim: item.boletim,
+    };
+  });
+};
+
+export default function TabelaIdepDetalhes({ dados }) {
   const [exibir, setExibir] = useState(false);
+  const dataSource = mapearDadosParaTabela(dados);
+
+  const columns = [
+    {
+      title: 'Ano letivo',
+      dataIndex: 'anoLetivo',
+      key: 'anoLetivo',
+      align: 'center',
+      width: 90,
+    },
+    {
+      title: 'IDEP',
+      children: [
+        {
+          title: 'Anos iniciais\n(1º a 5º anos)',
+          dataIndex: 'percentualInicial',
+          key: 'percentualInicial',
+          align: 'center',
+          width: 80,
+          onHeaderCell: () => ({
+            className: styles['coluna-anos-Iniciais-Finais'],
+          }),
+          render: value => (value !== undefined ? value : '-'),
+        },
+        {
+          title: 'Anos finais\n(6º a 9º anos)',
+          dataIndex: 'percentualFinal',
+          key: 'percentualFinal',
+          align: 'center',
+          width: 80,
+          onHeaderCell: () => ({
+            className: styles['coluna-anos-Iniciais-Finais'],
+          }),
+          render: value => (value !== undefined ? value : '-'),
+        },
+      ],
+    },
+    {
+      title: 'Proficência média',
+      children: [
+        {
+          title: 'Anos iniciais\n(1º a 5º ano)',
+          children: [
+            {
+              title: 'LP',
+              dataIndex: 'profIniciaisLP',
+              key: 'profIniciaisLP',
+              align: 'center',
+              width: 70,
+              onHeaderCell: () => ({
+                className: styles['coluna-anos-Iniciais-Finais'],
+              }),
+              render: value => (value !== undefined ? value : '-'),
+            },
+            {
+              title: 'MT',
+              dataIndex: 'profIniciaisMT',
+              key: 'profIniciaisMT',
+              align: 'center',
+              width: 70,
+              render: value => (value !== undefined ? value : '-'),
+            },
+            {
+              title: 'CN',
+              dataIndex: 'profIniciaisCN',
+              key: 'profIniciaisCN',
+              align: 'center',
+              width: 70,
+              render: value => (value !== undefined ? value : '-'),
+            },
+          ],
+        },
+        {
+          title: 'Anos finais\n(6º a 9º ano)',
+          children: [
+            {
+              title: 'LP',
+              dataIndex: 'profFinaisLP',
+              key: 'profFinaisLP',
+              align: 'center',
+              width: 70,
+              onHeaderCell: () => ({
+                className: styles['coluna-anos-Iniciais-Finais'],
+              }),
+              render: value => (value !== undefined ? value : '-'),
+            },
+            {
+              title: 'MT',
+              dataIndex: 'profFinaisMT',
+              key: 'profFinaisMT',
+              align: 'center',
+              width: 70,
+              render: value => (value !== undefined ? value : '-'),
+            },
+            {
+              title: 'CN',
+              dataIndex: 'profFinaisCN',
+              key: 'profFinaisCN',
+              align: 'center',
+              width: 70,
+              render: value => (value !== undefined ? value : '-'),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Boletim',
+      dataIndex: 'boletim',
+      key: 'boletim',
+      align: 'center',
+      width: 70,
+      render: url => (
+        <Tooltip title="Visualizar boletim">
+          {url ? (
+            <a href={url} target="_blank" rel="noopener noreferrer">
+              <EyeOutlined className="boletim-icone" />
+            </a>
+          ) : (
+            <EyeOutlined className="boletim-icone" style={{ opacity: 0.3 }} />
+          )}
+        </Tooltip>
+      ),
+    },
+  ];
+
   const configCabecalho = {
     altura: '44px',
     corBorda: Base.AzulBordaCollapse,
   };
+
   const key = 'idep-prof-coll';
+
   return (
     <div className="tabela-idep-detalhes">
       <CardCollapse

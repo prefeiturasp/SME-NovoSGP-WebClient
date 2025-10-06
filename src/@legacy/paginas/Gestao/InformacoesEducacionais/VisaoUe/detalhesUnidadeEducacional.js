@@ -11,7 +11,7 @@ export default function DetalhesUnidadeEducacional({ anoLetivo, ueCodigo }) {
       </CardEstilizado>
 
       <CardEstilizado>
-        <TabelaIdep />
+        <TabelaIdep anoLetivo={anoLetivo} ueCodigo={ueCodigo} />
       </CardEstilizado>
     </>
   );
