@@ -1,4 +1,4 @@
-import { Table, Tooltip } from 'antd';
+import { Table, Tooltip, Modal } from 'antd';
 import styles from './tabelaIdepDetalhes.css';
 import CardCollapse from '~/componentes/cardCollapse';
 import { Base } from '~/componentes';
@@ -64,8 +64,20 @@ const mapearDadosParaTabela = (dadosJson = []) => {
 
 export default function TabelaIdepDetalhes({ dados }) {
   const [exibir, setExibir] = useState(false);
-  const dataSource = mapearDadosParaTabela(dados);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [boletimSelecionado, setBoletimSelecionado] = useState(null);
 
+  const abrirBoletim = record => {
+    setBoletimSelecionado(record.boletim);
+    setModalVisible(true);
+  };
+
+  const fecharModal = () => {
+    setModalVisible(false);
+    setBoletimSelecionado(null);
+  };
+
+  const dataSource = mapearDadosParaTabela(dados);
   const columns = [
     {
       title: 'Ano letivo',
@@ -176,12 +188,16 @@ export default function TabelaIdepDetalhes({ dados }) {
       key: 'boletim',
       align: 'center',
       width: 70,
-      render: url => (
+      render: (_, record) => (
         <Tooltip title="Visualizar boletim">
-          {url ? (
-            <a href={url} target="_blank" rel="noopener noreferrer">
-              <HiEye color="#0076BE" size={22} className="boletim-icone" />
-            </a>
+          {record.boletim ? (
+            <HiEye
+              color="#0076BE"
+              size={22}
+              className="boletim-icone"
+              onClick={() => abrirBoletim(record)}
+              style={{ cursor: 'pointer', color: '#1890ff' }}
+            />
           ) : (
             <HiEye
               color="#0076BE"
@@ -227,6 +243,30 @@ export default function TabelaIdepDetalhes({ dados }) {
           </>
         )}
       </CardCollapse>
+
+      <Modal
+        title="Boletim IDEP"
+        open={modalVisible}
+        footer={null}
+        onCancel={fecharModal}
+        width="80%"
+        style={{ top: 20 }}
+      >
+        {boletimSelecionado && boletimSelecionado.endsWith('.pdf') ? (
+          <iframe
+            src={boletimSelecionado}
+            width="100%"
+            height="600px"
+            title="Boletim PDF"
+          ></iframe>
+        ) : (
+          <img
+            src={boletimSelecionado}
+            alt="Boletim"
+            style={{ width: '100%', height: '600px', borderRadius: 8 }}
+          />
+        )}
+      </Modal>
     </div>
   );
 }
