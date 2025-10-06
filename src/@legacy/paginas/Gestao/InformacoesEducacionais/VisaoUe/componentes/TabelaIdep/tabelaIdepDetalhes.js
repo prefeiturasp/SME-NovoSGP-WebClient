@@ -1,9 +1,9 @@
 import { Table, Tooltip } from 'antd';
-import { EyeOutlined } from '@ant-design/icons';
 import styles from './tabelaIdepDetalhes.css';
 import CardCollapse from '~/componentes/cardCollapse';
 import { Base } from '~/componentes';
 import React, { useState } from 'react';
+import { HiEye } from 'react-icons/hi';
 
 const cabecalhoDescricao = (
   <div className="cabecalho-idep">
@@ -21,7 +21,7 @@ const mapearDadosParaTabela = (dadosJson = []) => {
   return dadosJson.map((item, index) => {
     const profIniciaisLP =
       item.proficiencia?.anosIniciais?.find(
-        i => i.componenteCurricular === 'PT'
+        i => i.componenteCurricular === 'LP'
       )?.percentual || 0;
 
     const profIniciaisMT =
@@ -35,7 +35,7 @@ const mapearDadosParaTabela = (dadosJson = []) => {
       )?.percentual || 0;
 
     const profFinaisLP =
-      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 'PT')
+      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 'LP')
         ?.percentual || 0;
 
     const profFinaisMT =
@@ -180,10 +180,15 @@ export default function TabelaIdepDetalhes({ dados }) {
         <Tooltip title="Visualizar boletim">
           {url ? (
             <a href={url} target="_blank" rel="noopener noreferrer">
-              <EyeOutlined className="boletim-icone" />
+              <HiEye color="#0076BE" size={22} className="boletim-icone" />
             </a>
           ) : (
-            <EyeOutlined className="boletim-icone" style={{ opacity: 0.3 }} />
+            <HiEye
+              color="#0076BE"
+              size={22}
+              className="boletim-icone"
+              style={{ opacity: 0.3 }}
+            />
           )}
         </Tooltip>
       ),
