@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './detalhesUe.css';
 import ServicoDetalhesUe from '~/servicos/InformacoesEducacionais/ServicoDetalhesUe';
 import { erros } from '~/servicos';
+import { Loader } from '~/componentes';
 
 function DetalhesUe({ codigoUe, nomeUe, nomeDre }) {
   const [dados, setDados] = useState(null);
@@ -28,11 +29,15 @@ function DetalhesUe({ codigoUe, nomeUe, nomeDre }) {
   }, [codigoUe]);
 
   if (loading) {
-    return <div className="detalhes-ue">Carregando...</div>;
-  }
-
-  if (!dados) {
-    return <div className="detalhes-ue">Nenhum dado encontrado.</div>;
+    return (
+      <div className="mt-4">
+        <Loader
+          loading={loading}
+          className={loading ? 'text-center' : ''}
+          tip="Carregando..."
+        />
+      </div>
+    );
   }
 
   return (

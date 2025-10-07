@@ -1,4 +1,4 @@
-import { Col, Row } from 'antd';
+import { Col, Row, Spin } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Cabecalho } from '~/componentes-sgp';
@@ -13,11 +13,15 @@ export default function PainelEducacional() {
   const navigate = useNavigate();
   const [anoLetivo, setAnoLetivo] = useState(null);
   const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
+  const [dreNome, setDreNome] = useState('');
   const [ueCodigo, setUeCodigo] = useState(OPCAO_TODOS);
+  const [ueNome, setUeNome] = useState('');
   const [modalidade, setModalidade] = useState(null);
   const [semestre, setSemestre] = useState(null);
   const [tipoVisualizacao, setTipoVisualizacao] = useState('global');
   const [periodicidade, setPeriodicidade] = useState('mensal');
+  const [carregandoFiltro, setCarregandoFiltro] = useState(true);
+
   const aoClicarBotaoVoltar = () => {
     navigate('/');
   };
@@ -26,6 +30,7 @@ export default function PainelEducacional() {
     const codigo = valor && typeof valor === 'object' ? valor.codigo : valor;
     if (codigo !== dreCodigo) {
       setDreCodigo(codigo);
+      setDreNome(valor.desc);
     }
   };
 
@@ -33,6 +38,7 @@ export default function PainelEducacional() {
     const codigo = valor && typeof valor === 'object' ? valor.codigo : valor;
     if (codigo !== ueCodigo) {
       setUeCodigo(codigo);
+      setUeNome(valor.desc);
     }
   };
 
@@ -50,10 +56,7 @@ export default function PainelEducacional() {
 
   return (
     <>
-      <Cabecalho
-        pagina="Detalhes da Unidade Educacional"
-        style={{ marginBottom: '16px' }}
-      >
+      <Cabecalho pagina={title} style={{ marginBottom: '16px' }}>
         <BotaoVoltarPadrao onClick={aoClicarBotaoVoltar} />
       </Cabecalho>
       <CardEstilizado>
@@ -65,13 +68,18 @@ export default function PainelEducacional() {
                 setAnoLetivo={obterAnoLetivoSelecionado}
                 obterUeSelecionado={obterUeSelecionada}
                 anoLetivo={anoLetivo}
+                onCarregamentoConcluido={() => setCarregandoFiltro(false)}
               />
             </Col>
           </Row>
         </div>
       </CardEstilizado>
 
-      {ueCodigo === OPCAO_TODOS ? (
+      {carregandoFiltro ? (
+        <div style={{ textAlign: 'center', padding: '24px' }}>
+          <Spin tip="Carregando filtros..." size="large" />
+        </div>
+      ) : ueCodigo === OPCAO_TODOS ? (
         <InformacoesEducacionais
           anoLetivo={anoLetivo}
           dreCodigo={dreCodigo}
@@ -82,7 +90,12 @@ export default function PainelEducacional() {
           periodicidade={periodicidade}
         />
       ) : (
-        <DetalhesUnidadeEducacional ueCodigo={ueCodigo} anoLetivo={anoLetivo} />
+        <DetalhesUnidadeEducacional
+          ueCodigo={ueCodigo}
+          anoLetivo={anoLetivo}
+          dreNome={dreNome}
+          ueNome={ueNome}
+        />
       )}
     </>
   );

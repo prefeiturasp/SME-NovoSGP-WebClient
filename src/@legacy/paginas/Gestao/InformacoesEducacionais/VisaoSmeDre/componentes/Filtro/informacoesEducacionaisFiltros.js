@@ -16,6 +16,7 @@ const InformacoesEducacionaisFiltros = ({
   obterAnoLetivoSelecionado,
   setAnoLetivo,
   anoLetivo,
+  onCarregamentoConcluido,
 }) => {
   const usuario = useSelector(store => store.usuario);
   const anoMinimo = 2019;
@@ -244,6 +245,26 @@ const InformacoesEducacionaisFiltros = ({
     if (obterAnoLetivoSelecionado) obterAnoLetivoSelecionado(valor);
   };
 
+  const desabilitaDre =
+    usuario.ehPerfilProfessor ||
+    usuario.ehProfessor ||
+    usuario.ehProfessorCj ||
+    usuario.ehProfessorCjInfantil ||
+    usuario.ehProfessorInfantil ||
+    usuario.ehProfessorPoa;
+
+  useEffect(() => {
+    if (ue && obterUeSelecionado) {
+      obterUeSelecionado(ue);
+    }
+  }, [ue]);
+
+  useEffect(() => {
+    if (listaDres.length > 0 && listaUes.length > 0 && anoLetivo !== null) {
+      if (onCarregamentoConcluido) onCarregamentoConcluido();
+    }
+  }, [listaDres, listaUes, anoLetivo]);
+
   return (
     <div>
       <p
@@ -290,6 +311,7 @@ const InformacoesEducacionaisFiltros = ({
               placeholder="Selecione uma DRE"
               showSearch
               allowClear={false}
+              disabled={desabilitaDre}
             />
           </Loader>
         </Col>
