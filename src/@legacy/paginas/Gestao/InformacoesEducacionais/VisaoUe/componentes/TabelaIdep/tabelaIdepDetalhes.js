@@ -70,7 +70,7 @@ export default function TabelaIdepDetalhes({ dados }) {
 
   const abrirBoletim = record => {
     const url = record.boletim?.trim();
-    const urlWithHttps = `https://${url}`;
+    const urlWithHttps = url.startsWith('https') ? url : 'https://' + url;
     setBoletimSelecionado(urlWithHttps);
   };
 
@@ -87,8 +87,7 @@ export default function TabelaIdepDetalhes({ dados }) {
     if (!url) return;
 
     try {
-      console.log('URL do download:', url);
-      url = 'https://' + url;
+      url = url.startsWith('https') ? url : 'https://' + url;
       const response = await fetch(url);
       if (!response.ok) throw new Error('Erro ao baixar arquivo.');
 
