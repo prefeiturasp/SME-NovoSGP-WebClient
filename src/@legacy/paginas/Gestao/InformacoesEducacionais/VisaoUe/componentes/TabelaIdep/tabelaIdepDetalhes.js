@@ -85,9 +85,15 @@ export default function TabelaIdepDetalhes({ dados }) {
       key: 'anoLetivo',
       align: 'center',
       width: 90,
+      onHeaderCell: () => ({
+        className: 'coluna-anos-iniciais-finais',
+      }),
     },
     {
       title: 'IDEP',
+      onHeaderCell: () => ({
+        className: 'coluna-anos-iniciais-finais',
+      }),
       children: [
         {
           title: 'Anos iniciais\n(1º a 5º anos)',
@@ -95,9 +101,7 @@ export default function TabelaIdepDetalhes({ dados }) {
           key: 'percentualInicial',
           align: 'center',
           width: 80,
-          onHeaderCell: () => ({
-            className: styles['coluna-anos-Iniciais-Finais'],
-          }),
+
           render: value => (value !== undefined ? value : '-'),
         },
         {
@@ -115,6 +119,9 @@ export default function TabelaIdepDetalhes({ dados }) {
     },
     {
       title: 'Proficência média',
+      onHeaderCell: () => ({
+        className: 'coluna-anos-iniciais-finais',
+      }),
       children: [
         {
           title: 'Anos iniciais\n(1º a 5º ano)',
@@ -125,9 +132,7 @@ export default function TabelaIdepDetalhes({ dados }) {
               key: 'profIniciaisLP',
               align: 'center',
               width: 70,
-              onHeaderCell: () => ({
-                className: styles['coluna-anos-Iniciais-Finais'],
-              }),
+
               render: value => (value !== undefined ? value : '-'),
             },
             {
@@ -150,9 +155,6 @@ export default function TabelaIdepDetalhes({ dados }) {
         },
         {
           title: 'Anos finais\n(6º a 9º ano)',
-          onHeaderCell: () => ({
-            className: 'coluna-anos-iniciais-finais',
-          }),
 
           children: [
             {
@@ -190,6 +192,9 @@ export default function TabelaIdepDetalhes({ dados }) {
       key: 'boletim',
       align: 'center',
       width: 70,
+      onHeaderCell: () => ({
+        className: 'coluna-anos-iniciais-finais',
+      }),
       render: (_, record) => (
         <Tooltip title="Visualizar boletim">
           {record.boletim ? (
