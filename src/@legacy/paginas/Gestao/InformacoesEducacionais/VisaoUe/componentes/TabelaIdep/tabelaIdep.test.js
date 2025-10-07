@@ -1,8 +1,6 @@
-import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import TabelaIdep from './tabelaIdep';
 
-// Mock bem simples de todas as dependências
 jest.mock('~/servicos/InformacoesEducacionais/ServicoIdepTabela', () => ({
   obterIdepTabela: jest.fn(),
 }));
