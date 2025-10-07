@@ -1,5 +1,5 @@
 import { ROUTES } from '@/core/enum/routes';
-import { Col, Row } from 'antd';
+import { Col, Row, Watermark } from 'antd';
 import { Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -405,15 +405,29 @@ const DetalheNotificacao = () => {
                   </div>
                   <hr className="mt-hr" />
                   <div className="row">
-                    <div className="col-xs-12 col-md-12 col-lg-12 mensagem">
-                      MENSAGEM:{' '}
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: notificacao.mensagem,
-                        }}
-                      />
+                    <div
+                      className="col-xs-12 col-md-12 col-lg-12 mensagem"
+                      style={{ userSelect: 'none' }}
+                    >
+                      <Watermark
+                        content={
+                          usuario.meusDados &&
+                          usuario.meusDados.nome &&
+                          usuario.meusDados.rf
+                            ? `${usuario.meusDados.nome} - ${usuario.meusDados.rf}`
+                            : ''
+                        }
+                      >
+                        <div
+                          style={{ userSelect: 'none' }}
+                          dangerouslySetInnerHTML={{
+                            __html: notificacao.mensagem,
+                          }}
+                        />
+                      </Watermark>
                     </div>
                   </div>
+
                   {notificacao.categoriaId ===
                     notificacaoCategoria.Workflow_Aprovacao && (
                     <div className="row">
