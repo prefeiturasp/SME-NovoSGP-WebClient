@@ -4,14 +4,23 @@ import DetalhesUe from './componentes/DetalhesUe/detalhesUe';
 import TabelaIdep from './componentes/TabelaIdep/tabelaIdep';
 import { Col, Row } from 'antd';
 
-export default function DetalhesUnidadeEducacional({ anoLetivo, ueCodigo }) {
+export default function DetalhesUnidadeEducacional({
+  anoLetivo,
+  ueCodigo,
+  dreNome,
+  ueNome,
+}) {
   return (
     <>
       <CardEstilizado>
         <div className="col-md-12">
           <Row gutter={[16, 16]}>
             <Col span={24}>
-              <DetalhesUe anoLetivo={anoLetivo} ueCodigo={ueCodigo} />
+              <DetalhesUe
+                codigoUe={ueCodigo}
+                nomeUe={ueNome}
+                nomeDre={dreNome}
+              />
             </Col>
           </Row>
         </div>

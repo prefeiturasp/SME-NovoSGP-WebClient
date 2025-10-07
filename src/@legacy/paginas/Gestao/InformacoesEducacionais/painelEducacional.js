@@ -13,7 +13,9 @@ export default function PainelEducacional() {
   const navigate = useNavigate();
   const [anoLetivo, setAnoLetivo] = useState(null);
   const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
+  const [dreNome, setDreNome] = useState('');
   const [ueCodigo, setUeCodigo] = useState(OPCAO_TODOS);
+  const [ueNome, setUeNome] = useState('');
   const [modalidade, setModalidade] = useState(null);
   const [semestre, setSemestre] = useState(null);
   const [tipoVisualizacao, setTipoVisualizacao] = useState('global');
@@ -26,6 +28,7 @@ export default function PainelEducacional() {
     const codigo = valor && typeof valor === 'object' ? valor.codigo : valor;
     if (codigo !== dreCodigo) {
       setDreCodigo(codigo);
+      setDreNome(valor.desc);
     }
   };
 
@@ -33,6 +36,7 @@ export default function PainelEducacional() {
     const codigo = valor && typeof valor === 'object' ? valor.codigo : valor;
     if (codigo !== ueCodigo) {
       setUeCodigo(codigo);
+      setUeNome(valor.desc);
     }
   };
 
@@ -82,7 +86,12 @@ export default function PainelEducacional() {
           periodicidade={periodicidade}
         />
       ) : (
-        <DetalhesUnidadeEducacional ueCodigo={ueCodigo} anoLetivo={anoLetivo} />
+        <DetalhesUnidadeEducacional
+          ueCodigo={ueCodigo}
+          anoLetivo={anoLetivo}
+          dreNome={dreNome}
+          ueNome={ueNome}
+        />
       )}
     </>
   );
