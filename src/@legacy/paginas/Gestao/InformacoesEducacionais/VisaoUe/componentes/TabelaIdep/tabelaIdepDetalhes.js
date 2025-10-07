@@ -150,6 +150,10 @@ export default function TabelaIdepDetalhes({ dados }) {
         },
         {
           title: 'Anos finais\n(6º a 9º ano)',
+          onHeaderCell: () => ({
+            className: 'coluna-anos-iniciais-finais',
+          }),
+
           children: [
             {
               title: 'LP',
@@ -157,9 +161,7 @@ export default function TabelaIdepDetalhes({ dados }) {
               key: 'profFinaisLP',
               align: 'center',
               width: 70,
-              onHeaderCell: () => ({
-                className: styles['coluna-anos-Iniciais-Finais'],
-              }),
+
               render: value => (value !== undefined ? value : '-'),
             },
             {
