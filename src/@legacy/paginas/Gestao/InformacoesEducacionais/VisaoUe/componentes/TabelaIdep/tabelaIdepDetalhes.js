@@ -256,17 +256,19 @@ export default function TabelaIdepDetalhes({ dados }) {
       >
         {boletimSelecionado && boletimSelecionado.endsWith('.pdf') ? (
           <iframe
-            src={boletimSelecionado}
+            src={`https://docs.google.com/gview?url=${boletimSelecionado}&embedded=true`}
             width="100%"
-            height="600px"
+            height="580px"
             title="Boletim PDF"
           ></iframe>
         ) : (
-          <img
-            src={boletimSelecionado}
-            alt="Boletim"
-            style={{ width: '100%', height: '600px', borderRadius: 8 }}
-          />
+          <div className="div-img-boletim">
+            <img
+              src={boletimSelecionado}
+              alt="Boletim"
+              className="img-boletim"
+            />
+          </div>
         )}
       </Modal>
     </div>
