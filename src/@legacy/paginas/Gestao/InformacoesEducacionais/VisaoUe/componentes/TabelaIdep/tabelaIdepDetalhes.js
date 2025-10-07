@@ -1,9 +1,10 @@
-import { Table, Tooltip, Modal } from 'antd';
+import { Table, Tooltip, Modal, message } from 'antd';
 import styles from './tabelaIdepDetalhes.css';
 import CardCollapse from '~/componentes/cardCollapse';
 import { Base } from '~/componentes';
-import React, { useState } from 'react';
-import { HiEye } from 'react-icons/hi';
+import React, { useState, useEffect } from 'react';
+import { HiEye, HiDownload } from 'react-icons/hi';
+import { erro } from '~/servicos/alertas';
 
 const cabecalhoDescricao = (
   <div className="cabecalho-idep">
@@ -68,13 +69,44 @@ export default function TabelaIdepDetalhes({ dados }) {
   const [boletimSelecionado, setBoletimSelecionado] = useState(null);
 
   const abrirBoletim = record => {
-    setBoletimSelecionado(record.boletim);
-    setModalVisible(true);
+    const url = record.boletim?.trim();
+    const urlWithHttps = `https://${url}`;
+    setBoletimSelecionado(urlWithHttps);
   };
+
+  useEffect(() => {
+    if (boletimSelecionado) setModalVisible(true);
+  }, [boletimSelecionado]);
 
   const fecharModal = () => {
     setModalVisible(false);
     setBoletimSelecionado(null);
+  };
+
+  const downloadBoletim = async url => {
+    if (!url) return;
+
+    try {
+      console.log('URL do download:', url);
+      url = 'https://' + url;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('Erro ao baixar arquivo.');
+
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      const filename = url.split('/').pop() || 'boletim-idep';
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      error('Falha ao baixar boletim:');
+    }
   };
 
   const dataSource = mapearDadosParaTabela(dados);
@@ -196,24 +228,44 @@ export default function TabelaIdepDetalhes({ dados }) {
         className: 'coluna-anos-iniciais-finais',
       }),
       render: (_, record) => (
-        <Tooltip title="Visualizar boletim">
-          {record.boletim ? (
-            <HiEye
-              color="#0076BE"
-              size={22}
-              className="boletim-icone"
-              onClick={() => abrirBoletim(record)}
-              style={{ cursor: 'pointer', color: '#1890ff' }}
-            />
-          ) : (
-            <HiEye
-              color="#0076BE"
-              size={22}
-              className="boletim-icone"
-              style={{ opacity: 0.3 }}
-            />
-          )}
-        </Tooltip>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+          <Tooltip title="Visualizar boletim">
+            {record.boletim ? (
+              <HiEye
+                color="#0076BE"
+                size={22}
+                className="boletim-icone"
+                onClick={() => abrirBoletim(record)}
+                style={{ cursor: 'pointer', color: '#1890ff' }}
+              />
+            ) : (
+              <HiEye
+                color="#0076BE"
+                size={22}
+                className="boletim-icone"
+                style={{ opacity: 0.3 }}
+              />
+            )}
+          </Tooltip>
+          <Tooltip title="Baixar boletim">
+            {record.boletim ? (
+              <HiDownload
+                color="#4CAF50"
+                size={22}
+                className="boletim-download-icone"
+                onClick={() => downloadBoletim(record.boletim)}
+                style={{ cursor: 'pointer' }}
+              />
+            ) : (
+              <HiDownload
+                color="#4CAF50"
+                size={22}
+                className="boletim-download-icone"
+                style={{ opacity: 0.3 }}
+              />
+            )}
+          </Tooltip>
+        </div>
       ),
     },
   ];
@@ -261,13 +313,14 @@ export default function TabelaIdepDetalhes({ dados }) {
       >
         {boletimSelecionado && boletimSelecionado.endsWith('.pdf') ? (
           <iframe
-            src={`https://docs.google.com/gview?url=${boletimSelecionado}&embedded=true`}
+            src={boletimSelecionado}
             width="100%"
             height="580px"
             title="Boletim PDF"
           ></iframe>
         ) : (
           <div className="div-img-boletim">
+            <label>Imagem</label>
             <img
               src={boletimSelecionado}
               alt="Boletim"

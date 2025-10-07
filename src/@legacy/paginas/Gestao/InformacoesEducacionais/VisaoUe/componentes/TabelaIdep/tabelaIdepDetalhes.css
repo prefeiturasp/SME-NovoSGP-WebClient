@@ -12,6 +12,12 @@
   font-size: 18px;
   cursor: pointer;
 }
+
+.tabela-idep-detalhes .boletim-download-icone {
+  color: #4caf50;
+  font-size: 18px;
+  cursor: pointer;
+}
 .tabela-idep-detalhes .cabecalho-idep {
   font-size: 13px;
   color: #555;
