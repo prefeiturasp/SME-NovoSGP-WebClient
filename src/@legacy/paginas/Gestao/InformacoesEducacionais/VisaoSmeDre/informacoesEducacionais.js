@@ -8,6 +8,7 @@ import GraficoIdeb from './componentes/GraficoIdeb/graficoIdeb';
 import GraficoIdep from './componentes/GraficoIdep/graficoIdep';
 import TabelaIndicadoresNivelCriticoAlfabetizacao from './componentes/TabelaIndicadoresNivelCriticoAlfabetizacao/tabelaIndicadoresNivelCriticoAlfabetizacao';
 import TabelaIndicadoresPap from './componentes/TabelaIndicadoresPap/tabelaIndicadoresPap';
+import TabelaAbandonoSmeDre from './componentes/Abandono/tabelaAbandonoSmeDre';
 import VisaoGeral from './componentes/VisaoGeral';
 import PropTypes from 'prop-types';
 
@@ -126,6 +127,16 @@ export default function InformacoesEducacionais({
               <GraficoFluenciaLeitora
                 dreId={dreCodigo}
                 ueId={ueCodigo}
+                anoLetivo={anoLetivo}
+              />
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <TabelaAbandonoSmeDre
+                codigoDre={dreCodigo}
+                codigoUe={ueCodigo}
                 anoLetivo={anoLetivo}
               />
             </Col>
