@@ -1,10 +1,9 @@
-import { Table, Tooltip, Modal, message } from 'antd';
-import styles from './tabelaIdepDetalhes.css';
-import CardCollapse from '~/componentes/cardCollapse';
+import { Modal, Table, Tooltip } from 'antd';
+import { useEffect, useState } from 'react';
+import { HiDownload, HiEye } from 'react-icons/hi';
 import { Base } from '~/componentes';
-import React, { useState, useEffect } from 'react';
-import { HiEye, HiDownload } from 'react-icons/hi';
-import { erro } from '~/servicos/alertas';
+import CardCollapse from '~/componentes/cardCollapse';
+import styles from './tabelaIdepDetalhes.css';
 
 const cabecalhoDescricao = (
   <div className="cabecalho-idep">

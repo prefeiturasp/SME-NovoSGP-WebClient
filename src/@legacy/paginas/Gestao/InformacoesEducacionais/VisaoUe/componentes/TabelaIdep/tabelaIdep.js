@@ -35,7 +35,7 @@ export default function TabelaIdep({ anoLetivo, ueCodigo }) {
         <Loader
           loading={carregando}
           className={carregando ? 'text-center' : ''}
-          tip="Carregando indicadores PAP..."
+          tip="Carregando..."
         />
       </div>
     );
