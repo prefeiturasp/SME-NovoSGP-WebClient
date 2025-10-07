@@ -8,7 +8,13 @@ export default function DetalhesUnidadeEducacional({ anoLetivo, ueCodigo }) {
   return (
     <>
       <CardEstilizado>
-        <DetalhesUe anoLetivo={anoLetivo} ueCodigo={ueCodigo} />
+        <div className="col-md-12">
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <DetalhesUe anoLetivo={anoLetivo} ueCodigo={ueCodigo} />
+            </Col>
+          </Row>
+        </div>
       </CardEstilizado>
 
       <CardEstilizado>
