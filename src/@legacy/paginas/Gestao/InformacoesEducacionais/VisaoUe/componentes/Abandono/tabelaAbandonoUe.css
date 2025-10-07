@@ -1,0 +1,23 @@
+.tabela-abandono-custom .ant-table {
+  border: 1px solid #d9d9d9;
+  border-radius: 0 !important;
+}
+
+.tabela-abandono-custom .ant-table-container {
+  border-radius: 0 !important;
+}
+
+.tabela-abandono-custom .ant-table-thead > tr > th,
+.tabela-abandono-custom .ant-table-tbody > tr > td {
+  padding: 4px 16px 4px 16px !important;
+  text-align: center !important;
+}
+
+.tabela-abandono-custom .ant-table-thead > tr > th {
+  background: #e7e6f8 !important;
+}
+
+.tabela-abandono-custom .ant-table-tbody > tr > td,
+.tabela-abandono-custom .ant-table-thead > tr > th {
+  border-color: #d9d9d9 !important;
+}
