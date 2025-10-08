@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { CardEstilizado } from '../shared/styles';
 import DetalhesUe from './componentes/DetalhesUe/detalhesUe';
 import TabelaIdep from './componentes/TabelaIdep/tabelaIdep';
-import TabelaIdepAnosAnteriores from './componentes/TabelaIdepAnosAnteriores/tabelaIdepAnosAnteriores';
 
 export default function DetalhesUnidadeEducacional({
   anoLetivo,
@@ -32,11 +31,6 @@ export default function DetalhesUnidadeEducacional({
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <TabelaIdep anoLetivo={anoLetivo} ueCodigo={ueCodigo} />
-            </Col>
-          </Row>
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <TabelaIdepAnosAnteriores ueCodigo={ueCodigo} />
             </Col>
           </Row>
         </div>

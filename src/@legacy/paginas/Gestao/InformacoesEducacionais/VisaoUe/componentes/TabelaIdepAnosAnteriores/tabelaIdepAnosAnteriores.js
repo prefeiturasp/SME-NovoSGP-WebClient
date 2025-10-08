@@ -13,7 +13,10 @@ export default function TabelaIdepAnosAnteriores({ ueCodigo }) {
     const obterDados = async () => {
       setCarregando(true);
       try {
-        const response = await ServicoIdepTabela.obterIdepTabela(ueCodigo);
+        const response = await ServicoIdepTabela.obterIdepTabela(
+          null,
+          ueCodigo
+        );
 
         setDados(response.data);
       } catch (error) {

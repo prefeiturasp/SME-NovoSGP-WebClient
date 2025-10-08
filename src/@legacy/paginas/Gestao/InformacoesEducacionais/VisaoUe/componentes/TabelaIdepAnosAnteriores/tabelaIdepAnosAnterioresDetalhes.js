@@ -2,7 +2,7 @@ import { Modal, Table, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { HiDownload, HiEye } from 'react-icons/hi';
 import { Base } from '~/componentes';
-import CardCollapse from '~/componentes/cardCollapse';
+import CardCollapseCustomized from '../../../shared/cardCollapseCustomized';
 import styles from '../TabelaIdep/tabelaIdepDetalhes.css';
 
 const mapearDadosParaTabela = (dadosJson = []) => {
@@ -116,7 +116,13 @@ export default function TabelaIdepAnosAnterioresDetalhes({ dados }) {
       }),
       children: [
         {
-          title: 'Anos iniciais\n(1º a 5º anos)',
+          title: (
+            <span>
+              Anos iniciais
+              <br />
+              (1º a 5º anos)
+            </span>
+          ),
           dataIndex: 'percentualInicial',
           key: 'percentualInicial',
           align: 'center',
@@ -125,7 +131,13 @@ export default function TabelaIdepAnosAnterioresDetalhes({ dados }) {
           render: value => (value !== undefined ? value : '-'),
         },
         {
-          title: 'Anos finais\n(6º a 9º anos)',
+          title: (
+            <span>
+              Anos finais
+              <br />
+              (6º a 9º anos)
+            </span>
+          ),
           dataIndex: 'percentualFinal',
           key: 'percentualFinal',
           align: 'center',
@@ -144,7 +156,14 @@ export default function TabelaIdepAnosAnterioresDetalhes({ dados }) {
       }),
       children: [
         {
-          title: 'Anos iniciais\n(1º a 5º ano)',
+          title: (
+            <span>
+              Anos iniciais
+              <br />
+              (1º a 5º anos)
+            </span>
+          ),
+
           children: [
             {
               title: 'LP',
@@ -174,8 +193,13 @@ export default function TabelaIdepAnosAnterioresDetalhes({ dados }) {
           ],
         },
         {
-          title: 'Anos finais\n(6º a 9º ano)',
-
+          title: (
+            <span>
+              Anos finais
+              <br />
+              (6º a 9º anos)
+            </span>
+          ),
           children: [
             {
               title: 'LP',
@@ -258,38 +282,29 @@ export default function TabelaIdepAnosAnterioresDetalhes({ dados }) {
     },
   ];
 
-  const configCabecalho = {
-    altura: '44px',
-    //definir aqui a cor do background como cinza
-    // corBorda: Base.AzulBordaCollapse,
-  };
-
   const key = 'idep-prof-coll';
 
   return (
     <div className="tabela-idep-detalhes">
-      <CardCollapse
+      <CardCollapseCustomized
         titulo="Ver anos anteriores"
-        key={`${key}-collapse-key`}
-        indice={`${key}-collapse-indice`}
-        alt={`${key}-alt`}
-        configCabecalho={configCabecalho}
-        show={exibir}
-        onClick={() => setExibir(!exibir)}
+        aberto={exibir} // ✅ substitui show
+        aoClicar={() => setExibir(!exibir)} // ✅ substitui onClick
+        key={`${key}-collapse-modern`}
+        alturaCabecalho="44px"
+        corCabecalho={Base.CinzaBordaCollapse}
       >
-        {exibir && (
-          <>
-            <Table
-              columns={columns}
-              dataSource={dataSource}
-              bordered
-              pagination={false}
-              size="small"
-              scroll={{ x: 'max-content' }}
-            />
-          </>
-        )}
-      </CardCollapse>
+        <>
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            bordered
+            pagination={false}
+            size="small"
+            scroll={{ x: 'max-content' }}
+          />
+        </>
+      </CardCollapseCustomized>
 
       <Modal
         title="Boletim IDEP"

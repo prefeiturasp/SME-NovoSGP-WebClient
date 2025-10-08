@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { HiDownload, HiEye } from 'react-icons/hi';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
+import TabelaIdepAnosAnteriores from '../TabelaIdepAnosAnteriores/tabelaIdepAnosAnteriores';
 import styles from './tabelaIdepDetalhes.css';
 
 const cabecalhoDescricao = (
@@ -62,7 +63,7 @@ const mapearDadosParaTabela = (dadosJson = []) => {
   });
 };
 
-export default function TabelaIdepDetalhes({ dados }) {
+export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
   const [exibir, setExibir] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [boletimSelecionado, setBoletimSelecionado] = useState(null);
@@ -126,7 +127,13 @@ export default function TabelaIdepDetalhes({ dados }) {
       }),
       children: [
         {
-          title: 'Anos iniciais\n(1º a 5º anos)',
+          title: (
+            <span>
+              Anos iniciais
+              <br />
+              (1º a 5º anos)
+            </span>
+          ),
           dataIndex: 'percentualInicial',
           key: 'percentualInicial',
           align: 'center',
@@ -135,7 +142,13 @@ export default function TabelaIdepDetalhes({ dados }) {
           render: value => (value !== undefined ? value : '-'),
         },
         {
-          title: 'Anos finais\n(6º a 9º anos)',
+          title: (
+            <span>
+              Anos finais
+              <br />
+              (6º a 9º anos)
+            </span>
+          ),
           dataIndex: 'percentualFinal',
           key: 'percentualFinal',
           align: 'center',
@@ -154,7 +167,13 @@ export default function TabelaIdepDetalhes({ dados }) {
       }),
       children: [
         {
-          title: 'Anos iniciais\n(1º a 5º ano)',
+          title: (
+            <span>
+              Anos iniciais
+              <br />
+              (1º a 5º anos)
+            </span>
+          ),
           children: [
             {
               title: 'LP',
@@ -184,8 +203,13 @@ export default function TabelaIdepDetalhes({ dados }) {
           ],
         },
         {
-          title: 'Anos finais\n(6º a 9º ano)',
-
+          title: (
+            <span>
+              Anos finais
+              <br />
+              (6º a 9º anos)
+            </span>
+          ),
           children: [
             {
               title: 'LP',
@@ -299,6 +323,10 @@ export default function TabelaIdepDetalhes({ dados }) {
             />
           </>
         )}
+
+        <div className="mt-4">
+          <TabelaIdepAnosAnteriores ueCodigo={ueCodigo} />
+        </div>
       </CardCollapse>
 
       <Modal
