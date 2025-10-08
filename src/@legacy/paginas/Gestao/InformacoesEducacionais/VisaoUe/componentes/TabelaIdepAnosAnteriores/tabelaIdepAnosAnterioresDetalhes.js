@@ -2,19 +2,8 @@ import { Modal, Table, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { HiDownload, HiEye } from 'react-icons/hi';
 import { Base } from '~/componentes';
-import CardCollapse from '~/componentes/cardCollapse';
-import TabelaIdepAnosAnteriores from '../TabelaIdepAnosAnteriores/tabelaIdepAnosAnteriores';
-import styles from './tabelaIdepDetalhes.css';
-
-const cabecalhoDescricao = (
-  <div className="cabecalho-idep">
-    O Índice de Desenvolvimento da Educação Paulistana (IDEP) é uma ferramenta
-    para avaliar o desempenho de escolas de Ensino Fundamental e estudantes da
-    Rede Municipal de Ensino (RME). É calculado pela Secretaria Municipal de
-    Educação (SME) a partir dos resultados das avaliações da Prova São Paulo e
-    dos resultados das taxas de aprovação.
-  </div>
-);
+import CardCollapseCustomized from '../../../shared/cardCollapseCustomized';
+import styles from '../TabelaIdep/tabelaIdepDetalhes.css';
 
 const mapearDadosParaTabela = (dadosJson = []) => {
   if (!Array.isArray(dadosJson)) return [];
@@ -63,7 +52,7 @@ const mapearDadosParaTabela = (dadosJson = []) => {
   });
 };
 
-export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
+export default function TabelaIdepAnosAnterioresDetalhes({ dados }) {
   const [exibir, setExibir] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [boletimSelecionado, setBoletimSelecionado] = useState(null);
@@ -174,6 +163,7 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
               (1º a 5º anos)
             </span>
           ),
+
           children: [
             {
               title: 'LP',
@@ -292,42 +282,29 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
     },
   ];
 
-  const configCabecalho = {
-    altura: '44px',
-    corBorda: Base.AzulBordaCollapse,
-  };
-
   const key = 'idep-prof-coll';
 
   return (
     <div className="tabela-idep-detalhes">
-      <CardCollapse
-        titulo="IDEP e Proficiência"
-        key={`${key}-collapse-key`}
-        indice={`${key}-collapse-indice`}
-        alt={`${key}-alt`}
-        configCabecalho={configCabecalho}
-        show={exibir}
-        onClick={() => setExibir(!exibir)}
+      <CardCollapseCustomized
+        titulo="Ver anos anteriores"
+        aberto={exibir}
+        aoClicar={() => setExibir(!exibir)}
+        key={`${key}-collapse-modern`}
+        alturaCabecalho="44px"
+        corCabecalho={Base.CinzaBordaCollapse}
       >
-        {exibir && (
-          <>
-            {cabecalhoDescricao}
-            <Table
-              columns={columns}
-              dataSource={dataSource}
-              bordered
-              pagination={false}
-              size="small"
-              scroll={{ x: 'max-content' }}
-            />
-          </>
-        )}
-
-        <div className="mt-4">
-          <TabelaIdepAnosAnteriores ueCodigo={ueCodigo} />
-        </div>
-      </CardCollapse>
+        <>
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            bordered
+            pagination={false}
+            size="small"
+            scroll={{ x: 'max-content' }}
+          />
+        </>
+      </CardCollapseCustomized>
 
       <Modal
         title="Boletim IDEP"
