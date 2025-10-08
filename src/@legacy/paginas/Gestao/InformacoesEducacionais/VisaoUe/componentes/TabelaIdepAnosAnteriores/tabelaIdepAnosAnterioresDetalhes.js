@@ -288,8 +288,8 @@ export default function TabelaIdepAnosAnterioresDetalhes({ dados }) {
     <div className="tabela-idep-detalhes">
       <CardCollapseCustomized
         titulo="Ver anos anteriores"
-        aberto={exibir} // ✅ substitui show
-        aoClicar={() => setExibir(!exibir)} // ✅ substitui onClick
+        aberto={exibir}
+        aoClicar={() => setExibir(!exibir)}
         key={`${key}-collapse-modern`}
         alturaCabecalho="44px"
         corCabecalho={Base.CinzaBordaCollapse}
