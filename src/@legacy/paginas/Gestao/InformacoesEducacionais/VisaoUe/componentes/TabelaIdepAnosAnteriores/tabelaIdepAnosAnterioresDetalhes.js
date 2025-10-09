@@ -142,9 +142,7 @@ export default function TabelaIdepAnosAnterioresDetalhes({ dados }) {
           key: 'percentualFinal',
           align: 'center',
           width: 80,
-          onHeaderCell: () => ({
-            className: styles['coluna-anos-Iniciais-Finais'],
-          }),
+
           render: value => (value !== undefined ? value : '-'),
         },
       ],
