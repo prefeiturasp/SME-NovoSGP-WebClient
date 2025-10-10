@@ -6,8 +6,8 @@ import ReactGA from 'react-ga';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { PersistGate } from 'redux-persist/integration/react';
-
 import { ThemeProvider } from 'styled-components';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import GlobalStyle from '~/estilos/global';
 import { Deslogar } from '~/redux/modulos/usuario/actions';
@@ -15,6 +15,8 @@ import { obterTrackingID } from '~/servicos/variaveis';
 import Routes from './routes';
 
 ReactGA.initialize(obterTrackingID);
+
+const queryClient = new QueryClient();
 
 const App: React.FC = () => {
   const verificaSairResetSenha = () => {
@@ -39,20 +41,23 @@ const App: React.FC = () => {
       verificaSairResetSenha();
     }
   });
+
   // @ts-ignore
   return (
-    <ConfigProvider theme={SGPTheme}>
-      <ThemeProvider theme={SGPTheme}>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <BrowserRouter>
-              <GlobalStyle />
-              <Routes />
-            </BrowserRouter>
-          </PersistGate>
-        </Provider>
-      </ThemeProvider>
-    </ConfigProvider>
+    <QueryClientProvider client={queryClient}>
+      <ConfigProvider theme={SGPTheme}>
+        <ThemeProvider theme={SGPTheme}>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <BrowserRouter>
+                <GlobalStyle />
+                <Routes />
+              </BrowserRouter>
+            </PersistGate>
+          </Provider>
+        </ThemeProvider>
+      </ConfigProvider>
+    </QueryClientProvider>
   );
 };
 

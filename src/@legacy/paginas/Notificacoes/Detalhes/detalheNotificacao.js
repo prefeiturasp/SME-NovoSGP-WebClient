@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import * as Yup from 'yup';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader } from '~/componentes';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
@@ -35,11 +36,11 @@ const DetalheNotificacao = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const paramsRoute = useParams();
+  const queryClient = useQueryClient();
 
   const idNotificacao = paramsRoute?.id || 0;
 
   const [listaDeStatus, setListaDeStatus] = useState([]);
-  const [carregandoTela, setCarregandoTela] = useState(false);
   const [aprovar, setAprovar] = useState(false);
 
   const titulosNiveis = [
@@ -54,6 +55,7 @@ const DetalheNotificacao = () => {
 
   const usuario = useSelector(state => state.usuario);
   const permissoesTela = usuario.permissoes[ROUTES.NOTIFICACOES];
+  const anoAtual = window.moment().format('YYYY');
 
   const [validacoes, setValidacoes] = useState(
     Yup.object({
@@ -61,86 +63,69 @@ const DetalheNotificacao = () => {
     })
   );
 
-  const [notificacao, setNotificacao] = useState({
-    alteradoEm: '',
-    alteradoPor: null,
-    criadoEm: '',
-    criadoPor: '',
-    id: 0,
-    mensagem: '',
-    mostrarBotaoMarcarComoLido: false,
-    mostrarBotoesDeAprovacao: false,
-    situacao: '',
-    tipo: '',
-    titulo: '',
+  const {
+    data: notificacao,
+    isLoading: carregandoNotificacao,
+    error: erroNotificacao,
+  } = useQuery({
+    queryKey: ['notificacao', idNotificacao],
+    queryFn: () =>
+      api.get(`v1/notificacoes/${idNotificacao}`).then(res => res.data),
+    enabled: !!idNotificacao,
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 30 * 60 * 1000,
+    onError: erros,
   });
 
-  const buscaNotificacao = async id => {
-    try {
-      setCarregandoTela(true);
-      const { data, status } = await api.get(`v1/notificacoes/${id}`);
-      if (data && status === 200) {
-        setNotificacao(data);
-        setCarregandoTela(false);
-      }
-    } catch (listaErros) {
-      setCarregandoTela(false);
-      erros(listaErros);
+  const {
+    data: linhaTempo,
+    isLoading: carregandoLinhaTempo,
+    error: erroLinhaTempo,
+  } = useQuery({
+    queryKey: ['linhaTempo', idNotificacao],
+    queryFn: () =>
+      api
+        .get(
+          `v1/workflows/aprovacoes/notificacoes/${idNotificacao}/linha-tempo`
+        )
+        .then(res => res.data),
+    enabled:
+      !!idNotificacao &&
+      notificacao?.categoriaId === notificacaoCategoria.Workflow_Aprovacao,
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 30 * 60 * 1000,
+    onError: erros,
+  });
+
+  useEffect(() => {
+    if (linhaTempo) {
+      setListaDeStatus(
+        linhaTempo.map(item => ({
+          titulo: titulosNiveis[item.statusId],
+          status: item.statusId,
+          timestamp: item.alteracaoData,
+          rf: item.alteracaoUsuarioRf,
+          nome: item.alteracaoUsuario,
+        }))
+      );
     }
-  };
+  }, [linhaTempo]);
 
   useEffect(() => {
     setBreadcrumbManual(location.pathname, 'Detalhes', '/notificacoes');
     verificaSomenteConsulta(permissoesTela);
-  }, [location]);
+  }, [location, permissoesTela]);
 
   useEffect(() => {
-    if (idNotificacao) {
-      buscaNotificacao(idNotificacao);
-    }
-  }, [idNotificacao]);
-
-  const anoAtual = window.moment().format('YYYY');
-
-  useEffect(() => {
-    const buscaLinhaTempo = async () => {
-      try {
-        setCarregandoTela(true);
-        const { data, status } = await api.get(
-          `v1/workflows/aprovacoes/notificacoes/${idNotificacao}/linha-tempo`
-        );
-        if (data && status === 200) {
-          setListaDeStatus(
-            data.map(item => ({
-              titulo: titulosNiveis[item.statusId],
-              status: item.statusId,
-              timestamp: item.alteracaoData,
-              rf: item.alteracaoUsuarioRf,
-              nome: item.alteracaoUsuario,
-            }))
-          );
-          setCarregandoTela(false);
-        }
-      } catch (listaErros) {
-        setCarregandoTela(false);
-        erros(listaErros);
-      }
-    };
-
     if (
-      notificacao &&
-      notificacao.categoriaId === notificacaoCategoria.Workflow_Aprovacao
+      notificacao?.categoriaId === notificacaoCategoria.Aviso &&
+      usuario.rf.length > 0
     ) {
-      buscaLinhaTempo();
+      servicoNotificacao.validarBuscaNotificacoesPorAnoRf(anoAtual, usuario.rf);
     }
-    if (notificacao.categoriaId === notificacaoCategoria.Aviso) {
-      if (usuario.rf.length > 0)
-        servicoNotificacao.validarBuscaNotificacoesPorAnoRf(
-          anoAtual,
-          usuario.rf
-        );
-    }
-  }, [notificacao]);
+  }, [notificacao, usuario.rf, anoAtual]);
+
+  const carregandoTela = carregandoNotificacao || carregandoLinhaTempo;
 
   const marcarComoLida = async () => {
     try {
@@ -158,15 +143,17 @@ const DetalheNotificacao = () => {
           }
         });
 
+        queryClient.invalidateQueries(['notificacao', idNotificacao]);
+        queryClient.invalidateQueries(['linhaTempo', idNotificacao]);
+
         navigate(urlTelaNotificacoes);
         if (usuario.rf.length > 0)
           servicoNotificacao.validarBuscaNotificacoesPorAnoRf(
             anoAtual,
             usuario.rf
           );
-
-        setCarregandoTela(false);
       }
+      setCarregandoTela(false);
     } catch (error) {
       setCarregandoTela(false);
       erro('Não foi possível marcar notificação como lida!');
@@ -194,6 +181,9 @@ const DetalheNotificacao = () => {
             }
           });
 
+          queryClient.invalidateQueries(['notificacao', idNotificacao]);
+          queryClient.invalidateQueries(['linhaTempo', idNotificacao]);
+
           navigate(urlTelaNotificacoes);
           if (usuario.rf.length > 0) {
             servicoNotificacao.validarBuscaNotificacoesPorAnoRf(
@@ -201,9 +191,8 @@ const DetalheNotificacao = () => {
               usuario.rf
             );
           }
-
-          setCarregandoTela(false);
         }
+        setCarregandoTela(false);
       } catch (error) {
         setCarregandoTela(false);
         erro('Não foi possível excluir a notificação!');
@@ -233,6 +222,8 @@ const DetalheNotificacao = () => {
           if (data.mensagens) {
             aviso(data.mensagens[0]);
           } else sucesso(msgSucesso);
+          queryClient.invalidateQueries(['notificacao', idNotificacao]);
+          queryClient.invalidateQueries(['linhaTempo', idNotificacao]);
           setCarregandoTela(false);
           navigate(urlTelaNotificacoes);
         }
@@ -248,7 +239,7 @@ const DetalheNotificacao = () => {
       <Formik
         enableReinitialize
         initialValues={{
-          observacao: notificacao.observacao || '',
+          observacao: notificacao?.observacao || '',
         }}
         validationSchema={validacoes}
         onSubmit={values => enviarAprovacao(values)}
@@ -271,10 +262,10 @@ const DetalheNotificacao = () => {
                       label="Aceitar"
                       color={cores.Colors.Roxo}
                       disabled={
-                        !notificacao.mostrarBotoesDeAprovacao ||
+                        !notificacao?.mostrarBotoesDeAprovacao ||
                         !permissoesTela.podeAlterar
                       }
-                      border={!notificacao.mostrarBotoesDeAprovacao}
+                      border={!notificacao?.mostrarBotoesDeAprovacao}
                       type="button"
                       onClick={async e => {
                         setValidacoes(
@@ -299,7 +290,7 @@ const DetalheNotificacao = () => {
                       color={cores.Colors.Roxo}
                       border
                       disabled={
-                        !notificacao.mostrarBotoesDeAprovacao ||
+                        !notificacao?.mostrarBotoesDeAprovacao ||
                         !permissoesTela.podeAlterar
                       }
                       type="button"
@@ -326,7 +317,7 @@ const DetalheNotificacao = () => {
                       color={cores.Colors.Azul}
                       border
                       disabled={
-                        !notificacao.mostrarBotaoMarcarComoLido ||
+                        !notificacao?.mostrarBotaoMarcarComoLido ||
                         !permissoesTela.podeAlterar
                       }
                       onClick={marcarComoLida}
@@ -335,7 +326,7 @@ const DetalheNotificacao = () => {
                   <Col>
                     <BotaoExcluirPadrao
                       disabled={
-                        !notificacao.mostrarBotaoRemover ||
+                        !notificacao?.mostrarBotaoRemover ||
                         !permissoesTela.podeExcluir
                       }
                       onClick={excluir}
@@ -343,6 +334,7 @@ const DetalheNotificacao = () => {
                   </Col>
                 </Row>
               </Cabecalho>
+
               <Card addRow={false}>
                 <EstiloDetalhe>
                   <div className="col-xs-12 col-md-12 col-lg-12">
@@ -353,48 +345,50 @@ const DetalheNotificacao = () => {
                             CÓDIGO
                           </div>
                           <div className="id-notificacao col-xs-12 col-md-12 col-lg-12 text-center">
-                            {notificacao.codigo}
+                            {notificacao?.codigo}
                           </div>
                         </div>
                       </div>
+
                       <div className="col-xs-12 col-md-12 col-lg-10">
                         <div className="row">
                           <div className="col-xs-12 col-md-12 col-lg-12">
                             <div className="notificacao-horario">
-                              {`Notificação automática ${notificacao.criadoEm.substr(
+                              {`Notificação automática ${notificacao?.criadoEm?.substr(
                                 0,
                                 10
                               )}`}
                             </div>
                           </div>
+
                           <div className="col-xs-12 col-md-12 col-lg-12">
                             <div className="row">
                               <div className="col-xs-12 col-md-12 col-lg-4 titulo-coluna">
                                 Tipo{' '}
                                 <div className="conteudo-coluna">
-                                  {notificacao.tipo}
+                                  {notificacao?.tipo}
                                 </div>
                               </div>
                               <div className="col-xs-12 col-md-12 col-lg-6 titulo-coluna">
                                 Título
                                 <div className="conteudo-coluna">
-                                  {notificacao.titulo}
+                                  {notificacao?.titulo}
                                 </div>
                               </div>
                               <div className="col-xs-12 col-md-12 col-lg-2 titulo-coluna">
                                 Situação
                                 <div
                                   className={`conteudo-coluna ${
-                                    notificacao.statusId ===
+                                    notificacao?.statusId ===
                                     notificacaoStatus.Pendente
                                       ? 'texto-vermelho-negrito'
                                       : ''
                                   }`}
                                 >
-                                  {notificacao.statusId ===
+                                  {notificacao?.statusId ===
                                   notificacaoStatus.Pendente
                                     ? 'Não Lida'
-                                    : notificacao.situacao}
+                                    : notificacao?.situacao}
                                 </div>
                               </div>
                             </div>
@@ -403,6 +397,7 @@ const DetalheNotificacao = () => {
                       </div>
                     </div>
                   </div>
+
                   <hr className="mt-hr" />
                   <div className="row">
                     <div
@@ -421,14 +416,14 @@ const DetalheNotificacao = () => {
                         <div
                           style={{ userSelect: 'none' }}
                           dangerouslySetInnerHTML={{
-                            __html: notificacao.mensagem,
+                            __html: notificacao?.mensagem || '',
                           }}
                         />
                       </Watermark>
                     </div>
                   </div>
 
-                  {notificacao.categoriaId ===
+                  {notificacao?.categoriaId ===
                     notificacaoCategoria.Workflow_Aprovacao && (
                     <div className="row">
                       <div className="col-xs-12 col-md-12 col-lg-12 obs">
@@ -439,7 +434,7 @@ const DetalheNotificacao = () => {
                           form={form}
                           maxlength="100"
                           desabilitado={
-                            !notificacao.mostrarBotoesDeAprovacao ||
+                            !notificacao?.mostrarBotoesDeAprovacao ||
                             !permissoesTela.podeAlterar
                           }
                         />
@@ -447,7 +442,8 @@ const DetalheNotificacao = () => {
                     </div>
                   )}
                 </EstiloDetalhe>
-                {notificacao.categoriaId ===
+
+                {notificacao?.categoriaId ===
                   notificacaoCategoria.Workflow_Aprovacao && (
                   <EstiloLinhaTempo>
                     <div className="col-xs-12 col-md-12 col-lg-12">
@@ -470,4 +466,5 @@ const DetalheNotificacao = () => {
     </>
   );
 };
+
 export default DetalheNotificacao;
