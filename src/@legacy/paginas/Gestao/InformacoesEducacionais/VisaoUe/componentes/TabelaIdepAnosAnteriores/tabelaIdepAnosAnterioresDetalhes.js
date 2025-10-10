@@ -148,7 +148,7 @@ export default function TabelaIdepAnosAnterioresDetalhes({ dados }) {
       ],
     },
     {
-      title: 'Proficência média',
+      title: 'Proficiência média',
       onHeaderCell: () => ({
         className: 'coluna-anos-iniciais-finais',
       }),
