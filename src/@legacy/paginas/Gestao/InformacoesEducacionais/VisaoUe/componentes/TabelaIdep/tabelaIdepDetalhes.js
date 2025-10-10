@@ -161,7 +161,7 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
       ],
     },
     {
-      title: 'Proficência média',
+      title: 'Proficiência média',
       onHeaderCell: () => ({
         className: 'coluna-anos-iniciais-finais',
       }),
