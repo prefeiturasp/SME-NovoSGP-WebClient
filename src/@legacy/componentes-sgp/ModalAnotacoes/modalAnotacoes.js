@@ -1,6 +1,6 @@
 import { Form, Formik } from 'formik';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import shortid from 'shortid';
 import * as Yup from 'yup';
@@ -61,6 +61,7 @@ const ModalAnotacoesFrequencia = props => {
   const [valoresIniciais, setValoresIniciais] = useState(iniciar);
   const [loaderSalvarEditar, setLoaderSalvarEditar] = useState(false);
   const [motivosAusenciaAbae, setMotivosAusenciaAbae] = useState([]);
+  const exibirEditor = useRef(false);
 
   const validacoes = Yup.object().shape(
     {
@@ -387,26 +388,26 @@ const ModalAnotacoesFrequencia = props => {
               )}
               <div className="col-md-12 mt-2">
                 <EditorAnotacao>
-                  {valoresIniciais?.motivoAusenciaId && (
-                    <JoditEditor
-                      label="Anotação"
-                      form={form}
-                      value={valoresIniciais?.anotacao}
-                      name="anotacao"
-                      onChange={v => {
-                        if (valoresIniciais?.anotacao !== v) {
-                          onChangeCampos();
-                        }
-                      }}
-                      desabilitar={desabilitarCampos}
-                      labelRequired={
-                        !form?.values?.motivoAusenciaId ||
-                        !!(
-                          form?.values?.anotacao && form?.values?.motivoAusenciaId
-                        )
+                  <JoditEditor
+                    label="Anotação"
+                    form={form}
+                    value={valoresIniciais?.anotacao}
+                    name="anotacao"
+                    onChange={() => {
+                      if (!exibirEditor.current) {
+                        exibirEditor.current = true
+                        return;
                       }
-                    />
-                  )}
+                      onChangeCampos();
+                    }}
+                    desabilitar={desabilitarCampos}
+                    labelRequired={
+                      !form?.values?.motivoAusenciaId ||
+                      !!(
+                        form?.values?.anotacao && form?.values?.motivoAusenciaId
+                      )
+                    }
+                  />
                 </EditorAnotacao>
               </div>
               <div className="row">
