@@ -7,7 +7,7 @@ import ServicoPap from '~/servicos/InformacoesEducacionais/ServicoPap';
 import TabelaIndicadoresPapDetalhes from './tabelaIndicadoresPapDetalhes';
 import Title from 'antd/es/typography/Title';
 
-const TabelaIndicadoresPap = ({ codigoDre, codigoUe }) => {
+const TabelaIndicadoresPap = ({ anoLetivo, codigoDre, codigoUe }) => {
   const [dados, setDados] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -16,6 +16,7 @@ const TabelaIndicadoresPap = ({ codigoDre, codigoUe }) => {
       setExibirLoader(true);
       try {
         const response = await ServicoPap.obterIndicadoresPap(
+          anoLetivo,
           codigoDre,
           codigoUe
         );
@@ -28,7 +29,7 @@ const TabelaIndicadoresPap = ({ codigoDre, codigoUe }) => {
     };
 
     fetchData();
-  }, [codigoDre, codigoUe]);
+  }, [anoLetivo, codigoDre, codigoUe]);
 
   if (exibirLoader) {
     return (
@@ -67,13 +68,15 @@ const TabelaIndicadoresPap = ({ codigoDre, codigoUe }) => {
 };
 
 TabelaIndicadoresPap.propTypes = {
-  codigoDre: PropTypes.string.isRequired,
-  codigoUe: PropTypes.string.isRequired,
+  anoLetivo: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  codigoDre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  codigoUe: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 TabelaIndicadoresPap.defaultProps = {
   codigoDre: null,
   codigoUe: null,
+  anoLetivo: new Date().getFullYear(),
 };
 
 export default TabelaIndicadoresPap;
