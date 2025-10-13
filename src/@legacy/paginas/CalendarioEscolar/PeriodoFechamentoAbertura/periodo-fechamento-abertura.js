@@ -81,6 +81,8 @@ const PeriodoFechamentoAbertura = () => {
   const [listaTipoCalendario, setListaTipoCalendario] = useState([]);
   const [valorTipoCalendario, setValorTipoCalendario] = useState('');
   const [pesquisaTipoCalendario, setPesquisaTipoCalendario] = useState('');
+  const [isModalidade1, setIsModalidade1] = useState(false);
+  const [valorAplicacao, setValorAplicacao] = useState('');
 
   const validacaoPrimeiroBim = {
     bimestre1InicioDoFechamento: momentSchema.required(
@@ -320,6 +322,14 @@ const PeriodoFechamentoAbertura = () => {
     }
   };
 
+  const obterIdPorDescricao = descricaoSelecionada => {
+    const opcao = opcoesAplicacao.find(
+      item => item.descricao === descricaoSelecionada
+    );
+    console.log(opcao);
+    return opcao ? opcao.id : null;
+  };
+
   const onSubmit = async (form, voltar) => {
     form.fechamentosBimestres.forEach(item => {
       switch (item.bimestre) {
@@ -345,10 +355,15 @@ const PeriodoFechamentoAbertura = () => {
     });
 
     setEmprocessamento(true);
-    ServicoPeriodoFechamento.salvar({
+
+    const payload = {
       ...form,
+      aplicacao: valorAplicacao, // Se estiver usando estado separado
+      // ou "form.aplicacao" se o campo já estiver no Formik
       confirmouAlteracaoHierarquica: false,
-    })
+    };
+
+    ServicoPeriodoFechamento.salvar(payload)
       .then(() => {
         sucesso('Períodos salvos com sucesso.');
         carregaDados();
@@ -447,10 +462,16 @@ const PeriodoFechamentoAbertura = () => {
 
   const selecionaTipoCalendario = descricao => {
     const tipo = listaTipoCalendario?.find(t => t?.descricao === descricao);
+
     if (Number(tipo?.id) || !tipo?.id) {
       const isPeriodoAnual = tipo?.periodo === periodo?.Anual;
       setIsTipoCalendarioAnual(isPeriodoAnual);
       setValorTipoCalendario(descricao);
+    }
+
+    setIsModalidade1(tipo?.modalidade === 1);
+    if (tipo?.modalidade !== 1) {
+      setValorAplicacao('');
     }
     setTipoCalendarioSelecionado(tipo?.id);
   };
@@ -460,6 +481,12 @@ const PeriodoFechamentoAbertura = () => {
       setPesquisaTipoCalendario(descricao);
     }
   };
+
+  const opcoesAplicacao = [
+    { id: 1, descricao: 'SGP' },
+    { id: 2, descricao: 'Sondagem (Aplicação)' },
+    { id: 3, descricao: 'Sondagem (Digitação)' },
+  ];
 
   return (
     <Loader loading={emProcessamento}>
@@ -531,6 +558,40 @@ const PeriodoFechamentoAbertura = () => {
                       />
                     </Loader>
                   </div>
+
+                  <div className="col-sm-12 col-md-4 col-lg-6 col-xl-4 mb-2">
+                    {isModalidade1 && valorTipoCalendario && (
+                      <SelectAutocomplete
+                        showList
+                        placeholder="Selecione a aplicação"
+                        name="aplicacao"
+                        id="aplicacao"
+                        lista={opcoesAplicacao}
+                        valueField="descricao" // aqui mantem como descricao porque campo recebe descricao
+                        textField="descricao"
+                        onSelect={descricao => {
+                          const id = obterIdPorDescricao(descricao);
+                          setValorAplicacao(id); // seta o id correto no estado
+                          if (!modoEdicao) setModoEdicao(true);
+                        }}
+                        onChange={descricao => {
+                          const id = obterIdPorDescricao(descricao);
+                          setValorAplicacao(id);
+                          if (!modoEdicao) setModoEdicao(true);
+                        }}
+                        value={
+                          opcoesAplicacao.find(
+                            item => item.id === valorAplicacao
+                          )?.descricao || ''
+                        } // mostrar a descrição como texto
+                        label="Aplicação"
+                        labelRequired
+                        temErro={modoEdicao && !valorAplicacao}
+                        mensagemErro="Campo obrigatório"
+                      />
+                    )}
+                  </div>
+
                   <div className="col-sm-12 col-md-4 col-lg-6 col-xl-8 pt-2 pb-2 d-flex justify-content-end">
                     {registroMigrado ? (
                       <RegistroMigrado>Registro Migrado</RegistroMigrado>
