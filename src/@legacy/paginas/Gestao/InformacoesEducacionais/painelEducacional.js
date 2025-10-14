@@ -11,7 +11,7 @@ import DetalhesUnidadeEducacional from './VisaoUe/detalhesUnidadeEducacional';
 
 export default function PainelEducacional() {
   const navigate = useNavigate();
-  const [anoLetivo, setAnoLetivo] = useState(null);
+  const [anoLetivo, setAnoLetivo] = useState(new Date().getFullYear());
   const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
   const [dreNome, setDreNome] = useState('');
   const [ueCodigo, setUeCodigo] = useState(OPCAO_TODOS);
