@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import * as Yup from 'yup';
-import { CampoData, momentSchema } from '~/componentes';
+import { CampoData, momentSchema, SelectAutocomplete } from '~/componentes';
 import Auditoria from '~/componentes/auditoria';
 import CampoTexto from '~/componentes/campoTexto';
 import { OPCAO_TODOS } from '~/constantes';
@@ -54,6 +54,14 @@ const FechaReabCadastroForm = () => {
   const navigate = useNavigate();
   const paramsRota = useParams();
   const paramsLocation = useLocation();
+  const [valorAplicacao, setValorAplicacao] = useState('');
+  const [exibirCampoAplicacao, setExibirCampoAplicacao] = useState(true);
+
+  const opcoesAplicacao = [
+    { id: 1, descricao: 'SGP' },
+    { id: 2, descricao: 'Sondagem (Aplicação)' },
+    { id: 3, descricao: 'Sondagem (Digitação)' },
+  ];
 
   setBreadcrumbManual(
     paramsLocation?.pathname,
@@ -98,6 +106,7 @@ const FechaReabCadastroForm = () => {
       );
       if (calAtual) {
         setCalendarioSelecionado(calAtual);
+        console.log(calAtual);
       }
     } else if (!paramsRota?.id) {
       setCalendarioSelecionado();
@@ -289,6 +298,7 @@ const FechaReabCadastroForm = () => {
 
     if (resposta?.data) {
       setListaTipoCalendarioEscolar(resposta.data);
+      console.log(resposta.data); //aqui vem todos os calendarios, precisa ver qual o user selecionou e exibir ou nao o campo novo aplicacao
     } else {
       setListaTipoCalendarioEscolar([]);
     }
@@ -315,17 +325,44 @@ const FechaReabCadastroForm = () => {
               <Form>
                 <Col span={24}>
                   <Row gutter={[16, 16]}>
-                    <Col span={24}>
-                      <Col sm={24} md={12} xl={8} style={{ paddingLeft: 0 }}>
-                        <TipoCalendarioReabertura
-                          form={form}
-                          onChangeCampos={() => {
+                    <Col sm={24} md={12} xl={8}>
+                      <TipoCalendarioReabertura
+                        form={form}
+                        onChangeCampos={() => {
+                          onChangeCampos();
+                        }}
+                        obterTiposCalendarios={obterTiposCalendarios}
+                      />
+                    </Col>
+
+                    {exibirCampoAplicacao && (
+                      <Col sm={24} md={12} xl={8}>
+                        <SelectAutocomplete
+                          showList
+                          label="Aplicação"
+                          labelRequired
+                          name="aplicacao"
+                          id="aplicacao"
+                          lista={opcoesAplicacao}
+                          valueField="id"
+                          textField="descricao"
+                          value={valorAplicacao}
+                          onSelect={id => {
+                            form.setFieldValue('aplicacao', id);
+                            setValorAplicacao(id);
                             onChangeCampos();
                           }}
-                          obterTiposCalendarios={obterTiposCalendarios}
+                          onChange={id => {
+                            form.setFieldValue('aplicacao', id);
+                            setValorAplicacao(id);
+                            onChangeCampos();
+                          }}
+                          temErro={emEdicao && !valorAplicacao}
+                          mensagemErro="Campo obrigatório"
+                          desabilitado={desabilitarCampos}
                         />
                       </Col>
-                    </Col>
+                    )}
 
                     <Col md={24} xl={12}>
                       <DreReabertura
