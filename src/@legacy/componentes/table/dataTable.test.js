@@ -1,5 +1,6 @@
+import React from 'react';
 import { render } from '@testing-library/react';
-import DataTable from './table/dataTable';
+import DataTable from './dataTable';
 
 describe('DataTable', () => {
   it('renderiza sem erros', () => {
