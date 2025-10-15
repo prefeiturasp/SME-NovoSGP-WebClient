@@ -21,3 +21,17 @@
 .tabela-sondagem-custom .ant-table-thead > tr > th {
   border-color: #d9d9d9 !important;
 }
+
+.tabela-sondagem-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.tabela-sondagem-desc {
+  font-size: 14px;
+  margin-bottom: 0;
+  color: #42474a;
+  flex: 1;
+  margin-right: 16px;
+}

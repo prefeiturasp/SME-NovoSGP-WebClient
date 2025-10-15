@@ -41,7 +41,6 @@ function TabelaSondagemUe({ dreCodigo, ueCodigo, anoLetivo }) {
     }
   }, [exibirSondagemUe, dreCodigo, ueCodigo, anoLetivo, bimestre]);
 
-  // Ajuste os nomes dos campos para bater com o que vem da API
   const columns = [
     {
       title: 'Ano',
@@ -106,22 +105,8 @@ function TabelaSondagemUe({ dreCodigo, ueCodigo, anoLetivo }) {
       >
         {exibirSondagemUe && (
           <>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                marginBottom: 32,
-              }}
-            >
-              <p
-                style={{
-                  fontSize: '14px',
-                  marginBottom: 0,
-                  color: '#42474a',
-                  flex: 1,
-                  marginRight: 16,
-                }}
-              >
+            <div className="tabela-sondagem-header">
+              <p className="tabela-sondagem-desc">
                 O Sondagem reúne informações sobre a alfabetização em Língua
                 Portuguesa (leitura e escrita) dos alunos da rede municipal. Os
                 professores registram os dados dos alunos na plataforma, e o
@@ -149,7 +134,6 @@ function TabelaSondagemUe({ dreCodigo, ueCodigo, anoLetivo }) {
               loading={loading}
               scroll={{ x: 'max-content' }}
               rowKey={row => `${row.serieAno}-${row.bimestre}`}
-              style={{ background: '#fff' }}
               className="tabela-sondagem-custom"
             />
           </>

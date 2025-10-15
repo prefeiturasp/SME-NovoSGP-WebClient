@@ -32,8 +32,7 @@ class ServicoAbandono {
 
     const params = new URLSearchParams();
     params.append('anoLetivo', anoLetivo);
-    // params.append('codigoUe', codigoUe);
-    params.append('codigoUe', 1992);
+    params.append('codigoUe', codigoUe);
     params.append('modalidade', modalidade);
     params.append('numeroPagina', numeroPagina);
     params.append('numeroRegistros', numeroRegistros);
