@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Table, Card } from 'antd';
+import { Table } from 'antd';
 import './tabelaAbandonoSmeDre.css';
 import PropTypes from 'prop-types';
 import { erros } from '~/servicos';
@@ -60,23 +60,13 @@ const columns = [
       if (row.isHeader) {
         return {
           children: (
-            <span
-              style={{
-                fontWeight: 'bold',
-                textAlign: 'center',
-                display: 'block',
-              }}
-            >
+            <span className="tabela-abandono-custom-modalidade">
               {row.modalidade}
             </span>
           ),
           props: {
             colSpan: 2,
-            style: {
-              background: '#f6f5fa',
-              textAlign: 'center',
-              fontWeight: 'bold',
-            },
+            className: 'tabela-abandono-custom-modalidade-td',
           },
         };
       }
