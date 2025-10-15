@@ -5,7 +5,6 @@ import DetalhesUe from './componentes/DetalhesUe/detalhesUe';
 import TabelaIdep from './componentes/TabelaIdep/tabelaIdep';
 import TabelaAbandonoUe from './componentes/Abandono/tabelaAbandonoUe';
 import TabelaSondagemUe from './componentes/Sondagem/tabelaSondagemUe';
-import { Col, Row } from 'antd';
 
 export default function DetalhesUnidadeEducacional({
   anoLetivo,
