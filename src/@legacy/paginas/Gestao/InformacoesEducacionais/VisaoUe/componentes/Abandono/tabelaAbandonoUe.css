@@ -1,0 +1,59 @@
+.tabela-abandono-custom {
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 32px;
+}
+
+.tabela-abandono-custom-title {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.tabela-abandono-custom-desc {
+  font-size: 14px;
+  color: #42474a;
+  margin-bottom: 32px;
+}
+
+.tabela-abandono-custom .ant-table {
+  border: 1px solid #d9d9d9;
+  border-radius: 0 !important;
+}
+
+.tabela-abandono-custom .ant-table-container {
+  border-radius: 0 !important;
+}
+
+.tabela-abandono-custom .ant-table-thead > tr > th,
+.tabela-abandono-custom .ant-table-tbody > tr > td {
+  padding: 4px 16px 4px 16px !important;
+  text-align: center !important;
+}
+
+.tabela-abandono-custom .ant-table-thead > tr > th {
+  background: #e7e6f8 !important;
+}
+
+.tabela-abandono-custom .ant-table-tbody > tr > td,
+.tabela-abandono-custom .ant-table-thead > tr > th {
+  border-color: #d9d9d9 !important;
+}
+
+.tabela-abandono-custom .ant-table-tbody > tr > td[colspan='3'] {
+  background: #f6f5fa !important;
+  text-align: center !important;
+  font-weight: bold !important;
+  font-size: 16px;
+  color: #333;
+}
+
+.tabela-abandono-custom-sem-dados {
+  text-align: center;
+  padding: 32px;
+  font-size: 16px;
+  color: #888;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 4px;
+}
