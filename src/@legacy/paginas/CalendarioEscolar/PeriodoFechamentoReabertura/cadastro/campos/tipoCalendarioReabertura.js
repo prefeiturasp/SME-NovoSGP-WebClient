@@ -8,6 +8,7 @@ const TipoCalendarioReabertura = ({
   form,
   onChangeCampos,
   obterTiposCalendarios,
+  onSelectCalendario,
 }) => {
   const {
     listaTipoCalendarioEscolar,
@@ -32,6 +33,7 @@ const TipoCalendarioReabertura = ({
 
       setListaUes([]);
       form.setFieldValue('ueCodigo', '');
+      if (onSelectCalendario) onSelectCalendario(calendario);
     } else {
       setCalendarioSelecionado({ descricao });
     }
@@ -74,12 +76,14 @@ TipoCalendarioReabertura.propTypes = {
   form: PropTypes.oneOfType([PropTypes.object]),
   onChangeCampos: PropTypes.func,
   obterTiposCalendarios: PropTypes.func,
+  onSelectCalendario: PropTypes.func,
 };
 
 TipoCalendarioReabertura.defaultProps = {
   form: null,
   onChangeCampos: () => null,
   obterTiposCalendarios: () => null,
+  onSelectCalendario: () => {},
 };
 
 export default TipoCalendarioReabertura;
