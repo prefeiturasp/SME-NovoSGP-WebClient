@@ -2,10 +2,12 @@ import api from '../api';
 
 class ServicoAbandono {
   ObterDadosAbandonoSmeDre = (codigoDre, codigoUe, anoLetivo) => {
-    if (!codigoDre || !anoLetivo) return Promise.resolve({ data: [] });
+    if (!anoLetivo) return Promise.resolve({ data: [] });
 
     const params = new URLSearchParams();
-    params.append('codigoDre', codigoDre);
+    if (codigoDre && String(codigoDre) !== '-99') {
+      params.append('codigoDre', codigoDre);
+    }
     params.append('anoLetivo', anoLetivo);
 
     const url = `v1/painel-educacional/abandono?${params.toString()}`;
