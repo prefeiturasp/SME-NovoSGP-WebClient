@@ -91,6 +91,7 @@ export default function PainelEducacional() {
         />
       ) : (
         <DetalhesUnidadeEducacional
+          dreCodigo={dreCodigo}
           ueCodigo={ueCodigo}
           anoLetivo={anoLetivo}
           dreNome={dreNome}

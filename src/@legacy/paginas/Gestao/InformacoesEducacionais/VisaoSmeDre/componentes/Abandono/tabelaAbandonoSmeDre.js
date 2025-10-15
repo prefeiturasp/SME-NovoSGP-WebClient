@@ -1,27 +1,88 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Table, Card } from 'antd';
 import './tabelaAbandonoSmeDre.css';
-
-import { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { erros } from '~/servicos';
-import { Loader } from '~/componentes';
 import ServicoAbandono from '~/servicos/InformacoesEducacionais/ServicoAbandono';
+
+function agruparModalidadesParaTabela(modalidades) {
+  const agrupado = {};
+  modalidades.forEach(m => {
+    if (!agrupado[m.modalidade]) agrupado[m.modalidade] = [];
+    agrupado[m.modalidade].push({
+      ano: m.ano,
+      quantidadeDesistentes: m.quantidadeDesistentes,
+    });
+  });
+
+  let data = [];
+  let idx = 0;
+  Object.entries(agrupado).forEach(([modalidade, anos]) => {
+    anos.sort((a, b) => {
+      const aNum = Number(a.ano);
+      const bNum = Number(b.ano);
+      if (!isNaN(aNum) && !isNaN(bNum)) return aNum - bNum;
+      return String(a.ano).localeCompare(String(b.ano), 'pt-BR', {
+        numeric: true,
+      });
+    });
+    data.push({
+      key: `header-${modalidade}`,
+      modalidade,
+      isHeader: true,
+      colSpanAno: 2,
+      colSpanQtd: 0,
+      bold: true,
+    });
+    anos.forEach((item, i) => {
+      data.push({
+        key: `${modalidade}-${item.ano}-${i}`,
+        ano: item.ano,
+        qtd: item.quantidadeDesistentes,
+        isHeader: false,
+        colSpanAno: 1,
+        colSpanQtd: 1,
+        bold: false,
+      });
+    });
+    idx++;
+  });
+  return data;
+}
 
 const columns = [
   {
     title: 'Ano',
     dataIndex: 'ano',
     key: 'ano',
+    width: '50%',
     render: (text, row) => {
-      if (row.colSpanAno === 0)
-        return { children: null, props: { colSpan: 0 } };
+      if (row.isHeader) {
+        return {
+          children: (
+            <span
+              style={{
+                fontWeight: 'bold',
+                textAlign: 'center',
+                display: 'block',
+              }}
+            >
+              {row.modalidade}
+            </span>
+          ),
+          props: {
+            colSpan: 2,
+            style: {
+              background: '#f6f5fa',
+              textAlign: 'center',
+              fontWeight: 'bold',
+            },
+          },
+        };
+      }
       return {
         children: text,
-        props: {
-          colSpan: row.colSpanAno || 1,
-          style: row.bold ? { fontWeight: 'bold' } : {},
-        },
+        props: { colSpan: row.colSpanAno || 1 },
       };
     },
   },
@@ -30,181 +91,73 @@ const columns = [
     dataIndex: 'qtd',
     key: 'qtd',
     align: 'right',
+    width: '50%',
     render: (text, row) => {
-      if (row.colSpanQtd === 0)
+      if (row.isHeader) {
         return { children: null, props: { colSpan: 0 } };
+      }
       return {
         children: text,
-        props: {
-          colSpan: row.colSpanQtd || 1,
-          style: row.bold ? { fontWeight: 'bold' } : {},
-        },
+        props: { colSpan: row.colSpanQtd || 1 },
       };
     },
   },
 ];
 
-const data = [
-  {
-    key: 'header1',
-    ano: 'Educação infantil',
-    qtd: '',
-    colSpanAno: 2,
-    colSpanQtd: 0,
-    bold: true,
-  },
-  {
-    key: 'creche',
-    ano: 'Creche (0 a 3 anos)',
-    qtd: '150',
-  },
-  {
-    key: 'preescola',
-    ano: 'Pré-escola (4 e 5 anos)',
-    qtd: '460',
-  },
-  {
-    key: 'header2',
-    ano: 'Ensino fundamental',
-    qtd: '',
-    colSpanAno: 2,
-    colSpanQtd: 0,
-    bold: true,
-  },
-  {
-    key: 'fund1',
-    ano: '1º',
-    qtd: '1.203',
-  },
-  {
-    key: 'fund2',
-    ano: '2º',
-    qtd: '651',
-  },
-  {
-    key: 'fund3',
-    ano: '3º',
-    qtd: '810',
-  },
-  {
-    key: 'fund4',
-    ano: '4º',
-    qtd: '901',
-  },
-  {
-    key: 'fund5',
-    ano: '5º',
-    qtd: '1.548',
-  },
-  {
-    key: 'fund6',
-    ano: '6º',
-    qtd: '1.014',
-  },
-  {
-    key: 'fund7',
-    ano: '7º',
-    qtd: '965',
-  },
-  {
-    key: 'fund8',
-    ano: '8º',
-    qtd: '715',
-  },
-  {
-    key: 'fund9',
-    ano: '9º',
-    qtd: '874',
-  },
-  {
-    key: 'header3',
-    ano: 'Ensino médio',
-    qtd: '',
-    colSpanAno: 2,
-    colSpanQtd: 0,
-    bold: true,
-  },
-  {
-    key: 'medio1',
-    ano: '1º',
-    qtd: '2.412',
-  },
-  {
-    key: 'medio2',
-    ano: '2º',
-    qtd: '3.698',
-  },
-  {
-    key: 'medio3',
-    ano: '3º',
-    qtd: '7.109',
-  },
-];
-
 function TabelaAbandonoSmeDre({ codigoDre, codigoUe, anoLetivo }) {
   const [dados, setDados] = useState([]);
-  const [exibirLoader, setExibirLoader] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const obterDados = useCallback(async () => {
-    setExibirLoader(true);
+    if (!codigoDre || !anoLetivo) {
+      setDados([]);
+      return;
+    }
+    setLoading(true);
     try {
-      const resposta = await ServicoAbandono.ObterDadosAbandano(
+      const resposta = await ServicoAbandono.ObterDadosAbandonoSmeDre(
         codigoDre,
         codigoUe,
         anoLetivo
       );
-
-      if (resposta.status === 200 && resposta.data) {
-        const dadosTabela = (resposta.data || []).map((escola, index) => ({
-          key: index,
-          posicao: escola.posicao,
-          ue: escola.ue || 'UE TESTE',
-          dre: escola.dre || 'DRE TESTE',
-          totalAlunosNaoAlfabetizados: escola.totalAlunosNaoAlfabetizados || 0,
-          percentualTotalAlunos: escola.percentualTotalAlunos || 0,
-        }));
-
-        setDados(dadosTabela);
-      } else {
-        setDados([]);
+      let modalidades = [];
+      if (Array.isArray(resposta.data)) {
+        resposta.data.forEach(item => {
+          if (Array.isArray(item.modalidades)) {
+            modalidades = modalidades.concat(item.modalidades);
+          }
+        });
       }
+      setDados(agruparModalidadesParaTabela(modalidades));
     } catch (error) {
       if (error.response?.data?.mensagens?.length > 0)
         erros(error.response.data.mensagens.join(', '));
       else erros('Erro ao carregar dados do Abandono');
       setDados([]);
     } finally {
-      setExibirLoader(false);
+      setLoading(false);
     }
-  }, []);
+  }, [codigoDre, codigoUe, anoLetivo]);
 
   useEffect(() => {
     obterDados();
-  }, [anoLetivo, codigoDre]);
+  }, [obterDados]);
+
   return (
     <>
-      <h5 style={{ fontWeight: 'bold', color: '#333', marginBottom: '16px' }}>
-        Abandono
-      </h5>
-      <p
-        style={{
-          fontSize: '14px',
-          marginBottom: '32px',
-          color: '#42474a',
-        }}
-      >
+      <h5 className="tabela-abandono-custom-title">Abandono</h5>
+      <p className="tabela-abandono-custom-desc">
         É a quantidade de estudantes cadastrados no EOL, do ensino infantil ao
         ensino médio, classificados como desistentes ou abandono.
       </p>
-      <div style={{ width: '100%', maxWidth: 600 }}>
+      <div className="tabela-abandono-custom">
         <Table
           columns={columns}
-          dataSource={data}
+          dataSource={dados}
+          loading={loading}
           pagination={false}
           bordered
           rowClassName={record => (record.bold ? 'ant-table-row-bold' : '')}
-          style={{ marginTop: 16 }}
-          className="tabela-abandono-custom"
         />
       </div>
     </>
@@ -214,11 +167,13 @@ function TabelaAbandonoSmeDre({ codigoDre, codigoUe, anoLetivo }) {
 TabelaAbandonoSmeDre.propTypes = {
   codigoDre: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   codigoUe: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  anoLetivo: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 TabelaAbandonoSmeDre.defaultProps = {
   codigoDre: null,
   codigoUe: null,
+  anoLetivo: null,
 };
 
 export default TabelaAbandonoSmeDre;

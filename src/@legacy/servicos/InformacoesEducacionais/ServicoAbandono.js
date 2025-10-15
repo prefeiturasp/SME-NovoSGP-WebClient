@@ -1,19 +1,50 @@
 import api from '../api';
 
 class ServicoAbandono {
-  ObterDadosAbandano = (codigoDre, codigoUe, anoLetivo) => {
+  ObterDadosAbandonoSmeDre = (codigoDre, codigoUe, anoLetivo) => {
+    if (!codigoDre || !anoLetivo) return Promise.resolve({ data: [] });
+
     const params = new URLSearchParams();
+    params.append('codigoDre', codigoDre);
+    params.append('anoLetivo', anoLetivo);
 
-    if (codigoDre) params.append('codigoDre', codigoDre);
-    if (codigoUe) params.append('codigoUe', codigoUe);
-    if (anoLetivo) params.append('anoLetivo', anoLetivo);
-
-    const queryString = params.toString();
-    const url = queryString
-      ? `v1/painel-educacional/abandono?${queryString}`
-      : 'v1/painel-educacional/abandono';
-
+    const url = `v1/painel-educacional/abandono?${params.toString()}`;
     return api.get(url);
+  };
+
+  ObterDadosAbandonoUe = ({
+    anoLetivo,
+    codigoDre,
+    codigoUe,
+    modalidade,
+    numeroPagina,
+    numeroRegistros,
+  }) => {
+    if (
+      !anoLetivo ||
+      !codigoUe ||
+      !modalidade ||
+      !numeroPagina ||
+      !numeroRegistros
+    ) {
+      return Promise.resolve({ data: [] });
+    }
+
+    const params = new URLSearchParams();
+    params.append('anoLetivo', anoLetivo);
+    // params.append('codigoUe', codigoUe);
+    params.append('codigoUe', 1992);
+    params.append('modalidade', modalidade);
+    params.append('numeroPagina', numeroPagina);
+    params.append('numeroRegistros', numeroRegistros);
+    if (codigoDre) params.append('codigoDre', codigoDre);
+
+    const url = `v1/painel-educacional/abandono-ue?${params.toString()}`;
+    return api.get(url, {
+      headers: {
+        Accept: 'text/plain',
+      },
+    });
   };
 }
 
