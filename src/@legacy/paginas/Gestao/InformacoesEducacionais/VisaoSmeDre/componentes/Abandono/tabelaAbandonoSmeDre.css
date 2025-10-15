@@ -28,7 +28,7 @@
   border-color: #d9d9d9 !important;
 }
 
-.tabela-abandono-custom-title {
+.tabela-abandono-sme-dre-custom-title {
   font-weight: bold;
   color: #333;
   margin-bottom: 16px;
@@ -43,8 +43,7 @@
 .tabela-abandono-custom .ant-table-tbody > tr > td[colspan='2'] {
   background: #f6f5fa !important;
   text-align: center !important;
-  font-weight: bold !important;
-  font-size: 16px;
+  font-size: 14px;
   color: #333;
 }
 
@@ -60,7 +59,7 @@
 }
 
 .tabela-abandono-custom-modalidade {
-  font-weight: bold;
+  font-weight: 700;
   text-align: center;
   display: block;
 }
@@ -68,5 +67,5 @@
 .tabela-abandono-custom-modalidade-td {
   background: #f6f5fa !important;
   text-align: center !important;
-  font-weight: bold !important;
+  font-weight: 700 !important;
 }
