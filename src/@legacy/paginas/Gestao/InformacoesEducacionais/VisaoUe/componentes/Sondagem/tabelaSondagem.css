@@ -35,3 +35,7 @@
   flex: 1;
   margin-right: 16px;
 }
+
+.mb-32 {
+  margin-bottom: 32px !important;
+}
