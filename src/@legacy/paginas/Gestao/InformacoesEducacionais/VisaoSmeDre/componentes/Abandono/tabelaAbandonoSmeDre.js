@@ -148,6 +148,7 @@ function TabelaAbandonoSmeDre({ codigoDre, codigoUe, anoLetivo }) {
           pagination={false}
           bordered
           rowClassName={record => (record.bold ? 'ant-table-row-bold' : '')}
+          locale={{ emptyText: 'Sem dados' }}
         />
       </div>
     </>
