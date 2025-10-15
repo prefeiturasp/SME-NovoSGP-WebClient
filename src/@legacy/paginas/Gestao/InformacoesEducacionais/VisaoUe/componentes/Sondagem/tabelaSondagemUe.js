@@ -115,7 +115,7 @@ function TabelaSondagemUe({ dreCodigo, ueCodigo, anoLetivo }) {
               </p>
               <Select
                 value={bimestre}
-                style={{ width: 150 }}
+                className="tabela-sondagem-select"
                 onChange={setBimestre}
                 options={[
                   { label: '1º bimestre', value: 1 },
@@ -132,7 +132,6 @@ function TabelaSondagemUe({ dreCodigo, ueCodigo, anoLetivo }) {
               pagination={false}
               size="small"
               loading={loading}
-              scroll={{ x: 'max-content' }}
               rowKey={row => `${row.serieAno}-${row.bimestre}`}
               className="tabela-sondagem-custom"
               locale={{ emptyText: 'Sem dados' }}
