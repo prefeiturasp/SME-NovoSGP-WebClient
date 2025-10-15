@@ -78,11 +78,7 @@ function TabelaAbandonoPorModalidade({
   ];
 
   if (totalRegistros === 0) {
-    return (
-      <div className="tabela-abandono-custom">
-        <div className="tabela-abandono-custom-sem-dados">Sem dados</div>
-      </div>
-    );
+    return <></>;
   }
 
   return (
