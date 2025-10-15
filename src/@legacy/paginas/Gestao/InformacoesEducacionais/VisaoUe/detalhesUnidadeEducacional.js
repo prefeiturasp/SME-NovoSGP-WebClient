@@ -1,4 +1,3 @@
-import { Col, Row } from 'antd';
 import PropTypes from 'prop-types';
 import { CardEstilizado } from '../shared/styles';
 import DetalhesUe from './componentes/DetalhesUe/detalhesUe';

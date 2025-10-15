@@ -1,13 +1,9 @@
-import React, { useMemo } from 'react';
 import { Table } from 'antd';
 import PropTypes from 'prop-types';
 import styles from './tabelaIndicadoresPapDetalhes.css';
 
 const TabelaIndicadoresPapDetalhes = ({ dados }) => {
-  const dataSource = dados?.quantidadesPorTipoPap || [];
-  const nomeDificuldade1 = dados?.nomeDificuldadeTop1 || 'Leitura';
-  const nomeDificuldade2 = dados?.nomeDificuldadeTop2 || 'Resolução de problema';
-  const columns = useMemo(() => [
+  const columns = [
     {
       title: 'Tipo do PAP',
       dataIndex: 'tipoPapNome',
@@ -17,22 +13,22 @@ const TabelaIndicadoresPapDetalhes = ({ dados }) => {
     },
     {
       title: 'Qtde. de turmas',
-      dataIndex: 'totalTurmas',
-      key: 'totalTurmas',
+      dataIndex: 'quantidadeTurmas',
+      key: 'quantidadeTurmas',
       align: 'center',
       onHeaderCell: () => ({ className: 'geral' }),
     },
     {
       title: 'Qtde. de estudantes',
-      dataIndex: 'totalAlunos',
-      key: 'totalAlunos',
+      dataIndex: 'quantidadeEstudantes',
+      key: 'quantidadeEstudantes',
       align: 'center',
       onHeaderCell: () => ({ className: 'geral' }),
     },
     {
       title: 'Estudantes com menos de 75% de frequência',
-      dataIndex: 'totalAlunosComFrequenciaInferiorLimite',
-      key: 'totalAlunosComFrequenciaInferiorLimite',
+      dataIndex: 'quantidadeEstudantesComFrequenciaInferiorLimite',
+      key: 'quantidadeEstudantesComFrequenciaInferiorLimite',
       align: 'center',
       onHeaderCell: () => ({ className: 'geral' }),
     },
@@ -41,35 +37,36 @@ const TabelaIndicadoresPapDetalhes = ({ dados }) => {
       onHeaderCell: () => ({ className: 'geral' }),
       children: [
         {
-          title: nomeDificuldade1,
-          dataIndex: 'totalAlunosDificuldadeTop1',
-          key: 'totalAlunosDificuldadeTop1',
+          title: ({ record }) => record?.nomeDificuldadeTop1 || 'Leitura',
+          dataIndex: 'quantidadeEstudantesDificuldadeTop1',
+          key: 'quantidadeEstudantesDificuldadeTop1',
           align: 'center',
           onHeaderCell: () => ({ className: 'coluna-dificuldade' }),
         },
         {
-          title: nomeDificuldade2,
-          dataIndex: 'totalAlunosDificuldadeTop2',
-          key: 'totalAlunosDificuldadeTop2',
+          title: ({ record }) =>
+            record?.nomeDificuldadeTop2 || 'Resolução de problema',
+          dataIndex: 'quantidadeEstudantesDificuldadeTop2',
+          key: 'quantidadeEstudantesDificuldadeTop2',
           align: 'center',
           onHeaderCell: () => ({ className: 'coluna-dificuldade' }),
         },
         {
           title: 'Outros',
-          dataIndex: 'totalAlunosDificuldadeOutras',
-          key: 'totalAlunosDificuldadeOutras',
+          dataIndex: 'outrasDificuldadesAprendizagem',
+          key: 'outrasDificuldadesAprendizagem',
           align: 'center',
           onHeaderCell: () => ({ className: 'coluna-dificuldade' }),
         },
       ],
     },
-  ], [nomeDificuldade1, nomeDificuldade2]);
+  ];
 
   return (
     <Table
       bordered
       pagination={false}
-      dataSource={dataSource}
+      dataSource={dados}
       rowKey={record => record.tipoPap}
       columns={columns}
       className="customTable"
@@ -78,26 +75,7 @@ const TabelaIndicadoresPapDetalhes = ({ dados }) => {
 };
 
 TabelaIndicadoresPapDetalhes.propTypes = {
-  dados: PropTypes.shape({
-    nomeDificuldadeTop1: PropTypes.string,
-    nomeDificuldadeTop2: PropTypes.string,
-    quantidadesPorTipoPap: PropTypes.arrayOf(
-      PropTypes.shape({
-        tipoPap: PropTypes.number,
-        tipoPapNome: PropTypes.string,
-        totalTurmas: PropTypes.number,
-        totalAlunos: PropTypes.number,
-        totalAlunosComFrequenciaInferiorLimite: PropTypes.number,
-        totalAlunosDificuldadeTop1: PropTypes.number,
-        totalAlunosDificuldadeTop2: PropTypes.number,
-        totalAlunosDificuldadeOutras: PropTypes.number,
-      })
-    ),
-  }),
-};
-
-TabelaIndicadoresPapDetalhes.defaultProps = {
-  dados: null,
+  dados: PropTypes.array.isRequired,
 };
 
 export default TabelaIndicadoresPapDetalhes;

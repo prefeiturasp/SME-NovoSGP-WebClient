@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import { Loader } from '~/componentes';
+import TabelaIdepDetalhes from './tabelaIdepDetalhes';
 import ServicoIdepTabela from '~/servicos/InformacoesEducacionais/ServicoIdepTabela';
 import { erros } from '~/servicos/alertas';
-import TabelaIdepDetalhes from './tabelaIdepDetalhes';
+import PropTypes from 'prop-types';
+import { Loader } from '~/componentes';
 
 export default function TabelaIdep({ anoLetivo, ueCodigo }) {
   const [dados, setDados] = useState([]);
@@ -35,21 +35,13 @@ export default function TabelaIdep({ anoLetivo, ueCodigo }) {
         <Loader
           loading={carregando}
           className={carregando ? 'text-center' : ''}
-          tip="Carregando..."
+          tip="Carregando indicadores PAP..."
         />
       </div>
     );
   }
 
-  return (
-    <>
-      <TabelaIdepDetalhes
-        dados={dados}
-        carregando={carregando}
-        ueCodigo={ueCodigo}
-      />
-    </>
-  );
+  return <TabelaIdepDetalhes dados={dados} carregando={carregando} />;
 }
 
 TabelaIdep.propTypes = {

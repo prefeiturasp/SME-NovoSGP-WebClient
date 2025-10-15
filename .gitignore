@@ -26,4 +26,3 @@ yarn-error.log*
 .vscode
 
 .env.development
-.env.development

@@ -1,6 +1,7 @@
 .tabela-idep-detalhes .ant-table-thead > tr > th {
+  /* background: #f5f6fa; */
   font-weight: 600;
-  color: #42474a;
+  color: #444;
   text-align: center;
 }
 .tabela-idep-detalhes .ant-table-tbody > tr > td {
@@ -26,6 +27,7 @@
 
 .coluna-anos-iniciais-finais {
   background-color: #f6f5f8 !important;
+  font-weight: 500;
 }
 
 .div-img-boletim {

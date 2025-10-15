@@ -1,10 +1,8 @@
 import api from '../api';
 
 class ServicoPap {
-  obterIndicadoresPap = (anoLetivo, codigoDre, codigoUe) => {
+  obterIndicadoresPap = (codigoDre, codigoUe) => {
     const params = new URLSearchParams();
-
-    params.append('anoLetivo', anoLetivo);
 
     if (codigoDre && String(codigoDre).trim() !== '-99')
       params.append('codigoDre', codigoDre);
@@ -13,7 +11,9 @@ class ServicoPap {
       params.append('codigoUe', codigoUe);
 
     const queryString = params.toString();
-    const url = `v1/painel-educacional/indicadores-pap?${queryString}`;
+    const url = queryString
+      ? `v1/painel-educacional/indicadores-pap?${queryString}`
+      : 'v1/painel-educacional/indicadores-pap';
 
     return api.get(url);
   };

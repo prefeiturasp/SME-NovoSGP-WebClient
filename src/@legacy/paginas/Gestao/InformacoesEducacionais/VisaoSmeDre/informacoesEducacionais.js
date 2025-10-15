@@ -116,7 +116,6 @@ export default function InformacoesEducacionais({
             <Col span={24}>
               <TabelaIndicadoresPap
                 key={dreCodigo}
-                anoLetivo={anoLetivo}
                 codigoDre={dreCodigo}
                 codigoUe={ueCodigo}
               />

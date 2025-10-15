@@ -76,8 +76,8 @@ DetalhesUe.propTypes = {
 
 DetalhesUe.defaultProps = {
   codigoUe: null,
-  nomeUe: null,
-  nomeDre: null,
+  nomeUe: 'Nome da Escola',
+  nomeDre: 'Nome da DRE',
 };
 
 export default DetalhesUe;

@@ -1,10 +1,10 @@
-import { Modal, Table, Tooltip } from 'antd';
-import { useEffect, useState } from 'react';
-import { HiDownload, HiEye } from 'react-icons/hi';
-import { Base } from '~/componentes';
-import CardCollapse from '~/componentes/cardCollapse';
-import TabelaIdepAnosAnteriores from '../TabelaIdepAnosAnteriores/tabelaIdepAnosAnteriores';
+import { Table, Tooltip, Modal, message } from 'antd';
 import styles from './tabelaIdepDetalhes.css';
+import CardCollapse from '~/componentes/cardCollapse';
+import { Base } from '~/componentes';
+import React, { useState, useEffect } from 'react';
+import { HiEye, HiDownload } from 'react-icons/hi';
+import { erro } from '~/servicos/alertas';
 
 const cabecalhoDescricao = (
   <div className="cabecalho-idep">
@@ -63,7 +63,7 @@ const mapearDadosParaTabela = (dadosJson = []) => {
   });
 };
 
-export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
+export default function TabelaIdepDetalhes({ dados }) {
   const [exibir, setExibir] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [boletimSelecionado, setBoletimSelecionado] = useState(null);
@@ -127,13 +127,7 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
       }),
       children: [
         {
-          title: (
-            <span>
-              Anos iniciais
-              <br />
-              (1º a 5º anos)
-            </span>
-          ),
+          title: 'Anos iniciais\n(1º a 5º anos)',
           dataIndex: 'percentualInicial',
           key: 'percentualInicial',
           align: 'center',
@@ -142,13 +136,7 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
           render: value => (value !== undefined ? value : '-'),
         },
         {
-          title: (
-            <span>
-              Anos finais
-              <br />
-              (6º a 9º anos)
-            </span>
-          ),
+          title: 'Anos finais\n(6º a 9º anos)',
           dataIndex: 'percentualFinal',
           key: 'percentualFinal',
           align: 'center',
@@ -161,19 +149,13 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
       ],
     },
     {
-      title: 'Proficiência média',
+      title: 'Proficência média',
       onHeaderCell: () => ({
         className: 'coluna-anos-iniciais-finais',
       }),
       children: [
         {
-          title: (
-            <span>
-              Anos iniciais
-              <br />
-              (1º a 5º anos)
-            </span>
-          ),
+          title: 'Anos iniciais\n(1º a 5º ano)',
           children: [
             {
               title: 'LP',
@@ -203,13 +185,8 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
           ],
         },
         {
-          title: (
-            <span>
-              Anos finais
-              <br />
-              (6º a 9º anos)
-            </span>
-          ),
+          title: 'Anos finais\n(6º a 9º ano)',
+
           children: [
             {
               title: 'LP',
@@ -323,10 +300,6 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
             />
           </>
         )}
-
-        <div className="mt-4">
-          <TabelaIdepAnosAnteriores ueCodigo={ueCodigo} />
-        </div>
       </CardCollapse>
 
       <Modal

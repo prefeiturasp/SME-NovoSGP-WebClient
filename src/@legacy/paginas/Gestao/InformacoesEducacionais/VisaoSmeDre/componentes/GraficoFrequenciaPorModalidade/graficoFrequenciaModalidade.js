@@ -223,7 +223,7 @@ const GraficoFrequenciaModalidade = ({
             colors={cores.length ? cores : undefined}
             xAxisVisible
             legendVisible={ehMensal}
-            labelVisible={ehMensal ? false : true}
+            labelVisible
             tooltip={{
               formatter: datum => ({
                 name: datum.modalidade,

@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import { Cabecalho } from '~/componentes-sgp';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { OPCAO_TODOS } from '~/constantes/constantes';
-import { CardEstilizado } from './shared/styles';
 import InformacoesEducacionaisFiltros from './VisaoSmeDre/componentes/Filtro/informacoesEducacionaisFiltros';
 import InformacoesEducacionais from './VisaoSmeDre/informacoesEducacionais';
+import { CardEstilizado } from './shared/styles';
 import DetalhesUnidadeEducacional from './VisaoUe/detalhesUnidadeEducacional';
 
 export default function PainelEducacional() {
   const navigate = useNavigate();
-  const [anoLetivo, setAnoLetivo] = useState(new Date().getFullYear());
+  const [anoLetivo, setAnoLetivo] = useState(null);
   const [dreCodigo, setDreCodigo] = useState(OPCAO_TODOS);
   const [dreNome, setDreNome] = useState('');
   const [ueCodigo, setUeCodigo] = useState(OPCAO_TODOS);
