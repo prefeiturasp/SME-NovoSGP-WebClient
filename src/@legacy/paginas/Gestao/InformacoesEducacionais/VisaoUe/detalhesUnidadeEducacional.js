@@ -16,7 +16,7 @@ export default function DetalhesUnidadeEducacional({
   return (
     <>
       <CardEstilizado>
-        <div className="col-md-12">
+        <div className="col-md-12 mb-32">
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <DetalhesUe
@@ -27,20 +27,16 @@ export default function DetalhesUnidadeEducacional({
             </Col>
           </Row>
         </div>
-      </CardEstilizado>
 
-      <CardEstilizado>
-        <div className="col-md-12">
+        <div className="col-md-12 mb-32">
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <TabelaIdep anoLetivo={anoLetivo} ueCodigo={ueCodigo} />
             </Col>
           </Row>
         </div>
-      </CardEstilizado>
 
-      <CardEstilizado>
-        <div className="col-md-12">
+        <div className="col-md-12 mb-32">
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <TabelaSondagemUe
@@ -51,9 +47,8 @@ export default function DetalhesUnidadeEducacional({
             </Col>
           </Row>
         </div>
-      </CardEstilizado>
-      <CardEstilizado>
-        <div className="col-md-12">
+
+        <div className="col-md-12 mb-32">
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <TabelaAbandonoUe

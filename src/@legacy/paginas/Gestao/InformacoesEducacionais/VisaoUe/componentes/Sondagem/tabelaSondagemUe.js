@@ -135,6 +135,7 @@ function TabelaSondagemUe({ dreCodigo, ueCodigo, anoLetivo }) {
               scroll={{ x: 'max-content' }}
               rowKey={row => `${row.serieAno}-${row.bimestre}`}
               className="tabela-sondagem-custom"
+              locale={{ emptyText: 'Sem dados' }}
             />
           </>
         )}
