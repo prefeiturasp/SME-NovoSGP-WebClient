@@ -78,11 +78,15 @@ function TabelaAbandonoPorModalidade({
   ];
 
   if (totalRegistros === 0) {
-    return <></>;
+    return (
+      <div className="tabela-abandono-custom">
+        <div className="tabela-abandono-custom-sem-dados">Sem dados</div>
+      </div>
+    );
   }
 
   return (
-    <div className="tabela-abandono-custom" style={{ marginBottom: 32 }}>
+    <div className="tabela-abandono-custom">
       <Table
         columns={columns}
         dataSource={dados}
@@ -98,11 +102,7 @@ function TabelaAbandonoPorModalidade({
         bordered
         loading={loading}
         title={() => (
-          <div
-            style={{ textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}
-          >
-            {modalidade}
-          </div>
+          <div className="tabela-abandono-custom-title">{modalidade}</div>
         )}
       />
     </div>

@@ -47,3 +47,26 @@
   font-size: 16px;
   color: #333;
 }
+
+.mini-resumo-abandono {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 12px;
+  background: #fafaff;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: inline-block;
+  min-width: 180px;
+}
+
+.tabela-abandono-custom-modalidade {
+  font-weight: bold;
+  text-align: center;
+  display: block;
+}
+
+.tabela-abandono-custom-modalidade-td {
+  background: #f6f5fa !important;
+  text-align: center !important;
+  font-weight: bold !important;
+}
