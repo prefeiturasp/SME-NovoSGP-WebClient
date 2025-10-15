@@ -55,11 +55,16 @@ const FechaReabCadastroForm = () => {
   const paramsRota = useParams();
   const paramsLocation = useLocation();
   const [valorAplicacao, setValorAplicacao] = useState('');
-  const [exibirCampoAplicacao, setExibirCampoAplicacao] = useState(true);
+  const [exibirCampoAplicacao, setExibirCampoAplicacao] = useState(false);
+  const [desabilitarCampoAplicacao, setDesabilitarCampoAplicacao] =
+    useState(false);
+
+  const perfilSelecionado = useSelector(
+    store => store.perfil.perfilSelecionado.nomePerfil
+  );
 
   const opcoesAplicacao = [
     { id: 1, descricao: 'SGP' },
-    { id: 2, descricao: 'Sondagem (Aplicação)' },
     { id: 3, descricao: 'Sondagem (Digitação)' },
   ];
 
@@ -106,7 +111,6 @@ const FechaReabCadastroForm = () => {
       );
       if (calAtual) {
         setCalendarioSelecionado(calAtual);
-        console.log(calAtual);
       }
     } else if (!paramsRota?.id) {
       setCalendarioSelecionado();
@@ -140,6 +144,7 @@ const FechaReabCadastroForm = () => {
       dataFim: moment(dados.dataFim),
       descricao: dados.descricao,
       bimestres: dados.bimestres.map(item => String(item)),
+      aplicacao: dados.aplicacao,
     };
 
     setValoresIniciais(valoresAtuais);
@@ -190,6 +195,18 @@ const FechaReabCadastroForm = () => {
       );
       if (calendarioAtual) {
         setCalendarioSelecionado(calendarioAtual);
+        setValorAplicacao(retorno.data.aplicacao);
+        if (calendarioAtual.modalidade === 1) setExibirCampoAplicacao(true);
+
+        if (
+          perfilSelecionado !== 'Adm COTIC' &&
+          perfilSelecionado !== 'Adm SME/COPED'
+        ) {
+          setDesabilitarCampoAplicacao(true);
+          setValorAplicacao(1);
+        } else {
+          setDesabilitarCampoAplicacao(false);
+        }
       }
 
       montarDataHoraUsuarioAprovador(retorno.data);
@@ -249,6 +266,13 @@ const FechaReabCadastroForm = () => {
     return valoresForm.bimestres;
   };
 
+  const obterIdPorDescricao = descricaoSelecionada => {
+    const opcao = opcoesAplicacao.find(
+      item => item.descricao === descricaoSelecionada
+    );
+    return opcao ? opcao.id : null;
+  };
+
   const onClickCadastrar = async valoresForm => {
     const bimestres = obterBimestresSalvar(valoresForm);
 
@@ -263,6 +287,7 @@ const FechaReabCadastroForm = () => {
       inicio: dataInicio,
       tipoCalendarioId: calendarioSelecionado?.id,
       id: paramsRota?.id,
+      aplicacao: valorAplicacao,
     };
 
     setExibirLoaderReabertura(true);
@@ -298,7 +323,6 @@ const FechaReabCadastroForm = () => {
 
     if (resposta?.data) {
       setListaTipoCalendarioEscolar(resposta.data);
-      console.log(resposta.data); //aqui vem todos os calendarios, precisa ver qual o user selecionou e exibir ou nao o campo novo aplicacao
     } else {
       setListaTipoCalendarioEscolar([]);
     }
@@ -307,6 +331,16 @@ const FechaReabCadastroForm = () => {
   useEffect(() => {
     obterTiposCalendarios();
   }, [obterTiposCalendarios]);
+
+  const tratarSelecaoCalendario = calendario => {
+    setCalendarioSelecionado(calendario);
+
+    if (calendario && calendario.modalidade === 1) {
+      setExibirCampoAplicacao(true);
+    } else {
+      setExibirCampoAplicacao(false);
+    }
+  };
 
   return (
     <>
@@ -332,6 +366,7 @@ const FechaReabCadastroForm = () => {
                           onChangeCampos();
                         }}
                         obterTiposCalendarios={obterTiposCalendarios}
+                        onSelectCalendario={tratarSelecaoCalendario}
                       />
                     </Col>
 
@@ -339,27 +374,31 @@ const FechaReabCadastroForm = () => {
                       <Col sm={24} md={12} xl={8}>
                         <SelectAutocomplete
                           showList
-                          label="Aplicação"
-                          labelRequired
+                          placeholder="Selecione a aplicação"
                           name="aplicacao"
                           id="aplicacao"
                           lista={opcoesAplicacao}
-                          valueField="id"
+                          valueField="descricao"
                           textField="descricao"
-                          value={valorAplicacao}
-                          onSelect={id => {
-                            form.setFieldValue('aplicacao', id);
+                          onSelect={descricao => {
+                            const id = obterIdPorDescricao(descricao);
+                            setValorAplicacao(id);
+                          }}
+                          onChange={descricao => {
+                            const id = obterIdPorDescricao(descricao);
                             setValorAplicacao(id);
                             onChangeCampos();
                           }}
-                          onChange={id => {
-                            form.setFieldValue('aplicacao', id);
-                            setValorAplicacao(id);
-                            onChangeCampos();
-                          }}
-                          temErro={emEdicao && !valorAplicacao}
+                          value={
+                            opcoesAplicacao.find(
+                              item => item.id === valorAplicacao
+                            )?.descricao || ''
+                          }
+                          label="Aplicação"
+                          labelRequired
+                          temErro={!valorAplicacao}
                           mensagemErro="Campo obrigatório"
-                          desabilitado={desabilitarCampos}
+                          disabled={desabilitarCampoAplicacao}
                         />
                       </Col>
                     )}
