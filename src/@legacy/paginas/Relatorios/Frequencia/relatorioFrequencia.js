@@ -55,7 +55,7 @@ const RelatorioFrequencia = () => {
   const [componentesCurriculares, setComponentesCurriculares] =
     useState(undefined);
   const [condicao, setCondicao] = useState(undefined);
-  const [tipoValor, setTipoValor] = useState('Absoluto');
+  const [tipoValor, setTipoValor] = useState('absoluto');
   const [desabilitarBtnGerar, setDesabilitarBtnGerar] = useState(true);
   const [desabilitarTipoRelatorio, setDesabilitarTipoRelatorio] =
     useState(false);
