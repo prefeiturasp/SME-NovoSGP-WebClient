@@ -5,54 +5,59 @@ import { Base } from '~/componentes';
 import CardCollapseCustomized from '../../../shared/cardCollapseCustomized';
 import styles from '../TabelaIdep/tabelaIdepDetalhes.css';
 
-const mapearDadosParaTabela = (dadosJson = []) => {
+const mapearDadosParaTabela = (dadosJson = [], anoLetivo) => {
   if (!Array.isArray(dadosJson)) return [];
 
-  return dadosJson.map((item, index) => {
-    const profIniciaisLP =
-      item.proficiencia?.anosIniciais?.find(
-        i => i.componenteCurricular === 'LP'
-      )?.percentual || 0;
+  return dadosJson
+    .filter(item => item.anoLetivo < anoLetivo)
+    .map((item, index) => {
+      const profIniciaisLP =
+        item.proficiencia?.anosIniciais?.find(
+          i => i.componenteCurricular === 'LP'
+        )?.percentual || 0;
 
-    const profIniciaisMT =
-      item.proficiencia?.anosIniciais?.find(
-        i => i.componenteCurricular === 'MT'
-      )?.percentual || 0;
+      const profIniciaisMT =
+        item.proficiencia?.anosIniciais?.find(
+          i => i.componenteCurricular === 'MT'
+        )?.percentual || 0;
 
-    const profIniciaisCN =
-      item.proficiencia?.anosIniciais?.find(
-        i => i.componenteCurricular === 'CN'
-      )?.percentual || 0;
+      const profIniciaisCN =
+        item.proficiencia?.anosIniciais?.find(
+          i => i.componenteCurricular === 'CN'
+        )?.percentual || 0;
 
-    const profFinaisLP =
-      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 'LP')
-        ?.percentual || 0;
+      const profFinaisLP =
+        item.proficiencia?.anosFinais?.find(
+          i => i.componenteCurricular === 'LP'
+        )?.percentual || 0;
 
-    const profFinaisMT =
-      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 'MT')
-        ?.percentual || 0;
+      const profFinaisMT =
+        item.proficiencia?.anosFinais?.find(
+          i => i.componenteCurricular === 'MT'
+        )?.percentual || 0;
 
-    const profFinaisCN =
-      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 'CN')
-        ?.percentual || 0;
+      const profFinaisCN =
+        item.proficiencia?.anosFinais?.find(
+          i => i.componenteCurricular === 'CN'
+        )?.percentual || 0;
 
-    return {
-      key: index,
-      anoLetivo: item.anoLetivo,
-      percentualInicial: item.percentualInicial,
-      percentualFinal: item.percentualFinal,
-      profIniciaisLP,
-      profIniciaisMT,
-      profIniciaisCN,
-      profFinaisLP,
-      profFinaisMT,
-      profFinaisCN,
-      boletim: item.boletim,
-    };
-  });
+      return {
+        key: index,
+        anoLetivo: item.anoLetivo,
+        percentualInicial: item.percentualInicial,
+        percentualFinal: item.percentualFinal,
+        profIniciaisLP,
+        profIniciaisMT,
+        profIniciaisCN,
+        profFinaisLP,
+        profFinaisMT,
+        profFinaisCN,
+        boletim: item.boletim,
+      };
+    });
 };
 
-export default function TabelaIdepAnosAnterioresDetalhes({ dados }) {
+export default function TabelaIdepAnosAnterioresDetalhes({ dados, anoLetivo }) {
   const [exibir, setExibir] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [boletimSelecionado, setBoletimSelecionado] = useState(null);
@@ -97,7 +102,7 @@ export default function TabelaIdepAnosAnterioresDetalhes({ dados }) {
     }
   };
 
-  const dataSource = mapearDadosParaTabela(dados);
+  const dataSource = mapearDadosParaTabela(dados, anoLetivo);
   const columns = [
     {
       title: 'Ano letivo',
