@@ -5,7 +5,7 @@ import { erros } from '~/servicos/alertas';
 import PropTypes from 'prop-types';
 import { Loader } from '~/componentes';
 
-export default function TabelaIdepAnosAnteriores({ ueCodigo }) {
+export default function TabelaIdepAnosAnteriores({ ueCodigo, anoLetivo }) {
   const [dados, setDados] = useState([]);
   const [carregando, setCarregando] = useState(false);
 
@@ -42,14 +42,16 @@ export default function TabelaIdepAnosAnteriores({ ueCodigo }) {
   }
 
   return (
-    <TabelaIdepAnosAnterioresDetalhes dados={dados} carregando={carregando} />
+    <TabelaIdepAnosAnterioresDetalhes dados={dados} anoLetivo={anoLetivo} />
   );
 }
 
 TabelaIdepAnosAnteriores.propTypes = {
   ueCodigo: PropTypes.string.isRequired,
+  anoLetivo: PropTypes.string.isRequired,
 };
 
 TabelaIdepAnosAnteriores.defaultProps = {
   ueCodigo: null,
+  anoLetivo: null,
 };
