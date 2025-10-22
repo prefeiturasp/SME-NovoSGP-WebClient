@@ -63,7 +63,7 @@ const mapearDadosParaTabela = (dadosJson = []) => {
   });
 };
 
-export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
+export default function TabelaIdepDetalhes({ dados, ueCodigo, anoLetivo }) {
   const [exibir, setExibir] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [boletimSelecionado, setBoletimSelecionado] = useState(null);
@@ -325,7 +325,7 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
         )}
 
         <div className="mt-4">
-          <TabelaIdepAnosAnteriores ueCodigo={ueCodigo} />
+          <TabelaIdepAnosAnteriores ueCodigo={ueCodigo} anoLetivo={anoLetivo} />
         </div>
       </CardCollapse>
 
