@@ -82,7 +82,7 @@ const PeriodoFechamentoAbertura = () => {
   const [valorTipoCalendario, setValorTipoCalendario] = useState('');
   const [pesquisaTipoCalendario, setPesquisaTipoCalendario] = useState('');
   const [isModalidadeFundMedio, setIsModalidadeFundMedio] = useState(false);
-  const [valorAplicacao, setValorAplicacao] = useState('');
+  const [valorAplicacao, setValorAplicacao] = useState(1);
 
   const validacaoPrimeiroBim = {
     bimestre1InicioDoFechamento: momentSchema.required(
@@ -211,7 +211,10 @@ const PeriodoFechamentoAbertura = () => {
     setModoEdicao(false);
     if (tipoCalendarioSelecionado) {
       setEmprocessamento(true);
-      ServicoPeriodoFechamento.obterPorTipoCalendario(tipoCalendarioSelecionado)
+      ServicoPeriodoFechamento.obterPorTipoCalendario(
+        tipoCalendarioSelecionado,
+        valorAplicacao
+      )
         .then(resposta => {
           setValorAplicacao(resposta.data.aplicacao);
 
@@ -284,7 +287,7 @@ const PeriodoFechamentoAbertura = () => {
     } else {
       setFechamento(obtemPeriodosIniciais());
     }
-  }, [tipoCalendarioSelecionado]);
+  }, [tipoCalendarioSelecionado, valorAplicacao]);
 
   useEffect(() => {
     carregaDados();
