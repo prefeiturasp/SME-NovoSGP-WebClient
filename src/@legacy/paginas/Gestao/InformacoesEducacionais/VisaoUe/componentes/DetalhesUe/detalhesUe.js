@@ -40,6 +40,10 @@ function DetalhesUe({ codigoUe, nomeUe, nomeDre }) {
     );
   }
 
+  if (!dados) {
+    return <div>Nenhum dado encontrado.</div>;
+  }
+
   return (
     <div className="detalhes-ue">
       <div className="escola-info">

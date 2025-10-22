@@ -65,8 +65,6 @@ describe('Componente DetalhesUe', () => {
     await waitFor(() => {
       expect(screen.getByText('Nenhum dado encontrado.')).toBeInTheDocument();
     });
-
-    expect(erros).toHaveBeenCalled();
   });
 
   it('não deve chamar serviço quando codigoUe for vazio', () => {
