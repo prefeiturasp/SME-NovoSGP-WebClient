@@ -5,6 +5,7 @@ import DetalhesUe from './componentes/DetalhesUe/detalhesUe';
 import TabelaIdep from './componentes/TabelaIdep/tabelaIdep';
 import TabelaAbandonoUe from './componentes/Abandono/tabelaAbandonoUe';
 import TabelaSondagemUe from './componentes/Sondagem/tabelaSondagemUe';
+import TabelaNotasUe from './componentes/Notas/tabelaNotasUE';
 
 export default function DetalhesUnidadeEducacional({
   anoLetivo,
@@ -52,6 +53,18 @@ export default function DetalhesUnidadeEducacional({
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <TabelaAbandonoUe
+                anoLetivo={anoLetivo}
+                ueCodigo={ueCodigo}
+                dreCodigo={dreCodigo}
+              />
+            </Col>
+          </Row>
+        </div>
+
+        <div className="col-md-12 mb-32">
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <TabelaNotasUe
                 anoLetivo={anoLetivo}
                 ueCodigo={ueCodigo}
                 dreCodigo={dreCodigo}
