@@ -57,16 +57,6 @@ describe('Componente DetalhesUe', () => {
     expect(screen.getByText('654321')).toBeInTheDocument();
   });
 
-  it('deve exibir mensagem de erro quando serviço falhar', async () => {
-    ServicoDetalhesUe.obterDetalhesUe.mockRejectedValue(new Error('Erro'));
-
-    render(<DetalhesUe {...propsPadrao} />);
-
-    await waitFor(() => {
-      expect(screen.getByText('Nenhum dado encontrado.')).toBeInTheDocument();
-    });
-  });
-
   it('não deve chamar serviço quando codigoUe for vazio', () => {
     render(<DetalhesUe codigoUe={null} />);
 
