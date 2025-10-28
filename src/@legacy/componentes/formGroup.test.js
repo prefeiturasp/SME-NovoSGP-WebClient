@@ -1,7 +1,6 @@
+import React from 'react';
 import { render } from '@testing-library/react';
 import FormGroup from './formGroup';
-describe('FormGroup', () => {
-  it('should render without crashing', () => {
-    render(<FormGroup />);
-  });
+test('renders FormGroup without crashing', () => {
+  render(<FormGroup>teste</FormGroup>);
 });

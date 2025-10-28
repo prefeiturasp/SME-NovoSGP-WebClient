@@ -1,8 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import CheckboxComponent from './checkbox';
-describe('CheckboxComponent', () => {
-  it('should render without crashing', () => {
-    render(<CheckboxComponent />);
-  });
+import Checkbox from './checkbox';
+test('renders Checkbox without crashing', () => {
+  render(<Checkbox />);
 });

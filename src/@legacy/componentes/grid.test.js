@@ -1,9 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import grid from './grid';
+import Grid from './grid';
 
-describe('grid', () => {
-  it('should render without crashing', () => {
-    render(React.createElement(grid));
-  });
+test('renders Grid without crashing', () => {
+  render(<Grid>teste</Grid>);
 });

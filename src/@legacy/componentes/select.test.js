@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import loader from './loader';
+import select from './select';
 
-describe('loader', () => {
+describe('select', () => {
   it('should render without crashing', () => {
-    render(React.createElement(loader));
+    render(React.createElement(select));
   });
 });
