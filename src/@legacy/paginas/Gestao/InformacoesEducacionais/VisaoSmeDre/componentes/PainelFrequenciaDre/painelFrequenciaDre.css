@@ -1,0 +1,139 @@
+.painel-frequencia-header {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.painel-frequencia-title {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 0;
+  font-size: 20px;
+}
+.painel-frequencia-desc {
+  font-size: 14px;
+  color: #42474a;
+  margin-bottom: 24px;
+  max-width: 820px;
+}
+.painel-frequencia-table .ant-table {
+  width: 100%;
+}
+.painel-frequencia-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+.painel-frequencia-intro {
+  flex: 1;
+}
+.painel-frequencia-intro h5 {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+.painel-frequencia-sub {
+  margin: 0;
+  color: #666;
+  font-size: 13px;
+  max-width: 760px;
+}
+.painel-frequencia-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  min-width: 260px;
+}
+.painel-frequencia-date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.painel-frequencia-date-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #333;
+}
+.painel-frequencia-date-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-day {
+  border: 1px solid #d9d9d9;
+  background: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #333;
+  font-size: 13px;
+}
+.btn-day:hover {
+  border-color: #bfbfbf;
+}
+.btn-day.disabled,
+.btn-day[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  color: #999;
+  border-color: #eee;
+}
+.btn-day-next {
+  border-color: #6f3efb;
+  color: #6f3efb;
+  background: #fff;
+}
+.btn-day-next:hover:not(.disabled) {
+  background: rgba(111, 62, 251, 0.06);
+}
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+  color: #333;
+  font-size: 13px;
+}
+.legend-square {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  border-radius: 2px;
+}
+.legend-alto {
+  background: #2ecc71;
+}
+.legend-medio {
+  background: #f1c40f;
+}
+.legend-baixo {
+  background: #e74c3c;
+}
+.indicacao-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.indicacao-badge {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  display: inline-block;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03) inset;
+}
+.painel-frequencia-table .ant-table-thead > tr > th,
+.painel-frequencia-table .ant-table-tbody > tr > td {
+  padding: 10px 14px;
+}
+.ant-pagination-item-active a {
+  background: #6f3efb !important;
+  border-color: #6f3efb !important;
+  color: #fff !important;
+}
+.ant-pagination-options {
+  margin-left: 12px;
+}

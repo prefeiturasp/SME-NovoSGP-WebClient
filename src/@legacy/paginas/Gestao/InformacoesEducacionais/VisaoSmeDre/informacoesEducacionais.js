@@ -12,6 +12,8 @@ import TabelaAbandonoSmeDre from './componentes/Abandono/tabelaAbandonoSmeDre';
 import VisaoGeral from './componentes/VisaoGeral';
 import PropTypes from 'prop-types';
 import DistorcaoIdadeSerie from '../shared/DistorcaoIdadeSerie/DistorcaoIdadeSerie';
+import PainelFrequenciaDre from './componentes/PainelFrequenciaDre/painelFrequenciaDre';
+
 export default function InformacoesEducacionais({
   anoLetivo,
   dreCodigo,
@@ -22,6 +24,7 @@ export default function InformacoesEducacionais({
   periodicidade,
 }) {
   const exibirGrafico = !!dreCodigo;
+  const exibirPainelFrequenciaDre = !!dreCodigo && String(dreCodigo) !== '-99';
   const exibirVisaoGeral = !!anoLetivo;
 
   return (
@@ -43,6 +46,21 @@ export default function InformacoesEducacionais({
           )}
         </div>
       </CardEstilizado>
+      {exibirPainelFrequenciaDre && (
+        <CardEstilizado>
+          <div className="col-md-12">
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <PainelFrequenciaDre
+                  anoLetivo={anoLetivo}
+                  dreCodigo={dreCodigo}
+                />
+              </Col>
+            </Row>
+          </div>
+        </CardEstilizado>
+      )}
+
       <CardEstilizado>
         <div className="col-md-12">
           <Row gutter={[32, 32]}>
