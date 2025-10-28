@@ -1,0 +1,72 @@
+.tabela-reclassificados-custom {
+  max-width: 960px;
+  margin-top: 16px;
+  margin: 0 !important;
+}
+
+.tabela-reclassificados-custom .ant-table {
+  border: 1px solid #d9d9d9;
+  border-radius: 0 !important;
+}
+
+.tabela-reclassificados-custom .ant-table-container {
+  border-radius: 0 !important;
+}
+
+.tabela-reclassificados-custom .ant-table-thead > tr > th,
+.tabela-reclassificados-custom .ant-table-tbody > tr > td {
+  padding: 4px 16px 4px 16px !important;
+  text-align: center !important;
+}
+
+.tabela-reclassificados-custom .ant-table-thead > tr > th {
+  background: #e7e6f8 !important;
+}
+
+.tabela-reclassificados-custom .ant-table-tbody > tr > td,
+.tabela-reclassificados-custom .ant-table-thead > tr > th {
+  border-color: #d9d9d9 !important;
+}
+
+.tabela-reclassificados-custom-title {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.tabela-reclassificados-custom-desc {
+  font-size: 14px;
+  color: #42474a;
+  margin-bottom: 0px;
+}
+
+.tabela-reclassificados-custom .ant-table-tbody > tr > td[colspan='2'] {
+  background: #f6f5fa !important;
+  text-align: center !important;
+  font-weight: bold !important;
+  font-size: 16px;
+  color: #333;
+}
+
+.mini-resumo-reclassificados {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 12px;
+  background: #fafaff;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: inline-block;
+  min-width: 180px;
+}
+
+.tabela-reclassificados-custom-modalidade {
+  font-weight: bold;
+  text-align: center;
+  display: block;
+}
+
+.tabela-reclassificados-custom-modalidade-td {
+  background: #f6f5fa !important;
+  text-align: center !important;
+  font-weight: bold !important;
+}
