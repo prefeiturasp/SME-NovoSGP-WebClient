@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Select } from 'antd';
+import { Select, Tooltip } from 'antd';
 import shortid from 'shortid';
 import { Field } from 'formik';
 import { Base } from './colors';
 import Label from './label';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Container = styled.div`
   ${({ size }) => size && size === 'small' && 'height: 24px !important;'}
@@ -74,6 +75,8 @@ const SelectComponent = React.forwardRef((props, ref) => {
     setValueOnlyOnChange,
     labelRequired,
     labelInValue,
+    tooltip,
+    tooltipIcon,
   } = props;
 
   const { Option } = Select;
@@ -128,9 +131,8 @@ const SelectComponent = React.forwardRef((props, ref) => {
       suffixIcon={<i className="fas fa-angle-down" style={{ fontSize: 18 }} />}
       className={
         form
-          ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${
-              className || ''
-            }`
+          ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${className || ''
+          }`
           : ''
       }
       name={name}
@@ -200,7 +202,27 @@ const SelectComponent = React.forwardRef((props, ref) => {
       color={color}
     >
       {label ? (
-        <Label text={label} control={name} isRequired={labelRequired} />
+        <>
+          {tooltip ? (
+            <div className="d-flex align-items-top">
+              <Label text={label} control={name} isRequired={labelRequired} />
+              <Tooltip title="Se o ano escolhido não tiver dados, exibiremos automaticamente o mais recente disponível.">
+              <FontAwesomeIcon
+                cursor="pointer"
+                style={{
+                  fontSize: '16px',
+                  color: Base.Azul,
+                  marginLeft: 5,
+                  marginRight: 5,
+                }}
+                icon={tooltipIcon}
+                />
+                </Tooltip>
+            </div>
+          ) : (
+            <Label text={label} control={name} isRequired={labelRequired} />
+          )}
+        </>
       ) : (
         <></>
       )}
