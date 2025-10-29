@@ -13,39 +13,39 @@ const mapearDadosParaTabela = (dadosJson = [], anoLetivo) => {
     .map((item, index) => {
       const profIniciaisLP =
         item.proficiencia?.anosIniciais?.find(
-          i => i.componenteCurricular === 'LP'
+          i => i.componenteCurricular === 138
         )?.percentual || 0;
 
       const profIniciaisMT =
         item.proficiencia?.anosIniciais?.find(
-          i => i.componenteCurricular === 'MT'
+          i => i.componenteCurricular === 2
         )?.percentual || 0;
 
       const profIniciaisCN =
         item.proficiencia?.anosIniciais?.find(
-          i => i.componenteCurricular === 'CN'
+          i => i.componenteCurricular === 89
         )?.percentual || 0;
 
       const profFinaisLP =
         item.proficiencia?.anosFinais?.find(
-          i => i.componenteCurricular === 'LP'
+          i => i.componenteCurricular === 138
         )?.percentual || 0;
 
       const profFinaisMT =
         item.proficiencia?.anosFinais?.find(
-          i => i.componenteCurricular === 'MT'
+          i => i.componenteCurricular === 2
         )?.percentual || 0;
 
       const profFinaisCN =
         item.proficiencia?.anosFinais?.find(
-          i => i.componenteCurricular === 'CN'
+          i => i.componenteCurricular === 89
         )?.percentual || 0;
 
       return {
         key: index,
         anoLetivo: item.anoLetivo,
-        percentualInicial: item.percentualInicial,
-        percentualFinal: item.percentualFinal,
+        percentualInicial: item.notaInicial,
+        percentualFinal: item.notaFinal,
         profIniciaisLP,
         profIniciaisMT,
         profIniciaisCN,
