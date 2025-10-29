@@ -5,6 +5,72 @@ import PropTypes from 'prop-types';
 import { erros } from '~/servicos';
 import ServicoEstudantesReclassificados from '~/servicos/InformacoesEducacionais/ServicoEstudantesReclassificados';
 
+function agruparModalidadesParaTabela(apiData) {
+  const tabela = [];
+  apiData.forEach(modalidadeObj => {
+    const modalidade = modalidadeObj.modalidade;
+    const serieAno = modalidadeObj.serieAno || [];
+    tabela.push({
+      isHeader: true,
+      modalidade,
+      colSpanAno: 2,
+      colSpanQtd: 0,
+    });
+    serieAno.forEach(item => {
+      tabela.push({
+        ano: item.anoTurma,
+        qtd: item.quantidadeAlunos,
+        isHeader: false,
+      });
+    });
+  });
+  return tabela;
+}
+
+const columns = [
+  {
+    title: 'Ano/Série',
+    dataIndex: 'ano',
+    key: 'ano',
+    width: '50%',
+    render: (text, row) => {
+      if (row.isHeader) {
+        return {
+          children: (
+            <span className="tabela-reclassificados-custom-modalidade">
+              {row.modalidade}
+            </span>
+          ),
+          props: {
+            colSpan: 2,
+            className: 'tabela-reclassificados-custom-modalidade-td',
+          },
+        };
+      }
+      return {
+        children: text,
+        props: { colSpan: row.colSpanAno || 1 },
+      };
+    },
+  },
+  {
+    title: 'Qtde de estudantes',
+    dataIndex: 'qtd',
+    key: 'qtd',
+    align: 'right',
+    width: '50%',
+    render: (text, row) => {
+      if (row.isHeader) {
+        return { children: null, props: { colSpan: 0 } };
+      }
+      return {
+        children: text,
+        props: { colSpan: row.colSpanQtd || 1 },
+      };
+    },
+  },
+];
+
 function TabelaEstudantesReclassificados({ codigoDre, codigoUe, anoLetivo }) {
   const [dados, setDados] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -22,15 +88,7 @@ function TabelaEstudantesReclassificados({ codigoDre, codigoUe, anoLetivo }) {
           codigoUe,
           anoLetivo
         );
-      let modalidades = [];
-      if (Array.isArray(resposta.data)) {
-        resposta.data.forEach(item => {
-          if (Array.isArray(item.modalidades)) {
-            modalidades = modalidades.concat(item.modalidades);
-          }
-        });
-      }
-      setDados(agruparModalidadesParaTabela(modalidades));
+      setDados(agruparModalidadesParaTabela(resposta.data));
     } catch (error) {
       if (error.response?.data?.mensagens?.length > 0)
         erros(error.response.data.mensagens.join(', '));

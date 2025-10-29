@@ -1,5 +1,4 @@
 .tabela-reclassificados-custom {
-  max-width: 960px;
   margin-top: 16px;
   margin: 0 !important;
 }
@@ -32,12 +31,13 @@
   font-weight: bold;
   color: #333;
   margin-bottom: 16px;
+  margin-top: 16px;
 }
 
 .tabela-reclassificados-custom-desc {
   font-size: 14px;
   color: #42474a;
-  margin-bottom: 0px;
+  margin-bottom: 16px;
 }
 
 .tabela-reclassificados-custom .ant-table-tbody > tr > td[colspan='2'] {
