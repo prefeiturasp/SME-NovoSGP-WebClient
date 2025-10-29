@@ -204,9 +204,13 @@ const SelectComponent = React.forwardRef((props, ref) => {
       {label ? (
         <>
           {tooltip ? (
-            <div className="d-flex align-items-top">
+            <div className="d-flex">
               <Label text={label} control={name} isRequired={labelRequired} />
-              <Tooltip title="Se o ano escolhido não tiver dados, exibiremos automaticamente o mais recente disponível.">
+              <Tooltip 
+                title="Se o ano escolhido não tiver dados, exibiremos automaticamente o mais recente disponível."
+                placement="top"
+                destroyTooltipOnHide
+                >
               <FontAwesomeIcon
                 cursor="pointer"
                 style={{
