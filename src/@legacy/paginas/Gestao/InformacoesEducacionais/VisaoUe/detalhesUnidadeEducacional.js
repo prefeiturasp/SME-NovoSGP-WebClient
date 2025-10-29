@@ -8,6 +8,7 @@ import TabelaSondagemUe from './componentes/Sondagem/tabelaSondagemUe';
 import DistorcaoIdadeSerieUe from './componentes/DistorcaoIdadeSerieUe/DistorcaoIdadeSerieUe';
 import GraficoAlfabetizacao from '../VisaoSmeDre/componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
 import GraficoFrequenciaSemanalCollapse from './componentes/GraficoFrequenciaSemanal/GraficoFrequenciaSemanalCollapse';
+import PainelFrequenciaUe from './componentes/PainelFrequenciaUe/painelFrequenciaUe';
 export default function DetalhesUnidadeEducacional({
   anoLetivo,
   ueCodigo,
@@ -34,6 +35,18 @@ export default function DetalhesUnidadeEducacional({
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <TabelaIdep anoLetivo={anoLetivo} ueCodigo={ueCodigo} />
+            </Col>
+          </Row>
+        </div>
+
+        <div className="col-md-12 mb-32">
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <PainelFrequenciaUe
+                anoLetivo={anoLetivo}
+                ueCodigo={ueCodigo}
+                nomeUe={ueNome}
+              />
             </Col>
           </Row>
         </div>

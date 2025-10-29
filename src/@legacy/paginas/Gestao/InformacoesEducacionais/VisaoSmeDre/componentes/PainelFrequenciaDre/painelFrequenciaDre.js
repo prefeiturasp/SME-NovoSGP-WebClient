@@ -1,53 +1,36 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Table, DatePicker, ConfigProvider } from 'antd';
+import { Table, DatePicker, Row, Col, Space, ConfigProvider } from 'antd';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
-import ptBR from 'antd/lib/locale/pt_BR';
+import ptBR from 'antd/es/locale/pt_BR';
 import CardCollapse from '~/componentes/cardCollapse';
+import Button from '~/componentes/button';
 import { Base } from '~/componentes';
 import ServicoFrequenciaDiariaDre from '~/servicos/InformacoesEducacionais/ServicoFrequenciaDiariaDre';
 import './painelFrequenciaDre.css';
 
-function formatDateIso(iso) {
-  try {
-    const d = new Date(iso);
-    return d.toLocaleDateString();
-  } catch {
-    return iso;
-  }
-}
-
-function formatDisplayDate(date) {
-  const dd = String(date.getDate()).padStart(2, '0');
-  const mm = String(date.getMonth() + 1).padStart(2, '0');
-  const yyyy = date.getFullYear();
-  return `${dd}/${mm}/${yyyy}`;
-}
-
-function toIsoDateString(date) {
-  const dd = String(date.getDate()).padStart(2, '0');
-  const mm = String(date.getMonth() + 1).padStart(2, '0');
-  const yyyy = date.getFullYear();
-  return `${yyyy}-${mm}-${dd}`;
-}
+dayjs.locale('pt-br');
 
 function nivelToColor(nivel) {
   if (!nivel) return '#ccc';
-  const n = String(nivel)
+  const texto = String(nivel)
     .toLowerCase()
     .normalize('NFD')
     .replace(/\p{Diacritic}/gu, '');
-
-  if (n.includes('alta') || n.includes('alto')) return '#2ECC71';
-  if (n.includes('media') || n.includes('medio') || n.includes('média'))
-    return '#F1C40F';
-  if (n.includes('baixa') || n.includes('baixo')) return '#E74C3C';
-
+  const cores = {
+    alto: '#2ECC71',
+    alta: '#2ECC71',
+    medio: '#F1C40F',
+    media: '#F1C40F',
+    baixa: '#E74C3C',
+    baixo: '#E74C3C',
+  };
+  for (const chave in cores) {
+    if (texto.includes(chave)) return cores[chave];
+  }
   return '#ccc';
 }
-
-dayjs.locale('pt-br');
 
 export default function PainelFrequenciaDre({ dreCodigo, anoLetivo }) {
   const [loading, setLoading] = useState(false);
@@ -57,6 +40,7 @@ export default function PainelFrequenciaDre({ dreCodigo, anoLetivo }) {
   const [totalPaginas, setTotalPaginas] = useState(0);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [dataFrequencia, setDataFrequencia] = useState(() => dayjs());
+  const [exibirCard, setExibirCard] = useState(false);
 
   const configCabecalho = {
     altura: '44px',
@@ -88,7 +72,6 @@ export default function PainelFrequenciaDre({ dreCodigo, anoLetivo }) {
       setDados(
         ues.map((u, idx) => ({
           key: `${u.ue || 'ue'}-${idx}`,
-          data: formatDateIso(u.data),
           ue: u.ue,
           quantidadeEstudantes: u.quantidadeEstudantes,
           estudantesPresentes: u.estudantesPresentes,
@@ -131,6 +114,7 @@ export default function PainelFrequenciaDre({ dreCodigo, anoLetivo }) {
       dataIndex: 'indicacao',
       key: 'indicacao',
       width: 64,
+      align: 'center',
       render: (_, record) => {
         const color = nivelToColor(record.nivelFrequencia);
         return (
@@ -141,17 +125,17 @@ export default function PainelFrequenciaDre({ dreCodigo, anoLetivo }) {
       },
     },
     {
+      title: 'Unidade educacional (UE)',
+      dataIndex: 'ue',
+      key: 'ue',
+      align: 'left',
+    },
+    {
       title: 'Nível de frequência',
       dataIndex: 'nivelFrequencia',
       key: 'nivelFrequencia',
       align: 'center',
       width: 140,
-    },
-    {
-      title: 'Unidade educacional (UE)',
-      dataIndex: 'ue',
-      key: 'ue',
-      align: 'left',
     },
     {
       title: 'Qtde. estudantes',
@@ -178,11 +162,11 @@ export default function PainelFrequenciaDre({ dreCodigo, anoLetivo }) {
   ];
 
   return (
-    <>
-      <div className="painel-frequencia-top">
-        <div className="painel-frequencia-intro">
-          <h2 className="painel-frequencia-title">Painel de frequência</h2>
-          <p className="painel-frequencia-desc">
+    <ConfigProvider locale={ptBR}>
+      <div className="painel-frequencia painel-frequencia-padding">
+        <div className="painel-frequencia-introducao">
+          <h2 className="painel-frequencia-titulo">Painel de frequência</h2>
+          <p className="painel-frequencia-descricao">
             Aqui, você encontra informações sobre a frequência escolar dos
             alunos matriculados nas Unidades Educacionais (UEs) de São Paulo em{' '}
             {anoLetivo}. Busque uma DRE ou UE específica na barra de pesquisa ou
@@ -190,83 +174,105 @@ export default function PainelFrequenciaDre({ dreCodigo, anoLetivo }) {
           </p>
         </div>
 
-        <div className="painel-frequencia-controls">
-          <div className="painel-frequencia-date">
-            <label className="painel-frequencia-date-label">
-              Dados do dia:
-            </label>
-            <div className="painel-frequencia-date-row">
-              <DatePicker
-                value={dataFrequencia}
-                format="DD/MM/YYYY"
-                onChange={date => {
-                  if (date) {
-                    setDataFrequencia(date);
-                    setPagina(1);
-                  }
-                }}
-                allowClear={false}
-              />
-              <button
-                type="button"
-                className="btn-day btn-day-prev"
-                onClick={prevDay}
-                aria-label="Dia anterior"
-              >
-                ← Dia anterior
-              </button>
-              <button
-                type="button"
-                className={`btn-day btn-day-next ${
-                  nextDisabled ? 'disabled' : ''
-                }`}
-                onClick={nextDay}
-                aria-label="Próximo dia"
-                disabled={nextDisabled}
-              >
-                Próximo dia →
-              </button>
-            </div>
-          </div>
+        <div className="painel-frequencia-controles">
+          <Row
+            align="middle"
+            justify="space-between"
+            className="painel-frequencia-data-row"
+          >
+            <Col>
+              <Space align="center">
+                <span className="painel-frequencia-data-label">
+                  Dados do dia:
+                </span>
+                <DatePicker
+                  value={dataFrequencia}
+                  format="DD/MM/YYYY"
+                  onChange={date => {
+                    if (date) {
+                      setDataFrequencia(date);
+                      setPagina(1);
+                    }
+                  }}
+                  allowClear={false}
+                  className="painel-frequencia-datepicker"
+                  locale={ptBR}
+                />
+              </Space>
+            </Col>
+            <Col>
+              <Space align="center" size={16}>
+                <Button
+                  label="← Dia anterior"
+                  color="Roxo"
+                  style="secondary"
+                  border={true}
+                  height="38px"
+                  fontSize="1rem"
+                  onClick={prevDay}
+                  disabled={false}
+                  className="btn-dia-anterior"
+                />
+                <Button
+                  label="Próximo dia →"
+                  color="Roxo"
+                  style="primary"
+                  border={false}
+                  height="38px"
+                  fontSize="1rem"
+                  onClick={nextDay}
+                  disabled={nextDisabled}
+                  className={`btn-dia-proximo${
+                    nextDisabled ? ' btn-dia-desabilitado' : ''
+                  }`}
+                />
+              </Space>
+            </Col>
+          </Row>
 
-          <div className="painel-frequencia-legend">
-            <span className="legend-item">
-              <span className="legend-square legend-alto" /> Alta
+          <div className="painel-frequencia-legenda">
+            <span className="painel-frequencia-legenda-titulo">
+              Nível de frequência:
             </span>
-            <span className="legend-item">
-              <span className="legend-square legend-medio" /> Média
+            <span className="painel-frequencia-legenda-item">
+              <span className="quadrado-nivel-frequencia painel-frequencia-legenda-alto" />{' '}
+              Alto
             </span>
-            <span className="legend-item">
-              <span className="legend-square legend-baixo" /> Baixa
+            <span className="painel-frequencia-legenda-item">
+              <span className="quadrado-nivel-frequencia painel-frequencia-legenda-medio" />{' '}
+              Médio
+            </span>
+            <span className="painel-frequencia-legenda-item">
+              <span className="quadrado-nivel-frequencia painel-frequencia-legenda-baixo" />{' '}
+              Baixo
             </span>
           </div>
         </div>
+        <Table
+          columns={columns}
+          dataSource={dados}
+          loading={loading}
+          pagination={{
+            pageSize: numeroRegistros,
+            current: pagina,
+            total: totalRegistros,
+            onChange: (p, size) => {
+              setPagina(p);
+              if (size && size !== numeroRegistros) setNumeroRegistros(size);
+            },
+            showSizeChanger: true,
+            pageSizeOptions: ['10', '25', '50', '100'],
+            showTotal: (total, range) =>
+              `${range[0]}-${range[1]} de ${total} unidades educacionais`,
+            locale: { items_per_page: '' },
+          }}
+          bordered
+          size="small"
+          locale={{ emptyText: 'Sem dados' }}
+          className="painel-frequencia-tabela"
+        />
       </div>
-
-      <Table
-        columns={columns}
-        dataSource={dados}
-        loading={loading}
-        pagination={{
-          pageSize: numeroRegistros,
-          current: pagina,
-          total: totalRegistros,
-          onChange: (p, size) => {
-            setPagina(p);
-            if (size && size !== numeroRegistros) setNumeroRegistros(size);
-          },
-          showSizeChanger: true,
-          pageSizeOptions: ['10', '25', '50', '100'],
-          showTotal: (total, range) =>
-            `${range[0]}-${range[1]} de ${total} unidades educacionais`,
-          locale: { items_per_page: '' },
-        }}
-        bordered
-        size="small"
-        locale={{ emptyText: 'Sem dados' }}
-        className="painel-frequencia-table"
-      />
-    </>
+    </ConfigProvider>
   );
 }
 
