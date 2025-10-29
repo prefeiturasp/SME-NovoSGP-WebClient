@@ -135,7 +135,7 @@ function TabelaAbandonoSmeDre({ codigoDre, codigoUe, anoLetivo }) {
 
   return (
     <>
-      <h5 className="tabela-abandono-custom-title">Abandono</h5>
+      <h5 className="tabela-abandono-sme-dre-custom-title ">Abandono</h5>
       <p className="tabela-abandono-custom-desc">
         É a quantidade de estudantes cadastrados no EOL, do ensino infantil ao
         ensino médio, classificados como desistentes ou abandono.

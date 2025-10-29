@@ -60,6 +60,16 @@ function TabelaAbandonoPorModalidade({
     fetchData();
   }, [fetchData, pagina]);
 
+  const dataWithHeader = [
+    {
+      key: 'modalidade-header',
+      modalidadeHeader: true,
+      turma: null,
+      qtd: null,
+    },
+    ...dados,
+  ];
+
   const columns = [
     {
       title: 'Turma',
@@ -67,6 +77,22 @@ function TabelaAbandonoPorModalidade({
       key: 'turma',
       align: 'center',
       width: '50%',
+      render: (text, row) => {
+        if (row.modalidadeHeader) {
+          return {
+            children: (
+              <span className="tabela-abandono-custom-title-center">
+                {modalidade}
+              </span>
+            ),
+            props: {
+              colSpan: 2,
+              className: 'tabela-abandono-custom-modalidade-td',
+            },
+          };
+        }
+        return text;
+      },
     },
     {
       title: 'Qtde de desistências',
@@ -74,6 +100,12 @@ function TabelaAbandonoPorModalidade({
       key: 'qtd',
       align: 'center',
       width: '50%',
+      render: (text, row) => {
+        if (row.modalidadeHeader) {
+          return { children: null, props: { colSpan: 0 } };
+        }
+        return text;
+      },
     },
   ];
 
@@ -82,10 +114,10 @@ function TabelaAbandonoPorModalidade({
   }
 
   return (
-    <div className="tabela-abandono-custom">
+    <div className="tabela-abandono-custom tabela-abandono-custom-full">
       <Table
         columns={columns}
-        dataSource={dados}
+        dataSource={dataWithHeader}
         pagination={{
           pageSize: 10,
           current: pagina,
@@ -97,9 +129,6 @@ function TabelaAbandonoPorModalidade({
         }}
         bordered
         loading={loading}
-        title={() => (
-          <div className="tabela-abandono-custom-title">{modalidade}</div>
-        )}
       />
     </div>
   );

@@ -1,53 +1,54 @@
-.tabela-abandono-custom {
-  max-width: 960px;
+.tabela-distorcao-custom {
   margin-top: 16px;
   margin: 0 !important;
 }
 
-.tabela-abandono-custom .ant-table {
+.tabela-distorcao-custom .ant-table {
   border: 1px solid #d9d9d9;
   border-radius: 0 !important;
 }
 
-.tabela-abandono-custom .ant-table-container {
+.tabela-distorcao-custom .ant-table-container {
   border-radius: 0 !important;
 }
 
-.tabela-abandono-custom .ant-table-thead > tr > th,
-.tabela-abandono-custom .ant-table-tbody > tr > td {
+.tabela-distorcao-custom .ant-table-thead > tr > th,
+.tabela-distorcao-custom .ant-table-tbody > tr > td {
   padding: 4px 16px 4px 16px !important;
   text-align: center !important;
 }
 
-.tabela-abandono-custom .ant-table-thead > tr > th {
+.tabela-distorcao-custom .ant-table-thead > tr > th {
   background: #e7e6f8 !important;
 }
 
-.tabela-abandono-custom .ant-table-tbody > tr > td,
-.tabela-abandono-custom .ant-table-thead > tr > th {
+.tabela-distorcao-custom .ant-table-tbody > tr > td,
+.tabela-distorcao-custom .ant-table-thead > tr > th {
   border-color: #d9d9d9 !important;
 }
 
-.tabela-abandono-sme-dre-custom-title {
+.tabela-distorcao-custom-title {
   font-weight: bold;
   color: #333;
   margin-bottom: 16px;
+  margin-top: 16px;
 }
 
-.tabela-abandono-custom-desc {
+.tabela-distorcao-custom-desc {
   font-size: 14px;
   color: #42474a;
-  margin-bottom: 0px;
+  margin-bottom: 15px;
 }
 
-.tabela-abandono-custom .ant-table-tbody > tr > td[colspan='2'] {
+.tabela-distorcao-custom .ant-table-tbody > tr > td[colspan='2'] {
   background: #f6f5fa !important;
   text-align: center !important;
-  font-size: 14px;
+  font-weight: bold !important;
+  font-size: 16px;
   color: #333;
 }
 
-.mini-resumo-abandono {
+.mini-resumo-distorcao {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   padding: 12px;
@@ -58,14 +59,14 @@
   min-width: 180px;
 }
 
-.tabela-abandono-custom-modalidade {
-  font-weight: 700;
+.tabela-distorcao-custom-modalidade {
+  font-weight: bold;
   text-align: center;
   display: block;
 }
 
-.tabela-abandono-custom-modalidade-td {
+.tabela-distorcao-custom-modalidade-td {
   background: #f6f5fa !important;
   text-align: center !important;
-  font-weight: 700 !important;
+  font-weight: bold !important;
 }
