@@ -11,6 +11,7 @@ import TabelaIndicadoresPap from './componentes/TabelaIndicadoresPap/tabelaIndic
 import TabelaAbandonoSmeDre from './componentes/Abandono/tabelaAbandonoSmeDre';
 import VisaoGeral from './componentes/VisaoGeral';
 import PropTypes from 'prop-types';
+import TabelaNotasSmeDre from './componentes/Notas/tabelaNotasSmeDre';
 import TabelaEstudantesReclassificados from '../shared/estudantesReclassificados/tabelaEstudantesReclassificados';
 import DistorcaoIdadeSerie from '../shared/DistorcaoIdadeSerie/DistorcaoIdadeSerie';
 import PainelFrequenciaDre from './componentes/PainelFrequenciaDre/painelFrequenciaDre';
@@ -155,6 +156,16 @@ export default function InformacoesEducacionais({
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <TabelaAbandonoSmeDre
+                codigoDre={dreCodigo}
+                codigoUe={ueCodigo}
+                anoLetivo={anoLetivo}
+              />
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <TabelaNotasSmeDre
                 codigoDre={dreCodigo}
                 codigoUe={ueCodigo}
                 anoLetivo={anoLetivo}
