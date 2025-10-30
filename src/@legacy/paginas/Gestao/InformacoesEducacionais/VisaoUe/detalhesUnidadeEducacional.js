@@ -42,18 +42,6 @@ export default function DetalhesUnidadeEducacional({
         <div className="col-md-12 mb-32">
           <Row gutter={[16, 16]}>
             <Col span={24}>
-              <PainelFrequenciaUe
-                anoLetivo={anoLetivo}
-                ueCodigo={ueCodigo}
-                nomeUe={ueNome}
-              />
-            </Col>
-          </Row>
-        </div>
-
-        <div className="col-md-12 mb-32">
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
               <TabelaSondagemUe
                 anoLetivo={anoLetivo}
                 ueCodigo={ueCodigo}
@@ -93,6 +81,7 @@ export default function DetalhesUnidadeEducacional({
               <GraficoFrequenciaSemanalCollapse
                 anoLetivo={anoLetivo}
                 ueCodigo={ueCodigo}
+                ueNome={ueNome}
               />
             </Col>
           </Row>

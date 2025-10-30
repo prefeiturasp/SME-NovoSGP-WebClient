@@ -15,29 +15,11 @@ export default function PainelFrequenciaUe({ ueCodigo, anoLetivo, nomeUe }) {
   const key = 'painel-frequencia-ue';
 
   return (
-    <CardCollapse
-      titulo="Frequência"
-      show={exibirCard}
-      onClick={() => setExibirCard(!exibirCard)}
-      configCabecalho={configCabecalho}
-      key={`${key}-collapse-key`}
-      indice={`${key}-collapse-indice`}
-    >
-      <div className="painel-frequencia painel-frequencia-padding">
-        <div className="painel-frequencia-introducao">
-          <h2 className="painel-frequencia-titulo">Média de frequência</h2>
-          <p className="painel-frequencia-descricao">
-            O gráfico representa a média de frequência semanal dos alunos da{' '}
-            <strong>{nomeUe}</strong> no último mês
-          </p>
-        </div>
-        <PainelFrequenciaBase
-          tipoExtra="ue"
-          codigo={ueCodigo}
-          anoLetivo={anoLetivo}
-        />
-      </div>
-    </CardCollapse>
+    <PainelFrequenciaBase
+      tipoExtra="ue"
+      codigo={ueCodigo}
+      anoLetivo={anoLetivo}
+    />
   );
 }
 
