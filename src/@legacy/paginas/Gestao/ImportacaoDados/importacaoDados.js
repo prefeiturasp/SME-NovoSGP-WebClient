@@ -234,6 +234,9 @@ function ImportacaoDados() {
             current: paginaAtual,
             total: totalRegistros,
             pageSize: 20,
+            locale: {
+              items_per_page: '',
+            },
             onChange: page => {
               setPaginaAtual(page);
               carregarInconsistencias(arquivoSelecionado, page);

@@ -6,7 +6,7 @@ import shortid from 'shortid';
 import { Field } from 'formik';
 import { Base } from './colors';
 import Label from './label';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const Container = styled.div`
   ${({ size }) => size && size === 'small' && 'height: 24px !important;'}
@@ -39,6 +39,23 @@ const Container = styled.div`
     white-space: nowrap;
     max-height: 100px;
     overflow: auto;
+  }
+`;
+
+const LabelContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: .5rem;
+
+  label {
+    margin: 0;    
+    font-weight: bold;
+  }
+    
+  .info-icon {
+    margin-left: 8px;
+    color: #8c8c8c;
+    cursor: pointer;
   }
 `;
 
@@ -76,7 +93,6 @@ const SelectComponent = React.forwardRef((props, ref) => {
     labelRequired,
     labelInValue,
     tooltip,
-    tooltipIcon,
   } = props;
 
   const { Option } = Select;
@@ -204,21 +220,12 @@ const SelectComponent = React.forwardRef((props, ref) => {
       {label ? (
         <>
           {tooltip ? (
-            <div className="d-flex">
+            <LabelContainer>
               <Label text={label} control={name} isRequired={labelRequired} />
-                <Tooltip placement="top" title={tooltip}>
-                  <FontAwesomeIcon
-                    cursor="pointer"
-                    style={{
-                      fontSize: '16px',
-                      color: Base.Azul,
-                      marginLeft: 5,
-                      marginRight: 5,
-                    }}
-                    icon={tooltipIcon}
-                    />
+                <Tooltip title={tooltip}>
+                  <QuestionCircleOutlined className='info-icon' />
                 </Tooltip>
-            </div>
+            </LabelContainer>
           ) : (
             <Label text={label} control={name} isRequired={labelRequired} />
           )}
