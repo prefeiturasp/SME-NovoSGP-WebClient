@@ -6,6 +6,8 @@ import TabelaIdep from './componentes/TabelaIdep/tabelaIdep';
 import TabelaAbandonoUe from './componentes/Abandono/tabelaAbandonoUe';
 import TabelaSondagemUe from './componentes/Sondagem/tabelaSondagemUe';
 import DistorcaoIdadeSerieUe from './componentes/DistorcaoIdadeSerieUe/DistorcaoIdadeSerieUe';
+import GraficoAlfabetizacao from '../VisaoSmeDre/componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
+import GraficoFrequenciaSemanalCollapse from './componentes/GraficoFrequenciaSemanal/GraficoFrequenciaSemanalCollapse';
 export default function DetalhesUnidadeEducacional({
   anoLetivo,
   ueCodigo,
@@ -67,6 +69,17 @@ export default function DetalhesUnidadeEducacional({
                 anoLetivo={anoLetivo}
                 ueCodigo={ueCodigo}
                 dreCodigo={dreCodigo}
+              />
+            </Col>
+          </Row>
+        </div>
+
+        <div className="col-md-12 mb-32">
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <GraficoFrequenciaSemanalCollapse
+                anoLetivo={anoLetivo}
+                ueCodigo={ueCodigo}
               />
             </Col>
           </Row>
