@@ -21,7 +21,8 @@ class ServicoNotas {
     anoLetivo,
     bimestre,
     modalidade,
-    pagina
+    pagina,
+    numeroRegistros = 10
   ) => {
     if (!anoLetivo) return Promise.resolve({ data: [] });
 
@@ -33,7 +34,8 @@ class ServicoNotas {
     params.append('bimestre', bimestre);
     params.append('codigoUe', codigoUe);
     params.append('modalidade', modalidade);
-    params.append('pagina', pagina);
+    params.append('NumeroPagina', pagina);
+    params.append('NumeroRegistros', numeroRegistros); // 👈 novo parâmetro
 
     const url = `v1/painel-educacional/notas-ue?${params.toString()}`;
     return api.get(url);

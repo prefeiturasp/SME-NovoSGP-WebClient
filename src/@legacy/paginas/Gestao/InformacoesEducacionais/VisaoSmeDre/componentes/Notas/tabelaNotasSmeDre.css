@@ -37,7 +37,7 @@
 .tabela-notas-custom-desc {
   font-size: 14px;
   color: #42474a;
-  margin-bottom: 10px;
+  padding: 0px 10px 0px 0px;
 }
 
 .tabela-notas-custom .ant-table-tbody > tr > td[colspan='2'] {
