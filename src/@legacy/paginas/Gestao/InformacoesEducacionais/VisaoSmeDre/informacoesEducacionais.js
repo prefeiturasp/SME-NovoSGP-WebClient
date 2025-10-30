@@ -12,7 +12,8 @@ import TabelaAbandonoSmeDre from './componentes/Abandono/tabelaAbandonoSmeDre';
 import VisaoGeral from './componentes/VisaoGeral';
 import PropTypes from 'prop-types';
 import TabelaNotasSmeDre from './componentes/Notas/tabelaNotasSmeDre';
-
+import TabelaEstudantesReclassificados from '../shared/estudantesReclassificados/tabelaEstudantesReclassificados';
+import DistorcaoIdadeSerie from '../shared/DistorcaoIdadeSerie/DistorcaoIdadeSerie';
 export default function InformacoesEducacionais({
   anoLetivo,
   dreCodigo,
@@ -147,6 +148,26 @@ export default function InformacoesEducacionais({
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <TabelaNotasSmeDre
+                codigoDre={dreCodigo}
+                codigoUe={ueCodigo}
+                anoLetivo={anoLetivo}
+              />
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <TabelaEstudantesReclassificados
+                codigoDre={dreCodigo}
+                codigoUe={ueCodigo}
+                anoLetivo={anoLetivo}
+              />
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <DistorcaoIdadeSerie
                 codigoDre={dreCodigo}
                 codigoUe={ueCodigo}
                 anoLetivo={anoLetivo}

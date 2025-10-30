@@ -47,6 +47,7 @@ export default function TabelaIdep({ anoLetivo, ueCodigo }) {
         dados={dados}
         carregando={carregando}
         ueCodigo={ueCodigo}
+        anoLetivo={anoLetivo}
       />
     </>
   );

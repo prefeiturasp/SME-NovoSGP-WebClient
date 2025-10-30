@@ -22,36 +22,36 @@ const mapearDadosParaTabela = (dadosJson = []) => {
   return dadosJson.map((item, index) => {
     const profIniciaisLP =
       item.proficiencia?.anosIniciais?.find(
-        i => i.componenteCurricular === 'LP'
+        i => i.componenteCurricular === 138
       )?.percentual || 0;
 
     const profIniciaisMT =
       item.proficiencia?.anosIniciais?.find(
-        i => i.componenteCurricular === 'MT'
+        i => i.componenteCurricular === 2
       )?.percentual || 0;
 
     const profIniciaisCN =
       item.proficiencia?.anosIniciais?.find(
-        i => i.componenteCurricular === 'CN'
+        i => i.componenteCurricular === 89
       )?.percentual || 0;
 
     const profFinaisLP =
-      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 'LP')
+      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 138)
         ?.percentual || 0;
 
     const profFinaisMT =
-      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 'MT')
+      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 2)
         ?.percentual || 0;
 
     const profFinaisCN =
-      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 'CN')
+      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 89)
         ?.percentual || 0;
 
     return {
       key: index,
       anoLetivo: item.anoLetivo,
-      percentualInicial: item.percentualInicial,
-      percentualFinal: item.percentualFinal,
+      percentualInicial: item.notaInicial,
+      percentualFinal: item.notaFinal,
       profIniciaisLP,
       profIniciaisMT,
       profIniciaisCN,
@@ -63,7 +63,7 @@ const mapearDadosParaTabela = (dadosJson = []) => {
   });
 };
 
-export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
+export default function TabelaIdepDetalhes({ dados, ueCodigo, anoLetivo }) {
   const [exibir, setExibir] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [boletimSelecionado, setBoletimSelecionado] = useState(null);
@@ -302,7 +302,7 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
   return (
     <div className="tabela-idep-detalhes">
       <CardCollapse
-        titulo="IDEP e Proficiência"
+        titulo="Índice de Desenvolvimento da Educação Paulistana (IDEP)"
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
         alt={`${key}-alt`}
@@ -325,7 +325,7 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo }) {
         )}
 
         <div className="mt-4">
-          <TabelaIdepAnosAnteriores ueCodigo={ueCodigo} />
+          <TabelaIdepAnosAnteriores ueCodigo={ueCodigo} anoLetivo={anoLetivo} />
         </div>
       </CardCollapse>
 

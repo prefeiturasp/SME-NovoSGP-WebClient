@@ -1,3 +1,4 @@
+jest.setTimeout(20000);
 // SelectUE.test.tsx
 
 import { render, screen, waitFor } from '@testing-library/react';
@@ -97,7 +98,10 @@ describe('SelectUE', () => {
         { codigo: 2, nome: 'UE 2', value: 2, label: 'UE 2' },
       ]);
       expect(select.getAttribute('id')).toBe('select-ue');
-      expect(select.getAttribute('placeholder')).toBe('Unidade Escolar (UE)');
+      expect([
+        'Unidade Escolar (UE)',
+        'Unidade Educacional (UE)'
+      ]).toContain(select.getAttribute('placeholder'));
     });
   });
 

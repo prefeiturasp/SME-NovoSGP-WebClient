@@ -9,6 +9,7 @@ import { ServicoFiltroRelatorio } from '~/servicos';
 import AbrangenciaServico from '~/servicos/Abrangencia';
 import { erros } from '~/servicos/alertas';
 import { Col, Row } from 'antd';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 const InformacoesEducacionaisFiltros = ({
   obterDreSelecionado,
@@ -293,6 +294,8 @@ const InformacoesEducacionaisFiltros = ({
               lista={listaAnos}
               valueOption="nome"
               valueText="nome"
+              tooltip="Se o ano escolhido não tiver dados, exibiremos automaticamente o mais recente disponível."
+              tooltipIcon={faQuestionCircle}
               onChange={e => {
                 setAnoLetivo(e);
               }}
