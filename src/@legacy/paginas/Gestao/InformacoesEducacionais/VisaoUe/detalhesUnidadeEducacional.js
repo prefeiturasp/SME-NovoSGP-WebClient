@@ -9,6 +9,7 @@ import Reclassificados from './componentes/Reclassificados/reclassificados';
 import DistorcaoIdadeSerieUe from './componentes/DistorcaoIdadeSerieUe/DistorcaoIdadeSerieUe';
 import GraficoAlfabetizacao from '../VisaoSmeDre/componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
 import GraficoFrequenciaSemanalCollapse from './componentes/GraficoFrequenciaSemanal/GraficoFrequenciaSemanalCollapse';
+import PainelFrequenciaUe from './componentes/PainelFrequenciaUe/painelFrequenciaUe';
 export default function DetalhesUnidadeEducacional({
   anoLetivo,
   ueCodigo,
@@ -93,6 +94,7 @@ export default function DetalhesUnidadeEducacional({
               <GraficoFrequenciaSemanalCollapse
                 anoLetivo={anoLetivo}
                 ueCodigo={ueCodigo}
+                ueNome={ueNome}
               />
             </Col>
           </Row>
