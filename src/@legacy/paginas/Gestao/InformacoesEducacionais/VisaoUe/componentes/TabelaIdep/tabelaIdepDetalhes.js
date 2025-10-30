@@ -50,8 +50,8 @@ const mapearDadosParaTabela = (dadosJson = []) => {
     return {
       key: index,
       anoLetivo: item.anoLetivo,
-      percentualInicial: item.notaInicial,
-      percentualFinal: item.notaFinal,
+      percentualInicial: item.percentualInicial,
+      percentualFinal: item.percentualFinal,
       profIniciaisLP,
       profIniciaisMT,
       profIniciaisCN,

@@ -206,21 +206,17 @@ const SelectComponent = React.forwardRef((props, ref) => {
           {tooltip ? (
             <div className="d-flex">
               <Label text={label} control={name} isRequired={labelRequired} />
-              <Tooltip 
-                title="Se o ano escolhido não tiver dados, exibiremos automaticamente o mais recente disponível."
-                placement="top"
-                destroyTooltipOnHide
-                >
-              <FontAwesomeIcon
-                cursor="pointer"
-                style={{
-                  fontSize: '16px',
-                  color: Base.Azul,
-                  marginLeft: 5,
-                  marginRight: 5,
-                }}
-                icon={tooltipIcon}
-                />
+                <Tooltip placement="top" title={tooltip}>
+                  <FontAwesomeIcon
+                    cursor="pointer"
+                    style={{
+                      fontSize: '16px',
+                      color: Base.Azul,
+                      marginLeft: 5,
+                      marginRight: 5,
+                    }}
+                    icon={tooltipIcon}
+                    />
                 </Tooltip>
             </div>
           ) : (
