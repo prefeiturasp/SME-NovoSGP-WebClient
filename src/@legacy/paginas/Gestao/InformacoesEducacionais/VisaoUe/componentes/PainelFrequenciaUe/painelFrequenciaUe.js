@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import CardCollapse from '~/componentes/cardCollapse';
 import { Base } from '~/componentes';
-import PainelFrequenciaBase from '~/paginas/Gestao/InformacoesEducacionais/shared/PainelFrequenciaBase';
-import '~/paginas/Gestao/InformacoesEducacionais/shared/painelFrequenciaBase.css';
+import PainelFrequenciaBase from '~/paginas/Gestao/InformacoesEducacionais/shared/PainelFrequenciaBase/PainelFrequenciaBase';
+import '~/paginas/Gestao/InformacoesEducacionais/shared/PainelFrequenciaBase/painelFrequenciaBase.css';
 
 export default function PainelFrequenciaUe({ ueCodigo, anoLetivo, nomeUe }) {
   const [exibirCard, setExibirCard] = useState(false);

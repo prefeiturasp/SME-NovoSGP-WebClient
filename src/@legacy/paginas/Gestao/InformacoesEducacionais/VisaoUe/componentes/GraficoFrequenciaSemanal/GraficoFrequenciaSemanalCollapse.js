@@ -10,7 +10,8 @@ import PainelFrequenciaUe from '../PainelFrequenciaUe/painelFrequenciaUe';
 import { Col, Row } from 'antd';
 
 function GraficoFrequenciaSemanalCollapse({ ueCodigo, anoLetivo, ueNome }) {
-  const [exibirGraficoFrequencia, setExibirGraficoFrequencia] = useState(true);
+  const [exibirGraficoFrequenciaVisaoUe, setExibirGraficoFrequenciaVisaoUe] =
+    useState(false);
 
   const listaOpcoes = [
     {
@@ -40,18 +41,20 @@ function GraficoFrequenciaSemanalCollapse({ ueCodigo, anoLetivo, ueNome }) {
     corBorda: Base.AzulBordaCollapse,
   };
 
-  const key = 'distorcao-prof-coll';
+  const key = 'frequencia-visao-ue-prof-coll';
 
   return (
     <CardCollapse
       titulo="Frequência"
-      show={exibirGraficoFrequencia}
-      onClick={() => setExibirGraficoFrequencia(!exibirGraficoFrequencia)}
+      show={exibirGraficoFrequenciaVisaoUe}
+      onClick={() =>
+        setExibirGraficoFrequenciaVisaoUe(!exibirGraficoFrequenciaVisaoUe)
+      }
       configCabecalho={configCabecalho}
       key={`${key}-collapse-key`}
       indice={`${key}-collapse-indice`}
     >
-      {exibirGraficoFrequencia && (
+      {exibirGraficoFrequenciaVisaoUe && (
         <>
           <h5 className="tabela-frequencia-title">Média de frequência</h5>
           <div className="tabela-frequencia-header">
