@@ -1,7 +1,7 @@
 import api from '../api';
 
 class ServicoAbandono {
-  ObterDadosReclassificados = (codigoDre, codigoUe, anoLetivo) => {
+  ObterDadosReclassificados = (codigoUe, codigoDre, anoLetivo) => {
     if (!anoLetivo) return Promise.resolve({ data: [] });
 
     const params = new URLSearchParams();
@@ -9,7 +9,7 @@ class ServicoAbandono {
       params.append('codigoDre', codigoDre);
     }
     if (codigoUe && String(codigoUe) !== '-99') {
-      params.append('codigoDre', codigoUe);
+      params.append('codigoUe', codigoUe);
     }
     params.append('anoLetivo', anoLetivo);
 

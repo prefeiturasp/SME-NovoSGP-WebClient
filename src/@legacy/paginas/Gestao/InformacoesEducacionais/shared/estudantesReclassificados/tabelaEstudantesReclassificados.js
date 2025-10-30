@@ -71,7 +71,7 @@ const columns = [
   },
 ];
 
-function TabelaEstudantesReclassificados({ codigoDre, codigoUe, anoLetivo }) {
+function TabelaEstudantesReclassificados({ codigoUe, codigoDre, anoLetivo }) {
   const [dados, setDados] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -84,8 +84,8 @@ function TabelaEstudantesReclassificados({ codigoDre, codigoUe, anoLetivo }) {
     try {
       const resposta =
         await ServicoEstudantesReclassificados.ObterDadosReclassificados(
-          codigoDre,
           codigoUe,
+          codigoDre,
           anoLetivo
         );
       setDados(agruparModalidadesParaTabela(resposta.data));
