@@ -2,69 +2,64 @@ import { Modal, Table, Tooltip } from 'antd';
 import { useEffect, useState } from 'react';
 import { HiDownload, HiEye } from 'react-icons/hi';
 import { Base } from '~/componentes';
-import CardCollapse from '~/componentes/cardCollapse';
-import TabelaIdepAnosAnteriores from '../TabelaIdepAnosAnteriores/tabelaIdepAnosAnteriores';
-import styles from './tabelaIdepDetalhes.css';
-import { InformacaoAnosAnteriores } from '../../../shared/informacaoAnosAnteriores';
+import CardCollapseCustomized from '../../../shared/cardCollapseCustomized';
+import styles from '../TabelaIdeb/tabelaIdebDetalhes.css';
 
-const cabecalhoDescricao = (
-  <div className="cabecalho-idep">
-    O Índice de Desenvolvimento da Educação Paulistana (IDEP) é uma ferramenta
-    para avaliar o desempenho de escolas de Ensino Fundamental e estudantes da
-    Rede Municipal de Ensino (RME). É calculado pela Secretaria Municipal de
-    Educação (SME) a partir dos resultados das avaliações da Prova São Paulo e
-    dos resultados das taxas de aprovação.
-  </div>
-);
-
-const mapearDadosParaTabela = (dadosJson = []) => {
+const mapearDadosParaTabela = (dadosJson = [], anoLetivo) => {
   if (!Array.isArray(dadosJson)) return [];
 
-  return dadosJson.map((item, index) => {
-    const profIniciaisLP =
-      item.proficiencia?.anosIniciais?.find(
-        i => i.componenteCurricular === 138
-      )?.percentual || 0;
+  return dadosJson
+    .filter(item => item.anoLetivo < anoLetivo)
+    .map((item, index) => {
+      const profIniciaisLP =
+        item.proficiencia?.anosIniciais?.find(
+          i => i.componenteCurricular === 138
+        )?.percentual || 0;
 
-    const profIniciaisMT =
-      item.proficiencia?.anosIniciais?.find(
-        i => i.componenteCurricular === 2
-      )?.percentual || 0;
+      const profIniciaisMT =
+        item.proficiencia?.anosIniciais?.find(
+          i => i.componenteCurricular === 2
+        )?.percentual || 0;
 
-    const profIniciaisCN =
-      item.proficiencia?.anosIniciais?.find(
-        i => i.componenteCurricular === 89
-      )?.percentual || 0;
+      const profFinaisLP =
+        item.proficiencia?.anosFinais?.find(
+          i => i.componenteCurricular === 138
+        )?.percentual || 0;
 
-    const profFinaisLP =
-      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 138)
-        ?.percentual || 0;
+      const profFinaisMT =
+        item.proficiencia?.anosFinais?.find(
+          i => i.componenteCurricular === 2
+        )?.percentual || 0;
 
-    const profFinaisMT =
-      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 2)
-        ?.percentual || 0;
+      const profEnsinoMedioLP =
+        item.proficiencia?.ensinoMedio?.find(
+          i => i.componenteCurricular === 138
+        )?.percentual || 0;
 
-    const profFinaisCN =
-      item.proficiencia?.anosFinais?.find(i => i.componenteCurricular === 89)
-        ?.percentual || 0;
+      const profEnsinoMedioMT =
+        item.proficiencia?.ensinoMedio?.find(
+          i => i.componenteCurricular === 2
+        )?.percentual || 0;
 
-    return {
-      key: index,
-      anoLetivo: item.anoLetivo,
-      percentualInicial: item.percentualInicial,
-      percentualFinal: item.percentualFinal,
-      profIniciaisLP,
-      profIniciaisMT,
-      profIniciaisCN,
-      profFinaisLP,
-      profFinaisMT,
-      profFinaisCN,
-      boletim: item.boletim,
-    };
-  });
+
+      return {
+        key: index,
+        anoLetivo: item.anoLetivo,
+      percentualInicial: item.notaInicial,
+      percentualFinal: item.notaFinal,
+      percentualEnsinoMedio: item.notaEnsinoMedio,
+        profIniciaisLP,
+        profIniciaisMT,
+        profFinaisLP,
+        profFinaisMT,
+        profEnsinoMedioLP,
+        profEnsinoMedioMT,
+        boletim: item.boletim,
+      };
+    });
 };
 
-export default function TabelaIdepDetalhes({ dados, ueCodigo, anoLetivo }) {
+export default function TabelaIdebAnosAnterioresDetalhes({ dados, anoLetivo }) {
   const [exibir, setExibir] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [boletimSelecionado, setBoletimSelecionado] = useState(null);
@@ -97,7 +92,7 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo, anoLetivo }) {
 
       const link = document.createElement('a');
       link.href = blobUrl;
-      const filename = url.split('/').pop() || 'boletim-idep';
+      const filename = url.split('/').pop() || 'boletim-ideb';
       link.download = filename;
       document.body.appendChild(link);
       link.click();
@@ -109,7 +104,7 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo, anoLetivo }) {
     }
   };
 
-  const dataSource = mapearDadosParaTabela(dados);
+  const dataSource = mapearDadosParaTabela(dados, anoLetivo);
   const columns = [
     {
       title: 'Ano letivo',
@@ -122,7 +117,7 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo, anoLetivo }) {
       }),
     },
     {
-      title: 'IDEP',
+      title: 'IDEB',
       onHeaderCell: () => ({
         className: 'coluna-anos-iniciais-finais',
       }),
@@ -154,9 +149,20 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo, anoLetivo }) {
           key: 'percentualFinal',
           align: 'center',
           width: 80,
-          onHeaderCell: () => ({
-            className: styles['coluna-anos-Iniciais-Finais'],
-          }),
+
+          render: value => (value !== undefined ? value : '-'),
+        },
+        {
+          title: (
+            <span>
+              Ensino médio
+            </span>
+          ),
+          dataIndex: 'percentualEnsinoMedio',
+          key: 'percentualEnsinoMedio',
+          align: 'center',
+          width: 80,
+
           render: value => (value !== undefined ? value : '-'),
         },
       ],
@@ -175,6 +181,7 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo, anoLetivo }) {
               (1º a 5º anos)
             </span>
           ),
+
           children: [
             {
               title: 'LP',
@@ -189,14 +196,6 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo, anoLetivo }) {
               title: 'MT',
               dataIndex: 'profIniciaisMT',
               key: 'profIniciaisMT',
-              align: 'center',
-              width: 70,
-              render: value => (value !== undefined ? value : '-'),
-            },
-            {
-              title: 'CN',
-              dataIndex: 'profIniciaisCN',
-              key: 'profIniciaisCN',
               align: 'center',
               width: 70,
               render: value => (value !== undefined ? value : '-'),
@@ -229,10 +228,28 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo, anoLetivo }) {
               width: 70,
               render: value => (value !== undefined ? value : '-'),
             },
+          ],
+        },
+        {
+          title: (
+            <span>
+              Ensino médio
+            </span>
+          ),
+          children: [
             {
-              title: 'CN',
-              dataIndex: 'profFinaisCN',
-              key: 'profFinaisCN',
+              title: 'LP',
+              dataIndex: 'profEnsinoMedioLP',
+              key: 'profEnsinoMedioLP',
+              align: 'center',
+              width: 70,
+
+              render: value => (value !== undefined ? value : '-'),
+            },
+            {
+              title: 'MT',
+              dataIndex: 'profEnsinoMedioMT',
+              key: 'profEnsinoMedioMT',
               align: 'center',
               width: 70,
               render: value => (value !== undefined ? value : '-'),
@@ -293,46 +310,32 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo, anoLetivo }) {
     },
   ];
 
-  const configCabecalho = {
-    altura: '44px',
-    corBorda: Base.AzulBordaCollapse,
-  };
-
-  const key = 'idep-prof-coll';
+  const key = 'ideb-prof-coll';
 
   return (
-    <div className="tabela-idep-detalhes">
-      <CardCollapse
-        titulo="Índice de Desenvolvimento da Educação Paulistana (IDEP)"
-        key={`${key}-collapse-key`}
-        indice={`${key}-collapse-indice`}
-        alt={`${key}-alt`}
-        configCabecalho={configCabecalho}
-        show={exibir}
-        onClick={() => setExibir(!exibir)}
+    <div className="tabela-ideb-detalhes">
+      <CardCollapseCustomized
+        titulo="Ver anos anteriores"
+        aberto={exibir}
+        aoClicar={() => setExibir(!exibir)}
+        key={`${key}-collapse-modern`}
+        alturaCabecalho="44px"
+        corCabecalho={Base.CinzaBordaCollapse}
       >
-        {exibir && (
-          <>
-            {cabecalhoDescricao}
-            <InformacaoAnosAnteriores />
-            <Table
-              columns={columns}
-              dataSource={dataSource}
-              bordered
-              pagination={false}
-              size="small"
-              scroll={{ x: 'max-content' }}
-            />
-          </>
-        )}
-
-        <div className="mt-4">
-          <TabelaIdepAnosAnteriores ueCodigo={ueCodigo} anoLetivo={anoLetivo} />
-        </div>
-      </CardCollapse>
+        <>
+          <Table
+            columns={columns}
+            dataSource={dataSource}
+            bordered
+            pagination={false}
+            size="small"
+            scroll={{ x: 'max-content' }}
+          />
+        </>
+      </CardCollapseCustomized>
 
       <Modal
-        title="Boletim IDEP"
+        title="Boletim IDEB"
         open={modalVisible}
         footer={null}
         onCancel={fecharModal}

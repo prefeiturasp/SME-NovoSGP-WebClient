@@ -7,6 +7,7 @@ import ServicoIdepGrafico from '~/servicos/InformacoesEducacionais/ServicoIdepGr
 import { SelectComponent } from '~/componentes';
 import { Area } from '@ant-design/plots';
 import { Base, Colors } from '~/componentes/colors';
+import { InformacaoAnosAnteriores } from '../../../shared/informacaoAnosAnteriores';
 
 const listaPeriodicidade = [
   { valor: 1, desc: 'Anos iniciais (1º a 5º anos)' },
@@ -147,6 +148,8 @@ const GraficoIdep = ({ anoLetivo, dreId }) => {
         resultados das avaliações da Prova São Paulo e dos resultados das taxas
         de aprovação.
       </p>
+
+      <InformacaoAnosAnteriores />
 
       {loading ? (
         <Loader />
