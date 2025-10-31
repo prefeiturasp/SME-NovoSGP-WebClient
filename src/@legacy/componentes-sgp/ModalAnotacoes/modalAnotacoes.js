@@ -1,6 +1,6 @@
 import { Form, Formik } from 'formik';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import shortid from 'shortid';
 import * as Yup from 'yup';
@@ -61,6 +61,7 @@ const ModalAnotacoesFrequencia = props => {
   const [valoresIniciais, setValoresIniciais] = useState(iniciar);
   const [loaderSalvarEditar, setLoaderSalvarEditar] = useState(false);
   const [motivosAusenciaAbae, setMotivosAusenciaAbae] = useState([]);
+  const exibirEditor = useRef(false);
 
   const validacoes = Yup.object().shape(
     {
@@ -392,10 +393,12 @@ const ModalAnotacoesFrequencia = props => {
                     form={form}
                     value={valoresIniciais?.anotacao}
                     name="anotacao"
-                    onChange={v => {
-                      if (valoresIniciais.anotacao !== v) {
-                        onChangeCampos();
+                    onChange={() => {
+                      if (!exibirEditor.current) {
+                        exibirEditor.current = true
+                        return;
                       }
+                      onChangeCampos();
                     }}
                     desabilitar={desabilitarCampos}
                     labelRequired={
@@ -413,8 +416,8 @@ const ModalAnotacoesFrequencia = props => {
                   style={{ marginTop: '-15px' }}
                 >
                   {valoresIniciais &&
-                  valoresIniciais.auditoria &&
-                  valoresIniciais.auditoria.criadoPor ? (
+                    valoresIniciais.auditoria &&
+                    valoresIniciais.auditoria.criadoPor ? (
                     <Auditoria
                       criadoPor={valoresIniciais.auditoria.criadoPor}
                       criadoEm={valoresIniciais.auditoria.criadoEm}
@@ -498,10 +501,10 @@ ModalAnotacoesFrequencia.defaultProps = {
   componenteCurricularId: '',
   desabilitarCampos: false,
   exibirModal: false,
-  setExibirModal: () => {},
+  setExibirModal: () => { },
   dadosModal: [],
-  setDadosModal: () => {},
-  fechouModal: () => {},
+  setDadosModal: () => { },
+  fechouModal: () => { },
   listaPadraoMotivoAusencia: [],
 };
 
