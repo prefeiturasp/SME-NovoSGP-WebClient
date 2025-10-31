@@ -81,6 +81,8 @@ const PeriodoFechamentoAbertura = () => {
   const [listaTipoCalendario, setListaTipoCalendario] = useState([]);
   const [valorTipoCalendario, setValorTipoCalendario] = useState('');
   const [pesquisaTipoCalendario, setPesquisaTipoCalendario] = useState('');
+  const [isModalidadeFundMedio, setIsModalidadeFundMedio] = useState(false);
+  const [valorAplicacao, setValorAplicacao] = useState('');
 
   const validacaoPrimeiroBim = {
     bimestre1InicioDoFechamento: momentSchema.required(
@@ -211,6 +213,8 @@ const PeriodoFechamentoAbertura = () => {
       setEmprocessamento(true);
       ServicoPeriodoFechamento.obterPorTipoCalendario(tipoCalendarioSelecionado)
         .then(resposta => {
+          setValorAplicacao(resposta.data.aplicacao);
+
           if (resposta?.data?.fechamentosBimestres) {
             const montarDataInicio = item => {
               return item.inicioDoFechamento
@@ -320,6 +324,13 @@ const PeriodoFechamentoAbertura = () => {
     }
   };
 
+  const obterIdPorDescricao = descricaoSelecionada => {
+    const opcao = opcoesAplicacao.find(
+      item => item.descricao === descricaoSelecionada
+    );
+    return opcao ? opcao.id : null;
+  };
+
   const onSubmit = async (form, voltar) => {
     form.fechamentosBimestres.forEach(item => {
       switch (item.bimestre) {
@@ -345,10 +356,14 @@ const PeriodoFechamentoAbertura = () => {
     });
 
     setEmprocessamento(true);
-    ServicoPeriodoFechamento.salvar({
+
+    const payload = {
       ...form,
+      // aplicacao: valorAplicacao,
       confirmouAlteracaoHierarquica: false,
-    })
+    };
+
+    ServicoPeriodoFechamento.salvar(payload)
       .then(() => {
         sucesso('Períodos salvos com sucesso.');
         carregaDados();
@@ -447,10 +462,16 @@ const PeriodoFechamentoAbertura = () => {
 
   const selecionaTipoCalendario = descricao => {
     const tipo = listaTipoCalendario?.find(t => t?.descricao === descricao);
+
     if (Number(tipo?.id) || !tipo?.id) {
       const isPeriodoAnual = tipo?.periodo === periodo?.Anual;
       setIsTipoCalendarioAnual(isPeriodoAnual);
       setValorTipoCalendario(descricao);
+    }
+
+    setIsModalidadeFundMedio(tipo?.modalidade === 1);
+    if (tipo?.modalidade !== 1) {
+      setValorAplicacao('');
     }
     setTipoCalendarioSelecionado(tipo?.id);
   };
@@ -460,6 +481,12 @@ const PeriodoFechamentoAbertura = () => {
       setPesquisaTipoCalendario(descricao);
     }
   };
+
+  const opcoesAplicacao = [
+    { id: 1, descricao: 'SGP' },
+    { id: 2, descricao: 'Sondagem (Aplicação)' },
+    { id: 3, descricao: 'Sondagem (Digitação)' },
+  ];
 
   return (
     <Loader loading={emProcessamento}>
@@ -531,6 +558,40 @@ const PeriodoFechamentoAbertura = () => {
                       />
                     </Loader>
                   </div>
+
+                  {/* <div className="col-sm-12 col-md-4 col-lg-6 col-xl-4 mb-2">
+                    {isModalidadeFundMedio && valorTipoCalendario && (
+                      <SelectAutocomplete
+                        showList
+                        placeholder="Selecione a aplicação"
+                        name="aplicacao"
+                        id="aplicacao"
+                        lista={opcoesAplicacao}
+                        valueField="descricao"
+                        textField="descricao"
+                        onSelect={descricao => {
+                          const id = obterIdPorDescricao(descricao);
+                          setValorAplicacao(id);
+                          if (!modoEdicao) setModoEdicao(true);
+                        }}
+                        onChange={descricao => {
+                          const id = obterIdPorDescricao(descricao);
+                          setValorAplicacao(id);
+                          if (!modoEdicao) setModoEdicao(true);
+                        }}
+                        value={
+                          opcoesAplicacao.find(
+                            item => item.id === valorAplicacao
+                          )?.descricao || ''
+                        }
+                        label="Aplicação"
+                        labelRequired
+                        temErro={modoEdicao && !valorAplicacao}
+                        mensagemErro="Campo obrigatório"
+                      />
+                    )}
+                  </div> */}
+
                   <div className="col-sm-12 col-md-4 col-lg-6 col-xl-8 pt-2 pb-2 d-flex justify-content-end">
                     {registroMigrado ? (
                       <RegistroMigrado>Registro Migrado</RegistroMigrado>

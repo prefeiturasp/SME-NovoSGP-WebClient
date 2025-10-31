@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Select } from 'antd';
+import { Select, Tooltip } from 'antd';
 import shortid from 'shortid';
 import { Field } from 'formik';
 import { Base } from './colors';
@@ -128,9 +128,8 @@ const SelectComponent = React.forwardRef((props, ref) => {
       suffixIcon={<i className="fas fa-angle-down" style={{ fontSize: 18 }} />}
       className={
         form
-          ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${
-              className || ''
-            }`
+          ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${className || ''
+          }`
           : ''
       }
       name={name}

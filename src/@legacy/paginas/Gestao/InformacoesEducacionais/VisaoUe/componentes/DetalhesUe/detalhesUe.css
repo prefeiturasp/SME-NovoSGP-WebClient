@@ -1,0 +1,37 @@
+.detalhes-ue {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: #6933ff;
+  color: white;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.escola-info h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  color: white;
+}
+
+.escola-info p {
+  font-size: 14px;
+  margin: 4px 0 0;
+  color: white;
+}
+
+.escola-dados {
+  background: white;
+  color: #42474a;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-top: 12px;
+}
+
+.escola-dados p {
+  margin: 4px 0;
+}

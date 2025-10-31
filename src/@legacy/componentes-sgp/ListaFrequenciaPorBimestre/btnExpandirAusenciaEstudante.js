@@ -27,7 +27,6 @@ const BtnExpandirAusenciaEstudante = props => {
 
   return (
     <ContainerColunaMotivoAusencia
-      data-testid="btn-expandir"
       onClick={() => onClickExpandir(indexLinha)}
       className={
         expandirLinhaAusenciaEstudante[indexLinha]
