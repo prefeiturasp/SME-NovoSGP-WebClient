@@ -293,7 +293,6 @@ const InformacoesEducacionaisFiltros = ({
               lista={listaAnos}
               valueOption="nome"
               valueText="nome"
-              tooltip="Se o ano escolhido não tiver dados, exibiremos automaticamente o mais recente disponível."
               onChange={e => {
                 setAnoLetivo(e);
               }}

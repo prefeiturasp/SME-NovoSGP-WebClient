@@ -7,6 +7,7 @@ import ServicoIdebGrafico from '~/servicos/InformacoesEducacionais/ServicoIdebGr
 import { SelectComponent } from '~/componentes';
 import { Area } from '@ant-design/plots';
 import { Base, Colors } from '~/componentes/colors';
+import { InformacaoAnosAnteriores } from '../../../shared/informacaoAnosAnteriores';
 
 const listaSerie = [
   { valor: 1, desc: 'Anos iniciais (1º a 5º anos)' },
@@ -142,6 +143,8 @@ const GraficoIdeb = ({ anoLetivo, dreId }) => {
         O Índice de Desenvolvimento da Educação Básica é medido a partir das
         médias de desempenho no Sistema de Avaliação da Educação Básica (SAEB).
       </p>
+
+      <InformacaoAnosAnteriores />
 
       {loading ? (
         <Loader />
