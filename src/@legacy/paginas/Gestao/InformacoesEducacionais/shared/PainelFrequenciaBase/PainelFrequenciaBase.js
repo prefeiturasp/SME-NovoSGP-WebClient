@@ -46,7 +46,7 @@ function getDefaultColumns(tipoExtra) {
         );
       },
     },
-    ...extra,
+
     {
       title: 'Nível de frequência',
       dataIndex: 'nivelFrequencia',
@@ -54,6 +54,7 @@ function getDefaultColumns(tipoExtra) {
       align: 'center',
       width: 140,
     },
+    ...extra,
     {
       title: 'Qtde. estudantes',
       dataIndex: 'quantidadeEstudantes',
@@ -85,7 +86,7 @@ export default function PainelFrequenciaBase({ tipoExtra, codigo, anoLetivo }) {
   const [pagina, setPagina] = useState(1);
   const [numeroRegistros, setNumeroRegistros] = useState(10);
   const [totalRegistros, setTotalRegistros] = useState(0);
-  const [dataFrequencia, setDataFrequencia] = useState(() => dayjs());
+  const [dataFrequencia, setDataFrequencia] = useState(null);
 
   const fetch = useCallback(async () => {
     if (!codigo || !anoLetivo) {
@@ -95,23 +96,22 @@ export default function PainelFrequenciaBase({ tipoExtra, codigo, anoLetivo }) {
     }
     setLoading(true);
     try {
+      const dataFrequenciaFormatada = dataFrequencia
+        ? dayjs(dataFrequencia).format('YYYY-MM-DD')
+        : undefined;
       const resposta =
         tipoExtra === 'ue'
           ? await ServicoFrequenciaDiaria.ObterFrequenciaDiariaUe({
               anoLetivo,
               codigoUe: codigo,
-              dataFrequencia: dataFrequencia
-                ? dataFrequencia.format('YYYY-MM-DD')
-                : undefined,
+              dataFrequencia: dataFrequenciaFormatada,
               numeroPagina: pagina,
               numeroRegistros: numeroRegistros,
             })
           : await ServicoFrequenciaDiaria.ObterFrequenciaDiariaDre({
               anoLetivo,
               codigoDre: codigo,
-              dataFrequencia: dataFrequencia
-                ? dataFrequencia.format('YYYY-MM-DD')
-                : undefined,
+              dataFrequencia: dataFrequenciaFormatada,
               numeroPagina: pagina,
               numeroRegistros: numeroRegistros,
             });
@@ -144,22 +144,41 @@ export default function PainelFrequenciaBase({ tipoExtra, codigo, anoLetivo }) {
 
   const prevDay = () => {
     setDataFrequencia(d =>
-      d ? d.subtract(1, 'day') : dayjs().subtract(1, 'day')
+      d ? dayjs(d).subtract(1, 'day') : dayjs().subtract(1, 'day')
     );
     setPagina(1);
   };
   const nextDay = () => {
-    setDataFrequencia(d => (d ? d.add(1, 'day') : dayjs().add(1, 'day')));
+    setDataFrequencia(d =>
+      d ? dayjs(d).add(1, 'day') : dayjs().add(1, 'day')
+    );
     setPagina(1);
   };
   const nextDisabled =
     !dataFrequencia || !dataFrequencia.isBefore(dayjs(), 'day');
 
+  const disabledDate = current => {
+    if (!current) return false;
+    const hoje = dayjs();
+    const ontem = hoje.subtract(1, 'day');
+    const inicioAno = hoje.startOf('year');
+    return current.isBefore(inicioAno, 'day') || current.isAfter(ontem, 'day');
+  };
+
   const columns = getDefaultColumns(tipoExtra);
+
+  const anoAtual = dayjs().year();
+  if (String(anoLetivo) !== String(anoAtual)) {
+    return (
+      <div className="painel-frequencia-sem-dados-ano">
+        Sem dados para o ano letivo selecionado
+      </div>
+    );
+  }
 
   return (
     <ConfigProvider locale={ptBR}>
-      <div className="painel-frequencia-controles">
+      <div>
         <Row
           align="middle"
           justify="space-between"
@@ -172,16 +191,18 @@ export default function PainelFrequenciaBase({ tipoExtra, codigo, anoLetivo }) {
               </span>
               <DatePicker
                 value={dataFrequencia}
-                format="DD/MM/YYYY"
+                format="DD-MM-YYYY"
                 onChange={date => {
                   if (date) {
-                    setDataFrequencia(date);
+                    setDataFrequencia(dayjs(date));
                     setPagina(1);
                   }
                 }}
                 allowClear={false}
                 className="painel-frequencia-datepicker"
                 locale={ptBR}
+                disabledDate={disabledDate}
+                placeholder="DD-MM-AAAA"
               />
             </Space>
           </Col>

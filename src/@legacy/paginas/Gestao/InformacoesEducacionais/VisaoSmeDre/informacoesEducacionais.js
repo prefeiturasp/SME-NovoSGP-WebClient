@@ -27,6 +27,7 @@ export default function InformacoesEducacionais({
   const exibirGrafico = !!dreCodigo;
   const exibirPainelFrequenciaDre = !!dreCodigo && String(dreCodigo) !== '-99';
   const exibirVisaoGeral = !!anoLetivo;
+  const anoAtual = String(new Date().getFullYear());
 
   return (
     <>
@@ -47,7 +48,7 @@ export default function InformacoesEducacionais({
           )}
         </div>
       </CardEstilizado>
-      {exibirPainelFrequenciaDre && (
+      {exibirPainelFrequenciaDre && anoLetivo === anoAtual && (
         <CardEstilizado>
           <div className="col-md-12">
             <Row gutter={[32, 32]}>
