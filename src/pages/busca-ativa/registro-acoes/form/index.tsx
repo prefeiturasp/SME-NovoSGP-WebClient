@@ -14,7 +14,7 @@ import { RegistroAcaoBuscaAtivaRespostaDto } from '@/core/dto/RegistroAcaoBuscaA
 import { ROUTES } from '@/core/enum/routes';
 import { useAppSelector } from '@/core/hooks/use-redux';
 import buscaAtivaService from '@/core/services/busca-ativa-service';
-import { Checkbox, Col, Form, Row } from 'antd';
+import { Checkbox, Col, Form, Row, Modal, Button, Space, Table } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -127,6 +127,73 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
     obterSecoes();
   }, [obterSecoes]);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const [motivosAusenciasAnotacao, setMotivosAusenciasAnotacao] = useState<any>();
+
+  const handleLocalizadorChange = (_field: any, value: any) => {
+    buscarMotivosAusenciasFeitasPeloProfessor(value);
+  };
+
+  const dataSource = motivosAusenciasAnotacao?.map((item: any, index: any) => ({
+    key: index,
+    data: dayjs(item.dataAula).format('DD/MM/YYYY'),
+    motivo: item.descricaoMotivoAusencia,
+  }));
+
+  const columns = [
+    {
+      title: 'Data',
+      dataIndex: 'data',
+      key: 'data',
+    },
+    {
+      title: 'Motivo',
+      dataIndex: 'motivo',
+      key: 'motivo',
+    },
+  ];
+
+  const buscarMotivosAusenciasFeitasPeloProfessor = async (codigoAlunoEOL: any) => {
+    await obterMotivosAusenciasModal(codigoAlunoEOL);
+  };
+
+  const hoje = dayjs().format('YYYY-MM-DD 00:00:00');
+  const trintaDiasAtras = dayjs().subtract(30, 'day').format('YYYY-MM-DD 00:00:00');
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const obterMotivosAusenciasModal = useCallback(async (codigoAlunoEOL: any) => {
+    setIsLoading(true);
+    try {
+      if (codigoAlunoEOL) {
+        const resposta = await buscaAtivaService.obterMotivosAusenciasModal(
+          codigoAlunoEOL,
+          trintaDiasAtras,
+          hoje,
+        );
+
+        if (resposta?.sucesso) {
+          setMotivosAusenciasAnotacao(resposta.dados);
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao buscar motivos de ausência:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
   return (
     <LoaderBuscaAtivaRegistroAcoesForm>
       <Col>
@@ -226,9 +293,39 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
                       !!formInitialValues?.localizadorEstudante?.codigo ||
                       desabilitarCamposBuscaAtivaRegistroAcoes,
                   }}
+                  onChange={handleLocalizadorChange}
                 />
               </Col>
 
+              <Space
+                direction="vertical"
+                size="middle"
+                style={{
+                  display: 'flex',
+                }}
+              >
+                <Button
+                  color="primary"
+                  type="default"
+                  size="small"
+                  style={{ marginBottom: '15px', marginLeft: '10px' }}
+                  onClick={showModal}
+                  loading={isLoading}
+                >
+                  Visualizar histórico de ausências cadastradas pelo professor
+                </Button>
+                <Modal
+                  title="Histórico de Ausências (Últimos 30 dias)"
+                  open={isModalOpen}
+                  onOk={handleOk}
+                  onCancel={handleCancel}
+                  cancelText={'Cancelar'}
+                  okText={'Confirmar'}
+                >
+                  <Table dataSource={dataSource} columns={columns} pagination={false} />
+                </Modal>
+              </Space>
+              <br />
               <Col xs={24}>
                 <BuscaAtivaRegistroAcoesFormDinamico />
               </Col>

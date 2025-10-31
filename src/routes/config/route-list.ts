@@ -133,8 +133,8 @@ import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioS
 import SemPermissao from '~/paginas/SemPermissao/sem-permissao';
 import Sondagem from '~/paginas/Sondagem/sondagem';
 import { setRotas } from '~/redux/modulos/navegacao/actions';
-import InformacoesEducacionais from '~/paginas/Gestao/InformacoesEducacionais/painelEducacional';
-import ImportacaoDados from '~/paginas/Gestao/ImportacaoDados/importacaoDados';
+// import InformacoesEducacionais from '~/paginas/Gestao/InformacoesEducacionais/informacoesEducacionais';
+// import ImportacaoDados from '~/paginas/Gestao/ImportacaoDados/importacaoDados';
 
 export interface RouteProps {
   path: string;
@@ -1918,27 +1918,27 @@ route.set(ROUTES.RELATORIO_PRODUTIVIDADE, {
   chavePermissao: ROUTES.RELATORIO_PRODUTIVIDADE,
 });
 
-route.set(ROUTES.IMPORTACAO_DADOS, {
-  breadcrumbName: 'Importação de Dados',
-  menu: ['Gestão'],
-  parent: '/',
-  component: ImportacaoDados,
-  exact: true,
-  tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
-  chavePermissao: ROUTES.IMPORTACAO_DADOS,
-});
+// route.set(ROUTES.IMPORTACAO_DADOS, {
+//   breadcrumbName: 'Importação de Dados',
+//   menu: ['Gestão'],
+//   parent: '/',
+//   component: ImportacaoDados,
+//   exact: true,
+//   tipo: RotasTipo.EstruturadaAutenticada,
+//   temPermissionamento: true,
+//   chavePermissao: ROUTES.IMPORTACAO_DADOS,
+// });
 
-route.set(ROUTES.INFORMACOES_EDUCACIONAIS, {
-  breadcrumbName: 'Informações Educacionais',
-  menu: ['Gestão'],
-  parent: '/',
-  component: InformacoesEducacionais,
-  exact: true,
-  tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
-  chavePermissao: ROUTES.INFORMACOES_EDUCACIONAIS,
-});
+// route.set(ROUTES.INFORMACOES_EDUCACIONAIS, {
+//   breadcrumbName: 'Informações Educacionais',
+//   menu: ['Gestão'],
+//   parent: '/',
+//   component: InformacoesEducacionais,
+//   exact: true,
+//   tipo: RotasTipo.EstruturadaAutenticada,
+//   temPermissionamento: true,
+//   chavePermissao: ROUTES.INFORMACOES_EDUCACIONAIS,
+// });
 
 const getRoutesArray = () => {
   for (const [key, value] of route) {
