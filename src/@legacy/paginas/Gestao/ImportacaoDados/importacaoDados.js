@@ -135,9 +135,9 @@ function ImportacaoDados() {
   const [arquivoSelecionado, setArquivoSelecionado] = useState(null);
   const [paginaAtual, setPaginaAtual] = useState(1);
   const [totalRegistros, setTotalRegistros] = useState(0);
-  const pageSize = 20;
+  const [pageSize, setPageSize] = useState(20);
 
-  const carregarInconsistencias = async (registro, page = 1) => {
+  const carregarInconsistencias = async (registro, page = 1, size = 20) => {
     if (registro) setArquivoSelecionado(registro);
     setLoading(true);
     try {
@@ -145,10 +145,10 @@ function ImportacaoDados() {
         params: {
           ImportacaoLogId: registro?.id || arquivoSelecionado?.id,
           numeroPagina: page,
-          numeroRegistros: pageSize,
+          numeroRegistros: size,
         },
       });
-
+      setPageSize(size);
       setInconsistencias(resposta.data.items || []);
       setTotalRegistros(resposta.data.totalRegistros || 0);
     } catch (e) {
@@ -233,13 +233,13 @@ function ImportacaoDados() {
           pagination={{
             current: paginaAtual,
             total: totalRegistros,
-            pageSize: 20,
+            pageSize,
             locale: {
               items_per_page: '',
             },
-            onChange: page => {
+            onChange: (page, size) => {              
               setPaginaAtual(page);
-              carregarInconsistencias(arquivoSelecionado, page);
+              carregarInconsistencias(arquivoSelecionado, page, size);
             },
           }}
         />

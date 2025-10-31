@@ -5,6 +5,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import TabelaIdepAnosAnteriores from '../TabelaIdepAnosAnteriores/tabelaIdepAnosAnteriores';
 import styles from './tabelaIdepDetalhes.css';
+import { InformacaoAnosAnteriores } from '../../../shared/informacaoAnosAnteriores';
 
 const cabecalhoDescricao = (
   <div className="cabecalho-idep">
@@ -313,6 +314,7 @@ export default function TabelaIdepDetalhes({ dados, ueCodigo, anoLetivo }) {
         {exibir && (
           <>
             {cabecalhoDescricao}
+            <InformacaoAnosAnteriores />
             <Table
               columns={columns}
               dataSource={dataSource}
