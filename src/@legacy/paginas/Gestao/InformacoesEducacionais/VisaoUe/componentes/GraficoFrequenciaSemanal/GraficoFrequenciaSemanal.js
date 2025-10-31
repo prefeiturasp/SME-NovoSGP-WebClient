@@ -19,6 +19,18 @@ const GraficoFrequenciaSemanal = ({
   const [dados, setDados] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const formatarDataDDMM = v => {
+    const d = new Date(v);
+    if (!Number.isNaN(d.getTime())) {
+      return d.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+      });
+    }
+    const m = String(v).match(/^(\d{2})\/(\d{2})/);
+    return m ? `${m[1]}/${m[2]}` : '';
+  };
+
   const config = {
     data: dados,
     xField,
@@ -46,10 +58,6 @@ const GraficoFrequenciaSemanal = ({
         ? { text: xAxisTitle, style: { fill: xAxisTitleColor } }
         : undefined,
       label: {
-        formatter: value => {
-          const [dia, mes] = value.split('/');
-          return `${dia}/${mes}`;
-        },
         style: {
           fill: '#42474A',
           fontSize: 14,
@@ -92,7 +100,7 @@ const GraficoFrequenciaSemanal = ({
 
       if (resposta.status === 200 && Array.isArray(resposta.data)) {
         const dadosFormatados = resposta.data.map(item => ({
-          dataAula: item.dataAula,
+          dataAula: formatarDataDDMM(item.dataAula),
           percentualFrequencia: Math.min(item.percentualFrequencia, 100),
         }));
         setDados(dadosFormatados);
