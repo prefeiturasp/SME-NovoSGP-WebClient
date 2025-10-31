@@ -110,17 +110,19 @@ export default function DetalhesUnidadeEducacional({
           </Row>
         </div>
 
-        <div className="col-md-12 mb-32">
-          <Row gutter={[16, 16]}>
-            <Col span={24}>
-              <GraficoFrequenciaSemanalCollapse
-                anoLetivo={anoLetivo}
-                ueCodigo={ueCodigo}
-                ueNome={ueNome}
-              />
-            </Col>
-          </Row>
-        </div>
+        {String(anoLetivo) === String(new Date().getFullYear()) && (
+          <div className="col-md-12 mb-32">
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <GraficoFrequenciaSemanalCollapse
+                  anoLetivo={anoLetivo}
+                  ueCodigo={ueCodigo}
+                  ueNome={ueNome}
+                />
+              </Col>
+            </Row>
+          </div>
+        )}
       </CardEstilizado>
     </>
   );
