@@ -287,7 +287,7 @@ const FechaReabCadastroForm = () => {
       inicio: dataInicio,
       tipoCalendarioId: calendarioSelecionado?.id,
       id: paramsRota?.id,
-      aplicacao: valorAplicacao,
+      // aplicacao: valorAplicacao,
     };
 
     setExibirLoaderReabertura(true);
@@ -370,7 +370,7 @@ const FechaReabCadastroForm = () => {
                       />
                     </Col>
 
-                    {exibirCampoAplicacao && (
+                    {/* {exibirCampoAplicacao && (
                       <Col sm={24} md={12} xl={8}>
                         <SelectAutocomplete
                           showList
@@ -401,7 +401,7 @@ const FechaReabCadastroForm = () => {
                           disabled={desabilitarCampoAplicacao}
                         />
                       </Col>
-                    )}
+                    )} */}
 
                     <Col md={24} xl={12}>
                       <DreReabertura

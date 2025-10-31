@@ -359,7 +359,7 @@ const PeriodoFechamentoAbertura = () => {
 
     const payload = {
       ...form,
-      aplicacao: valorAplicacao,
+      // aplicacao: valorAplicacao,
       confirmouAlteracaoHierarquica: false,
     };
 
@@ -559,7 +559,7 @@ const PeriodoFechamentoAbertura = () => {
                     </Loader>
                   </div>
 
-                  <div className="col-sm-12 col-md-4 col-lg-6 col-xl-4 mb-2">
+                  {/* <div className="col-sm-12 col-md-4 col-lg-6 col-xl-4 mb-2">
                     {isModalidadeFundMedio && valorTipoCalendario && (
                       <SelectAutocomplete
                         showList
@@ -590,7 +590,7 @@ const PeriodoFechamentoAbertura = () => {
                         mensagemErro="Campo obrigatório"
                       />
                     )}
-                  </div>
+                  </div> */}
 
                   <div className="col-sm-12 col-md-4 col-lg-6 col-xl-8 pt-2 pb-2 d-flex justify-content-end">
                     {registroMigrado ? (
