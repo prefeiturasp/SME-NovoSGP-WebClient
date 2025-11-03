@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import PainelFrequenciaBase from './PainelFrequenciaBase';
 
 jest.mock('~/servicos/api', () => ({
@@ -11,58 +11,36 @@ jest.mock('~/servicos/api', () => ({
 }));
 
 describe('PainelFrequenciaBase', () => {
-  it('renderiza controles de data e legenda', () => {
+  it('exibe mensagem de sem dados para o ano letivo selecionado quando anoLetivo não é o atual', () => {
     render(
-      <PainelFrequenciaBase tipoExtra="ue" codigo={123} anoLetivo={2024} />
+      <PainelFrequenciaBase tipoExtra="ue" codigo={123} anoLetivo="2000" />
     );
-    expect(screen.getByText(/Dados do dia:/i)).toBeInTheDocument();
-    expect(screen.getByText(/Nível de frequência:/i)).toBeInTheDocument();
-    expect(screen.getByText(/Alto/i)).toBeInTheDocument();
-    expect(screen.getByText(/Médio/i)).toBeInTheDocument();
-    expect(screen.getByText(/Baixo/i)).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /Dia anterior/i })
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: /Próximo dia/i })
+      screen.getByText(/Sem dados para o ano letivo selecionado/i)
     ).toBeInTheDocument();
   });
 
-  it('renderiza tabela vazia inicialmente', () => {
+  it('exibe mensagem de sem dados para o ano letivo selecionado quando anoLetivo é null', () => {
     render(
-      <PainelFrequenciaBase tipoExtra="ue" codigo={123} anoLetivo={2024} />
+      <PainelFrequenciaBase tipoExtra="ue" codigo={123} anoLetivo={null} />
     );
-    expect(screen.getByText(/Sem dados/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(/Sem dados para o ano letivo selecionado/i)
+    ).toBeInTheDocument();
   });
 
-  it('muda página ao clicar na paginação', () => {
+  it('não exibe controles ou tabela quando anoLetivo não é o atual', () => {
     render(
-      <PainelFrequenciaBase tipoExtra="ue" codigo={123} anoLetivo={2024} />
+      <PainelFrequenciaBase tipoExtra="dre" codigo={123} anoLetivo="1999" />
     );
-    expect(screen.getByRole('table')).toBeInTheDocument();
-  });
-
-  it('chama função de mudar dia ao clicar nos botões', () => {
-    render(
-      <PainelFrequenciaBase tipoExtra="ue" codigo={123} anoLetivo={2024} />
-    );
-    const btnAnterior = screen.getByRole('button', { name: /Dia anterior/i });
-    const btnProximo = screen.getByRole('button', { name: /Próximo dia/i });
-    fireEvent.click(btnAnterior);
-    fireEvent.click(btnProximo);
-  });
-
-  it('renderiza coluna Turma para tipoExtra="ue"', () => {
-    render(
-      <PainelFrequenciaBase tipoExtra="ue" codigo={123} anoLetivo={2024} />
-    );
-    expect(screen.getByText(/Turma/i)).toBeInTheDocument();
-  });
-
-  it('renderiza coluna Unidade educacional (UE) para tipoExtra="dre"', () => {
-    render(
-      <PainelFrequenciaBase tipoExtra="dre" codigo={123} anoLetivo={2024} />
-    );
-    expect(screen.getByText(/Unidade educacional \(UE\)/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Dados do dia:/i)).not.toBeInTheDocument();
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /Dia anterior/i })
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/Turma/i)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/Unidade educacional \(UE\)/i)
+    ).not.toBeInTheDocument();
   });
 });
