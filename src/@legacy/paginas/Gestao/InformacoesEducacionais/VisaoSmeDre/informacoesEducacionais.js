@@ -15,6 +15,7 @@ import TabelaNotasSmeDre from './componentes/Notas/tabelaNotasSmeDre';
 import TabelaEstudantesReclassificados from '../shared/estudantesReclassificados/tabelaEstudantesReclassificados';
 import DistorcaoIdadeSerie from '../shared/DistorcaoIdadeSerie/DistorcaoIdadeSerie';
 import PainelFrequenciaDre from './componentes/PainelFrequenciaDre/painelFrequenciaDre';
+import PlanoAEE from '../shared/PlanoAEE/PlanoAEE';
 
 export default function InformacoesEducacionais({
   anoLetivo,
@@ -190,6 +191,18 @@ export default function InformacoesEducacionais({
                 codigoUe={ueCodigo}
                 anoLetivo={anoLetivo}
               />
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              {String(anoLetivo) === String(new Date().getFullYear()) ? (
+                <PlanoAEE
+                  codigoDre={dreCodigo}
+                  codigoUe={ueCodigo}
+                  anoLetivo={anoLetivo}
+                />
+              ) : null}
             </Col>
           </Row>
         </div>

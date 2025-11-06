@@ -12,6 +12,8 @@ import DistorcaoIdadeSerieUe from './componentes/DistorcaoIdadeSerieUe/Distorcao
 import GraficoAlfabetizacao from '../VisaoSmeDre/componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
 import GraficoFrequenciaSemanalCollapse from './componentes/GraficoFrequenciaSemanal/GraficoFrequenciaSemanalCollapse';
 import PainelFrequenciaUe from './componentes/PainelFrequenciaUe/painelFrequenciaUe';
+import PlanoAEEUe from './componentes/PlanoAEEUE/PlanoAEEUe';
+
 export default function DetalhesUnidadeEducacional({
   anoLetivo,
   ueCodigo,
@@ -118,6 +120,20 @@ export default function DetalhesUnidadeEducacional({
                 ueCodigo={ueCodigo}
                 ueNome={ueNome}
               />
+            </Col>
+          </Row>
+        </div>
+
+        <div className="col-md-12 mb-32">
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              {String(anoLetivo) === String(new Date().getFullYear()) ? (
+                <PlanoAEEUe
+                  anoLetivo={anoLetivo}
+                  ueCodigo={ueCodigo}
+                  dreCodigo={dreCodigo}
+                />
+              ) : null}
             </Col>
           </Row>
         </div>
