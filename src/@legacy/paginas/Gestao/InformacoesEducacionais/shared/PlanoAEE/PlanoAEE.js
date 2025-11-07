@@ -2,17 +2,21 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Table } from 'antd';
 import './PlanoAEE.css';
 import PropTypes from 'prop-types';
+import ServicoPlanoAEE from '~/servicos/InformacoesEducacionais/ServicoPlanoAEE';
 
-const mockData = {
-  quantidadePlanos: 3478,
-  planos: [
-    { situacao: 'Aguardando validação PAAI', quantidade: 865 },
-    { situacao: 'Aguardando validação do CP', quantidade: 712 },
-    { situacao: 'Validado', quantidade: 632 },
-    { situacao: 'Encerrado', quantidade: 893 },
-    { situacao: 'Expirado', quantidade: 376 },
-  ],
-};
+const SITUACOES_PADRAO = [
+  {
+    backend: 'Aguardando atribuição de PAAI',
+    coluna: 'Aguardando validação PAAI',
+  },
+  {
+    backend: 'Aguardando parecer da coordenação',
+    coluna: 'Aguardando validação do CP',
+  },
+  { backend: 'Aguardando parecer do CEFAI', coluna: 'Validado' },
+  { backend: 'Encerrado Automaticamente', coluna: 'Encerrado' },
+  { backend: 'Expirado', coluna: 'Expirado' },
+];
 
 function PlanoAEE({ codigoDre, codigoUe, anoLetivo }) {
   const [dadosTabela, setDadosTabela] = useState([]);
@@ -21,21 +25,25 @@ function PlanoAEE({ codigoDre, codigoUe, anoLetivo }) {
   const obterDados = useCallback(async () => {
     setLoading(true);
     try {
-      const { quantidadePlanos, planos } = mockData;
+      const resposta = await ServicoPlanoAEE.ObterDadosPlanoAEESmeDreUe(
+        codigoDre,
+        codigoUe,
+        anoLetivo
+      );
+      const resultado = resposta.data[0] || {};
+      const { quantidadePlanos, planos = [] } = resultado;
 
-      const linha = {
-        key: 'unique_key',
-        quantidadePlanos,
-        ...planos.reduce((acc, curr) => {
-          acc[curr.situacao] = curr.quantidade;
-          return acc;
-        }, {}),
-      };
+      const linha = { key: 'linha', quantidadePlanos };
+      SITUACOES_PADRAO.forEach(sit => {
+        const plano = planos.find(p => p.situacaoPlano === sit.backend);
+        linha[sit.coluna] = plano ? plano.quantidadeAlunos : '-';
+      });
+
       setDadosTabela([linha]);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [codigoDre, codigoUe, anoLetivo]);
 
   useEffect(() => {
     obterDados();
@@ -47,10 +55,6 @@ function PlanoAEE({ codigoDre, codigoUe, anoLetivo }) {
       dataIndex: 'quantidadePlanos',
       key: 'qtde',
       align: 'center',
-      render: value => ({
-        children: value,
-        props: { rowSpan: 1 },
-      }),
       width: 120,
     },
     {
@@ -65,12 +69,11 @@ function PlanoAEE({ codigoDre, codigoUe, anoLetivo }) {
           Situação
         </div>
       ),
-      children: mockData.planos.map(plan => ({
-        title: plan.situacao,
-        dataIndex: plan.situacao,
-        key: plan.situacao,
+      children: SITUACOES_PADRAO.map(plan => ({
+        title: plan.coluna,
+        dataIndex: plan.coluna,
+        key: plan.coluna,
         align: 'center',
-        render: quantidade => quantidade,
         width: 120,
       })),
     },
@@ -87,7 +90,6 @@ function PlanoAEE({ codigoDre, codigoUe, anoLetivo }) {
         aprendizagem de estudantes com deficiência, transtornos globais do
         desenvolvimento e altas habilidades/superdotação.
       </p>
-
       <div className="planoaee-tabela">
         <Table
           columns={columns}
