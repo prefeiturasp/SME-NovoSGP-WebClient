@@ -6,7 +6,7 @@ import { Base } from '~/componentes';
 import './tabelaFluenciaLeitoraUE.css';
 
 function TabelaFluenciaLeitoraUE({ dreCodigo, ueCodigo, anoLetivo }) {
-  const [exibirSondagemUe, setExibirSondagemUe] = useState(false);
+  const [exibirFluenciaLeitoraUe, setExibirFluenciaLeitoraUe] = useState(false);
   const [dados, setDados] = useState([]);
   const [loading, setLoading] = useState(false);
   const [tipoAvaliacao, setTipoAvaliacao] = useState(1);
@@ -19,7 +19,7 @@ function TabelaFluenciaLeitoraUE({ dreCodigo, ueCodigo, anoLetivo }) {
   const key = 'fluencia-leitora-prof-coll';
 
   useEffect(() => {
-    if (exibirSondagemUe && ueCodigo && anoLetivo && tipoAvaliacao) {
+    if (exibirFluenciaLeitoraUe && ueCodigo && anoLetivo && tipoAvaliacao) {
       setLoading(true);
       ServicoFluenciaLeituraGrafico.obterFluenciaLeituraUe(
         ueCodigo,
@@ -38,7 +38,7 @@ function TabelaFluenciaLeitoraUE({ dreCodigo, ueCodigo, anoLetivo }) {
         .catch(() => setDados([]))
         .finally(() => setLoading(false));
     }
-  }, [exibirSondagemUe, ueCodigo, anoLetivo, tipoAvaliacao]);
+  }, [exibirFluenciaLeitoraUe, ueCodigo, anoLetivo, tipoAvaliacao]);
 
   const columns = [
     {
@@ -137,13 +137,13 @@ function TabelaFluenciaLeitoraUE({ dreCodigo, ueCodigo, anoLetivo }) {
     <>
       <CardCollapse
         titulo="Fluência Leitora"
-        show={exibirSondagemUe}
-        onClick={() => setExibirSondagemUe(!exibirSondagemUe)}
+        show={exibirFluenciaLeitoraUe}
+        onClick={() => setExibirFluenciaLeitoraUe(!exibirFluenciaLeitoraUe)}
         configCabecalho={configCabecalho}
         key={`${key}-collapse-key`}
         indice={`${key}-collapse-indice`}
       >
-        {exibirSondagemUe && (
+        {exibirFluenciaLeitoraUe && (
           <>
             <div className="fluencia-leitora-header">
               <p className="fluencia-leitora-desc">
