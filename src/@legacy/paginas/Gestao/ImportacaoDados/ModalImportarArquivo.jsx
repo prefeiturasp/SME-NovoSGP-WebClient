@@ -135,6 +135,8 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         headers: { 'Content-Type': 'multipart/form-data' },
       };
 
+      fmData.append('anoLetivo', encodeURIComponent(anoNum));
+
       if (isBoletim) {
         arquivoSelecionado.forEach((file) => {
           fmData.append('boletins', file);
@@ -168,7 +170,6 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         if (isBoletim) {
           url += `?ano=${encodeURIComponent(anoNum)}`;
         }
-        fmData.append('anoLetivo', encodeURIComponent(anoNum));
       } else {
         alert('Seleção inválida.');
         return;
