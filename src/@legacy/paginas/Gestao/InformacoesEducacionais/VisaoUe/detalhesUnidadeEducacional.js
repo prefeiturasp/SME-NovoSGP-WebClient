@@ -13,6 +13,7 @@ import GraficoAlfabetizacao from '../VisaoSmeDre/componentes/GraficoAnaliseDeAlf
 import GraficoFrequenciaSemanalCollapse from './componentes/GraficoFrequenciaSemanal/GraficoFrequenciaSemanalCollapse';
 import PainelFrequenciaUe from './componentes/PainelFrequenciaUe/painelFrequenciaUe';
 import PlanoAEEUe from './componentes/PlanoAEEUE/PlanoAEEUe';
+import FluenciaLeitoraUe from './componentes/FluenciaLeitoraUE/tabelaFluenciaLeitoraUE';
 
 export default function DetalhesUnidadeEducacional({
   anoLetivo,
@@ -136,6 +137,18 @@ export default function DetalhesUnidadeEducacional({
                   dreCodigo={dreCodigo}
                 />
               ) : null}
+            </Col>
+          </Row>
+        </div>
+
+        <div className="col-md-12 mb-32">
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <FluenciaLeitoraUe
+                anoLetivo={anoLetivo}
+                ueCodigo={ueCodigo}
+                dreCodigo={dreCodigo}
+              />
             </Col>
           </Row>
         </div>
