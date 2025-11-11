@@ -35,7 +35,7 @@ class ServicoNotas {
     params.append('codigoUe', codigoUe);
     params.append('modalidade', modalidade);
     params.append('NumeroPagina', pagina);
-    params.append('NumeroRegistros', numeroRegistros); // 👈 novo parâmetro
+    params.append('NumeroRegistros', numeroRegistros);
 
     const url = `v1/painel-educacional/notas-ue?${params.toString()}`;
     return api.get(url);
