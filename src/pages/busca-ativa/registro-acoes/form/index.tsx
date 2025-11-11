@@ -307,7 +307,6 @@ const BuscaAtivaRegistroAcoesForm: React.FC<BuscaAtivaRegistroAcoesFormProps> = 
                 />
               </Col>
 
-
               <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
                 <Button
                   color="primary"
