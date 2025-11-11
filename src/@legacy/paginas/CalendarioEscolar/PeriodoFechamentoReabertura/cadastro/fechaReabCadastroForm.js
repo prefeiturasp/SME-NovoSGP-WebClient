@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import * as Yup from 'yup';
-import { CampoData, momentSchema } from '~/componentes';
+import { CampoData, momentSchema, SelectAutocomplete } from '~/componentes';
 import Auditoria from '~/componentes/auditoria';
 import CampoTexto from '~/componentes/campoTexto';
 import { OPCAO_TODOS } from '~/constantes';
@@ -54,6 +54,19 @@ const FechaReabCadastroForm = () => {
   const navigate = useNavigate();
   const paramsRota = useParams();
   const paramsLocation = useLocation();
+  const [valorAplicacao, setValorAplicacao] = useState('');
+  const [exibirCampoAplicacao, setExibirCampoAplicacao] = useState(false);
+  const [desabilitarCampoAplicacao, setDesabilitarCampoAplicacao] =
+    useState(false);
+
+  const perfilSelecionado = useSelector(
+    store => store.perfil.perfilSelecionado.nomePerfil
+  );
+
+  const opcoesAplicacao = [
+    { id: 1, descricao: 'SGP' },
+    { id: 3, descricao: 'Sondagem (Digitação)' },
+  ];
 
   setBreadcrumbManual(
     paramsLocation?.pathname,
@@ -131,6 +144,7 @@ const FechaReabCadastroForm = () => {
       dataFim: moment(dados.dataFim),
       descricao: dados.descricao,
       bimestres: dados.bimestres.map(item => String(item)),
+      aplicacao: dados.aplicacao,
     };
 
     setValoresIniciais(valoresAtuais);
@@ -181,6 +195,18 @@ const FechaReabCadastroForm = () => {
       );
       if (calendarioAtual) {
         setCalendarioSelecionado(calendarioAtual);
+        setValorAplicacao(retorno.data.aplicacao);
+        if (calendarioAtual.modalidade === 1) setExibirCampoAplicacao(true);
+
+        if (
+          perfilSelecionado !== 'Adm COTIC' &&
+          perfilSelecionado !== 'Adm SME/COPED'
+        ) {
+          setDesabilitarCampoAplicacao(true);
+          setValorAplicacao(1);
+        } else {
+          setDesabilitarCampoAplicacao(false);
+        }
       }
 
       montarDataHoraUsuarioAprovador(retorno.data);
@@ -240,6 +266,13 @@ const FechaReabCadastroForm = () => {
     return valoresForm.bimestres;
   };
 
+  const obterIdPorDescricao = descricaoSelecionada => {
+    const opcao = opcoesAplicacao.find(
+      item => item.descricao === descricaoSelecionada
+    );
+    return opcao ? opcao.id : null;
+  };
+
   const onClickCadastrar = async valoresForm => {
     const bimestres = obterBimestresSalvar(valoresForm);
 
@@ -254,6 +287,7 @@ const FechaReabCadastroForm = () => {
       inicio: dataInicio,
       tipoCalendarioId: calendarioSelecionado?.id,
       id: paramsRota?.id,
+      // aplicacao: valorAplicacao,
     };
 
     setExibirLoaderReabertura(true);
@@ -298,6 +332,16 @@ const FechaReabCadastroForm = () => {
     obterTiposCalendarios();
   }, [obterTiposCalendarios]);
 
+  const tratarSelecaoCalendario = calendario => {
+    setCalendarioSelecionado(calendario);
+
+    if (calendario && calendario.modalidade === 1) {
+      setExibirCampoAplicacao(true);
+    } else {
+      setExibirCampoAplicacao(false);
+    }
+  };
+
   return (
     <>
       {valoresIniciais ? (
@@ -315,17 +359,49 @@ const FechaReabCadastroForm = () => {
               <Form>
                 <Col span={24}>
                   <Row gutter={[16, 16]}>
-                    <Col span={24}>
-                      <Col sm={24} md={12} xl={8} style={{ paddingLeft: 0 }}>
-                        <TipoCalendarioReabertura
-                          form={form}
-                          onChangeCampos={() => {
+                    <Col sm={24} md={12} xl={8}>
+                      <TipoCalendarioReabertura
+                        form={form}
+                        onChangeCampos={() => {
+                          onChangeCampos();
+                        }}
+                        obterTiposCalendarios={obterTiposCalendarios}
+                        onSelectCalendario={tratarSelecaoCalendario}
+                      />
+                    </Col>
+
+                    {/* {exibirCampoAplicacao && (
+                      <Col sm={24} md={12} xl={8}>
+                        <SelectAutocomplete
+                          showList
+                          placeholder="Selecione a aplicação"
+                          name="aplicacao"
+                          id="aplicacao"
+                          lista={opcoesAplicacao}
+                          valueField="descricao"
+                          textField="descricao"
+                          onSelect={descricao => {
+                            const id = obterIdPorDescricao(descricao);
+                            setValorAplicacao(id);
+                          }}
+                          onChange={descricao => {
+                            const id = obterIdPorDescricao(descricao);
+                            setValorAplicacao(id);
                             onChangeCampos();
                           }}
-                          obterTiposCalendarios={obterTiposCalendarios}
+                          value={
+                            opcoesAplicacao.find(
+                              item => item.id === valorAplicacao
+                            )?.descricao || ''
+                          }
+                          label="Aplicação"
+                          labelRequired
+                          temErro={!valorAplicacao}
+                          mensagemErro="Campo obrigatório"
+                          disabled={desabilitarCampoAplicacao}
                         />
                       </Col>
-                    </Col>
+                    )} */}
 
                     <Col md={24} xl={12}>
                       <DreReabertura

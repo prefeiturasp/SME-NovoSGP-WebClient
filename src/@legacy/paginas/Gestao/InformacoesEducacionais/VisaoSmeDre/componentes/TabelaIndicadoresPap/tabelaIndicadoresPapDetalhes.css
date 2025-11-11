@@ -1,0 +1,16 @@
+.customTable .ant-table-thead > tr > th {
+   padding: 6px 10px !important; 
+  line-height: 1.2 !important;  
+  font-weight: 600;
+  background-color: #f5f7fb;    
+}
+
+.coluna-dificuldade {
+  background-color: #F4F4F7 !important;
+  font-weight: 500;
+}
+
+.geral {
+  background-color: #E7E8FA !important;
+  font-weight: 500;
+}
