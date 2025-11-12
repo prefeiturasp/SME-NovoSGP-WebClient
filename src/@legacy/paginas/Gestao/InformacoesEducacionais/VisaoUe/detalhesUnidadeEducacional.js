@@ -14,7 +14,7 @@ import GraficoFrequenciaSemanalCollapse from './componentes/GraficoFrequenciaSem
 import PainelFrequenciaUe from './componentes/PainelFrequenciaUe/painelFrequenciaUe';
 import PlanoAEEUe from './componentes/PlanoAEEUE/PlanoAEEUe';
 import FluenciaLeitoraUe from './componentes/FluenciaLeitoraUE/tabelaFluenciaLeitoraUE';
-
+import EstudantesTempoIntegralUe from './componentes/EstudantesTempoIntegralUe/EstudantesTempoIntegralUe';
 export default function DetalhesUnidadeEducacional({
   anoLetivo,
   ueCodigo,
@@ -145,6 +145,18 @@ export default function DetalhesUnidadeEducacional({
           <Row gutter={[16, 16]}>
             <Col span={24}>
               <FluenciaLeitoraUe
+                anoLetivo={anoLetivo}
+                ueCodigo={ueCodigo}
+                dreCodigo={dreCodigo}
+              />
+            </Col>
+          </Row>
+        </div>
+
+        <div className="col-md-12 mb-32">
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <EstudantesTempoIntegralUe
                 anoLetivo={anoLetivo}
                 ueCodigo={ueCodigo}
                 dreCodigo={dreCodigo}

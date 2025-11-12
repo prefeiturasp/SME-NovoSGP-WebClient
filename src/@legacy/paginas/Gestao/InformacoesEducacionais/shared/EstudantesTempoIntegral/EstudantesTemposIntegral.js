@@ -1,124 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Table } from 'antd';
 import PropTypes from 'prop-types';
-import './EstudantesTemposIntegral.css'; // Ajuste o nome para o css novo
+import './EstudantesTemposIntegral.css';
+import ServicoEstudantesTempoIntegral from '~/servicos/InformacoesEducacionais/ServicoEstudantesTempoIntegral';
 
-// Vai usar dados reais, mas pode ser mock para exemplo:
-const mockApiData = [
-  {
-    modalidade: 'Educação Infantil',
-    indicadores: [
-      {
-        anoSerieEtapa: 'Creche (0 a 3 anos)',
-        quantidadeAlunosIntegral: 389216,
-        quantidadeAlunosParcial: 9619,
-      },
-      {
-        anoSerieEtapa: 'Pré-Escola (4 e 5 anos)',
-        quantidadeAlunosIntegral: 124771,
-        quantidadeAlunosParcial: 295725,
-      },
-    ],
-  },
-  {
-    modalidade: 'Ensino Fundamental',
-    indicadores: [
-      {
-        anoSerieEtapa: '1º',
-        quantidadeAlunosIntegral: 40371,
-        quantidadeAlunosParcial: 29796,
-      },
-      {
-        anoSerieEtapa: '2º',
-        quantidadeAlunosIntegral: 11268,
-        quantidadeAlunosParcial: 52215,
-      },
-      {
-        anoSerieEtapa: '3º',
-        quantidadeAlunosIntegral: 10237,
-        quantidadeAlunosParcial: 56985,
-      },
-      {
-        anoSerieEtapa: '4º',
-        quantidadeAlunosIntegral: 2579,
-        quantidadeAlunosParcial: 62844,
-      },
-      {
-        anoSerieEtapa: '5º',
-        quantidadeAlunosIntegral: 2022,
-        quantidadeAlunosParcial: 60599,
-      },
-      {
-        anoSerieEtapa: '6º',
-        quantidadeAlunosIntegral: 1587,
-        quantidadeAlunosParcial: 54425,
-      },
-      {
-        anoSerieEtapa: '7º',
-        quantidadeAlunosIntegral: 1422,
-        quantidadeAlunosParcial: 55173,
-      },
-      {
-        anoSerieEtapa: '8º',
-        quantidadeAlunosIntegral: 1507,
-        quantidadeAlunosParcial: 60305,
-      },
-      {
-        anoSerieEtapa: '9º',
-        quantidadeAlunosIntegral: 1442,
-        quantidadeAlunosParcial: 59349,
-      },
-    ],
-  },
-  {
-    modalidade: 'Ensino Médio',
-    indicadores: [
-      {
-        anoSerieEtapa: '1º',
-        quantidadeAlunosIntegral: 746,
-        quantidadeAlunosParcial: 1292,
-      },
-      {
-        anoSerieEtapa: '2º',
-        quantidadeAlunosIntegral: 310,
-        quantidadeAlunosParcial: 3143,
-      },
-      {
-        anoSerieEtapa: '3º',
-        quantidadeAlunosIntegral: 241,
-        quantidadeAlunosParcial: 3000,
-      },
-      {
-        anoSerieEtapa: '4º',
-        quantidadeAlunosIntegral: 0,
-        quantidadeAlunosParcial: 23,
-      },
-    ],
-  },
-];
-
-// Função para formatar milhares
 function formataNumero(valor) {
   if (typeof valor !== 'number') return valor;
   return valor.toLocaleString('pt-BR');
 }
 
-// Gera as linhas da tabela agrupadas conforme print, usando diretamente o JSON da API
 function montarRows(data) {
   const rows = [];
   data.forEach(grupo => {
-    // Cabeçalho do grupo (exibe a modalidade)
     rows.push({
       key: `mod-${grupo.modalidade}`,
       tipo: 'header',
       modalidade: grupo.modalidade,
     });
-    // Header 1 para Matrículas (agrupa colunas Integral e Parcial)
     rows.push({
       key: `mod-${grupo.modalidade}-matriculas`,
       tipo: 'matriculas',
     });
-    // Subheader dinâmica (Etapa/Ano + Integral/Parcial)
     rows.push({
       key: `mod-${grupo.modalidade}-subhdr`,
       tipo: 'subheader',
@@ -126,7 +28,6 @@ function montarRows(data) {
       integral: 'Integral',
       parcial: 'Parcial',
     });
-    // Linhas dos indicadores
     grupo.indicadores.forEach((item, idx) => {
       rows.push({
         key: `mod-${grupo.modalidade}-${idx}-${item.anoSerieEtapa}`,
@@ -238,11 +139,30 @@ const columns = [
   },
 ];
 
-function EstudantesIntegral({ dadosApi }) {
+function EstudantesIntegral({ codigoDre, codigoUe, anoLetivo }) {
   const [dados, setDados] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const obterDados = useCallback(async () => {
+    setLoading(true);
+    try {
+      const resposta =
+        await ServicoEstudantesTempoIntegral.ObterDadosEstudantesTempoIntegralSmeDreUe(
+          codigoDre,
+          codigoUe,
+          anoLetivo
+        );
+      setDados(montarRows(resposta.data));
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  }, [codigoDre, codigoUe, anoLetivo]);
+
   useEffect(() => {
-    setDados(montarRows(dadosApi || mockApiData));
-  }, [dadosApi]);
+    obterDados();
+  }, [obterDados]);
+
   return (
     <>
       <h5 className="tabela-estudantes-integral-title">
@@ -258,6 +178,7 @@ function EstudantesIntegral({ dadosApi }) {
           dataSource={dados}
           pagination={false}
           bordered
+          loading={loading}
           showHeader={false}
           locale={{ emptyText: 'Sem dados' }}
           rowKey={record => record.key}
