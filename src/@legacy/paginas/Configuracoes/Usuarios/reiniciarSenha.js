@@ -179,7 +179,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
       return;
     }
 
-    if (resetPagina) setPagina(1);
+    
     setCarregando(true);
 
     try {
@@ -199,7 +199,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
         const queryParams = new URLSearchParams({
           ...(rf && { rf }),
           ...(nome && { nome }),
-          pagina: pagina.toString(),
+          pagina: resetPagina ? '1' : pagina.toString(),
           registrosPorPagina: quantidadeRegistrosPorPagina.toString(),
         });
 
@@ -233,10 +233,12 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
       }
 
       setListaUsuario(lista);
+
     } catch (error) {
       console.error('Erro ao buscar usuários:', error);
       setListaUsuario([]);
     } finally {
+      if (resetPagina) setPagina(1);
       setCarregando(false);
     }
   };
