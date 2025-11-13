@@ -17,6 +17,7 @@ import DistorcaoIdadeSerie from '../shared/DistorcaoIdadeSerie/DistorcaoIdadeSer
 import PainelFrequenciaDre from './componentes/PainelFrequenciaDre/painelFrequenciaDre';
 import PlanoAEE from '../shared/PlanoAEE/PlanoAEE';
 import EstudantesIntegral from '../shared/EstudantesTempoIntegral/EstudantesTemposIntegral';
+import TabelaAprovacaoSmeDre from './componentes/Aprovacao/tabelaAprovacaoSmeDre';
 export default function InformacoesEducacionais({
   anoLetivo,
   dreCodigo,
@@ -199,6 +200,16 @@ export default function InformacoesEducacionais({
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <EstudantesIntegral
+                codigoDre={dreCodigo}
+                codigoUe={ueCodigo}
+                anoLetivo={anoLetivo}
+              />
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <TabelaAprovacaoSmeDre
                 codigoDre={dreCodigo}
                 codigoUe={ueCodigo}
                 anoLetivo={anoLetivo}
