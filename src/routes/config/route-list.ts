@@ -129,7 +129,9 @@ import ResumosGraficosPAP from '~/paginas/Relatorios/PAP/ResumosGraficos';
 import RelatorioParecerConclusivo from '~/paginas/Relatorios/ParecerConclusivo/relatorioParecerConclusivo';
 import RelatorioPendencias from '~/paginas/Relatorios/Pendencias/relatorioPendencias';
 import RelatorioDevolutivas from '~/paginas/Relatorios/Planejamento/Devolutivas/relatorioDevolutivas';
-import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/relatorioSondagem';
+import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/Analitico/relatorioSondagemAnalitico';
+import RelatorioSondagemConsolidado from '~/paginas/Relatorios/Sondagem/Consolidado/relatorioSondagemConsolidado';
+import RelatorioSondagemPorTurma from '~/paginas/Relatorios/Sondagem/PorTurma/relatorioSondagemPorTurma';
 import SemPermissao from '~/paginas/SemPermissao/sem-permissao';
 import Sondagem from '~/paginas/Sondagem/sondagem';
 import { setRotas } from '~/redux/modulos/navegacao/actions';
@@ -1636,6 +1638,28 @@ route.set(ROUTES.RELATORIO_ENCAMINHAMENTO_NAAPA, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_ENCAMINHAMENTO_NAAPA,
+});
+
+route.set(ROUTES.RELATORIO_SONDAGEM_POR_TURMA, {
+  breadcrumbName: 'Por turma',
+  menu: ['Relatórios', 'Sondagem'],
+  parent: '/',
+  component: RelatorioSondagemPorTurma,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true, // trocar para false para desenvolver
+  chavePermissao: ROUTES.RELATORIO_SONDAGEM_POR_TURMA,
+});
+
+route.set(ROUTES.RELATORIO_SONDAGEM_CONSOLIDADO, {
+  breadcrumbName: 'Consolidado',
+  menu: ['Relatórios', 'Sondagem'],
+  parent: '/',
+  component: RelatorioSondagemConsolidado,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true, // trocar para false para desenvolver
+  chavePermissao: ROUTES.RELATORIO_SONDAGEM_CONSOLIDADO,
 });
 
 route.set(ROUTES.RELATORIO_SONDAGEM_ANALITICO, {
