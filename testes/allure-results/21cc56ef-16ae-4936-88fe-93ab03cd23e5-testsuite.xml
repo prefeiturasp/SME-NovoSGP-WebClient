@@ -1,0 +1,199 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394383605' stop='1754394399942'>
+    <name>API - Aula prevista</name>
+    <title>API - Aula prevista</title>
+    <test-cases>
+        <test-case start='1754394383623' status='passed' stop='1754394392926'>
+            <name>Retornar aulas prevista por bimestre</name>
+            <title>Retornar aulas prevista por bimestre</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394392968' status='passed' stop='1754394393053'>
+            <name>Modalidade deve ser obrigatória</name>
+            <title>Modalidade deve ser obrigatória</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394393061' status='passed' stop='1754394393143'>
+            <name>Não retornar aula com modalidade inválida</name>
+            <title>Não retornar aula com modalidade inválida</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394393151' status='passed' stop='1754394393211'>
+            <name>Turma deve ser obrigatória</name>
+            <title>Turma deve ser obrigatória</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394393220' status='passed' stop='1754394393322'>
+            <name>Não retornar aula com turma inválida</name>
+            <title>Não retornar aula com turma inválida</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394393333' status='passed' stop='1754394393398'>
+            <name>Disciplina deve ser obrigatória</name>
+            <title>Disciplina deve ser obrigatória</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394393406' status='passed' stop='1754394393487'>
+            <name>Semestre deve ser obrigatório</name>
+            <title>Semestre deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394393493' status='passed' stop='1754394393553'>
+            <name>Não retornar aula no bimestre quando estiver deslogado</name>
+            <title>Não retornar aula no bimestre quando estiver deslogado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394393560' status='passed' stop='1754394395268'>
+            <name>Retornar aulas prevista através do ID</name>
+            <title>Retornar aulas prevista através do ID</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394395298' status='passed' stop='1754394395359'>
+            <name>Não retornar aula prevista quando estiver deslogado</name>
+            <title>Não retornar aula prevista quando estiver deslogado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394395367' status='passed' stop='1754394395420'>
+            <name>ID da aulas prevista deve ser obrigatório</name>
+            <title>ID da aulas prevista deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394395427' status='passed' stop='1754394396937'>
+            <name>Alterar aulas prevista através do ID</name>
+            <title>Alterar aulas prevista através do ID</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394396960' status='passed' stop='1754394397019'>
+            <name>Não alterar aulas prevista sem o ID</name>
+            <title>Não alterar aulas prevista sem o ID</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394397026' status='passed' stop='1754394397085'>
+            <name>Corpo da requisição não poderá estar vazio</name>
+            <title>Corpo da requisição não poderá estar vazio</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394397091' status='passed' stop='1754394397153'>
+            <name>Não alterar aula prevista quando estiver deslogado</name>
+            <title>Não alterar aula prevista quando estiver deslogado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394397160' status='passed' stop='1754394397221'>
+            <name>Componente curricular deve ser informado</name>
+            <title>Componente curricular deve ser informado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394397228' status='passed' stop='1754394397289'>
+            <name>Modalidade deve ser informada</name>
+            <title>Modalidade deve ser informada</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394397296' status='passed' stop='1754394397377'>
+            <name>Turma deve ser informada</name>
+            <title>Turma deve ser informada</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394397385' status='passed' stop='1754394399586'>
+            <name>Criar aulas prevista</name>
+            <title>Criar aulas prevista</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394399601' status='passed' stop='1754394399684'>
+            <name>Não criar aulas sem componente curricular informado</name>
+            <title>Não criar aulas sem componente curricular informado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394399692' status='passed' stop='1754394399751'>
+            <name>Não criar aulas sem modalidade informada</name>
+            <title>Não criar aulas sem modalidade informada</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394399757' status='passed' stop='1754394399816'>
+            <name>Não criar aulas sem turma informada</name>
+            <title>Não criar aulas sem turma informada</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394399822' status='passed' stop='1754394399877'>
+            <name>Corpo da requisição  para criar aula não poderá estar vazio</name>
+            <title>Corpo da requisição  para criar aula não poderá estar vazio</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394399885' status='passed' stop='1754394399942'>
+            <name>Não criar aula prevista quando estiver deslogado</name>
+            <title>Não criar aula prevista quando estiver deslogado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

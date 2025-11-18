@@ -1,0 +1,71 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394659225' stop='1754394689120'>
+    <name>Login</name>
+    <title>Login</title>
+    <test-cases>
+        <test-case start='1754394659249' status='passed' stop='1754394662158'>
+            <name>Validar login para o cenário "Usuario valido" (example #1)</name>
+            <title>Validar login para o cenário "Usuario valido" (example #1)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394662173' status='passed' stop='1754394663702'>
+            <name>Validar login para o cenário "Usuario invalido" (example #2)</name>
+            <title>Validar login para o cenário "Usuario invalido" (example #2)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394663725' status='passed' stop='1754394665496'>
+            <name>Validar login para o cenário "Senha invalida" (example #3)</name>
+            <title>Validar login para o cenário "Senha invalida" (example #3)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394665511' status='passed' stop='1754394683510'>
+            <name>Validar login para o cenário "Usuario inexistente" (example #4)</name>
+            <title>Validar login para o cenário "Usuario inexistente" (example #4)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394683530' status='passed' stop='1754394684827'>
+            <name>Validar login para o cenário "Usuario em branco" (example #5)</name>
+            <title>Validar login para o cenário "Usuario em branco" (example #5)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394684838' status='passed' stop='1754394686208'>
+            <name>Validar login para o cenário "Senha em branco" (example #6)</name>
+            <title>Validar login para o cenário "Senha em branco" (example #6)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394686221' status='passed' stop='1754394687718'>
+            <name>Validar login para o cenário "Usuario menor que 5 caracteres" (example #7)</name>
+            <title>Validar login para o cenário "Usuario menor que 5 caracteres" (example #7)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394687730' status='passed' stop='1754394689119'>
+            <name>Validar login para o cenário "Senha menor que 4 caracteres" (example #8)</name>
+            <title>Validar login para o cenário "Senha menor que 4 caracteres" (example #8)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394477163' stop='1754394477627'>
+    <name>API - Dashboard de fechamentos - Pendências</name>
+    <title>API - Dashboard de fechamentos - Pendências</title>
+    <test-cases>
+        <test-case start='1754394477163' status='passed' stop='1754394477571'>
+            <name>Carrega pendências do dashboard de fechamentos</name>
+            <title>Carrega pendências do dashboard de fechamentos</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394477584' status='passed' stop='1754394477627'>
+            <name>Não retorna pendências sem usuário autenticado</name>
+            <title>Não retorna pendências sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

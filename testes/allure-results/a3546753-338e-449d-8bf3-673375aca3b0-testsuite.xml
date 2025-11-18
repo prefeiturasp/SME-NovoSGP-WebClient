@@ -1,0 +1,103 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394692404' stop='1754394731449'>
+    <name>Perfil</name>
+    <title>Perfil</title>
+    <test-cases>
+        <test-case start='1754394692420' status='passed' stop='1754394696551'>
+            <name>Logar no SGP com perfil de "Usuario professor" (example #1)</name>
+            <title>Logar no SGP com perfil de "Usuario professor" (example #1)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394696631' status='passed' stop='1754394700233'>
+            <name>Logar no SGP com perfil de "Usuario professor de ed. infantil" (example #2)</name>
+            <title>Logar no SGP com perfil de "Usuario professor de ed. infantil" (example #2)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394700281' status='passed' stop='1754394702247'>
+            <name>Logar no SGP com perfil de "Usuario supervisor" (example #3)</name>
+            <title>Logar no SGP com perfil de "Usuario supervisor" (example #3)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394702325' status='passed' stop='1754394706364'>
+            <name>Logar no SGP com perfil de "Usuario diretor" (example #4)</name>
+            <title>Logar no SGP com perfil de "Usuario diretor" (example #4)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394706462' status='passed' stop='1754394710120'>
+            <name>Logar no SGP com perfil de "Usuario CP" (example #5)</name>
+            <title>Logar no SGP com perfil de "Usuario CP" (example #5)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394710264' status='passed' stop='1754394712562'>
+            <name>Logar no SGP com perfil de "Usuario assistente Social" (example #6)</name>
+            <title>Logar no SGP com perfil de "Usuario assistente Social" (example #6)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394712654' status='passed' stop='1754394715697'>
+            <name>Logar no SGP com perfil de "Usuario ADM UE" (example #7)</name>
+            <title>Logar no SGP com perfil de "Usuario ADM UE" (example #7)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394715740' status='passed' stop='1754394719599'>
+            <name>Logar no SGP com perfil de "Usuario AD" (example #8)</name>
+            <title>Logar no SGP com perfil de "Usuario AD" (example #8)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394719697' status='passed' stop='1754394723017'>
+            <name>Logar no SGP com perfil de "Usuario PAAI" (example #9)</name>
+            <title>Logar no SGP com perfil de "Usuario PAAI" (example #9)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394723119' status='passed' stop='1754394726440'>
+            <name>Logar no SGP com perfil de "Usuario Coordenador CEFAI" (example #10)</name>
+            <title>Logar no SGP com perfil de "Usuario Coordenador CEFAI" (example #10)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394726568' status='passed' stop='1754394728877'>
+            <name>Logar no SGP com perfil de "Usuario ADM COTIC" (example #11)</name>
+            <title>Logar no SGP com perfil de "Usuario ADM COTIC" (example #11)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394728924' status='passed' stop='1754394731446'>
+            <name>Logar no SGP com perfil de "Usuario ABAE" (example #12)</name>
+            <title>Logar no SGP com perfil de "Usuario ABAE" (example #12)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

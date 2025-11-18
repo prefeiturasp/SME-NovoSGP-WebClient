@@ -1,0 +1,55 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394456573' stop='1754394457189'>
+    <name>API - Dashboard compensações de ausência consideradas</name>
+    <title>API - Dashboard compensações de ausência consideradas</title>
+    <test-cases>
+        <test-case start='1754394456573' status='passed' stop='1754394456923'>
+            <name>Retorna dados da turma no bimestre</name>
+            <title>Retorna dados da turma no bimestre</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394456935' status='passed' stop='1754394456974'>
+            <name>Não retorna dados sem usuário autenticado</name>
+            <title>Não retorna dados sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394456984' status='passed' stop='1754394457021'>
+            <name>Ano letivo deve ser obrigatório</name>
+            <title>Ano letivo deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394457028' status='passed' stop='1754394457066'>
+            <name>DRE deve ser obrigatório</name>
+            <title>DRE deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394457073' status='passed' stop='1754394457114'>
+            <name>UE deve ser obrigatório</name>
+            <title>UE deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394457123' status='passed' stop='1754394457189'>
+            <name>Modalidade deve ser obrigatório</name>
+            <title>Modalidade deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

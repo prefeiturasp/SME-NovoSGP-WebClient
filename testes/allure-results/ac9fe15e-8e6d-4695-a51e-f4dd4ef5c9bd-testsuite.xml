@@ -1,0 +1,39 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394487540' stop='1754394488123'>
+    <name>API - Dashboard de acompanhamento aprendizagem por última consolidação</name>
+    <title>API - Dashboard de acompanhamento aprendizagem por última consolidação</title>
+    <test-cases>
+        <test-case start='1754394487540' status='passed' stop='1754394487965'>
+            <name>Retorna dashboard do ano letivo</name>
+            <title>Retorna dashboard do ano letivo</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394487970' status='passed' stop='1754394488012'>
+            <name>Não busca dashboard sem usuário autenticado</name>
+            <title>Não busca dashboard sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394488022' status='passed' stop='1754394488061'>
+            <name>Ano letivo deve ser informado</name>
+            <title>Ano letivo deve ser informado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394488069' status='passed' stop='1754394488123'>
+            <name>Ano letivo deve ser inválido</name>
+            <title>Ano letivo deve ser inválido</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

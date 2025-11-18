@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394412797' stop='1754394413419'>
+    <name>API - Listar perfis do usuário</name>
+    <title>API - Listar perfis do usuário</title>
+    <test-cases>
+        <test-case start='1754394412814' status='passed' stop='1754394413334'>
+            <name>Listar as informações de perfil após autenticação</name>
+            <title>Listar as informações de perfil após autenticação</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394413348' status='passed' stop='1754394413419'>
+            <name>Sem dados de perfis quando usuário não está autenticado</name>
+            <title>Sem dados de perfis quando usuário não está autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

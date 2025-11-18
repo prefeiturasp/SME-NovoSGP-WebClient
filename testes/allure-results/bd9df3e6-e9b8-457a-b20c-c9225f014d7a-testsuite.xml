@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394469223' stop='1754394469935'>
+    <name>API - Dashboard de fechamentos - Conselhos de classes - Pareceres conclusivos</name>
+    <title>API - Dashboard de fechamentos - Conselhos de classes - Pareceres conclusivos</title>
+    <test-cases>
+        <test-case start='1754394469223' status='passed' stop='1754394469880'>
+            <name>Carrega dashboard de fechamento do conselho de classe de pareceres conclusivos</name>
+            <title>Carrega dashboard de fechamento do conselho de classe de pareceres conclusivos</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394469889' status='passed' stop='1754394469934'>
+            <name>Não retorna pareceres conclusivos de fechamento sem usuário autenticado</name>
+            <title>Não retorna pareceres conclusivos de fechamento sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>
