@@ -1,0 +1,57 @@
+import PropTypes from 'prop-types';
+import React from 'react';
+import SelectComponent from '~/componentes/select';
+import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
+import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
+
+const CampoDinamicoComboMultiplaEscolha = props => {
+  const { questaoAtual, form, label, desabilitado, onChange, prefixId } = props;
+
+  const id = QuestionarioDinamicoFuncoes.gerarId(prefixId, questaoAtual);
+
+  const lista = questaoAtual?.opcaoResposta.map(item => {
+    return { label: item.nome, value: item.id };
+  });
+
+  return (
+    <>
+      <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
+        {label}
+        <SelectComponent
+          id={id}
+          multiple
+          form={form}
+          lista={lista}
+          valueText="label"
+          valueOption="value"
+          name={String(questaoAtual?.id)}
+          placeholder={questaoAtual?.placeHolder}
+          disabled={desabilitado || questaoAtual?.somenteLeitura}
+          onChange={valorAtualSelecionado => {
+            onChange(valorAtualSelecionado);
+          }}
+        />
+      </ColunaDimensionavel>
+    </>
+  );
+};
+
+CampoDinamicoComboMultiplaEscolha.propTypes = {
+  questaoAtual: PropTypes.oneOfType([PropTypes.any]),
+  form: PropTypes.oneOfType([PropTypes.any]),
+  label: PropTypes.oneOfType([PropTypes.any]),
+  prefixId: PropTypes.string,
+  desabilitado: PropTypes.bool,
+  onChange: PropTypes.oneOfType([PropTypes.any]),
+};
+
+CampoDinamicoComboMultiplaEscolha.defaultProps = {
+  questaoAtual: null,
+  form: null,
+  label: '',
+  prefixId: '',
+  desabilitado: false,
+  onChange: () => {},
+};
+
+export default CampoDinamicoComboMultiplaEscolha;

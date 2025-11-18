@@ -1,0 +1,61 @@
+.scroll-clean {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.scroll-clean::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-clean::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-clean::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+}
+
+.scroll-clean::-webkit-scrollbar-button {
+  display: none;
+}
+
+.grafico-ideb-container {
+  margin-bottom: 24px;
+}
+
+.grafico-ideb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 32px;
+  margin-bottom: 8px;
+}
+
+.grafico-ideb-titulo {
+  font-weight: bold;
+  margin: 0;
+}
+
+.grafico-ideb-select {
+  min-width: 200px;
+}
+
+.grafico-ideb-descricao {
+  font-size: 14px;
+  margin-bottom: 32px;
+}
+
+.grafico-ideb-tooltip {
+  padding: 8px;
+}
+
+.grafico-ideb-label {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.grafico-ideb-title-label {
+  font-size: 14px;
+  font-weight: 700;
+}

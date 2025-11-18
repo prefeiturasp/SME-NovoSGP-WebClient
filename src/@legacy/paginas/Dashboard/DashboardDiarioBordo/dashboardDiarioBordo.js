@@ -1,0 +1,45 @@
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { Cabecalho } from '~/componentes-sgp';
+import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
+import Card from '~/componentes/card';
+import { URL_HOME } from '~/constantes/url';
+import { limparDadosDashboardDiarioBordo } from '~/redux/modulos/dashboardDiarioBordo/actions';
+import GraficosDiarioBordo from './DadosDashboardDiarioBordo/graficosDiarioBordo';
+import DashboardDiarioBordoAlertaInfantil from './dashboardDiarioBordoAlertaInfantil';
+import DashboardDiarioBordoFiltros from './dashboardDiarioBordoFiltros';
+
+const DashboardDiarioBordo = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const onClickVoltar = () => navigate(URL_HOME);
+
+  useEffect(() => {
+    return () => {
+      dispatch(limparDadosDashboardDiarioBordo());
+    };
+  }, [dispatch]);
+
+  return (
+    <>
+      <DashboardDiarioBordoAlertaInfantil />
+      <Cabecalho pagina="Dashboard diário de bordo">
+        <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
+      </Cabecalho>
+      <Card>
+        <div className="col-md-12">
+          <DashboardDiarioBordoFiltros />
+          <div className="row">
+            <div className="col-md-12 mt-2">
+              <GraficosDiarioBordo />
+            </div>
+          </div>
+        </div>
+      </Card>
+    </>
+  );
+};
+
+export default DashboardDiarioBordo;

@@ -1,0 +1,11 @@
+export { default as ResumosGraficosPAPServico } from './PAP/ResumosGraficos';
+export { default as ServicoRelatorioAtribuicoes } from './Gestao/Atribuicoes/ServicoRelatorioAtribuicoes';
+export { default as ServicoAdesaoEscolaAqui } from './EscolaAqui/Adesao/ServicoAdesaoEscolaAqui';
+export { default as ServicoRegistroItineranciaAEE } from './AEE/ServicoRegistroItineranciaAEE';
+export { default as ServicoRelatorioDevolutivas } from './Planejamento/servicoRelatorioDevolutivas';
+export { default as ServicoAcompanhamentoAprendizagem } from './AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
+export { default as ServicoRelatorioFrequencia } from './Frequencia/ServicoRelatorioFrequencia';
+export { default as ServicoRelatorioAcompanhamentoFechamento } from './Fechamento/AcompanhamentoFechamento/ServicoRelatorioAcompanhamentoFechamento';
+export { default as ServicoRelatorioPendencias } from './Pendencias/ServicoRelatorioPendencias';
+export { default as ServicoRelatorioAtaBimestral } from './Atas/ServicoRelatorioAtaBimestral';
+export { default as ServicoAcompanhamentoRegistros } from './Gestao/AcompanhamentoRegistros/ServicoAcompanhamentoRegistros';

@@ -1,0 +1,171 @@
+.painel-frequencia-padding {
+  padding: 24px 16px 0 16px;
+}
+
+.painel-frequencia-titulo {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #222;
+  margin-bottom: 4px;
+  letter-spacing: 0.01em;
+}
+.painel-frequencia-descricao {
+  font-weight: 400;
+  font-size: 1rem;
+  color: #222;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.painel-frequencia-controles {
+  padding-top: 16px;
+}
+.painel-frequencia-data-row {
+  width: 100%;
+  margin-bottom: 12px;
+}
+.painel-frequencia-data-label {
+  font-weight: 700;
+  color: #222;
+  font-size: 1.15rem;
+  margin-right: 8px;
+}
+.painel-frequencia-datepicker {
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-weight: 500;
+  font-size: 1rem;
+}
+
+.btn-dia {
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-size: 1rem;
+  border: 1px solid #4b2995;
+  background: #fff;
+  color: #4b2995;
+  margin-right: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-dia-proximo {
+  background: #4b2995;
+  color: #fff;
+  border: none;
+  margin-right: 0;
+}
+.btn-dia-desabilitado {
+  background: #e0e0e0 !important;
+  color: #a0a0a0 !important;
+  cursor: not-allowed !important;
+  border: none !important;
+}
+
+.painel-frequencia-legenda {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.painel-frequencia-legenda-titulo {
+  font-weight: 500;
+  color: #222;
+  font-size: 1rem;
+  margin-right: 24px;
+  min-width: 140px;
+  flex-shrink: 0;
+}
+.painel-frequencia-legenda-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+  color: #222;
+  font-size: 1rem;
+}
+.painel-frequencia-legenda-quadrado,
+.indicacao-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: inline-block;
+}
+.painel-frequencia-legenda-alto {
+  background: #2ecc71;
+}
+.painel-frequencia-legenda-medio {
+  background: #f1c40f;
+}
+.painel-frequencia-legenda-baixo {
+  background: #e74c3c;
+}
+
+.quadrado-nivel-frequencia {
+  width: 26px;
+  height: 13px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.indicacao-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.painel-frequencia-tabela {
+  margin-top: 16px;
+  border-radius: 4px;
+  font-weight: 400;
+  font-size: 1rem;
+  overflow: hidden;
+}
+
+.ant-table.ant-table-small.ant-table-bordered {
+  border: 2px solid #d9d9d9 !important;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.painel-frequencia-tabela .ant-table-thead > tr > th:last-child,
+.painel-frequencia-tabela .ant-table-tbody > tr > td:last-child {
+  border-right: none !important;
+}
+
+.painel-frequencia-tabela .ant-table-tbody > tr:last-child > td {
+  border-bottom: none !important;
+}
+
+.painel-frequencia-tabela .ant-table,
+.painel-frequencia-tabela .ant-table-thead > tr > th,
+.painel-frequencia-tabela .ant-table-tbody > tr > td {
+  border: none !important;
+  border-bottom: 2px solid #d9d9d9 !important;
+  border-right: 2px solid #d9d9d9 !important;
+}
+
+.painel-frequencia-tabela .ant-table-thead > tr > th {
+  background: #fafafa;
+  border-bottom: 2px solid #d9d9d9 !important;
+}
+
+.painel-frequencia-tabela .ant-table {
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.painel-frequencia-tabela .ant-table-thead > tr > th:first-child {
+  border-top-left-radius: 4px;
+}
+.painel-frequencia-tabela .ant-table-thead > tr > th:last-child {
+  border-top-right-radius: 4px;
+}
+.painel-frequencia-tabela .ant-table-tbody > tr:last-child > td:first-child {
+  border-bottom-left-radius: 4px;
+}
+.painel-frequencia-tabela .ant-table-tbody > tr:last-child > td:last-child {
+  border-bottom-right-radius: 4px;
+}
