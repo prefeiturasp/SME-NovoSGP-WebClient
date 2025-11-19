@@ -101,7 +101,7 @@ function TabelaInformacoesEducacionais({ codigoDre, codigoUe, anoLetivo }) {
       dataIndex: 'percentualFrequenciaGlobal',
       key: 'frequencia',
       align: 'center',
-      width: 100,
+      width: 110,
       render: value => `${value}%`,
     },
     {
