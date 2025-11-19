@@ -93,6 +93,7 @@ import ListaOcorrencias from '~/paginas/Gestao/Ocorrencia/lista/listaOcorrencias
 import Login from '~/paginas/Login';
 import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/encaminhamentoNAAPA';
 import ListaEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Lista/listaEncaminhamentoNAAPA';
+import TabelaEncaminhamentoNAAPA from '~/paginas/NAAPA/EncaminhamentoNovo/tabelaEncaminhamentoNAAPA';
 import DetalheNotificacao from '~/paginas/Notificacoes/Detalhes/detalheNotificacao';
 import NotificacoesLista from '~/paginas/Notificacoes/Lista/listaNotificacoes';
 import MeusDados from '~/paginas/Perfil/meusDados';
@@ -1579,6 +1580,17 @@ route.set(ROUTES.ENCAMINHAMENTO_NAAPA, {
   menu: ['NAAPA'],
   parent: '/',
   component: ListaEncaminhamentoNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
+});
+
+route.set(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO, {
+  breadcrumbName: 'Encaminhamento NAAPA NOVO',
+  menu: ['NAAPA'],
+  parent: '/',
+  component: TabelaEncaminhamentoNAAPA,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
