@@ -16,6 +16,15 @@ import {
   SGP_BUTTON_SALVAR_ALTERAR,
 } from '~/constantes/ids/button';
 
+import {
+  confirmar,
+  erro,
+  erros,
+  exibirAlerta,
+  sucesso,
+} from '~/servicos/alertas';
+import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
+
 const SondagemDigitacao = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -25,11 +34,13 @@ const SondagemDigitacao = () => {
 
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
+  const [listaProficiencia, setListaProficiencia] = useState([]);
   const [modoEdicao, setModoEdicao] = useState(false);
   const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] = useState();
+  const [proficienciaIdSelecionada, setProficienciaIdSelecionada] = useState();
   const [dadoslista, setDadosLista] = useState([]);
   const [auditoria, setAuditoria] = useState(undefined);
-  const permissoesTela = usuario.permissoes[ROUTES.SondagemDigitacao]; 
+  const permissoesTela = usuario.permissoes[ROUTES.SondagemDigitacao];
   const [somenteConsulta, setSomenteConsulta] = useState(false); // Verificar se realmente vai ser usado.
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -37,15 +48,15 @@ const SondagemDigitacao = () => {
     store => store.filtro.modalidades
   );
 
-//   useEffect(() => {
-//     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
-//       modalidadesFiltroPrincipal,
-//       turmaSelecionada
-//     );
-//     setSomenteConsulta(
-//       verificaSomenteConsulta(permissoesTela, naoSetarSomenteConsultaNoStore)
-//     );
-//   }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
+  //   useEffect(() => {
+  //     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
+  //       modalidadesFiltroPrincipal,
+  //       turmaSelecionada
+  //     );
+  //     setSomenteConsulta(
+  //       verificaSomenteConsulta(permissoesTela, naoSetarSomenteConsultaNoStore)
+  //     );
+  //   }, [turmaSelecionada, permissoesTela, modalidadesFiltroPrincipal]);
 
   const perguntaAoSalvar = async () => {
     return confirmar(
@@ -53,6 +64,11 @@ const SondagemDigitacao = () => {
       '',
       'Suas alterações não foram salvas, deseja salvar agora?'
     );
+  };
+
+  const resetarTela = (novosDados = null) => {
+    // setModoEdicao(false);
+    // buscarDados(disciplinaIdSelecionada, novosDados);
   };
 
   const onClickCancelar = async () => {
@@ -82,12 +98,38 @@ const SondagemDigitacao = () => {
 
     if (disciplinaId) {
       setDisciplinaIdSelecionada(String(disciplinaId));
-      await buscarDados(disciplinaId);
+      const listaProeficiencia = MockProficiencia();
+      setListaProficiencia(listaProeficiencia.data);
+
+      // await buscarDados(disciplinaId);
     } else {
-      setDadosLista([]);
-      setAuditoria(undefined);
+      // setDadosLista([]);
+      // setAuditoria(undefined);
       setDisciplinaIdSelecionada(undefined);
     }
+  };
+
+  const onChangeProficiencia = async proficienciaId => {
+    if (proficienciaId) {
+      setProficienciaIdSelecionada(String(proficienciaId));
+      // Carrega o proximo campo caso ele exista
+    } else {
+      // setDadosLista([]);
+      // setAuditoria(undefined);
+      setProficienciaIdSelecionada(undefined);
+    }
+  };
+
+  const onClickVoltar = async () => {
+    // if (modoEdicao) {
+    //   const confirmado = await perguntaAoSalvar();
+    //   if (confirmado) {
+    //     await salvar();
+    //     navigate(URL_HOME);
+    //   }
+    // } else {
+    //   navigate(URL_HOME);
+    // }
   };
 
   const buscarDados = async (disciplinaId, novosDados) => {
@@ -155,6 +197,42 @@ const SondagemDigitacao = () => {
     // setExibirLoader(false);
   };
 
+  useEffect(() => {
+    const obterDisciplinas = async () => {
+      // const disciplinas = await ServicoDisciplina.obterDisciplinasPorTurma(
+      //   turmaId
+      // );
+      // Mockado enquanto o serviço não está pronto
+      const disciplinas = MockDisciplina();
+
+      setListaDisciplinas(disciplinas.data);
+      if (disciplinas?.data?.length === 1) {
+        const disciplina = disciplinas.data[0];
+        onChangeDisciplinas(disciplina.id);
+        setDesabilitarDisciplina(true);
+      } else if (disciplinas?.data?.length > 1) {
+        setDadosLista([]);
+        setModoEdicao(false);
+        setDisciplinaIdSelecionada(undefined);
+        setListaDisciplinas(disciplinas.data);
+        setDesabilitarDisciplina(false);
+        setAuditoria(undefined);
+      }
+    };
+
+    if (
+      turmaId &&
+      !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)
+    ) {
+      obterDisciplinas();
+    } else {
+      setDadosLista([]);
+      setModoEdicao(false);
+      setDisciplinaIdSelecionada(undefined);
+      setListaDisciplinas([]);
+    }
+  }, [turmaSelecionada, modalidade, modalidadesFiltroPrincipal]);
+
   return (
     <Loader loading={exibirLoader} tip="Carregando...">
       {!turmaSelecionada.turma &&
@@ -199,6 +277,7 @@ const SondagemDigitacao = () => {
         <div className="col-md-12">
           <div className="row">
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
+              <label>Componente Curricular</label>
               <SelectComponent
                 id="disciplina"
                 name="disciplinaId"
@@ -208,20 +287,21 @@ const SondagemDigitacao = () => {
                 valueSelect={disciplinaIdSelecionada}
                 onChange={onChangeDisciplinas}
                 placeholder="Selecione um componente curricular"
-                // disabled={desabilitarDisciplina || !turmaSelecionada.turma}
+                disabled={desabilitarDisciplina || !turmaSelecionada.turma}
               />
             </div>
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
+              <label>Proficiência</label>
               <SelectComponent
                 id="Proficiencia"
                 name="Proficiencia"
-                lista={listaDisciplinas}
+                lista={listaProficiencia}
                 valueOption="id"
                 valueText="nome"
-                valueSelect={disciplinaIdSelecionada}
-                onChange={onChangeDisciplinas}
+                valueSelect={proficienciaIdSelecionada}
+                onChange={onChangeProficiencia}
                 placeholder="Selecione uma Proficiência"
-                // disabled={desabilitarDisciplina || !turmaSelecionada.turma}
+                disabled={desabilitarDisciplina || !turmaSelecionada.turma}
               />
             </div>
           </div>
@@ -232,3 +312,22 @@ const SondagemDigitacao = () => {
 };
 
 export default SondagemDigitacao;
+
+const MockDisciplina = () => {
+  const disciplina = {
+    data: [
+      { id: 1, nome: 'Língua Portuguesa' },
+      { id: 2, nome: 'Matemática' },
+    ],
+  };
+
+  return disciplina;
+};
+
+const MockProficiencia = () => {
+  const proficiencia = {
+    data: [{ id: 1, nome: 'Escrita' }],
+  };
+
+  return proficiencia;
+};
