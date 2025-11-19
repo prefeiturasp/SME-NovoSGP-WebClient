@@ -54,7 +54,7 @@ export enum ROUTES {
   CONTROLE_GRADE = '/relatorios/diario-classe/controle-grade',
   RELATORIO_PLANEJAMENTO_DIARIO = '/relatorios/diario-classe/planejamento-diario',
   SONDAGEM = '/sondagem',
-  SONDAGEM_DIGITACAO = '/sondagem/digitacao',
+  SONDAGEM_NOVO = '/sondagem/novo',
   HISTORICO_NOTIFICACOES = '/relatorios/notificacoes/historico-notificacoes',
   DOCUMENTOS_PLANOS_TRABALHO = '/gestao/documentos-planos-trabalho',
   RELATORIO_USUARIOS = '/relatorios/gestao/usuarios',

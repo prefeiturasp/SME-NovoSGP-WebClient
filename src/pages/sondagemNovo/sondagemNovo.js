@@ -25,7 +25,7 @@ import {
 } from '~/servicos/alertas';
 import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 
-const SondagemDigitacao = () => {
+const SondagemNovo = () => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
   const turmaId = turmaSelecionada ? turmaSelecionada.turma : 0;
@@ -311,7 +311,7 @@ const SondagemDigitacao = () => {
   );
 };
 
-export default SondagemDigitacao;
+export default SondagemNovo;
 
 const MockDisciplina = () => {
   const disciplina = {
