@@ -1,0 +1,200 @@
+{
+    "questao": "escrita",
+    "estudantes": [
+        {
+            "lp": true,
+            "numero": 1,
+            "nome": "João Silva",            
+            "pap": true,
+            "aee":true,
+            "acessibilidade": true,            
+            "coluna": [
+                { 
+                    "descricaoColuna": "Bimestre 0",
+                    "PeriodoBimestreAtivo": true,
+                    "opcaoResposta": [
+                        {
+                            "id": 1,
+                            "orden": 1,
+                            "descricaoOpcao": "PS"
+                        },
+                        {
+                            "id": 2,
+                            "orden": 2,
+                            "descricaoOpcao": "SSV"
+                        },
+                        {
+                            "id": 3,
+                            "orden": 3,
+                            "descricaoOpcao": "SCV"
+                        },
+                        {
+                            "id": 4,
+                            "orden": 4,
+                            "descricaoOpcao": "SA"
+                        },
+                        {
+                            "id": 5,
+                            "orden": 5,
+                            "descricaoOpcao": "A"
+                        }
+                    ],
+                    "resposta":[
+                        {
+                            "id":1,
+                            "opcaoRespostaId":2
+                        }
+                    ]
+                },
+                { 
+                    "descricaoColuna": "1° Bimestre",
+                    "PeriodoBimestreAtivo": false,
+                    "opcaoResposta": [
+                        {
+                            "id": 1,
+                            "orden": 1,
+                            "descricaoOpcao": "PS"
+                        },
+                        {
+                            "id": 2,
+                            "orden": 2,
+                            "descricaoOpcao": "SSV"
+                        },
+                        {
+                            "id": 3,
+                            "orden": 3,
+                            "descricaoOpcao": "SCV"
+                        },
+                        {
+                            "id": 4,
+                            "orden": 4,
+                            "descricaoOpcao": "SA"
+                        },
+                        {
+                            "id": 5,
+                            "orden": 5,
+                            "descricaoOpcao": "A"
+                        }
+                    ],
+                    "resposta":[
+                        {
+                            "id":2,
+                            "opcaoRespostaId":3
+                        }
+                    ]
+                },
+                { 
+                    "descricaoColuna": "2° Bimestre",
+                    "PeriodoBimestreAtivo": false,
+                    "opcaoResposta": [
+                        {
+                            "id": 1,
+                            "orden": 1,
+                            "descricaoOpcao": "PS"
+                        },
+                        {
+                            "id": 2,
+                            "orden": 2,
+                            "descricaoOpcao": "SSV"
+                        },
+                        {
+                            "id": 3,
+                            "orden": 3,
+                            "descricaoOpcao": "SCV"
+                        },
+                        {
+                            "id": 4,
+                            "orden": 4,
+                            "descricaoOpcao": "SA"
+                        },
+                        {
+                            "id": 5,
+                            "orden": 5,
+                            "descricaoOpcao": "A"
+                        }
+                    ],
+                    "resposta":[
+                        {
+                            "id":3,
+                            "opcaoRespostaId":4
+                        }
+                    ]
+                },
+                { 
+                    "descricaoColuna": "3° Bimestre",
+                    "PeriodoBimestreAtivo": false,
+                    "opcaoResposta": [
+                        {
+                            "id": 1,
+                            "orden": 1,
+                            "descricaoOpcao": "PS"
+                        },
+                        {
+                            "id": 2,
+                            "orden": 2,
+                            "descricaoOpcao": "SSV"
+                        },
+                        {
+                            "id": 3,
+                            "orden": 3,
+                            "descricaoOpcao": "SCV"
+                        },
+                        {
+                            "id": 4,
+                            "orden": 4,
+                            "descricaoOpcao": "SA"
+                        },
+                        {
+                            "id": 5,
+                            "orden": 5,
+                            "descricaoOpcao": "A"
+                        }
+                    ],
+                    "resposta":[
+                        {
+                            "id":3,
+                            "opcaoRespostaId":5
+                        }
+                    ]
+                },
+                {
+                    "descricaoColuna": "4° Bimestre",
+                    "PeriodoBimestreAtivo": false,
+                    "opcaoResposta": [
+                        {
+                            "id": 1,
+                            "orden": 1,
+                            "descricaoOpcao": "PS"
+                        },
+                        {
+                            "id": 2,
+                            "orden": 2,
+                            "descricaoOpcao": "SSV"
+                        },
+                        {
+                            "id": 3,
+                            "orden": 3,
+                            "descricaoOpcao": "SCV"
+                        },
+                        {
+                            "id": 4,
+                            "orden": 4,
+                            "descricaoOpcao": "SA"
+                        },
+                        {
+                            "id": 5,
+                            "orden": 5,
+                            "descricaoOpcao": "A"
+                        }
+                    ],
+                    "resposta":[
+                        {
+                            "id":4,
+                            "opcaoRespostaId":1
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

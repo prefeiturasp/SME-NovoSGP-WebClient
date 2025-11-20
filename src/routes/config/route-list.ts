@@ -137,7 +137,7 @@ import Sondagem from '~/paginas/Sondagem/sondagem';
 import { setRotas } from '~/redux/modulos/navegacao/actions';
 import InformacoesEducacionais from '~/paginas/Gestao/InformacoesEducacionais/painelEducacional';
 import ImportacaoDados from '~/paginas/Gestao/ImportacaoDados/importacaoDados';
-import SondagemNovo from '@/pages/sondagemNovo/sondagemNovo';
+import SondagemNovo from '@/pages/sondagemNovo/index';
 
 export interface RouteProps {
   path: string;
