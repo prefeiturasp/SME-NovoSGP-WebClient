@@ -26,7 +26,7 @@ const SondagemNovo = () => {
 
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
   const [listaProficiencia, setListaProficiencia] = useState([]);
-  const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] = useState();
+  // const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] = useState();
   // const [proficienciaIdSelecionada, setProficienciaIdSelecionada] = useState();
 
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
@@ -42,7 +42,7 @@ const SondagemNovo = () => {
 
   const modalidadesFiltroPrincipal = useSelector((store: any) => store.filtro.modalidades);
 
-  const [form] = Form.useForm();
+  const [formFiltro] = Form.useForm();
 
   //   useEffect(() => {
   //     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
@@ -90,10 +90,8 @@ const SondagemNovo = () => {
     // }
 
     if (disciplinaId) {
-      setDisciplinaIdSelecionada(disciplinaId);
-      console.log('DisciplinaId selecionada: ', disciplinaId, disciplinaIdSelecionada);
-
-      const valorSelecionado = form.getFieldValue('disciplinaId');
+      // setDisciplinaIdSelecionada(disciplinaId);
+      const valorSelecionado = formFiltro.getFieldValue('disciplinaId');
       console.log('ID:', valorSelecionado);
 
       const listaProeficiencia = MockProficiencia();
@@ -108,6 +106,8 @@ const SondagemNovo = () => {
 
   const onChangeProficiencia = async (proficienciaId) => {
     if (proficienciaId) {
+      const valorSelecionado = formFiltro.getFieldValue('proficienciaId');
+      console.log('ID proficiencia:', valorSelecionado);
       // setProficienciaIdSelecionada(proficienciaId);
       // Carrega o proximo campo caso ele exista
     } else {
@@ -200,21 +200,30 @@ const SondagemNovo = () => {
       //   turmaId
       // );
       // Mockado enquanto o serviço não está pronto
+      formFiltro.resetFields();
       const disciplinas = MockDisciplina();
-
-      setListaDisciplinas(disciplinas.data);
-      if (disciplinas?.data?.length === 1) {
-        const disciplina = disciplinas.data[0];
-        onChangeDisciplinas(disciplina.value);
-        setDesabilitarDisciplina(true);
-      } else if (disciplinas?.data?.length > 1) {
-        // setDadosLista([]);
-        // setModoEdicao(false);
-        // setDisciplinaIdSelecionada(undefined);
-        setListaDisciplinas(disciplinas.data);
+      // const valorSelecionado = formFiltro.getFieldValue('disciplinaId');
+      // console.log('ID carregado:', valorSelecionado);
+      if (disciplinas?.data?.length > 0) {
         setDesabilitarDisciplina(false);
-        // setAuditoria(undefined);
+        setListaDisciplinas(disciplinas.data);
+      } else {
+        setDesabilitarDisciplina(true);
+        setListaDisciplinas([]);
       }
+
+      // if (disciplinas?.data?.length === 1) {
+      //   const disciplina = disciplinas.data[0];
+      //   onChangeDisciplinas(disciplina.value);
+      //   setDesabilitarDisciplina(true);
+      // } else if (disciplinas?.data?.length > 1) {
+      //   // setDadosLista([]);
+      //   // setModoEdicao(false);
+      //   // setDisciplinaIdSelecionada(undefined);
+      //   setListaDisciplinas(disciplinas.data);
+      //   setDesabilitarDisciplina(false);
+      //   // setAuditoria(undefined);
+      // }
     };
 
     if (turmaId && !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)) {
@@ -222,10 +231,10 @@ const SondagemNovo = () => {
     } else {
       // setDadosLista([]);
       // setModoEdicao(false);
-      // setDisciplinaIdSelecionada(undefined);
       setListaDisciplinas([]);
+      formFiltro.resetFields();
     }
-  }, [turmaSelecionada, modalidade, modalidadesFiltroPrincipal]);
+  }, [turmaSelecionada, modalidade, turmaId, modalidadesFiltroPrincipal]);
 
   return (
     <Loader loading={exibirLoader} tip="Carregando...">
@@ -251,7 +260,7 @@ const SondagemNovo = () => {
         </>
       </Cabecalho>
       <Card>
-        <Form form={form}>
+        <Form form={formFiltro}>
           <div className="col-md-12">
             <div className="row">
               <div className="col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-2">
