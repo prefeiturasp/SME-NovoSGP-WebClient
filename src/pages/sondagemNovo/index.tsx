@@ -16,6 +16,9 @@ import BotaoCancelarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoCancela
 import BotaoSalvarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoSalvarPadrao';
 import Select from '@/components/lib/inputs/select';
 import { Form } from 'antd';
+import MockDadosTabelaDinamica from './MockDadosTabelaDinamica.json';
+import { DadosTabelaDinamica } from './types';
+import SondagemListaDinamica from './sondagemListaDinamica';
 
 const SondagemNovo = () => {
   const usuario = useSelector((store: any) => store.usuario);
@@ -31,18 +34,19 @@ const SondagemNovo = () => {
 
   const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
   const [modoEdicao] = useState(false); // setModoEdicao
-  // const [dadoslista, setDadosLista] = useState([]);
+  const [dadoslista, setDadosLista] = useState<DadosTabelaDinamica | null>();
   // const [auditoria, setAuditoria] = useState(undefined);
 
   // const { permissoes } = usuario;
   // const permissoesTela = permissoes?.[ROUTES.SONDAGEM_NOVO];
 
   // const [somenteConsulta, setSomenteConsulta] = useState(false); // Verificar se realmente vai ser usado.
-  const [exibirLoader] = useState(false); // setExibirLoader
+  const [exibirLoader, setExibirLoader] = useState(false);
 
   const modalidadesFiltroPrincipal = useSelector((store: any) => store.filtro.modalidades);
 
   const [formFiltro] = Form.useForm();
+  const [formListaDinamica] = Form.useForm();
 
   //   useEffect(() => {
   //     const naoSetarSomenteConsultaNoStore = ehTurmaInfantil(
@@ -98,7 +102,7 @@ const SondagemNovo = () => {
       setListaProficiencia(listaProeficiencia.data);
       // await buscarDados(disciplinaId);
     } else {
-      // setDadosLista([]);
+      // setDadosLista(null);
       // setAuditoria(undefined);
       // setDisciplinaIdSelecionada(undefined);
     }
@@ -110,10 +114,25 @@ const SondagemNovo = () => {
       console.log('ID proficiencia:', valorSelecionado);
       // setProficienciaIdSelecionada(proficienciaId);
       // Carrega o proximo campo caso ele exista
+      await buscarDadosLista();
     } else {
-      // setDadosLista([]);
+      // setDadosLista(null);
       // setAuditoria(undefined);
       // setProficienciaIdSelecionada(undefined);
+    }
+  };
+
+  const buscarDadosLista = async () => {
+    try {
+      setExibirLoader(true);
+      // Chamar API para buscar os dados da lista
+
+      const dadosMock = MockDadosTabelaDinamica;
+      setDadosLista(dadosMock);
+    } catch (error) {
+      // Tratar erro caso necessário
+    } finally {
+      setExibirLoader(false);
     }
   };
 
@@ -288,6 +307,11 @@ const SondagemNovo = () => {
             </div>
           </div>
         </Form>
+        {dadoslista ? (
+          <SondagemListaDinamica dados={dadoslista} formListaDinamica={formListaDinamica} />
+        ) : (
+          <div />
+        )}
       </Card>
     </Loader>
   );
