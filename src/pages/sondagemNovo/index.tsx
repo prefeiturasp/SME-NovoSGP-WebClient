@@ -82,7 +82,27 @@ const SondagemNovo = () => {
   };
 
   const onClickSalvar = async () => {
-    // await salvar();
+    const dadosFormulario = formListaDinamica.getFieldsValue();
+
+    // Transforma os dados do formulário em um array de objetos organizados
+    const dadosParaSalvar = dadoslista?.estudantes.map((estudante, estudanteIndex) => {
+      const respostas = estudante.coluna.map((coluna, colunaIndex) => ({
+        nomeColuna: coluna.descricaoColuna,
+        respostaId: dadosFormulario[`respostaId_${estudanteIndex}_${colunaIndex}`] || null,
+        respostaSelecionada: dadosFormulario[`resposta_${estudanteIndex}_${colunaIndex}`] || null,
+      }));
+
+      return {
+        numeroEstudante: estudante.numero,
+        nomeEstudante: estudante.nome,
+        lp: dadosFormulario[`lp_${estudanteIndex}`] || false,
+        respostas: respostas,
+      };
+    });
+
+    console.log('Dados organizados para salvar:', dadosParaSalvar);
+
+    // await salvar(dadosParaSalvar);
   };
 
   const onChangeDisciplinas = async (disciplinaId) => {
