@@ -32,6 +32,7 @@ export enum ROUTES {
   FECHAMENTO_BIMESTRE = '/fechamento/fechamento-bimestre',
   PERIODO_FECHAMENTO_ABERTURA = '/calendario-escolar/periodo-fechamento-abertura',
   PAP = '/relatorios/pap/relatorio-graficos',
+  SONDAGEM_NOVO = '/sondagem/novo',
   PERIODO_FECHAMENTO_REABERTURA = '/calendario-escolar/periodo-fechamento-reabertura',
   RELATORIO_PAP_ACOMPANHAMENTO = '/relatorios/pap/relatorio-preenchimento',
   PENDENCIAS_FECHAMENTO = '/fechamento/pendencias-fechamento',

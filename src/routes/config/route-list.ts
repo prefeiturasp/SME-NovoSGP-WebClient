@@ -135,6 +135,7 @@ import Sondagem from '~/paginas/Sondagem/sondagem';
 import { setRotas } from '~/redux/modulos/navegacao/actions';
 import InformacoesEducacionais from '~/paginas/Gestao/InformacoesEducacionais/painelEducacional';
 import ImportacaoDados from '~/paginas/Gestao/ImportacaoDados/importacaoDados';
+import SondagemNovo from '@/pages/sondagemNovo';
 
 export interface RouteProps {
   path: string;
@@ -1680,6 +1681,17 @@ route.set(ROUTES.RELATORIO_PAP, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
   chavePermissao: ROUTES.RELATORIO_PAP,
+});
+
+route.set(ROUTES.SONDAGEM_NOVO, {
+  breadcrumbName: 'Sondagem Novo',
+  menu: ['Diário de Classe'],
+  parent: '/',
+  component: SondagemNovo,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false, // em desenvolvimento
+  chavePermissao: ROUTES.SONDAGEM_NOVO,
 });
 
 route.set(ROUTES.RELATORIO_OCORRENCIAS, {
