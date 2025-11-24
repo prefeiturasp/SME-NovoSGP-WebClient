@@ -17,6 +17,7 @@ import InformacoesEscolares from './Componentes/InformacoesEscolares/informacoes
 import InformacoesSrmTabela from './Componentes/InformacoesSrm/InformacoesSrmTabela';
 import TabelaFrequenciaTurmaPAP from './Componentes/TabelaFrequenciaTurmaPAP/TabelaFrequenciaTurmaPAP';
 import TurmasProgramaTabela from './Componentes/TurmasPrograma/turmasProgramaTabela';
+import CampoDinamicoAlertCheckbox from './Componentes/campoDinamicoAlertCheckbox';
 import CampoDinamicoCheckbox from './Componentes/campoDinamicoCheckbox';
 import CampoDinamicoCombo from './Componentes/campoDinamicoCombo';
 import { CampoDinamicoComboJSON } from './Componentes/campoDinamicoComboJSON';
@@ -412,6 +413,18 @@ const QuestionarioDinamico = props => {
 
     let campoAtual = null;
     switch (questaoAtual?.tipoQuestao) {
+      case tipoQuestao.AlertCheckbox:
+        campoAtual = (
+          <CampoDinamicoAlertCheckbox
+            {...params}
+            desabilitado={desabilitarCampos}
+            onChange={() => {
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
+          />
+        );
+        break;
       case tipoQuestao.Frase:
         campoAtual = (
           <CampoDinamicoFrase
