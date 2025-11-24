@@ -4,6 +4,7 @@ import { ColumnsType } from 'antd/es/table';
 import { FileTextOutlined, TeamOutlined, EyeOutlined } from '@ant-design/icons';
 import Select from '@/components/lib/inputs/select';
 import { DadosTabelaDinamica, Estudante } from './types';
+import './sondagemListaDinamica.css';
 
 interface ListaSondagemEscritaProps {
   dados: DadosTabelaDinamica | null;
@@ -16,32 +17,26 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
   const mostrarColunaLP = dados?.questao === 'escrita';
   const [opcoesCarregadas, setOpcoesCarregadas] = useState(false);
 
-  // Primeiro carrega as opções (renderiza a tabela)
   useEffect(() => {
     if (dados?.estudantes && dados.estudantes.length > 0) {
       setOpcoesCarregadas(true);
     }
   }, [dados]);
 
-  // Depois seta as respostas no formulário
   useEffect(() => {
     if (opcoesCarregadas && dados?.estudantes) {
       const initialValues: any = {};
 
       dados.estudantes.forEach((estudante, estudanteIndex) => {
-        // Checkbox LP
         initialValues[`lp_${estudanteIndex}`] = estudante.lp;
 
-        // Respostas dos selects - agora setamos o opcaoRespostaId
         estudante.coluna.forEach((coluna, colunaIndex) => {
           const respostaSelecionada = coluna.resposta?.[0];
 
-          // Setamos o valor da opção selecionada (opcaoRespostaId)
           initialValues[`resposta_${estudanteIndex}_${colunaIndex}`] = respostaSelecionada
             ? respostaSelecionada.opcaoRespostaId
             : undefined;
 
-          // Guardamos o id da resposta em um campo oculto para usar no save
           initialValues[`respostaId_${estudanteIndex}_${colunaIndex}`] = respostaSelecionada
             ? respostaSelecionada.id
             : '';
@@ -62,11 +57,9 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
     // Aqui você pode adicionar lógica adicional quando o checkbox mudar
   };
 
-  // Monta as colunas da tabela
   const columns: ColumnsType<Estudante> = [];
   const columnsDinamicas: ColumnsType<Estudante> = [];
 
-  // Coluna LP (Checkbox) - só aparece se questao === 'escrita'
   if (mostrarColunaLP) {
     columns.push({
       title: <span style={{ fontSize: '11px', whiteSpace: 'nowrap' }}>LP como 2ª língua?</span>,
@@ -82,7 +75,6 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
     });
   }
 
-  // Coluna Estudante (Nome + Ícones)
   columns.push({
     title: 'Estudante',
     key: 'estudante',
@@ -137,14 +129,12 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
     }
   };
 
-  // Colunas dinâmicas (Bimestres)
   if (dados?.estudantes?.[0]?.coluna) {
     dados.estudantes[0].coluna.forEach((coluna, colunaIndex) => {
       columnsDinamicas.push({
         title: coluna.descricaoColuna,
         key: `coluna_${colunaIndex}`,
         width: 150,
-        align: 'center',
         render: (_, record, estudanteIndex) => {
           const colunaEstudante = record.coluna[colunaIndex];
           const options = colunaEstudante.opcaoResposta
@@ -158,7 +148,6 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
 
           return (
             <>
-              {/* Campo oculto para armazenar o ID da resposta */}
               <Form.Item
                 name={`respostaId_${estudanteIndex}_${colunaIndex}`}
                 hidden
@@ -168,7 +157,6 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
                 <input type="hidden" />
               </Form.Item>
 
-              {/* Select com as opções de resposta */}
               <Form.Item
                 name={`resposta_${estudanteIndex}_${colunaIndex}`}
                 style={{ margin: 0 }}
@@ -202,7 +190,6 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
     );
   }
 
-  // Adiciona um índice único para cada estudante
   const dataSourceComIndice = dados.estudantes.map((estudante, index) => ({
     ...estudante,
     uniqueKey: `estudante_${index}_${estudante.numero}`,
@@ -220,6 +207,7 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
           bordered
           size="small"
           sticky
+          className="custom-border-table"
         />
       </Form>
     </div>
