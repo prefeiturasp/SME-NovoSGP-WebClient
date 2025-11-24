@@ -64,6 +64,7 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
 
   // Monta as colunas da tabela
   const columns: ColumnsType<Estudante> = [];
+  const columnsDinamicas: ColumnsType<Estudante> = [];
 
   // Coluna LP (Checkbox) - só aparece se questao === 'escrita'
   if (mostrarColunaLP) {
@@ -115,10 +116,25 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
     ),
   });
 
+  const nomeQuestao = () => {
+    switch (dados?.questao) {
+      case 'escrita':
+        return 'Sistema de escrita';
+      case 'reescrita':
+        return 'Reescrita';
+      case 'producao':
+        return 'Produção';
+      case 'compreensao':
+        return 'Compreensão de textos';
+      default:
+        return 'Questão';
+    }
+  };
+
   // Colunas dinâmicas (Bimestres)
   if (dados?.estudantes?.[0]?.coluna) {
     dados.estudantes[0].coluna.forEach((coluna, colunaIndex) => {
-      columns.push({
+      columnsDinamicas.push({
         title: coluna.descricaoColuna,
         key: `coluna_${colunaIndex}`,
         width: 200,
@@ -165,6 +181,10 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
           );
         },
       });
+    });
+    columns.push({
+      title: nomeQuestao(),
+      children: [...columnsDinamicas],
     });
   }
 
