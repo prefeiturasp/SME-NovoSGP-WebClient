@@ -69,9 +69,9 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
   // Coluna LP (Checkbox) - só aparece se questao === 'escrita'
   if (mostrarColunaLP) {
     columns.push({
-      title: 'LP',
+      title: <span style={{ fontSize: '11px', whiteSpace: 'nowrap' }}>LP como 2ª língua?</span>,
       key: 'lp',
-      width: 60,
+      width: 110,
       align: 'center',
       fixed: 'left',
       render: (_, _record, index) => (
@@ -86,11 +86,17 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
   columns.push({
     title: 'Estudante',
     key: 'estudante',
-    width: 300,
+    width: mostrarColunaLP ? '40%' : '50%',
     fixed: 'left',
     render: (_, record) => (
       <Space direction="vertical" size={0} style={{ width: '100%' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
           <span style={{ fontWeight: 500 }}>
             {record.numero} - {record.nome}
           </span>
@@ -137,7 +143,7 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
       columnsDinamicas.push({
         title: coluna.descricaoColuna,
         key: `coluna_${colunaIndex}`,
-        width: 200,
+        width: 150,
         align: 'center',
         render: (_, record, estudanteIndex) => {
           const colunaEstudante = record.coluna[colunaIndex];
@@ -203,16 +209,17 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
   }));
 
   return (
-    <div style={{ marginTop: 16 }}>
+    <div style={{ marginTop: 16, overflowX: 'auto' }}>
       <Form form={formListaDinamica} component={false}>
         <Table
           columns={columns}
           dataSource={dataSourceComIndice}
           rowKey={(record: any) => record.uniqueKey}
           pagination={false}
-          scroll={{ x: 'max-content' }}
+          scroll={{ x: 'max-content', y: 600 }}
           bordered
           size="small"
+          sticky
         />
       </Form>
     </div>
