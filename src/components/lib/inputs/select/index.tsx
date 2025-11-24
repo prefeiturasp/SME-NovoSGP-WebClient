@@ -16,7 +16,6 @@ const Select: React.FC<SelectProps> = (props) => {
 
   return (
     <SelectAnt
-      getPopupContainer={(trigger) => trigger.parentElement}
       notFoundContent={
         <Empty
           description="Sem dados"
@@ -24,9 +23,10 @@ const Select: React.FC<SelectProps> = (props) => {
           image={Empty.PRESENTED_IMAGE_SIMPLE}
         />
       }
-      {...props}
       showSearch
       filterOption={filterOption}
+      getPopupContainer={(trigger) => trigger.parentElement}
+      {...props}
     />
   );
 };

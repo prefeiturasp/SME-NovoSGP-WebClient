@@ -169,6 +169,9 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
                   placeholder="Selecione"
                   disabled={isDisabled}
                   style={{ width: '100%' }}
+                  getPopupContainer={() => document.body}
+                  dropdownStyle={{ zIndex: 10000 }}
+                  placement="bottomLeft"
                 />
               </Form.Item>
             </>

@@ -13,3 +13,13 @@
   border-right: 1px solid #f0f0f0;
   box-shadow: none;
 }
+
+/* Garantir que o dropdown do Select apareça por cima da tabela */
+.ant-select-dropdown {
+  z-index: 10000 !important;
+}
+
+/* Forçar dropdown para baixo quando possível */
+.rc-virtual-list {
+  z-index: 10001 !important;
+}
