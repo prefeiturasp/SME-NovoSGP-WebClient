@@ -87,9 +87,9 @@ export enum ROUTES {
   LISTAO_OPERACOES = '/diario-classe/listao/operacoes',
   RELATORIO_FREQUENCIA_MENSAL = '/relatorios/frequencia/mensal',
   DASHBOARD_NAAPA = '/dashboard/naapa',
-  ATENDIMENTO_NAAPA = '/naapa/atendimento',
-  ENCAMINHAMENTO_NAAPA = '/naapa/encaminhamento',
-  ENCAMINHAMENTO_NAAPA_NOVO = '/naapa/encaminhamento-novo',
+  ATENDIMENTO_NAAPA = '/naapa/encaminhamento', // vai ser > /naapa/atendimento,
+  ENCAMINHAMENTO_NAAPA = '/naapa/encaminhamento', // usado para permissao
+  ENCAMINHAMENTO_NAAPA_NOVO = '/naapa/encaminhamento-novo', // somente endpoint
   RELATORIO_ENCAMINHAMENTO_NAAPA = '/relatorios/naapa/encaminhamento',
   LOGIN = '/login',
   REDEFINIR_SENHA = '/redefinir-senha',

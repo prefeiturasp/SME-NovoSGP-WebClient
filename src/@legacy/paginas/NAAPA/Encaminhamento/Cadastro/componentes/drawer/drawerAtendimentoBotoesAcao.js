@@ -37,7 +37,7 @@ const DrawerAtendimentoBotoesAcao = ({
     store => store.encaminhamentoNAAPA.desabilitarCamposEncaminhamentoNAAPA
   );
 
-  const permissoesTela = usuario.permissoes[ROUTES.ENCAMINHAMENTO_NAAPA];
+  const permissoesTela = usuario.permissoes[ROUTES.ATENDIMENTO_NAAPA];
 
   const encaminhamentoNAAPAId = id;
 
