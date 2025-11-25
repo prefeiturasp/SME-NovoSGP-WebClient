@@ -6,7 +6,7 @@ import { onchangeMultiSelect } from '~/utils';
 import FechaReabCadastroContext from '../fechaReabCadastroContext';
 import { ModalidadeTipoCalendarioEnum } from '@/core/enum/modalidade-tipo-calendario-enum';
 
-const BimestreReabertura = ({ form, onChangeCampos }) => {
+const BimestreReabertura = ({ form, onChangeCampos, aplicacaoSondagem }) => {
   const {
     desabilitarCampos,
     calendarioSelecionado,
@@ -18,15 +18,17 @@ const BimestreReabertura = ({ form, onChangeCampos }) => {
 
   const nomeCampo = 'bimestres';
 
+  const descricaoCicloBimestre = aplicacaoSondagem ? 'Ciclo' : 'Bimestre';
+
   const montarListaBimestres = tipoModalidade => {
     const listaNova = [
       {
         valor: 1,
-        descricao: 'Primeiro Bimestre',
+        descricao: `Primeiro ${descricaoCicloBimestre}`,
       },
       {
         valor: 2,
-        descricao: 'Segundo Bimestre',
+        descricao: `Segundo ${descricaoCicloBimestre}`,
       },
     ];
 
@@ -37,13 +39,25 @@ const BimestreReabertura = ({ form, onChangeCampos }) => {
       listaNova.push(
         {
           valor: 3,
-          descricao: 'Terceiro Bimestre',
+          descricao: `Terceiro ${descricaoCicloBimestre}`,
         },
         {
           valor: 4,
-          descricao: 'Quarto Bimestre',
-        }
+          descricao: `Quarto ${descricaoCicloBimestre}`,
+        },
       );
+
+      if (aplicacaoSondagem) {
+        listaNova.push(
+          {
+            valor: 5,
+            descricao: 'Quinto Ciclo'
+          },
+        );
+      }
+
+    } else {
+      setListaBimestres(listaNova.filter(({ valor }) => valor !== 5));
     }
 
     listaNova.push({
@@ -59,7 +73,7 @@ const BimestreReabertura = ({ form, onChangeCampos }) => {
     } else {
       setListaBimestres([]);
     }
-  }, [calendarioSelecionado]);
+  }, [calendarioSelecionado, aplicacaoSondagem]);
 
   const onChangeBimestre = novosValores => {
     form.setFieldValue(nomeCampo, novosValores || []);
@@ -73,8 +87,8 @@ const BimestreReabertura = ({ form, onChangeCampos }) => {
       lista={listaBimestres}
       valueOption="valor"
       valueText="descricao"
-      label="Bimestre"
-      placeholder="Selecione bimestre(s)"
+      label={`${aplicacaoSondagem ? 'Ciclos' : 'Bimestres'}`}
+      placeholder={`Selecione ${aplicacaoSondagem ? 'ciclo' : 'bimestre'}(s)`}
       multiple
       setValueOnlyOnChange
       disabled={desabilitarCampos}
@@ -90,11 +104,13 @@ const BimestreReabertura = ({ form, onChangeCampos }) => {
 BimestreReabertura.propTypes = {
   form: PropTypes.oneOfType([PropTypes.object]),
   onChangeCampos: PropTypes.func,
+  aplicacaoSondagem: PropTypes.bool,
 };
 
 BimestreReabertura.defaultProps = {
   form: null,
   onChangeCampos: () => null,
+  aplicacaoSondagem: false,
 };
 
 export default BimestreReabertura;
