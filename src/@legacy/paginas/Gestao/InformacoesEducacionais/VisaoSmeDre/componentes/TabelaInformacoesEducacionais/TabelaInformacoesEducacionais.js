@@ -112,6 +112,13 @@ function TabelaInformacoesEducacionais({ codigoDre, codigoUe, anoLetivo }) {
       width: 120,
     },
     {
+      title: 'Qtde. Alunos PAP',
+      dataIndex: 'quantidadeAlunosPap',
+      key: 'alunosPap',
+      align: 'center',
+      width: 120,
+    },
+    {
       title: 'Freq. Alunos PAP',
       dataIndex: 'percentualFrequenciaAlunosPap',
       key: 'frequenciaAlunosPap',
@@ -124,7 +131,7 @@ function TabelaInformacoesEducacionais({ codigoDre, codigoUe, anoLetivo }) {
       dataIndex: 'quantidadeAlunosDesistentesAbandono',
       key: 'desistentesAbandono',
       align: 'center',
-      width: 120,
+      width: 110,
     },
     {
       title: 'Promoções',
