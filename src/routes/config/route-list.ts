@@ -1585,7 +1585,7 @@ route.set(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO, {
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: false,
-  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO,
+  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
 });
 
 route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO}/novo`, {
@@ -1595,7 +1595,7 @@ route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO}/novo`, {
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: false,
-  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO,
+  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
 });
 
 route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO}/:id`, {
@@ -1605,12 +1605,12 @@ route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO}/:id`, {
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: false,
-  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO,
+  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
 });
 // novo encaminhamento
 
 // futuro atendimento
-route.set(ROUTES.ENCAMINHAMENTO_NAAPA, {
+route.set(ROUTES.ATENDIMENTO_NAAPA, {
   breadcrumbName: 'Atendimento',
   menu: ['NAAPA'],
   parent: '/',
@@ -1618,27 +1618,27 @@ route.set(ROUTES.ENCAMINHAMENTO_NAAPA, {
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
+  chavePermissao: ROUTES.ATENDIMENTO_NAAPA,
 });
 
-route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA}/novo`, {
+route.set(`${ROUTES.ATENDIMENTO_NAAPA}/novo`, {
   breadcrumbName: 'Atendimento',
-  parent: ROUTES.ENCAMINHAMENTO_NAAPA,
+  parent: ROUTES.ATENDIMENTO_NAAPA,
   component: CadastroAtendimentoNAAPA,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
+  chavePermissao: ROUTES.ATENDIMENTO_NAAPA,
 });
 
-route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA}/:id`, {
+route.set(`${ROUTES.ATENDIMENTO_NAAPA}/:id`, {
   breadcrumbName: 'Atendimento',
-  parent: ROUTES.ENCAMINHAMENTO_NAAPA,
+  parent: ROUTES.ATENDIMENTO_NAAPA,
   component: CadastroAtendimentoNAAPA,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
-  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
+  chavePermissao: ROUTES.ATENDIMENTO_NAAPA,
 });
 // futuro atendimento
 

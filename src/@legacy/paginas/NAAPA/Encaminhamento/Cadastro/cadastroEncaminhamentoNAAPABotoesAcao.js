@@ -45,7 +45,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
   const dadosRouteState = state;
 
-  const permissoesTela = usuario.permissoes[ROUTES.ENCAMINHAMENTO_NAAPA];
+  const permissoesTela = usuario.permissoes[ROUTES.ATENDIMENTO_NAAPA];
 
   const questionarioDinamicoEmEdicao = useSelector(
     store => store.questionarioDinamico.questionarioDinamicoEmEdicao
@@ -69,7 +69,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       setBreadcrumbManual(
         pathname,
         'Encaminhamento',
-        `${ROUTES.ENCAMINHAMENTO_NAAPA}`
+        `${ROUTES.ATENDIMENTO_NAAPA}`
       );
     }
   }, [pathname, encaminhamentoId]);
@@ -105,12 +105,12 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
       if (confirmou) {
         const resposta = await ServicoNAAPA.salvarPadrao(encaminhamentoId);
-        if (resposta?.status === 200) navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
+        if (resposta?.status === 200) navigate(ROUTES.ATENDIMENTO_NAAPA);
       } else {
-        navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
+        navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
       }
     } else {
-      navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
+      navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
     }
   };
 
@@ -128,7 +128,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       });
       if (resultado?.status === 200) {
         sucesso('Encaminhamento excluído com sucesso');
-        navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
+        navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
       }
     }
   };
@@ -158,7 +158,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       if (encaminhamentoId) {
         dispatch(setCarregarDadosEncaminhamentoNAAPA(true));
       }
-      navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`, {
+      navigate(`${ROUTES.ATENDIMENTO_NAAPA}/${resposta?.data?.id}`, {
         state: dadosRouteState,
       });
     }
@@ -173,7 +173,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         : situacaoNAAPA.AguardandoAtendimento
     );
     if (resposta?.status === 200) {
-      navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
+      navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
     }
   };
 
