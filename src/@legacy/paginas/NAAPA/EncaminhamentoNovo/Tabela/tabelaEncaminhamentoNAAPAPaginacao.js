@@ -3,7 +3,8 @@ import { ROUTES } from '@/core/enum/routes';
 import { store } from '@/core/redux';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ListaPaginada } from '~/componentes';
+import { Checkbox } from 'antd';
+import { ListaPaginada, DataTable } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { SGP_TABLE_ENCAMINHAMENTO_NAAPA } from '~/constantes/ids/table';
 import { setTabAtivaEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
@@ -95,20 +96,12 @@ const TabelaEncaminhamentoNAAPAPaginacao = props => {
       dataIndex: 'suspeitaViolencia',
       align: 'center',
       render: suspeita => {
-        if (suspeita === 'Sim') {
-          return (
-            <div
-              style={{
-                color: '#722ed1',
-                fontSize: '16px',
-                textAlign: 'center',
-              }}
-            >
-              ✓
-            </div>
-          );
-        }
-        return '-';
+        return (
+          <Checkbox
+            checked={suspeita === 'Sim'}
+            style={{ cursor: 'default' }}
+          />
+        );
       },
     },
   ];
@@ -184,24 +177,26 @@ const TabelaEncaminhamentoNAAPAPaginacao = props => {
 
   if (usarMock) {
     return (
-      <ListaPaginada
+      <DataTable
         id={SGP_TABLE_ENCAMINHAMENTO_NAAPA}
-        colunas={colunas}
-        colunaChave="id"
-        temPaginacao={true}
-        filtroEhValido={true}
-        multiSelecao={true}
-        linhas={dados}
-        setLista={() => {}}
-        onClick={linha => {
+        columns={colunas}
+        dataSource={dados}
+        selectMultipleRows={true}
+        selectedRowKeys={[]}
+        onSelectRow={ids => {
+          const itensSelecionados = dados.filter(item => ids.includes(item.id));
+          onSelecionarItems(itensSelecionados);
+        }}
+        onClickRow={linha => {
           store.dispatch(setTabAtivaEncaminhamentoNAAPA(0));
           const dadosSalvarState = obterDadosFiltros();
           navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${linha?.id}`, {
             state: dadosSalvarState,
           });
         }}
-        onSelecionarLinhas={onSelecionarItems}
-        showSizeChanger={true}
+        pagination={true}
+        pageSize={10}
+        idLinha="id"
       />
     );
   }
