@@ -40,6 +40,7 @@ import { ordenarDescPor, verificarDataFimMaiorInicio } from '~/utils';
 import { BotaoOrdenacaoListaEncaminhamentoNAAPA } from './components/ordenacao';
 import ListaEncaminhamentoNAAPABotoesAcao from './listaEncaminhamentoNAAPABotoesAcao';
 import ListaEncaminhamentoNAAPAPaginada from './listaEncaminhamentoNAAPAPaginada';
+import TabelaEncaminhamentoNAAPAPaginacao from '../Tabela/tabelaEncaminhamentoNAAPAPaginacao';
 
 const ListaEncaminhamentoNAAPA = () => {
   const location = useLocation();
@@ -584,6 +585,17 @@ const ListaEncaminhamentoNAAPA = () => {
               onChange={e =>
                 setExibirEncaminhamentosEncerrados(e?.target?.value)
               }
+            />
+          </Col>
+
+          <Col className="mt-3" sm={24} lg={24}>
+            <TabelaEncaminhamentoNAAPAPaginacao
+              somenteConsulta={somenteConsulta}
+              idsSelecionados={idsEncaminhamentoNAAPASelecionados}
+              onSelecionarItems={onSelecionarItems}
+              obterDadosFiltros={obterDadosFiltros}
+              ordenacoesSelecionadas={ordenacoesSelecionadas}
+              setOrdenacoesSelecionadas={setOrdenacoesSelecionadas}
             />
           </Col>
         </Row>
