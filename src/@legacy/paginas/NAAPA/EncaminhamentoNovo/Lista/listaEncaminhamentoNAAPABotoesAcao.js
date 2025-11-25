@@ -30,14 +30,11 @@ const ListaEncaminhamentoNAAPABotoesAcao = props => {
         <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
       </Col>
       <Col>
-        <BtnImpressaoEncaminhamentoNAAPA idsSelecionados={idsSelecionados} />
-      </Col>
-      <Col>
         <Button
           bold
           border
-          label="Novo"
-          color={Colors.Roxo}
+          label="Novo Encaminhamento"
+          color={Colors.Azul}
           id={SGP_BUTTON_NOVO}
           onClick={onClickNovo}
           disabled={desabilitarNovo}
