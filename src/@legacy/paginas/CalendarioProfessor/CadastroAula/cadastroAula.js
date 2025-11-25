@@ -4,7 +4,7 @@ import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
 import queryString from 'query-string';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 import { Cabecalho } from '~/componentes-sgp';
 import Alert from '~/componentes/alert';
@@ -47,11 +47,13 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import AlterarAula from './alterarAula';
 import ExcluirAula from './excluirAula';
+import { selecionarTurma } from '~/redux/modulos/usuario/actions';
 
 function CadastroDeAula() {
   const navigate = useNavigate();
   const location = useLocation();
   const routeParams = useParams();
+  const dispatch = useDispatch();
 
   const id = routeParams?.id;
   const tipoCalendarioId = routeParams?.tipoCalendarioId;
@@ -304,98 +306,100 @@ function CadastroDeAula() {
     [turmaSelecionada.turma, defineGrade, id]
   );
 
-  const obterAula = useCallback(async () => {
-    const carregarComponentesCurriculares = async idTurma => {
-      setCarregandoDados(true);
-      const respostaComponentes =
-        !!id || aula?.disciplinaId
-          ? await servicoDisciplina.obterDisciplinasTurma(idTurma)
-          : await servicoDisciplina
+  const obterAula = useCallback(
+    async idTurmaParameter => {
+      const idTurma = idTurmaParameter || turmaSelecionada.turma;
+      const carregarComponentesCurriculares = async idTurma => {
+        setCarregandoDados(true);
+        const respostaComponentes =
+          !!id || aula?.disciplinaId
+            ? await servicoDisciplina.obterDisciplinasTurma(idTurma)
+            : await servicoDisciplina
               .obterDisciplinasPorTurma(idTurma)
               .catch(e => erros(e))
               .finally(() => setCarregandoDados(false));
 
-      if (respostaComponentes?.status === 200) {
-        setListaComponentes(respostaComponentes.data);
-        return respostaComponentes.data;
-      }
-      return [];
-    };
-    const componentes = await carregarComponentesCurriculares(
-      turmaSelecionada.turma
-    );
-    if (id) {
-      setCarregandoDados(true);
-      servicoCadastroAula
-        .obterPorId(id)
-        .then(resposta => {
-          const respostaAula = resposta.data;
-          respostaAula.dataAula = window.moment(respostaAula.dataAula);
-          setRecorrenciaAulaOriginal(respostaAula.recorrenciaAula);
-          setAula(respostaAula);
-          setRegistroMigrado(respostaAula.migrado);
-          setEmManutencao(respostaAula.emManutencao);
-          setPossuiCompensacao(respostaAula.possuiCompensacao);
-          servicoCadastroAula
-            .obterRecorrenciaPorIdAula(id, respostaAula.recorrenciaAula)
-            .then(resp => {
-              setRecorrenciaAulaEmEdicao(resp.data);
-            })
-            .catch(e => erros(e));
-          if (componentes) {
-            const componenteSelecionado = componentes.find(
-              c =>
-                String(c.codigoComponenteCurricular) ===
+        if (respostaComponentes?.status === 200) {
+          setListaComponentes(respostaComponentes.data);
+          return respostaComponentes.data;
+        }
+        return [];
+      };
+      const componentes = await carregarComponentesCurriculares(idTurma);
+      if (id) {
+        setCarregandoDados(true);
+        servicoCadastroAula
+          .obterPorId(id)
+          .then(resposta => {
+            const respostaAula = resposta.data;
+            respostaAula.dataAula = window.moment(respostaAula.dataAula);
+            setRecorrenciaAulaOriginal(respostaAula.recorrenciaAula);
+            setAula(respostaAula);
+            setRegistroMigrado(respostaAula.migrado);
+            setEmManutencao(respostaAula.emManutencao);
+            setPossuiCompensacao(respostaAula.possuiCompensacao);
+            servicoCadastroAula
+              .obterRecorrenciaPorIdAula(id, respostaAula.recorrenciaAula)
+              .then(resp => {
+                setRecorrenciaAulaEmEdicao(resp.data);
+              })
+              .catch(e => erros(e));
+            if (componentes) {
+              const componenteSelecionado = componentes.find(
+                c =>
+                  String(c.codigoComponenteCurricular) ===
                   String(respostaAula.disciplinaId) ||
-                String(c.id) === String(respostaAula.disciplinaId) ||
-                (c.regencia &&
-                  String(c.codDisciplinaPai) === respostaAula.disciplinaId)
-            );
-
-            if (
-              componenteSelecionado.codigoComponenteCurricular ==
-              respostaAula.disciplinaId
-            ) {
-              respostaAula.disciplinaId = String(componenteSelecionado.id);
-              setAula(respostaAula);
-            }
-
-            if (componenteSelecionado) {
-              carregarGrade(
-                componenteSelecionado,
-                respostaAula.dataAula,
-                respostaAula.tipoAula,
-                respostaAula.tipoAula === 1 && !ehProfessorCj
+                  String(c.id) === String(respostaAula.disciplinaId) ||
+                  (c.regencia &&
+                    String(c.codDisciplinaPai) === respostaAula.disciplinaId)
               );
-            } else {
-              setAula({
-                ...respostaAula,
-                disciplinaId: null,
-              });
-              setSomenteLeitura(false);
-              setCarregandoDados(false);
-            }
-          }
-        })
-        .catch(e => {
-          erros(e);
-          navegarParaCalendarioProfessor();
-          setCarregandoDados(false);
-        });
-    } else if (componentes?.length === 1) {
-      setAula({
-        ...aulaInicial,
-        disciplinaId: String(componentes[0].id),
-      });
 
-      carregarGrade(
-        componentes[0],
-        aulaInicial.dataAula,
-        aulaInicial.tipoAula,
-        Number(aulaInicial.tipoAula) === 1 && !ehProfessorCj
-      );
-    }
-  }, [id, turmaSelecionada.turma]);
+              if (
+                componenteSelecionado.codigoComponenteCurricular ==
+                respostaAula.disciplinaId
+              ) {
+                respostaAula.disciplinaId = String(componenteSelecionado.id);
+                setAula(respostaAula);
+              }
+
+              if (componenteSelecionado) {
+                carregarGrade(
+                  componenteSelecionado,
+                  respostaAula.dataAula,
+                  respostaAula.tipoAula,
+                  respostaAula.tipoAula === 1 && !ehProfessorCj
+                );
+              } else {
+                setAula({
+                  ...respostaAula,
+                  disciplinaId: null,
+                });
+                setSomenteLeitura(false);
+                setCarregandoDados(false);
+              }
+            }
+          })
+          .catch(e => {
+            erros(e);
+            navegarParaCalendarioProfessor();
+            setCarregandoDados(false);
+          });
+      } else if (componentes?.length === 1) {
+        setAula({
+          ...aulaInicial,
+          disciplinaId: String(componentes[0].id),
+        });
+
+        carregarGrade(
+          componentes[0],
+          aulaInicial.dataAula,
+          aulaInicial.tipoAula,
+          Number(aulaInicial.tipoAula) === 1 && !ehProfessorCj
+        );
+      }
+    },
+    [id, turmaSelecionada.turma]
+  );
 
   const continuarQuandoTemCompensacao = () =>
     confirmar(
@@ -587,9 +591,8 @@ function CadastroDeAula() {
           modalidadesFiltroPrincipal,
           turmaSelecionada
         );
-        mensagem += ` Obs: Esta aula ou sua recorrência possui frequência ou ${
-          infantil ? 'diário de bordo' : 'plano de aula'
-        } registrado, ao excluí - la estará excluindo esse registro também`;
+        mensagem += ` Obs: Esta aula ou sua recorrência possui frequência ou ${infantil ? 'diário de bordo' : 'plano de aula'
+          } registrado, ao excluí - la estará excluindo esse registro também`;
       }
       let confirmado = await confirmar(
         `Excluir aula - ${obterDataFormatada()} `,
@@ -624,12 +627,49 @@ function CadastroDeAula() {
     }
   };
 
+  const obterTurmaQueryString = () => {
+    const urlParams = new URLSearchParams(location.search);
+    const params = {
+      anoLetivo: urlParams.get('anoLetivo'),
+      modalidade: urlParams.get('modalidade'),
+      semestre: urlParams.get('semestre'),
+      dre: urlParams.get('dre'),
+      ue: urlParams.get('ue'),
+      turma: urlParams.get('turma'),
+      turmaDescricao: urlParams.get('turmaDescricao'),
+    };
+
+    if (params?.turma) {
+      const turma = {
+        anoLetivo: params.anoLetivo,
+        modalidade: params.modalidade,
+        dre: params.dre,
+        unidadeEscolar: params.ue,
+        turma: params.turma,
+        periodo: params.semestre,
+        desc: params.anoLetivo + ' - ' + params.turmaDescricao,
+        consideraHistorico: false,
+      };
+
+      return turma;
+    }
+
+    return null;
+  };
+
   useEffect(() => {
     setBreadcrumbManual(
       location?.pathname,
       'Cadastro de Aula',
       '/calendario-escolar/calendario-professor'
     );
+
+    const turmaQueryString = obterTurmaQueryString();
+    if (turmaQueryString) {
+      dispatch(selecionarTurma(turmaQueryString));
+      obterAula(turmaQueryString.turma);
+      return;
+    }
 
     if (turmaFiltro === turmaSelecionada.turma) {
       obterAula();
@@ -643,7 +683,9 @@ function CadastroDeAula() {
   }, [carregandoDados, aula.somenteLeitura]);
 
   useEffect(() => {
-    if (turmaFiltro !== turmaSelecionada.turma) salvarAntesMudarTurma();
+    const turmaQueryString = obterTurmaQueryString();
+    if (!turmaQueryString && turmaFiltro !== turmaSelecionada.turma)
+      salvarAntesMudarTurma();
   }, [turmaSelecionada]);
 
   return (
@@ -840,8 +882,8 @@ function CadastroDeAula() {
                         label="Componente Curricular"
                         valueOption={
                           listaComponentes[0]?.regencia &&
-                          listaComponentes[0]?.codDisciplinaPai &&
-                          listaComponentes[0]?.codDisciplinaPai !== 0
+                            listaComponentes[0]?.codDisciplinaPai &&
+                            listaComponentes[0]?.codDisciplinaPai !== 0
                             ? 'codDisciplinaPai'
                             : 'id'
                         }
