@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox, Form, Space, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { FileTextOutlined, TeamOutlined, EyeOutlined } from '@ant-design/icons';
-import Select from '@/components/lib/inputs/select';
+import Select from '@/components/sgp/sondagem/selectColorido';
 import { DadosTabelaDinamica, Estudante } from './types';
 import './sondagemListaDinamica.css';
 
@@ -49,12 +49,10 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
 
   const handleSelectChange = (estudanteIndex: number, colunaIndex: number, value: number) => {
     console.log(`Estudante ${estudanteIndex}, Coluna ${colunaIndex}, Novo valor: ${value}`);
-    // Aqui você pode adicionar lógica adicional quando o valor mudar
   };
 
   const handleCheckboxChange = (estudanteIndex: number, checked: boolean) => {
     console.log(`Estudante ${estudanteIndex}, LP: ${checked}`);
-    // Aqui você pode adicionar lógica adicional quando o checkbox mudar
   };
 
   const columns: ColumnsType<Estudante> = [];
@@ -62,7 +60,7 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
 
   if (mostrarColunaLP) {
     columns.push({
-      title: <span style={{ fontSize: '11px', whiteSpace: 'nowrap' }}>LP como 2ª língua?</span>,
+      title: <span style={{ fontSize: '11px', whiteSpace: 'normal' }}>LP como 2ª língua?</span>,
       key: 'lp',
       width: 110,
       align: 'center',
@@ -122,7 +120,7 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
         return 'Reescrita';
       case 'producao':
         return 'Produção';
-      case 'compreensao':
+      case 'leitura':
         return 'Compreensão de textos';
       default:
         return 'Questão';
@@ -172,6 +170,15 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
                   getPopupContainer={() => document.body}
                   dropdownStyle={{ zIndex: 10000 }}
                   placement="bottomLeft"
+                  tipoQuestao={
+                    dados?.questao as
+                      | 'escrita'
+                      | 'reescrita'
+                      | 'producao'
+                      | 'leitura'
+                      | 'numeros'
+                      | 'mapeamento'
+                  }
                 />
               </Form.Item>
             </>
