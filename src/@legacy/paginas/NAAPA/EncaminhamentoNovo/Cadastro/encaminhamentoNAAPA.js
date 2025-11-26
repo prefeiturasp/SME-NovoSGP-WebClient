@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Cabecalho } from '~/componentes-sgp';
-import LocalizarEstudante from './componentes/localizarEstudante/index.js';
+import LocalizarEstudante from '~/componentes-sgp/LocalizarEstudante';
 import { Card } from '~/componentes';
 import CadastroEncaminhamentoNAAPABotoesAcao from './cadastroEncaminhamentoNAAPABotoesAcao';
 import CadastroEncaminhamentoNAAPA from './cadastroEncaminhamentoNAAPA';
