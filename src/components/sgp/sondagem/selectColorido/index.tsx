@@ -34,35 +34,39 @@ const SelectColorido: React.FC<SelectColoridoProps> = ({
 
       let cores: string[];
       let textColors: string[];
-      console.log('Criar outro switch do case de escrita usando o anoTurma', anoTurma);
+      console.log('Testar com switch duplo e criar o switch de matematica', anoTurma);
       switch (tipoQuestao) {
         case 'escrita':
-          cores = ['#FF3131', '#FFDE59', '#FF914D', '#5170FF', '#00BF63', '#FFFFFF'];
-          textColors = ['#FFFFFF', '#42474A', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#42474A'];
-          break;
-        case 'reescrita':
-          cores = ['#FF3131', '#FFDE59', '#FF914D', '#D9D2E9', '#D0C2EF', '#C3B0EB', '#AF92ED'];
-          textColors = [
-            '#FFFFFF',
-            '#42474A',
-            '#FFFFFF',
-            '#42474A',
-            '#42474A',
-            '#42474A',
-            '#FFFFFF',
-          ];
-          break;
-        case 'producao':
-          cores = ['#FF3131', '#FFDE59', '#FF914D', '#D9D2E9', '#D0C2EF', '#C3B0EB', '#AF92ED'];
-          textColors = [
-            '#FFFFFF',
-            '#42474A',
-            '#FFFFFF',
-            '#42474A',
-            '#42474A',
-            '#42474A',
-            '#FFFFFF',
-          ];
+          switch (anoTurma) {
+            case '1':
+              cores = ['#FF3131', '#FFDE59', '#FF914D', '#5170FF', '#00BF63', '#FFFFFF'];
+              textColors = ['#FFFFFF', '#42474A', '#FFFFFF', '#FFFFFF', '#FFFFFF', '#42474A'];
+              break;
+            case '2':
+              cores = ['#FF3131', '#FFDE59', '#FF914D', '#D9D2E9', '#D0C2EF', '#C3B0EB', '#AF92ED'];
+              textColors = [
+                '#FFFFFF',
+                '#42474A',
+                '#FFFFFF',
+                '#42474A',
+                '#42474A',
+                '#42474A',
+                '#FFFFFF',
+              ];
+              break;
+            case '3':
+              cores = ['#FF3131', '#FFDE59', '#FF914D', '#D9D2E9', '#D0C2EF', '#C3B0EB', '#AF92ED'];
+              textColors = [
+                '#FFFFFF',
+                '#42474A',
+                '#FFFFFF',
+                '#42474A',
+                '#42474A',
+                '#42474A',
+                '#FFFFFF',
+              ];
+              break;
+          }
           break;
         case 'leitura':
           cores = ['#7ED957', '#FFDE59', '#F18888'];
