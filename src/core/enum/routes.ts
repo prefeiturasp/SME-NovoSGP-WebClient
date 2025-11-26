@@ -88,6 +88,7 @@ export enum ROUTES {
   RELATORIO_FREQUENCIA_MENSAL = '/relatorios/frequencia/mensal',
   DASHBOARD_NAAPA = '/dashboard/naapa',
   ENCAMINHAMENTO_NAAPA = '/naapa/encaminhamento',
+  ENCAMINHAMENTO_NAAPA_NOVO = '/naapa/encaminhamento-novo',
   RELATORIO_ENCAMINHAMENTO_NAAPA = '/relatorios/naapa/encaminhamento',
   LOGIN = '/login',
   REDEFINIR_SENHA = '/redefinir-senha',
