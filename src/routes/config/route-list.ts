@@ -1589,7 +1589,7 @@ route.set(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO, {
 });
 
 route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO}/novo`, {
-  breadcrumbName: 'Encaminhamento',
+  breadcrumbName: 'Novo',
   parent: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO,
   component: CadastroEncaminhamentoNAAPA,
   exact: true,
@@ -1622,7 +1622,7 @@ route.set(ROUTES.ATENDIMENTO_NAAPA, {
 });
 
 route.set(`${ROUTES.ATENDIMENTO_NAAPA}/novo`, {
-  breadcrumbName: 'Atendimento',
+  breadcrumbName: 'Novo',
   parent: ROUTES.ATENDIMENTO_NAAPA,
   component: CadastroAtendimentoNAAPA,
   exact: true,
