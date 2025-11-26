@@ -170,6 +170,7 @@ const CadastroEncaminhamentoNAAPA = () => {
             consultarFrequenciaGlobal
             exibirFrequencia
             exibirBotaoImprimir={false}
+            exibirCpf={true}
             permiteAlterarImagem={true}
             anoLetivo={dadosEncaminhamentoNAAPA?.anoLetivo}
             codigoTurma={dadosEncaminhamentoNAAPA?.turma?.codigo}
