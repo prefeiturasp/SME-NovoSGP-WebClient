@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 // import { ROUTES } from '@/core/enum/routes';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
@@ -9,9 +9,7 @@ import Alert from '~/componentes/alert';
 import Card from '~/componentes/card';
 import Grid from '~/componentes/grid';
 import { Cabecalho } from '~/componentes-sgp';
-// import SelectComponent from '~/componentes/select';
 import { confirmar } from '~/servicos/alertas';
-// import ServicoDisciplina from '~/servicos/Paginas/ServicoDisciplina';
 import BotaoCancelarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoCancelarPadrao';
 import BotaoSalvarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoSalvarPadrao';
 import Select from '@/components/lib/inputs/select';
@@ -26,15 +24,17 @@ const SondagemNovo = () => {
   const turmaId = turmaSelecionada ? turmaSelecionada.turma : 0;
   // const periodo = turmaSelecionada ? turmaSelecionada.periodo : 0;
   const { modalidade } = turmaSelecionada;
+  const { ano } = turmaSelecionada;
 
   const [listaDisciplinas, setListaDisciplinas] = useState([]);
   const [listaProficiencia, setListaProficiencia] = useState([]);
   // const [disciplinaIdSelecionada, setDisciplinaIdSelecionada] = useState();
   // const [proficienciaIdSelecionada, setProficienciaIdSelecionada] = useState();
 
-  const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(false);
+  const [desabilitarDisciplina, setDesabilitarDisciplina] = useState(true);
   const [modoEdicao] = useState(false); // setModoEdicao
   const [dadoslista, setDadosLista] = useState<DadosTabelaDinamica | null>();
+  const [modalidadeAnoValidos, setModalidadeAnoValidos] = useState(false);
   // const [auditoria, setAuditoria] = useState(undefined);
 
   // const { permissoes } = usuario;
@@ -44,6 +44,13 @@ const SondagemNovo = () => {
   const [exibirLoader, setExibirLoader] = useState(false);
 
   const modalidadesFiltroPrincipal = useSelector((store: any) => store.filtro.modalidades);
+
+  // const modalidadeFiltro = useSelector((store: any) => store.usuario.turmaSelecionada.modalidade);
+  // const anoFiltro = useSelector((store: any) => store.usuario.turmaSelecionada.ano);
+  // const dados = useSelector((store: any) => store.usuario.turmaSelecionada);
+  // console.log('modalidade :', modalidadeFiltro);
+  // console.log('ano:', anoFiltro);
+  // console.log('dados :', dados);
 
   const [formFiltro] = Form.useForm();
   const [formListaDinamica] = Form.useForm();
@@ -84,7 +91,6 @@ const SondagemNovo = () => {
   const onClickSalvar = async () => {
     const dadosFormulario = formListaDinamica.getFieldsValue();
 
-    // Transforma os dados do formulário em um array de objetos organizados
     const dadosParaSalvar = dadoslista?.estudantes.map((estudante, estudanteIndex) => {
       const respostas = estudante.coluna.map((coluna, colunaIndex) => ({
         nomeColuna: coluna.descricaoColuna,
@@ -96,7 +102,7 @@ const SondagemNovo = () => {
         numeroEstudante: estudante.numero,
         nomeEstudante: estudante.nome,
         lp: dadosFormulario[`lp_${estudanteIndex}`] || false,
-        respostas: respostas,
+        respostas,
       };
     });
 
@@ -233,6 +239,20 @@ const SondagemNovo = () => {
   // setExibirLoader(false);
   // };
 
+  const verificarModalidadeTurma = useCallback(() => {
+    if (modalidade === '3') {
+      if (ano === '1') {
+        return true;
+      }
+    }
+    if (modalidade === '5') {
+      if (ano === '1' || ano === '2' || ano === '3') {
+        return true;
+      }
+    }
+    return false;
+  }, [modalidade, ano]);
+
   useEffect(() => {
     const obterDisciplinas = async () => {
       // const disciplinas = await ServicoDisciplina.obterDisciplinasPorTurma(
@@ -265,15 +285,40 @@ const SondagemNovo = () => {
       // }
     };
 
-    if (turmaId && !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)) {
-      obterDisciplinas();
-    } else {
-      // setDadosLista([]);
-      // setModoEdicao(false);
-      setListaDisciplinas([]);
-      formFiltro.resetFields();
+    console.log('turmaId mudou :', turmaId);
+    setDadosLista(null);
+
+    if (modalidade && ano) {
+      const valido = verificarModalidadeTurma();
+      console.log('Modalidade e ano válidos :', valido);
+      setModalidadeAnoValidos(valido);
+      if (valido) {
+        if (turmaId && !ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada)) {
+          obterDisciplinas();
+        } else {
+          setListaDisciplinas([]);
+          formFiltro.resetFields();
+          setDesabilitarDisciplina(true);
+          setDadosLista(null);
+          // setModoEdicao(false);
+        }
+      } else {
+        setListaDisciplinas([]);
+        formFiltro.resetFields();
+        setDesabilitarDisciplina(true);
+        setDadosLista(null);
+        // setModoEdicao(false);
+      }
     }
-  }, [turmaSelecionada, modalidade, turmaId, modalidadesFiltroPrincipal]);
+  }, [
+    turmaSelecionada,
+    modalidade,
+    turmaId,
+    modalidadesFiltroPrincipal,
+    ano,
+    formFiltro,
+    verificarModalidadeTurma,
+  ]);
 
   return (
     <Loader loading={exibirLoader} tip="Carregando...">
@@ -290,6 +335,20 @@ const SondagemNovo = () => {
           />
         </Grid>
       ) : null}
+      {modalidadeAnoValidos ? null : (
+        <Grid cols={12} className="p-0">
+          <Alert
+            alerta={{
+              tipo: 'warning',
+              id: 'SegundoAlerta',
+              mensagem:
+                'Só existe sondagem para modalidade "Ensino Fundamental" do 1° a 3° ano e "Educação de Jovens Adultos" do 1° ano.',
+              estiloTitulo: { fontSize: '18px' },
+            }}
+            className="mb-2"
+          />
+        </Grid>
+      )}
       <AlertaModalidadeInfantil />
       <Cabecalho pagina="Sondagem - Digitação">
         <>
@@ -328,7 +387,11 @@ const SondagemNovo = () => {
           </div>
         </Form>
         {dadoslista ? (
-          <SondagemListaDinamica dados={dadoslista} formListaDinamica={formListaDinamica} />
+          <SondagemListaDinamica
+            dados={dadoslista}
+            formListaDinamica={formListaDinamica}
+            anoTurma={ano}
+          />
         ) : (
           <div />
         )}

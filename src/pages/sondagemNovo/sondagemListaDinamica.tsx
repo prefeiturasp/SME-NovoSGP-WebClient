@@ -10,10 +10,9 @@ interface ListaSondagemEscritaProps {
   dados: DadosTabelaDinamica | null;
 }
 
-const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDinamica: any }> = ({
-  dados,
-  formListaDinamica,
-}) => {
+const SondagemListaDinamica: React.FC<
+  ListaSondagemEscritaProps & { formListaDinamica: any; anoTurma: string }
+> = ({ dados, formListaDinamica, anoTurma }) => {
   const mostrarColunaLP = dados?.questao === 'escrita';
   const [opcoesCarregadas, setOpcoesCarregadas] = useState(false);
 
@@ -179,6 +178,7 @@ const SondagemListaDinamica: React.FC<ListaSondagemEscritaProps & { formListaDin
                       | 'numeros'
                       | 'mapeamento'
                   }
+                  anoTurma={anoTurma}
                 />
               </Form.Item>
             </>
