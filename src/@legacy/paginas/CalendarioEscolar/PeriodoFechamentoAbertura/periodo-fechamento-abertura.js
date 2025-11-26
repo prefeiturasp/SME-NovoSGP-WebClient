@@ -72,6 +72,8 @@ const PeriodoFechamentoAbertura = () => {
       bimestre3FinalDoFechamento: '',
       bimestre4InicioDoFechamento: '',
       bimestre4FinalDoFechamento: '',
+      bimestre5InicioDoFechamento: '',
+      bimestre5FinalDoFechamento: '',
     };
   };
   const [fechamento, setFechamento] = useState(obtemPeriodosIniciais());
@@ -83,7 +85,9 @@ const PeriodoFechamentoAbertura = () => {
   const [pesquisaTipoCalendario, setPesquisaTipoCalendario] = useState('');
   const [isModalidadeFundMedio, setIsModalidadeFundMedio] = useState(false);
   const [valorAplicacao, setValorAplicacao] = useState('');
+  const [isAplicacaoSondagem, setIsAplicacaoSondagem] = useState(false);
 
+  
   const validacaoPrimeiroBim = {
     bimestre1InicioDoFechamento: momentSchema.required(
       'Data inicial obrigatória'
@@ -148,6 +152,23 @@ const PeriodoFechamentoAbertura = () => {
       ),
   };
 
+  const validacaoQuintoBim = {
+    bimestre5InicioDoFechamento: momentSchema
+      .required('Data inicial obrigatória')
+      .dataMenorIgualQue(
+        'bimestre4FinalDoFechamento',
+        'bimestre5InicioDoFechamento',
+        'Data inválida'
+      ),
+    bimestre5FinalDoFechamento: momentSchema
+      .required('Data final obrigatória')
+      .dataMenorQue(
+        'bimestre5InicioDoFechamento',
+        'bimestre5FinalDoFechamento',
+        'Data inválida'
+      ),
+  };
+
   useEffect(() => {
     let periodos = {};
     if (isTipoCalendarioAnual) {
@@ -156,13 +177,14 @@ const PeriodoFechamentoAbertura = () => {
         validacaoPrimeiroBim,
         validacaoSegundoBim,
         validacaoTerceiroBim,
-        validacaoQuartoBim
+        validacaoQuartoBim,
+        isAplicacaoSondagem && { ...validacaoQuintoBim }
       );
     } else {
       periodos = Object.assign({}, validacaoPrimeiroBim, validacaoSegundoBim);
     }
     setValidacoes(Yup.object().shape(periodos));
-  }, [isTipoCalendarioAnual]);
+  }, [isTipoCalendarioAnual, isAplicacaoSondagem]);
 
   useEffect(() => {
     const somenteConsultarFrequencia = verificaSomenteConsulta(permissoesTela);
@@ -211,9 +233,10 @@ const PeriodoFechamentoAbertura = () => {
     setModoEdicao(false);
     if (tipoCalendarioSelecionado) {
       setEmprocessamento(true);
-      ServicoPeriodoFechamento.obterPorTipoCalendario(tipoCalendarioSelecionado)
+      ServicoPeriodoFechamento.obterPorTipoCalendario(tipoCalendarioSelecionado, valorAplicacao)
         .then(resposta => {
           setValorAplicacao(resposta.data.aplicacao);
+          setIsAplicacaoSondagem(resposta.data.ehAplicacaoSondagem);
 
           if (resposta?.data?.fechamentosBimestres) {
             const montarDataInicio = item => {
@@ -254,6 +277,12 @@ const PeriodoFechamentoAbertura = () => {
                   resposta.data.bimestre4FinalDoFechamento =
                     montarDataFim(item);
                   break;
+                case 5:
+                  resposta.data.bimestre5InicioDoFechamento =
+                    montarDataInicio(item);
+                  resposta.data.bimestre5FinalDoFechamento =
+                    montarDataFim(item);
+                  break;
                 default:
                   break;
               }
@@ -284,7 +313,7 @@ const PeriodoFechamentoAbertura = () => {
     } else {
       setFechamento(obtemPeriodosIniciais());
     }
-  }, [tipoCalendarioSelecionado]);
+  }, [tipoCalendarioSelecionado, valorAplicacao]);
 
   useEffect(() => {
     carregaDados();
@@ -350,6 +379,10 @@ const PeriodoFechamentoAbertura = () => {
           item.inicioDoFechamento = form.bimestre4InicioDoFechamento.toDate();
           item.finalDoFechamento = form.bimestre4FinalDoFechamento.toDate();
           break;
+        case 5:
+          item.inicioDoFechamento = form.bimestre5InicioDoFechamento.toDate();
+          item.finalDoFechamento = form.bimestre5FinalDoFechamento.toDate();
+          break;
         default:
           break;
       }
@@ -359,7 +392,7 @@ const PeriodoFechamentoAbertura = () => {
 
     const payload = {
       ...form,
-      // aplicacao: valorAplicacao,
+      aplicacao: valorAplicacao,
       confirmouAlteracaoHierarquica: false,
     };
 
@@ -437,7 +470,7 @@ const PeriodoFechamentoAbertura = () => {
         <div className="col-md-3 mb-2">
           <CampoData
             form={form}
-            placeholder="Início do Bimestre"
+            placeholder={`Início do ${isAplicacaoSondagem ? 'Ciclo' : 'Bimestre'}`}
             formatoData="DD/MM/YYYY"
             name={chaveDataInicial}
             onChange={() => onChangeCamposData(form)}
@@ -448,7 +481,7 @@ const PeriodoFechamentoAbertura = () => {
         <div className="col-md-3 mb-2">
           <CampoData
             form={form}
-            placeholder="Fim do Bimestre"
+            placeholder={`Fim do ${isAplicacaoSondagem ? 'Ciclo' : 'Bimestre'}`}
             formatoData="DD/MM/YYYY"
             name={chaveDataFinal}
             onChange={() => onChangeCamposData(form)}
@@ -559,7 +592,7 @@ const PeriodoFechamentoAbertura = () => {
                     </Loader>
                   </div>
 
-                  {/* <div className="col-sm-12 col-md-4 col-lg-6 col-xl-4 mb-2">
+                  <div className="col-sm-12 col-md-4 col-lg-6 col-xl-4 mb-2">
                     {isModalidadeFundMedio && valorTipoCalendario && (
                       <SelectAutocomplete
                         showList
@@ -590,7 +623,7 @@ const PeriodoFechamentoAbertura = () => {
                         mensagemErro="Campo obrigatório"
                       />
                     )}
-                  </div> */}
+                  </div>
 
                   <div className="col-sm-12 col-md-4 col-lg-6 col-xl-8 pt-2 pb-2 d-flex justify-content-end">
                     {registroMigrado ? (
@@ -608,7 +641,7 @@ const PeriodoFechamentoAbertura = () => {
                       {fechamento.fechamentosBimestres.map((c, indice) =>
                         criaBimestre(
                           form,
-                          `${c.bimestre}° Bimestre`,
+                          `${c.bimestre}° ${isAplicacaoSondagem ? 'Ciclo' : 'Bimestre'}`,
                           `bimestre${c.bimestre}InicioDoFechamento`,
                           `bimestre${c.bimestre}FinalDoFechamento`,
                           obterDatasParaHabilitar(
@@ -623,8 +656,8 @@ const PeriodoFechamentoAbertura = () => {
                 />
                 <div className="row">
                   {tipoCalendarioSelecionado &&
-                  ehRegistroExistente &&
-                  auditoria?.criadoEm ? (
+                    ehRegistroExistente &&
+                    auditoria?.criadoEm ? (
                     <Auditoria
                       criadoEm={auditoria.criadoEm}
                       criadoPor={auditoria.criadoPor}

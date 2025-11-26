@@ -2,9 +2,9 @@ import moment from 'moment';
 import api from '~/servicos/api';
 
 class ServicoPeriodoFechamento {
-  obterPorTipoCalendario = tipoCalendarioSelecionado => {
+  obterPorTipoCalendario = (tipoCalendarioSelecionado, aplicacao) => {
     return api.get(
-      `/v1/periodos/fechamentos/aberturas?tipoCalendarioId=${tipoCalendarioSelecionado}`
+      `/v1/periodos/fechamentos/aberturas?tipoCalendarioId=${tipoCalendarioSelecionado}${aplicacao ? `&aplicacao=${aplicacao}` : ''}`
     );
   };
 
