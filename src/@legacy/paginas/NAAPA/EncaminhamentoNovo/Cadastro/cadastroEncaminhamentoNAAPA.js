@@ -3,7 +3,7 @@ import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { SelectComponent } from '~/componentes';
-import ObjectCardEstudante from '~/componentes-sgp/ObjectCardEstudante/objectCardEstudante';
+import ObjectCardEstudante from './componentes/cardEstudante/objectCardEstudante';
 import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
 import MontarDadosTabs from './componentes/montarDadosTabs/montarDadosTabs';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
@@ -125,7 +125,18 @@ const CadastroEncaminhamentoNAAPA = () => {
         </Col>
       </Row>
 
-      <Row gutter={[16, 16]}>
+      <Row gutter={[16, 16]} style={{ padding: '8px 0px' }}>
+        <Col>
+          <p>
+            Confira as informações completas do estudante, além dos atendimentos
+            e acompanhamentos realizados pelos equipamentos da rede. Esses
+            registros oferecem uma visão integrada do caso e apoiam a
+            continuidade do acompanhamento.
+          </p>
+        </Col>
+      </Row>
+
+      <Row gutter={[16, 16]} style={{ marginBottom: '16px' }}>
         <Col sm={24} lg={12}>
           <SelectComponent
             disabled

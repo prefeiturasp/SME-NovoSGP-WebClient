@@ -29,7 +29,6 @@ import {
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
-import BtnImpressaoEncaminhamentoNAAPA from '../componentes/btnImpressaoNAAPA';
 import BtnReabrirEncaminhamentoNAAPA from './componentes/reabrir';
 
 const CadastroEncaminhamentoNAAPABotoesAcao = props => {
@@ -221,17 +220,12 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       <Col>
         <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
       </Col>
-      <Col>
-        <BtnImpressaoEncaminhamentoNAAPA
-          idsSelecionados={encaminhamentoId ? [encaminhamentoId] : []}
-        />
-      </Col>
       {mostrarBusca ? (
         <Col>
           <Button
             bold
             border
-            color={Colors.Roxo}
+            color={Colors.Azul}
             label="Próximo passo"
             disabled={desabilitarProximoPasso}
             onClick={() => onClickProximoPasso()}
