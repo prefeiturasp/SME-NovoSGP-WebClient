@@ -9,7 +9,7 @@ import {
   setTabAtivaEncaminhamentoNAAPA,
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { erros } from '~/servicos';
-import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
+import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
 import MontarDadosTabItinerancia from './montarDadosTabItinerancia/montarDadosTabItinerancia';
 import MontarDadosTabSelecionada from './montarDadosTabSelecionada';
 import { MontarDadosTabBuscaAtiva } from './montarDadosTabBuscaAtiva';
@@ -40,9 +40,8 @@ const MontarDadosTabs = () => {
   );
 
   const obterSecoes = useCallback(async () => {
-    const resposta = await ServicoNAAPA.obterSecoes(
-      encaminhamentoId,
-      modalidade
+    const resposta = await ServicoEncaminhamentoNAAPA.obterSecoes(
+      encaminhamentoId
     ).catch(e => erros(e));
 
     dispatch(setDadosSecoesEncaminhamentoNAAPA(resposta?.data || []));
@@ -51,7 +50,7 @@ const MontarDadosTabs = () => {
         resposta?.data[0]?.questionarioId?.toString();
       dispatch(setTabAtivaEncaminhamentoNAAPA(primeiraTabSelecionada));
     }
-  }, [dispatch, encaminhamentoId, modalidade]);
+  }, [dispatch, encaminhamentoId]);
 
   useEffect(() => {
     if (aluno?.codigoAluno && anoLetivo) {
@@ -62,7 +61,7 @@ const MontarDadosTabs = () => {
   }, [dispatch, obterSecoes, aluno, anoLetivo]);
 
   const onChangeTab = tabIndex => {
-    ServicoNAAPA.validarTrocaDeAbas(tabIndex, encaminhamentoId);
+    ServicoEncaminhamentoNAAPA.validarTrocaDeAbas(tabIndex, encaminhamentoId);
   };
 
   return (
@@ -103,12 +102,6 @@ const MontarDadosTabs = () => {
             </TabPane>
           );
         })}
-
-        <TabPane tab="Busca ativa escolar" key="BUSCA_ATIVA_ESCOLAR">
-          {tabAtivaEncaminhamentoNAAPA === 'BUSCA_ATIVA_ESCOLAR' && (
-            <MontarDadosTabBuscaAtiva exibirCampoSemValor={false} />
-          )}
-        </TabPane>
       </ContainerTabsCard>
 
       {!tabAtivaEncaminhamentoNAAPA && (
