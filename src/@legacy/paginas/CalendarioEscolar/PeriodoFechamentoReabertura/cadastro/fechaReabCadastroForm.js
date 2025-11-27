@@ -89,9 +89,9 @@ const FechaReabCadastroForm = () => {
     paramsRota?.id
       ? null
       : {
-          ...valoresIniciaisPadrao,
-          tipoCalendarioId: paramsRota?.tipoCalendarioId,
-        }
+        ...valoresIniciaisPadrao,
+        tipoCalendarioId: paramsRota?.tipoCalendarioId,
+      }
   );
 
   const onChangeCampos = () => {
@@ -153,8 +153,8 @@ const FechaReabCadastroForm = () => {
   const montarDataHoraUsuarioAprovador = dados => {
     const dataFormatada = dados?.aprovadoEm
       ? `${moment?.(dados?.aprovadoEm)?.format('DD/MM/YYYY')}  às ${moment?.(
-          dados?.aprovadoEm
-        )?.format('HH:mm')}`
+        dados?.aprovadoEm
+      )?.format('HH:mm')}`
       : '';
 
     if (dataFormatada && dados.aprovadoPor) {
@@ -342,6 +342,13 @@ const FechaReabCadastroForm = () => {
     }
   };
 
+  const onChangeAplicacao = form => {
+    const id = obterIdPorDescricao(form?.aplicacao);
+    setValorAplicacao(id);
+    form.setFieldValue('bimestres', undefined);
+    onChangeCampos();
+  };
+
   return (
     <>
       {valoresIniciais ? (
@@ -384,11 +391,7 @@ const FechaReabCadastroForm = () => {
                             const id = obterIdPorDescricao(descricao);
                             setValorAplicacao(id);
                           }}
-                          onChange={descricao => {
-                            const id = obterIdPorDescricao(descricao);
-                            setValorAplicacao(id);
-                            onChangeCampos();
-                          }}
+                          onChange={() => onChangeAplicacao(form)}
                           value={
                             opcoesAplicacao.find(
                               item => item.id === valorAplicacao
