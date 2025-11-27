@@ -40,7 +40,6 @@ import { ordenarDescPor, verificarDataFimMaiorInicio } from '~/utils';
 import { BotaoOrdenacaoListaEncaminhamentoNAAPA } from './components/ordenacao';
 import ListaEncaminhamentoNAAPABotoesAcao from './listaEncaminhamentoNAAPABotoesAcao';
 import ListaEncaminhamentoNAAPAPaginada from './listaEncaminhamentoNAAPAPaginada';
-import TabelaEncaminhamentoNAAPAPaginacao from '../Tabela/tabelaEncaminhamentoNAAPAPaginacao';
 
 const ListaEncaminhamentoNAAPA = () => {
   const location = useLocation();
@@ -449,7 +448,7 @@ const ListaEncaminhamentoNAAPA = () => {
           <Col span={24}>
             <CheckboxComponent
               id={SGP_CHECKBOX_EXIBIR_HISTORICO}
-              label="Exibir histórico?"
+              label="Exibir histórico"
               onChangeCheckbox={onCheckedConsideraHistorico}
               checked={consideraHistorico}
             />
@@ -575,6 +574,21 @@ const ListaEncaminhamentoNAAPA = () => {
             />
           </Col>
 
+          {/* <Col sm={24} lg={12}>
+            <SelectComponent
+              allowClear
+              valueOption="id"
+              label="Prioridade"
+              valueText="nome"
+              disabled={!ue?.codigo}
+              placeholder="Prioridade"
+              lista={listaPrioridades}
+              onChange={setPrioridade}
+              valueSelect={prioridade}
+              id={SGP_SELECT_PRIORIDADE}
+            />
+          </Col> */}
+
           <Col sm={24} lg={12}>
             <RadioGroupButton
               desabilitado={!ue?.codigo}
@@ -588,14 +602,35 @@ const ListaEncaminhamentoNAAPA = () => {
             />
           </Col>
 
-          <Col className="mt-3" sm={24} lg={24}>
-            <TabelaEncaminhamentoNAAPAPaginacao
-              somenteConsulta={somenteConsulta}
-              idsSelecionados={idsEncaminhamentoNAAPASelecionados}
+          <Col xs={24} sm={12}>
+            <BotaoOrdenacaoListaEncaminhamentoNAAPA
+              disabled={!ue?.codigo}
+              setOrdenacoesSelecionadas={setOrdenacoesSelecionadas}
+              ordenacoesSelecionadas={ordenacoesSelecionadas}
+              opcoesParaRemover={
+                ue?.codigo !== OPCAO_TODOS
+                  ? [OrdenacaoListEncaminhamentoNAAPAEnum.UE]
+                  : []
+              }
+            />
+          </Col>
+
+          <Col sm={24}>
+            <ListaEncaminhamentoNAAPAPaginada
+              ue={ue}
+              dre={dre}
+              turmaId={turmaId}
+              situacao={situacao}
+              anoLetivo={anoLetivo}
+              codigoNomeAluno={codigoNomeAluno}
+              prioridade={prioridade}
+              consideraHistorico={consideraHistorico}
+              dataAberturaQueixaFim={dataAberturaQueixaFim}
+              dataAberturaQueixaInicio={dataAberturaQueixaInicio}
               onSelecionarItems={onSelecionarItems}
+              exibirEncaminhamentosEncerrados={exibirEncaminhamentosEncerrados}
               obterDadosFiltros={obterDadosFiltros}
               ordenacoesSelecionadas={ordenacoesSelecionadas}
-              setOrdenacoesSelecionadas={setOrdenacoesSelecionadas}
             />
           </Col>
         </Row>
