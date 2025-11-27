@@ -10,7 +10,7 @@ import { SGP_SECAO } from '~/constantes/ids/questionario-dinamico';
 import { setExibirLoaderEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { erros } from '~/servicos';
 import ServicoEstudante from '~/servicos/Paginas/Estudante/ServicoEstudante';
-import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
+import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
 
 const MontarDadosTabSelecionada = props => {
   const { questionarioId, dadosTab } = props;
@@ -189,7 +189,7 @@ const MontarDadosTabSelecionada = props => {
   const obterDadosQuestionarioId = useCallback(async () => {
     dispatch(setExibirLoaderEncaminhamentoNAAPA(true));
 
-    const resposta = await ServicoNAAPA.obterDadosQuestionarioId(
+    const resposta = await ServicoEncaminhamentoNAAPA.obterDadosQuestionarioId(
       questionarioId,
       aluno?.codigoAluno,
       turma?.codigo,
@@ -322,7 +322,7 @@ const MontarDadosTabSelecionada = props => {
         dadosQuestionarioAtual={dadosQuestionarioAtual}
         prefixId={`${SGP_SECAO}_${dadosTab?.nomeComponente}`}
         desabilitarCampos={desabilitarCamposEncaminhamentoNAAPA}
-        funcaoRemoverArquivoCampoUpload={ServicoNAAPA.removerArquivo}
+        funcaoRemoverArquivoCampoUpload={ServicoEncaminhamentoNAAPA.removerArquivo}
         onChangeQuestionario={() => {
           QuestionarioDinamicoFuncoes.guardarSecaoEmEdicao(dadosTab?.id);
         }}
