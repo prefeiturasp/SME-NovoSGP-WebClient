@@ -6,7 +6,7 @@ import { SelectComponent } from '~/componentes';
 import ObjectCardEstudante from '~/componentes-sgp/ObjectCardEstudante/objectCardEstudante';
 import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
 import MontarDadosTabs from './componentes/montarDadosTabs/montarDadosTabs';
-import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
+import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
 import { store } from '@/core/redux';
 import {
   setCarregarDadosEncaminhamentoNAAPA,
@@ -49,7 +49,7 @@ const CadastroEncaminhamentoNAAPA = () => {
 
   const obterDadosEncaminhamentoNAAPA = useCallback(async () => {
     dispatch(setExibirLoaderEncaminhamentoNAAPA(true));
-    const resposta = await ServicoNAAPA.obterDadosEncaminhamentoNAAPA(
+    const resposta = await ServicoEncaminhamentoNAAPA.obterDadosEncaminhamentoNAAPA(
       encaminhamentoId
     ).catch(e => erros(e));
 
