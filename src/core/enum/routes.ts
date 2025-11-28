@@ -90,6 +90,7 @@ export enum ROUTES {
   ATENDIMENTO_NAAPA = '/naapa/encaminhamento', // vai ser > /naapa/atendimento,
   ENCAMINHAMENTO_NAAPA = '/naapa/encaminhamento', // usado para permissao
   ENCAMINHAMENTO_NAAPA_NOVO = '/naapa/encaminhamento-novo', // somente endpoint
+  ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL = '/naapa/encaminhamento-novo-institucional',
   RELATORIO_ENCAMINHAMENTO_NAAPA = '/relatorios/naapa/encaminhamento',
   LOGIN = '/login',
   REDEFINIR_SENHA = '/redefinir-senha',
