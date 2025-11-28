@@ -51,6 +51,7 @@ const ListaEncaminhamentoNAAPABotoesAcao = props => {
       </Col>
       <Col>
         <Dropdown
+          disabled={desabilitarNovo}
           menu={{ items, selectable: false }}
           placement="bottomLeft"
           overlayClassName="dropdownNovoEncaminhamento"
