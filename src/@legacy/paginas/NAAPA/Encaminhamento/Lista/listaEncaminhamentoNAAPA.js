@@ -424,7 +424,7 @@ const ListaEncaminhamentoNAAPA = () => {
 
   return (
     <>
-      <Cabecalho pagina="Encaminhamento NAAPA">
+      <Cabecalho pagina="Atendimento">
         <ListaEncaminhamentoNAAPABotoesAcao
           podeIncluir={podeIncluir}
           somenteConsulta={somenteConsulta}

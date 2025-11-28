@@ -1577,8 +1577,7 @@ route.set(ROUTES.DASHBOARD_NAAPA, {
   chavePermissao: ROUTES.DASHBOARD_NAAPA,
 });
 
-// novo encaminhamento
-route.set(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO, {
+route.set(ROUTES.ENCAMINHAMENTO_NAAPA, {
   breadcrumbName: 'Encaminhamento',
   menu: ['NAAPA'],
   parent: '/',
@@ -1589,9 +1588,8 @@ route.set(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO, {
   chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
 });
 
-route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO}/novo`, {
-  breadcrumbName: 'Novo',
-  parent: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO,
+route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA}/novo`, {
+  parent: ROUTES.ENCAMINHAMENTO_NAAPA,
   component: CadastroEncaminhamentoNAAPA,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
@@ -1599,18 +1597,15 @@ route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO}/novo`, {
   chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
 });
 
-route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO}/:id`, {
-  breadcrumbName: 'Encaminhamento',
-  parent: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO,
+route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA}/:id`, {
+  parent: ROUTES.ENCAMINHAMENTO_NAAPA,
   component: CadastroEncaminhamentoNAAPA,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: false,
   chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
 });
-// novo encaminhamento
 
-// futuro atendimento
 route.set(ROUTES.ATENDIMENTO_NAAPA, {
   breadcrumbName: 'Atendimento',
   menu: ['NAAPA'],
@@ -1623,7 +1618,6 @@ route.set(ROUTES.ATENDIMENTO_NAAPA, {
 });
 
 route.set(`${ROUTES.ATENDIMENTO_NAAPA}/novo`, {
-  breadcrumbName: 'Novo',
   parent: ROUTES.ATENDIMENTO_NAAPA,
   component: CadastroAtendimentoNAAPA,
   exact: true,
@@ -1633,7 +1627,6 @@ route.set(`${ROUTES.ATENDIMENTO_NAAPA}/novo`, {
 });
 
 route.set(`${ROUTES.ATENDIMENTO_NAAPA}/:id`, {
-  breadcrumbName: 'Atendimento',
   parent: ROUTES.ATENDIMENTO_NAAPA,
   component: CadastroAtendimentoNAAPA,
   exact: true,
@@ -1641,7 +1634,6 @@ route.set(`${ROUTES.ATENDIMENTO_NAAPA}/:id`, {
   temPermissionamento: true,
   chavePermissao: ROUTES.ATENDIMENTO_NAAPA,
 });
-// futuro atendimento
 
 // novo encaminhamento institucional
 route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL}/novo`, {
