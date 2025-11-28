@@ -143,7 +143,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
       onClick={linha => {
         store.dispatch(setTabAtivaEncaminhamentoNAAPA(0));
         const dadosSalvarState = obterDadosFiltros();
-        navigate(`${ROUTES.ATENDIMENTO_NAAPA}/${linha?.id}`, {
+        navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${linha?.id}`, {
           state: dadosSalvarState,
         });
       }}
