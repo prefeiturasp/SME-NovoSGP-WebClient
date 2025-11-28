@@ -104,13 +104,12 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
       if (confirmou) {
         const resposta = await ServicoNAAPA.salvarPadrao(encaminhamentoId);
-        if (resposta?.status === 200)
-          navigate(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO);
+        if (resposta?.status === 200) navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
       } else {
-        navigate(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO, { state: dadosRouteState });
+        navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
       }
     } else {
-      navigate(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO, { state: dadosRouteState });
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
     }
   };
 
@@ -128,7 +127,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       });
       if (resultado?.status === 200) {
         sucesso('Encaminhamento excluído com sucesso');
-        navigate(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO, { state: dadosRouteState });
+        navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
       }
     }
   };
@@ -158,7 +157,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       if (encaminhamentoId) {
         dispatch(setCarregarDadosEncaminhamentoNAAPA(true));
       }
-      navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO}/${resposta?.data?.id}`, {
+      navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`, {
         state: dadosRouteState,
       });
     }
@@ -173,7 +172,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         : situacaoNAAPA.AguardandoAtendimento
     );
     if (resposta?.status === 200) {
-      navigate(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO, { state: dadosRouteState });
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
     }
   };
 
