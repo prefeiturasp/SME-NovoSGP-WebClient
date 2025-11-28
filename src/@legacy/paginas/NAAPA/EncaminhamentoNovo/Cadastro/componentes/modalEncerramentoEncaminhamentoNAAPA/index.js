@@ -89,7 +89,7 @@ const ModalEncerramentoEncaminhamentoNAAPA = () => {
     if (retorno?.status === 200) {
       sucesso('Encaminhamento encerrado com sucesso.');
       fecharModal();
-      navigate(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO);
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
     }
   };
 

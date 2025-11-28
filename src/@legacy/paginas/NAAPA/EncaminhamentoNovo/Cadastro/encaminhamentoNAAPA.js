@@ -37,7 +37,7 @@ const EncaminhamentoNAAPA = () => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
 
     if (mostrarBusca && soConsulta) {
-      navigate(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO);
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
     }
   }, [permissoesTela, mostrarBusca]);
 
