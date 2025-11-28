@@ -137,6 +137,7 @@ import Sondagem from '~/paginas/Sondagem/sondagem';
 import { setRotas } from '~/redux/modulos/navegacao/actions';
 import InformacoesEducacionais from '~/paginas/Gestao/InformacoesEducacionais/painelEducacional';
 import ImportacaoDados from '~/paginas/Gestao/ImportacaoDados/importacaoDados';
+import CadastroEncaminhamentoNAAPAInstitucional from '@/@legacy/paginas/NAAPA/EncaminhamentoNovo/CadastroInstitucional/cadastroEncaminhamentoNAAPAInstitucional';
 
 export interface RouteProps {
   path: string;
@@ -1641,6 +1642,28 @@ route.set(`${ROUTES.ATENDIMENTO_NAAPA}/:id`, {
   chavePermissao: ROUTES.ATENDIMENTO_NAAPA,
 });
 // futuro atendimento
+
+// novo encaminhamento institucional
+route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL}/novo`, {
+  breadcrumbName: 'Novo',
+  parent: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL,
+  component: CadastroEncaminhamentoNAAPAInstitucional,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
+  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
+});
+
+route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL}/:id`, {
+  breadcrumbName: 'Encaminhamento',
+  parent: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL,
+  component: CadastroEncaminhamentoNAAPAInstitucional,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
+  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
+});
+// novo encaminhamento institucional
 
 route.set(ROUTES.RELATORIO_AEE_PLANO_IMPRESSAO, {
   breadcrumbName: 'Plano',
