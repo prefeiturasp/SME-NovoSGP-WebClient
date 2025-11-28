@@ -17,11 +17,11 @@ const CampoDinamicoAlertCheckbox = props => {
     <div className="col-md-12 mb-3">
       <div
         className="d-flex align-items-center p-2 mb-2"
-        style={{ backgroundColor: '#FFF9E6', borderRadius: '4px' }}
+        style={{ backgroundColor: '#FFF3CD', borderRadius: '4px' }}
       >
         <input
           type="checkbox"
-          style={{ marginRight: '12px', marginLeft: '12px' }}
+          style={{ marginRight: '12px', marginLeft: '12px', color: '#856404' }}
           checked={!!form.values[questaoAtual.id]}
           onChange={handleChange}
           disabled={desabilitado}
@@ -29,11 +29,11 @@ const CampoDinamicoAlertCheckbox = props => {
         <div>
           <span
             className="fw-bold"
-            style={{ color: 'red', fontWeight: 'bold' }}
+            style={{ color: '#856404', fontWeight: 'bold' }}
           >
             {questaoAtual.nome}
           </span>
-          <div className="small" style={{ color: 'red' }}>
+          <div className="small" style={{ color: '#856404' }}>
             {questaoAtual.observacao}
           </div>
         </div>
