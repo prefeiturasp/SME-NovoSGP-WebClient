@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao from './cadastroEncaminhamentoNAAPAInstitucionalBotoesAcao';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
-import { Card } from '~/componentes';
+import { Card, CampoData } from '~/componentes';
 import LoaderEncaminhamentoNAAPA from '../Cadastro/componentes/loaderEncaminhamentoNAAPA';
 import { verificaSomenteConsulta } from '~/servicos';
 import { ROUTES } from '@/core/enum/routes';
@@ -25,10 +25,13 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
   const [codigoDre, setCodigoDre] = useState();
   const [codigoUe, setCodigoUe] = useState();
+  const [dataEntradaQueixa, setDataEntradaQueixa] = useState();
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
+
+  const SGP_DATA_ENTRADA_QUEIXA = 'sgp-data-entrada-queixa';
 
   const obterDres = useCallback(async () => {
     setCarregandoDres(true);
@@ -38,14 +41,12 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     )
       .catch(e => erros(e))
       .finally(() => setCarregandoDres(false));
-    console.log('Resposta DREs:', resposta);
     if (resposta?.data?.length > 0) {
       const lista = resposta.data.sort(FiltroHelper.ordenarLista('nome'));
 
       if (lista?.length === 1) {
         //store.dispatch(setDre(lista[0]));
       }
-      console.log('Lista DREs:', lista);
       setListaDres(lista);
     } else {
       setListaDres([]);
@@ -87,6 +88,15 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     setCodigoUe(valorSelecionado);
   };
 
+  const onChangeData = data => {
+    console.log('Data escolhida:', data);
+    setDataEntradaQueixa(data);
+    const dataFormatada = data ? data.format('DD/MM/YYYY') : null;
+    formEncInstitucional.setFieldsValue({
+      dataEntradaQueixa: dataFormatada,
+    });
+  };
+
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
 
@@ -113,13 +123,15 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     <LoaderEncaminhamentoNAAPA>
       <div>
         <Cabecalho pagina="Encaminhamento Institucional">
-          <CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao formEncInstitucional={formEncInstitucional} />
+          <CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao
+            formEncInstitucional={formEncInstitucional}
+          />
         </Cabecalho>
 
         <Card padding="24px 24px">
           <Form form={formEncInstitucional} layout="vertical">
             <Row gutter={[16, 16]} style={{ width: '100%', margin: 0 }}>
-              <Col sm={24} md={24} lg={10}>
+              <Col sm={24} md={24} lg={9}>
                 <Loader loading={carregandoDres} ignorarTip>
                   <Form.Item name="codigoDre">
                     <SelectComponent
@@ -137,7 +149,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
                 </Loader>
               </Col>
 
-              <Col sm={24} md={24} lg={10}>
+              <Col sm={24} md={24} lg={9}>
                 <Loader loading={carregandoUes} ignorarTip>
                   <Form.Item name="codigoUe">
                     <SelectComponent
@@ -153,6 +165,19 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
                     />
                   </Form.Item>
                 </Loader>
+              </Col>
+              <Col sm={24} md={24} lg={6}>
+                <Form.Item name="dataEntradaQueixa">
+                  <CampoData
+                    label="Data de entrada da queixa"
+                    id={SGP_DATA_ENTRADA_QUEIXA}
+                    valor={dataEntradaQueixa}
+                    onChange={onChangeData}
+                    placeholder="DD/MM/AAAA"
+                    formatoData="DD/MM/YYYY"
+                    desabilitado={listaUes?.length === 0}
+                  />
+                </Form.Item>
               </Col>
             </Row>
           </Form>
