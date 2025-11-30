@@ -122,10 +122,8 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
 
   const onClickCadastrarAlterar = async () => {
     const dadosFormulario = await formEncInstitucional.validateFields();
-    console.log(
-      'Dados do formulário ao clicar em Cadastrar/Alterar:',
-      dadosFormulario
-    );
+
+    console.log('Dados do formulário:', dadosFormulario);
     //   const resposta = await ServicoNAAPA.salvarPadrao(
     //     encaminhamentoId,
     //     true,
