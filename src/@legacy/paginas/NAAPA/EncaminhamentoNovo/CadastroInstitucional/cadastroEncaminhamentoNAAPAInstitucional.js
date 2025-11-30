@@ -12,6 +12,7 @@ import { Col, Row, Form } from 'antd';
 import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
 import { AbrangenciaServico, erros } from '~/servicos';
+import { JoditEditor } from '~/componentes';
 
 export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const { id } = useParams();
@@ -26,12 +27,15 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const [codigoDre, setCodigoDre] = useState();
   const [codigoUe, setCodigoUe] = useState();
   const [dataEntradaQueixa, setDataEntradaQueixa] = useState();
+  const [motivoEncaminhamento, setMotivoEncaminhamento] = useState('');
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
+  const [desabilitarCampos, setDesabilitarCampos] = useState(false);
 
   const SGP_DATA_ENTRADA_QUEIXA = 'sgp-data-entrada-queixa';
+  const SGP_MOTIVO_ENCAMINHAMENTO = 'sgp-motivo-encaminhamento';
 
   const obterDres = useCallback(async () => {
     setCarregandoDres(true);
@@ -78,18 +82,15 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
   const onChangeDre = codigo => {
     const valorSelecionado = formEncInstitucional.getFieldValue('codigoDre');
-    console.log('DRE escolhida:', valorSelecionado);
     setCodigoDre(valorSelecionado);
   };
 
   const onChangeUe = codigo => {
     const valorSelecionado = formEncInstitucional.getFieldValue('codigoUe');
-    console.log('UE escolhida:', valorSelecionado);
     setCodigoUe(valorSelecionado);
   };
 
   const onChangeData = data => {
-    console.log('Data escolhida:', data);
     setDataEntradaQueixa(data);
     const dataFormatada = data ? data.format('DD/MM/YYYY') : null;
     formEncInstitucional.setFieldsValue({
@@ -97,11 +98,16 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     });
   };
 
+  const onChangeMotivoEncaminhamento = valor => {
+    setMotivoEncaminhamento(valor);
+  };
+
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
 
     if (soConsulta) {
       navigate(ROUTES.ATENDIMENTO_NAAPA);
+      setDesabilitarCampos(true);
     }
   }, [permissoesTela]);
 
@@ -148,7 +154,6 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
                   </Form.Item>
                 </Loader>
               </Col>
-
               <Col sm={24} md={24} lg={9}>
                 <Loader loading={carregandoUes} ignorarTip>
                   <Form.Item name="codigoUe">
@@ -176,6 +181,21 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
                     placeholder="DD/MM/AAAA"
                     formatoData="DD/MM/YYYY"
                     desabilitado={listaUes?.length === 0}
+                  />
+                </Form.Item>
+              </Col>
+              <Col sm={24} md={24} lg={24}>
+                <Form.Item
+                  name="motivoEncaminhamento"
+                  getValueFromEvent={e => e}
+                >
+                  <JoditEditor
+                    label="Motivo do encaminhamento"
+                    id={SGP_MOTIVO_ENCAMINHAMENTO}
+                    name="motivoEncaminhamento"
+                    onChange={onChangeMotivoEncaminhamento}
+                    readonly={desabilitarCampos}
+                    desabilitar={desabilitarCampos}
                   />
                 </Form.Item>
               </Col>
