@@ -1638,7 +1638,7 @@ route.set(`${ROUTES.ATENDIMENTO_NAAPA}/:id`, {
 // novo encaminhamento institucional
 route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL}/novo`, {
   breadcrumbName: 'Novo',
-  parent: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL,
+  parent: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO,
   component: CadastroEncaminhamentoNAAPAInstitucional,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
@@ -1648,7 +1648,7 @@ route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL}/novo`, {
 
 route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL}/:id`, {
   breadcrumbName: 'Encaminhamento',
-  parent: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL,
+  parent: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO,
   component: CadastroEncaminhamentoNAAPAInstitucional,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
