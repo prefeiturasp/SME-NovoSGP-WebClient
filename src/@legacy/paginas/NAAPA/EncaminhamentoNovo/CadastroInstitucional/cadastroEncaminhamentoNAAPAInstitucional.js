@@ -11,8 +11,10 @@ import CadastroEncaminhamentoNAAPABotoesAcao from '../Cadastro/cadastroEncaminha
 import { Col, Row, Form } from 'antd';
 import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
-import { AbrangenciaServico, erros } from '~/servicos';
+import { AbrangenciaServico, erros, sucesso } from '~/servicos';
 import { JoditEditor } from '~/componentes';
+import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
+import './cadastroEncaminhamentoNAAPAInstitucional.css';
 
 export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const { id } = useParams();
@@ -28,14 +30,26 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const [codigoUe, setCodigoUe] = useState();
   const [dataEntradaQueixa, setDataEntradaQueixa] = useState();
   const [motivoEncaminhamento, setMotivoEncaminhamento] = useState('');
+  const [anexosLista, setAnexosLista] = useState([]);
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
+  const [carregarAnexos, setCarregarAnexos] = useState(false);
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
 
   const SGP_DATA_ENTRADA_QUEIXA = 'sgp-data-entrada-queixa';
   const SGP_MOTIVO_ENCAMINHAMENTO = 'sgp-motivo-encaminhamento';
+  const SGP_UPLOAD_ANEXOS_ENCAMINHAMENTO_INSTITUCIONAL =
+    'sgp-upload-anexos-encaminhamento-institucional';
+
+  const TAMANHO_MAXIMO_UPLOAD = 10;
+  const TOTAL_ARQUIVOS_UPLOAD = 10;
+
+  const tiposArquivosPermitidos =
+    '.doc, .docx, .xls, .xlsx, .pdf, .png, .jpeg , .jpg';
+  const textoFormatoUpload =
+    'Permitido somente um arquivo. Tipo permitido doc, docx, xls, xlsx, PDF, PNG, JPEG e JPG';
 
   const obterDres = useCallback(async () => {
     setCarregandoDres(true);
@@ -102,6 +116,11 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     setMotivoEncaminhamento(valor);
   };
 
+  const onChangeAnexos = listaArquivos => {
+    setAnexosLista(listaArquivos);
+    formEncInstitucional.setFieldsValue({ anexos: listaArquivos });
+  };
+
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
 
@@ -124,6 +143,44 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
       //store.dispatch(setUe());
     }
   }, [codigoDre]);
+
+  const onRemoveFile = async arquivo => {
+    if (desabilitarCampos) {
+      return false;
+    }
+
+    const codigoArquivo = arquivo?.xhr;
+
+    // Se for um arquivo já salvo (tem arquivoId)
+    if (arquivo.arquivoId) {
+      // Aqui você vai chamar seu serviço de remover do backend quando tiver
+      // const resposta = await ServicoNAAPA.removerAnexo(arquivo.arquivoId);
+      sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
+      return true;
+    }
+
+    // Se for um arquivo recém enviado (tem código temporário)
+    if (!codigoArquivo) {
+      return false;
+    }
+
+    setCarregarAnexos(true);
+
+    // Quando seu backend estiver pronto, descomentar:
+    // const resposta = await ServicoArmazenamento.removerArquivo(codigoArquivo)
+    //   .catch(e => erros(e));
+
+    setCarregarAnexos(false);
+
+    // if (resposta?.status === 200) {
+    //   sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
+    //   return true;
+    // }
+
+    // Por enquanto, retorna true para teste:
+    sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
+    return true;
+  };
 
   return (
     <LoaderEncaminhamentoNAAPA>
@@ -185,17 +242,40 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
                 </Form.Item>
               </Col>
               <Col sm={24} md={24} lg={24}>
-                <Form.Item
-                  name="motivoEncaminhamento"
-                  getValueFromEvent={e => e}
-                >
-                  <JoditEditor
-                    label="Motivo do encaminhamento"
-                    id={SGP_MOTIVO_ENCAMINHAMENTO}
+                <Loader loading={carregarAnexos} ignorarTip>
+                  <Form.Item
                     name="motivoEncaminhamento"
-                    onChange={onChangeMotivoEncaminhamento}
-                    readonly={desabilitarCampos}
-                    desabilitar={desabilitarCampos}
+                    getValueFromEvent={e => e}
+                  >
+                    <JoditEditor
+                      label="Motivo do encaminhamento"
+                      id={SGP_MOTIVO_ENCAMINHAMENTO}
+                      name="motivoEncaminhamento"
+                      onChange={onChangeMotivoEncaminhamento}
+                      readonly={desabilitarCampos}
+                      desabilitar={desabilitarCampos}
+                    />
+                  </Form.Item>
+                </Loader>
+              </Col>
+              <div className='tituloAnexo'>Anexo de documentos</div>
+              <p className='subTituloAnexo'>Adicione os arquivos que julgar necessários.</p>
+              <Col sm={24} md={24} lg={24}>
+                <Form.Item name="anexos" getValueFromEvent={e => e}>
+                  <UploadArquivos
+                    name="anexos"
+                    id={SGP_UPLOAD_ANEXOS_ENCAMINHAMENTO_INSTITUCIONAL}
+                    desabilitarGeral={desabilitarCampos}
+                    desabilitarUpload={false}
+                    textoFormatoUpload={textoFormatoUpload}
+                    tiposArquivosPermitidos={tiposArquivosPermitidos}
+                    onRemove={onRemoveFile}
+                    onChangeListaArquivos={onChangeAnexos}
+                    urlUpload="v1/naapa/encaminhamento-institucional/upload"
+                    tamanhoMaximoArquivo={TAMANHO_MAXIMO_UPLOAD}
+                    totalDeUploads={TOTAL_ARQUIVOS_UPLOAD}
+                    defaultFileList={anexosLista}
+                    label="Anexos"
                   />
                 </Form.Item>
               </Col>
