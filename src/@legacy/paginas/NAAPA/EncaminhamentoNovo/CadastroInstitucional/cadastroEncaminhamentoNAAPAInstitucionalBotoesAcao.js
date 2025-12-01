@@ -17,13 +17,11 @@ import {
 } from '~/servicos';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { ROUTES } from '@/core/enum/routes';
-import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
-import { setDesabilitarCamposEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
-import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
-import situacaoNAAPA from '~/dtos/situacaoNAAPA';
+import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
 
 export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
   formEncInstitucional,
+  salvarEncaminhamento,
 }) => {
   const { id } = useParams();
   const { pathname, state } = useLocation();
@@ -34,20 +32,7 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
 
   const dadosRouteState = state;
 
-  const permissoesTela =
-    usuario?.permissoes?.[ROUTES.ENCAMINHAMENTO_NAAPA] || {};
-
-  const questionarioDinamicoEmEdicao = useSelector(
-    store => store.questionarioDinamico.questionarioDinamicoEmEdicao
-  );
-
-  const desabilitarCamposEncaminhamentoNAAPA = useSelector(
-    store => store.encaminhamentoNAAPA.desabilitarCamposEncaminhamentoNAAPA
-  );
-
-  const dadosSituacao = useSelector(
-    state => state.encaminhamentoNAAPA.dadosSituacaoEncaminhamentoNAAPA
-  );
+  const permissoesTela = usuario?.permissoes?.[ROUTES.ATENDIMENTO_NAAPA] || {};
 
   const encaminhamentoId = id;
 
@@ -55,50 +40,54 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
     if (pathname && encaminhamentoId) {
       setBreadcrumbManual(
         pathname,
-        'Encaminhamento',
-        `${ROUTES.ENCAMINHAMENTO_NAAPA}`
+        'Encaminhamento Institucional',
+        `${ROUTES.ATENDIMENTO_NAAPA}`
       );
     }
   }, [pathname, encaminhamentoId]);
 
-  useEffect(() => {
-    const soConsulta = verificaSomenteConsulta(permissoesTela);
-    const desabilitar =
-      encaminhamentoId > 0
-        ? soConsulta || !permissoesTela?.podeAlterar
-        : soConsulta || !permissoesTela?.podeIncluir;
-  }, [encaminhamentoId, permissoesTela, dispatch]);
-
   const onClickVoltar = async () => {
-    const confirmou = await confirmar(
-      'Atenção',
-      '',
-      'Suas alterações não foram salvas, deseja salvar agora?'
-    );
+    const foiModificado = formEncInstitucional.isFieldsTouched();
 
-    if (confirmou) {
-      const resposta = await ServicoNAAPA.salvarPadrao(encaminhamentoId);
-      if (resposta?.status === 200) navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
+    if (foiModificado) {
+      const confirmou = await confirmar(
+        'Atenção',
+        '',
+        'Suas alterações não foram salvas, deseja salvar agora?'
+      );
+
+      if (confirmou) {
+        const salvou = await salvarEncaminhamento();
+        if (salvou) {
+          navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
+        }
+      } else {
+        navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
+      }
     } else {
-      navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
+      navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
     }
   };
 
   const onClickExcluir = async () => {
+    if (!encaminhamentoId) return;
+
     const confirmado = await confirmar(
       'Excluir',
       '',
-      'Você tem certeza que deseja excluir este registro?'
+      'Você tem certeza que deseja excluir este encaminhamento institucional?'
     );
+
     if (confirmado) {
-      const resultado = await ServicoNAAPA.excluirEncaminhamento(
+      const resultado = await ServicoEncaminhamentoNAAPA.excluirEncaminhamento(
         encaminhamentoId
       ).catch(e => {
         erros(e);
       });
+
       if (resultado?.status === 200) {
-        sucesso('Encaminhamento excluído com sucesso');
-        navigate(ROUTES.ENCAMINHAMENTO_NAAPA, {
+        sucesso('Encaminhamento institucional excluído com sucesso');
+        navigate(ROUTES.ATENDIMENTO_NAAPA, {
           state: dadosRouteState,
         });
       }
@@ -106,58 +95,38 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
   };
 
   const onClickCancelar = async () => {
-    if (!desabilitarCamposEncaminhamentoNAAPA && questionarioDinamicoEmEdicao) {
+    const foiModificado = formEncInstitucional.isFieldsTouched();
+
+    if (foiModificado) {
       const confirmou = await confirmar(
         'Atenção',
         'Você não salvou as informações preenchidas.',
         'Deseja realmente cancelar as alterações?'
       );
+
       if (confirmou) {
-        QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico(
-          ServicoNAAPA.removerArquivo
-        );
+        if (encaminhamentoId) {
+          window.location.reload();
+        } else {
+          formEncInstitucional.resetFields();
+        }
       }
     }
   };
 
   const onClickCadastrarAlterar = async () => {
-    const dadosFormulario = await formEncInstitucional.validateFields();
+    const salvou = await salvarEncaminhamento();
 
-    console.log('Dados do formulário:', dadosFormulario);
-    //   const resposta = await ServicoNAAPA.salvarPadrao(
-    //     encaminhamentoId,
-    //     true,
-    //     encaminhamentoId && !dadosSituacao?.situacao === situacaoNAAPA.Rascunho
-    //       ? dadosSituacao?.situacao
-    //       : situacaoNAAPA.AguardandoAtendimento
-    //   );
-    //   if (resposta?.status === 200) {
-    //     navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
-    //   }
+    if (salvou) {
+      navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
+    }
   };
 
-  const ocultarBtnRascunho =
-    encaminhamentoId &&
-    dadosSituacao?.situacao &&
-    dadosSituacao?.situacao !== situacaoNAAPA.Rascunho;
+  const labelBtnCadastrarAlterar = encaminhamentoId ? 'Alterar' : 'Cadastrar';
 
-  const labelBtnCadastrarAlterar = ocultarBtnRascunho ? 'Alterar' : 'Cadastrar';
+  const disabledBtnExcluir = !permissoesTela?.podeExcluir || !encaminhamentoId;
 
-  const disabledBtnDefault =
-    desabilitarCamposEncaminhamentoNAAPA || !questionarioDinamicoEmEdicao;
-
-  const disabledBtnExcluir =
-    !permissoesTela?.podeExcluir ||
-    !encaminhamentoId ||
-    (dadosSituacao?.situacao !== situacaoNAAPA.Rascunho &&
-      dadosSituacao?.situacao !== situacaoNAAPA.AguardandoAtendimento);
-
-  const disabledCadastrarAlterar =
-    desabilitarCamposEncaminhamentoNAAPA ||
-    !permissoesTela?.podeAlterar ||
-    (encaminhamentoId &&
-      !questionarioDinamicoEmEdicao &&
-      dadosSituacao?.situacao !== situacaoNAAPA.Rascunho);
+  const disabledCadastrarAlterar = false;
 
   if (!permissoesTela) {
     return null;
@@ -180,7 +149,6 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
           label="Cancelar"
           color={Colors.Roxo}
           id={SGP_BUTTON_CANCELAR}
-          disabled={disabledBtnDefault}
           onClick={() => onClickCancelar()}
         />
       </Col>
@@ -192,8 +160,7 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
           color={Colors.Azul}
           id={SGP_BUTTON_ALTERAR_CADASTRAR}
           onClick={() => onClickCadastrarAlterar()}
-          disabled={false}
-          // disabled={false} disabledCadastrarAlterar
+          disabled={disabledCadastrarAlterar}
         />
       </Col>
     </Row>

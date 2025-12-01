@@ -19,7 +19,7 @@ import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import { ImprimirAnexosNAAPAEnum } from '@/core/enum/imprimir-anexos-naapa-enum';
 
-const URL_PADRAO = 'v1/novo-encaminhamento-naapa';
+const URL_PADRAO = 'v1/encaminhamento-naapa';
 
 class ServicoEncaminhamentoNAAPA {
   buscarSituacoes = () => api.get(`${URL_PADRAO}/situacoes`);
@@ -29,10 +29,8 @@ class ServicoEncaminhamentoNAAPA {
   obterDadosEncaminhamentoNAAPA = encaminhamentoId =>
     api.get(`${URL_PADRAO}/${encaminhamentoId}`);
 
-  obterSecoes = (encaminhamentoId) =>
-    api.get(
-      `${URL_PADRAO}/secoes?encaminhamentoNAAPAId=${encaminhamentoId}`
-    );
+  obterSecoes = encaminhamentoId =>
+    api.get(`${URL_PADRAO}/secoes?encaminhamentoNAAPAId=${encaminhamentoId}`);
 
   obterDadosQuestionarioId = (
     questionarioId,
@@ -387,6 +385,71 @@ class ServicoEncaminhamentoNAAPA {
     api.get(`${URL_PADRAO}/secoes-itinerancia/profissionais-envolvidos`, {
       params: { codigoDre, codigoUe },
     });
+
+  // ========== MÉTODOS ENCAMINHAMENTO INSTITUCIONAL ==========
+
+  /**
+   * Salva ou atualiza um encaminhamento institucional
+   * @param {Object} dados - Dados do encaminhamento
+   * @param {number} dados.id - ID do encaminhamento (opcional, para edição)
+   * @param {string} dados.codigoDre - Código da DRE
+   * @param {string} dados.codigoUe - Código da UE
+   * @param {string} dados.dataEntradaQueixa - Data de entrada da queixa (formato DD/MM/YYYY)
+   * @param {string} dados.motivoEncaminhamento - Motivo do encaminhamento (HTML)
+   * @param {Array<string>} dados.anexos - Array com os códigos (GUID) dos arquivos anexados
+   * @returns {Promise} Response do axios
+   */
+  salvarEncaminhamentoInstitucional = async dados => {
+    try {
+      const params = {
+        codigoDre: dados.codigoDre,
+        codigoUe: dados.codigoUe,
+        dataEntradaQueixa: dados.dataEntradaQueixa,
+        motivoEncaminhamento: dados.motivoEncaminhamento,
+        anexos: dados.anexos || [],
+      };
+      
+      if (dados.id) {
+        params.id = dados.id;
+      }
+
+      console.log('Params para salvar encaminhamento institucional:', params);
+
+      const resposta = await api.post(`${URL_PADRAO}/salvar`, params);
+
+      if (resposta?.status === 200) {
+        const mensagem = dados.id
+          ? 'Encaminhamento institucional alterado com sucesso'
+          : 'Encaminhamento institucional cadastrado com sucesso';
+        sucesso(mensagem);
+      }
+
+      return resposta;
+    } catch (e) {
+      erros(e);
+      return null;
+    }
+  };
+  
+  obterEncaminhamentoInstitucional = async encaminhamentoId => {
+    try {
+      const resposta = await api.get(`${URL_PADRAO}/${encaminhamentoId}`);
+      return resposta;
+    } catch (e) {
+      erros(e);
+      return null;
+    }
+  };
+ 
+  removerArquivoInstitucional = arquivoCodigo => {
+    return api.delete(`${URL_PADRAO}/arquivo?arquivoCodigo=${arquivoCodigo}`);
+  };
+  
+  downloadArquivoInstitucional = arquivoCodigo => {
+    return api.get(`v1/armazenamento/arquivos/${arquivoCodigo}`, {
+      responseType: 'blob',
+    });
+  };
 }
 
 export default new ServicoEncaminhamentoNAAPA();
