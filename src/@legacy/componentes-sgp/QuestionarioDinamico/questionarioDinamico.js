@@ -127,8 +127,9 @@ const QuestionarioDinamico = props => {
           case tipoQuestao.InformacoesFrequenciaTurmaPAP:
           case tipoQuestao.ProfissionaisEnvolvidos:
           case tipoQuestao.AvaliacoesExternasProvaSP:
-            valorRespostaAtual = resposta[0].texto
-              ? JSON.parse(resposta[0].texto)
+          case tipoQuestao.AlertCheckbox:
+            valorRespostaAtual = resposta[0].opcaoRespostaId
+              ? Number(resposta[0].opcaoRespostaId)
               : '';
             break;
           case tipoQuestao.ComboMultiplaEscolhaDinamico:
@@ -182,7 +183,7 @@ const QuestionarioDinamico = props => {
             break;
         }
       }
-
+      
       if (
         valorRespostaAtual?.length &&
         (questaoAtual?.tipoQuestao === tipoQuestao.ComboMultiplaEscolha ||

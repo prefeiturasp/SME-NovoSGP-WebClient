@@ -1,4 +1,4 @@
-import { Row, Tabs } from 'antd';
+import { Col, Row, Tabs } from 'antd';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -13,6 +13,9 @@ import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoE
 import MontarDadosTabItinerancia from './montarDadosTabItinerancia/montarDadosTabItinerancia';
 import MontarDadosTabSelecionada from './montarDadosTabSelecionada';
 import { MontarDadosTabBuscaAtiva } from './montarDadosTabBuscaAtiva';
+import { Cabecalho } from '~/componentes-sgp';
+import './estilo.css';
+import { Base } from '~/componentes/colors';
 
 const { TabPane } = Tabs;
 
@@ -66,53 +69,32 @@ const MontarDadosTabs = () => {
 
   return (
     <>
-      <ContainerTabsCard
-        border
-        type="card"
-        onChange={onChangeTab}
-        style={{ marginBottom: 20 }}
-        activeKey={tabAtivaEncaminhamentoNAAPA}
-      >
-        {dadosSecoesEncaminhamentoNAAPA?.map(tab => {
-          const questionarioId = tab?.questionarioId;
-          const nomeTab = tab?.nome;
-          const ehTabItinerancia =
-            tab?.nomeComponente === 'QUESTOES_ITINERANCIA';
-          const desabilitarTabItinerancia =
-            ehTabItinerancia &&
-            (!situacao || Number(situacao) === situacaoNAAPA.Rascunho);
+      {dadosSecoesEncaminhamentoNAAPA?.map(tab => {
+        const questionarioId = tab?.questionarioId;
+        const ehTabItinerancia = tab?.nomeComponente === 'QUESTOES_ITINERANCIA';
+        const desabilitarTabItinerancia =
+          ehTabItinerancia &&
+          (!situacao || Number(situacao) === situacaoNAAPA.Rascunho);
 
-          return (
-            <TabPane
-              tab={nomeTab}
-              key={questionarioId}
-              disabled={desabilitarTabItinerancia}
+        return (
+          <div>
+            <h1
+              style={{ color: Base.CinzaMako }}
+              className="titulo-acionamento"
             >
-              {ehTabItinerancia ? (
-                <MontarDadosTabItinerancia
-                  questionarioId={questionarioId}
-                  dadosTab={tab}
-                />
-              ) : (
-                <MontarDadosTabSelecionada
-                  questionarioId={questionarioId}
-                  dadosTab={tab}
-                />
-              )}
-            </TabPane>
-          );
-        })}
-      </ContainerTabsCard>
+              Acionamento de fluxos
+            </h1>
 
-      {!tabAtivaEncaminhamentoNAAPA && (
-        <Row
-          type="flex"
-          justify="center"
-          style={{ marginTop: 20, marginBottom: 36 }}
-        >
-          Selecione uma aba
-        </Row>
-      )}
+            <p className="p-descricao">
+              Insira as informações do encaminhamento
+            </p>
+            <MontarDadosTabSelecionada
+              questionarioId={questionarioId}
+              dadosTab={tab}
+            />
+          </div>
+        );
+      })}
     </>
   );
 };

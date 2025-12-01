@@ -21,7 +21,7 @@ import {
 } from '~/servicos';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { ROUTES } from '@/core/enum/routes';
-import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
+import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
 import {
   setCarregarDadosEncaminhamentoNAAPA,
   setDesabilitarCamposEncaminhamentoNAAPA,
@@ -83,7 +83,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   }, [encaminhamentoId, permissoesTela, dispatch]);
 
   const onClickProximoPasso = () => {
-    ServicoNAAPA.existeEncaminhamentoAtivo(aluno?.codigoAluno)
+    ServicoEncaminhamentoNAAPA.existeEncaminhamentoAtivo(aluno?.codigoAluno)
       .then(resposta => {
         if (resposta.data) {
           erro('Existe encaminhamento ativo para este estudante');
@@ -103,7 +103,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       );
 
       if (confirmou) {
-        const resposta = await ServicoNAAPA.salvarPadrao(encaminhamentoId);
+        const resposta = await ServicoEncaminhamentoNAAPA.salvarPadrao(encaminhamentoId);
         if (resposta?.status === 200) navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
       } else {
         navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
@@ -120,7 +120,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       'Você tem certeza que deseja excluir este registro?'
     );
     if (confirmado) {
-      const resultado = await ServicoNAAPA.excluirEncaminhamento(
+      const resultado = await ServicoEncaminhamentoNAAPA.excluirEncaminhamento(
         encaminhamentoId
       ).catch(e => {
         erros(e);
@@ -141,14 +141,14 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       );
       if (confirmou) {
         QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico(
-          ServicoNAAPA.removerArquivo
+          ServicoEncaminhamentoNAAPA.removerArquivo
         );
       }
     }
   };
 
   const onClickSalvarRascunho = async () => {
-    const resposta = await ServicoNAAPA.salvarPadrao(
+    const resposta = await ServicoEncaminhamentoNAAPA.salvarPadrao(
       encaminhamentoId,
       true,
       situacaoNAAPA.Rascunho
@@ -164,7 +164,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   };
 
   const onClickCadastrarAlterar = async () => {
-    const resposta = await ServicoNAAPA.salvarPadrao(
+    const resposta = await ServicoEncaminhamentoNAAPA.salvarPadrao(
       encaminhamentoId,
       true,
       encaminhamentoId && !dadosSituacao?.situacao === situacaoNAAPA.Rascunho
