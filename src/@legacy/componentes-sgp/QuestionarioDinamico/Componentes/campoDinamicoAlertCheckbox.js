@@ -8,9 +8,19 @@ const CampoDinamicoAlertCheckbox = props => {
   const dispatch = useDispatch();
   const { form, questaoAtual, desabilitado, onChange } = props;
 
+  const idOpcaoSim = questaoAtual.opcaoResposta.find(o => o.nome === 'Sim')?.id;
+  const idOpcaoNao = questaoAtual.opcaoResposta.find(o => o.nome === 'Não')?.id;
+
+  const value = form.values[questaoAtual.id];
+
+  const checked = String(value) === String(idOpcaoSim);
+
   const handleChange = e => {
-    form.setFieldValue(questaoAtual.id, e.target.checked);
+    const novoValor = e.target.checked ? idOpcaoSim : idOpcaoNao;
+
+    form.setFieldValue(questaoAtual.id, novoValor);
     dispatch(setQuestionarioDinamicoEmEdicao(true));
+
     if (onChange) onChange();
   };
 
@@ -20,15 +30,13 @@ const CampoDinamicoAlertCheckbox = props => {
         className="d-flex align-items-center p-3 mb-2"
         style={{ backgroundColor: '#FFF3CD', borderRadius: '4px' }}
       >
-        <label className="cb-container">
-          <input
-            type="checkbox"
-            onChange={handleChange}
-            disabled={desabilitado}
-          />
-          <span className="cb-checkmark"></span>
-        </label>
-
+        <input
+          type="checkbox"
+          style={{ marginRight: '12px', marginLeft: '12px', color: '#856404' }}
+          checked={checked}
+          onChange={handleChange}
+          disabled={desabilitado}
+        />
         <div>
           <span
             className="fw-bold"
