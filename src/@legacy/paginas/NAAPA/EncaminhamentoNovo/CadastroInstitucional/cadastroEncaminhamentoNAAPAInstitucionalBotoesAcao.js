@@ -35,7 +35,7 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
   const dadosRouteState = state;
 
   const permissoesTela =
-    usuario?.permissoes?.[ROUTES.ENCAMINHAMENTO_NAAPA_NOVO] || {};
+    usuario?.permissoes?.[ROUTES.ENCAMINHAMENTO_NAAPA] || {};
 
   const questionarioDinamicoEmEdicao = useSelector(
     store => store.questionarioDinamico.questionarioDinamicoEmEdicao
@@ -56,7 +56,7 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
       setBreadcrumbManual(
         pathname,
         'Encaminhamento',
-        `${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO}`
+        `${ROUTES.ENCAMINHAMENTO_NAAPA}`
       );
     }
   }, [pathname, encaminhamentoId]);
@@ -78,9 +78,9 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
 
     if (confirmou) {
       const resposta = await ServicoNAAPA.salvarPadrao(encaminhamentoId);
-      if (resposta?.status === 200) navigate(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO);
+      if (resposta?.status === 200) navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
     } else {
-      navigate(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO, { state: dadosRouteState });
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
     }
   };
 
@@ -98,7 +98,7 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
       });
       if (resultado?.status === 200) {
         sucesso('Encaminhamento excluído com sucesso');
-        navigate(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO, {
+        navigate(ROUTES.ENCAMINHAMENTO_NAAPA, {
           state: dadosRouteState,
         });
       }
@@ -132,7 +132,7 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
     //       : situacaoNAAPA.AguardandoAtendimento
     //   );
     //   if (resposta?.status === 200) {
-    //     navigate(ROUTES.ENCAMINHAMENTO_NAAPA_NOVO, { state: dadosRouteState });
+    //     navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
     //   }
   };
 
