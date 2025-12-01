@@ -66,53 +66,22 @@ const MontarDadosTabs = () => {
 
   return (
     <>
-      <ContainerTabsCard
-        border
-        type="card"
-        onChange={onChangeTab}
-        style={{ marginBottom: 20 }}
-        activeKey={tabAtivaEncaminhamentoNAAPA}
-      >
-        {dadosSecoesEncaminhamentoNAAPA?.map(tab => {
-          const questionarioId = tab?.questionarioId;
-          const nomeTab = tab?.nome;
-          const ehTabItinerancia =
-            tab?.nomeComponente === 'QUESTOES_ITINERANCIA';
-          const desabilitarTabItinerancia =
-            ehTabItinerancia &&
-            (!situacao || Number(situacao) === situacaoNAAPA.Rascunho);
+      {dadosSecoesEncaminhamentoNAAPA?.map(tab => {
+        const questionarioId = tab?.questionarioId;
+        const ehTabItinerancia = tab?.nomeComponente === 'QUESTOES_ITINERANCIA';
+        const desabilitarTabItinerancia =
+          ehTabItinerancia &&
+          (!situacao || Number(situacao) === situacaoNAAPA.Rascunho);
 
-          return (
-            <TabPane
-              tab={nomeTab}
-              key={questionarioId}
-              disabled={desabilitarTabItinerancia}
-            >
-              {ehTabItinerancia ? (
-                <MontarDadosTabItinerancia
-                  questionarioId={questionarioId}
-                  dadosTab={tab}
-                />
-              ) : (
-                <MontarDadosTabSelecionada
-                  questionarioId={questionarioId}
-                  dadosTab={tab}
-                />
-              )}
-            </TabPane>
-          );
-        })}
-      </ContainerTabsCard>
-
-      {!tabAtivaEncaminhamentoNAAPA && (
-        <Row
-          type="flex"
-          justify="center"
-          style={{ marginTop: 20, marginBottom: 36 }}
-        >
-          Selecione uma aba
-        </Row>
-      )}
+        return (
+          <div>
+            <MontarDadosTabSelecionada
+              questionarioId={questionarioId}
+              dadosTab={tab}
+            />
+          </div>
+        );
+      })}
     </>
   );
 };
