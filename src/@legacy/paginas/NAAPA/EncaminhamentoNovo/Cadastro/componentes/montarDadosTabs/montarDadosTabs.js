@@ -1,4 +1,4 @@
-import { Row, Tabs } from 'antd';
+import { Col, Row, Tabs } from 'antd';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -13,6 +13,9 @@ import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoE
 import MontarDadosTabItinerancia from './montarDadosTabItinerancia/montarDadosTabItinerancia';
 import MontarDadosTabSelecionada from './montarDadosTabSelecionada';
 import { MontarDadosTabBuscaAtiva } from './montarDadosTabBuscaAtiva';
+import { Cabecalho } from '~/componentes-sgp';
+import './estilo.css';
+import { Base } from '~/componentes/colors';
 
 const { TabPane } = Tabs;
 
@@ -75,6 +78,16 @@ const MontarDadosTabs = () => {
 
         return (
           <div>
+            <h1
+              style={{ color: Base.CinzaMako }}
+              className="titulo-acionamento"
+            >
+              Acionamento de fluxos
+            </h1>
+
+            <p className="p-descricao">
+              Insira as informações do encaminhamento
+            </p>
             <MontarDadosTabSelecionada
               questionarioId={questionarioId}
               dadosTab={tab}
