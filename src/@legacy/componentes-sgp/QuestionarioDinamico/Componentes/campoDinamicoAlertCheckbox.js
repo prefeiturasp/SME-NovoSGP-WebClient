@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
+import './estilo.css';
 
 const CampoDinamicoAlertCheckbox = props => {
   const dispatch = useDispatch();
@@ -16,16 +17,18 @@ const CampoDinamicoAlertCheckbox = props => {
   return (
     <div className="col-md-12 mb-3">
       <div
-        className="d-flex align-items-center p-2 mb-2"
+        className="d-flex align-items-center p-3 mb-2"
         style={{ backgroundColor: '#FFF3CD', borderRadius: '4px' }}
       >
-        <input
-          type="checkbox"
-          style={{ marginRight: '12px', marginLeft: '12px', color: '#856404' }}
-          checked={!!form.values[questaoAtual.id]}
-          onChange={handleChange}
-          disabled={desabilitado}
-        />
+        <label className="cb-container">
+          <input
+            type="checkbox"
+            onChange={handleChange}
+            disabled={desabilitado}
+          />
+          <span className="cb-checkmark"></span>
+        </label>
+
         <div>
           <span
             className="fw-bold"
