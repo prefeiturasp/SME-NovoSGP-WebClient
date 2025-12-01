@@ -122,18 +122,6 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
 
   const onClickCadastrarAlterar = async () => {
     const dadosFormulario = await formEncInstitucional.validateFields();
-
-    console.log('Dados do formulário:', dadosFormulario);
-    //   const resposta = await ServicoNAAPA.salvarPadrao(
-    //     encaminhamentoId,
-    //     true,
-    //     encaminhamentoId && !dadosSituacao?.situacao === situacaoNAAPA.Rascunho
-    //       ? dadosSituacao?.situacao
-    //       : situacaoNAAPA.AguardandoAtendimento
-    //   );
-    //   if (resposta?.status === 200) {
-    //     navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
-    //   }
   };
 
   const ocultarBtnRascunho =
@@ -193,7 +181,6 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
           id={SGP_BUTTON_ALTERAR_CADASTRAR}
           onClick={() => onClickCadastrarAlterar()}
           disabled={false}
-          // disabled={false} disabledCadastrarAlterar
         />
       </Col>
     </Row>
