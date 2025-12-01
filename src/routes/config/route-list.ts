@@ -1635,10 +1635,9 @@ route.set(`${ROUTES.ATENDIMENTO_NAAPA}/:id`, {
   chavePermissao: ROUTES.ATENDIMENTO_NAAPA,
 });
 
-// novo encaminhamento institucional
-route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL}/novo`, {
+route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_INSTITUCIONAL}/novo`, {
   breadcrumbName: 'Novo',
-  parent: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO,
+  parent: ROUTES.ENCAMINHAMENTO_NAAPA,
   component: CadastroEncaminhamentoNAAPAInstitucional,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
@@ -1646,16 +1645,15 @@ route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL}/novo`, {
   chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
 });
 
-route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL}/:id`, {
+route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_INSTITUCIONAL}/:id`, {
   breadcrumbName: 'Encaminhamento',
-  parent: ROUTES.ENCAMINHAMENTO_NAAPA_NOVO,
+  parent: ROUTES.ENCAMINHAMENTO_NAAPA,
   component: CadastroEncaminhamentoNAAPAInstitucional,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: false,
   chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
 });
-// novo encaminhamento institucional
 
 route.set(ROUTES.RELATORIO_AEE_PLANO_IMPRESSAO, {
   breadcrumbName: 'Plano',
