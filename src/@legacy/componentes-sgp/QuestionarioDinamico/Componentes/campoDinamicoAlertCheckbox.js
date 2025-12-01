@@ -7,9 +7,19 @@ const CampoDinamicoAlertCheckbox = props => {
   const dispatch = useDispatch();
   const { form, questaoAtual, desabilitado, onChange } = props;
 
+  const idOpcaoSim = questaoAtual.opcaoResposta.find(o => o.nome === "Sim")?.id;
+  const idOpcaoNao = questaoAtual.opcaoResposta.find(o => o.nome === "Não")?.id;
+
+  const value = form.values[questaoAtual.id];
+
+  const checked = String(value) === String(idOpcaoSim);
+
   const handleChange = e => {
-    form.setFieldValue(questaoAtual.id, e.target.checked);
+    const novoValor = e.target.checked ? idOpcaoSim : idOpcaoNao;
+
+    form.setFieldValue(questaoAtual.id, novoValor);
     dispatch(setQuestionarioDinamicoEmEdicao(true));
+
     if (onChange) onChange();
   };
 
@@ -22,7 +32,7 @@ const CampoDinamicoAlertCheckbox = props => {
         <input
           type="checkbox"
           style={{ marginRight: '12px', marginLeft: '12px', color: '#856404' }}
-          checked={!!form.values[questaoAtual.id]}
+          checked={checked}
           onChange={handleChange}
           disabled={desabilitado}
         />
