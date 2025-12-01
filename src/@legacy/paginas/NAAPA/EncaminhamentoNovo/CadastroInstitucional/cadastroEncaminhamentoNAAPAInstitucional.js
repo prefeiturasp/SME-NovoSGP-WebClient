@@ -63,12 +63,10 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
       const lista = resposta.data.sort(FiltroHelper.ordenarLista('nome'));
 
       if (lista?.length === 1) {
-        //store.dispatch(setDre(lista[0]));
       }
       setListaDres(lista);
     } else {
       setListaDres([]);
-      //store.dispatch(setDre());
     }
   }, []);
 
@@ -84,13 +82,11 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
     if (resposta?.data?.length) {
       if (resposta?.data?.length === 1) {
-        //store.dispatch(setUe(resposta.data[0]));
       }
 
       setListaUes(resposta.data);
     } else {
       setListaUes([]);
-      //store.dispatch(setUe());
     }
   }, [codigoDre]);
 
@@ -132,7 +128,6 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
   useEffect(() => {
     obterDres();
-    //store.dispatch(setAnoLetivo(anoAtual));
   }, []);
 
   useEffect(() => {
@@ -140,7 +135,6 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
       obterUes();
     } else {
       setListaUes([]);
-      //store.dispatch(setUe());
     }
   }, [codigoDre]);
 
@@ -151,33 +145,19 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
     const codigoArquivo = arquivo?.xhr;
 
-    // Se for um arquivo já salvo (tem arquivoId)
     if (arquivo.arquivoId) {
-      // Aqui você vai chamar seu serviço de remover do backend quando tiver
-      // const resposta = await ServicoNAAPA.removerAnexo(arquivo.arquivoId);
       sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
       return true;
     }
 
-    // Se for um arquivo recém enviado (tem código temporário)
     if (!codigoArquivo) {
       return false;
     }
 
     setCarregarAnexos(true);
 
-    // Quando seu backend estiver pronto, descomentar:
-    // const resposta = await ServicoArmazenamento.removerArquivo(codigoArquivo)
-    //   .catch(e => erros(e));
-
     setCarregarAnexos(false);
 
-    // if (resposta?.status === 200) {
-    //   sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
-    //   return true;
-    // }
-
-    // Por enquanto, retorna true para teste:
     sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
     return true;
   };
@@ -258,8 +238,10 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
                   </Form.Item>
                 </Loader>
               </Col>
-              <div className='tituloAnexo'>Anexo de documentos</div>
-              <p className='subTituloAnexo'>Adicione os arquivos que julgar necessários.</p>
+              <div className="tituloAnexo">Anexo de documentos</div>
+              <p className="subTituloAnexo">
+                Adicione os arquivos que julgar necessários.
+              </p>
               <Col sm={24} md={24} lg={24}>
                 <Form.Item name="anexos" getValueFromEvent={e => e}>
                   <UploadArquivos
