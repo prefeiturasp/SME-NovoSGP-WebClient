@@ -1584,7 +1584,7 @@ route.set(ROUTES.ENCAMINHAMENTO_NAAPA, {
   component: ListaEncaminhamentoNAAPA,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: false,
+  temPermissionamento: true,
   chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
 });
 
@@ -1593,7 +1593,7 @@ route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA}/novo`, {
   component: CadastroEncaminhamentoNAAPA,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: false,
+  temPermissionamento: true,
   chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
 });
 
@@ -1602,7 +1602,7 @@ route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA}/:id`, {
   component: CadastroEncaminhamentoNAAPA,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: false,
+  temPermissionamento: true,
   chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
 });
 
