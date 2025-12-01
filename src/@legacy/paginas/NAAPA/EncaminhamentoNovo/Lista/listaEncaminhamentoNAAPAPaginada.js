@@ -142,10 +142,19 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
       filtro={filtros}
       onClick={linha => {
         store.dispatch(setTabAtivaEncaminhamentoNAAPA(0));
+
         const dadosSalvarState = obterDadosFiltros();
-        navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${linha?.id}`, {
-          state: dadosSalvarState,
-        });
+
+        if (linha?.tipoQuestionario === 'Institucional') {
+          navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA_INSTITUCIONAL}/${linha.id}`, {
+            state: dadosSalvarState,
+          });
+        } else if (linha?.tipoQuestionario === 'Individual') {
+          navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${linha.id}`, {
+            state: dadosSalvarState,
+          });
+        } else {
+        }
       }}
       filtroEhValido={filtroEhValido}
       multiSelecao
