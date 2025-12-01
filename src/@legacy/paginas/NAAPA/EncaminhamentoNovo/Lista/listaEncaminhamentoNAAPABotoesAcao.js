@@ -27,7 +27,7 @@ const ListaEncaminhamentoNAAPABotoesAcao = props => {
 
   const onClickNovoInstitucional = () => {
     const dadosSalvarState = obterDadosFiltros();
-    navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA_NOVO_INSTITUCIONAL}/novo`, {
+    navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA_INSTITUCIONAL}/novo`, {
       state: dadosSalvarState,
     });
   };
@@ -44,7 +44,10 @@ const ListaEncaminhamentoNAAPABotoesAcao = props => {
     {
       key: '2',
       label: (
-        <button className="btnDropNovoEcaminhamentoItem" onClick={onClickNovoInstitucional}>
+        <button
+          className="btnDropNovoEcaminhamentoItem"
+          onClick={onClickNovoInstitucional}
+        >
           Encaminhamento Institucional
         </button>
       ),
