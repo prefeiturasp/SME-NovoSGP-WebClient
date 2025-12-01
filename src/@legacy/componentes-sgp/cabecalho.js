@@ -78,7 +78,7 @@ const Cabecalho = ({
 
   const componentePadrao = (
     <div
-      className="d-flex background-row pt-2"
+      className="d-flex background-row pt-2 pb-2"
       style={{
         justifyContent: 'space-between',
         flexWrap: 'wrap-reverse',

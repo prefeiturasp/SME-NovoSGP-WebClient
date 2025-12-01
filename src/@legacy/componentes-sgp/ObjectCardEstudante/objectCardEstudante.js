@@ -15,6 +15,7 @@ const ObjectCardEstudante = props => {
     codigoTurma,
     exibirBotaoImprimir,
     exibirFrequencia,
+    exibirCpf,
     permiteAlterarImagem,
     dadosIniciais,
     consultarFrequenciaGlobal,
@@ -108,6 +109,7 @@ const ObjectCardEstudante = props => {
         dados={dadosObjectCardEstudante}
         exibirBotaoImprimir={exibirBotaoImprimir}
         exibirFrequencia={exibirFrequencia}
+        exibirCpf={exibirCpf}
         permiteAlterarImagem={permiteAlterarImagem}
       />
     </Loader>

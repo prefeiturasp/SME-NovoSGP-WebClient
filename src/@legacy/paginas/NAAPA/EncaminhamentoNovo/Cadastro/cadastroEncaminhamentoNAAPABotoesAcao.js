@@ -29,7 +29,6 @@ import {
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import situacaoNAAPA from '~/dtos/situacaoNAAPA';
-import BtnImpressaoEncaminhamentoNAAPA from '../componentes/btnImpressaoNAAPA';
 import BtnReabrirEncaminhamentoNAAPA from './componentes/reabrir';
 
 const CadastroEncaminhamentoNAAPABotoesAcao = props => {
@@ -45,7 +44,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
   const dadosRouteState = state;
 
-  const permissoesTela = usuario.permissoes[ROUTES.ATENDIMENTO_NAAPA];
+  const permissoesTela = usuario.permissoes[ROUTES.ENCAMINHAMENTO_NAAPA];
 
   const questionarioDinamicoEmEdicao = useSelector(
     store => store.questionarioDinamico.questionarioDinamicoEmEdicao
@@ -69,7 +68,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       setBreadcrumbManual(
         pathname,
         'Encaminhamento',
-        `${ROUTES.ATENDIMENTO_NAAPA}`
+        `${ROUTES.ENCAMINHAMENTO_NAAPA}`
       );
     }
   }, [pathname, encaminhamentoId]);
@@ -105,12 +104,12 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
       if (confirmou) {
         const resposta = await ServicoNAAPA.salvarPadrao(encaminhamentoId);
-        if (resposta?.status === 200) navigate(ROUTES.ATENDIMENTO_NAAPA);
+        if (resposta?.status === 200) navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
       } else {
-        navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
+        navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
       }
     } else {
-      navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
     }
   };
 
@@ -128,7 +127,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       });
       if (resultado?.status === 200) {
         sucesso('Encaminhamento excluído com sucesso');
-        navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
+        navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
       }
     }
   };
@@ -158,7 +157,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       if (encaminhamentoId) {
         dispatch(setCarregarDadosEncaminhamentoNAAPA(true));
       }
-      navigate(`${ROUTES.ATENDIMENTO_NAAPA}/${resposta?.data?.id}`, {
+      navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`, {
         state: dadosRouteState,
       });
     }
@@ -173,7 +172,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         : situacaoNAAPA.AguardandoAtendimento
     );
     if (resposta?.status === 200) {
-      navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
     }
   };
 
@@ -220,17 +219,12 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       <Col>
         <BotaoVoltarPadrao onClick={() => onClickVoltar()} />
       </Col>
-      <Col>
-        <BtnImpressaoEncaminhamentoNAAPA
-          idsSelecionados={encaminhamentoId ? [encaminhamentoId] : []}
-        />
-      </Col>
       {mostrarBusca ? (
         <Col>
           <Button
             bold
             border
-            color={Colors.Roxo}
+            color={Colors.Azul}
             label="Próximo passo"
             disabled={desabilitarProximoPasso}
             onClick={() => onClickProximoPasso()}

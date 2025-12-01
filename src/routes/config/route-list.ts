@@ -91,8 +91,10 @@ import DocPlanosTrabalhoLista from '~/paginas/Gestao/DocumentosPlanosTrabalho/li
 import CadastroOcorrencias from '~/paginas/Gestao/Ocorrencia/CadastroOcorrencias';
 import ListaOcorrencias from '~/paginas/Gestao/Ocorrencia/lista/listaOcorrencias';
 import Login from '~/paginas/Login';
-import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/encaminhamentoNAAPA';
-import ListaEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Lista/listaEncaminhamentoNAAPA';
+import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/EncaminhamentoNovo/Cadastro/encaminhamentoNAAPA';
+import ListaEncaminhamentoNAAPA from '~/paginas/NAAPA/EncaminhamentoNovo/Lista/listaEncaminhamentoNAAPA';
+import CadastroAtendimentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/encaminhamentoNAAPA';
+import ListaAtendimentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Lista/listaEncaminhamentoNAAPA';
 import DetalheNotificacao from '~/paginas/Notificacoes/Detalhes/detalheNotificacao';
 import NotificacoesLista from '~/paginas/Notificacoes/Lista/listaNotificacoes';
 import MeusDados from '~/paginas/Perfil/meusDados';
@@ -137,6 +139,7 @@ import Sondagem from '~/paginas/Sondagem/sondagem';
 import { setRotas } from '~/redux/modulos/navegacao/actions';
 import InformacoesEducacionais from '~/paginas/Gestao/InformacoesEducacionais/painelEducacional';
 import ImportacaoDados from '~/paginas/Gestao/ImportacaoDados/importacaoDados';
+import CadastroEncaminhamentoNAAPAInstitucional from '@/@legacy/paginas/NAAPA/EncaminhamentoNovo/CadastroInstitucional/cadastroEncaminhamentoNAAPAInstitucional';
 
 export interface RouteProps {
   path: string;
@@ -1577,7 +1580,7 @@ route.set(ROUTES.DASHBOARD_NAAPA, {
 });
 
 route.set(ROUTES.ENCAMINHAMENTO_NAAPA, {
-  breadcrumbName: 'Encaminhamento NAAPA',
+  breadcrumbName: 'Encaminhamento',
   menu: ['NAAPA'],
   parent: '/',
   component: ListaEncaminhamentoNAAPA,
@@ -1588,7 +1591,6 @@ route.set(ROUTES.ENCAMINHAMENTO_NAAPA, {
 });
 
 route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA}/novo`, {
-  breadcrumbName: 'Encaminhamento',
   parent: ROUTES.ENCAMINHAMENTO_NAAPA,
   component: CadastroEncaminhamentoNAAPA,
   exact: true,
@@ -1598,12 +1600,60 @@ route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA}/novo`, {
 });
 
 route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA}/:id`, {
-  breadcrumbName: 'Encaminhamento',
   parent: ROUTES.ENCAMINHAMENTO_NAAPA,
   component: CadastroEncaminhamentoNAAPA,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
+  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
+});
+
+route.set(ROUTES.ATENDIMENTO_NAAPA, {
+  breadcrumbName: 'Atendimento',
+  menu: ['NAAPA'],
+  parent: '/',
+  component: ListaAtendimentoNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.ATENDIMENTO_NAAPA,
+});
+
+route.set(`${ROUTES.ATENDIMENTO_NAAPA}/novo`, {
+  parent: ROUTES.ATENDIMENTO_NAAPA,
+  component: CadastroAtendimentoNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.ATENDIMENTO_NAAPA,
+});
+
+route.set(`${ROUTES.ATENDIMENTO_NAAPA}/:id`, {
+  parent: ROUTES.ATENDIMENTO_NAAPA,
+  component: CadastroAtendimentoNAAPA,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: true,
+  chavePermissao: ROUTES.ATENDIMENTO_NAAPA,
+});
+
+route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_INSTITUCIONAL}/novo`, {
+  breadcrumbName: 'Novo',
+  parent: ROUTES.ENCAMINHAMENTO_NAAPA,
+  component: CadastroEncaminhamentoNAAPAInstitucional,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
+  chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
+});
+
+route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA_INSTITUCIONAL}/:id`, {
+  breadcrumbName: 'Encaminhamento',
+  parent: ROUTES.ENCAMINHAMENTO_NAAPA,
+  component: CadastroEncaminhamentoNAAPAInstitucional,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
   chavePermissao: ROUTES.ENCAMINHAMENTO_NAAPA,
 });
 

@@ -46,7 +46,7 @@ const ListaEncaminhamentoNAAPA = () => {
 
   const usuario = useSelector(state => state.usuario);
   const { permissoes } = usuario;
-  const { podeIncluir } = permissoes?.[ROUTES.ATENDIMENTO_NAAPA];
+  const { podeIncluir } = permissoes?.[ROUTES.ENCAMINHAMENTO_NAAPA];
 
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [anoLetivo, setAnoLetivo] = useState();
@@ -141,7 +141,7 @@ const ListaEncaminhamentoNAAPA = () => {
 
   useEffect(() => {
     const soConsulta = verificaSomenteConsulta(
-      permissoes?.[ROUTES.ATENDIMENTO_NAAPA]
+      permissoes?.[ROUTES.ENCAMINHAMENTO_NAAPA]
     );
     setSomenteConsulta(soConsulta);
   }, [permissoes]);
@@ -424,7 +424,7 @@ const ListaEncaminhamentoNAAPA = () => {
 
   return (
     <>
-      <Cabecalho pagina="Atendimento">
+      <Cabecalho pagina="Encaminhamento">
         <ListaEncaminhamentoNAAPABotoesAcao
           podeIncluir={podeIncluir}
           somenteConsulta={somenteConsulta}
@@ -436,9 +436,19 @@ const ListaEncaminhamentoNAAPA = () => {
       <Card padding="24px 24px">
         <Row gutter={[16, 16]} style={{ maxWidth: '100%', margin: 0 }}>
           <Col span={24}>
+            <p>
+              O Programa de Apoio e Acompanhamento para a Aprendizagem
+              destina-se aos bebês, crianças e adolescentes que tiveram seus
+              direitos violados, encontram-se em situação de sofrimento e/ou
+              apresentam dificuldades significativas no processo de aprendizagem
+              e desenvolvimento.
+            </p>
+          </Col>
+
+          <Col span={24}>
             <CheckboxComponent
               id={SGP_CHECKBOX_EXIBIR_HISTORICO}
-              label="Exibir histórico?"
+              label="Exibir histórico"
               onChangeCheckbox={onCheckedConsideraHistorico}
               checked={consideraHistorico}
             />
@@ -564,7 +574,7 @@ const ListaEncaminhamentoNAAPA = () => {
             />
           </Col>
 
-          <Col sm={24} lg={12}>
+          {/* <Col sm={24} lg={12}>
             <SelectComponent
               allowClear
               valueOption="id"
@@ -577,13 +587,13 @@ const ListaEncaminhamentoNAAPA = () => {
               valueSelect={prioridade}
               id={SGP_SELECT_PRIORIDADE}
             />
-          </Col>
+          </Col> */}
 
           <Col sm={24} lg={12}>
             <RadioGroupButton
               desabilitado={!ue?.codigo}
               value={exibirEncaminhamentosEncerrados}
-              label="Apresentar encaminhamentos encerrados"
+              label="Exibir encaminhamentos encerrados"
               opcoes={opcoesEncerrados}
               id={SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_NAAPA_ENCERRADOS}
               onChange={e =>

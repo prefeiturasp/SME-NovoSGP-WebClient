@@ -19,7 +19,7 @@ const ListaEncaminhamentoNAAPABotoesAcao = props => {
 
   const onClickNovo = () => {
     const dadosSalvarState = obterDadosFiltros();
-    navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/novo`, {
+    navigate(`${ROUTES.ATENDIMENTO_NAAPA}/novo`, {
       state: dadosSalvarState,
     });
   };

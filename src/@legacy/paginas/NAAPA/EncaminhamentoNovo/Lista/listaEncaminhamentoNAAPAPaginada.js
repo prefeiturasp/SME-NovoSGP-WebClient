@@ -1,6 +1,7 @@
 import { NomeEstudanteLista } from '@/@legacy/componentes-sgp';
 import { ROUTES } from '@/core/enum/routes';
 import { store } from '@/core/redux';
+import { Checkbox } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ListaPaginada } from '~/componentes';
@@ -35,18 +36,16 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
 
   const colunas = [
     {
+      title: 'Tipo',
+      dataIndex: 'tipoQuestionario',
+    },
+    {
       title: 'Criança/Estudante',
-      dataIndex: 'nomeAluno ',
-      render: (_, linha) => (
-        <NomeEstudanteLista
-          nome={`${linha?.nomeAluno} (${linha?.codigoAluno})`}
-          ehMatriculadoTurmaPAP={linha?.ehMatriculadoTurmaPAP}
-        />
-      ),
+      dataIndex: 'nomeAluno',
     },
     {
       title: 'Turma',
-      dataIndex: 'turma',
+      dataIndex: 'turmaNome',
     },
     {
       title: 'Data de entrada da queixa',
@@ -63,19 +62,22 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
           : '',
     },
     {
-      title: 'Prioridade',
-      dataIndex: 'prioridade',
-    },
-    {
       title: 'Situação',
       dataIndex: 'situacao',
+    },
+    {
+      title: 'Suspeita de violência',
+      dataIndex: 'suspeitaViolencia',
+      render: valor => {
+        return <Checkbox checked={Boolean(valor)} disabled />;
+      },
     },
   ];
 
   if (ue?.codigo === OPCAO_TODOS) {
-    colunas.unshift({
-      title: 'Unidade Escolar (UE)',
-      dataIndex: 'ue',
+    colunas.splice(1, 0, {
+      title: 'Unidade Educacional',
+      dataIndex: 'ueNome',
     });
   }
 
@@ -134,16 +136,25 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
 
   return exibirTabela ? (
     <ListaPaginada
-      url="v1/encaminhamento-naapa"
+      url="v1/novo-encaminhamento-naapa/obterEncaminhamentoPorTipo"
       id={SGP_TABLE_ENCAMINHAMENTO_NAAPA}
       colunas={colunas}
       filtro={filtros}
       onClick={linha => {
         store.dispatch(setTabAtivaEncaminhamentoNAAPA(0));
+
         const dadosSalvarState = obterDadosFiltros();
-        navigate(`${ROUTES.ATENDIMENTO_NAAPA}/${linha?.id}`, {
-          state: dadosSalvarState,
-        });
+
+        if (linha?.tipoQuestionario === 'Institucional') {
+          navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA_INSTITUCIONAL}/${linha.id}`, {
+            state: dadosSalvarState,
+          });
+        } else if (linha?.tipoQuestionario === 'Individual') {
+          navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${linha.id}`, {
+            state: dadosSalvarState,
+          });
+        } else {
+        }
       }}
       filtroEhValido={filtroEhValido}
       multiSelecao

@@ -19,7 +19,7 @@ const EncaminhamentoNAAPA = () => {
   const navigate = useNavigate();
 
   const usuario = useSelector(state => state.usuario);
-  const permissoesTela = usuario.permissoes[ROUTES.ATENDIMENTO_NAAPA];
+  const permissoesTela = usuario.permissoes[ROUTES.ENCAMINHAMENTO_NAAPA];
 
   const encaminhamentoId = id;
 
@@ -37,7 +37,7 @@ const EncaminhamentoNAAPA = () => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
 
     if (mostrarBusca && soConsulta) {
-      navigate(ROUTES.ATENDIMENTO_NAAPA);
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
     }
   }, [permissoesTela, mostrarBusca]);
 
@@ -52,7 +52,9 @@ const EncaminhamentoNAAPA = () => {
 
       <Card padding="24px 24px">
         {mostrarBusca ? (
-          <LocalizarEstudante consideraNovasUEs />
+          <>
+            <LocalizarEstudante consideraNovasUEs />
+          </>
         ) : (
           <CadastroEncaminhamentoNAAPA />
         )}
