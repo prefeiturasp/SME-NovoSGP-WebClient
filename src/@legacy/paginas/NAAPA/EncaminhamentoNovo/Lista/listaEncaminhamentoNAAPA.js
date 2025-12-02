@@ -35,7 +35,7 @@ import {
   SGP_SELECT_UE,
 } from '~/constantes/ids/select';
 import { AbrangenciaServico, erros, verificaSomenteConsulta } from '~/servicos';
-import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
+import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
 import { ordenarDescPor, verificarDataFimMaiorInicio } from '~/utils';
 import { BotaoOrdenacaoListaEncaminhamentoNAAPA } from './components/ordenacao';
 import ListaEncaminhamentoNAAPABotoesAcao from './listaEncaminhamentoNAAPABotoesAcao';
@@ -69,7 +69,6 @@ const ListaEncaminhamentoNAAPA = () => {
   const [listaUes, setListaUes] = useState([]);
   const [listaTurmas, setListaTurmas] = useState([]);
   const [listaSituacoes, setListaSituacoes] = useState([]);
-  const [listaPrioridades, setListaPrioridades] = useState([]);
 
   const [carregandoAnosLetivos, setCarregandoAnosLetivos] = useState(false);
   const [carregandoDres, setCarregandoDres] = useState(false);
@@ -282,19 +281,12 @@ const ListaEncaminhamentoNAAPA = () => {
   };
 
   useEffect(() => {
-    ServicoNAAPA.buscarSituacoes().then(resposta => {
+    ServicoEncaminhamentoNAAPA.buscarSituacoes().then(resposta => {
       if (resposta?.data?.length) {
         const lista = atualizarSituacoes(resposta.data);
         setListaSituacoes(lista);
       } else {
         setListaSituacoes([]);
-      }
-    });
-    ServicoNAAPA.buscarPrioridades().then(resposta => {
-      if (resposta?.data?.length) {
-        setListaPrioridades(resposta.data);
-      } else {
-        setListaPrioridades([]);
       }
     });
   }, []);

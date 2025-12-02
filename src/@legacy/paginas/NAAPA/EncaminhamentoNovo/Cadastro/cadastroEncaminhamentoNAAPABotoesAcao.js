@@ -61,7 +61,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const encaminhamentoId = id;
 
   const desabilitarProximoPasso =
-    desabilitarCamposEncaminhamentoNAAPA || !aluno?.codigoAluno;
+    desabilitarCamposEncaminhamentoNAAPA || !aluno?.codigoAluno;  
 
   useEffect(() => {
     if (pathname && encaminhamentoId) {
@@ -132,42 +132,11 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     }
   };
 
-  const onClickCancelar = async () => {
-    if (!desabilitarCamposEncaminhamentoNAAPA && questionarioDinamicoEmEdicao) {
-      const confirmou = await confirmar(
-        'Atenção',
-        'Você não salvou as informações preenchidas.',
-        'Deseja realmente cancelar as alterações?'
-      );
-      if (confirmou) {
-        QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico(
-          ServicoEncaminhamentoNAAPA.removerArquivo
-        );
-      }
-    }
-  };
-
-  const onClickSalvarRascunho = async () => {
-    const resposta = await ServicoEncaminhamentoNAAPA.salvarPadrao(
-      encaminhamentoId,
-      true,
-      situacaoNAAPA.Rascunho
-    );
-    if (resposta?.status === 200) {
-      if (encaminhamentoId) {
-        dispatch(setCarregarDadosEncaminhamentoNAAPA(true));
-      }
-      navigate(`${ROUTES.ENCAMINHAMENTO_NAAPA}/${resposta?.data?.id}`, {
-        state: dadosRouteState,
-      });
-    }
-  };
-
   const onClickCadastrarAlterar = async () => {
     const resposta = await ServicoEncaminhamentoNAAPA.salvarPadrao(
       encaminhamentoId,
       true,
-      encaminhamentoId && !dadosSituacao?.situacao === situacaoNAAPA.Rascunho
+      encaminhamentoId
         ? dadosSituacao?.situacao
         : situacaoNAAPA.AguardandoAtendimento
     );
@@ -179,10 +148,6 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const onClickEncerrar = () =>
     dispatch(setExibirModalEncerramentoEncaminhamentoNAAPA(true));
 
-  const ocultarBtnRascunho =
-    encaminhamentoId &&
-    dadosSituacao?.situacao &&
-    dadosSituacao?.situacao !== situacaoNAAPA.Rascunho;
 
   const exibirBtnEncerrar =
     encaminhamentoId &&
@@ -190,7 +155,9 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     (dadosSituacao?.situacao === situacaoNAAPA.AguardandoAtendimento ||
       dadosSituacao?.situacao === situacaoNAAPA.EmAtendimento);
 
-  const labelBtnCadastrarAlterar = ocultarBtnRascunho ? 'Alterar' : 'Cadastrar';
+  const exibirBtnExcluir = encaminhamentoId && dadosSituacao?.situacao === situacaoNAAPA.AguardandoAtendimento
+
+  const labelBtnCadastrarAlterar = encaminhamentoId ? 'Alterar' : 'Cadastrar';
 
   const disabledBtnDefault =
     desabilitarCamposEncaminhamentoNAAPA || !questionarioDinamicoEmEdicao;
@@ -233,39 +200,16 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
         </Col>
       ) : (
         <>
-          <Col>
-            <BotaoExcluirPadrao
-              disabled={disabledBtnExcluir}
-              onClick={() => onClickExcluir()}
-            />
-          </Col>
-
-          <BtnReabrirEncaminhamentoNAAPA />
-
-          <Col>
-            <Button
-              border
-              label="Cancelar"
-              color={Colors.Roxo}
-              id={SGP_BUTTON_CANCELAR}
-              disabled={disabledBtnDefault}
-              onClick={() => onClickCancelar()}
-            />
-          </Col>
-
-          {!ocultarBtnRascunho && (
+          {exibirBtnExcluir && (
             <Col>
-              <Button
-                bold
-                border
-                color={Colors.Azul}
-                label="Salvar rascunho"
-                id={SGP_BUTTON_SALVAR_RASCUNHO}
-                onClick={() => onClickSalvarRascunho()}
-                disabled={disabledRascunho}
+              <BotaoExcluirPadrao
+                disabled={disabledBtnExcluir}
+                onClick={() => onClickExcluir()}
               />
             </Col>
           )}
+
+          <BtnReabrirEncaminhamentoNAAPA />
 
           <Col>
             <Button
