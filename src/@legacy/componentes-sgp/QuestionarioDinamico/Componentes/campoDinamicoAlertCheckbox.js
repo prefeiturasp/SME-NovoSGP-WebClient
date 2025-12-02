@@ -30,13 +30,21 @@ const CampoDinamicoAlertCheckbox = props => {
         className="d-flex align-items-center p-3 mb-2"
         style={{ backgroundColor: '#FFF3CD', borderRadius: '4px' }}
       >
-        <input
-          type="checkbox"
-          style={{ marginRight: '12px', marginLeft: '12px', color: '#856404' }}
-          checked={checked}
-          onChange={handleChange}
-          disabled={desabilitado}
-        />
+        <label className="cb-container">
+          <input
+            type="checkbox"
+            style={{
+              marginRight: '12px',
+              marginLeft: '12px',
+              color: '#856404',
+            }}
+            checked={checked}
+            onChange={handleChange}
+            disabled={desabilitado}
+          />
+          <span className="cb-checkmark"></span>
+        </label>
+
         <div>
           <span
             className="fw-bold"

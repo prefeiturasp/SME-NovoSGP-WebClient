@@ -69,7 +69,7 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
       title: 'Suspeita de violência',
       dataIndex: 'suspeitaViolencia',
       render: valor => {
-        return <Checkbox checked={Boolean(valor)} disabled />;
+        return <Checkbox checked={Boolean(valor)} />;
       },
     },
   ];
