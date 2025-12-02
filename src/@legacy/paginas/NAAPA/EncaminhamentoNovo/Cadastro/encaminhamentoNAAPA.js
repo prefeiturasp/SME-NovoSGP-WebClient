@@ -53,6 +53,13 @@ const EncaminhamentoNAAPA = () => {
       <Card padding="24px 24px">
         {mostrarBusca ? (
           <>
+            <p style={{ padding: '8px' }}>
+              Insira as informações completas do estudante, além dos
+              atendimentos e acompanhamentos realizados pelos equipamentos da
+              rede. Esses registros oferecem uma visão integrada do caso e
+              apoiam a continuidade do acompanhamento.
+            </p>
+
             <LocalizarEstudante consideraNovasUEs />
           </>
         ) : (
