@@ -9,7 +9,7 @@ import { SGP_TABLE_ENCAMINHAMENTO_NAAPA } from '~/constantes/ids/table';
 import { setTabAtivaEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { verificarDataFimMaiorInicio } from '~/utils';
 
-const ListaEncaminhamentoNAAPAPaginada = props => {
+const ListaAtendimentoNAAPAPaginada = props => {
   const {
     ue,
     dre,
@@ -154,4 +154,4 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
   );
 };
 
-export default ListaEncaminhamentoNAAPAPaginada;
+export default ListaAtendimentoNAAPAPaginada;

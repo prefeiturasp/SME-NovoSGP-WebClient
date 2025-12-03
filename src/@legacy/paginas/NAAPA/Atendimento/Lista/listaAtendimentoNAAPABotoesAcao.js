@@ -7,7 +7,7 @@ import { URL_HOME } from '~/constantes';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import BtnImpressaoEncaminhamentoNAAPA from '../componentes/btnImpressaoNAAPA';
 
-const ListaEncaminhamentoNAAPABotoesAcao = props => {
+const ListaAtendimentoNAAPABotoesAcao = props => {
   const navigate = useNavigate();
 
   const { somenteConsulta, podeIncluir, idsSelecionados, obterDadosFiltros } =
@@ -47,4 +47,4 @@ const ListaEncaminhamentoNAAPABotoesAcao = props => {
   );
 };
 
-export default ListaEncaminhamentoNAAPABotoesAcao;
+export default ListaAtendimentoNAAPABotoesAcao;

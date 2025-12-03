@@ -38,10 +38,10 @@ import { AbrangenciaServico, erros, verificaSomenteConsulta } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { ordenarDescPor, verificarDataFimMaiorInicio } from '~/utils';
 import { BotaoOrdenacaoListaEncaminhamentoNAAPA } from './components/ordenacao';
-import ListaEncaminhamentoNAAPABotoesAcao from './listaEncaminhamentoNAAPABotoesAcao';
-import ListaEncaminhamentoNAAPAPaginada from './listaEncaminhamentoNAAPAPaginada';
+import ListaAtendimentoNAAPABotoesAcao from './listaAtendimentoNAAPABotoesAcao';
+import ListaAtendimentoNAAPAPaginada from './listaAtendimentoNAAPAPaginada';
 
-const ListaEncaminhamentoNAAPA = () => {
+const ListaAtendimentoNAAPA = () => {
   const location = useLocation();
 
   const usuario = useSelector(state => state.usuario);
@@ -425,7 +425,7 @@ const ListaEncaminhamentoNAAPA = () => {
   return (
     <>
       <Cabecalho pagina="Atendimento">
-        <ListaEncaminhamentoNAAPABotoesAcao
+        <ListaAtendimentoNAAPABotoesAcao
           podeIncluir={podeIncluir}
           somenteConsulta={somenteConsulta}
           idsSelecionados={idsEncaminhamentoNAAPASelecionados}
@@ -606,7 +606,7 @@ const ListaEncaminhamentoNAAPA = () => {
           </Col>
 
           <Col sm={24}>
-            <ListaEncaminhamentoNAAPAPaginada
+            <ListaAtendimentoNAAPAPaginada
               ue={ue}
               dre={dre}
               turmaId={turmaId}
@@ -629,4 +629,4 @@ const ListaEncaminhamentoNAAPA = () => {
   );
 };
 
-export default ListaEncaminhamentoNAAPA;
+export default ListaAtendimentoNAAPA;
