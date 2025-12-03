@@ -53,11 +53,7 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
 
   useEffect(() => {
     if (pathname && encaminhamentoId) {
-      setBreadcrumbManual(
-        pathname,
-        'Encaminhamento',
-        `${ROUTES.ENCAMINHAMENTO_NAAPA}`
-      );
+      setBreadcrumbManual(pathname, '', `${ROUTES.ENCAMINHAMENTO_NAAPA}`);
     }
   }, [pathname, encaminhamentoId]);
 

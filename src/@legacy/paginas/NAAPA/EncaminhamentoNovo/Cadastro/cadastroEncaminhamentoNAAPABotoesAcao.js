@@ -61,15 +61,11 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const encaminhamentoId = id;
 
   const desabilitarProximoPasso =
-    desabilitarCamposEncaminhamentoNAAPA || !aluno?.codigoAluno;  
+    desabilitarCamposEncaminhamentoNAAPA || !aluno?.codigoAluno;
 
   useEffect(() => {
     if (pathname && encaminhamentoId) {
-      setBreadcrumbManual(
-        pathname,
-        'Encaminhamento',
-        `${ROUTES.ENCAMINHAMENTO_NAAPA}`
-      );
+      setBreadcrumbManual(pathname, '', `${ROUTES.ENCAMINHAMENTO_NAAPA}`);
     }
   }, [pathname, encaminhamentoId]);
 
@@ -103,7 +99,9 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
       );
 
       if (confirmou) {
-        const resposta = await ServicoEncaminhamentoNAAPA.salvarPadrao(encaminhamentoId);
+        const resposta = await ServicoEncaminhamentoNAAPA.salvarPadrao(
+          encaminhamentoId
+        );
         if (resposta?.status === 200) navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
       } else {
         navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
@@ -148,14 +146,15 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const onClickEncerrar = () =>
     dispatch(setExibirModalEncerramentoEncaminhamentoNAAPA(true));
 
-
   const exibirBtnEncerrar =
     encaminhamentoId &&
     dadosSituacao?.situacao &&
     (dadosSituacao?.situacao === situacaoNAAPA.AguardandoAtendimento ||
       dadosSituacao?.situacao === situacaoNAAPA.EmAtendimento);
 
-  const exibirBtnExcluir = encaminhamentoId && dadosSituacao?.situacao === situacaoNAAPA.AguardandoAtendimento
+  const exibirBtnExcluir =
+    encaminhamentoId &&
+    dadosSituacao?.situacao === situacaoNAAPA.AguardandoAtendimento;
 
   const labelBtnCadastrarAlterar = encaminhamentoId ? 'Alterar' : 'Cadastrar';
 

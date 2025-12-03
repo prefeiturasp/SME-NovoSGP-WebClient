@@ -66,11 +66,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
   useEffect(() => {
     if (pathname && encaminhamentoId) {
-      setBreadcrumbManual(
-        pathname,
-        'Encaminhamento',
-        `${ROUTES.ATENDIMENTO_NAAPA}`
-      );
+      setBreadcrumbManual(pathname, '', `${ROUTES.ATENDIMENTO_NAAPA}`);
     }
   }, [pathname, encaminhamentoId]);
 
