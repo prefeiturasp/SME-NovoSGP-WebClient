@@ -15,10 +15,8 @@ import { AbrangenciaServico, erros, sucesso } from '~/servicos';
 import { JoditEditor } from '~/componentes';
 import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
 import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
-import ServicoEncaInstitucionalNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaInstitucionalNAAPA';
 import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
 import './cadastroEncaminhamentoNAAPAInstitucional.css';
-import MontarDadosTabsInstitucional from './componentes/montarDadosTabsInstitucional/montarDadosTabsInstitucional';
 
 export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const { id } = useParams();
@@ -48,6 +46,14 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const SGP_MOTIVO_ENCAMINHAMENTO = 'sgp-motivo-encaminhamento';
   const SGP_UPLOAD_ANEXOS_ENCAMINHAMENTO_INSTITUCIONAL =
     'sgp-upload-anexos-encaminhamento-institucional';
+
+  const TAMANHO_MAXIMO_UPLOAD = 10;
+  const TOTAL_ARQUIVOS_UPLOAD = 10;
+
+  const tiposArquivosPermitidos =
+    '.doc, .docx, .xls, .xlsx, .pdf, .png, .jpeg , .jpg';
+  const textoFormatoUpload =
+    'Permitido somente um arquivo. Tipo permitido doc, docx, xls, xlsx, PDF, PNG, JPEG e JPG';
 
   const obterDres = useCallback(async () => {
     setCarregandoDres(true);
@@ -98,6 +104,23 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     setCodigoUe(valorSelecionado);
   };
 
+  const onChangeData = data => {
+    setDataEntradaQueixa(data);
+    const dataFormatada = data ? data.format('DD/MM/YYYY') : null;
+    formEncInstitucional.setFieldsValue({
+      dataEntradaQueixa: dataFormatada,
+    });
+  };
+
+  const onChangeMotivoEncaminhamento = valor => {
+    setMotivoEncaminhamento(valor);
+  };
+
+  const onChangeAnexos = listaArquivos => {
+    setAnexosLista(listaArquivos);
+    formEncInstitucional.setFieldsValue({ anexos: listaArquivos });
+  };
+
   // ========== MÉTODOS DE BUSCA E MANIPULAÇÃO DE DADOS ==========
 
   const obterDadosEncaminhamento = useCallback(async () => {
@@ -107,7 +130,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
     try {
       const resposta =
-        await ServicoEncaInstitucionalNAAPA.obterEncaminhamentoInstitucional(
+        await ServicoEncaminhamentoNAAPA.obterEncaminhamentoInstitucional(
           encaminhamentoId
         );
 
@@ -151,9 +174,11 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     }
   }, [encaminhamentoId, formEncInstitucional]);
 
+
   const prepararDadosParaSalvar = () => {
     const valores = formEncInstitucional.getFieldsValue();
 
+    
     const codigosAnexos = anexosLista
       .filter(arquivo => arquivo.xhr)
       .map(arquivo => arquivo.xhr);
@@ -166,6 +191,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
       anexos: codigosAnexos,
     };
 
+    
     if (encaminhamentoId) {
       dados.id = parseInt(encaminhamentoId, 10);
     }
@@ -173,8 +199,10 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     return dados;
   };
 
+  
   const salvarEncaminhamento = async () => {
     try {
+      
       await formEncInstitucional.validateFields();
 
       const dados = prepararDadosParaSalvar();
@@ -196,6 +224,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     } catch (erro) {
       setCarregandoGeral(false);
 
+      
       if (erro?.errorFields) {
         return false;
       }
@@ -230,6 +259,50 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
       //store.dispatch(setUe());
     }
   }, [codigoDre]);
+
+  const onRemoveFile = async arquivo => {
+    if (desabilitarCampos) {
+      return false;
+    }
+
+    const codigoArquivo = arquivo?.xhr;
+
+    if (!codigoArquivo) {
+      return false;
+    }
+
+    setCarregarAnexos(true);
+
+    try {
+      let resposta;
+
+      // Se for um arquivo já salvo (tem arquivoId), usa o endpoint específico
+      if (arquivo.arquivoId) {
+        // Quando o backend implementar o DELETE por arquivoId, descomentar:
+        // resposta = await api.delete(`${URL_PADRAO}/arquivo/${arquivo.arquivoId}`);
+
+        // Por enquanto, remove pelo código:
+        resposta = await ServicoEncaminhamentoNAAPA.removerArquivoInstitucional(
+          codigoArquivo
+        );
+      } else {
+        // Arquivo recém enviado (ainda não salvo no banco)
+        resposta = await ServicoArmazenamento.removerArquivo(codigoArquivo);
+      }
+
+      if (resposta?.status === 200) {
+        sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      erros(e);
+      return false;
+    } finally {
+      setCarregarAnexos(false);
+    }
+  };
 
   return (
     <LoaderEncaminhamentoNAAPA loading={carregandoGeral}>
@@ -294,10 +367,69 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
                   </Form.Item>
                 </Loader>
               </Col>
+              <Col sm={24} md={24} lg={6}>
+                <Form.Item
+                  name="dataEntradaQueixa"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Campo obrigatório',
+                    },
+                  ]}
+                >
+                  <CampoData
+                    label="Data de entrada da queixa"
+                    id={SGP_DATA_ENTRADA_QUEIXA}
+                    valor={dataEntradaQueixa}
+                    onChange={onChangeData}
+                    placeholder="DD/MM/AAAA"
+                    formatoData="DD/MM/YYYY"
+                    desabilitado={listaUes?.length === 0}
+                  />
+                </Form.Item>
+              </Col>
+              <Col sm={24} md={24} lg={24}>
+                <Loader loading={carregarAnexos} ignorarTip>
+                  <Form.Item
+                    name="motivoEncaminhamento"
+                    getValueFromEvent={e => e}
+                  >
+                    <JoditEditor
+                      label="Motivo do encaminhamento"
+                      id={SGP_MOTIVO_ENCAMINHAMENTO}
+                      name="motivoEncaminhamento"
+                      onChange={onChangeMotivoEncaminhamento}
+                      readonly={desabilitarCampos}
+                      desabilitar={desabilitarCampos}
+                    />
+                  </Form.Item>
+                </Loader>
+              </Col>
+              <div className="tituloAnexo">Anexo de documentos</div>
+              <p className="subTituloAnexo">
+                Adicione os arquivos que julgar necessários.
+              </p>
+              <Col sm={24} md={24} lg={24}>
+                <Form.Item name="anexos" getValueFromEvent={e => e}>
+                  <UploadArquivos
+                    name="anexos"
+                    id={SGP_UPLOAD_ANEXOS_ENCAMINHAMENTO_INSTITUCIONAL}
+                    desabilitarGeral={desabilitarCampos}
+                    desabilitarUpload={false}
+                    textoFormatoUpload={textoFormatoUpload}
+                    tiposArquivosPermitidos={tiposArquivosPermitidos}
+                    onRemove={onRemoveFile}
+                    onChangeListaArquivos={onChangeAnexos}
+                    urlUpload="v1/encaminhamento-naapa/upload"
+                    tamanhoMaximoArquivo={TAMANHO_MAXIMO_UPLOAD}
+                    totalDeUploads={TOTAL_ARQUIVOS_UPLOAD}
+                    defaultFileList={anexosLista}
+                    label="Anexos"
+                  />
+                </Form.Item>
+              </Col>
             </Row>
-
-            <MontarDadosTabsInstitucional />
-          </Form>          
+          </Form>
         </Card>
       </div>
     </LoaderEncaminhamentoNAAPA>

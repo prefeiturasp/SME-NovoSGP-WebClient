@@ -1,0 +1,82 @@
+import { Row, Tabs } from 'antd';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { ContainerTabsCard } from '~/componentes/tabs/style';
+//import situacaoNAAPA from '~/dtos/situacaoNAAPA';
+import {
+  setDadosSecoesEncaminhamentoInstitucional,
+  setTabAtivaEncaminhamentoInstitucional,
+} from '~/redux/modulos/encaminhamentoInstitucional/actions';
+import { erros } from '~/servicos';
+//import MontarDadosTabItinerancia from './montarDadosTabItinerancia/montarDadosTabItinerancia';
+//import { MontarDadosTabBuscaAtiva } from './montarDadosTabBuscaAtiva';
+import ServicoEncaInstitucionalNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaInstitucionalNAAPA';
+
+const { TabPane } = Tabs;
+
+const MontarDadosTabsInstitucional = () => {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+
+  const encaminhamentoId = id || 0;
+
+  const { dreId, ueId, tipo } = useSelector(
+    state => state.encaminhamentoInstitucional.dadosEncaminhamentoInstitucional
+  );
+
+  const dadosSecoesEncaminhamento = useSelector(
+    store =>
+      store.encaminhamentoInstitucional.dadosSecoesEncaminhamentoInstitucional
+  );
+
+  const tabAtiva = useSelector(
+    store =>
+      store.encaminhamentoInstitucional.tabAtivaEncaminhamentoInstitucional
+  );
+
+  const obterSecoes = useCallback(async () => {
+    const resposta =
+      await ServicoEncaInstitucionalNAAPA.obterSecoesInstitucional(
+        encaminhamentoId
+      ).catch(e => erros(e));
+
+    dispatch(setDadosSecoesEncaminhamentoInstitucional(resposta?.data || []));
+
+    if (!encaminhamentoId) {
+      const primeiraTabSelecionada =
+        resposta?.data[0]?.questionarioId?.toString();
+      dispatch(setTabAtivaEncaminhamentoInstitucional(primeiraTabSelecionada));
+    }
+  }, [dispatch, encaminhamentoId]);
+
+  useEffect(() => {
+    obterSecoes();
+  }, [dispatch, obterSecoes]);
+
+  return (
+    <ContainerTabsCard
+      border
+      type="card"
+      onChange={onChangeTab}
+      style={{ marginBottom: 20 }}
+      activeKey={tabAtiva}
+    >
+      {dadosSecoesEncaminhamento?.map(tab => {
+        const questionarioId = tab?.questionarioId;
+        const nomeTab = tab?.nome;
+
+        return (
+          <TabPane tab={nomeTab} key={questionarioId}>
+            <MontarDadosTabSelecionadaInstitucional
+              questionarioId={questionarioId}
+              dadosTab={tab}
+            />
+          </TabPane>
+        );
+      })}
+    </ContainerTabsCard>
+  );
+};
+
+export default MontarDadosTabsInstitucional;

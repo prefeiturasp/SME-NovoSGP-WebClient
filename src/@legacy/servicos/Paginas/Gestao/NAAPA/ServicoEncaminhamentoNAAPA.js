@@ -408,7 +408,7 @@ class ServicoEncaminhamentoNAAPA {
         motivoEncaminhamento: dados.motivoEncaminhamento,
         anexos: dados.anexos || [],
       };
-      
+
       if (dados.id) {
         params.id = dados.id;
       }
@@ -430,7 +430,7 @@ class ServicoEncaminhamentoNAAPA {
       return null;
     }
   };
-  
+
   obterEncaminhamentoInstitucional = async encaminhamentoId => {
     try {
       const resposta = await api.get(`${URL_PADRAO}/${encaminhamentoId}`);
@@ -440,16 +440,17 @@ class ServicoEncaminhamentoNAAPA {
       return null;
     }
   };
- 
+
   removerArquivoInstitucional = arquivoCodigo => {
     return api.delete(`${URL_PADRAO}/arquivo?arquivoCodigo=${arquivoCodigo}`);
   };
-  
+
   downloadArquivoInstitucional = arquivoCodigo => {
     return api.get(`v1/armazenamento/arquivos/${arquivoCodigo}`, {
       responseType: 'blob',
     });
   };
+  
 }
 
 export default new ServicoEncaminhamentoNAAPA();
