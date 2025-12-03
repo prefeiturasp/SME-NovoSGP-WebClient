@@ -424,7 +424,7 @@ const ListaAtendimentoNAAPA = () => {
 
   return (
     <>
-      <Cabecalho pagina="Atendimento">
+      <Cabecalho pagina="Atendimento Individual">
         <ListaAtendimentoNAAPABotoesAcao
           podeIncluir={podeIncluir}
           somenteConsulta={somenteConsulta}
@@ -435,6 +435,15 @@ const ListaAtendimentoNAAPA = () => {
 
       <Card padding="24px 24px">
         <Row gutter={[16, 16]} style={{ maxWidth: '100%', margin: 0 }}>
+          <Col span={24}>
+            <p>
+              Aqui você encontra os registros de situações em que crianças ou
+              adolescentes enfrentaram qualquer forma de violência que afetou
+              sua dignidade e integridade. Essas informações ajudam o NAAPA a
+              oferecer apoio à unidade educacional, à família e ao estudante de
+              forma acolhedora e responsável.
+            </p>
+          </Col>
           <Col span={24}>
             <CheckboxComponent
               id={SGP_CHECKBOX_EXIBIR_HISTORICO}
@@ -561,21 +570,6 @@ const ListaAtendimentoNAAPA = () => {
               label="Situação do encaminhamento"
               id={SGP_SELECT_SITUACAO_ENCAMINHAMENTO}
               placeholder="Situação do encaminhamento"
-            />
-          </Col>
-
-          <Col sm={24} lg={12}>
-            <SelectComponent
-              allowClear
-              valueOption="id"
-              label="Prioridade"
-              valueText="nome"
-              disabled={!ue?.codigo}
-              placeholder="Prioridade"
-              lista={listaPrioridades}
-              onChange={setPrioridade}
-              valueSelect={prioridade}
-              id={SGP_SELECT_PRIORIDADE}
             />
           </Col>
 

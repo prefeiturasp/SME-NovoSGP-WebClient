@@ -1619,15 +1619,6 @@ route.set(ROUTES.ATENDIMENTO_NAAPA, {
   chavePermissao: ROUTES.ATENDIMENTO_NAAPA,
 });
 
-route.set(`${ROUTES.ATENDIMENTO_NAAPA}/novo`, {
-  parent: ROUTES.ATENDIMENTO_NAAPA,
-  component: CadastroAtendimentoNAAPA,
-  exact: true,
-  tipo: RotasTipo.EstruturadaAutenticada,
-  temPermissionamento: true,
-  chavePermissao: ROUTES.ATENDIMENTO_NAAPA,
-});
-
 route.set(`${ROUTES.ATENDIMENTO_NAAPA}/:id`, {
   parent: ROUTES.ATENDIMENTO_NAAPA,
   component: CadastroAtendimentoNAAPA,

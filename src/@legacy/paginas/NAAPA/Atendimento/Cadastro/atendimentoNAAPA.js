@@ -43,7 +43,7 @@ const AtendimentoNAAPA = () => {
 
   return (
     <LoaderEncaminhamentoNAAPA>
-      <Cabecalho pagina="Atendimento">
+      <Cabecalho pagina="Atendimento Individual">
         <CadastroAtendimentoNAAPABotoesAcao
           mostrarBusca={mostrarBusca}
           setMostrarBusca={setMostrarBusca}
