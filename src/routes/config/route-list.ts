@@ -1580,7 +1580,7 @@ route.set(ROUTES.DASHBOARD_NAAPA, {
 });
 
 route.set(ROUTES.ENCAMINHAMENTO_NAAPA, {
-  breadcrumbName: 'Encaminhamento NAAPA',
+  breadcrumbName: 'Encaminhamento',
   menu: ['NAAPA'],
   parent: '/',
   component: ListaEncaminhamentoNAAPA,
@@ -1609,7 +1609,7 @@ route.set(`${ROUTES.ENCAMINHAMENTO_NAAPA}/:id`, {
 });
 
 route.set(ROUTES.ATENDIMENTO_NAAPA, {
-  breadcrumbName: 'Atendimento NAAPA',
+  breadcrumbName: 'Atendimento',
   menu: ['NAAPA'],
   parent: '/',
   component: ListaAtendimentoNAAPA,
