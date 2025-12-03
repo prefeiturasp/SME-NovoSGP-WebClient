@@ -119,7 +119,10 @@ const CadastroEncaminhamentoNAAPA = () => {
 
   return dadosEncaminhamentoNAAPA?.aluno?.codigoAluno ? (
     <Col span={24}>
-      <Row gutter={[16, 16]}>
+      <Row
+        gutter={[16, 16]}
+        style={{ paddingTop: '8px', paddingBottom: '16px' }}
+      >
         <Col span={24}>
           <p>
             Aqui é onde ficam armazenadas as informações completas do estudante,
