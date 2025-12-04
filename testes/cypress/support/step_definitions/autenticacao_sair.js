@@ -28,7 +28,6 @@ When('envio uma requisição GET para deslogar', function () {
   }).as('response')
 })
 
-
 Then('retorna o status 200 de sucesso', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)

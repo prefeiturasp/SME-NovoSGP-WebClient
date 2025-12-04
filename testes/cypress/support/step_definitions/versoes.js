@@ -48,7 +48,7 @@ When('tento a requisição GET para o endpoint de versões', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 ', function () {
+Then('retorna o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401) 
   })

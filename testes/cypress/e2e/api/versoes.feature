@@ -8,7 +8,7 @@ Feature: API - Versão do sistema
   Scenario: Não acessar a versão sem autenticação
     Given que não login não gerou um token de acesso válido
     When tento a requisição GET para o endpoint de versões
-    Then retorna o status 401 
+    Then retorna o status 401
 
   Scenario: Realizar o teste de ping
     Given que acesso o endpoint
