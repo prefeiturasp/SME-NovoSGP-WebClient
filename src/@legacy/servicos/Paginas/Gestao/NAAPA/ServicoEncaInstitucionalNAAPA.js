@@ -6,7 +6,7 @@ import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/
 import { store } from '@/core/redux';
 import _ from 'lodash';
 
-const URL_PADRAO = 'v1/encaminhamento-naapa';
+const URL_PADRAO = 'v1/novo-encaminhamento-naapa';
 
 class ServicoEncaInstitucionalNAAPA {
   obterEncaminhamentoInstitucional = async encaminhamentoId => {
@@ -51,6 +51,12 @@ class ServicoEncaInstitucionalNAAPA {
 
   removerArquivoInstitucional = arquivoCodigo => {
     return api.delete(`${URL_PADRAO}/arquivo?arquivoCodigo=${arquivoCodigo}`);
+  };
+
+  downloadArquivoInstitucional = arquivoCodigo => {
+    return api.get(`v1/armazenamento/arquivos/${arquivoCodigo}`, {
+      responseType: 'blob',
+    });
   };
 
   salvarEncaminhamentoInstitucional = async (

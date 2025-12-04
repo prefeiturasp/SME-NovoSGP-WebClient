@@ -65,12 +65,10 @@ const MontarDadosTabSelecionadaInstitucional = props => {
       <QuestionarioDinamico
         dados={dadosTab}
         exibirOrdemLabel={false}
-        // 👇 MUDOU: URL específica para institucional
-        urlUpload="v1/encaminhamento-naapa-institucional/upload"
+        urlUpload="v1/novo-encaminhamento-naapa/upload"
         dadosQuestionarioAtual={dadosQuestionarioAtual}
         prefixId={`${SGP_SECAO}_${dadosTab?.nomeComponente}`}
         desabilitarCampos={desabilitarCampos}
-        // 👇 MUDOU: Função de remover específica
         funcaoRemoverArquivoCampoUpload={
           ServicoEncaInstitucionalNAAPA.removerArquivoInstitucional
         }
