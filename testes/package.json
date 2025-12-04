@@ -27,7 +27,7 @@
     "@cucumber/cucumber": "^11.2.0",
     "@cucumber/gherkin": "^32.1.0",
     "@cypress/webpack-preprocessor": "^6.0.2",
-    "@shelex/cypress-allure-plugin": "^2.41.0",
+    "@shelex/cypress-allure-plugin": "^2.41.2",
     "allure-commandline": "^2.24.1",
     "crypto-js": "^3.3.0",
     "css-loader": "^7.1.2",
