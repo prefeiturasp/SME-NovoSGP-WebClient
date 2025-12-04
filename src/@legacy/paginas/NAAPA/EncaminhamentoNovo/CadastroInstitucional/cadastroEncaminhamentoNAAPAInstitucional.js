@@ -6,17 +6,20 @@ import LoaderEncaminhamentoNAAPA from '../Cadastro/componentes/loaderEncaminhame
 import { verificaSomenteConsulta } from '~/servicos';
 import { ROUTES } from '@/core/enum/routes';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import CadastroEncaminhamentoNAAPABotoesAcao from '../Cadastro/cadastroEncaminhamentoNAAPABotoesAcao';
 import { Col, Row, Form } from 'antd';
 import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
 import { AbrangenciaServico, erros, sucesso } from '~/servicos';
+import {
+  setDadosEncaminhamentoInstitucional,
+  setLimparDadosEncaminhamentoInstitucional,
+} from '~/redux/modulos/encaminhamentoInstitucional/actions';
 import { JoditEditor } from '~/componentes';
 import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
 import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
 import ServicoEncaInstitucionalNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaInstitucionalNAAPA';
-import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
 import './cadastroEncaminhamentoNAAPAInstitucional.css';
 import MontarDadosTabsInstitucional from './componentes/montarDadosTabsInstitucional/montarDadosTabsInstitucional';
 
@@ -27,6 +30,12 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const usuario = useSelector(state => state.usuario);
   const permissoesTela = usuario.permissoes[ROUTES.ATENDIMENTO_NAAPA];
   const encaminhamentoId = id;
+
+  const dispatch = useDispatch();
+
+  const dadosEncaminhamentoInstitucional = useSelector(
+    state => state.encaminhamentoInstitucional.dadosEncaminhamentoInstitucional
+  );
 
   const [formEncInstitucional] = Form.useForm();
 
@@ -91,11 +100,24 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const onChangeDre = codigo => {
     const valorSelecionado = formEncInstitucional.getFieldValue('codigoDre');
     setCodigoDre(valorSelecionado);
+    // salvar no redux
+    dispatch(
+      setDadosEncaminhamentoInstitucional({
+        ...dadosEncaminhamentoInstitucional,
+        dreCodigo: valorSelecionado,
+      })
+    );
   };
 
   const onChangeUe = codigo => {
     const valorSelecionado = formEncInstitucional.getFieldValue('codigoUe');
     setCodigoUe(valorSelecionado);
+    dispatch(
+      setDadosEncaminhamentoInstitucional({
+        ...dadosEncaminhamentoInstitucional,
+        ueCodigo: valorSelecionado,
+      })
+    );
   };
 
   // ========== MÉTODOS DE BUSCA E MANIPULAÇÃO DE DADOS ==========
@@ -143,6 +165,15 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
           setAnexosLista(anexosMapeados);
           formEncInstitucional.setFieldsValue({ anexos: anexosMapeados });
         }
+        // salvar também no redux para que MontarDadosTabsInstitucional use os dados
+        dispatch(
+          setDadosEncaminhamentoInstitucional({
+            dreCodigo: dados.codigoDre,
+            ueCodigo: dados.codigoUe,
+            anoLetivo: dados.anoLetivo,
+            // mantemos outros campos se necessário
+          })
+        );
       }
     } catch (e) {
       erros(e);
@@ -152,15 +183,19 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   }, [encaminhamentoId, formEncInstitucional]);
 
   const prepararDadosParaSalvar = () => {
+    // Ao salvar agora usamos os dados do Redux (dre/ue) e o mapping dos questionarios
+    // mantendo compatibilidade com campos locais de anexo caso existam
     const valores = formEncInstitucional.getFieldsValue();
 
     const codigosAnexos = anexosLista
       .filter(arquivo => arquivo.xhr)
       .map(arquivo => arquivo.xhr);
 
+    const dadosRedux = dadosEncaminhamentoInstitucional || {};
+
     const dados = {
-      codigoDre: valores.codigoDre,
-      codigoUe: valores.codigoUe,
+      codigoDre: dadosRedux.dreCodigo || valores.codigoDre,
+      codigoUe: dadosRedux.ueCodigo || valores.codigoUe,
       dataEntradaQueixa: valores.dataEntradaQueixa,
       motivoEncaminhamento: valores.motivoEncaminhamento || '',
       anexos: codigosAnexos,
@@ -179,11 +214,24 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
       const dados = prepararDadosParaSalvar();
 
+      // Persistir os dados no Redux para que o serviço os leia
+      dispatch(
+        setDadosEncaminhamentoInstitucional({
+          ...dadosEncaminhamentoInstitucional,
+          dreCodigo: dados.codigoDre,
+          ueCodigo: dados.codigoUe,
+          dataEntradaQueixa: dados.dataEntradaQueixa,
+          motivoEncaminhamento: dados.motivoEncaminhamento,
+          anexos: dados.anexos,
+        })
+      );
+
       setCarregandoGeral(true);
 
+      // Use the institutional service to save; it will map questionarios from Redux
       const resposta =
-        await ServicoEncaminhamentoNAAPA.salvarEncaminhamentoInstitucional(
-          dados
+        await ServicoEncaInstitucionalNAAPA.salvarEncaminhamentoInstitucional(
+          encaminhamentoId
         );
 
       setCarregandoGeral(false);
@@ -221,6 +269,12 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
       obterDadosEncaminhamento();
     }
   }, [encaminhamentoId, obterDadosEncaminhamento]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setLimparDadosEncaminhamentoInstitucional());
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     if (codigoDre) {
@@ -297,7 +351,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
             </Row>
 
             <MontarDadosTabsInstitucional />
-          </Form>          
+          </Form>
         </Card>
       </div>
     </LoaderEncaminhamentoNAAPA>

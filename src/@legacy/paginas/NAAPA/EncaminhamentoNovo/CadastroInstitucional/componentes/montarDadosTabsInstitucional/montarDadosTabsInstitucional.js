@@ -3,6 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { ContainerTabsCard } from '~/componentes/tabs/style';
+import MontarDadosTabSelecionadaInstitucional from './montarDadosTabSelecionadaInstitucional';
 //import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 import {
   setDadosSecoesEncaminhamentoInstitucional,
@@ -41,11 +42,12 @@ const MontarDadosTabsInstitucional = () => {
         encaminhamentoId
       ).catch(e => erros(e));
 
-    dispatch(setDadosSecoesEncaminhamentoInstitucional(resposta?.data || []));
+    const data = resposta?.data || resposta || [];
+
+    dispatch(setDadosSecoesEncaminhamentoInstitucional(data));
 
     if (!encaminhamentoId) {
-      const primeiraTabSelecionada =
-        resposta?.data[0]?.questionarioId?.toString();
+      const primeiraTabSelecionada = data?.[0]?.questionarioId?.toString();
       dispatch(setTabAtivaEncaminhamentoInstitucional(primeiraTabSelecionada));
     }
   }, [dispatch, encaminhamentoId]);
@@ -58,7 +60,7 @@ const MontarDadosTabsInstitucional = () => {
     <ContainerTabsCard
       border
       type="card"
-      onChange={onChangeTab}
+      onChange={key => dispatch(setTabAtivaEncaminhamentoInstitucional(key))}
       style={{ marginBottom: 20 }}
       activeKey={tabAtiva}
     >

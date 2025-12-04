@@ -18,6 +18,8 @@ import {
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { ROUTES } from '@/core/enum/routes';
 import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
+import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
+import ServicoEncaInstitucionalNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaInstitucionalNAAPA';
 
 export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
   formEncInstitucional,
@@ -46,8 +48,13 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
     }
   }, [pathname, encaminhamentoId]);
 
+  const questionarioDinamicoEmEdicao = useSelector(
+    store => store.questionarioDinamico.questionarioDinamicoEmEdicao
+  );
+
   const onClickVoltar = async () => {
-    const foiModificado = formEncInstitucional.isFieldsTouched();
+    const formTouched = formEncInstitucional?.isFieldsTouched?.() || false;
+    const foiModificado = questionarioDinamicoEmEdicao || formTouched;
 
     if (foiModificado) {
       const confirmou = await confirmar(
@@ -95,7 +102,8 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
   };
 
   const onClickCancelar = async () => {
-    const foiModificado = formEncInstitucional.isFieldsTouched();
+    const formTouched = formEncInstitucional?.isFieldsTouched?.() || false;
+    const foiModificado = questionarioDinamicoEmEdicao || formTouched;
 
     if (foiModificado) {
       const confirmou = await confirmar(
@@ -105,6 +113,11 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
       );
 
       if (confirmou) {
+        // Limpa dados dinâmicos e arquivos temporários
+        QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico(
+          ServicoEncaInstitucionalNAAPA.removerArquivoInstitucional
+        );
+
         if (encaminhamentoId) {
           window.location.reload();
         } else {

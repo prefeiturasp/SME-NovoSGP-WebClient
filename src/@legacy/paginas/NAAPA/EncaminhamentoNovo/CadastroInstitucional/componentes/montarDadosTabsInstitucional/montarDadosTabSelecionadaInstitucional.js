@@ -5,6 +5,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Auditoria } from '~/componentes';
+import { erros } from '~/servicos';
+import { setExibirLoaderEncaminhamentoInstitucional } from '~/redux/modulos/encaminhamentoInstitucional/actions';
 import QuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
 import { SGP_SECAO } from '~/constantes/ids/questionario-dinamico';
 //import { setExibirLoaderEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
@@ -28,22 +30,28 @@ const MontarDadosTabSelecionadaInstitucional = props => {
   const [dadosQuestionarioAtual, setDadosQuestionarioAtual] = useState();
 
   const obterDadosQuestionarioId = useCallback(async () => {
-    dispatch(setExibirLoaderEncaminhamentoInstitucional(true));
+    try {
+      dispatch(setExibirLoaderEncaminhamentoInstitucional(true));
 
-    const resposta =
-      await ServicoEncaInstitucionalNAAPA.obterDadosQuestionarioIdInstitucional(
-        questionarioId,
-        encaminhamentoId
-      );
+      const resposta =
+        await ServicoEncaInstitucionalNAAPA.obterDadosQuestionarioIdInstitucional(
+          questionarioId,
+          encaminhamentoId
+        ).catch(e => {
+          erros(e);
+          return null;
+        });
 
-    if (resposta?.data?.length) {
-      // ✅ SEM mapeamento, usa os dados direto do backend
-      setDadosQuestionarioAtual(resposta.data);
-    } else {
-      setDadosQuestionarioAtual([]);
+      const data = resposta?.data || resposta || [];
+
+      if (Array.isArray(data) && data.length) {
+        setDadosQuestionarioAtual(data);
+      } else {
+        setDadosQuestionarioAtual([]);
+      }
+    } finally {
+      dispatch(setExibirLoaderEncaminhamentoInstitucional(false));
     }
-
-    dispatch(setExibirLoaderEncaminhamentoInstitucional(false));
   }, [dispatch, questionarioId, encaminhamentoId]);
 
   useEffect(() => {
