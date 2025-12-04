@@ -21,9 +21,9 @@ class ServicoPlanoAEE {
     return api.get(`${urlPadrao}/situacoes`);
   };
 
-  existePlanoAEEEstudante = async codigoEstudante => {
+  existePlanoAEEEstudante = async estudante => {
     const resultado = await api
-      .get(`${urlPadrao}/estudante/${codigoEstudante.estudanteCodigo}/existe`)
+      .get(`${urlPadrao}/estudante/${estudante.estudanteCodigo}/existe/${estudante.ueCodigo}/ue`)
       .catch(e => erros(e));
 
     if (resultado?.data) {
@@ -465,6 +465,10 @@ class ServicoPlanoAEE {
     }
 
     return api.get(url);
+  };
+
+  encerramentoManualPlanoAEE = id => {
+    return api.post(`${urlPadrao}/encerramento-manual/${id}`);
   };
 }
 
