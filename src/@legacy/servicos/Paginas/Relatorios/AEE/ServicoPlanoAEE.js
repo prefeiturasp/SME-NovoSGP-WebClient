@@ -466,6 +466,10 @@ class ServicoPlanoAEE {
 
     return api.get(url);
   };
+
+  encerramentoManualPlanoAEE = id => {
+    return api.post(`${urlPadrao}/encerramento-manual/${id}`);
+  };
 }
 
 export default new ServicoPlanoAEE();
