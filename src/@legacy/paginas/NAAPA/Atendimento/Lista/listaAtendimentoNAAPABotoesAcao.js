@@ -7,7 +7,7 @@ import { URL_HOME } from '~/constantes';
 import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import BtnImpressaoEncaminhamentoNAAPA from '../componentes/btnImpressaoNAAPA';
 
-const ListaEncaminhamentoNAAPABotoesAcao = props => {
+const ListaAtendimentoNAAPABotoesAcao = props => {
   const navigate = useNavigate();
 
   const { somenteConsulta, podeIncluir, idsSelecionados, obterDadosFiltros } =
@@ -17,13 +17,6 @@ const ListaEncaminhamentoNAAPABotoesAcao = props => {
 
   const onClickVoltar = () => navigate(URL_HOME);
 
-  const onClickNovo = () => {
-    const dadosSalvarState = obterDadosFiltros();
-    navigate(`${ROUTES.ATENDIMENTO_NAAPA}/novo`, {
-      state: dadosSalvarState,
-    });
-  };
-
   return (
     <Row gutter={[8, 8]} type="flex">
       <Col>
@@ -32,19 +25,8 @@ const ListaEncaminhamentoNAAPABotoesAcao = props => {
       <Col>
         <BtnImpressaoEncaminhamentoNAAPA idsSelecionados={idsSelecionados} />
       </Col>
-      <Col>
-        <Button
-          bold
-          border
-          label="Novo"
-          color={Colors.Roxo}
-          id={SGP_BUTTON_NOVO}
-          onClick={onClickNovo}
-          disabled={desabilitarNovo}
-        />
-      </Col>
     </Row>
   );
 };
 
-export default ListaEncaminhamentoNAAPABotoesAcao;
+export default ListaAtendimentoNAAPABotoesAcao;

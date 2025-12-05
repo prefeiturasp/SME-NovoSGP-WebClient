@@ -19,7 +19,7 @@ import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
 import { ImprimirAnexosNAAPAEnum } from '@/core/enum/imprimir-anexos-naapa-enum';
 
-const URL_PADRAO = 'v1/encaminhamento-naapa';
+const URL_PADRAO = 'v1/atendimento-naapa';
 
 class ServicoNAAPA {
   buscarSituacoes = () => api.get(`${URL_PADRAO}/situacoes`);

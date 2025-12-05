@@ -38,10 +38,10 @@ import { AbrangenciaServico, erros, verificaSomenteConsulta } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { ordenarDescPor, verificarDataFimMaiorInicio } from '~/utils';
 import { BotaoOrdenacaoListaEncaminhamentoNAAPA } from './components/ordenacao';
-import ListaEncaminhamentoNAAPABotoesAcao from './listaEncaminhamentoNAAPABotoesAcao';
-import ListaEncaminhamentoNAAPAPaginada from './listaEncaminhamentoNAAPAPaginada';
+import ListaAtendimentoNAAPABotoesAcao from './listaAtendimentoNAAPABotoesAcao';
+import ListaAtendimentoNAAPAPaginada from './listaAtendimentoNAAPAPaginada';
 
-const ListaEncaminhamentoNAAPA = () => {
+const ListaAtendimentoNAAPA = () => {
   const location = useLocation();
 
   const usuario = useSelector(state => state.usuario);
@@ -424,8 +424,8 @@ const ListaEncaminhamentoNAAPA = () => {
 
   return (
     <>
-      <Cabecalho pagina="Atendimento">
-        <ListaEncaminhamentoNAAPABotoesAcao
+      <Cabecalho pagina="Atendimento Individual">
+        <ListaAtendimentoNAAPABotoesAcao
           podeIncluir={podeIncluir}
           somenteConsulta={somenteConsulta}
           idsSelecionados={idsEncaminhamentoNAAPASelecionados}
@@ -435,6 +435,15 @@ const ListaEncaminhamentoNAAPA = () => {
 
       <Card padding="24px 24px">
         <Row gutter={[16, 16]} style={{ maxWidth: '100%', margin: 0 }}>
+          <Col span={24}>
+            <p>
+              Aqui você encontra os registros de situações em que crianças ou
+              adolescentes enfrentaram qualquer forma de violência que afetou
+              sua dignidade e integridade. Essas informações ajudam o NAAPA a
+              oferecer apoio à unidade educacional, à família e ao estudante de
+              forma acolhedora e responsável.
+            </p>
+          </Col>
           <Col span={24}>
             <CheckboxComponent
               id={SGP_CHECKBOX_EXIBIR_HISTORICO}
@@ -565,21 +574,6 @@ const ListaEncaminhamentoNAAPA = () => {
           </Col>
 
           <Col sm={24} lg={12}>
-            <SelectComponent
-              allowClear
-              valueOption="id"
-              label="Prioridade"
-              valueText="nome"
-              disabled={!ue?.codigo}
-              placeholder="Prioridade"
-              lista={listaPrioridades}
-              onChange={setPrioridade}
-              valueSelect={prioridade}
-              id={SGP_SELECT_PRIORIDADE}
-            />
-          </Col>
-
-          <Col sm={24} lg={12}>
             <RadioGroupButton
               desabilitado={!ue?.codigo}
               value={exibirEncaminhamentosEncerrados}
@@ -606,7 +600,7 @@ const ListaEncaminhamentoNAAPA = () => {
           </Col>
 
           <Col sm={24}>
-            <ListaEncaminhamentoNAAPAPaginada
+            <ListaAtendimentoNAAPAPaginada
               ue={ue}
               dre={dre}
               turmaId={turmaId}
@@ -629,4 +623,4 @@ const ListaEncaminhamentoNAAPA = () => {
   );
 };
 
-export default ListaEncaminhamentoNAAPA;
+export default ListaAtendimentoNAAPA;

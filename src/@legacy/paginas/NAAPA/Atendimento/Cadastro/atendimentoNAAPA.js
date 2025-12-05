@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import { Cabecalho } from '~/componentes-sgp';
 import LocalizarEstudante from '~/componentes-sgp/LocalizarEstudante';
 import { Card } from '~/componentes';
-import CadastroEncaminhamentoNAAPABotoesAcao from './cadastroEncaminhamentoNAAPABotoesAcao';
-import CadastroEncaminhamentoNAAPA from './cadastroEncaminhamentoNAAPA';
+import CadastroAtendimentoNAAPABotoesAcao from './cadastroAtendimentoNAAPABotoesAcao';
+import CadastroAtendimentoNAAPA from './cadastroAtendimentoNAAPA';
 import { store } from '@/core/redux';
 import LoaderEncaminhamentoNAAPA from './componentes/loaderEncaminhamentoNAAPA';
 import { limparDadosLocalizarEstudante } from '~/redux/modulos/localizarEstudante/actions';
@@ -14,7 +14,7 @@ import { ROUTES } from '@/core/enum/routes';
 import { verificaSomenteConsulta } from '~/servicos';
 import { setLimparDadosQuestionarioDinamico } from '~/redux/modulos/questionarioDinamico/actions';
 
-const EncaminhamentoNAAPA = () => {
+const AtendimentoNAAPA = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -43,8 +43,8 @@ const EncaminhamentoNAAPA = () => {
 
   return (
     <LoaderEncaminhamentoNAAPA>
-      <Cabecalho pagina="Encaminhamento">
-        <CadastroEncaminhamentoNAAPABotoesAcao
+      <Cabecalho pagina="Atendimento Individual">
+        <CadastroAtendimentoNAAPABotoesAcao
           mostrarBusca={mostrarBusca}
           setMostrarBusca={setMostrarBusca}
         />
@@ -54,11 +54,11 @@ const EncaminhamentoNAAPA = () => {
         {mostrarBusca ? (
           <LocalizarEstudante consideraNovasUEs />
         ) : (
-          <CadastroEncaminhamentoNAAPA />
+          <CadastroAtendimentoNAAPA />
         )}
       </Card>
     </LoaderEncaminhamentoNAAPA>
   );
 };
 
-export default EncaminhamentoNAAPA;
+export default AtendimentoNAAPA;

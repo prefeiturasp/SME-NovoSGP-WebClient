@@ -8,8 +8,9 @@ import { OPCAO_TODOS } from '~/constantes';
 import { SGP_TABLE_ENCAMINHAMENTO_NAAPA } from '~/constantes/ids/table';
 import { setTabAtivaEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { verificarDataFimMaiorInicio } from '~/utils';
+import { Checkbox } from 'antd';
 
-const ListaEncaminhamentoNAAPAPaginada = props => {
+const ListaAtendimentoNAAPAPaginada = props => {
   const {
     ue,
     dre,
@@ -63,18 +64,21 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
           : '',
     },
     {
-      title: 'Prioridade',
-      dataIndex: 'prioridade',
-    },
-    {
       title: 'Situação',
       dataIndex: 'situacao',
+    },
+    {
+      title: 'Suspeita de violência',
+      dataIndex: 'suspeitaViolencia',
+      render: valor => {
+        return <Checkbox checked={Boolean(valor)} />;
+      },
     },
   ];
 
   if (ue?.codigo === OPCAO_TODOS) {
     colunas.unshift({
-      title: 'Unidade Escolar (UE)',
+      title: 'Unidade Educacional',
       dataIndex: 'ue',
     });
   }
@@ -154,4 +158,4 @@ const ListaEncaminhamentoNAAPAPaginada = props => {
   );
 };
 
-export default ListaEncaminhamentoNAAPAPaginada;
+export default ListaAtendimentoNAAPAPaginada;

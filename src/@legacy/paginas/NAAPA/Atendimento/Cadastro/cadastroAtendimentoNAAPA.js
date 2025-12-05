@@ -119,9 +119,17 @@ const CadastroEncaminhamentoNAAPA = () => {
 
   return dadosEncaminhamentoNAAPA?.aluno?.codigoAluno ? (
     <Col span={24}>
-      <Row gutter={[16, 0]} type="flex" justify="end">
-        <Col>
-          <LabelSituacao />
+      <Row
+        gutter={[16, 16]}
+        style={{ paddingTop: '8px', paddingBottom: '16px' }}
+      >
+        <Col span={24}>
+          <p>
+            Aqui é onde ficam armazenadas as informações completas do estudante,
+            além dos atendimentos e acompanhamentos realizados pelos
+            equipamentos da rede. Esses registros oferecem uma visão integrada
+            do caso e apoiam a continuidade do acompanhamento.
+          </p>
         </Col>
       </Row>
 

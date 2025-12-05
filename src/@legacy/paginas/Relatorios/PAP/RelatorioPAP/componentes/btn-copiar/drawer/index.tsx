@@ -12,7 +12,7 @@ import _, { cloneDeep } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Label, Loader } from '~/componentes';
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
-import { DrawerContainer } from '~/paginas/NAAPA/Encaminhamento/Cadastro/componentes/drawer/styles';
+import { DrawerContainer } from '~/paginas/NAAPA/Atendimento/Cadastro/componentes/drawer/styles';
 import { setEstudantesRelatorioPAP } from '~/redux/modulos/relatorioPAP/actions';
 import { confirmar, erro, erros, sucesso } from '~/servicos';
 import ServicoRelatorioPAP from '~/servicos/Paginas/Relatorios/PAP/RelatorioPAP/ServicoRelatorioPAP';

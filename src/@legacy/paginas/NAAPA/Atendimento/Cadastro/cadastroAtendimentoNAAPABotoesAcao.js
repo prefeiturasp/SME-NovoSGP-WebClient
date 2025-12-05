@@ -66,11 +66,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
   useEffect(() => {
     if (pathname && encaminhamentoId) {
-      setBreadcrumbManual(
-        pathname,
-        'Encaminhamento',
-        `${ROUTES.ATENDIMENTO_NAAPA}`
-      );
+      setBreadcrumbManual(pathname, '', `${ROUTES.ATENDIMENTO_NAAPA}`);
     }
   }, [pathname, encaminhamentoId]);
 
@@ -191,8 +187,6 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     (dadosSituacao?.situacao === situacaoNAAPA.AguardandoAtendimento ||
       dadosSituacao?.situacao === situacaoNAAPA.EmAtendimento);
 
-  const labelBtnCadastrarAlterar = ocultarBtnRascunho ? 'Alterar' : 'Cadastrar';
-
   const disabledBtnDefault =
     desabilitarCamposEncaminhamentoNAAPA || !questionarioDinamicoEmEdicao;
 
@@ -230,7 +224,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
           <Button
             bold
             border
-            color={Colors.Roxo}
+            color={Colors.Azul}
             label="Próximo passo"
             disabled={desabilitarProximoPasso}
             onClick={() => onClickProximoPasso()}
@@ -252,7 +246,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
             <Button
               border
               label="Cancelar"
-              color={Colors.Roxo}
+              color={Colors.Azul}
               id={SGP_BUTTON_CANCELAR}
               disabled={disabledBtnDefault}
               onClick={() => onClickCancelar()}
@@ -277,7 +271,7 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
             <Button
               bold
               border
-              label={labelBtnCadastrarAlterar}
+              label={'Salvar'}
               color={Colors.Azul}
               id={SGP_BUTTON_ALTERAR_CADASTRAR}
               onClick={() => onClickCadastrarAlterar()}
@@ -290,11 +284,11 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
               <Button
                 bold
                 border
-                color={Colors.Roxo}
-                label="Encerrar"
+                color={Colors.Azul}
+                label="Iniciar atendimento"
                 id={SGP_BUTTON_ENCERRAR_ENCAMINHAMENTO_NAAPA}
-                onClick={() => onClickEncerrar()}
-                disabled={desabilitarCamposEncaminhamentoNAAPA}
+                // onClick={() => onClickEncerrar()}
+                disabled={true}
               />
             </Col>
           )}
