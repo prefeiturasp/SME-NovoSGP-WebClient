@@ -138,7 +138,7 @@ const ListaAtendimentoNAAPAPaginada = props => {
 
   return exibirTabela ? (
     <ListaPaginada
-      url="v1/encaminhamento-naapa"
+      url="v1/atendimento-naapa"
       id={SGP_TABLE_ENCAMINHAMENTO_NAAPA}
       colunas={colunas}
       filtro={filtros}
