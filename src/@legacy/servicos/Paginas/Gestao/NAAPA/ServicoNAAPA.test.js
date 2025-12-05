@@ -35,10 +35,13 @@ jest.mock('@/core/redux', () => ({
   },
 }));
 
-jest.mock('~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes', () => ({
-  mapearQuestionarios: jest.fn(),
-  limparDadosOriginaisQuestionarioDinamico: jest.fn(),
-}));
+jest.mock(
+  '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes',
+  () => ({
+    mapearQuestionarios: jest.fn(),
+    limparDadosOriginaisQuestionarioDinamico: jest.fn(),
+  })
+);
 
 jest.mock('~/servicos/alertas', () => ({
   sucesso: jest.fn(),
@@ -56,11 +59,11 @@ describe('ServicoNAAPA', () => {
 
     const resposta = await ServicoNAAPA.buscarSituacoes();
 
-    expect(api.get).toHaveBeenCalledWith('v1/encaminhamento-naapa/situacoes');
+    expect(api.get).toHaveBeenCalledWith('v1/atendimento-naapa/situacoes');
     expect(resposta).toEqual({ data: ['Situação A', 'Situação B'] });
   });
 
-  it('deve salvar encaminhamento como rascunho', async () => {
+  it('deve salvar atendimento como rascunho', async () => {
     QuestionarioDinamicoFuncoes.mapearQuestionarios.mockResolvedValue({
       formsValidos: true,
       secoes: [],
@@ -70,14 +73,16 @@ describe('ServicoNAAPA', () => {
 
     const resposta = await ServicoNAAPA.salvarPadrao(null);
 
-    expect(api.post).toHaveBeenCalledWith('v1/encaminhamento-naapa/salvar', {
+    expect(api.post).toHaveBeenCalledWith('v1/atendimento-naapa/salvar', {
       turmaId: 456,
       alunoCodigo: 123,
       situacao: 'Rascunho',
       secoes: [],
     });
-    // Corrigido para a mensagem correta
-    expect(alertas.sucesso).toHaveBeenCalledWith('Registro cadastrado com sucesso');
+
+    expect(alertas.sucesso).toHaveBeenCalledWith(
+      'Registro cadastrado com sucesso'
+    );
     expect(resposta).toEqual({ status: 200, data: { id: 1 } });
   });
 
@@ -98,7 +103,7 @@ describe('ServicoNAAPA', () => {
 
     const resposta = await ServicoNAAPA.excluirEncaminhamento(10);
 
-    expect(api.delete).toHaveBeenCalledWith('v1/encaminhamento-naapa/10');
+    expect(api.delete).toHaveBeenCalledWith('v1/atendimento-naapa/10');
     expect(resposta).toEqual({ status: 200 });
   });
 
@@ -112,7 +117,7 @@ describe('ServicoNAAPA', () => {
       'v1/encaminhamento-naapa/imprimir-detalhado',
       {
         encaminhamentoNaapaIds: mockIds,
-        imprimirAnexos: 1, // Corrigido para o valor recebido
+        imprimirAnexos: 1,
       }
     );
   });
@@ -126,7 +131,9 @@ describe('ServicoNAAPA - métodos auxiliares', () => {
   it('deve excluir um atendimento', async () => {
     api.delete.mockResolvedValue({ status: 200 });
     const response = await ServicoNAAPA.excluirAtendimento(10, 5);
-    expect(api.delete).toHaveBeenCalledWith('v1/encaminhamento-naapa/10/secoes-itinerancia/5');
+    expect(api.delete).toHaveBeenCalledWith(
+      'v1/atendimento-naapa/10/secoes-itinerancia/5'
+    );
     expect(response.status).toBe(200);
   });
 
@@ -177,20 +184,20 @@ describe('ServicoNAAPA - encerramento e reabertura', () => {
     jest.clearAllMocks();
   });
 
-  it('deve encerrar encaminhamento com sucesso', async () => {
+  it('deve encerrar atendimento com sucesso', async () => {
     api.post.mockResolvedValue({ status: 200 });
     const result = await ServicoNAAPA.encerrarEncaminhamentoNAAPA(123);
-    expect(api.post).toHaveBeenCalledWith('v1/encaminhamento-naapa/encerrar', {
+    expect(api.post).toHaveBeenCalledWith('v1/atendimento-naapa/encerrar', {
       encaminhamentoId: 123,
       motivoEncerramento: undefined,
     });
     expect(result.status).toBe(200);
   });
 
-  it('deve reabrir encaminhamento com sucesso', async () => {
+  it('deve reabrir atendimento com sucesso', async () => {
     api.post.mockResolvedValue({ status: 200 });
     const result = await ServicoNAAPA.reabrir(456);
-    expect(api.post).toHaveBeenCalledWith('v1/encaminhamento-naapa/reabrir/456');
+    expect(api.post).toHaveBeenCalledWith('v1/atendimento-naapa/reabrir/456');
     expect(result.status).toBe(200);
   });
 });
@@ -203,21 +210,23 @@ describe('ServicoNAAPA - portas, fluxos, e situação', () => {
   it('deve obter portas de entrada', async () => {
     api.get.mockResolvedValue({ status: 200, data: ['porta1', 'porta2'] });
     const response = await ServicoNAAPA.obterPortasEntrada();
-    expect(api.get).toHaveBeenCalledWith('v1/encaminhamento-naapa/portas-entrada');
+    expect(api.get).toHaveBeenCalledWith('v1/atendimento-naapa/portas-entrada');
     expect(response.data).toContain('porta1');
   });
 
   it('deve obter fluxos de alerta', async () => {
     api.get.mockResolvedValue({ status: 200, data: ['fluxo1'] });
     const response = await ServicoNAAPA.obterFluxosAlerta();
-    expect(api.get).toHaveBeenCalledWith('v1/encaminhamento-naapa/fluxos-alerta');
+    expect(api.get).toHaveBeenCalledWith('v1/atendimento-naapa/fluxos-alerta');
     expect(response.data).toContain('fluxo1');
   });
 
   it('deve verificar existência de encaminhamento ativo', async () => {
     api.get.mockResolvedValue({ data: true });
     const ativo = await ServicoNAAPA.existeEncaminhamentoAtivo(1, 2);
-    expect(api.get).toHaveBeenCalledWith('v1/encaminhamento-naapa/aluno/1/existe-encaminhamento-ativo');
+    expect(api.get).toHaveBeenCalledWith(
+      'v1/atendimento-naapa/aluno/1/existe-encaminhamento-ativo'
+    );
     expect(ativo).toStrictEqual({ data: true });
   });
 });
@@ -230,16 +239,24 @@ describe('ServicoNAAPA - impressão e profissionais envolvidos', () => {
   it('deve obter tipos de impressão e anexos', async () => {
     api.get.mockResolvedValue({ status: 200, data: ['tipo1'] });
     const response = await ServicoNAAPA.obterTiposImpressaoAnexos(42);
-    expect(api.get).toHaveBeenCalledWith('v1/encaminhamento-naapa/42/anexos/tipos-impressao');
+    expect(api.get).toHaveBeenCalledWith(
+      'v1/atendimento-naapa/42/anexos/tipos-impressao'
+    );
     expect(response.data).toContain('tipo1');
   });
 
   it('deve obter profissionais envolvidos no atendimento', async () => {
     api.get.mockResolvedValue({ data: ['prof1'] });
-    const response = await ServicoNAAPA.obterProfissionaisEnvolvidosAtendimento('DRE123', 'UE456');
-    expect(api.get).toHaveBeenCalledWith('v1/encaminhamento-naapa/secoes-itinerancia/profissionais-envolvidos', {
-      params: { codigoDre: 'DRE123', codigoUe: 'UE456' },
-    });
+    const response = await ServicoNAAPA.obterProfissionaisEnvolvidosAtendimento(
+      'DRE123',
+      'UE456'
+    );
+    expect(api.get).toHaveBeenCalledWith(
+      'v1/atendimento-naapa/secoes-itinerancia/profissionais-envolvidos',
+      {
+        params: { codigoDre: 'DRE123', codigoUe: 'UE456' },
+      }
+    );
     expect(response.data).toContain('prof1');
   });
 });
