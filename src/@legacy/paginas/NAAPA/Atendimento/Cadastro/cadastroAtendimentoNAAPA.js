@@ -202,7 +202,7 @@ const CadastroEncaminhamentoNAAPA = () => {
               <Observacoes />
 
               <Historico
-                url={`v1/encaminhamento-naapa/${encaminhamentoId}/historico-alteracoes`}
+                url={`v1/atendimento-naapa/${encaminhamentoId}/historico-alteracoes`}
               />
             </>
           )}

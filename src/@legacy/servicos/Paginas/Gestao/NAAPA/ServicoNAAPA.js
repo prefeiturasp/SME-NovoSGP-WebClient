@@ -41,7 +41,7 @@ class ServicoNAAPA {
     encaminhamentoId
   ) =>
     api.get(
-      `${URL_PADRAO}/questionario?questionarioId=${questionarioId}&codigoAluno=${codigoAluno}&codigoTurma=${codigoTurma}&encaminhamentoId=${
+      `${URL_PADRAO}/questionario?questionarioId=${questionarioId}&codigoAluno=${codigoAluno}&codigoTurma=${codigoTurma}&atendimentoId=${
         encaminhamentoId || 0
       }`
     );
