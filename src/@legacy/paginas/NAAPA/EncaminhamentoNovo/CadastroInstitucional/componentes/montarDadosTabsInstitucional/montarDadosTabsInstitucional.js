@@ -4,14 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { ContainerTabsCard } from '~/componentes/tabs/style';
 import MontarDadosTabSelecionadaInstitucional from './montarDadosTabSelecionadaInstitucional';
-//import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 import {
   setDadosSecoesEncaminhamentoInstitucional,
   setTabAtivaEncaminhamentoInstitucional,
 } from '~/redux/modulos/encaminhamentoInstitucional/actions';
 import { erros } from '~/servicos';
-//import MontarDadosTabItinerancia from './montarDadosTabItinerancia/montarDadosTabItinerancia';
-//import { MontarDadosTabBuscaAtiva } from './montarDadosTabBuscaAtiva';
 import ServicoEncaInstitucionalNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaInstitucionalNAAPA';
 
 const { TabPane } = Tabs;
@@ -55,6 +52,20 @@ const MontarDadosTabsInstitucional = () => {
   useEffect(() => {
     obterSecoes();
   }, [dispatch, obterSecoes]);
+
+  if (dadosSecoesEncaminhamento?.length === 1) {
+    const primeiraSecao = dadosSecoesEncaminhamento[0];
+    const questionarioId = primeiraSecao?.questionarioId;
+
+    return (
+      <div style={{ marginBottom: 20 }}>
+        <MontarDadosTabSelecionadaInstitucional
+          questionarioId={questionarioId}
+          dadosTab={primeiraSecao}
+        />
+      </div>
+    );
+  }
 
   return (
     <ContainerTabsCard

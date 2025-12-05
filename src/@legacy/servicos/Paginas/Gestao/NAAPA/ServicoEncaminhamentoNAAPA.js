@@ -386,19 +386,6 @@ class ServicoEncaminhamentoNAAPA {
       params: { codigoDre, codigoUe },
     });
 
-  // ========== MÉTODOS ENCAMINHAMENTO INSTITUCIONAL ==========
-
-  /**
-   * Salva ou atualiza um encaminhamento institucional
-   * @param {Object} dados - Dados do encaminhamento
-   * @param {number} dados.id - ID do encaminhamento (opcional, para edição)
-   * @param {string} dados.codigoDre - Código da DRE
-   * @param {string} dados.codigoUe - Código da UE
-   * @param {string} dados.dataEntradaQueixa - Data de entrada da queixa (formato DD/MM/YYYY)
-   * @param {string} dados.motivoEncaminhamento - Motivo do encaminhamento (HTML)
-   * @param {Array<string>} dados.anexos - Array com os códigos (GUID) dos arquivos anexados
-   * @returns {Promise} Response do axios
-   */
   salvarEncaminhamentoInstitucional = async dados => {
     try {
       const params = {
@@ -450,7 +437,6 @@ class ServicoEncaminhamentoNAAPA {
       responseType: 'blob',
     });
   };
-  
 }
 
 export default new ServicoEncaminhamentoNAAPA();

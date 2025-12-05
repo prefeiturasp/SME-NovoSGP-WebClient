@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import QuestionarioDinamicoFuncoes from '@/@legacy/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import { Row } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
@@ -9,9 +8,6 @@ import { erros } from '~/servicos';
 import { setExibirLoaderEncaminhamentoInstitucional } from '~/redux/modulos/encaminhamentoInstitucional/actions';
 import QuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
 import { SGP_SECAO } from '~/constantes/ids/questionario-dinamico';
-//import { setExibirLoaderEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
-//import { erros } from '~/servicos';
-//import ServicoEstudante from '~/servicos/Paginas/Estudante/ServicoEstudante';
 import ServicoEncaInstitucionalNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaInstitucionalNAAPA';
 
 const MontarDadosTabSelecionadaInstitucional = props => {
@@ -75,7 +71,6 @@ const MontarDadosTabSelecionadaInstitucional = props => {
         onChangeQuestionario={() => {
           QuestionarioDinamicoFuncoes.guardarSecaoEmEdicao(dadosTab?.id);
         }}
-        // ✅ REMOVIDO: validarCampoObrigatorioCustomizado (a menos que precise)
       />
 
       <Row style={{ padding: '0 10px 10px' }}>

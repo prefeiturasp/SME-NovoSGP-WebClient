@@ -100,7 +100,6 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const onChangeDre = codigo => {
     const valorSelecionado = formEncInstitucional.getFieldValue('codigoDre');
     setCodigoDre(valorSelecionado);
-    // salvar no redux
     dispatch(
       setDadosEncaminhamentoInstitucional({
         ...dadosEncaminhamentoInstitucional,
@@ -119,8 +118,6 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
       })
     );
   };
-
-  // ========== MÉTODOS DE BUSCA E MANIPULAÇÃO DE DADOS ==========
 
   const obterDadosEncaminhamento = useCallback(async () => {
     if (!encaminhamentoId) return;
@@ -165,13 +162,12 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
           setAnexosLista(anexosMapeados);
           formEncInstitucional.setFieldsValue({ anexos: anexosMapeados });
         }
-        // salvar também no redux para que MontarDadosTabsInstitucional use os dados
+
         dispatch(
           setDadosEncaminhamentoInstitucional({
             dreCodigo: dados.codigoDre,
             ueCodigo: dados.codigoUe,
             anoLetivo: dados.anoLetivo,
-            // mantemos outros campos se necessário
           })
         );
       }
@@ -183,8 +179,6 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   }, [encaminhamentoId, formEncInstitucional]);
 
   const prepararDadosParaSalvar = () => {
-    // Ao salvar agora usamos os dados do Redux (dre/ue) e o mapping dos questionarios
-    // mantendo compatibilidade com campos locais de anexo caso existam
     const valores = formEncInstitucional.getFieldsValue();
 
     const codigosAnexos = anexosLista
@@ -214,7 +208,6 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
       const dados = prepararDadosParaSalvar();
 
-      // Persistir os dados no Redux para que o serviço os leia
       dispatch(
         setDadosEncaminhamentoInstitucional({
           ...dadosEncaminhamentoInstitucional,
@@ -228,7 +221,6 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
       setCarregandoGeral(true);
 
-      // Use the institutional service to save; it will map questionarios from Redux
       const resposta =
         await ServicoEncaInstitucionalNAAPA.salvarEncaminhamentoInstitucional(
           encaminhamentoId
@@ -264,7 +256,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
   useEffect(() => {
     obterDres();
-    // Se tem ID na URL, busca os dados do encaminhamento
+
     if (encaminhamentoId) {
       obterDadosEncaminhamento();
     }
@@ -281,7 +273,6 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
       obterUes();
     } else {
       setListaUes([]);
-      //store.dispatch(setUe());
     }
   }, [codigoDre]);
 
@@ -298,7 +289,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
         <Card padding="24px 24px">
           <Form form={formEncInstitucional} layout="vertical">
             <Row gutter={[16, 16]} style={{ width: '100%', margin: 0 }}>
-              <Col sm={24} md={24} lg={9}>
+              <Col sm={24} md={24} lg={12}>
                 <Loader loading={carregandoDres} ignorarTip>
                   <Form.Item
                     name="codigoDre"
@@ -323,7 +314,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
                   </Form.Item>
                 </Loader>
               </Col>
-              <Col sm={24} md={24} lg={9}>
+              <Col sm={24} md={24} lg={12}>
                 <Loader loading={carregandoUes} ignorarTip>
                   <Form.Item
                     name="codigoUe"
@@ -349,8 +340,9 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
                 </Loader>
               </Col>
             </Row>
-
-            <MontarDadosTabsInstitucional />
+            <div className="espacoFormDinamico">
+              <MontarDadosTabsInstitucional />
+            </div>
           </Form>
         </Card>
       </div>

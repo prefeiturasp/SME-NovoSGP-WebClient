@@ -20,11 +20,8 @@ class ServicoEncaInstitucionalNAAPA {
   };
 
   obterSecoesInstitucional = async encaminhamentoId => {
-    // Retorna formato compatível com outros serviços: { data: [...] }
     try {
-      // Em desenvolvimento usamos mock
       return { data: secaodadosmock };
-      // Em produção, descomente a linha abaixo e ajuste params conforme backend
       // const params = encaminhamentoId ? `?encaminhamentoId=${encaminhamentoId}` : '';
       // return api.get(`${URL_PADRAO}/secoes-institucional${params}`);
     } catch (e) {
@@ -38,9 +35,7 @@ class ServicoEncaInstitucionalNAAPA {
     encaminhamentoId
   ) => {
     try {
-      // Em desenvolvimento usamos mock
       return { data: questaodadosmock };
-      // Em produção, descomente e ajuste:
       // const encaminhamentoParam = encaminhamentoId ? `&encaminhamentoId=${encaminhamentoId}` : '';
       // return api.get(`${URL_PADRAO}/questionario-institucional?questionarioId=${questionarioId}${encaminhamentoParam}`);
     } catch (e) {
@@ -89,7 +84,6 @@ class ServicoEncaInstitucionalNAAPA {
       const paramsSalvar = {
         codigoDre: dadosEncaminhamentoInstitucional?.dreCodigo,
         codigoUe: dadosEncaminhamentoInstitucional?.ueCodigo,
-        // campos do form institucional
         dataEntradaQueixa: dadosEncaminhamentoInstitucional?.dataEntradaQueixa,
         motivoEncaminhamento:
           dadosEncaminhamentoInstitucional?.motivoEncaminhamento || '',

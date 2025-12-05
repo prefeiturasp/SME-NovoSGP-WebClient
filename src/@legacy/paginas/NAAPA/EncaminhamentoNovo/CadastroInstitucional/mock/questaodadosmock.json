@@ -10,7 +10,7 @@
     "opcionais": "{\"desabilitarDataFutura\":true}",
     "opcaoResposta": [],
     "resposta": [],
-    "dimensao": 3,
+    "dimensao": 6,
     "tamanho": null,
     "mascara": null,
     "placeHolder": "Data",

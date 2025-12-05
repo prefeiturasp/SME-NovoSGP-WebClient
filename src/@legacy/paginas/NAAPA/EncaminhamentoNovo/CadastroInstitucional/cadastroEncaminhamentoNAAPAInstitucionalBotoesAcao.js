@@ -34,7 +34,8 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
 
   const dadosRouteState = state;
 
-  const permissoesTela = usuario?.permissoes?.[ROUTES.ENCAMINHAMENTO_NAAPA] || {};
+  const permissoesTela =
+    usuario?.permissoes?.[ROUTES.ENCAMINHAMENTO_NAAPA] || {};
 
   const encaminhamentoId = id;
 
@@ -113,7 +114,6 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
       );
 
       if (confirmou) {
-        // Limpa dados dinâmicos e arquivos temporários
         QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico(
           ServicoEncaInstitucionalNAAPA.removerArquivoInstitucional
         );

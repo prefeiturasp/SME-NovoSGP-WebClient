@@ -8,13 +8,7 @@ import {
   SGP_BUTTON_ALTERAR_CADASTRAR,
   SGP_BUTTON_CANCELAR,
 } from '~/constantes/ids/button';
-import {
-  verificaSomenteConsulta,
-  confirmar,
-  sucesso,
-  erros,
-  setBreadcrumbManual,
-} from '~/servicos';
+import { confirmar, sucesso, erros, setBreadcrumbManual } from '~/servicos';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 import { ROUTES } from '@/core/enum/routes';
 import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';

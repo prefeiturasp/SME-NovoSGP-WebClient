@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao from './cadastroEncaminhamentoNAAPAInstitucionalBotoesAcao';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
 import { Card, CampoData } from '~/componentes';
@@ -121,8 +121,6 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     formEncInstitucional.setFieldsValue({ anexos: listaArquivos });
   };
 
-  // ========== MÉTODOS DE BUSCA E MANIPULAÇÃO DE DADOS ==========
-
   const obterDadosEncaminhamento = useCallback(async () => {
     if (!encaminhamentoId) return;
 
@@ -174,11 +172,9 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     }
   }, [encaminhamentoId, formEncInstitucional]);
 
-
   const prepararDadosParaSalvar = () => {
     const valores = formEncInstitucional.getFieldsValue();
 
-    
     const codigosAnexos = anexosLista
       .filter(arquivo => arquivo.xhr)
       .map(arquivo => arquivo.xhr);
@@ -191,7 +187,6 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
       anexos: codigosAnexos,
     };
 
-    
     if (encaminhamentoId) {
       dados.id = parseInt(encaminhamentoId, 10);
     }
@@ -199,10 +194,8 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     return dados;
   };
 
-  
   const salvarEncaminhamento = async () => {
     try {
-      
       await formEncInstitucional.validateFields();
 
       const dados = prepararDadosParaSalvar();
@@ -224,7 +217,6 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     } catch (erro) {
       setCarregandoGeral(false);
 
-      
       if (erro?.errorFields) {
         return false;
       }
@@ -245,7 +237,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
   useEffect(() => {
     obterDres();
-    // Se tem ID na URL, busca os dados do encaminhamento
+
     if (encaminhamentoId) {
       obterDadosEncaminhamento();
     }
@@ -256,7 +248,6 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
       obterUes();
     } else {
       setListaUes([]);
-      //store.dispatch(setUe());
     }
   }, [codigoDre]);
 
@@ -276,17 +267,11 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     try {
       let resposta;
 
-      // Se for um arquivo já salvo (tem arquivoId), usa o endpoint específico
       if (arquivo.arquivoId) {
-        // Quando o backend implementar o DELETE por arquivoId, descomentar:
-        // resposta = await api.delete(`${URL_PADRAO}/arquivo/${arquivo.arquivoId}`);
-
-        // Por enquanto, remove pelo código:
         resposta = await ServicoEncaminhamentoNAAPA.removerArquivoInstitucional(
           codigoArquivo
         );
       } else {
-        // Arquivo recém enviado (ainda não salvo no banco)
         resposta = await ServicoArmazenamento.removerArquivo(codigoArquivo);
       }
 
