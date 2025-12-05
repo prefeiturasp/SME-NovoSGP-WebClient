@@ -34,7 +34,7 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
 
   const dadosRouteState = state;
 
-  const permissoesTela = usuario?.permissoes?.[ROUTES.ATENDIMENTO_NAAPA] || {};
+  const permissoesTela = usuario?.permissoes?.[ROUTES.ENCAMINHAMENTO_NAAPA] || {};
 
   const encaminhamentoId = id;
 
@@ -43,7 +43,7 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
       setBreadcrumbManual(
         pathname,
         'Encaminhamento Institucional',
-        `${ROUTES.ATENDIMENTO_NAAPA}`
+        `${ROUTES.ENCAMINHAMENTO_NAAPA}`
       );
     }
   }, [pathname, encaminhamentoId]);
@@ -66,13 +66,13 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
       if (confirmou) {
         const salvou = await salvarEncaminhamento();
         if (salvou) {
-          navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
+          navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
         }
       } else {
-        navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
+        navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
       }
     } else {
-      navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
     }
   };
 
@@ -94,7 +94,7 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
 
       if (resultado?.status === 200) {
         sucesso('Encaminhamento institucional excluído com sucesso');
-        navigate(ROUTES.ATENDIMENTO_NAAPA, {
+        navigate(ROUTES.ENCAMINHAMENTO_NAAPA, {
           state: dadosRouteState,
         });
       }
@@ -131,7 +131,7 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
     const salvou = await salvarEncaminhamento();
 
     if (salvou) {
-      navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
     }
   };
 
