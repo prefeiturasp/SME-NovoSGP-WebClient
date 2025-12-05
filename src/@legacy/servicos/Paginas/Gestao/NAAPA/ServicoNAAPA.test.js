@@ -114,7 +114,7 @@ describe('ServicoNAAPA', () => {
     await ServicoNAAPA.imprimir(mockIds);
 
     expect(api.post).toHaveBeenCalledWith(
-      'v1/encaminhamento-naapa/imprimir-detalhado',
+      'v1/atendimento-naapa/imprimir-detalhado',
       {
         encaminhamentoNaapaIds: mockIds,
         imprimirAnexos: 1,
