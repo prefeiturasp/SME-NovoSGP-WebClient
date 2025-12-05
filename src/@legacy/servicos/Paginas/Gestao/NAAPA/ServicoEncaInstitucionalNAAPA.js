@@ -22,8 +22,12 @@ class ServicoEncaInstitucionalNAAPA {
   obterSecoesInstitucional = async encaminhamentoId => {
     try {
       return { data: secaodadosmock };
-      // const params = encaminhamentoId ? `?encaminhamentoId=${encaminhamentoId}` : '';
-      // return api.get(`${URL_PADRAO}/secoes-institucional${params}`);
+      // const params = encaminhamentoId
+      //   ? `?encaminhamentoId=${encaminhamentoId}`
+      //   : '';
+      // const resposta = await api.get(`${URL_PADRAO}/secoes${params}`);
+      // console.log('resposta obterSecoesInstitucional', resposta);
+      // return resposta;
     } catch (e) {
       erros(e);
       return { data: [] };
