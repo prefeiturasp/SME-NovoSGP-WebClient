@@ -7,7 +7,6 @@ import { verificaSomenteConsulta } from '~/servicos';
 import { ROUTES } from '@/core/enum/routes';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import CadastroEncaminhamentoNAAPABotoesAcao from '../Cadastro/cadastroEncaminhamentoNAAPABotoesAcao';
 import { Col, Row, Form } from 'antd';
 import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
