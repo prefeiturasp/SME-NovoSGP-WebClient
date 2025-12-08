@@ -1,13 +1,17 @@
-.tituloAnexo{
-    font-size: 20px;
-    font-weight: 700;
-    width: 100%;
-    padding-left: 0.5em;
-    color: #42474A;
+.tituloAnexo {
+  font-size: 20px;
+  font-weight: 700;
+  width: 100%;
+  padding-left: 0.5em;
+  color: #42474a;
 }
-.subTituloAnexo{
-    font-size: 14px;
-    font-weight: 400;
-    padding-left: 0.5em;
-    color: #42474A;
+.subTituloAnexo {
+  font-size: 14px;
+  font-weight: 400;
+  padding-left: 0.5em;
+  color: #42474a;
+}
+.espacoFormDinamico {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
 }

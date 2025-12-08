@@ -1,0 +1,53 @@
+[
+  {
+    "id": 57,
+    "ordem": 0,
+    "nome": "Data de entrada da queixa",
+    "observacao": "",
+    "obrigatorio": true,
+    "somenteLeitura": false,
+    "tipoQuestao": 14,
+    "opcionais": "{\"desabilitarDataFutura\":true}",
+    "opcaoResposta": [],
+    "resposta": [],
+    "dimensao": 6,
+    "tamanho": null,
+    "mascara": null,
+    "placeHolder": "Data",
+    "nomeComponente": "DATA_ENTRADA_QUEIXA"
+  },
+  {
+    "id": 72,
+    "ordem": 17,
+    "nome": "Descrição do encaminhamento",
+    "observacao": "",
+    "obrigatorio": true,
+    "somenteLeitura": false,
+    "tipoQuestao": 18,
+    "opcionais": "",
+    "opcaoResposta": [],
+    "resposta": [],
+    "dimensao": 12,
+    "tamanho": null,
+    "mascara": null,
+    "placeHolder": null,
+    "nomeComponente": "DESCRICAO_ENCAMINHAMENTO"
+  },
+  {
+    "id": 73,
+    "ordem": 19,
+    "nome": "Anexos",
+    "observacao": "",
+    "obrigatorio": false,
+    "somenteLeitura": false,
+    "tipoQuestao": 6,
+    "opcionais": "",
+    "opcaoResposta": [],
+    "resposta": [],
+    "dimensao": 12,
+    "tamanho": null,
+    "mascara": null,
+    "placeHolder": null,
+    "nomeComponente": "ANEXOS"
+  }
+]

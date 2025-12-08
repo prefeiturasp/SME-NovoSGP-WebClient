@@ -6,15 +6,21 @@ import LoaderEncaminhamentoNAAPA from '../Cadastro/componentes/loaderEncaminhame
 import { verificaSomenteConsulta } from '~/servicos';
 import { ROUTES } from '@/core/enum/routes';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import CadastroEncaminhamentoNAAPABotoesAcao from '../Cadastro/cadastroEncaminhamentoNAAPABotoesAcao';
 import { Col, Row, Form } from 'antd';
 import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
 import { AbrangenciaServico, erros, sucesso } from '~/servicos';
+import {
+  setDadosEncaminhamentoInstitucional,
+  setLimparDadosEncaminhamentoInstitucional,
+} from '~/redux/modulos/encaminhamentoInstitucional/actions';
 import { JoditEditor } from '~/componentes';
 import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
+import ServicoEncaInstitucionalNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaInstitucionalNAAPA';
 import './cadastroEncaminhamentoNAAPAInstitucional.css';
+import MontarDadosTabsInstitucional from './componentes/montarDadosTabsInstitucional/montarDadosTabsInstitucional';
 
 export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const { id } = useParams();
@@ -23,6 +29,12 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const usuario = useSelector(state => state.usuario);
   const permissoesTela = usuario.permissoes[ROUTES.ATENDIMENTO_NAAPA];
   const encaminhamentoId = id;
+
+  const dispatch = useDispatch();
+
+  const dadosEncaminhamentoInstitucional = useSelector(
+    state => state.encaminhamentoInstitucional.dadosEncaminhamentoInstitucional
+  );
 
   const [formEncInstitucional] = Form.useForm();
 
@@ -37,19 +49,13 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
+  const [carregandoGeral, setCarregandoGeral] = useState(false);
+  const [dadosIniciais, setDadosIniciais] = useState(null);
 
   const SGP_DATA_ENTRADA_QUEIXA = 'sgp-data-entrada-queixa';
   const SGP_MOTIVO_ENCAMINHAMENTO = 'sgp-motivo-encaminhamento';
   const SGP_UPLOAD_ANEXOS_ENCAMINHAMENTO_INSTITUCIONAL =
     'sgp-upload-anexos-encaminhamento-institucional';
-
-  const TAMANHO_MAXIMO_UPLOAD = 10;
-  const TOTAL_ARQUIVOS_UPLOAD = 10;
-
-  const tiposArquivosPermitidos =
-    '.doc, .docx, .xls, .xlsx, .pdf, .png, .jpeg , .jpg';
-  const textoFormatoUpload =
-    'Permitido somente um arquivo. Tipo permitido doc, docx, xls, xlsx, PDF, PNG, JPEG e JPG';
 
   const obterDres = useCallback(async () => {
     setCarregandoDres(true);
@@ -93,28 +99,149 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const onChangeDre = codigo => {
     const valorSelecionado = formEncInstitucional.getFieldValue('codigoDre');
     setCodigoDre(valorSelecionado);
+    dispatch(
+      setDadosEncaminhamentoInstitucional({
+        ...dadosEncaminhamentoInstitucional,
+        dreCodigo: valorSelecionado,
+      })
+    );
   };
 
   const onChangeUe = codigo => {
     const valorSelecionado = formEncInstitucional.getFieldValue('codigoUe');
     setCodigoUe(valorSelecionado);
+    dispatch(
+      setDadosEncaminhamentoInstitucional({
+        ...dadosEncaminhamentoInstitucional,
+        ueCodigo: valorSelecionado,
+      })
+    );
   };
 
-  const onChangeData = data => {
-    setDataEntradaQueixa(data);
-    const dataFormatada = data ? data.format('DD/MM/YYYY') : null;
-    formEncInstitucional.setFieldsValue({
-      dataEntradaQueixa: dataFormatada,
-    });
+  const obterDadosEncaminhamento = useCallback(async () => {
+    if (!encaminhamentoId) return;
+
+    setCarregandoGeral(true);
+
+    try {
+      const resposta =
+        await ServicoEncaInstitucionalNAAPA.obterEncaminhamentoInstitucional(
+          encaminhamentoId
+        );
+
+      if (resposta?.data) {
+        const dados = resposta.data;
+        setDadosIniciais(dados);
+
+        formEncInstitucional.setFieldsValue({
+          codigoDre: dados.codigoDre,
+          codigoUe: dados.codigoUe,
+          dataEntradaQueixa: dados.dataEntradaQueixa,
+          motivoEncaminhamento: dados.motivoEncaminhamento,
+        });
+
+        setCodigoDre(dados.codigoDre);
+        setCodigoUe(dados.codigoUe);
+        setDataEntradaQueixa(
+          dados.dataEntradaQueixa
+            ? window.moment(dados.dataEntradaQueixa, 'DD/MM/YYYY')
+            : null
+        );
+        setMotivoEncaminhamento(dados.motivoEncaminhamento || '');
+
+        if (dados.anexos?.length) {
+          const anexosMapeados = dados.anexos.map(anexo => ({
+            uid: anexo.codigo,
+            xhr: anexo.codigo,
+            arquivoId: anexo.arquivoId,
+            name: anexo.nome,
+            status: 'done',
+          }));
+
+          setAnexosLista(anexosMapeados);
+          formEncInstitucional.setFieldsValue({ anexos: anexosMapeados });
+        }
+
+        dispatch(
+          setDadosEncaminhamentoInstitucional({
+            dreCodigo: dados.codigoDre,
+            ueCodigo: dados.codigoUe,
+            anoLetivo: dados.anoLetivo,
+          })
+        );
+      }
+    } catch (e) {
+      erros(e);
+    } finally {
+      setCarregandoGeral(false);
+    }
+  }, [encaminhamentoId, formEncInstitucional]);
+
+  const prepararDadosParaSalvar = () => {
+    const valores = formEncInstitucional.getFieldsValue();
+
+    const codigosAnexos = anexosLista
+      .filter(arquivo => arquivo.xhr)
+      .map(arquivo => arquivo.xhr);
+
+    const dadosRedux = dadosEncaminhamentoInstitucional || {};
+
+    const dados = {
+      codigoDre: dadosRedux.dreCodigo || valores.codigoDre,
+      codigoUe: dadosRedux.ueCodigo || valores.codigoUe,
+      dataEntradaQueixa: valores.dataEntradaQueixa,
+      motivoEncaminhamento: valores.motivoEncaminhamento || '',
+      anexos: codigosAnexos,
+    };
+
+    if (encaminhamentoId) {
+      dados.id = parseInt(encaminhamentoId, 10);
+    }
+
+    return dados;
   };
 
-  const onChangeMotivoEncaminhamento = valor => {
-    setMotivoEncaminhamento(valor);
-  };
+  const salvarEncaminhamento = async () => {
+    try {
+      await formEncInstitucional.validateFields();
 
-  const onChangeAnexos = listaArquivos => {
-    setAnexosLista(listaArquivos);
-    formEncInstitucional.setFieldsValue({ anexos: listaArquivos });
+      const dados = prepararDadosParaSalvar();
+
+      dispatch(
+        setDadosEncaminhamentoInstitucional({
+          ...dadosEncaminhamentoInstitucional,
+          dreCodigo: dados.codigoDre,
+          ueCodigo: dados.codigoUe,
+          dataEntradaQueixa: dados.dataEntradaQueixa,
+          motivoEncaminhamento: dados.motivoEncaminhamento,
+          anexos: dados.anexos,
+        })
+      );
+
+      setCarregandoGeral(true);
+
+      const resposta =
+        await ServicoEncaInstitucionalNAAPA.salvarEncaminhamentoInstitucional(
+          encaminhamentoId
+        );
+
+      setCarregandoGeral(false);
+
+      if (resposta?.status === 200) {
+        return true;
+      }
+
+      return false;
+    } catch (erro) {
+      setCarregandoGeral(false);
+
+      if (erro?.errorFields) {
+        return false;
+      }
+
+      erros(erro);
+      return false;
+    }
   };
 
   useEffect(() => {
@@ -128,7 +255,17 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
   useEffect(() => {
     obterDres();
-  }, []);
+
+    if (encaminhamentoId) {
+      obterDadosEncaminhamento();
+    }
+  }, [encaminhamentoId, obterDadosEncaminhamento]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(setLimparDadosEncaminhamentoInstitucional());
+    };
+  }, [dispatch]);
 
   useEffect(() => {
     if (codigoDre) {
@@ -138,45 +275,30 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     }
   }, [codigoDre]);
 
-  const onRemoveFile = async arquivo => {
-    if (desabilitarCampos) {
-      return false;
-    }
-
-    const codigoArquivo = arquivo?.xhr;
-
-    if (arquivo.arquivoId) {
-      sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
-      return true;
-    }
-
-    if (!codigoArquivo) {
-      return false;
-    }
-
-    setCarregarAnexos(true);
-
-    setCarregarAnexos(false);
-
-    sucesso(`Arquivo ${arquivo.name} removido com sucesso`);
-    return true;
-  };
-
   return (
-    <LoaderEncaminhamentoNAAPA>
+    <LoaderEncaminhamentoNAAPA loading={carregandoGeral}>
       <div>
         <Cabecalho pagina="Encaminhamento Institucional">
           <CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao
             formEncInstitucional={formEncInstitucional}
+            salvarEncaminhamento={salvarEncaminhamento}
           />
         </Cabecalho>
 
         <Card padding="24px 24px">
           <Form form={formEncInstitucional} layout="vertical">
             <Row gutter={[16, 16]} style={{ width: '100%', margin: 0 }}>
-              <Col sm={24} md={24} lg={9}>
+              <Col sm={24} md={24} lg={12}>
                 <Loader loading={carregandoDres} ignorarTip>
-                  <Form.Item name="codigoDre">
+                  <Form.Item
+                    name="codigoDre"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Campo obrigatório',
+                      },
+                    ]}
+                  >
                     <SelectComponent
                       valueText="nome"
                       id={SGP_SELECT_DRE}
@@ -191,9 +313,17 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
                   </Form.Item>
                 </Loader>
               </Col>
-              <Col sm={24} md={24} lg={9}>
+              <Col sm={24} md={24} lg={12}>
                 <Loader loading={carregandoUes} ignorarTip>
-                  <Form.Item name="codigoUe">
+                  <Form.Item
+                    name="codigoUe"
+                    rules={[
+                      {
+                        required: true,
+                        message: 'Campo obrigatório',
+                      },
+                    ]}
+                  >
                     <SelectComponent
                       valueText="nome"
                       id={SGP_SELECT_UE}
@@ -208,60 +338,10 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
                   </Form.Item>
                 </Loader>
               </Col>
-              <Col sm={24} md={24} lg={6}>
-                <Form.Item name="dataEntradaQueixa">
-                  <CampoData
-                    label="Data de entrada da queixa"
-                    id={SGP_DATA_ENTRADA_QUEIXA}
-                    valor={dataEntradaQueixa}
-                    onChange={onChangeData}
-                    placeholder="DD/MM/AAAA"
-                    formatoData="DD/MM/YYYY"
-                    desabilitado={listaUes?.length === 0}
-                  />
-                </Form.Item>
-              </Col>
-              <Col sm={24} md={24} lg={24}>
-                <Loader loading={carregarAnexos} ignorarTip>
-                  <Form.Item
-                    name="motivoEncaminhamento"
-                    getValueFromEvent={e => e}
-                  >
-                    <JoditEditor
-                      label="Motivo do encaminhamento"
-                      id={SGP_MOTIVO_ENCAMINHAMENTO}
-                      name="motivoEncaminhamento"
-                      onChange={onChangeMotivoEncaminhamento}
-                      readonly={desabilitarCampos}
-                      desabilitar={desabilitarCampos}
-                    />
-                  </Form.Item>
-                </Loader>
-              </Col>
-              <div className="tituloAnexo">Anexo de documentos</div>
-              <p className="subTituloAnexo">
-                Adicione os arquivos que julgar necessários.
-              </p>
-              <Col sm={24} md={24} lg={24}>
-                <Form.Item name="anexos" getValueFromEvent={e => e}>
-                  <UploadArquivos
-                    name="anexos"
-                    id={SGP_UPLOAD_ANEXOS_ENCAMINHAMENTO_INSTITUCIONAL}
-                    desabilitarGeral={desabilitarCampos}
-                    desabilitarUpload={false}
-                    textoFormatoUpload={textoFormatoUpload}
-                    tiposArquivosPermitidos={tiposArquivosPermitidos}
-                    onRemove={onRemoveFile}
-                    onChangeListaArquivos={onChangeAnexos}
-                    urlUpload="v1/naapa/encaminhamento-institucional/upload"
-                    tamanhoMaximoArquivo={TAMANHO_MAXIMO_UPLOAD}
-                    totalDeUploads={TOTAL_ARQUIVOS_UPLOAD}
-                    defaultFileList={anexosLista}
-                    label="Anexos"
-                  />
-                </Form.Item>
-              </Col>
             </Row>
+            <div className="espacoFormDinamico">
+              <MontarDadosTabsInstitucional />
+            </div>
           </Form>
         </Card>
       </div>
