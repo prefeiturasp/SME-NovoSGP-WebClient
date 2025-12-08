@@ -196,16 +196,6 @@ const CadastroEncaminhamentoNAAPA = () => {
             codigoTurma={dadosEncaminhamentoNAAPA?.turma?.codigo}
             codigoAluno={dadosEncaminhamentoNAAPA?.aluno?.codigoAluno}
           />
-
-          {encaminhamentoId && (
-            <>
-              <Observacoes />
-
-              <Historico
-                url={`v1/atendimento-naapa/${encaminhamentoId}/historico-alteracoes`}
-              />
-            </>
-          )}
         </Col>
       </Row>
     </Col>
