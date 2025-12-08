@@ -79,7 +79,7 @@ export const MontarDadosTabBuscaAtiva = ({ exibirCampoSemValor = true }) => {
               colunas={colunas}
               id={SGP_TABLE_REGISTRO_ACOES}
               onClick={linha => onClickLinha(linha)}
-              url={`v1/encaminhamento-naapa/aluno/${codigoAluno}/registros-acao`}
+              url={`v1/atendimento-naapa/aluno/${codigoAluno}/registros-acao`}
             />
           </Col>
         </Row>

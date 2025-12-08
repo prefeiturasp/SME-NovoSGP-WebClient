@@ -153,7 +153,7 @@ const ListaHistoricoAtendimentosPaginada = ({
               })
             : [];
         }}
-        url={`v1/encaminhamento-naapa/${encaminhamentoNAAPAId}/secoes-itinerancia`}
+        url={`v1/atendimento-naapa/${encaminhamentoNAAPAId}/secoes-itinerancia`}
         setLista={(dadosNovos, dadosAntigos) => {
           const excluidoUltimoRegistro = !dadosNovos?.length;
 

@@ -318,7 +318,7 @@ const MontarDadosTabSelecionada = props => {
         exibirOrdemLabel={false}
         codigoTurma={turma?.codigo}
         codigoAluno={aluno?.codigoAluno}
-        urlUpload="v1/encaminhamento-naapa/upload"
+        urlUpload="v1/atendimento-naapa/upload"
         dadosQuestionarioAtual={dadosQuestionarioAtual}
         prefixId={`${SGP_SECAO}_${dadosTab?.nomeComponente}`}
         desabilitarCampos={desabilitarCamposEncaminhamentoNAAPA}
