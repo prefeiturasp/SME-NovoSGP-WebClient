@@ -252,6 +252,7 @@ const BotoesAcoesPlanoAEE = () => {
       const resultado = await ServicoPlanoAEE.encerramentoManualPlanoAEE(
         planoAEEDados?.id
       ).catch(e => {
+        dispatch(setExibirLoaderPlanoAEE(false));
         erros(e);
       });
       if (resultado && resultado.status === 200) {
