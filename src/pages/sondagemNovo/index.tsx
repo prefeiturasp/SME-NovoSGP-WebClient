@@ -152,6 +152,7 @@ const SondagemNovo = () => {
     try {
       setExibirLoader(true);
       // Chamar API para buscar os dados da lista
+      // ver depois
 
       const dadosMock = MockDadosTabelaDinamica;
       setDadosLista(dadosMock);
