@@ -13,7 +13,7 @@ import ServicoEstudante from '~/servicos/Paginas/Estudante/ServicoEstudante';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 
 const MontarDadosTabSelecionada = props => {
-  const { questionarioId, dadosTab } = props;
+  const { questionarioId, dadosTab, ehTabEncaminhamento } = props;
 
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -27,6 +27,9 @@ const MontarDadosTabSelecionada = props => {
   const desabilitarCamposEncaminhamentoNAAPA = useSelector(
     store => store.encaminhamentoNAAPA.desabilitarCamposEncaminhamentoNAAPA
   );
+
+  const desabilitarCampos =
+    ehTabEncaminhamento || desabilitarCamposEncaminhamentoNAAPA;
 
   const [dadosQuestionarioAtual, setDadosQuestionarioAtual] = useState();
 
@@ -321,7 +324,7 @@ const MontarDadosTabSelecionada = props => {
         urlUpload="v1/atendimento-naapa/upload"
         dadosQuestionarioAtual={dadosQuestionarioAtual}
         prefixId={`${SGP_SECAO}_${dadosTab?.nomeComponente}`}
-        desabilitarCampos={desabilitarCamposEncaminhamentoNAAPA}
+        desabilitarCampos={desabilitarCampos}
         funcaoRemoverArquivoCampoUpload={ServicoNAAPA.removerArquivo}
         onChangeQuestionario={() => {
           QuestionarioDinamicoFuncoes.guardarSecaoEmEdicao(dadosTab?.id);

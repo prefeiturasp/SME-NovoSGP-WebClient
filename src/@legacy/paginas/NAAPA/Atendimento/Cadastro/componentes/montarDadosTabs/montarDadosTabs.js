@@ -46,11 +46,10 @@ const MontarDadosTabs = () => {
     ).catch(e => erros(e));
 
     dispatch(setDadosSecoesEncaminhamentoNAAPA(resposta?.data || []));
-    if (!encaminhamentoId) {
-      const primeiraTabSelecionada =
-        resposta?.data[0]?.questionarioId?.toString();
-      dispatch(setTabAtivaEncaminhamentoNAAPA(primeiraTabSelecionada));
-    }
+
+    const primeiraTabSelecionada =
+      resposta?.data[0]?.questionarioId?.toString();
+    dispatch(setTabAtivaEncaminhamentoNAAPA(primeiraTabSelecionada));
   }, [dispatch, encaminhamentoId, modalidade]);
 
   useEffect(() => {
@@ -82,12 +81,15 @@ const MontarDadosTabs = () => {
           const desabilitarTabItinerancia =
             ehTabItinerancia &&
             (!situacao || Number(situacao) === situacaoNAAPA.Rascunho);
+          const ehTabEncaminhamento =
+            nomeTab?.toLowerCase() === 'encaminhamento';
 
           return (
             <TabPane
               tab={nomeTab}
               key={questionarioId}
               disabled={desabilitarTabItinerancia}
+              style={{ border: 'none' }}
             >
               {ehTabItinerancia ? (
                 <MontarDadosTabItinerancia
@@ -98,13 +100,18 @@ const MontarDadosTabs = () => {
                 <MontarDadosTabSelecionada
                   questionarioId={questionarioId}
                   dadosTab={tab}
+                  ehTabEncaminhamento={ehTabEncaminhamento}
                 />
               )}
             </TabPane>
           );
         })}
 
-        <TabPane tab="Busca ativa escolar" key="BUSCA_ATIVA_ESCOLAR">
+        <TabPane
+          tab="Busca ativa escolar"
+          key="BUSCA_ATIVA_ESCOLAR"
+          style={{ border: 'none' }}
+        >
           {tabAtivaEncaminhamentoNAAPA === 'BUSCA_ATIVA_ESCOLAR' && (
             <MontarDadosTabBuscaAtiva exibirCampoSemValor={false} />
           )}
