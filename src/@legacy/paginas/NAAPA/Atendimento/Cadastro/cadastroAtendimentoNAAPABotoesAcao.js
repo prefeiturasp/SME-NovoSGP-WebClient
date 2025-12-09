@@ -244,31 +244,6 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
 
           <Col>
             <Button
-              border
-              label="Cancelar"
-              color={Colors.Azul}
-              id={SGP_BUTTON_CANCELAR}
-              disabled={disabledBtnDefault}
-              onClick={() => onClickCancelar()}
-            />
-          </Col>
-
-          {!ocultarBtnRascunho && (
-            <Col>
-              <Button
-                bold
-                border
-                color={Colors.Azul}
-                label="Salvar rascunho"
-                id={SGP_BUTTON_SALVAR_RASCUNHO}
-                onClick={() => onClickSalvarRascunho()}
-                disabled={disabledRascunho}
-              />
-            </Col>
-          )}
-
-          <Col>
-            <Button
               bold
               border
               label={'Salvar'}
