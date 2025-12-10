@@ -50,6 +50,7 @@ import relatorioPAP from './relatorioPAP/reducers';
 import buscaAtivaRegistroAcoes from './buscaAtivaRegistroAcoes/reducers';
 import mapeamentoEstudantes from './mapeamentoEstudantes/reducers';
 import encaminhamentoInstitucional from './encaminhamentoInstitucional/reducers';
+import usuarioFilaEspera from './usuarioFilaEspera/reducers';
 
 const reducers = combineReducers({
   navegacao,
@@ -102,6 +103,7 @@ const reducers = combineReducers({
   buscaAtivaRegistroAcoes,
   mapeamentoEstudantes,
   encaminhamentoInstitucional,
+  usuarioFilaEspera,
 });
 
 const rootReducer = (state, action) => {
