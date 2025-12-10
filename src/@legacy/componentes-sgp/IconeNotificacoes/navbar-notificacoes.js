@@ -128,12 +128,10 @@ const NavbarNotificacoes = props => {
           );
 
           connection.on('BloqueioUsuario', fila => {
-            console.log('BloqueioUsuario recebido no SignalR', fila);
             dispatch(setUsuarioBloqueado(fila));
           });
 
           connection.on('DesbloqueioUsuario', () => {
-            console.log('DesbloqueioUsuario recebido no SignalR');
             dispatch(setUsuarioDesbloqueado());
           });
           dispatch(setIniciarNotificacoesSemWebSocket(false));
