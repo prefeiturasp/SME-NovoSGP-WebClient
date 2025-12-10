@@ -10,6 +10,7 @@ const inicial = {
   dadosSituacaoEncaminhamentoNAAPA: null,
   exibirModalEncerramentoEncaminhamentoNAAPA: false,
   carregarDadosEncaminhamentoNAAPA: false,
+  dadosEncaminhamentoEscolar: null,
 };
 
 export default function EncaminhamentoNAAPA(state = inicial, action) {
@@ -47,6 +48,7 @@ export default function EncaminhamentoNAAPA(state = inicial, action) {
           exibirLoaderEncaminhamentoNAAPA: false,
           dadosSituacaoEncaminhamentoNAAPA: null,
           exibirModalEncerramentoEncaminhamentoNAAPA: false,
+          dadosEncaminhamentoEscolar: null,
         };
       }
       case '@encaminhamentoNAAPA/setDesabilitarCamposEncaminhamentoNAAPA': {
@@ -77,6 +79,12 @@ export default function EncaminhamentoNAAPA(state = inicial, action) {
         return {
           ...draft,
           carregarDadosEncaminhamentoNAAPA: action.payload,
+        };
+      }
+      case '@encaminhamentoNAAPA/setDadosEncaminhamentoEscolar': {
+        return {
+          ...draft,
+          dadosEncaminhamentoEscolar: action.payload,
         };
       }
       default:

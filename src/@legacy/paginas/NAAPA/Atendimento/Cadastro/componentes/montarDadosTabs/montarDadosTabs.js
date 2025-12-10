@@ -7,6 +7,7 @@ import situacaoNAAPA from '~/dtos/situacaoNAAPA';
 import {
   setDadosSecoesEncaminhamentoNAAPA,
   setTabAtivaEncaminhamentoNAAPA,
+  setDadosEncaminhamentoEscolar,
 } from '~/redux/modulos/encaminhamentoNAAPA/actions';
 import { erros } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
@@ -46,6 +47,18 @@ const MontarDadosTabs = () => {
     ).catch(e => erros(e));
 
     dispatch(setDadosSecoesEncaminhamentoNAAPA(resposta?.data || []));
+
+    const secaoEncaminhamento = resposta?.data?.find(
+      secao => secao?.nome?.toLowerCase() === 'encaminhamento'
+    );
+
+    if (secaoEncaminhamento?.encaminhamentoEscolar) {
+      dispatch(
+        setDadosEncaminhamentoEscolar(secaoEncaminhamento.encaminhamentoEscolar)
+      );
+    } else {
+      dispatch(setDadosEncaminhamentoEscolar(null));
+    }
 
     const primeiraTabSelecionada =
       resposta?.data[0]?.questionarioId?.toString();

@@ -47,3 +47,8 @@ export const setCarregarDadosEncaminhamentoNAAPA = payload => ({
   type: '@encaminhamentoNAAPA/setCarregarDadosEncaminhamentoNAAPA',
   payload,
 });
+
+export const setDadosEncaminhamentoEscolar = payload => ({
+  type: '@encaminhamentoNAAPA/setDadosEncaminhamentoEscolar',
+  payload,
+});

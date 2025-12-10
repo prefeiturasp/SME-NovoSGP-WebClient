@@ -28,6 +28,10 @@ const MontarDadosTabSelecionada = props => {
     store => store.encaminhamentoNAAPA.desabilitarCamposEncaminhamentoNAAPA
   );
 
+  const dadosEncaminhamentoEscolar = useSelector(
+    store => store.encaminhamentoNAAPA.dadosEncaminhamentoEscolar
+  );
+
   const desabilitarCampos =
     ehTabEncaminhamento || desabilitarCamposEncaminhamentoNAAPA;
 
@@ -192,6 +196,16 @@ const MontarDadosTabSelecionada = props => {
   const obterDadosQuestionarioId = useCallback(async () => {
     dispatch(setExibirLoaderEncaminhamentoNAAPA(true));
 
+    if (ehTabEncaminhamento) {
+      if (dadosEncaminhamentoEscolar) {
+        setDadosQuestionarioAtual(dadosEncaminhamentoEscolar);
+      } else {
+        setDadosQuestionarioAtual([]);
+      }
+      dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
+      return;
+    }
+
     const resposta = await ServicoNAAPA.obterDadosQuestionarioId(
       questionarioId,
       aluno?.codigoAluno,
@@ -232,7 +246,15 @@ const MontarDadosTabSelecionada = props => {
       setDadosQuestionarioAtual([]);
     }
     dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
-  }, [dispatch, questionarioId, aluno, turma, encaminhamentoId]);
+  }, [
+    dispatch,
+    questionarioId,
+    aluno,
+    turma,
+    encaminhamentoId,
+    ehTabEncaminhamento,
+    dadosEncaminhamentoEscolar,
+  ]);
 
   useEffect(() => {
     if (questionarioId) {
