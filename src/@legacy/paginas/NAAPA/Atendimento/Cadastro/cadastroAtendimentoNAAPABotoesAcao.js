@@ -176,6 +176,19 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
   const onClickEncerrar = () =>
     dispatch(setExibirModalEncerramentoEncaminhamentoNAAPA(true));
 
+  const onClickIniciarAtendimento = async () => {
+    try {
+      const resultado = await ServicoNAAPA.iniciarAtendimento(encaminhamentoId);
+
+      if (resultado?.data) {
+        sucesso('Status do atendimento alterado com sucesso');
+        navigate(ROUTES.ATENDIMENTO_NAAPA, { state: dadosRouteState });
+      }
+    } catch (e) {
+      erros(e);
+    }
+  };
+
   const ocultarBtnRascunho =
     encaminhamentoId &&
     dadosSituacao?.situacao &&
@@ -208,6 +221,11 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
     (encaminhamentoId &&
       !questionarioDinamicoEmEdicao &&
       dadosSituacao?.situacao === situacaoNAAPA.Rascunho);
+
+  const iniciarAtendimentoDisabled =
+    desabilitarCamposEncaminhamentoNAAPA ||
+    !encaminhamentoId ||
+    dadosSituacao?.situacao !== situacaoNAAPA.AguardandoAtendimento;
 
   return (
     <Row gutter={[8, 8]} type="flex">
@@ -262,8 +280,8 @@ const CadastroEncaminhamentoNAAPABotoesAcao = props => {
                 color={Colors.Azul}
                 label="Iniciar atendimento"
                 id={SGP_BUTTON_ENCERRAR_ENCAMINHAMENTO_NAAPA}
-                // onClick={() => onClickEncerrar()}
-                disabled={true}
+                onClick={() => onClickIniciarAtendimento()}
+                disabled={iniciarAtendimentoDisabled}
               />
             </Col>
           )}

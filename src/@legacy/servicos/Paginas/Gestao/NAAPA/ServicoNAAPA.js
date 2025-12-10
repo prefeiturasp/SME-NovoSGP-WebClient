@@ -387,6 +387,10 @@ class ServicoNAAPA {
     api.get(`${URL_PADRAO}/secoes-itinerancia/profissionais-envolvidos`, {
       params: { codigoDre, codigoUe },
     });
+
+  iniciarAtendimento = atendimentoId => {
+    return api.put(`${URL_PADRAO}/alterar-situacao/em-apoio/${atendimentoId}`);
+  };
 }
 
 export default new ServicoNAAPA();
