@@ -19,7 +19,6 @@ import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirP
 import { ROUTES } from '@/core/enum/routes';
 import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
-import ServicoEncaInstitucionalNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaInstitucionalNAAPA';
 
 export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
   formEncInstitucional,
@@ -128,10 +127,23 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
   };
 
   const onClickCadastrarAlterar = async () => {
-    const salvou = await salvarEncaminhamento();
+    try {
+      await formEncInstitucional.validateFields();
 
-    if (salvou) {
-      navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
+      const salvou = await salvarEncaminhamento();
+
+      if (salvou) {
+        sucesso(
+          encaminhamentoId
+            ? 'Registro alterado com sucesso'
+            : 'Registro cadastrado com sucesso'
+        );
+        navigate(ROUTES.ENCAMINHAMENTO_NAAPA, { state: dadosRouteState });
+      }
+    } catch (erro) {
+      if (!erro?.errorFields) {
+        erros(erro);
+      }
     }
   };
 
@@ -139,7 +151,8 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
 
   const disabledBtnExcluir = !permissoesTela?.podeExcluir || !encaminhamentoId;
 
-  const disabledCadastrarAlterar = false;
+  const disabledCadastrarAlterar =
+    !permissoesTela?.podeAlterar && encaminhamentoId;
 
   if (!permissoesTela) {
     return null;

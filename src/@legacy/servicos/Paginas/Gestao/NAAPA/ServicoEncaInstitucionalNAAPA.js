@@ -98,7 +98,26 @@ class ServicoEncaInstitucionalNAAPA {
       };
 
       if (encaminhamentoId) paramsSalvar.id = encaminhamentoId;
-      console.log('paramsSalvar', paramsSalvar);
+
+      const resposta = await api.post(`${URL_PADRAO}/salvar`, paramsSalvar);
+
+      if (resposta?.status === 200 && limparDadosAoSalvar) {
+        const { dispatch } = store;
+        const { setQuestionarioDinamicoEmEdicao, setListaSecoesEmEdicao } =
+          await import('~/redux/modulos/questionarioDinamico/actions');
+        const { setLimparDadosQuestionarioDinamico } = await import(
+          '~/redux/modulos/questionarioDinamico/actions'
+        );
+        const { setLimparDadosEncaminhamentoInstitucional } = await import(
+          '~/redux/modulos/encaminhamentoInstitucional/actions'
+        );
+
+        dispatch(setQuestionarioDinamicoEmEdicao(false));
+        dispatch(setListaSecoesEmEdicao([]));
+        dispatch(setLimparDadosQuestionarioDinamico());
+        dispatch(setLimparDadosEncaminhamentoInstitucional());
+      }
+
       return resposta;
     } catch (e) {
       erros(e);

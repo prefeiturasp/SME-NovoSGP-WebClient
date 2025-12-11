@@ -1,23 +1,20 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao from './cadastroEncaminhamentoNAAPAInstitucionalBotoesAcao';
 import { Cabecalho, FiltroHelper } from '~/componentes-sgp';
-import { Card, CampoData } from '~/componentes';
+import { Card } from '~/componentes';
 import LoaderEncaminhamentoNAAPA from '../Cadastro/componentes/loaderEncaminhamentoNAAPA';
 import { verificaSomenteConsulta } from '~/servicos';
 import { ROUTES } from '@/core/enum/routes';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import CadastroEncaminhamentoNAAPABotoesAcao from '../Cadastro/cadastroEncaminhamentoNAAPABotoesAcao';
 import { Col, Row, Form } from 'antd';
 import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_DRE, SGP_SELECT_UE } from '~/constantes/ids/select';
-import { AbrangenciaServico, erros, sucesso } from '~/servicos';
+import { AbrangenciaServico, erros } from '~/servicos';
 import {
   setDadosEncaminhamentoInstitucional,
   setLimparDadosEncaminhamentoInstitucional,
 } from '~/redux/modulos/encaminhamentoInstitucional/actions';
-import { JoditEditor } from '~/componentes';
-import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
 import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
 import './cadastroEncaminhamentoNAAPAInstitucional.css';
 import MontarDadosTabsInstitucional from './componentes/montarDadosTabsInstitucional/montarDadosTabsInstitucional';
@@ -40,22 +37,12 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
   const [codigoDre, setCodigoDre] = useState();
   const [codigoUe, setCodigoUe] = useState();
-  const [dataEntradaQueixa, setDataEntradaQueixa] = useState();
-  const [motivoEncaminhamento, setMotivoEncaminhamento] = useState('');
-  const [anexosLista, setAnexosLista] = useState([]);
   const [carregandoDres, setCarregandoDres] = useState(false);
   const [carregandoUes, setCarregandoUes] = useState(false);
-  const [carregarAnexos, setCarregarAnexos] = useState(false);
   const [listaDres, setListaDres] = useState([]);
   const [listaUes, setListaUes] = useState([]);
   const [desabilitarCampos, setDesabilitarCampos] = useState(false);
   const [carregandoGeral, setCarregandoGeral] = useState(false);
-  const [dadosIniciais, setDadosIniciais] = useState(null);
-
-  const SGP_DATA_ENTRADA_QUEIXA = 'sgp-data-entrada-queixa';
-  const SGP_MOTIVO_ENCAMINHAMENTO = 'sgp-motivo-encaminhamento';
-  const SGP_UPLOAD_ANEXOS_ENCAMINHAMENTO_INSTITUCIONAL =
-    'sgp-upload-anexos-encaminhamento-institucional';
 
   const obterDres = useCallback(async () => {
     setCarregandoDres(true);
@@ -124,48 +111,21 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     setCarregandoGeral(true);
 
     try {
-      const resposta = await ServicoEncaminhamentoNAAPA.obterDadosEncaminhamentoNAAPA(
-        encaminhamentoId
-      );
+      const resposta =
+        await ServicoEncaminhamentoNAAPA.obterDadosEncaminhamentoNAAPA(
+          encaminhamentoId
+        );
 
       if (resposta?.data) {
         const dados = resposta.data;
-        setDadosIniciais(dados);
 
-        formEncInstitucional.setFieldsValue({
-          codigoDre: dados.codigoDre,
-          codigoUe: dados.codigoUe,
-          dataEntradaQueixa: dados.dataEntradaQueixa,
-          motivoEncaminhamento: dados.motivoEncaminhamento,
-        });
-
-        setCodigoDre(dados.codigoDre);
-        setCodigoUe(dados.codigoUe);
-        setDataEntradaQueixa(
-          dados.dataEntradaQueixa
-            ? window.moment(dados.dataEntradaQueixa, 'DD/MM/YYYY')
-            : null
-        );
-        setMotivoEncaminhamento(dados.motivoEncaminhamento || '');
-
-        if (dados.anexos?.length) {
-          const anexosMapeados = dados.anexos.map(anexo => ({
-            uid: anexo.codigo,
-            xhr: anexo.codigo,
-            arquivoId: anexo.arquivoId,
-            name: anexo.nome,
-            status: 'done',
-          }));
-
-          setAnexosLista(anexosMapeados);
-          formEncInstitucional.setFieldsValue({ anexos: anexosMapeados });
-        }
+        setCodigoDre(dados.dreCodigo);
+        setCodigoUe(dados.ueCodigo);
 
         dispatch(
           setDadosEncaminhamentoInstitucional({
-            dreCodigo: dados.codigoDre,
-            ueCodigo: dados.codigoUe,
-            anoLetivo: dados.anoLetivo,
+            dreCodigo: dados.dreCodigo,
+            ueCodigo: dados.ueCodigo,
           })
         );
       }
@@ -174,54 +134,29 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     } finally {
       setCarregandoGeral(false);
     }
-  }, [encaminhamentoId, formEncInstitucional]);
-
-  const prepararDadosParaSalvar = () => {
-    const valores = formEncInstitucional.getFieldsValue();
-
-    const codigosAnexos = anexosLista
-      .filter(arquivo => arquivo.xhr)
-      .map(arquivo => arquivo.xhr);
-
-    const dadosRedux = dadosEncaminhamentoInstitucional || {};
-
-    const dados = {
-      codigoDre: dadosRedux.dreCodigo || valores.codigoDre,
-      codigoUe: dadosRedux.ueCodigo || valores.codigoUe,
-      dataEntradaQueixa: valores.dataEntradaQueixa,
-      motivoEncaminhamento: valores.motivoEncaminhamento || '',
-      anexos: codigosAnexos,
-    };
-
-    if (encaminhamentoId) {
-      dados.id = parseInt(encaminhamentoId, 10);
-    }
-
-    return dados;
-  };
+  }, [encaminhamentoId, dispatch]);
 
   const salvarEncaminhamento = async () => {
     try {
       await formEncInstitucional.validateFields();
 
-      const dados = prepararDadosParaSalvar();
+      const dadosRedux = dadosEncaminhamentoInstitucional || {};
 
       dispatch(
         setDadosEncaminhamentoInstitucional({
           ...dadosEncaminhamentoInstitucional,
-          dreCodigo: dados.codigoDre,
-          ueCodigo: dados.codigoUe,
-          dataEntradaQueixa: dados.dataEntradaQueixa,
-          motivoEncaminhamento: dados.motivoEncaminhamento,
-          anexos: dados.anexos,
+          dreCodigo: dadosRedux.dreCodigo || codigoDre,
+          ueCodigo: dadosRedux.ueCodigo || codigoUe,
         })
       );
 
       setCarregandoGeral(true);
 
-      const resposta = await ServicoEncaminhamentoNAAPA.salvarEncaminhamento(
-        encaminhamentoId
-      );
+      const resposta =
+        await ServicoEncaminhamentoNAAPA.salvarEncaminhamentoInstitucional(
+          encaminhamentoId,
+          true
+        );
 
       setCarregandoGeral(false);
 
@@ -246,10 +181,10 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     const soConsulta = verificaSomenteConsulta(permissoesTela);
 
     if (soConsulta) {
-      navigate(ROUTES.ATENDIMENTO_NAAPA);
+      navigate(ROUTES.ENCAMINHAMENTO_NAAPA);
       setDesabilitarCampos(true);
     }
-  }, [permissoesTela]);
+  }, [permissoesTela, navigate]);
 
   useEffect(() => {
     obterDres();
@@ -257,7 +192,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     if (encaminhamentoId) {
       obterDadosEncaminhamento();
     }
-  }, [encaminhamentoId, obterDadosEncaminhamento]);
+  }, [encaminhamentoId, obterDadosEncaminhamento, obterDres]);
 
   useEffect(() => {
     return () => {
@@ -271,7 +206,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     } else {
       setListaUes([]);
     }
-  }, [codigoDre]);
+  }, [codigoDre, obterUes]);
 
   return (
     <LoaderEncaminhamentoNAAPA loading={carregandoGeral}>
