@@ -16,6 +16,7 @@ import { MontarDadosTabBuscaAtiva } from './montarDadosTabBuscaAtiva';
 import { Cabecalho } from '~/componentes-sgp';
 import './estilo.css';
 import { Base } from '~/componentes/colors';
+import { TipoQuestionario } from '@/core/enum/tipo-questionario-enum';
 
 const { TabPane } = Tabs;
 
@@ -44,7 +45,8 @@ const MontarDadosTabs = () => {
 
   const obterSecoes = useCallback(async () => {
     const resposta = await ServicoEncaminhamentoNAAPA.obterSecoes(
-      encaminhamentoId
+      encaminhamentoId,
+      TipoQuestionario.EncaminhamentoNAAPAIndividual
     ).catch(e => erros(e));
 
     dispatch(setDadosSecoesEncaminhamentoNAAPA(resposta?.data || []));
