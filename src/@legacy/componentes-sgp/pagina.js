@@ -17,20 +17,65 @@ const Pagina = () => {
     state => state.usuarioFilaEspera.usuarioBloqueado
   );
 
+  useEffect(() => {
+    let userInteracted = false;
+
+    const markInteraction = () => {
+      userInteracted = true;
+    };
+
+    const handleKeyDown = e => {
+      if (e.key === 'F5' || ((e.ctrlKey || e.metaKey) && e.key === 'r')) {
+        e.preventDefault();
+
+        const confirmReload = window.confirm(
+          'Você realmente deseja recarregar a página?'
+        );
+
+        if (confirmReload) {
+          window.location.reload();
+        }
+      }
+    };
+
+    const handleBeforeUnload = e => {
+      if (userInteracted) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('click', markInteraction, { once: false });
+    window.addEventListener('keydown', markInteraction, { once: false });
+    window.addEventListener('scroll', markInteraction, { once: false });
+    window.addEventListener('touchstart', markInteraction, { once: false });
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('click', markInteraction);
+      window.removeEventListener('keydown', markInteraction);
+      window.removeEventListener('scroll', markInteraction);
+      window.removeEventListener('touchstart', markInteraction);
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   useEffect(() => setBloquearTela(usuarioBloqueado), [usuarioBloqueado]);
 
   return (
     <CapturaErros navigate={navigate}>
       <Layout
-        hasSider
+        hasSider={!bloquearTela}
         style={{
           minHeight: '100vh',
-          backgroundColor: bloquearTela ? 'white' : 'inherit',
         }}
       >
-        <SiderSGP />
+        {!bloquearTela && <SiderSGP />}
         <Layout>
-          <Navbar />
+          <Navbar bloqueado={bloquearTela} />
           {bloquearTela ? (
             <FilaEspera />
           ) : (
