@@ -18,7 +18,7 @@ import {
 } from '~/redux/modulos/encaminhamentoInstitucional/actions';
 import { JoditEditor } from '~/componentes';
 import UploadArquivos from '~/componentes-sgp/UploadArquivos/uploadArquivos';
-import ServicoEncaInstitucionalNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaInstitucionalNAAPA';
+import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
 import './cadastroEncaminhamentoNAAPAInstitucional.css';
 import MontarDadosTabsInstitucional from './componentes/montarDadosTabsInstitucional/montarDadosTabsInstitucional';
 
@@ -124,10 +124,9 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     setCarregandoGeral(true);
 
     try {
-      const resposta =
-        await ServicoEncaInstitucionalNAAPA.obterEncaminhamentoInstitucional(
-          encaminhamentoId
-        );
+      const resposta = await ServicoNAAPA.obterDadosEncaminhamentoNAAPA(
+        encaminhamentoId
+      );
 
       if (resposta?.data) {
         const dados = resposta.data;
@@ -220,10 +219,9 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
       setCarregandoGeral(true);
 
-      const resposta =
-        await ServicoEncaInstitucionalNAAPA.salvarEncaminhamentoInstitucional(
-          encaminhamentoId
-        );
+      const resposta = await ServicoNAAPA.salvarEncaminhamento(
+        encaminhamentoId
+      );
 
       setCarregandoGeral(false);
 

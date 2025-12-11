@@ -8,4 +8,6 @@ export enum TipoQuestionario {
   RelatorioDinamicoEncaminhamentoNAAPA = 7,
   RegistroAcaoBuscaAtiva = 8,
   MapeamentoEstudante = 9,
+  EncaminhamentoNAAPAIndividual = 11,
+  EncaminhamentoNAAPAInstitucional = 12,
 }

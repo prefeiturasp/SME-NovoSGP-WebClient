@@ -5,6 +5,7 @@ import { erros, sucesso } from '~/servicos/alertas';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
 import { store } from '@/core/redux';
 import _ from 'lodash';
+import { TipoQuestionario } from '@/core/enum/tipo-questionario-enum';
 
 const URL_PADRAO = 'v1/novo-encaminhamento-naapa';
 
@@ -21,7 +22,10 @@ class ServicoEncaInstitucionalNAAPA {
 
   obterSecoesInstitucional = async encaminhamentoId => {
     try {
-      return { data: secaodadosmock };
+      const resposta = await api.get(
+        `${URL_PADRAO}/secoes?ecaminhamentoNaapaId=${encaminhamentoId}&tipoQuestionario=${TipoQuestionario.EncaminhamentoNAAPAInstitucional}`
+      );
+      return resposta;
     } catch (e) {
       erros(e);
       return { data: [] };
@@ -33,7 +37,13 @@ class ServicoEncaInstitucionalNAAPA {
     encaminhamentoId
   ) => {
     try {
-      return { data: questaodadosmock };
+      const resposta = await api.get(
+        `${URL_PADRAO}/questionario?questionarioId=${questionarioId}&codigoAluno=${null}&codigoTurma=${null}&encaminhamentoId=${
+          encaminhamentoId || 0
+        }`
+      );
+      return resposta;
+      // return { data: questaodadosmock };
     } catch (e) {
       erros(e);
       return { data: [] };

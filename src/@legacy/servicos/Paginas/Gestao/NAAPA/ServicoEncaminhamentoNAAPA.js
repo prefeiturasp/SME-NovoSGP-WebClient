@@ -29,10 +29,8 @@ class ServicoEncaminhamentoNAAPA {
   obterDadosEncaminhamentoNAAPA = encaminhamentoId =>
     api.get(`${URL_PADRAO}/${encaminhamentoId}`);
 
-  obterSecoes = (encaminhamentoId) =>
-    api.get(
-      `${URL_PADRAO}/secoes?encaminhamentoNAAPAId=${encaminhamentoId}`
-    );
+  obterSecoes = (encaminhamentoId, TipoQuestionario) =>
+    api.get(`${URL_PADRAO}/secoes?encaminhamentoNAAPAId=${encaminhamentoId}&tipoQuestionario=${TipoQuestionario}`);
 
   obterDadosQuestionarioId = (
     questionarioId,
@@ -387,6 +385,16 @@ class ServicoEncaminhamentoNAAPA {
     api.get(`${URL_PADRAO}/secoes-itinerancia/profissionais-envolvidos`, {
       params: { codigoDre, codigoUe },
     });
+
+  removerArquivoInstitucional = arquivoCodigo => {
+    return api.delete(`${URL_PADRAO}/arquivo?arquivoCodigo=${arquivoCodigo}`);
+  };
+
+  downloadArquivoInstitucional = arquivoCodigo => {
+    return api.get(`v1/armazenamento/arquivos/${arquivoCodigo}`, {
+      responseType: 'blob',
+    });
+  };
 }
 
 export default new ServicoEncaminhamentoNAAPA();

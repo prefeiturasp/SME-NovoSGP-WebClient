@@ -115,7 +115,7 @@ export const CadastroEncaminhamentoNAAPAInstitucionalBotoesAcao = ({
 
       if (confirmou) {
         QuestionarioDinamicoFuncoes.limparDadosOriginaisQuestionarioDinamico(
-          ServicoEncaInstitucionalNAAPA.removerArquivoInstitucional
+          ServicoEncaminhamentoNAAPA.removerArquivoInstitucional
         );
 
         if (encaminhamentoId) {
