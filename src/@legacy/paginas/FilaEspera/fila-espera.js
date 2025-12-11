@@ -17,20 +17,36 @@ const FilaEspera = () => {
 
   return (
     <div className="page">
-      <section class="content" aria-labelledby="titulo">
+      <section className="content" aria-labelledby="titulo">
         <div>
-          <h1 id="titulo" class="title">
-            Você está em uma sala de espera virtual
-          </h1>
-          <p class="desc">Por favor não atualize a página, aguarde.</p>
-          <p class="desc">
-            <strong>Seu numero na fila é: {usuarioNumeroFila}</strong>
-          </p>
+          <div className="logo" aria-hidden="true">
+            <img src="/imagens/LogoDoSgp.svg" alt="Logo Novo SGP" />
+          </div>
+          <div>
+            <h1 id="titulo" className="title">
+              Você está em uma sala <br /> de espera virtual
+            </h1>
+            <p className="desc">
+              Aguarde um instante, estamos te direcionando.
+              <br />
+              <span>Não atualize a página </span>
+              para não perder sua posição.
+            </p>
+            <p className="desc">
+              <strong> Sua posição na fila: {usuarioNumeroFila}</strong>
+            </p>
+          </div>
+          <div className="logo-prefeitura">
+            <img
+              src="/imagens/logo-prefeitura.svg"
+              alt="Logo Prefeitura de São Paulo"
+            />
+          </div>
         </div>
 
         <div class="art" aria-hidden="true">
           <img
-            src="/imagens/algo-deu-errado.jpg"
+            src="/imagens/fila-espera.svg"
             alt="Ilustração de técnico verificando servidores representando erro interno do servidor"
           />
         </div>
