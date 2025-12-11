@@ -31,7 +31,7 @@ import Loader from '~/componentes/loader';
 import { SGP_BUTTON_SAIR } from '../../constantes/ids/button';
 import { sair } from '~/servicos/Paginas/ServicoUsuario';
 
-const Navbar = () => {
+const Navbar = ({ bloqueado = false }) => {
   const retraido = useSelector(state => state.navegacao.retraido);
   const [carregando, setCarregando] = useState(false);
 
@@ -103,7 +103,11 @@ const Navbar = () => {
             onClickMessage={clickEncerrar}
           />
         )}
-        <Nav className="navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top py-0">
+        <Nav
+          className={`navbar navbar-expand-md navbar-light bg-white shadow-sm sticky-top py-0 ${
+            bloqueado ? 'invisible' : ''
+          }`}
+        >
           <div className="container-fluid h-100">
             <div className="logo-navbar">
               <Link

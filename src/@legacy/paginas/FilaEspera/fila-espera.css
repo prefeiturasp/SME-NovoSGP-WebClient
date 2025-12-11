@@ -15,7 +15,29 @@
     gap: clamp(16px, 4vw, 48px);
 }
 
+.logo {
+    display: block;
+    margin-bottom: 5rem;
+}
+
+.logo img{
+    height: 56px;
+    width: 66px;
+}
+
+.logo-prefeitura {
+    margin-top: 5rem;
+}
+
+.logo-prefeitura img {
+    height: 49px;
+    width: 151px;
+}
+
+
 .title {
+    font-family: 'Roboto';
+    font-weight: 700;
     font-size: 48px;
     line-height: 1.1;
     margin: 0 0 16px;
@@ -24,10 +46,17 @@
 }
 
 .desc {
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 20px;
     margin: 0 0 8px;
     color: #42474a;
-    font-size: clamp(16px, 1.7vw, 18px);
     line-height: 1.55;
+}
+
+.desc span{
+    color: #8255FE;
+    font-weight: 700;
 }
 
 .art {
@@ -36,8 +65,8 @@
 }
 
 .art img {
-    max-width: 85%;
-    height: auto;
+    width: 582px;
+    height: 526px;
     display: block;
 }
 
