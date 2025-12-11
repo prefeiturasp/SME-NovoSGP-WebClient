@@ -1,0 +1,57 @@
+.page {
+    min-height: 100dvh;
+    display: flex;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px clamp(16px, 3vw, 32px);
+    align-items: center;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    align-items: center;
+    gap: clamp(16px, 4vw, 48px);
+}
+
+.title {
+    font-size: 48px;
+    line-height: 1.1;
+    margin: 0 0 16px;
+    color: #42474a;
+    letter-spacing: -0.02em;
+}
+
+.desc {
+    margin: 0 0 8px;
+    color: #42474a;
+    font-size: clamp(16px, 1.7vw, 18px);
+    line-height: 1.55;
+}
+
+.art {
+    display: grid;
+    place-items: center;
+}
+
+.art img {
+    max-width: 85%;
+    height: auto;
+    display: block;
+}
+
+/* Responsivo */
+@media (max-width: 880px) {
+    .content {
+        grid-template-columns: 1fr;
+    }
+
+    header, footer {
+        gap: 12px;
+    }
+
+    footer {
+        justify-content: flex-start;
+    }
+}
