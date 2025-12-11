@@ -23,6 +23,10 @@ import {
   webSocketNotificacaoCriada,
   setIniciarNotificacoesSemWebSocket,
 } from '~/redux/modulos/notificacoes/actions';
+import {
+  setUsuarioBloqueado,
+  setUsuarioDesbloqueado,
+} from '~/redux/modulos/usuarioFilaEspera/actions';
 import { erros } from '~/servicos/alertas';
 import servicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 import { obterUrlSignalR } from '~/servicos/variaveis';
@@ -122,6 +126,14 @@ const NavbarNotificacoes = props => {
               dispatch(webSocketNotificacaoExcluida(params));
             }
           );
+
+          connection.on('BloqueioUsuario', fila => {
+            dispatch(setUsuarioBloqueado(fila));
+          });
+
+          connection.on('DesbloqueioUsuario', () => {
+            dispatch(setUsuarioDesbloqueado());
+          });
           dispatch(setIniciarNotificacoesSemWebSocket(false));
         })
         .catch(async () => {
