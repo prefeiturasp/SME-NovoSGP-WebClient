@@ -61,4 +61,3 @@ Cypress.Commands.add('carregandoMenus', () => {
     cy.intercept('GET', apiUrl).as('menus')
     cy.wait('@menus', { timeout: 60000 }).its('response.statusCode').should('eq', 200)
 })
-  
