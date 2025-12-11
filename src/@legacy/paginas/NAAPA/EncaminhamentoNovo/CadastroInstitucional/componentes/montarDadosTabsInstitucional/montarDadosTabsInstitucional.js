@@ -9,7 +9,8 @@ import {
   setTabAtivaEncaminhamentoInstitucional,
 } from '~/redux/modulos/encaminhamentoInstitucional/actions';
 import { erros } from '~/servicos';
-import ServicoEncaInstitucionalNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaInstitucionalNAAPA';
+import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
+import { TipoQuestionario } from '@/core/enum/tipo-questionario-enum';
 
 const { TabPane } = Tabs;
 
@@ -17,7 +18,7 @@ const MontarDadosTabsInstitucional = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
-  const encaminhamentoId = id || null;
+  const encaminhamentoId = id || 0;
 
   const { dreId, ueId, tipo } = useSelector(
     state => state.encaminhamentoInstitucional.dadosEncaminhamentoInstitucional
@@ -34,10 +35,10 @@ const MontarDadosTabsInstitucional = () => {
   );
 
   const obterSecoes = useCallback(async () => {
-    const resposta =
-      await ServicoEncaInstitucionalNAAPA.obterSecoesInstitucional(
-        encaminhamentoId
-      ).catch(e => erros(e));
+    const resposta = await ServicoEncaminhamentoNAAPA.obterSecoes(
+      encaminhamentoId,
+      TipoQuestionario.EncaminhamentoNAAPAInstitucional
+    ).catch(e => erros(e));
 
     const data = resposta?.data || resposta || [];
 

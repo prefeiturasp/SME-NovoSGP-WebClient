@@ -29,9 +29,9 @@ class ServicoEncaminhamentoNAAPA {
   obterDadosEncaminhamentoNAAPA = encaminhamentoId =>
     api.get(`${URL_PADRAO}/${encaminhamentoId}`);
 
-  obterSecoes = (encaminhamentoId) =>
+  obterSecoes = (encaminhamentoId, TipoQuestionario) =>
     api.get(
-      `${URL_PADRAO}/secoes?encaminhamentoNAAPAId=${encaminhamentoId}`
+      `${URL_PADRAO}/secoes?encaminhamentoNAAPAId=${encaminhamentoId}&tipoQuestionario=${TipoQuestionario}`
     );
 
   obterDadosQuestionarioId = (
@@ -387,6 +387,81 @@ class ServicoEncaminhamentoNAAPA {
     api.get(`${URL_PADRAO}/secoes-itinerancia/profissionais-envolvidos`, {
       params: { codigoDre, codigoUe },
     });
+
+  removerArquivoInstitucional = arquivoCodigo => {
+    return api.delete(`${URL_PADRAO}/arquivo?arquivoCodigo=${arquivoCodigo}`);
+  };
+
+  downloadArquivoInstitucional = arquivoCodigo => {
+    return api.get(`v1/armazenamento/arquivos/${arquivoCodigo}`, {
+      responseType: 'blob',
+    });
+  };
+
+  salvarEncaminhamentoInstitucional = async (
+    encaminhamentoId,
+    limparDadosAoSalvar = true
+  ) => {
+    try {
+      const state = store.getState();
+      const { encaminhamentoInstitucional } = state;
+      const {
+        dadosEncaminhamentoInstitucional,
+        dadosSecoesEncaminhamentoInstitucional,
+      } = encaminhamentoInstitucional;
+
+      const nomesSecoesComCamposObrigatorios = [];
+
+      const dadosMapeados =
+        await QuestionarioDinamicoFuncoes.mapearQuestionarios(
+          dadosSecoesEncaminhamentoInstitucional,
+          true,
+          nomesSecoesComCamposObrigatorios
+        );
+
+      const formsValidos = !!dadosMapeados?.formsValidos;
+
+      if (!formsValidos && !dadosMapeados?.secoes?.length) {
+        return false;
+      }
+
+      const paramsSalvar = {
+        codigoDre: dadosEncaminhamentoInstitucional?.dreCodigo,
+        codigoUe: dadosEncaminhamentoInstitucional?.ueCodigo,
+        dataEntradaQueixa: dadosEncaminhamentoInstitucional?.dataEntradaQueixa,
+        motivoEncaminhamento:
+          dadosEncaminhamentoInstitucional?.motivoEncaminhamento || '',
+        anexos: dadosEncaminhamentoInstitucional?.anexos || [],
+        secoes: dadosMapeados?.secoes?.length ? dadosMapeados.secoes : [],
+      };
+
+      if (encaminhamentoId) paramsSalvar.id = encaminhamentoId;
+
+      const resposta = await api.post(`${URL_PADRAO}/salvar`, paramsSalvar);
+
+      if (resposta?.status === 200 && limparDadosAoSalvar) {
+        const { dispatch } = store;
+        const { setQuestionarioDinamicoEmEdicao, setListaSecoesEmEdicao } =
+          await import('~/redux/modulos/questionarioDinamico/actions');
+        const { setLimparDadosQuestionarioDinamico } = await import(
+          '~/redux/modulos/questionarioDinamico/actions'
+        );
+        const { setLimparDadosEncaminhamentoInstitucional } = await import(
+          '~/redux/modulos/encaminhamentoInstitucional/actions'
+        );
+
+        dispatch(setQuestionarioDinamicoEmEdicao(false));
+        dispatch(setListaSecoesEmEdicao([]));
+        dispatch(setLimparDadosQuestionarioDinamico());
+        dispatch(setLimparDadosEncaminhamentoInstitucional());
+      }
+
+      return resposta;
+    } catch (e) {
+      erros(e);
+      return null;
+    }
+  };
 }
 
 export default new ServicoEncaminhamentoNAAPA();

@@ -8,7 +8,7 @@ import { erros } from '~/servicos';
 import { setExibirLoaderEncaminhamentoInstitucional } from '~/redux/modulos/encaminhamentoInstitucional/actions';
 import QuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/questionarioDinamico';
 import { SGP_SECAO } from '~/constantes/ids/questionario-dinamico';
-import ServicoEncaInstitucionalNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaInstitucionalNAAPA';
+import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
 
 const MontarDadosTabSelecionadaInstitucional = props => {
   const { questionarioId, dadosTab } = props;
@@ -30,8 +30,10 @@ const MontarDadosTabSelecionadaInstitucional = props => {
       dispatch(setExibirLoaderEncaminhamentoInstitucional(true));
 
       const resposta =
-        await ServicoEncaInstitucionalNAAPA.obterDadosQuestionarioIdInstitucional(
+        await ServicoEncaminhamentoNAAPA.obterDadosQuestionarioId(
           questionarioId,
+          null,
+          null,
           encaminhamentoId
         ).catch(e => {
           erros(e);
@@ -66,7 +68,7 @@ const MontarDadosTabSelecionadaInstitucional = props => {
         prefixId={`${SGP_SECAO}_${dadosTab?.nomeComponente}`}
         desabilitarCampos={desabilitarCampos}
         funcaoRemoverArquivoCampoUpload={
-          ServicoEncaInstitucionalNAAPA.removerArquivoInstitucional
+          ServicoEncaminhamentoNAAPA.removerArquivoInstitucional
         }
         onChangeQuestionario={() => {
           QuestionarioDinamicoFuncoes.guardarSecaoEmEdicao(dadosTab?.id);

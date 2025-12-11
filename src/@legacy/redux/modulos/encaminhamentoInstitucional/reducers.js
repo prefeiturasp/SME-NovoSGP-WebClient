@@ -2,6 +2,7 @@ import produce from 'immer';
 
 const inicial = {
   dadosEncaminhamentoInstitucional: {
+    Id: null,
     dreId: null,
     dreCodigo: null,
     dreNome: null,
