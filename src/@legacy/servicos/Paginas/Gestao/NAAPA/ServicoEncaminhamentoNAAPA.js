@@ -426,16 +426,15 @@ class ServicoEncaminhamentoNAAPA {
       }
 
       const paramsSalvar = {
-        codigoDre: dadosEncaminhamentoInstitucional?.dreCodigo,
-        codigoUe: dadosEncaminhamentoInstitucional?.ueCodigo,
-        dataEntradaQueixa: dadosEncaminhamentoInstitucional?.dataEntradaQueixa,
-        motivoEncaminhamento:
-          dadosEncaminhamentoInstitucional?.motivoEncaminhamento || '',
-        anexos: dadosEncaminhamentoInstitucional?.anexos || [],
+        DreId: dadosEncaminhamentoInstitucional?.DreId,
+        UeId: dadosEncaminhamentoInstitucional?.UeId,
+        Tipo: dadosEncaminhamentoInstitucional?.Tipo || 2,
+        Situacao:
+          dadosEncaminhamentoInstitucional?.Situacao || situacaoNAAPA.Rascunho,
         secoes: dadosMapeados?.secoes?.length ? dadosMapeados.secoes : [],
       };
 
-      if (encaminhamentoId) paramsSalvar.id = encaminhamentoId;
+      if (encaminhamentoId) paramsSalvar.Id = encaminhamentoId;
 
       const resposta = await api.post(`${URL_PADRAO}/salvar`, paramsSalvar);
 

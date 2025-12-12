@@ -3,18 +3,10 @@ import produce from 'immer';
 const inicial = {
   dadosEncaminhamentoInstitucional: {
     Id: null,
-    dreId: null,
-    dreCodigo: null,
-    dreNome: null,
-    ueId: null,
-    ueCodigo: null,
-    ueNome: null,
-    anoLetivo: null,
-    situação: null,
-    tipo: null,
-    dataEntradaQueixa: null,
-    motivoEncaminhamento: null,
-    anexos: [],
+    DreId: null,
+    UeId: null,
+    Situacao: null,
+    Tipo: null,
   },
 
   dadosSecoesEncaminhamentoInstitucional: [],
