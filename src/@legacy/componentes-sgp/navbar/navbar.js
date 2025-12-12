@@ -139,6 +139,23 @@ const Navbar = ({ bloqueado = false }) => {
                     <Perfil />
                   </li>
                   <li className="list-inline-item mr-4">
+                    <Link
+                      to="/module-federation"
+                      onClick={async e => {
+                        const pararAcao = await validarNavegacaoTela(
+                          e,
+                          '/module-federation'
+                        );
+                        if (!pararAcao) navigate('/module-federation');
+                      }}
+                    >
+                      <Botao className="text-center">
+                        <Icone className="fa fa-plug fa-lg" />
+                        <Texto className="d-block mt-1">SONDAGEM</Texto>
+                      </Botao>
+                    </Link>
+                  </li>
+                  <li className="list-inline-item mr-4">
                     <NavbarNotificacoes
                       Botao={Botao}
                       Icone={Icone}

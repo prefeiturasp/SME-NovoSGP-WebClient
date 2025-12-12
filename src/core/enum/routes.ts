@@ -123,4 +123,5 @@ export enum ROUTES {
   RELATORIO_PRODUTIVIDADE = '/relatorios/frequencia/produtividade',
   IMPORTACAO_DADOS = '/gestao/importacao-dados',
   INFORMACOES_EDUCACIONAIS = '/gestao/informacoes-educacionais',
+  MODULE_FEDERATION = '/module-federation',
 }

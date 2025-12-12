@@ -135,6 +135,7 @@ import Sondagem from '~/paginas/Sondagem/sondagem';
 import { setRotas } from '~/redux/modulos/navegacao/actions';
 import InformacoesEducacionais from '~/paginas/Gestao/InformacoesEducacionais/painelEducacional';
 import ImportacaoDados from '~/paginas/Gestao/ImportacaoDados/importacaoDados';
+import ModuleFederation from '~/paginas/ModuleFederation';
 
 export interface RouteProps {
   path: string;
@@ -516,6 +517,18 @@ route.set(ROUTES.PRINCIPAL, {
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: false,
   breadcrumbName: 'Início',
+});
+
+route.set(ROUTES.MODULE_FEDERATION, {
+  icone: 'fas fa-plug',
+  parent: '/',
+  component: ModuleFederation,
+  exact: true,
+  limpaSelecaoMenu: true,
+  dicaIcone: 'Module Federation',
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
+  breadcrumbName: 'Module Federation',
 });
 
 route.set(ROUTES.TIPO_FERIADO, {

@@ -129,7 +129,8 @@ export const Topo = styled.div`
     font-size: 10px !important;
   }
 
-  .perfil-edit #perfil-edit {
+  .perfil-edit #perfil-edit,
+  .perfil-edit #module-federation-link {
     color: ${Base.Branco};
   }
 
