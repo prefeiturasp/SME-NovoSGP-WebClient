@@ -20,7 +20,7 @@ const MontarDadosTabsInstitucional = () => {
 
   const encaminhamentoId = id || 0;
 
-  const { dreId, ueId, tipo } = useSelector(
+  const { DreId, UeId, Tipo } = useSelector(
     state => state.encaminhamentoInstitucional.dadosEncaminhamentoInstitucional
   );
 

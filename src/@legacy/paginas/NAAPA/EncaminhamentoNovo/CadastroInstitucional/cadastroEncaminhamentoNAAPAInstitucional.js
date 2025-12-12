@@ -89,7 +89,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     dispatch(
       setDadosEncaminhamentoInstitucional({
         ...dadosEncaminhamentoInstitucional,
-        dreCodigo: valorSelecionado,
+        DreId: valorSelecionado,
       })
     );
   };
@@ -100,7 +100,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     dispatch(
       setDadosEncaminhamentoInstitucional({
         ...dadosEncaminhamentoInstitucional,
-        ueCodigo: valorSelecionado,
+        UeId: valorSelecionado,
       })
     );
   };
@@ -124,8 +124,11 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
         dispatch(
           setDadosEncaminhamentoInstitucional({
-            dreCodigo: dados.dreCodigo,
-            ueCodigo: dados.ueCodigo,
+            Id: dados.id,
+            DreId: dados.dreId,
+            UeId: dados.ueId,
+            Situacao: dados.situacao,
+            Tipo: dados.tipo,
           })
         );
       }
@@ -145,8 +148,10 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
       dispatch(
         setDadosEncaminhamentoInstitucional({
           ...dadosEncaminhamentoInstitucional,
-          dreCodigo: dadosRedux.dreCodigo || codigoDre,
-          ueCodigo: dadosRedux.ueCodigo || codigoUe,
+          DreId: dadosRedux.DreId || codigoDre,
+          UeId: dadosRedux.UeId || codigoUe,
+          Tipo: dadosRedux.Tipo || 2,
+          Situacao: dadosRedux.Situacao || 1,
         })
       );
 
