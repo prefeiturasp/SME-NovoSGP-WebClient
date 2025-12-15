@@ -26,6 +26,9 @@ const tipoQuestao = {
   ComboMultiplaEscolhaDinamico: 25,
   AvaliacoesExternasProvaSP: 26,
   AlertCheckbox: 27,
+  TabelaAvaliacoesBimestrais: 28,
+  TabelaContextoSocial: 29,
+  TabelaDinamica: 30,
 };
 
 export default tipoQuestao;

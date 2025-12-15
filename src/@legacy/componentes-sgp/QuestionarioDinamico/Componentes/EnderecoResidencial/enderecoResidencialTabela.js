@@ -42,6 +42,10 @@ const EnderecoResidencialTabela = props => {
 
   const colunas = [
     {
+      title: 'CEP',
+      dataIndex: 'cep',
+    },
+    {
       title: 'Tipo de logradouro',
       dataIndex: 'tipoLogradouro',
     },
@@ -54,12 +58,12 @@ const EnderecoResidencialTabela = props => {
       dataIndex: 'numero',
     },
     {
-      title: 'Complemento',
-      dataIndex: 'complemento',
-    },
-    {
       title: 'Bairro',
       dataIndex: 'bairro',
+    },
+    {
+      title: 'Complemento',
+      dataIndex: 'complemento',
     },
   ];
 
@@ -102,7 +106,7 @@ const EnderecoResidencialTabela = props => {
           columns={colunas}
           pagination={false}
           onClickRow={onClickRow}
-          dataSource={dadosTabela}
+          dataSource={questaoAtual.resposta}
           id={SGP_TABLE_ENDERECO_RESIDENCIAL}
         />
       </div>

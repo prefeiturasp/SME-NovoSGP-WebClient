@@ -126,9 +126,10 @@ const MontarDadosTabSelecionada = props => {
                 complemento: endereco?.complemento,
                 logradouro: endereco?.logradouro,
                 tipoLogradouro: endereco?.tipologradouro,
+                cep: endereco?.cep,
               },
             ];
-            questao.resposta = [{ texto: JSON.stringify(listaEndereco) }];
+            questao.resposta = listaEndereco;
           }
           break;
         case 'GENERO':
@@ -216,18 +217,13 @@ const MontarDadosTabSelecionada = props => {
     if (resposta?.data?.length) {
       let dadosMapeados = resposta.data;
 
-      let informacoesAdicionaisEstudante = null;
-      if (!encaminhamentoId) {
-        informacoesAdicionaisEstudante =
-          await obterinformacoesAdicionaisEstudante(aluno?.codigoAluno);
-      }
+      let informacoesAdicionaisEstudante =
+        await obterinformacoesAdicionaisEstudante(aluno?.codigoAluno);
 
-      if (!encaminhamentoId && informacoesAdicionaisEstudante) {
-        dadosMapeados = mapearDadosNovoEncaminhamento(
-          resposta.data,
-          informacoesAdicionaisEstudante
-        );
-      }
+      dadosMapeados = mapearDadosNovoEncaminhamento(
+        resposta.data,
+        informacoesAdicionaisEstudante
+      );
 
       let dadosTurmasPrograma = [];
 
@@ -235,16 +231,9 @@ const MontarDadosTabSelecionada = props => {
         questao => questao.nomeComponente === 'TURMAS_PROGRAMA'
       );
 
-      if (temTurmasPrograma) {
-        dadosTurmasPrograma = await dadosIniciaisTurmasPrograma();
-      }
-
-      dadosMapeados = mapearDados(resposta.data, dadosTurmasPrograma);
-
       setDadosQuestionarioAtual(dadosMapeados);
-    } else {
-      setDadosQuestionarioAtual([]);
     }
+
     dispatch(setExibirLoaderEncaminhamentoNAAPA(false));
   }, [
     dispatch,
