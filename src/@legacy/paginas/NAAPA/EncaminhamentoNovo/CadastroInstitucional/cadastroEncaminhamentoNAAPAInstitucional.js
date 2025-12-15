@@ -18,6 +18,7 @@ import {
 import ServicoEncaminhamentoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoEncaminhamentoNAAPA';
 import './cadastroEncaminhamentoNAAPAInstitucional.css';
 import MontarDadosTabsInstitucional from './componentes/montarDadosTabsInstitucional/montarDadosTabsInstitucional';
+import { set } from 'lodash';
 
 export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const { id } = useParams();
@@ -34,6 +35,9 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   );
 
   const [formEncInstitucional] = Form.useForm();
+
+  const [idDre, setIdDre] = useState();
+  const [idUe, setIdUe] = useState();
 
   const [codigoDre, setCodigoDre] = useState();
   const [codigoUe, setCodigoUe] = useState();
@@ -85,11 +89,17 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
   const onChangeDre = codigo => {
     const valorSelecionado = formEncInstitucional.getFieldValue('codigoDre');
+
     setCodigoDre(valorSelecionado);
+    const idDreSelecionada = listaDres.find(
+      dre => dre.codigo == valorSelecionado.toString()
+    )?.id;
+
+    setIdDre(idDreSelecionada);
     dispatch(
       setDadosEncaminhamentoInstitucional({
         ...dadosEncaminhamentoInstitucional,
-        DreId: valorSelecionado,
+        dreId: idDreSelecionada,
       })
     );
   };
@@ -97,10 +107,15 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
   const onChangeUe = codigo => {
     const valorSelecionado = formEncInstitucional.getFieldValue('codigoUe');
     setCodigoUe(valorSelecionado);
+    const idUeSelecionada = listaUes.find(
+      ue => ue.codigo == valorSelecionado.toString()
+    )?.id;
+
+    setIdUe(idUeSelecionada);
     dispatch(
       setDadosEncaminhamentoInstitucional({
         ...dadosEncaminhamentoInstitucional,
-        UeId: valorSelecionado,
+        UeId: idUeSelecionada,
       })
     );
   };
@@ -121,14 +136,16 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
 
         setCodigoDre(dados.dreCodigo);
         setCodigoUe(dados.ueCodigo);
+        setIdDre(dados.dreId);
+        setIdUe(dados.ueId);
 
         dispatch(
           setDadosEncaminhamentoInstitucional({
-            Id: dados.id,
-            DreId: dados.dreId,
-            UeId: dados.ueId,
-            Situacao: dados.situacao,
-            Tipo: dados.tipo,
+            id: dados.id,
+            dreId: dados.dreId,
+            ueId: dados.ueId,
+            situacao: dados.situacao,
+            tipo: dados.tipo,
           })
         );
       }
@@ -148,10 +165,10 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
       dispatch(
         setDadosEncaminhamentoInstitucional({
           ...dadosEncaminhamentoInstitucional,
-          DreId: dadosRedux.DreId || codigoDre,
-          UeId: dadosRedux.UeId || codigoUe,
-          Tipo: dadosRedux.Tipo || 2,
-          Situacao: dadosRedux.Situacao || 1,
+          dreId: dadosRedux.dreId || idDre,
+          ueId: dadosRedux.ueId || idUe,
+          tipo: dadosRedux.tipo || 12,
+          situacao: dadosRedux.situacao || 2,
         })
       );
 
