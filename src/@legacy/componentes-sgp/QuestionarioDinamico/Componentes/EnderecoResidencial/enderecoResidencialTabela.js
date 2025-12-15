@@ -7,6 +7,7 @@ import Label from '~/componentes/label';
 import ModalCadastroEnderecoResidencial from './modalCadastroEnderecoResidencial';
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 import { SGP_TABLE_ENDERECO_RESIDENCIAL } from '~/constantes/ids/table';
+import { Col, Row, Typography } from 'antd';
 
 const EnderecoResidencialTabela = props => {
   const { label, questaoAtual, form, onChange, disabled } = props;
@@ -89,6 +90,8 @@ const EnderecoResidencialTabela = props => {
     );
   };
 
+  let opcionais = JSON.parse(questaoAtual.opcionais);
+
   return (
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
       <ModalCadastroEnderecoResidencial
@@ -99,6 +102,25 @@ const EnderecoResidencialTabela = props => {
       />
 
       <Label text={label} />
+
+      {opcionais.titulo && (
+        <Row gutter={[16, 16]}>
+          <Col xs={24}>
+            <Typography.Title className="mb-3" level={4}>
+              {opcionais.titulo}
+            </Typography.Title>
+          </Col>
+        </Row>
+      )}
+      {opcionais.subtitulo && (
+        <Row gutter={[16, 24]} className="mb-4">
+          <Col xs={24}>
+            <Typography.Text className="mb-2">
+              {opcionais.subtitulo}
+            </Typography.Text>
+          </Col>
+        </Row>
+      )}
 
       <div className={possuiErro() ? 'tabela-invalida' : ''}>
         <DataTable
