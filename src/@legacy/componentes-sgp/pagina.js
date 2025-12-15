@@ -12,9 +12,29 @@ import { useSelector } from 'react-redux';
 
 const Pagina = () => {
   const navigate = useNavigate();
+  const perfisAdministrador = [
+    '5be1e074-37d6-e911-abd6-f81654fe895d',
+    '5ae1e074-37d6-e911-abd6-f81654fe895d',
+  ];
   const [bloquearTela, setBloquearTela] = useState(false);
+  const [usuarioAdministrador, setUsuarioAdministrador] = useState(false);
+
   const usuarioBloqueado = useSelector(
     state => state.usuarioFilaEspera.usuarioBloqueado
+  );
+
+  const perfilStore = useSelector(e => e.perfil);
+
+  useEffect(() => {
+    const ehAdministrador = perfilStore?.perfis?.some(perfil =>
+      perfisAdministrador.includes(perfil.codigoPerfil)
+    );
+    setUsuarioAdministrador(ehAdministrador || false);
+  }, [perfilStore]);
+
+  useEffect(
+    () => setBloquearTela(usuarioBloqueado && !usuarioAdministrador),
+    [usuarioBloqueado]
   );
 
   useEffect(() => {
@@ -62,8 +82,6 @@ const Pagina = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []);
-
-  useEffect(() => setBloquearTela(usuarioBloqueado), [usuarioBloqueado]);
 
   return (
     <CapturaErros navigate={navigate}>
