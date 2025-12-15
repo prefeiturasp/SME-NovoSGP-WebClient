@@ -421,8 +421,20 @@ export default createGlobalStyle`
     border-radius: 4px !important;
   }
 
-  .mb-6 {
+  .mb-32 {
+    margin-bottom: 2rem !important;
+  }
+
+  .mt-32 {
+    margin-top: 2rem !important;
+  }
+
+  .mb-96 {
     margin-bottom: 6rem !important;
+  }
+
+  .mt-96 {
+    margin-top: 6rem !important;
   }
 
 

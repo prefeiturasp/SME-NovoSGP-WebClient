@@ -113,11 +113,9 @@ const EnderecoResidencialTabela = props => {
         </Row>
       )}
       {opcionais.subtitulo && (
-        <Row gutter={[16, 24]} className="mb-4">
+        <Row gutter={[16, 24]} className="mb-32">
           <Col xs={24}>
-            <Typography.Text className="mb-2">
-              {opcionais.subtitulo}
-            </Typography.Text>
+            <Typography.Text>{opcionais.subtitulo}</Typography.Text>
           </Col>
         </Row>
       )}

@@ -50,7 +50,7 @@ export const MontarQuestionarioPAPConselhoClasse = ({ bimestre, codigoAluno }) =
 
   if (exibirLoader)
     return (
-      <div className="col-sm-12 mb-6 mt-4">
+      <div className="col-sm-12 mt-4 mb-96">
         <Loader loading tip="Validando exibição dados Relatório de PAP" />
       </div>
     );
