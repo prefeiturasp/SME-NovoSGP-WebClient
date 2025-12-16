@@ -132,6 +132,19 @@ const MontarDadosTabSelecionada = props => {
             questao.resposta = listaEndereco;
           }
           break;
+        case 'TABELA_CONTEXTO_SOCIAL':
+          const listaSocial = [
+            {
+              grupoEtnico: informacoesEstudante?.grupoEtnico,
+              sexo: informacoesEstudante?.sexo,
+              ehImigrante: informacoesEstudante?.ehImigrante,
+              responsavel: informacoesEstudante?.nomeMae,
+              responsavelEhImigrante:
+                informacoesEstudante?.responsavelEhImigrante,
+            },
+          ];
+          questao.resposta = listaSocial;
+          break;
         case 'GENERO':
           if (informacoesEstudante?.sexo) {
             const opcaoRespostaId = buscarValoresOpcaoResposta(
@@ -224,6 +237,8 @@ const MontarDadosTabSelecionada = props => {
         resposta.data,
         informacoesAdicionaisEstudante
       );
+
+      console.log('veio o negocio mapeado ?', dadosMapeados);
 
       let dadosTurmasPrograma = [];
 

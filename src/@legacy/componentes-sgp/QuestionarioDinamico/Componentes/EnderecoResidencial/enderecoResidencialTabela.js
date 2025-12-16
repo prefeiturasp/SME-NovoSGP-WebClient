@@ -5,8 +5,8 @@ import { DataTable } from '~/componentes';
 import { Base } from '~/componentes/colors';
 import Label from '~/componentes/label';
 import ModalCadastroEnderecoResidencial from './modalCadastroEnderecoResidencial';
-import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 import { SGP_TABLE_ENDERECO_RESIDENCIAL } from '~/constantes/ids/table';
+import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 import { Col, Row, Typography } from 'antd';
 
 const EnderecoResidencialTabela = props => {
@@ -90,7 +90,13 @@ const EnderecoResidencialTabela = props => {
     );
   };
 
-  let opcionais = JSON.parse(questaoAtual.opcionais);
+  let opcionais = {};
+
+  try {
+    opcionais = JSON.parse(questaoAtual?.opcionais || '{}');
+  } catch {
+    opcionais = {};
+  }
 
   return (
     <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
@@ -103,7 +109,7 @@ const EnderecoResidencialTabela = props => {
 
       <Label text={label} />
 
-      {opcionais.titulo && (
+      {opcionais?.titulo && (
         <Row gutter={[16, 16]}>
           <Col xs={24}>
             <Typography.Title className="mb-3" level={4}>
@@ -112,7 +118,7 @@ const EnderecoResidencialTabela = props => {
           </Col>
         </Row>
       )}
-      {opcionais.subtitulo && (
+      {opcionais?.subtitulo && (
         <Row gutter={[16, 24]} className="mb-32">
           <Col xs={24}>
             <Typography.Text>{opcionais.subtitulo}</Typography.Text>

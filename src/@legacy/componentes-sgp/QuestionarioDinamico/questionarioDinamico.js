@@ -13,6 +13,7 @@ import { AvaliacoesExternasProvaSP } from './Componentes/AvaliacoesExternasProva
 import ContatoResponsaveisTabela from './Componentes/ContatoResponsaveis/contatoResponsaveisTabela';
 import DiasHorariosTabela from './Componentes/DiasHorariosTabela/diasHorariosTabela';
 import EnderecoResidencialTabela from './Componentes/EnderecoResidencial/enderecoResidencialTabela';
+import TabelaContextoSocial from './Componentes/TabelaContextoSocial/tabelaContextoSocial';
 import InformacoesEscolares from './Componentes/InformacoesEscolares/informacoesEscolares';
 import InformacoesSrmTabela from './Componentes/InformacoesSrm/InformacoesSrmTabela';
 import TabelaFrequenciaTurmaPAP from './Componentes/TabelaFrequenciaTurmaPAP/TabelaFrequenciaTurmaPAP';
@@ -121,6 +122,7 @@ const QuestionarioDinamico = props => {
           case tipoQuestao.AtendimentoClinico:
           case tipoQuestao.AtividadesContraturno:
           case tipoQuestao.Endereco:
+          case tipoQuestao.TabelaContextoSocial:
           case tipoQuestao.ContatoResponsaveis:
           case tipoQuestao.TurmasPrograma:
           case tipoQuestao.InformacoesSrm:
@@ -183,7 +185,7 @@ const QuestionarioDinamico = props => {
             break;
         }
       }
-      
+
       if (
         valorRespostaAtual?.length &&
         (questaoAtual?.tipoQuestao === tipoQuestao.ComboMultiplaEscolha ||
@@ -612,6 +614,19 @@ const QuestionarioDinamico = props => {
       case tipoQuestao.Endereco:
         campoAtual = (
           <EnderecoResidencialTabela
+            {...params}
+            label={label?.props?.text}
+            disabled={desabilitarCampos}
+            onChange={() => {
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
+          />
+        );
+        break;
+      case tipoQuestao.TabelaContextoSocial:
+        campoAtual = (
+          <TabelaContextoSocial
             {...params}
             label={label?.props?.text}
             disabled={desabilitarCampos}
