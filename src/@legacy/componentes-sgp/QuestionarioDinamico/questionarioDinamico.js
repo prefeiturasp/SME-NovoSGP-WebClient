@@ -14,6 +14,7 @@ import ContatoResponsaveisTabela from './Componentes/ContatoResponsaveis/contato
 import DiasHorariosTabela from './Componentes/DiasHorariosTabela/diasHorariosTabela';
 import EnderecoResidencialTabela from './Componentes/EnderecoResidencial/enderecoResidencialTabela';
 import TabelaContextoSocial from './Componentes/TabelaContextoSocial/tabelaContextoSocial';
+import TabelaAvaliacoesBimestrais from './Componentes/TabelaAvaliacoesBimestrais/tabelaAvaliacoesBimestrais';
 import InformacoesEscolares from './Componentes/InformacoesEscolares/informacoesEscolares';
 import InformacoesSrmTabela from './Componentes/InformacoesSrm/InformacoesSrmTabela';
 import TabelaFrequenciaTurmaPAP from './Componentes/TabelaFrequenciaTurmaPAP/TabelaFrequenciaTurmaPAP';
@@ -627,6 +628,19 @@ const QuestionarioDinamico = props => {
       case tipoQuestao.TabelaContextoSocial:
         campoAtual = (
           <TabelaContextoSocial
+            {...params}
+            label={label?.props?.text}
+            disabled={desabilitarCampos}
+            onChange={() => {
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
+          />
+        );
+        break;
+      case tipoQuestao.TabelaAvaliacoesBimestrais:
+        campoAtual = (
+          <TabelaAvaliacoesBimestrais
             {...params}
             label={label?.props?.text}
             disabled={desabilitarCampos}
