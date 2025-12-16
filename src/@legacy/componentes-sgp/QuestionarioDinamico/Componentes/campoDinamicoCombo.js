@@ -23,7 +23,11 @@ const CampoDinamicoCombo = props => {
   }
 
   return (
-    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
+    <ColunaDimensionavel
+      dimensao={
+        opcionais?.titulo || opcionais?.subtitulo ? 12 : questaoAtual?.dimensao
+      }
+    >
       {opcionais?.titulo && (
         <Row gutter={[16, 16]} className="mt-2">
           <Col xs={24}>

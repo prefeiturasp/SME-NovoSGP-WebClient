@@ -238,8 +238,6 @@ const MontarDadosTabSelecionada = props => {
         informacoesAdicionaisEstudante
       );
 
-      console.log('veio o negocio mapeado ?', dadosMapeados);
-
       let dadosTurmasPrograma = [];
 
       const temTurmasPrograma = dadosMapeados.find(

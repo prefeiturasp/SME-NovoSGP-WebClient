@@ -40,16 +40,14 @@ function TabelaContextoSocial(props) {
     },
   ];
   return (
-    <div>
-      <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
-        <DataTable
-          gerarIdUnico
-          columns={colunas}
-          pagination={false}
-          dataSource={questaoAtual.resposta}
-        />
-      </ColunaDimensionavel>
-    </div>
+    <ColunaDimensionavel dimensao={questaoAtual?.dimensao}>
+      <DataTable
+        gerarIdUnico
+        columns={colunas}
+        pagination={false}
+        dataSource={questaoAtual.resposta}
+      />
+    </ColunaDimensionavel>
   );
 }
 
