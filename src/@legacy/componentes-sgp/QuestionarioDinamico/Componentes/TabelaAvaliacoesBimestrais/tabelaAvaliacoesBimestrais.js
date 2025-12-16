@@ -9,22 +9,22 @@ function TabelaAvaliacoesBimestrais(props) {
     {
       bimestre: '1',
       indicadores: [
-        { componente: 'PORT', nota: 10, percentualFrequencia: 100 },
-        { componente: 'MAT', nota: 10, percentualFrequencia: 100 },
+        { componente: 'PORTUGUÊS', nota: 10, percentualFrequencia: 100 },
+        { componente: 'MATEMÁTICA', nota: 10, percentualFrequencia: 100 },
       ],
     },
     {
       bimestre: '2',
       indicadores: [
-        { componente: 'PORT', nota: 9, percentualFrequencia: 95 },
-        { componente: 'MAT', nota: 8, percentualFrequencia: 90 },
+        { componente: 'PORTUGUÊS', nota: 9, percentualFrequencia: 95 },
+        { componente: 'MATEMÁTICA', nota: 8, percentualFrequencia: 90 },
       ],
     },
     {
       bimestre: '3',
       indicadores: [
-        { componente: 'PORT', nota: 7, percentualFrequencia: 85 },
-        { componente: 'MAT', nota: 6, percentualFrequencia: 80 },
+        { componente: 'PORTUGUÊS', nota: 7, percentualFrequencia: 85 },
+        { componente: 'MATEMÁTICA', nota: 6, percentualFrequencia: 80 },
       ],
     },
   ];

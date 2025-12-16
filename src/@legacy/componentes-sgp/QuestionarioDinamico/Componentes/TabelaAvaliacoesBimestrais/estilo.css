@@ -43,3 +43,12 @@
 .tabela-avaliacoes-container .ant-table-row:hover {
   background-color: #f0f8ff !important;
 }
+
+.ant-tabs-nav {
+  margin-bottom: 0 !important;
+}
+
+.ant-tabs-tabpane {
+  padding-top: 8px !important;
+  border: none !important;
+}
