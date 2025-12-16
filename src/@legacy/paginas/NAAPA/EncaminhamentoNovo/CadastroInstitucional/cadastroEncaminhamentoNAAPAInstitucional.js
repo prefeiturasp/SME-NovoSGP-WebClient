@@ -139,6 +139,11 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
         setIdDre(dados.dreId);
         setIdUe(dados.ueId);
 
+        formEncInstitucional.setFieldsValue({
+          codigoDre: dados.dreCodigo,
+          codigoUe: dados.ueCodigo,
+        });
+
         dispatch(
           setDadosEncaminhamentoInstitucional({
             id: dados.id,
@@ -154,7 +159,7 @@ export const CadastroEncaminhamentoNAAPAInstitucional = () => {
     } finally {
       setCarregandoGeral(false);
     }
-  }, [encaminhamentoId, dispatch]);
+  }, [encaminhamentoId, dispatch, formEncInstitucional]);
 
   const salvarEncaminhamento = async () => {
     try {
