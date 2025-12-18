@@ -47,8 +47,16 @@ const Campo = styled.div`
   }
 `;
 
+const ehBase64 = src =>
+  typeof src === 'string' && src.startsWith('data:image/');
+
+const ehBlobUrl = imgSrc => imgSrc?.startsWith('blob:');
+
 const temBinarioNaUrl = imgSrc =>
-  !!(imgSrc && imgSrc?.startsWith('data:image/'));
+  !!(
+    imgSrc &&
+    (imgSrc.startsWith('data:image/') || imgSrc.startsWith('blob:'))
+  );
 
 const ehUrlExterna = imgSrc => {
   const urlSGP = clone(urlBase).replace('/api', '');
@@ -57,7 +65,13 @@ const ehUrlExterna = imgSrc => {
 };
 
 export const temBinarioOuUrlExterna = imgSrc =>
-  temBinarioNaUrl(imgSrc) || ehUrlExterna(imgSrc);
+  temBinarioNaUrl(imgSrc) || ehUrlExterna(imgSrc) || ehBase64(imgSrc);
+
+const adicionarHttpSeNaoTiver = url => {
+  if (!/^https?:\/\//i.test(url)) {
+    return `https://${url}`;
+  }
+};
 
 const uploadImagemManual = async file => {
   const fmData = new FormData();
@@ -71,10 +85,40 @@ const uploadImagemManual = async file => {
     .post('v1/arquivos/upload', fmData, config)
     .catch(e => erros(e));
 
-  return resposta?.data?.path;
+  if (resposta?.data?.path) return adicionarHttpSeNaoTiver(resposta.data.path);
+
+  return adicionarHttpSeNaoTiver(resposta?.data?.data?.path);
+};
+
+const base64ToFile = (base64, filename = 'image.png') => {
+  const arr = base64.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], filename, { type: mime });
 };
 
 const converterImagemURLExternaParaInterna = async urlExterna => {
+  if (!urlExterna) return '';
+
+  if (ehBase64(urlExterna)) {
+    const file = base64ToFile(urlExterna);
+    return uploadImagemManual(file);
+  }
+
+  if (urlExterna.startsWith('blob:')) {
+    const res = await fetch(urlExterna);
+    const blob = await res.blob();
+    const file = new File([blob], 'image.png', { type: blob.type });
+    return uploadImagemManual(file);
+  }
+
   const localFile =
     urlExterna?.startsWith('file:///') ||
     urlExterna?.startsWith('blob:https://web.whatsapp.com/') ||
@@ -316,10 +360,34 @@ const JoditEditor = forwardRef((props, ref) => {
           setValidacaoComErro(validarSeTemErro(valorParaValidar));
         }
       },
-      change: newValue => {
+      change: async newValue => {
+        if (!editorInstance.current) return;
+
+        if (/(src="data:image\/|src="blob:)/.test(newValue)) {
+          const novoHtml = await validarUploadImagensExternasEBinarias(
+            newValue,
+            imagensCentralizadas
+          );
+
+          if (novoHtml !== newValue) {
+            editorInstance.current.value = novoHtml;
+
+            if (props.form) {
+              props.form.setFieldValue(props.name, novoHtml);
+            }
+
+            if (props.onChange) {
+              props.onChange(novoHtml);
+            }
+
+            return;
+          }
+        }
+
         if (props.form) {
           props.form.setFieldValue(props.name, newValue);
         }
+
         if (props.onChange) {
           props.onChange(newValue);
         }
