@@ -112,7 +112,6 @@ const converterImagemURLExternaParaInterna = async urlExterna => {
     return uploadImagemManual(file);
   }
 
-  // blob: (caso crítico)
   if (urlExterna.startsWith('blob:')) {
     const res = await fetch(urlExterna);
     const blob = await res.blob();
@@ -364,7 +363,6 @@ const JoditEditor = forwardRef((props, ref) => {
       change: async newValue => {
         if (!editorInstance.current) return;
 
-        // nunca permitir blob ou base64 no valor final
         if (/(src="data:image\/|src="blob:)/.test(newValue)) {
           const novoHtml = await validarUploadImagensExternasEBinarias(
             newValue,
@@ -386,7 +384,6 @@ const JoditEditor = forwardRef((props, ref) => {
           }
         }
 
-        // fluxo normal
         if (props.form) {
           props.form.setFieldValue(props.name, newValue);
         }
