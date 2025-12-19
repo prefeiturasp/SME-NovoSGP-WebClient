@@ -6,7 +6,7 @@ const URL_BASE_SONDAGEM =
 
 const URL_REMOTE_ENTRY = `${URL_BASE_SONDAGEM}/assets/remoteEntry.js`;
 
-const inicializarContainerRemoto = async (container) => {
+const inicializarContainerRemoto = async container => {
   if (typeof __webpack_share_scopes__ !== 'undefined') {
     await __webpack_init_sharing__('default');
     await container.init(__webpack_share_scopes__.default);
@@ -15,17 +15,24 @@ const inicializarContainerRemoto = async (container) => {
 
   const ReactLib = await import('react');
   const ReactDOMLib = await import('react-dom');
+  const ReactReduxLib = await import('react-redux');
 
   await container.init({
     react: {
       '18.2.0': {
-        get: async () => () => ReactLib,
+        get: () => Promise.resolve(() => ReactLib),
         loaded: 1,
       },
     },
     'react-dom': {
       '18.2.0': {
-        get: async () => () => ReactDOMLib,
+        get: () => Promise.resolve(() => ReactDOMLib),
+        loaded: 1,
+      },
+    },
+    'react-redux': {
+      '8.1.0': {
+        get: () => Promise.resolve(() => ReactReduxLib),
         loaded: 1,
       },
     },
@@ -33,9 +40,7 @@ const inicializarContainerRemoto = async (container) => {
 };
 
 const carregarComponenteRemoto = async () => {
-  const container = await import(
-    /* webpackIgnore: true */ URL_REMOTE_ENTRY
-  );
+  const container = await import(/* webpackIgnore: true */ URL_REMOTE_ENTRY);
 
   if (!container?.init || !container?.get) {
     throw new Error('Container remoto inválido');
@@ -60,10 +65,8 @@ const NovaSondagem = () => {
 
   useEffect(() => {
     carregarComponenteRemoto()
-      .then((Componente) =>
-        setComponenteRemoto(() => Componente)
-      )
-      .catch((err) => setErro(err.message))
+      .then(Componente => setComponenteRemoto(() => Componente))
+      .catch(err => setErro(err.message))
       .finally(() => setCarregando(false));
   }, []);
 
@@ -76,11 +79,7 @@ const NovaSondagem = () => {
 
         <p style={estilos.dica}>
           Verifique se o projeto de Sondagem está rodando em{' '}
-          <a
-            href={URL_BASE_SONDAGEM}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={URL_BASE_SONDAGEM} target="_blank" rel="noopener noreferrer">
             {URL_BASE_SONDAGEM}
           </a>
         </p>
@@ -91,13 +90,18 @@ const NovaSondagem = () => {
   if (carregando || !ComponenteRemoto) {
     return (
       <div style={estilos.centralizado}>
-        <Spin
-          size="large"
-          tip="Carregando Sistema de Sondagem..."
-        />
+        <Spin size="large" tip="Carregando Sistema de Sondagem..." />
       </div>
     );
   }
+
+  console.log('🔍 [SGP Host] Redux Provider está ativo');
+  console.log(
+    '🔍 [SGP Host] Store disponível:',
+    typeof window !== 'undefined'
+      ? !!window.__REDUX_DEVTOOLS_EXTENSION__
+      : false
+  );
 
   return (
     <div style={estilos.container}>

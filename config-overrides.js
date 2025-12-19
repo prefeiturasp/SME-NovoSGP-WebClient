@@ -38,6 +38,16 @@ const moduleFederationConfig = override(
             requiredVersion: '^18.2.0',
             eager: true,
           },
+          'react-redux': {
+            singleton: true,
+            requiredVersion: '^8.1.0',
+            eager: true,
+          },
+          redux: {
+            singleton: true,
+            requiredVersion: '^4.2.0',
+            eager: true,
+          },
           'react-router-dom': {
             singleton: true,
             requiredVersion: '^6.10.0',
