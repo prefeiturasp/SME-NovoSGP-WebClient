@@ -48,7 +48,7 @@ const carregarComponenteRemoto = async () => {
 
   await inicializarContainerRemoto(container);
 
-  const fabrica = await container.get('./Home');
+  const fabrica = await container.get('./SemAcesso');
   const modulo = fabrica();
 
   if (!modulo?.default) {
