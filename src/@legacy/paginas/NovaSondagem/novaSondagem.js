@@ -7,40 +7,60 @@ const URL_BASE_SONDAGEM =
 const URL_REMOTE_ENTRY = `${URL_BASE_SONDAGEM}/assets/remoteEntry.js`;
 
 const inicializarContainerRemoto = async container => {
-  if (typeof __webpack_share_scopes__ !== 'undefined') {
+  console.log('🔍 [SGP Host] Iniciando imports...');
+
+  // Tentar usar o webpack share scopes primeiro
+  if (
+    typeof __webpack_share_scopes__ !== 'undefined' &&
+    __webpack_share_scopes__.default
+  ) {
+    console.log('🔍 [SGP Host] Usando __webpack_share_scopes__ do webpack');
     await __webpack_init_sharing__('default');
     await container.init(__webpack_share_scopes__.default);
+    console.log(
+      '🔍 [SGP Host] Container inicializado com webpack share scopes!'
+    );
     return;
   }
 
+  // Se não tiver webpack share scopes, criar manualmente
   const ReactLib = await import('react');
   const ReactDOMLib = await import('react-dom');
   const ReactReduxLib = await import('react-redux');
+  console.log('🔍 [SGP Host] Imports concluídos');
 
-  await container.init({
+  // Formato alternativo de shareScope
+  const shareScope = {
     react: {
       '18.2.0': {
-        get: () => Promise.resolve(() => ReactLib),
+        get: async () => ReactLib,
         loaded: 1,
       },
     },
     'react-dom': {
       '18.2.0': {
-        get: () => Promise.resolve(() => ReactDOMLib),
+        get: async () => ReactDOMLib,
         loaded: 1,
       },
     },
     'react-redux': {
       '8.1.0': {
-        get: () => Promise.resolve(() => ReactReduxLib),
+        get: async () => ReactReduxLib,
         loaded: 1,
       },
     },
-  });
+  };
+  console.log('🔍 [SGP Host] ShareScope criado com formato alternativo');
+
+  console.log('🔍 [SGP Host] Inicializando container...');
+  await container.init(shareScope);
+  console.log('🔍 [SGP Host] Container inicializado com sucesso!');
 };
 
 const carregarComponenteRemoto = async () => {
   const container = await import(/* webpackIgnore: true */ URL_REMOTE_ENTRY);
+
+  console.log('🔍 [SGP Host] Container carregado:', container);
 
   if (!container?.init || !container?.get) {
     throw new Error('Container remoto inválido');
@@ -49,7 +69,11 @@ const carregarComponenteRemoto = async () => {
   await inicializarContainerRemoto(container);
 
   const fabrica = await container.get('./SemAcesso');
-  const modulo = fabrica();
+  console.log('🔍 [SGP Host] Factory obtida:', typeof fabrica, fabrica);
+
+  // Verificar se fabrica é uma função ou já é o módulo
+  const modulo = typeof fabrica === 'function' ? fabrica() : fabrica;
+  console.log('🔍 [SGP Host] Módulo obtido:', modulo);
 
   if (!modulo?.default) {
     throw new Error('O módulo remoto não possui exportação default');
