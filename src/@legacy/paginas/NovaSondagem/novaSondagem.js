@@ -68,7 +68,7 @@ const carregarComponenteRemoto = async () => {
 
   await inicializarContainerRemoto(container);
 
-  const fabrica = await container.get('./SemAcesso');
+  const fabrica = await container.get('./Home');
   console.log('🔍 [SGP Host] Factory obtida:', typeof fabrica, fabrica);
 
   // Verificar se fabrica é uma função ou já é o módulo
@@ -161,7 +161,7 @@ const estilos = {
   container: {
     margin: '-16px -32px',
     minHeight: 'calc(100vh - 70px)',
-    background: '#fff',
+    background: '#f5f6f8',
   },
 };
 
