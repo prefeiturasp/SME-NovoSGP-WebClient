@@ -40,17 +40,27 @@ const moduleFederationConfig = override(
           },
           'react-redux': {
             singleton: true,
-            requiredVersion: '^8.1.0',
+            requiredVersion: '^8.1.3',
             eager: true,
           },
           redux: {
             singleton: true,
-            requiredVersion: '^4.2.0',
+            requiredVersion: '^4.0.4',
             eager: true,
           },
           'react-router-dom': {
             singleton: true,
             requiredVersion: '^6.10.0',
+            eager: true,
+          },
+          antd: {
+            singleton: true,
+            requiredVersion: '^5.4.0',
+            eager: true,
+          },
+          '@reduxjs/toolkit': {
+            singleton: true,
+            requiredVersion: '^1.9.7',
             eager: true,
           },
         },

@@ -27,25 +27,32 @@ const inicializarContainerRemoto = async container => {
   const ReactLib = await import('react');
   const ReactDOMLib = await import('react-dom');
   const ReactReduxLib = await import('react-redux');
+  const AntdLib = await import('antd');
   console.log('🔍 [SGP Host] Imports concluídos');
 
   // Formato alternativo de shareScope
   const shareScope = {
     react: {
-      '18.2.0': {
+      '^18.2.0': {
         get: async () => ReactLib,
         loaded: 1,
       },
     },
     'react-dom': {
-      '18.2.0': {
+      '^18.2.0': {
         get: async () => ReactDOMLib,
         loaded: 1,
       },
     },
     'react-redux': {
-      '8.1.0': {
+      '^8.1.3': {
         get: async () => ReactReduxLib,
+        loaded: 1,
+      },
+    },
+    antd: {
+      '^5.4.0': {
+        get: async () => AntdLib,
         loaded: 1,
       },
     },
