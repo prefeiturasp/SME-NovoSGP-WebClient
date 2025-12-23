@@ -1,19 +1,21 @@
-Feature: API - Fechamento - Acompanhamento de id de pendências
+# language: pt
 
-  Scenario: Listar todas as pendências por id
-    Given que possuo um token de acesso válido
-    When informo o id da pendência
-    And envio uma requisição GET para o endpoint
-    Then a reposta deve conter status 200
+Funcionalidade: API - Fechamento - Acompanhamento de id de pendências
 
-  Scenario: Não permitir acessar sem autenticação
-    Given que não possuo um token de acesso válido
-    When informo somente o id da pendência
-    And tento o envio uma requisição GET para o endpoint
-    Then a resposta deve ter o status 401 sem detalhamento da pendência
+  Cenário: Listar todas as pendências por id
+    Dado que possuo um token de acesso válido
+    Quando informo o id da pendência
+    E envio uma requisição GET para o endpoint
+    Então a reposta deve conter status 200
 
-  Scenario: Não listar pendência sem id informado
-    Given que possuo um token de acesso válido
-    When não informo o id da pendência
-    And envio uma requisição GET para o endpoint sem id válido
-    Then a resposta deve ter o status 601 com a mensagem de erro de id da pendência não informado
+  Cenário: Não permitir acessar sem autenticação
+    Dado que não possuo um token de acesso válido
+    Quando informo somente o id da pendência
+    E tento o envio uma requisição GET para o endpoint
+    Então a resposta deve ter o status 401 sem detalhamento da pendência
+
+  Cenário: Não listar pendência sem id informado
+    Dado que possuo um token de acesso válido
+    Quando não informo o id da pendência
+    E envio uma requisição GET para o endpoint sem id válido
+    Então a resposta deve ter o status 601 com a mensagem de erro de id da pendência não informado

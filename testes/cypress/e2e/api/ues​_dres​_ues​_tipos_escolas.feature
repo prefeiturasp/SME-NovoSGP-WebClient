@@ -1,25 +1,27 @@
-Feature: API - Tipo e descrição da UE
+# language: pt
 
-  Scenario: Retorna dados do tipo da UE
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para endpoint de tipos escolas 
-    Then retorna o status 200 de sucesso com os dados  
+Funcionalidade: API - Tipo e descrição da UE
 
-  Scenario: Não retorna dados sem usuário autenticado
-    Given que não gerou um token de acesso válido
-    When tento uma requisição GET para endpoint de tipos escolas
-    Then retorna o status 401 sem os dados
+  Cenário: Retorna dados do tipo da UE
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para endpoint de tipos escolas 
+    Então retorna o status 200 de sucesso com os dados  
 
-  Scenario: Código da DRE deve ser obrigatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para endpoint dos tipos de UE
-    And não informo a DRE
-    Then retorna o status 500 sem os dados de UE
+  Cenário: Não retorna dados sem usuário autenticado
+    Dado que não gerou um token de acesso válido
+    Quando tento uma requisição GET para endpoint de tipos escolas
+    Então retorna o status 401 sem os dados
 
-  Scenario: Código da UE deve ser obrigatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para endpoint de tipos
-    And não informo a UE
-    Then retorna o status 500 sem os dados da DRE
+  Cenário: Código da DRE deve ser obrigatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para endpoint dos tipos de UE
+    E não informo a DRE
+    Então retorna o status 500 sem os dados de UE
+
+  Cenário: Código da UE deve ser obrigatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para endpoint de tipos
+    E não informo a UE
+    Então retorna o status 500 sem os dados da DRE
 
 

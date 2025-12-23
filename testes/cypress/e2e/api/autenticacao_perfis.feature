@@ -1,17 +1,19 @@
-Feature: API - Autenticação de id do perfil do usuário
+# language: pt
 
-  Scenario: Selecionar perfil válido para o usuário
-    Given que login gerou um token de acesso válido
-    When envio uma requisição PUT para o endpoint de autenticação do perfil
-    Then retorna o id com status 200
+Funcionalidade: API - Autenticação de id do perfil do usuário
 
-  Scenario: Não permitir selecionar perfil inválido
-    Given que login gerou um token de acesso válido
-    When tento a requisição PUT para o endpoint com perfil inválido
-    Then retorna o status 422
+  Cenário: Selecionar perfil válido para o usuário
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição PUT para o endpoint de autenticação do perfil
+    Então retorna o id com status 200
 
-  Scenario: Não selecionar perfil sem autenticação
-    Given que não login não gerou um token de acesso válido
-    When tento a requisição PUT para o endpoint de autenticação do perfil
-    Then retorna o status 401
+  Cenário: Não permitir selecionar perfil inválido
+    Dado que login gerou um token de acesso válido
+    Quando tento a requisição PUT para o endpoint com perfil inválido
+    Então retorna o status 422
+
+  Cenário: Não selecionar perfil sem autenticação
+    Dado que não login não gerou um token de acesso válido
+    Quando tento a requisição PUT para o endpoint de autenticação do perfil
+    Então retorna o status 401
 

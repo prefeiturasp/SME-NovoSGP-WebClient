@@ -1,103 +1,105 @@
-Feature: API - Consultas de anotações de frequência do aluno
+# language: pt
 
-  Scenario: Retorna a anotação do aluno através do id
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint do id da anotação
-    Then retorna os dados do id com status 200
+Funcionalidade: API - Consultas de anotações de frequência do aluno
 
-  Scenario: Id da anotação é obrigatório na consulta do aluno
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint sem id da anotação
-    Then retorna o status 405 que o id é obrigatório
+  Cenário: Retorna a anotação do aluno através do id
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint do id da anotação
+    Então retorna os dados do id com status 200
 
-  Scenario: Id da anotação inválido na consulta do aluno
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint com id da anotação incorreto
-    Then retorna o status 601 que o id deve ser informado
+  Cenário: Id da anotação é obrigatório na consulta do aluno
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint sem id da anotação
+    Então retorna o status 405 que o id é obrigatório
 
-  Scenario: Id da anotação inexistente na consulta do aluno
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint com id da anotação inexistente
-    Then retorna o status 601 que anotação não foi encontrada
+  Cenário: Id da anotação inválido na consulta do aluno
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint com id da anotação incorreto
+    Então retorna o status 601 que o id deve ser informado
 
-  Scenario: Não retorna a anotação do aluno através do id sem autenticação
-    Given que não possuo um token de acesso válido
-    When tento a requisição GET para o endpoint do id da anotação
-    Then não retorna dados da anotação id mostrando o status 401
+  Cenário: Id da anotação inexistente na consulta do aluno
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint com id da anotação inexistente
+    Então retorna o status 601 que anotação não foi encontrada
+
+  Cenário: Não retorna a anotação do aluno através do id sem autenticação
+    Dado que não possuo um token de acesso válido
+    Quando tento a requisição GET para o endpoint do id da anotação
+    Então não retorna dados da anotação id mostrando o status 401
   
-  Scenario: Retorna a anotação do aluno na aula
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint de anotação do aluno na aula
-    Then retorna os dados do id aula com status 204
+  Cenário: Retorna a anotação do aluno na aula
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de anotação do aluno na aula
+    Então retorna os dados do id aula com status 204
 
-  Scenario: Id do aluno é obrigatório na anotação da aula
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint sem id do aluno na aula
-    Then retorna o status 500 sem dados de aula
+  Cenário: Id do aluno é obrigatório na anotação da aula
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint sem id do aluno na aula
+    Então retorna o status 500 sem dados de aula
 
-  Scenario: Id da aula é obrigatório na anotação do aluno
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint sem id da aula do aluno
-    Then retorna o status 500 sem dados de aluno  
+  Cenário: Id da aula é obrigatório na anotação do aluno
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint sem id da aula do aluno
+    Então retorna o status 500 sem dados de aluno  
 
-  Scenario: Não retorna a anotação do aluno através do id sem autenticação
-    Given que não possuo um token de acesso válido
-    When tento a requisição GET para o endpoint do id da anotação
-    Then não retorna dados da anotação id mostrando o status 401
+  Cenário: Não retorna a anotação do aluno através do id sem autenticação
+    Dado que não possuo um token de acesso válido
+    Quando tento a requisição GET para o endpoint do id da anotação
+    Então não retorna dados da anotação id mostrando o status 401
 
-  Scenario: Retorna os motivos de ausências nas anotações do aluno
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint de motivos de ausências
-    Then retorna o status 200 as descrições nas anotações do aluno
+  Cenário: Retorna os motivos de ausências nas anotações do aluno
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de motivos de ausências
+    Então retorna o status 200 as descrições nas anotações do aluno
 
-  Scenario: Não retorna os motivos de ausências sem autenticação
-    Given que não possuo um token de acesso válido
-    When tento uma requisição GET para o endpoint de motivos de ausências
-    Then não retorna as descrições exibindo o status 401
+  Cenário: Não retorna os motivos de ausências sem autenticação
+    Dado que não possuo um token de acesso válido
+    Quando tento uma requisição GET para o endpoint de motivos de ausências
+    Então não retorna as descrições exibindo o status 401
 
-  Scenario: Retorna as anotações do aluno na data selecionada
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint de anotações na data
-    Then retorna o status 200 com os dados de aluno no período
+  Cenário: Retorna as anotações do aluno na data selecionada
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de anotações na data
+    Então retorna o status 200 com os dados de aluno no período
 
-  Scenario: Data de fim deve ser maior que início
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint de anotações com data
-    And data de fim é maior que início
-    Then retorna o status 601 que o fim deve ser maior
+  Cenário: Data de fim deve ser maior que início
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de anotações com data
+    E data de fim é maior que início
+    Então retorna o status 601 que o fim deve ser maior
 
-  Scenario: Não permitir data inválida
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint de anotações da data
-    And a data está inválida
-    Then retorna o status 422 que o valor é inválido
+  Cenário: Não permitir data inválida
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de anotações da data
+    E a data está inválida
+    Então retorna o status 422 que o valor é inválido
 
-  Scenario: Data fim deve ser preenchida
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint sem data fim preenchida
-    Then retorna o status 422 que data fim é inválida
+  Cenário: Data fim deve ser preenchida
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint sem data fim preenchida
+    Então retorna o status 422 que data fim é inválida
 
-  Scenario: Filtrar somente com data fim
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint sem data fim
-    Then retorna o status 601 que data fim é obrigatório
+  Cenário: Filtrar somente com data fim
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint sem data fim
+    Então retorna o status 601 que data fim é obrigatório
 
-  Scenario: Data início deve ser preenchida
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint sem data início preenchida
-    Then retorna o status 422 que data início é inválida
+  Cenário: Data início deve ser preenchida
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint sem data início preenchida
+    Então retorna o status 422 que data início é inválida
 
-  Scenario: Filtrar somente com data início
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint sem data início
-    Then retorna o status 601 que data início é obrigatório
+  Cenário: Filtrar somente com data início
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint sem data início
+    Então retorna o status 601 que data início é obrigatório
 
-  Scenario: Aluno deve ser preenchido
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint da data sem o aluno
-    Then retorna o status 422 que a consulta do aluno é inválida
+  Cenário: Aluno deve ser preenchido
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint da data sem o aluno
+    Então retorna o status 422 que a consulta do aluno é inválida
 
-  Scenario: Não retorna as anotações do aluno na data selecionada sem autenticação
-    Given que não possuo um token de acesso válido
-    When tento uma requisição GET para o endpoint de anotações na data
-    Then não retorna os dados de aluno no período exibindo o status 401
+  Cenário: Não retorna as anotações do aluno na data selecionada sem autenticação
+    Dado que não possuo um token de acesso válido
+    Quando tento uma requisição GET para o endpoint de anotações na data
+    Então não retorna os dados de aluno no período exibindo o status 401

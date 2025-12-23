@@ -1,11 +1,13 @@
-Feature: API - Tipos de ocorrências
+# language: pt
 
-  Scenario: Retornar os ids e tipos de ocorrências
-    Given que login gerou um token de acesso válido
-    When envio a requisição GET para o endpoint de ocorrências
-    Then retorna o status 200 com os ids e tipos
+Funcionalidade: API - Tipos de ocorrências
 
-  Scenario: Não acessar os tipos de ocorrências sem autenticação
-    Given que não login não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint de ocorrências
-    Then retorna o status 401 sem os ids e tipos
+  Cenário: Retornar os ids e tipos de ocorrências
+    Dado que login gerou um token de acesso válido
+    Quando envio a requisição GET para o endpoint de ocorrências
+    Então retorna o status 200 com os ids e tipos
+
+  Cenário: Não acessar os tipos de ocorrências sem autenticação
+    Dado que não login não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint de ocorrências
+    Então retorna o status 401 sem os ids e tipos

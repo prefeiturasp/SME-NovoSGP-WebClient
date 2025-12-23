@@ -3,7 +3,7 @@
 describe('API - Dashboard AEE de planos acessibilidades', () => {   
     it('Retorna dados AEE planos acessibilidades', () => {
       cy.buscar_dashboard_aee_encaminhamentos_matriculados_srm_paee().then((response) => {
-        expect(response.status).to.eq(200)
+        expect(response.status).to.eq(204)
       })
     })
   

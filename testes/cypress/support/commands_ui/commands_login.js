@@ -13,12 +13,16 @@ Cypress.Commands.add('dados_de_login', (usuario, senha) => {
 })
 
 Cypress.Commands.add('clicar_botao', () => {
-    if (Cypress.$('#usuario').val().trim() !== "" && Cypress.$('#senha').val().trim() !== "") {
+    const usuarioVal = (Cypress.$(loginLocalizadores.campo_usuario()).val() || '').toString().trim()
+    const senhaVal = (Cypress.$(loginLocalizadores.campo_senha()).val() || '').toString().trim()
+
+    if (usuarioVal !== "" && senhaVal !== "") {
         cy.intercept('POST', '/api/v1/autenticacao').as('loginRequest')
     }
+
     cy.get(loginLocalizadores.botao_acessar())
-        .should('be.visible')     
-        .click()
+      .should('be.visible')
+      .click()
 })
 
 Cypress.Commands.add('validar_mensagem', (mensagem) => {

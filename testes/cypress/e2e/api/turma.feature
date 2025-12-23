@@ -1,106 +1,108 @@
-Feature: API - Retorna a turma por código, ano letivo, tipo de calendário, modalidade e UE
+# language: pt
 
-  Scenario: Buscar alunos da turma no ano letivo
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint de código da turma com ano letivo
-    Then retorna os dados de todos alunos com status 200
+Funcionalidade: API - Retorna a turma por código, ano letivo, tipo de calendário, modalidade e UE
 
-  Scenario: Não buscar alunos com turma inválida
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint de código da turma inválida
-    Then retorna a mensagem de erro com status 601 sem os dados de alunos
+  Cenário: Buscar alunos da turma no ano letivo
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de código da turma com ano letivo
+    Então retorna os dados de todos alunos com status 200
 
-  Scenario: Código da turma deve ser obrigatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint sem código da turma
-    Then não retorna os dados de alunos com status 500
+  Cenário: Não buscar alunos com turma inválida
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de código da turma inválida
+    Então retorna a mensagem de erro com status 601 sem os dados de alunos
 
-  Scenario: Ano letivo deve ser obrigatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint sem ano letivo
-    Then não retorna os dados de alunos com status 500
+  Cenário: Código da turma deve ser obrigatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint sem código da turma
+    Então não retorna os dados de alunos com status 500
 
-  Scenario: Não busca os dados da turma sem autenticação
-    Given que não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint de código da turma com ano letivo
-    Then retorna o status 401 sem dados dos alunos
+  Cenário: Ano letivo deve ser obrigatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint sem ano letivo
+    Então não retorna os dados de alunos com status 500
 
-  Scenario: Buscar tipo de calendário
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint de tipo de calendário
-    Then retorna o status 200 com nome junto ao id
+  Cenário: Não busca os dados da turma sem autenticação
+    Dado que não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint de código da turma com ano letivo
+    Então retorna o status 401 sem dados dos alunos
+
+  Cenário: Buscar tipo de calendário
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de tipo de calendário
+    Então retorna o status 200 com nome junto ao id
   
-  Scenario: Código da turma deve ser obrigatório no tipo de calendário
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint sem turma no tipo de calendário
-    Then retorna o status 404 sem dados do calendário
+  Cenário: Código da turma deve ser obrigatório no tipo de calendário
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint sem turma no tipo de calendário
+    Então retorna o status 404 sem dados do calendário
 
-  Scenario: Não buscar tipo de calendário com turma inválida
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint com turma inválida no tipo de calendário
-    Then retorna a mensagem de erro com status 601 sem os tipos
+  Cenário: Não buscar tipo de calendário com turma inválida
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint com turma inválida no tipo de calendário
+    Então retorna a mensagem de erro com status 601 sem os tipos
 
-  Scenario: Não busca o tipo de calendário sem autenticação
-    Given que não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint o tipo de calendário
-    Then retorna o status 401 sem dados de calendário
+  Cenário: Não busca o tipo de calendário sem autenticação
+    Dado que não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint o tipo de calendário
+    Então retorna o status 401 sem dados de calendário
 
-  Scenario: Buscar modalidades da turma
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint de modalidades
-    Then retorna o status 200 com código junto a descrição
+  Cenário: Buscar modalidades da turma
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de modalidades
+    Então retorna o status 200 com código junto a descrição
 
-  Scenario: Não busca modalidades da turma sem autenticação
-    Given que não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint de modalidades
-    Then retorna o status 401 sem dados de modalidades
+  Cenário: Não busca modalidades da turma sem autenticação
+    Dado que não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint de modalidades
+    Então retorna o status 401 sem dados de modalidades
 
-  Scenario: Buscar turmas de sondagem da UE 
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint de sondagem da UE
-    Then retorna o status 200 com código da turma junto ao nome
+  Cenário: Buscar turmas de sondagem da UE 
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de sondagem da UE
+    Então retorna o status 200 com código da turma junto ao nome
 
-  Scenario: Ano deve ser obrigatório na sondagem da UE 
-    Given que login gerou um token de acesso válido
-    When tento uma requisição GET para o endpoint de sondagem sem ano
-    Then retorna o status 422 com mensagem de ano inválido
+  Cenário: Ano deve ser obrigatório na sondagem da UE 
+    Dado que login gerou um token de acesso válido
+    Quando tento uma requisição GET para o endpoint de sondagem sem ano
+    Então retorna o status 422 com mensagem de ano inválido
 
-  Scenario: UE deve ser obrigatório na sondagem da UE 
-    Given que login gerou um token de acesso válido
-    When tento uma requisição GET para o endpoint de sondagem sem UE
-    Then retorna o status 404 sem dados de UE
+  Cenário: UE deve ser obrigatório na sondagem da UE 
+    Dado que login gerou um token de acesso válido
+    Quando tento uma requisição GET para o endpoint de sondagem sem UE
+    Então retorna o status 404 sem dados de UE
 
-  Scenario: Não busca sondagem da turma sem autenticação
-    Given que não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint de sondagem
-    Then retorna o status 401 sem dados de sondagem
+  Cenário: Não busca sondagem da turma sem autenticação
+    Dado que não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint de sondagem
+    Então retorna o status 401 sem dados de sondagem
 
-  Scenario: Retornar listagem de turmas
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint de listagem de turmas
-    Then retorna o status 200 com itens, total de páginas e total de registros
+  Cenário: Retornar listagem de turmas
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de listagem de turmas
+    Então retorna o status 200 com itens, total de páginas e total de registros
 
-  Scenario: Não retornar listagem de turmas sem ano letivo
-    Given que login gerou um token de acesso válido
-    When tento uma requisição GET para o endpoint da listagem sem ano
-    Then retorna o status 422 que o ano está inválido
+  Cenário: Não retornar listagem de turmas sem ano letivo
+    Dado que login gerou um token de acesso válido
+    Quando tento uma requisição GET para o endpoint da listagem sem ano
+    Então retorna o status 422 que o ano está inválido
 
-  Scenario: Não retornar listagem de turmas sem modalidade
-    Given que login gerou um token de acesso válido
-    When tento uma requisição GET para o endpoint da listagem sem modalidade
-    Then retorna o status 500 que a modalidade está inválida
+  Cenário: Não retornar listagem de turmas sem modalidade
+    Dado que login gerou um token de acesso válido
+    Quando tento uma requisição GET para o endpoint da listagem sem modalidade
+    Então retorna o status 500 que a modalidade está inválida
 
-  Scenario: Não retornar listagem de turmas sem bimestre
-    Given que login gerou um token de acesso válido
-    When tento uma requisição GET para o endpoint da listagem sem o bimestre
-    Then retorna o status 422 que o bimestre está inválido
+  Cenário: Não retornar listagem de turmas sem bimestre
+    Dado que login gerou um token de acesso válido
+    Quando tento uma requisição GET para o endpoint da listagem sem o bimestre
+    Então retorna o status 422 que o bimestre está inválido
 
-  Scenario: Retornar listagem de turmas sem histórico
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint de listagem sem histórico
-    Then retorna o status 200
+  Cenário: Retornar listagem de turmas sem histórico
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de listagem sem histórico
+    Então retorna o status 200
 
-  Scenario: Não listar turmas sem autenticação
-    Given que não gerou um token de acesso válido
-    When tento uma requisição GET para o endpoint de listagem
-    Then retorna o status 401
+  Cenário: Não listar turmas sem autenticação
+    Dado que não gerou um token de acesso válido
+    Quando tento uma requisição GET para o endpoint de listagem
+    Então retorna o status 401

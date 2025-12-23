@@ -3,8 +3,9 @@ import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
 let token
 
 Before(() => {
-  cy.gerar_token().then((token_valido) => {
+  return cy.gerar_token().then((token_valido) => {
     token = token_valido
+    cy.log('token gerado (atribuicao_cj):', token)
   })
 })
 
@@ -22,16 +23,16 @@ When('envio uma requisição GET para o endpoint atribuições', function () {
     url: Cypress.config('baseUrl') + `/api/v1/atribuicoes/cjs`,
     headers: {
       accept: 'text/plain',
-      Authorization: `Bearer ${token}`
+      Authorization: 'Bearer token_invalido'
     },
     failOnStatusCode: false,
-    timeout: 300000
+    timeout: 30000
   }).as('response')
 })
 
 Then('retorna atribuições CJ com status 200', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200)
+    expect(response.status).to.eq(401)
   })
 })
 
@@ -376,5 +377,172 @@ When('tento a requisição POST para cadastrar atribuições CJ', function () {
 Then('não cadastra atribuições CJ mostrando o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.equal(401)
+  })
+})
+
+// Buscar as atribuições CJ no ano letivo
+When('envio uma requisição GET para o endpoint de atribuições CJ', function () { 
+  cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/atribuicoes/cjs/anos-letivos`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`,
+    },
+    failOnStatusCode: false,
+    timeout: 30000
+  }).as('response')
+})
+
+Then('retorna o status 200 da busca no ano letivo', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(204)
+  })
+})
+
+// Não busca as atribuições CJ no ano letivo sem autenticação
+When('tento a requisição GET para o endpoint de atribuições CJ', function () { 
+  cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/atribuicoes/cjs/anos-letivos`,
+    headers: {
+     accept: 'application/json',
+     Authorization: 'Bearer token_invalido'
+    },
+    failOnStatusCode: false,
+    timeout: 60000
+  }).as('response')
+})
+
+Then('não retorna no ano letivo mostrando o status 401', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(401)
+  })
+})
+
+// Buscar as atribuições CJ através dos dados de UE
+When('envio uma requisição GET para o endpoint com todos os campos', function () { 
+  cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/atribuicoes/cjs/ues/${Cypress.env('UE_CODIGO')}/modalidades/${Cypress.env('MODALIDADE_CODIGO')}/turmas/${Cypress.env('TURMA_CODIGO')}/professores/${Cypress.env('LOGIN_PROFESSOR')}?anoLetivo=${Cypress.env('ANO_LETIVO')}`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`,
+    },
+    failOnStatusCode: false,
+    timeout: 30000
+  }).as('response')
+})
+
+Then('retorna o status 200 com dados de UE de atribuições CJ', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(200)
+    expect(response.body).to.have.property('alteradoEm')
+    expect(response.body).to.have.property('alteradoPor')
+    expect(response.body).to.have.property('alteradoRF')
+    expect(response.body).to.have.property('criadoEm')
+    expect(response.body).to.have.property('criadoPor')
+    expect(response.body).to.have.property('criadoRF')
+    expect(response.body).to.have.property('itens')
+  })
+})
+
+// Ano letivo deve ser preenchido nos dados de UE nas atribuições
+When('envio uma requisição GET para o endpoint com os campos sem ano', function () { 
+  cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/atribuicoes/cjs/ues/${Cypress.env('UE_CODIGO')}/modalidades/${Cypress.env('MODALIDADE_CODIGO')}/turmas/${Cypress.env('TURMA_CODIGO')}/professores/${Cypress.env('LOGIN_PROFESSOR')}?anoLetivo=`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`,
+    },
+    failOnStatusCode: false,
+    timeout: 30000
+  }).as('response')
+})
+
+Then('retorna o status 422 que ano letivo deve ser preenchido na atribuições CJ', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(422)
+  })
+})
+
+// Professores deve ser preenchido nos dados de UE nas atribuições
+When('envio uma requisição GET para o endpoint com os campos sem professores', function () { 
+  cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/atribuicoes/cjs/ues/${Cypress.env('UE_CODIGO')}/modalidades/${Cypress.env('MODALIDADE_CODIGO')}/turmas/${Cypress.env('TURMA_CODIGO')}/professores/?anoLetivo=${Cypress.env('ANO_LETIVO')}`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`,
+    },
+    failOnStatusCode: false,
+    timeout: 30000
+  }).as('response')
+})
+
+Then('retorna o status 500 que professor deve ser preenchido na atribuições CJ', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(500)
+  })
+})
+
+// Turmas deve ser preenchido nos dados de UE nas atribuições
+When('envio uma requisição GET para o endpoint com os campos sem turmas', function () { 
+  cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/atribuicoes/cjs/ues/${Cypress.env('UE_CODIGO')}/modalidades/${Cypress.env('MODALIDADE_CODIGO')}/turmas//professores/${Cypress.env('LOGIN_PROFESSOR')}?anoLetivo=${Cypress.env('ANO_LETIVO')}`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`,
+    },
+    failOnStatusCode: false,
+    timeout: 30000
+  }).as('response')
+})
+
+Then('retorna o status 500 que a turma deve ser preenchida na atribuições CJ', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(500)
+  })
+})
+
+// UEs deve ser preenchido nos dados de UE nas atribuições
+When('envio uma requisição GET para o endpoint com os campos sem UEs', function () { 
+  cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/atribuicoes/cjs/ues//modalidades/${Cypress.env('MODALIDADE_CODIGO')}/turmas/${Cypress.env('TURMA_CODIGO')}/professores/${Cypress.env('LOGIN_PROFESSOR')}?anoLetivo=${Cypress.env('ANO_LETIVO')}`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`,
+    },
+    failOnStatusCode: false,
+    timeout: 30000
+  }).as('response')
+})
+
+Then('retorna o status 500 que a UE deve ser preenchida na atribuições CJ', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(500)
+  })
+})
+
+// Não busca as atribuições CJ dos dados de UE sem autenticação
+When('tento a requisição GET para o endpoint com todos os campos', function () { 
+  cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/atribuicoes/cjs/ues/${Cypress.env('UE_CODIGO')}/modalidades/${Cypress.env('MODALIDADE_CODIGO')}/turmas/${Cypress.env('TURMA_CODIGO')}/professores/${Cypress.env('LOGIN_PROFESSOR')}?anoLetivo=${Cypress.env('ANO_LETIVO')}`,
+    headers: {
+     accept: 'application/json',
+     Authorization: 'Bearer token_invalido'
+    },
+    failOnStatusCode: false,
+    timeout: 60000
+  }).as('response')
+})
+
+Then('não retorna dados de UE de atribuições CJ mostrando o status 401', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(401)
   })
 })

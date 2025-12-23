@@ -1,17 +1,19 @@
-Feature: API - Modalidades da UE no ano letivo
+# language: pt
 
-  Scenario: Retorna dados de UE através do código
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint de modalidades da UE
-    Then retorna os dados da UE com status 200
+Funcionalidade: API - Modalidades da UE no ano letivo
 
-  Scenario: Ano letivo deve ser obrigatório
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint sem o ano letivo
-    Then retorna o status 422 sem os dados da turma
+  Cenário: Retorna dados de UE através do código
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de modalidades da UE
+    Então retorna os dados da UE com status 200
 
-  Scenario: Não retornar dados sem usuário autenticado
-    Given que não possuo um token de acesso válido
-    When tento uma requisição GET para o endpoint de modalidades
-    Then não retorna os dados da UE com status 401
+  Cenário: Ano letivo deve ser obrigatório
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint sem o ano letivo
+    Então retorna o status 422 sem os dados da turma
+
+  Cenário: Não retornar dados sem usuário autenticado
+    Dado que não possuo um token de acesso válido
+    Quando tento uma requisição GET para o endpoint de modalidades
+    Então não retorna os dados da UE com status 401
 

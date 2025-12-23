@@ -1,32 +1,34 @@
-Feature: API - Lista de vínculo de supervisores
+# language: pt
 
-  Scenario: Listar os vínculos através da DRE
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para endpoint de vínculo
-    Then retorna o status 200 com supervisores da DRE
+Funcionalidade: API - Lista de vínculo de supervisores
 
-  Scenario: Listar os vínculos através da DRE e UE
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para endpoint de vínculo da DRE e UE
-    Then retorna o status 200 com supervisores da abranagência
+  Cenário: Listar os vínculos através da DRE
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para endpoint de vínculo
+    Então retorna o status 200 com supervisores da DRE
 
-  Scenario: Listar os vínculos através da DRE, UE e supervisor
-    Given que possuo um token de acesso válido
-    When envio a requisição GET para endpoint de vínculo da DRE e UE
-    Then retorna o status 200 e os supervisores
+  Cenário: Listar os vínculos através da DRE e UE
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para endpoint de vínculo da DRE e UE
+    Então retorna o status 200 com supervisores da abranagência
 
-  Scenario: UE não deve ter supervisor responsável
-    Given que possuo um token de acesso válido
-    When envio a requisição GET para endpoint sem vínculo na DRE e UE
-    Then retorna o status 200 sem supervisor responsável
+  Cenário: Listar os vínculos através da DRE, UE e supervisor
+    Dado que possuo um token de acesso válido
+    Quando envio a requisição GET para endpoint de vínculo da DRE e UE
+    Então retorna o status 200 e os supervisores
 
-  Scenario: Código da DRE deve ser obrigatório
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para endpoint de vínculo sem a DRE
-    Then retorna o status 601 que não foi preenchido o código
+  Cenário: UE não deve ter supervisor responsável
+    Dado que possuo um token de acesso válido
+    Quando envio a requisição GET para endpoint sem vínculo na DRE e UE
+    Então retorna o status 200 sem supervisor responsável
 
-  Scenario: Não retornar dados de vínculos de supervisores sem usuário autenticado
-    Given que não possuo um token de acesso válido
-    When tento a requisição GET para endpoint de vínculo
-    Then retorna o status 401 sem os dados
+  Cenário: Código da DRE deve ser obrigatório
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para endpoint de vínculo sem a DRE
+    Então retorna o status 601 que não foi preenchido o código
+
+  Cenário: Não retornar dados de vínculos de supervisores sem usuário autenticado
+    Dado que não possuo um token de acesso válido
+    Quando tento a requisição GET para endpoint de vínculo
+    Então retorna o status 401 sem os dados
 

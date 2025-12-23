@@ -1,14 +1,16 @@
-Feature: API - Validação do token de recuperação de senha
+# language: pt
 
-  Scenario: Token informado deve ser válido
-    Given que solicito a recuperação de senha
-    When envio uma requisição GET com token válido
-    Then retorna o status 200 de sucesso da solicitação
+Funcionalidade: API - Validação do token de recuperação de senha
 
-  Scenario: Token informado deve ser inválido
-    Given que solicito a recuperação de senha
-    When tento a requisição GET com token inválido
-    Then retorna o status 422
+  Cenário: Token informado deve ser válido
+    Dado que solicito a recuperação de senha
+    Quando envio uma requisição GET com token válido
+    Então retorna o status 200 de sucesso da solicitação
+
+  Cenário: Token informado deve ser inválido
+    Dado que solicito a recuperação de senha
+    Quando tento a requisição GET com token inválido
+    Então retorna o status 422
 
     
 

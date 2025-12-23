@@ -1,16 +1,18 @@
-Feature: API - CEP
+# language: pt
 
-  Scenario: Buscar dados com CEP válido
-    Given que possuo um token de acesso
-    When envio uma requisição GET com CEP válido
-    Then retorna o status 200 de confirmação da busca
+Funcionalidade: API - CEP
 
-   Scenario: CEP informado deve ser inválido
-    Given que possuo um token de acesso
-    When envio uma requisição GET com CEP inválido
-    Then retorna o status 204 que não foi possível buscar os dados
+  Cenário: Buscar dados com CEP válido
+    Dado que possuo um token de acesso
+    Quando envio uma requisição GET com CEP válido
+    Então retorna o status 200 de confirmação da busca
 
-  Scenario: CEP deve ser informado para busca
-    Given que possuo um token de acesso
-    When tento a requisição GET para o endpoint buscar sem o cep
-    Then não realiza a consulta retornando o status 500
+  Cenário: CEP informado deve ser inválido
+    Dado que possuo um token de acesso
+    Quando envio uma requisição GET com CEP inválido
+    Então retorna o status 204 que não foi possível buscar os dados
+
+  Cenário: CEP deve ser informado para busca
+    Dado que possuo um token de acesso
+    Quando tento a requisição GET para o endpoint buscar sem o cep
+    Então não realiza a consulta retornando o status 500

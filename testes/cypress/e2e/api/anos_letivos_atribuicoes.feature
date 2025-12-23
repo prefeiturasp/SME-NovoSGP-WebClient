@@ -1,17 +1,19 @@
-Feature: API - Anos letivos anteriores e atual
+# language: pt
 
-  Scenario: Retorna o ano letivo atual
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint buscar o ano letivo
-    Then retorna o ano atual com status 200
+Funcionalidade: API - Anos letivos anteriores e atual
 
-   Scenario: Retorna os anos letivos anteriores e atual
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint buscar os anos letivos
-    Then retorna os anos anteriores e atual com status 200
+  Cenário: Retorna o ano letivo atual
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint buscar o ano letivo
+    Então retorna o ano atual com status 200
 
-  Scenario: Não permitir acessar sem autenticação
-    Given que não possuo um token de acesso válido
-    When tento a requisição GET para o endpoint buscar o ano letivo
-    Then não consulta ano letivo mostrando o status 401
+   Cenário: Retorna os anos letivos anteriores e atual
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint buscar os anos letivos
+    Então retorna os anos anteriores e atual com status 200
+
+  Cenário: Não permitir acessar sem autenticação
+    Dado que não possuo um token de acesso válido
+    Quando tento a requisição GET para o endpoint buscar o ano letivo
+    Então não consulta ano letivo mostrando o status 401
 

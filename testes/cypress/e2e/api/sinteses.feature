@@ -1,23 +1,25 @@
-Feature: API - Sinteses
+# language: pt
 
-  Scenario: Retornar os valores do ano letivo
-    Given que login gerou um token de acesso válido
-    When insiro o ano letivo
-    And envio uma requisição GET para o endpoint de sinteses
-    Then retorna o status 200 com os valores
+Funcionalidade: API - Sinteses
 
-  Scenario: Não acessar a versão sem autenticação
-    Given que não login não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint de sinteses
-    Then retorna o status 401 sem valores
+  Cenário: Retornar os valores do ano letivo
+    Dado que login gerou um token de acesso válido
+    Quando insiro o ano letivo
+    E envio uma requisição GET para o endpoint de sinteses
+    Então retorna o status 200 com os valores
 
-  Scenario: Ano letivo deve ser obrigatório nas sinteses
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET de sinteses sem ano letivo
-    Then retorna o status 500
+  Cenário: Não acessar a versão sem autenticação
+    Dado que não login não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint de sinteses
+    Então retorna o status 401 sem valores
 
-  Scenario: Ano letivo deve ser válido nas sinteses
-    Given que login gerou um token de acesso válido
-    When insiro o ano letivo inválido
-    And tento o envio uma requisição GET de sinteses
-    Then retorna o status 601 com a mensagem de erro
+  Cenário: Ano letivo deve ser obrigatório nas sinteses
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET de sinteses sem ano letivo
+    Então retorna o status 500
+
+  Cenário: Ano letivo deve ser válido nas sinteses
+    Dado que login gerou um token de acesso válido
+    Quando insiro o ano letivo inválido
+    E tento o envio uma requisição GET de sinteses
+    Então retorna o status 601 com a mensagem de erro

@@ -1,17 +1,19 @@
-Feature: API - Mural de atividades infantis
+# language: pt
 
-  Scenario: Retorna mural de atividades da turma
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint do mural
-    Then retorna as atividades da turma com status 200
+Funcionalidade: API - Mural de atividades infantis
 
-   Scenario: Não retorna com turma inválida
-    Given que possuo um token de acesso válido
-    When envio a requisição GET para o endpoint com a aula inválida
-    Then não retorna as atividades exibindo mensagem para informar
+  Cenário: Retorna mural de atividades da turma
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint do mural
+    Então retorna as atividades da turma com status 200
 
-  Scenario: Não retorna as atividades sem usuário autenticado
-    Given que não possuo um token de acesso válido
-    When tento requisição GET para o endpoint do mural
-    Then não retorna as atividades mostrando o status 401
+  Cenário: Não retorna com turma inválida
+    Dado que possuo um token de acesso válido
+    Quando envio a requisição GET para o endpoint com a aula inválida
+    Então não retorna as atividades exibindo mensagem para informar
+
+  Cenário: Não retorna as atividades sem usuário autenticado
+    Dado que não possuo um token de acesso válido
+    Quando tento requisição GET para o endpoint do mural
+    Então não retorna as atividades mostrando o status 401
 

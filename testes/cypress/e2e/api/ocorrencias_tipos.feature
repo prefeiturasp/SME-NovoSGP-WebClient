@@ -1,12 +1,14 @@
-Feature: API - Listar ocorrências
+# language: pt
 
-  Scenario: Listar todas as ocorrências
-    Given que possuo um token de acesso válido
-    When envio uma requisição GET para o endpoint buscar
-    Then o corpo da resposta deve conter todos tipos de ocorrências com status 200
+Funcionalidade: API - Listar ocorrências
 
-  Scenario: Não permitir acessar sem autenticação
-    Given que não possuo um token de acesso válido
-    When tento enviar uma requisição GET para o endpoint
-    Then a consulta de tipos de ocorrências deve ter o status 401
+  Cenário: Listar todas as ocorrências
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint buscar
+    Então o corpo da resposta deve conter todos tipos de ocorrências com status 200
+
+  Cenário: Não permitir acessar sem autenticação
+    Dado que não possuo um token de acesso válido
+    Quando tento enviar uma requisição GET para o endpoint
+    Então a consulta de tipos de ocorrências deve ter o status 401
 

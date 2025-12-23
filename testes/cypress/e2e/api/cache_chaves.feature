@@ -1,9 +1,11 @@
-Feature: API - Cache chaves
+# language: pt
 
-  Scenario: Retornar os dados de cache chaves
-    Given que acesso o endpoint de cache
-    When envio uma requisição GET
-    Then retorna o status 200 com as chaves
+Funcionalidade: API - Cache chaves
+
+  Cenário: Retornar os dados de cache chaves
+    Dado que acesso o endpoint de cache
+    Quando envio uma requisição GET
+    Então retorna o status 200 com as chaves
 
 
 

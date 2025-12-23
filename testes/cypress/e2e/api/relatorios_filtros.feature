@@ -1,261 +1,263 @@
-Feature: API - Relatório filtros
+# language: pt
 
-  Scenario: Filtra DREs no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios filtros DRE
-    Then retorna o status 200 com dados da DRE
+Funcionalidade: API - Relatório filtros
 
-  Scenario: Não acessar a versão sem autenticação sem autenticação
-    Given que não login não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint relatórios filtros DRE
-    Then retorna o status 401 sem dados da DRE
+  Cenário: Filtra DREs no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios filtros DRE
+    Então retorna o status 200 com dados da DRE
 
-  Scenario: Filtra o código da DRE no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios filtros o código DRE
-    Then retorna o status 200 com dados de DRE no ano
+  Cenário: Não acessar a versão sem autenticação sem autenticação
+    Dado que não login não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint relatórios filtros DRE
+    Então retorna o status 401 sem dados da DRE
 
-  Scenario: Ano letivo é obrigatório ao filtrar o código da DRE no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios filtros código DRE
-    And não insiro o ano letivo
-    Then retorna o status 422 sem dados de DRE pois o ano é inválido
+  Cenário: Filtra o código da DRE no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios filtros o código DRE
+    Então retorna o status 200 com dados de DRE no ano
 
-  Scenario: DRE é obrigatória ao filtrar por código no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios filtros código de DRE
-    And não insiro a DRE
-    Then retorna o status 500 sem dados de DRE pois o código é vazio
+  Cenário: Ano letivo é obrigatório ao filtrar o código da DRE no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios filtros código DRE
+    E não insiro o ano letivo
+    Então retorna o status 422 sem dados de DRE pois o ano é inválido
 
-  Scenario: Não filtra o código da DRE no relatório sem autenticação
-    Given que não login não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint relatórios filtros o código DRE
-    Then retorna o status 401 sem dados da DRE no ano
+  Cenário: DRE é obrigatória ao filtrar por código no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios filtros código de DRE
+    E não insiro a DRE
+    Então retorna o status 500 sem dados de DRE pois o código é vazio
 
-  Scenario: Filtra as UEs no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios filtros com UE
-    Then retorna o status 200 com dados de UE no ano
+  Cenário: Não filtra o código da DRE no relatório sem autenticação
+    Dado que não login não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint relatórios filtros o código DRE
+    Então retorna o status 401 sem dados da DRE no ano
 
-  Scenario: Ano letivo é obrigatório ao filtrar a UE no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios filtros UE
-    And não insiro ano letivo
-    Then retorna o status 422 sem dados de UE pois o ano é inválido
+  Cenário: Filtra as UEs no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios filtros com UE
+    Então retorna o status 200 com dados de UE no ano
 
-  Scenario: UE é obrigatória ao filtrar por código no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios dos filtros UE
-    And não insiro a UE
-    Then retorna o status 500 sem dados de UE pois o código é vazio
+  Cenário: Ano letivo é obrigatório ao filtrar a UE no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios filtros UE
+    E não insiro ano letivo
+    Então retorna o status 422 sem dados de UE pois o ano é inválido
 
-  Scenario: Não filtra o código da UE no relatório sem autenticação
-    Given que não login não gerou um token de acesso válido
-    When tento uma requisição GET para o endpoint relatórios filtros com UE
-    Then retorna o status 401 sem dados da UE no ano
+  Cenário: UE é obrigatória ao filtrar por código no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios dos filtros UE
+    E não insiro a UE
+    Então retorna o status 500 sem dados de UE pois o código é vazio
 
-  Scenario: Filtra modalidade das UEs no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios modalidade filtros com UE
-    Then retorna o status 200 com dados de UE das modalidades no ano
+  Cenário: Não filtra o código da UE no relatório sem autenticação
+    Dado que não login não gerou um token de acesso válido
+    Quando tento uma requisição GET para o endpoint relatórios filtros com UE
+    Então retorna o status 401 sem dados da UE no ano
 
-  Scenario: Ano letivo é obrigatório ao filtrar a UE no relatório de modalidade
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios filtros UE modalidades
-    And não insire ano letivo
-    Then retorna o status 500 sem dados de UE no ano inválido
+  Cenário: Filtra modalidade das UEs no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios modalidade filtros com UE
+    Então retorna o status 200 com dados de UE das modalidades no ano
 
-  Scenario: UE é obrigatória ao filtrar por código no relatório de modalidade
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios dos filtros UE modalidades
-    And não insire a UE
-    Then retorna o status 500 sem dados de UE do código é vazio
+  Cenário: Ano letivo é obrigatório ao filtrar a UE no relatório de modalidade
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios filtros UE modalidades
+    E não insire ano letivo
+    Então retorna o status 500 sem dados de UE no ano inválido
 
-  Scenario: Histórico é obrigatório ao filtrar por código no relatório de modalidade
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios dos filtros modalidades
-    And não insiro histórico
-    Then retorna o status 500 sem dados de UE do histórico vazio
+  Cenário: UE é obrigatória ao filtrar por código no relatório de modalidade
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios dos filtros UE modalidades
+    E não insire a UE
+    Então retorna o status 500 sem dados de UE do código é vazio
 
-  Scenario: Não filtra o código da UE no relatório modalidade sem autenticação
-    Given que não login não gerou um token de acesso válido
-    When tento requisição GET para o endpoint relatórios modalidade filtros com UE
-    Then retorna o status 401 sem dados da UE do ano
+  Cenário: Histórico é obrigatório ao filtrar por código no relatório de modalidade
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios dos filtros modalidades
+    E não insiro histórico
+    Então retorna o status 500 sem dados de UE do histórico vazio
 
-   Scenario: Filtra modalidade e abrangencias das UEs no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios modalidade e abrangencias de filtros da UE
-    Then retorna o status 200 com dados de abrangencias da UE
+  Cenário: Não filtra o código da UE no relatório modalidade sem autenticação
+    Dado que não login não gerou um token de acesso válido
+    Quando tento requisição GET para o endpoint relatórios modalidade filtros com UE
+    Então retorna o status 401 sem dados da UE do ano
 
-  Scenario: UE é obrigatória ao filtrar relatório de modalidade com abrangencia
-    Given que login gerou um token de acesso válido
-    When envio requisição GET para endpoint relatórios dos filtros de abrangencias da modalidade
-    And não insiro ano letivo no filtro
-    Then retorna o status 500 sem dados de abrangencias da UE
+   Cenário: Filtra modalidade e abrangencias das UEs no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios modalidade e abrangencias de filtros da UE
+    Então retorna o status 200 com dados de abrangencias da UE
 
-  Scenario: Não filtra modalidade e abrangencias das UEs no relatório
-    Given que não login não gerou um token de acesso válido
-    When tento requisição GET para endpoint relatórios modalidade e abrangencias de filtros da UE
-    Then retorna o status 401 sem dados de abrangencias da UE
+  Cenário: UE é obrigatória ao filtrar relatório de modalidade com abrangencia
+    Dado que login gerou um token de acesso válido
+    Quando envio requisição GET para endpoint relatórios dos filtros de abrangencias da modalidade
+    E não insiro ano letivo no filtro
+    Então retorna o status 500 sem dados de abrangencias da UE
 
-  Scenario: Filtra modalidade dos anos escolares no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios modalidade no ano escolar
-    Then retorna o status 200 com valor e descrição da modalidade
+  Cenário: Não filtra modalidade e abrangencias das UEs no relatório
+    Dado que não login não gerou um token de acesso válido
+    Quando tento requisição GET para endpoint relatórios modalidade e abrangencias de filtros da UE
+    Então retorna o status 401 sem dados de abrangencias da UE
 
-  Scenario: UE é obrigatória ao filtrar modalidade dos anos escolares
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios modalidade do ano escolar
-    And não insiro a UE ao filtrar
-    Then retorna o status 500 sem dados de modalidade da UE
+  Cenário: Filtra modalidade dos anos escolares no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios modalidade no ano escolar
+    Então retorna o status 200 com valor e descrição da modalidade
 
-  Scenario: Modalidade é obrigatória ao filtrar anos escolares
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios modalidade ano escolar
-    And não seleciono o código ao filtrar
-    Then retorna o status 500 sem dados de modalidade no ano
+  Cenário: UE é obrigatória ao filtrar modalidade dos anos escolares
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios modalidade do ano escolar
+    E não insiro a UE ao filtrar
+    Então retorna o status 500 sem dados de modalidade da UE
 
-  Scenario: Não filtra modalidade dos anos escolares no relatório sem autenticação
-    Given que não login não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint relatórios modalidade no ano escolar
-    Then retorna o status 401 sem valor e descrição da modalidade
+  Cenário: Modalidade é obrigatória ao filtrar anos escolares
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios modalidade ano escolar
+    E não seleciono o código ao filtrar
+    Então retorna o status 500 sem dados de modalidade no ano
 
-  Scenario: Filtra turmas do ano letivo no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios filtrar turmas
-    Then retorna o status 200 com turmas no ano letivo
+  Cenário: Não filtra modalidade dos anos escolares no relatório sem autenticação
+    Dado que não login não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint relatórios modalidade no ano escolar
+    Então retorna o status 401 sem valor e descrição da modalidade
 
-  Scenario: UE é obrigatória ao filtrar turmas do ano letivo no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios turmas do ano letivo
-    And não insiro UE ao enviar
-    Then retorna o status 500 sem dados de UE das turmas
+  Cenário: Filtra turmas do ano letivo no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios filtrar turmas
+    Então retorna o status 200 com turmas no ano letivo
 
-  Scenario: Ano letivo é obrigatória ao filtrar turmas no relatório
-    Given que login gerou um token de acesso válido
-    When envio requisição GET para o endpoint relatórios turmas do ano letivo
-    And não seleciono o ano ao filtrar
-    Then retorna o status 500 sem dados de turmas no ano
+  Cenário: UE é obrigatória ao filtrar turmas do ano letivo no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios turmas do ano letivo
+    E não insiro UE ao enviar
+    Então retorna o status 500 sem dados de UE das turmas
 
-  Scenario: Não filtra turmas do ano letivo no relatório sem autenticação
-    Given que não login não gerou um token de acesso válido
-    When tento requisição GET para o endpoint relatórios filtrar turmas
-    Then retorna o status 401 sem turmas no ano letivo
+  Cenário: Ano letivo é obrigatória ao filtrar turmas no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio requisição GET para o endpoint relatórios turmas do ano letivo
+    E não seleciono o ano ao filtrar
+    Então retorna o status 500 sem dados de turmas no ano
 
-  Scenario: Filtra turmas do ano atual no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint filtrar turmas no ano
-    Then retorna o status 200 com turmas do ano atual
+  Cenário: Não filtra turmas do ano letivo no relatório sem autenticação
+    Dado que não login não gerou um token de acesso válido
+    Quando tento requisição GET para o endpoint relatórios filtrar turmas
+    Então retorna o status 401 sem turmas no ano letivo
 
-  Scenario: UE é obrigatória ao filtrar turmas do ano atual no relatório
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint relatórios turmas do ano 
-    And sem UE
-    Then retorna o status 500 sem dados de UE das turmas no atual
+  Cenário: Filtra turmas do ano atual no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint filtrar turmas no ano
+    Então retorna o status 200 com turmas do ano atual
 
-  Scenario: Ano atual é obrigatória ao filtrar turmas no relatório
-    Given que login gerou um token de acesso válido
-    When envio requisição GET para o endpoint relatórios turmas atual
-    And sem selecionar o ano
-    Then retorna o status 500 sem dados devido ao ano
+  Cenário: UE é obrigatória ao filtrar turmas do ano atual no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint relatórios turmas do ano 
+    E sem UE
+    Então retorna o status 500 sem dados de UE das turmas no atual
 
-  Scenario: Não filtra turmas do ano atual no relatório
-    Given que não login não gerou um token de acesso válido
-    When tento requisição GET para o endpoint filtrar turmas no ano
-    Then retorna o status 401 sem turmas no ano atual
+  Cenário: Ano atual é obrigatória ao filtrar turmas no relatório
+    Dado que login gerou um token de acesso válido
+    Quando envio requisição GET para o endpoint relatórios turmas atual
+    E sem selecionar o ano
+    Então retorna o status 500 sem dados devido ao ano
 
-  Scenario: Filtra ciclos da modalidade na UE
-    Given que login gerou um token de acesso válido
-    When envio a requisição GET para o endpoint de filtrar ciclos
-    Then retorna o status 200 com as modalidades da UE
+  Cenário: Não filtra turmas do ano atual no relatório
+    Dado que não login não gerou um token de acesso válido
+    Quando tento requisição GET para o endpoint filtrar turmas no ano
+    Então retorna o status 401 sem turmas no ano atual
 
-  Scenario: UE é obrigatória ao filtrar ciclos da modalidade
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint de filtrar ciclos da modalidade
-    And sem UE selecionada
-    Then retorna o status 500 sem dados de UE neste ciclo
+  Cenário: Filtra ciclos da modalidade na UE
+    Dado que login gerou um token de acesso válido
+    Quando envio a requisição GET para o endpoint de filtrar ciclos
+    Então retorna o status 200 com as modalidades da UE
 
-  Scenario: Modalidade é obrigatória ao filtrar ciclos da turma
-    Given que login gerou um token de acesso válido
-    When envio requisição GET para o endpoint de filtrar ciclos modalidade
-    And sem selecionar modalidade
-    Then retorna o status 500 sem dados de ciclos da UE
+  Cenário: UE é obrigatória ao filtrar ciclos da modalidade
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de filtrar ciclos da modalidade
+    E sem UE selecionada
+    Então retorna o status 500 sem dados de UE neste ciclo
 
-  Scenario: Não filtra turmas do ano atual no relatório
-    Given que não login não gerou um token de acesso válido
-    When tento requisição GET para o endpoint filtrar turmas no ano
-    Then retorna o status 401 sem turmas no ano atual
+  Cenário: Modalidade é obrigatória ao filtrar ciclos da turma
+    Dado que login gerou um token de acesso válido
+    Quando envio requisição GET para o endpoint de filtrar ciclos modalidade
+    E sem selecionar modalidade
+    Então retorna o status 500 sem dados de ciclos da UE
 
-  Scenario: Filtra componentes curriculares da modalidade na UE
-    Given que login gerou um token de acesso válido
-    When envio a requisição GET para o endpoint de filtrar modalidade
-    Then retorna o status 200 e componentes curriculares da UE
+  Cenário: Não filtra turmas do ano atual no relatório
+    Dado que não login não gerou um token de acesso válido
+    Quando tento requisição GET para o endpoint filtrar turmas no ano
+    Então retorna o status 401 sem turmas no ano atual
 
-  Scenario: UE é obrigatória ao filtrar componentes curriculares da modalidade
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint de filtrar componentes curriculares
-    And sem UE selecionada da modalidade
-    Then retorna o status 500 sem dados de UE neste componentes
+  Cenário: Filtra componentes curriculares da modalidade na UE
+    Dado que login gerou um token de acesso válido
+    Quando envio a requisição GET para o endpoint de filtrar modalidade
+    Então retorna o status 200 e componentes curriculares da UE
 
-  Scenario: Modalidade é obrigatória ao filtrar componentes curriculares
-    Given que login gerou um token de acesso válido
-    When envio requisição GET para endpoint de filtrar componentes curriculares
-    And sem selecionar o código da modalidade
-    Then retorna o status 500 sem dados de componentes da UE
+  Cenário: UE é obrigatória ao filtrar componentes curriculares da modalidade
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de filtrar componentes curriculares
+    E sem UE selecionada da modalidade
+    Então retorna o status 500 sem dados de UE neste componentes
 
-  Scenario: Ano letivo é obrigatório ao filtrar componentes curriculares da modalidade
-    Given que login gerou um token de acesso válido
-    When envio requisição GET para o endpoint filtrar componentes curriculares
-    And sem selecionar o ano letivo
-    Then retorna o status 500 sem dados da modalidade no ano
+  Cenário: Modalidade é obrigatória ao filtrar componentes curriculares
+    Dado que login gerou um token de acesso válido
+    Quando envio requisição GET para endpoint de filtrar componentes curriculares
+    E sem selecionar o código da modalidade
+    Então retorna o status 500 sem dados de componentes da UE
 
-  Scenario: Não filtra componentes curriculares da modalidade na UE
-    Given que não login não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint de filtrar modalidade
-    Then retorna o status 401 sem componentes curriculares da modalidade
+  Cenário: Ano letivo é obrigatório ao filtrar componentes curriculares da modalidade
+    Dado que login gerou um token de acesso válido
+    Quando envio requisição GET para o endpoint filtrar componentes curriculares
+    E sem selecionar o ano letivo
+    Então retorna o status 500 sem dados da modalidade no ano
 
-  Scenario: Filtra tipos de visualização da ata final
-    Given que login gerou um token de acesso válido
-    When envio a requisição GET para o endpoint de filtrar a ata final
-    Then retorna o status 200 com os tipos de visualização
+  Cenário: Não filtra componentes curriculares da modalidade na UE
+    Dado que não login não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint de filtrar modalidade
+    Então retorna o status 401 sem componentes curriculares da modalidade
 
-  Scenario: Não filtra tipos de visualização da ata final sem autenticação
-    Given que não login não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint de filtrar a ata final
-    Then retorna o status 401 sem os tipos de visualização
+  Cenário: Filtra tipos de visualização da ata final
+    Dado que login gerou um token de acesso válido
+    Quando envio a requisição GET para o endpoint de filtrar a ata final
+    Então retorna o status 200 com os tipos de visualização
 
-  Scenario: Filtra modalidade dos bimestres
-    Given que login gerou um token de acesso válido
-    When envio a requisição GET para o endpoint de filtrar a modalidade
-    Then retorna o status 200 com as modalidades dos bimestres
+  Cenário: Não filtra tipos de visualização da ata final sem autenticação
+    Dado que não login não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint de filtrar a ata final
+    Então retorna o status 401 sem os tipos de visualização
 
-  Scenario: Modalidade é obrigatória ao filtrar componentes curriculares
-    Given que login gerou um token de acesso válido
-    When envio requisição GET para o endpoint de filtrar a modalidade
-    And sem o código da modalidade
-    Then retorna o status 500 sem dados dos bimestres
+  Cenário: Filtra modalidade dos bimestres
+    Dado que login gerou um token de acesso válido
+    Quando envio a requisição GET para o endpoint de filtrar a modalidade
+    Então retorna o status 200 com as modalidades dos bimestres
 
-  Scenario: Não filtra modalidade dos bimestres sem autenticação
-    Given que não login não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint de filtrar a modalidade
-    Then retorna o status 401 sem as modalidades dos bimestres
+  Cenário: Modalidade é obrigatória ao filtrar componentes curriculares
+    Dado que login gerou um token de acesso válido
+    Quando envio requisição GET para o endpoint de filtrar a modalidade
+    E sem o código da modalidade
+    Então retorna o status 500 sem dados dos bimestres
 
-  Scenario: Filtra as situações de acompanhamento do fechamento
-    Given que login gerou um token de acesso válido
-    When envio a requisição GET para o endpoint de filtrar situações do fechamento
-    Then retorna o status 200 do acompanhamento
+  Cenário: Não filtra modalidade dos bimestres sem autenticação
+    Dado que não login não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint de filtrar a modalidade
+    Então retorna o status 401 sem as modalidades dos bimestres
 
-  Scenario: Não filtra as situações de acompanhamento do fechamento sem autenticação
-    Given que não login não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint de filtrar situações do fechamento
-    Then retorna o status 401 sem acompanhamento
+  Cenário: Filtra as situações de acompanhamento do fechamento
+    Dado que login gerou um token de acesso válido
+    Quando envio a requisição GET para o endpoint de filtrar situações do fechamento
+    Então retorna o status 200 do acompanhamento
 
-  Scenario: Filtra as situações de acompanhamento do conselho de classe
-    Given que login gerou um token de acesso válido
-    When envio a requisição GET para endpoint de filtrar situações do fechamento
-    Then retorna o status 200 do conselho de classe
+  Cenário: Não filtra as situações de acompanhamento do fechamento sem autenticação
+    Dado que não login não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint de filtrar situações do fechamento
+    Então retorna o status 401 sem acompanhamento
 
-  Scenario: Não filtra as situações de acompanhamento do conselho de classe sem autenticação
-    Given que não login não gerou um token de acesso válido
-    When tento a requisição GET para endpoint de filtrar situações do fechamento
-    Then retorna o status 401 sem conselho de classe
+  Cenário: Filtra as situações de acompanhamento do conselho de classe
+    Dado que login gerou um token de acesso válido
+    Quando envio a requisição GET para endpoint de filtrar situações do fechamento
+    Então retorna o status 200 do conselho de classe
+
+  Cenário: Não filtra as situações de acompanhamento do conselho de classe sem autenticação
+    Dado que não login não gerou um token de acesso válido
+    Quando tento a requisição GET para endpoint de filtrar situações do fechamento
+    Então retorna o status 401 sem conselho de classe

@@ -1,13 +1,15 @@
-Feature: API - Autenticação - Revalidar senha
+# language: pt
 
-  Scenario: Deve revalidar o token do usuário
+Funcionalidade: API - Autenticação - Revalidar senha
+
+  Cenário: Deve revalidar o token do usuário
     Given que possuo um token de acesso válido
-    When envio uma requisição POST para revalidar o token
-    Then retorna a expiração com status 200 
+    Quando envio uma requisição POST para revalidar o token
+    Então retorna a expiração com status 200 
 
-  Scenario: Não revalidar com usuário deslogado
+  Cenário: Não revalidar com usuário deslogado
     Given que não possuo um token de acesso válido
-    When tento a requisição POST para revalidar o token
-    Then não revalida retornando o status 401
+    Quando tento a requisição POST para revalidar o token
+    Então não revalida retornando o status 401
 
 

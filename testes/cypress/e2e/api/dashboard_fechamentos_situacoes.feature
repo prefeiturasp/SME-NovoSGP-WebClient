@@ -1,14 +1,16 @@
-Feature: API - Dashboard de fechamentos - Situações
+# language: pt
 
-  Scenario: Carrega situações do dashboard de fechamentos
-    Given que login gerou um token de acesso válido
-    When envio uma requisição GET para o endpoint do dashboard de fechamentos
-    Then retorna todas situações com status 200 
+Funcionalidade: API - Dashboard de fechamentos - Situações
 
-  Scenario: Não retorna situações sem usuário autenticado
-    Given que não login não gerou um token de acesso válido
-    When tento a requisição GET para o endpoint do dashboard de fechamentos
-    Then retorna o status 401 sem as situações
+  Cenário: Carrega situações do dashboard de fechamentos
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para o endpoint do dashboard de fechamentos
+    Então retorna todas situações com status 200 
+
+  Cenário: Não retorna situações sem usuário autenticado
+    Dado que não login não gerou um token de acesso válido
+    Quando tento a requisição GET para o endpoint do dashboard de fechamentos
+    Então retorna o status 401 sem as situações
 	
 	
 
