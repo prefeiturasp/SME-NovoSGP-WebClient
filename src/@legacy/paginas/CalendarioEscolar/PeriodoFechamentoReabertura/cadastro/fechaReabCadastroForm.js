@@ -287,7 +287,7 @@ const FechaReabCadastroForm = () => {
       inicio: dataInicio,
       tipoCalendarioId: calendarioSelecionado?.id,
       id: paramsRota?.id,
-      aplicacao: valorAplicacao,
+      ...(valorAplicacao !== '' && { aplicacao: valorAplicacao }),
     };
 
     setExibirLoaderReabertura(true);
