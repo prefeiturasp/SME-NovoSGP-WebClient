@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Spin } from 'antd';
+import { Provider } from 'react-redux';
+import { store } from '@/core/redux';
 
 const URL_BASE_SONDAGEM =
   process.env.REACT_APP_URL_SONDAGEM || 'http://localhost:5173';
@@ -136,7 +138,9 @@ const NovaSondagem = () => {
 
   return (
     <div style={estilos.container}>
-      <ComponenteRemoto />
+      <Provider store={store}>
+        <ComponenteRemoto />
+      </Provider>
     </div>
   );
 };
