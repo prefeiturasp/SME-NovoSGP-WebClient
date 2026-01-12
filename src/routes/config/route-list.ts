@@ -135,7 +135,8 @@ import RelatorioSondagemAnalitico from '~/paginas/Relatorios/Sondagem/Analitico/
 import RelatorioSondagemConsolidado from '~/paginas/Relatorios/Sondagem/Consolidado/relatorioSondagemConsolidado';
 import RelatorioSondagemPorTurma from '~/paginas/Relatorios/Sondagem/PorTurma/relatorioSondagemPorTurma';
 import SemPermissao from '~/paginas/SemPermissao/sem-permissao';
-import Sondagem from '~/paginas/Sondagem/sondagem';
+// import Sondagem from '~/paginas/Sondagem/sondagem';
+import NovaSondagem from '~/paginas/NovaSondagem/novaSondagem';
 import { setRotas } from '~/redux/modulos/navegacao/actions';
 import InformacoesEducacionais from '~/paginas/Gestao/InformacoesEducacionais/painelEducacional';
 import ImportacaoDados from '~/paginas/Gestao/ImportacaoDados/importacaoDados';
@@ -1144,9 +1145,18 @@ route.set(ROUTES.RELATORIO_PLANEJAMENTO_DIARIO, {
 route.set(ROUTES.SONDAGEM, {
   breadcrumbName: 'Sistema Sondagem',
   parent: '/',
-  component: Sondagem,
+  component: NovaSondagem,
   exact: false,
   tipo: RotasTipo.EstruturadaAutenticada,
+});
+
+route.set(ROUTES.NOVA_SONDAGEM, {
+  breadcrumbName: 'Nova Sondagem',
+  parent: '/',
+  component: NovaSondagem,
+  exact: false,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
 });
 
 route.set(ROUTES.HISTORICO_NOTIFICACOES, {

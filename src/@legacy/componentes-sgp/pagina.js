@@ -15,9 +15,11 @@ const Pagina = () => {
   const perfisAdministrador = [
     '5be1e074-37d6-e911-abd6-f81654fe895d',
     '5ae1e074-37d6-e911-abd6-f81654fe895d',
+    '48e1e074-37d6-e911-abd6-f81654fe895d',
   ];
   const [bloquearTela, setBloquearTela] = useState(false);
   const [usuarioAdministrador, setUsuarioAdministrador] = useState(false);
+
   const usuarioBloqueado = useSelector(
     state => state.usuarioFilaEspera.usuarioBloqueado
   );
