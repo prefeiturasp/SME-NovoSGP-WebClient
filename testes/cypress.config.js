@@ -72,6 +72,7 @@ module.exports = defineConfig({
         'CICLO_INTERDISCIPLINAR',
         'CICLO_AUTORAL',
         'CICLO_FILTRO_INVALIDO',
+        'PLANO_CICLO',
         'COM_FILTRO',
         'SEM_FILTRO',
         'FILTRO_AVANCADO',

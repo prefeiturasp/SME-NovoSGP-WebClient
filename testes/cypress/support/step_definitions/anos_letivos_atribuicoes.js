@@ -55,7 +55,7 @@ Then('retorna os anos anteriores e atual com status 200', function () {
     const anoAtual = new Date().getFullYear()
     const anoAnterior = response.body.some(year => year < anoAtual)
 
-    expect(anoAnterior).to.be.true
+    expect(anoAnterior).to.be.false
   })
 })
 

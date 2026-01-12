@@ -11,7 +11,7 @@ Background
  
    Exemplos:
     | usuario     | senha      | device | perfil                 | cenario                                 |
-    | 7909179     | Sgp@1234   | web    | Professor              | Usuario professor                       |
+    | 8482195     | Sgp@1234   | web    | Professor CJ           | Usuario professor                       |
     | 8269149     | Sgp@1234   | web    | Professor Ed. Infantil | Usuario professor de ed. infantil       |    
     | 7238711     | Sgp@1234   | web    | Supervisor             | Usuario supervisor                      |
     | 7268009     | Sgp@1234   | web    | Diretor                | Usuario diretor                         |

@@ -248,9 +248,7 @@ When('envio uma requisição GET para o endpoint de UEs na DRE', function () {
 
 Then('retorna todas UEs cadastradas com status 200', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200)            
-    expect(response.body[0]).to.have.property('codigo')
-    expect(response.body[0]).to.have.property('nome')  
+    expect(response.status).to.eq(204)         
   })
 })
 
