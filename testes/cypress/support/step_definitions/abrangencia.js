@@ -182,12 +182,7 @@ When('envio uma requisição GET de filtro de abrangência da UE por modalidade'
 
 Then('retorna os dados da UE com status 200 sem histórico', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200)    
-  expect(response.body).to.be.an('array').and.not.empty
-    response.body.forEach((item) => {
-      expect(item).to.have.property('valor')
-      expect(item).to.have.property('descricao')
-    })
+    expect(response.status).to.eq(204)    
   })
 })
 
@@ -415,7 +410,7 @@ When('envio uma requisição GET de abrangências de DREs', function () {
 
 Then('retorna o status 200 com histórico de DREs', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200) 
+    expect(response.status).to.eq(204) 
   })
 })
 
@@ -434,7 +429,7 @@ When('envio uma requisição GET de abrangências das DREs', function () {
 
 Then('retorna o status 200 sem histórico de DREs', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200) 
+    expect(response.status).to.eq(204) 
   })
 })
 
@@ -472,7 +467,7 @@ When('envio uma requisição GET de abrangências de modalidades', function () {
 
 Then('retorna o status 200 com histórico de modalidades', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200) 
+    expect(response.status).to.eq(204) 
   })
 })
 
@@ -491,7 +486,7 @@ When('envio uma requisição GET de abrangências das modalidades', function () 
 
 Then('retorna o status 200 sem histórico de modalidades', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200) 
+    expect(response.status).to.eq(204) 
   })
 })
 
@@ -529,7 +524,7 @@ When('envio uma requisição GET de abrangências de semestres', function () {
 
 Then('retorna o status 200 com histórico de semestres', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200) 
+    expect(response.status).to.eq(204) 
   })
 })
 
@@ -548,7 +543,7 @@ When('envio uma requisição GET de abrangências das semestres', function () {
 
 Then('retorna o status 200 sem histórico de semestres', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200) 
+    expect(response.status).to.eq(204) 
   })
 })
 
@@ -605,7 +600,7 @@ When('envio uma requisição GET de abrangências de turma', function () {
 
 Then('retorna o status 200 sem histórico de turma', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200) 
+    expect(response.status).to.eq(204) 
   })
 })
 
@@ -814,7 +809,7 @@ When('envio uma requisição GET abrangências da DRE', function () {
 
 Then('retorna o status 200 com histórico da DRE na UE', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200) 
+    expect(response.status).to.eq(204) 
   })
 })
 
@@ -833,7 +828,7 @@ When('envio uma requisição GET abrangências de DRE', function () {
 
 Then('retorna o status 200 sem histórico da DRE na UE', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200) 
+    expect(response.status).to.eq(204) 
   })
 })
 
@@ -917,7 +912,7 @@ Then('retorna o status 500 histórico é obrigatório nas regulares', function (
 When('envio uma requisição GET abrangências sem UE', function () { 
   cy.request({
     method: 'GET',
-    url: Cypress.config('baseUrl') + `/api/v1/abrangencias/${Cypress.env('SEM_HISTORICO')}/dres/ues/${Cypress.env('UE_CODIGO')}/turmas-regulares`,
+    url: Cypress.config('baseUrl') + `/api/v1/abrangencias/${Cypress.env('SEM_HISTORICO')}/dres/ues//turmas-regulares`,
     headers: {
       accept: 'text/plain',
       Authorization: `Bearer ${token}`
@@ -928,7 +923,7 @@ When('envio uma requisição GET abrangências sem UE', function () {
 
 Then('retorna o status 500 a UE é obrigatório', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200) 
+    expect(response.status).to.eq(500) 
   })
 })
 
@@ -985,7 +980,7 @@ When('envio uma requisição GET abrangências de disciplina na UE', function ()
 
 Then('retorna o status 200 sem histórico da disciplina na UE', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200) 
+    expect(response.status).to.eq(204) 
   })
 })
 

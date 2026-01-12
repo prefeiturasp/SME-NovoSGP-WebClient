@@ -91,43 +91,10 @@ Cypress.Commands.add('gerar_recuperacao_senha', () => {
             method: 'POST',
             url: Cypress.config('baseUrl') + `/api/v1/autenticacao/solicitar-recuperacao-senha?login=${Cypress.env('LOGIN_PRIMEIRO_ACESSO')}`,
             headers: {
-                'Accept': 'text/plain',
+                accept: 'text/plain',
                 'Authorization': `Bearer ${token}`
             },
             failOnStatusCode: false
         })
     })
 })
-
-Cypress.Commands.add('nao_gerar_recuperacao_senha', () => {
-    return cy.gerar_token().then((token) => {
-        return cy.request({
-            method: 'POST',
-            url: Cypress.config('baseUrl') + `/api/v1/autenticacao/solicitar-recuperacao-senha?login=123`,
-            headers: {
-                'Accept': 'text/plain',
-                'Authorization': `Bearer ${token}`
-            },
-            failOnStatusCode: false
-        })
-    })
-})
-
-Cypress.Commands.add('nao_gerar_recuperacao_senha_login_vazio', () => {
-    return cy.gerar_token().then((token) => {
-        return cy.request({
-            method: 'POST',
-            url: Cypress.config('baseUrl') + `/api/v1/autenticacao/solicitar-recuperacao-senha?login=`,
-            headers: {
-                'Accept': 'text/plain',
-                'Authorization': `Bearer ${token}`
-            },
-            failOnStatusCode: false
-        })
-    })
-})
-
-
-
-
-

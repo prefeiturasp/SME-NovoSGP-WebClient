@@ -5,11 +5,7 @@ import "cypress-cloud/support";
 // Comandos personalizados - API
 import './commands_api/commands_login'
 import './commands_api/commands_usuario'
-import './commands_api/commands_mapeamentos_estudantes'
 import './commands_api/commands_fechamento'
-import './commands_api/commands_relatorios'
-import './commands_api/commands_dashboard'
-import './commands_api/commands_ue'
 import './commands_api/commands_supervisores'
 
 // Comandos personalizados - UI

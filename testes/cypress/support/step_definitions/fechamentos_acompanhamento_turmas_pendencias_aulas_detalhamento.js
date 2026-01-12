@@ -30,7 +30,7 @@ Then('envio uma requisição GET para o endpoint', function () {
 
 Then('a reposta deve conter status 200', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(204)    
+    expect(response.status).to.eq(200)    
   })
 })
 

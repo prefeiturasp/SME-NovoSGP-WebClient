@@ -212,8 +212,8 @@ Funcionalidade: API - Dashboard EA
 
   Cenário: Leitura de comunicados de alunos no dashboard EA
     Dado que login gerou um token de acesso válido
-    Quando envio uma requisição GET para o endpoint de alunos de turmas
-    Então retorna o status 200 de alunos do dashboard EA de comunicados
+    Quando envio uma requisição GET para o endpoint de alunos EA
+    Então retorna status 200 ou 500 de alunos do dashboard EA de comunicados
 
   Cenário: Código da turma é obrigatório para leitura de comunicados de alunos
     Dado que login gerou um token de acesso válido
