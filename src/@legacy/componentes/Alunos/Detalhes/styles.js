@@ -26,11 +26,23 @@ const DadosAluno = styled.div`
   width: 100%;
   height: 100%;
   color: #42474a;
+  padding: 16px 16px;
   display: flex;
+  flezx-direction: row;
+  justify-content: space-between;
   align-items: center;
 
   p {
     margin-bottom: 0;
+  }
+
+  section {
+    padding: 0px 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
   }
 `;
 
@@ -91,10 +103,21 @@ const ContainerModalUploadImagem = styled.div`
   }
 `;
 
+const TextoStrong = styled.strong`
+  font-weight: 700 !important;
+`;
+const DivLinhaItem = styled.p`
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: row;
+`;
+
 export {
   Container,
   DadosAluno,
   FrequenciaGlobal,
   ContainerAvatar,
   ContainerModalUploadImagem,
+  TextoStrong,
+  DivLinhaItem,
 };

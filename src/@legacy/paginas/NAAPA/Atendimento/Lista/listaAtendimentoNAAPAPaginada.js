@@ -1,0 +1,161 @@
+import { NomeEstudanteLista } from '@/@legacy/componentes-sgp';
+import { ROUTES } from '@/core/enum/routes';
+import { store } from '@/core/redux';
+import { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ListaPaginada } from '~/componentes';
+import { OPCAO_TODOS } from '~/constantes';
+import { SGP_TABLE_ENCAMINHAMENTO_NAAPA } from '~/constantes/ids/table';
+import { setTabAtivaEncaminhamentoNAAPA } from '~/redux/modulos/encaminhamentoNAAPA/actions';
+import { verificarDataFimMaiorInicio } from '~/utils';
+import { Checkbox } from 'antd';
+
+const ListaAtendimentoNAAPAPaginada = props => {
+  const {
+    ue,
+    dre,
+    turmaId,
+    situacao,
+    anoLetivo,
+    codigoNomeAluno,
+    prioridade,
+    consideraHistorico,
+    dataAberturaQueixaFim,
+    dataAberturaQueixaInicio,
+    onSelecionarItems,
+    exibirEncaminhamentosEncerrados,
+    obterDadosFiltros,
+    ordenacoesSelecionadas,
+  } = props;
+
+  const navigate = useNavigate();
+
+  const [filtros, setFiltros] = useState();
+
+  const filtroEhValido = !!(anoLetivo && dre?.id && ue?.id);
+
+  const colunas = [
+    {
+      title: 'Criança/Estudante',
+      dataIndex: 'nomeAluno ',
+      render: (_, linha) => (
+        <NomeEstudanteLista
+          nome={`${linha?.nomeAluno} (${linha?.codigoAluno})`}
+          ehMatriculadoTurmaPAP={linha?.ehMatriculadoTurmaPAP}
+        />
+      ),
+    },
+    {
+      title: 'Turma',
+      dataIndex: 'turma',
+    },
+    {
+      title: 'Data de entrada da queixa',
+      dataIndex: 'dataAberturaQueixaInicio',
+      render: dataInicio =>
+        dataInicio ? window.moment(dataInicio).format('DD/MM/YYYY') : '',
+    },
+    {
+      title: 'Data do último atendimento',
+      dataIndex: 'dataUltimoAtendimento',
+      render: ultimoAtendimento =>
+        ultimoAtendimento
+          ? window.moment(ultimoAtendimento).format('DD/MM/YYYY')
+          : '',
+    },
+    {
+      title: 'Situação',
+      dataIndex: 'situacao',
+    },
+    {
+      title: 'Suspeita de violência',
+      dataIndex: 'suspeitaViolencia',
+      render: valor => {
+        return <Checkbox checked={Boolean(valor)} />;
+      },
+    },
+  ];
+
+  if (ue?.codigo === OPCAO_TODOS) {
+    colunas.unshift({
+      title: 'Unidade Educacional',
+      dataIndex: 'ue',
+    });
+  }
+
+  const filtrar = useCallback(() => {
+    const params = {
+      exibirHistorico: consideraHistorico,
+      anoLetivo,
+      dreId: dre?.id,
+      codigoUe: ue?.codigo,
+      turmaId: turmaId === OPCAO_TODOS ? '' : turmaId,
+      codigoNomeAluno,
+      dataAberturaQueixaInicio: dataAberturaQueixaInicio
+        ? dataAberturaQueixaInicio.format('YYYY-MM-DD')
+        : '',
+      dataAberturaQueixaFim: dataAberturaQueixaFim
+        ? dataAberturaQueixaFim.format('YYYY-MM-DD')
+        : '',
+      situacao,
+      prioridade,
+      exibirEncerrados: exibirEncaminhamentosEncerrados,
+    };
+
+    if (ordenacoesSelecionadas?.length) {
+      params.ordenacao = ordenacoesSelecionadas.map(item => item?.value);
+    }
+
+    const dataFimMaiorInicio = verificarDataFimMaiorInicio(
+      dataAberturaQueixaInicio,
+      dataAberturaQueixaFim
+    );
+
+    if (dataFimMaiorInicio) {
+      setFiltros({ ...params });
+    }
+  }, [
+    consideraHistorico,
+    anoLetivo,
+    dre,
+    ue,
+    turmaId,
+    codigoNomeAluno,
+    dataAberturaQueixaInicio,
+    dataAberturaQueixaFim,
+    situacao,
+    prioridade,
+    exibirEncaminhamentosEncerrados,
+    ordenacoesSelecionadas,
+  ]);
+
+  useEffect(() => {
+    filtrar();
+  }, [filtrar]);
+
+  const exibirTabela =
+    filtros?.anoLetivo && filtros?.dreId && filtros?.codigoUe;
+
+  return exibirTabela ? (
+    <ListaPaginada
+      url="v1/atendimento-naapa"
+      id={SGP_TABLE_ENCAMINHAMENTO_NAAPA}
+      colunas={colunas}
+      filtro={filtros}
+      onClick={linha => {
+        store.dispatch(setTabAtivaEncaminhamentoNAAPA(0));
+        const dadosSalvarState = obterDadosFiltros();
+        navigate(`${ROUTES.ATENDIMENTO_NAAPA}/${linha?.id}`, {
+          state: dadosSalvarState,
+        });
+      }}
+      filtroEhValido={filtroEhValido}
+      multiSelecao
+      selecionarItems={valores => onSelecionarItems(valores)}
+    />
+  ) : (
+    <></>
+  );
+};
+
+export default ListaAtendimentoNAAPAPaginada;

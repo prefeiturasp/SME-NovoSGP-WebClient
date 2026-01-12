@@ -38,8 +38,8 @@ const PlanoAEECadastro = () => {
     dispatch(setPlanoAEELimparDados());
   }, [dispatch]);
 
-  const validarSePermiteProximoPasso = async codigoEstudante => {
-    return ServicoPlanoAEE.existePlanoAEEEstudante(codigoEstudante);
+  const validarSePermiteProximoPasso = async estudante => {
+    return ServicoPlanoAEE.existePlanoAEEEstudante(estudante);
   };
 
   useEffect(() => {

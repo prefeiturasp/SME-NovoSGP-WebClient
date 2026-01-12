@@ -95,7 +95,7 @@ const TipoCalendarioEscolarForm = () => {
     {
       label:
         ModalidadeTipoCalendarioEnumDisplay[
-          ModalidadeTipoCalendarioEnum.FUNDAMENTAL_MEDIO
+        ModalidadeTipoCalendarioEnum.FUNDAMENTAL_MEDIO
         ],
       value: ModalidadeTipoCalendarioEnum.FUNDAMENTAL_MEDIO,
     },
@@ -107,7 +107,7 @@ const TipoCalendarioEscolarForm = () => {
     {
       label:
         ModalidadeTipoCalendarioEnumDisplay[
-          ModalidadeTipoCalendarioEnum.INFANTIL
+        ModalidadeTipoCalendarioEnum.INFANTIL
         ],
       value: ModalidadeTipoCalendarioEnum.INFANTIL,
     },
@@ -332,48 +332,32 @@ const TipoCalendarioEscolarForm = () => {
   const onChangeSemestre = valor => {
     setSemestre(valor);
   };
-  const obterSemestres = useCallback(
-    async (valor, form) => {
-      if (!valor) return;
-      const semestreEhRequerido = verificarSeSemestreEhRequerido(valor);
-      setSemestreRequerido(semestreEhRequerido);
-      if (!semestreEhRequerido) {
-        form.setFieldValue('periodo', undefined);
-        form.setFieldTouched('periodo', false, false);
-        setDestativarPeriodo(false);
-        return;
-      }
-      let modalidadeInformada = ModalidadeEnum.EJA;
-      setCarregandoSemestres(true);
-      if (Number(valor) === ModalidadeTipoCalendarioEnum.CELP) {
-        modalidadeInformada = ModalidadeEnum.CELP;
-      }
-      form.setFieldValue('periodo', 2);
-      form.setFieldTouched('periodo', true, true);
-      setDestativarPeriodo(true);
-      const retorno = await AbrangenciaServico.obterSemestres(
-        false,
-        anoLetivo,
-        modalidadeInformada,
-        '',
-        ''
-      )
-        .catch(e => erros(e))
-        .finally(() => setCarregandoSemestres(false));
+  
+  const obterSemestres = (valor, form) => {
+    if (!valor) return;
+    const semestreEhRequerido = verificarSeSemestreEhRequerido(valor);
+    setSemestreRequerido(semestreEhRequerido);
+    if (!semestreEhRequerido) {
+      form.setFieldValue('periodo', undefined);
+      form.setFieldTouched('periodo', false, false);
+      setDestativarPeriodo(false);
+      return;
+    }
+    let modalidadeInformada = ModalidadeEnum.EJA;
+    setCarregandoSemestres(true);
+    if (Number(valor) === ModalidadeTipoCalendarioEnum.CELP) {
+      modalidadeInformada = ModalidadeEnum.CELP;
+    }
+    form.setFieldValue('periodo', 2);
+    form.setFieldTouched('periodo', true, true);
+    setDestativarPeriodo(true);
 
-      if (retorno?.data?.length) {
-        const lista = retorno.data.map(periodo => {
-          return { desc: periodo, valor: periodo };
-        });
-
-        if (lista?.length === 1) {
-          setSemestre(lista[0].valor);
-        }
-        setListaSemestres(lista);
-      }
-    },
-    [anoLetivo]
-  );
+    const lista = [1, 2].map(semestre => {
+      return { desc: semestre, valor: semestre };
+    });
+    setListaSemestres(lista);
+    setCarregandoSemestres(false);
+  };
 
   useEffect(() => {
     if (!idTipoCalendario) {
@@ -397,9 +381,8 @@ const TipoCalendarioEscolarForm = () => {
         {form => (
           <>
             <Cabecalho
-              pagina={`${
-                idTipoCalendario > 0 ? 'Alterar' : 'Cadastro do'
-              } Tipo de Calendário Escolar`}
+              pagina={`${idTipoCalendario > 0 ? 'Alterar' : 'Cadastro do'
+                } Tipo de Calendário Escolar`}
             >
               <Row gutter={[8, 8]} type="flex">
                 <Col>

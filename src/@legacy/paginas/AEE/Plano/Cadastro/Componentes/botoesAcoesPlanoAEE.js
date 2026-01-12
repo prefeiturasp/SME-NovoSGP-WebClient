@@ -7,6 +7,7 @@ import {
   SGP_BUTTON_ATRIBUIR,
   SGP_BUTTON_CANCELAR,
   SGP_BUTTON_DEVOLVER,
+  SGP_BUTTON_PLANO_AEE_ENCERRAMENTO_MANUAL,
   SGP_BUTTON_SALVAR,
 } from '~/constantes/ids/button';
 import QuestionarioDinamicoFuncoes from '~/componentes-sgp/QuestionarioDinamico/Funcoes/QuestionarioDinamicoFuncoes';
@@ -240,6 +241,31 @@ const BotoesAcoesPlanoAEE = () => {
 
   const onClickDevolver = () => dispatch(setExibirModalDevolverPlanoAEE(true));
 
+  const onClickEncerramentoManual = async () => {
+    const confirmado = await confirmar(
+      'Encerrar',
+      '',
+      'Você tem certeza que deseja encerrar este plano?'
+    );
+    if (confirmado) {
+      dispatch(setExibirLoaderPlanoAEE(true));
+      const resultado = await ServicoPlanoAEE.encerramentoManualPlanoAEE(
+        planoAEEDados?.id
+      ).catch(e => {
+        dispatch(setExibirLoaderPlanoAEE(false));
+        erros(e);
+      });
+      if (resultado && resultado.status === 200) {
+        sucesso('Plano encerrado com sucesso');
+        navigate(ROUTES.RELATORIO_AEE_PLANO);
+      }
+    }
+  };
+
+  const exibirBtnEncerrar =
+           planoAEEDados?.permitirEncerramentoManual
+        && planoAEEDados?.situacao !== situacaoPlanoAEE.Encerrado;
+
   return (
     <>
       <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
@@ -283,6 +309,17 @@ const BotoesAcoesPlanoAEE = () => {
           !permissoesTela?.podeAlterar
         }
       />
+      {exibirBtnEncerrar && (
+        <Button
+          id={SGP_BUTTON_PLANO_AEE_ENCERRAMENTO_MANUAL}
+          label="Encerrar"
+          color={Colors.Vermelho}
+          onClick={onClickEncerramentoManual}
+          border
+          bold
+          className="ml-2"
+        />
+      )}
       <Button
         id={
           !ehCP && situacaoAtribuicaoPAAI

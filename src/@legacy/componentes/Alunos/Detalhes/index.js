@@ -1,4 +1,4 @@
-import { Card } from 'antd';
+import { Card, Divider } from 'antd';
 import * as moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -8,7 +8,13 @@ import { Base, Colors } from '~/componentes/colors';
 import { SGP_BUTTON_IMPRIMIR_DADOS_INDIVIDUAIS } from '~/constantes/ids/button';
 import { formatarFrequencia } from '~/utils';
 import FotoEstudanteObjectCard from './imagemEstudanteObjectCard';
-import { Container, DadosAluno, FrequenciaGlobal } from './styles';
+import {
+  Container,
+  DadosAluno,
+  FrequenciaGlobal,
+  TextoStrong,
+  DivLinhaItem,
+} from './styles';
 import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
 const DetalhesAluno = props => {
@@ -20,6 +26,7 @@ const DetalhesAluno = props => {
     exibirFrequencia,
     exibirResponsavel,
     permiteAlterarImagem,
+    exibirCpf,
   } = props;
 
   const {
@@ -34,6 +41,8 @@ const DetalhesAluno = props => {
     celularResponsavel,
     dataAtualizacaoContato,
     turma,
+    idade,
+    documentoCpf,
   } = dados;
 
   const situacao = dados?.situacao || dados?.situacaoMatricula;
@@ -63,47 +72,69 @@ const DetalhesAluno = props => {
         bodyStyle={{ borderTopRightRadius: 0 }}
       >
         <DadosAluno className="row">
-          <div
-            className={`col-md-${numeroLinhas()} d-flex justify-content-start`}
-            style={{
-              borderRight:
-                nomeResponsavel && exibirResponsavel
-                  ? `1px solid ${Base.CinzaDesabilitado}`
-                  : 'none',
-            }}
-          >
+          <section>
             <FotoEstudanteObjectCard
               codigoEOL={codigoEOL}
               permiteAlterarImagem={permiteAlterarImagem}
             />
             <div>
-              <p>
-                {nome} Nº {numeroChamada}
-              </p>
-              <p>
-                Data de nascimento:{' '}
-                {dataNascimento ? moment(dataNascimento).format('L') : ''}
-              </p>
-              <p>Código EOL: {codigoEOL}</p>
-              <p>
-                Situação: {situacao} em{' '}
-                {dataSituacao ? moment(dataSituacao).format('L') : ''}{' '}
-                {dataSituacao ? moment(dataSituacao).format('LT') : ''}
-              </p>
-              {turma ? <p>Turma: {turma}</p> : ''}
+              <DivLinhaItem>
+                <TextoStrong>Código EOL:</TextoStrong> {codigoEOL}
+              </DivLinhaItem>
+              <DivLinhaItem>
+                <TextoStrong>Nome completo:</TextoStrong>
+                {nome} Nº
+                {numeroChamada}
+              </DivLinhaItem>
+
+              {dataNascimento && (
+                <DivLinhaItem>
+                  <TextoStrong>Data de nascimento:</TextoStrong>
+                  {moment(dataNascimento).format('L')} ( {idade} anos )
+                </DivLinhaItem>
+              )}
+
+              {exibirCpf && (
+                <DivLinhaItem>
+                  <TextoStrong>Documento (CPF):</TextoStrong>
+                  {documentoCpf}
+                </DivLinhaItem>
+              )}
             </div>
-          </div>
+          </section>
+
+          {nomeResponsavel && exibirResponsavel && (
+            <Divider
+              type="vertical"
+              style={{ height: 120, borderLeft: '1px solid #DADADA' }}
+            />
+          )}
+
           {nomeResponsavel && exibirResponsavel ? (
-            <div className="col-md-4">
+            <section>
               <div>
-                <p>
-                  Responsável: {nomeResponsavel}
+                <DivLinhaItem>
+                  <TextoStrong>Situação:</TextoStrong> {situacao} em{' '}
+                  {dataSituacao ? moment(dataSituacao).format('L') : ''}{' '}
+                  {dataSituacao ? moment(dataSituacao).format('LT') : ''}
+                </DivLinhaItem>
+
+                {turma && (
+                  <DivLinhaItem>
+                    <TextoStrong>Turma:</TextoStrong> {turma}
+                  </DivLinhaItem>
+                )}
+
+                <DivLinhaItem>
+                  <TextoStrong> Responsável:</TextoStrong>
+                  {nomeResponsavel}{' '}
                   <span
                     style={{ color: Base.CinzaDesabilitado, fontSize: '13px' }}
                   >{` (${tipoResponsavel})`}</span>
-                </p>
-                <p>
-                  Telefone: {celularResponsavel}
+                </DivLinhaItem>
+
+                <DivLinhaItem>
+                  <TextoStrong>Telefone:</TextoStrong> {celularResponsavel}
                   <span
                     style={{ color: Base.CinzaDesabilitado, fontSize: '13px' }}
                   >{` (Atualizado - ${
@@ -111,22 +142,18 @@ const DetalhesAluno = props => {
                       ? moment(dataAtualizacaoContato).format('L')
                       : ''
                   })`}</span>
-                </p>
+                </DivLinhaItem>
               </div>
               <div>
                 <EstudanteAtendidoAEE show={dados?.ehAtendidoAEE} />
                 <EstudanteMatriculadoPAP show={dados?.ehMatriculadoTurmaPAP} />
               </div>
-            </div>
+            </section>
           ) : (
             ''
           )}
           {exibirBotaoImprimir || exibirFrequencia ? (
-            <div
-              className={`col-md-${
-                nomeResponsavel ? '2' : '4'
-              } d-flex justify-content-end display-block`}
-            >
+            <section>
               {exibirBotaoImprimir ? (
                 <Button
                   icon="print"
@@ -148,7 +175,7 @@ const DetalhesAluno = props => {
               ) : (
                 ''
               )}
-            </div>
+            </section>
           ) : (
             ''
           )}

@@ -15,7 +15,10 @@ import TabelaNotasSmeDre from './componentes/Notas/tabelaNotasSmeDre';
 import TabelaEstudantesReclassificados from '../shared/estudantesReclassificados/tabelaEstudantesReclassificados';
 import DistorcaoIdadeSerie from '../shared/DistorcaoIdadeSerie/DistorcaoIdadeSerie';
 import PainelFrequenciaDre from './componentes/PainelFrequenciaDre/painelFrequenciaDre';
-
+import PlanoAEE from '../shared/PlanoAEE/PlanoAEE';
+import EstudantesIntegral from '../shared/EstudantesTempoIntegral/EstudantesTemposIntegral';
+import TabelaAprovacaoSmeDre from './componentes/Aprovacao/tabelaAprovacaoSmeDre';
+import TabelaInformacoesEducacionais from './componentes/TabelaInformacoesEducacionais/TabelaInformacoesEducacionais';
 export default function InformacoesEducacionais({
   anoLetivo,
   dreCodigo,
@@ -28,6 +31,7 @@ export default function InformacoesEducacionais({
   const exibirGrafico = !!dreCodigo;
   const exibirPainelFrequenciaDre = !!dreCodigo && String(dreCodigo) !== '-99';
   const exibirVisaoGeral = !!anoLetivo;
+  const anoAtual = String(new Date().getFullYear());
 
   return (
     <>
@@ -48,7 +52,7 @@ export default function InformacoesEducacionais({
           )}
         </div>
       </CardEstilizado>
-      {exibirPainelFrequenciaDre && (
+      {exibirPainelFrequenciaDre && anoLetivo === anoAtual && (
         <CardEstilizado>
           <div className="col-md-12">
             <Row gutter={[32, 32]}>
@@ -70,7 +74,6 @@ export default function InformacoesEducacionais({
               <TituloCard>Análise detalhada</TituloCard>
             </Col>
           </Row>
-
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <GraficoIdep
@@ -89,7 +92,6 @@ export default function InformacoesEducacionais({
               />
             </Col>
           </Row>
-
           <Row gutter={[32, 32]}>
             <Col span={24}>
               {exibirGrafico ? (
@@ -114,13 +116,11 @@ export default function InformacoesEducacionais({
               )}
             </Col>
           </Row>
-
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <GraficoAnaliseDeAlfabetizacao dreId={dreCodigo} />
             </Col>
           </Row>
-
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <TabelaIndicadoresNivelCriticoAlfabetizacao
@@ -131,7 +131,6 @@ export default function InformacoesEducacionais({
               />
             </Col>
           </Row>
-
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <TabelaIndicadoresPap
@@ -142,7 +141,6 @@ export default function InformacoesEducacionais({
               />
             </Col>
           </Row>
-
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <GraficoFluenciaLeitora
@@ -152,7 +150,6 @@ export default function InformacoesEducacionais({
               />
             </Col>
           </Row>
-
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <TabelaAbandonoSmeDre
@@ -162,7 +159,6 @@ export default function InformacoesEducacionais({
               />
             </Col>
           </Row>
-
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <TabelaNotasSmeDre
@@ -172,7 +168,6 @@ export default function InformacoesEducacionais({
               />
             </Col>
           </Row>
-
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <TabelaEstudantesReclassificados
@@ -182,7 +177,6 @@ export default function InformacoesEducacionais({
               />
             </Col>
           </Row>
-
           <Row gutter={[32, 32]}>
             <Col span={24}>
               <DistorcaoIdadeSerie
@@ -192,6 +186,49 @@ export default function InformacoesEducacionais({
               />
             </Col>
           </Row>
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              {String(anoLetivo) === String(new Date().getFullYear()) ? (
+                <PlanoAEE
+                  codigoDre={dreCodigo}
+                  codigoUe={ueCodigo}
+                  anoLetivo={anoLetivo}
+                />
+              ) : null}
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <EstudantesIntegral
+                codigoDre={dreCodigo}
+                codigoUe={ueCodigo}
+                anoLetivo={anoLetivo}
+              />
+            </Col>
+          </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <TabelaAprovacaoSmeDre
+                codigoDre={dreCodigo}
+                codigoUe={ueCodigo}
+                anoLetivo={anoLetivo}
+              />
+            </Col>
+          </Row>
+
+          {dreCodigo !== '-99' && (
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <TabelaInformacoesEducacionais
+                  codigoDre={dreCodigo}
+                  codigoUe={ueCodigo}
+                  anoLetivo={anoLetivo}
+                />
+              </Col>
+            </Row>
+          )}
         </div>
       </CardEstilizado>
     </>

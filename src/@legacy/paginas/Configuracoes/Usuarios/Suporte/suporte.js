@@ -171,7 +171,6 @@ const Suporte = () => {
       erro('Campo login obrigatório');
       return;
     }
-
     if (!dreId) {
       setListaUsuario([]);
       return;

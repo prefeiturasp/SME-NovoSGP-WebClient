@@ -89,9 +89,9 @@ const FechaReabCadastroForm = () => {
     paramsRota?.id
       ? null
       : {
-          ...valoresIniciaisPadrao,
-          tipoCalendarioId: paramsRota?.tipoCalendarioId,
-        }
+        ...valoresIniciaisPadrao,
+        tipoCalendarioId: paramsRota?.tipoCalendarioId,
+      }
   );
 
   const onChangeCampos = () => {
@@ -153,8 +153,8 @@ const FechaReabCadastroForm = () => {
   const montarDataHoraUsuarioAprovador = dados => {
     const dataFormatada = dados?.aprovadoEm
       ? `${moment?.(dados?.aprovadoEm)?.format('DD/MM/YYYY')}  às ${moment?.(
-          dados?.aprovadoEm
-        )?.format('HH:mm')}`
+        dados?.aprovadoEm
+      )?.format('HH:mm')}`
       : '';
 
     if (dataFormatada && dados.aprovadoPor) {
@@ -287,7 +287,7 @@ const FechaReabCadastroForm = () => {
       inicio: dataInicio,
       tipoCalendarioId: calendarioSelecionado?.id,
       id: paramsRota?.id,
-      // aplicacao: valorAplicacao,
+      ...(valorAplicacao !== '' && { aplicacao: valorAplicacao }),
     };
 
     setExibirLoaderReabertura(true);
@@ -342,6 +342,13 @@ const FechaReabCadastroForm = () => {
     }
   };
 
+  const onChangeAplicacao = form => {
+    const id = obterIdPorDescricao(form?.aplicacao);
+    setValorAplicacao(id);
+    form.setFieldValue('bimestres', undefined);
+    onChangeCampos();
+  };
+
   return (
     <>
       {valoresIniciais ? (
@@ -370,7 +377,7 @@ const FechaReabCadastroForm = () => {
                       />
                     </Col>
 
-                    {/* {exibirCampoAplicacao && (
+                    {exibirCampoAplicacao && (
                       <Col sm={24} md={12} xl={8}>
                         <SelectAutocomplete
                           showList
@@ -384,11 +391,7 @@ const FechaReabCadastroForm = () => {
                             const id = obterIdPorDescricao(descricao);
                             setValorAplicacao(id);
                           }}
-                          onChange={descricao => {
-                            const id = obterIdPorDescricao(descricao);
-                            setValorAplicacao(id);
-                            onChangeCampos();
-                          }}
+                          onChange={() => onChangeAplicacao(form)}
                           value={
                             opcoesAplicacao.find(
                               item => item.id === valorAplicacao
@@ -401,7 +404,7 @@ const FechaReabCadastroForm = () => {
                           disabled={desabilitarCampoAplicacao}
                         />
                       </Col>
-                    )} */}
+                    )}
 
                     <Col md={24} xl={12}>
                       <DreReabertura
@@ -462,6 +465,7 @@ const FechaReabCadastroForm = () => {
 
                     <Col sm={24} md={12} lg={12}>
                       <BimestreReabertura
+                        aplicacaoSondagem={valorAplicacao === 2 || valorAplicacao === 3 ? true : false}
                         form={form}
                         onChangeCampos={() => {
                           onChangeCampos();

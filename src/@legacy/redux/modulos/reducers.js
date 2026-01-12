@@ -49,6 +49,7 @@ import turmaFiltroAutenticacaoFrequencia from './turmaFiltroAutenticacaoFrequenc
 import relatorioPAP from './relatorioPAP/reducers';
 import buscaAtivaRegistroAcoes from './buscaAtivaRegistroAcoes/reducers';
 import mapeamentoEstudantes from './mapeamentoEstudantes/reducers';
+import encaminhamentoInstitucional from './encaminhamentoInstitucional/reducers';
 import usuarioFilaEspera from './usuarioFilaEspera/reducers';
 
 const reducers = combineReducers({
@@ -101,6 +102,7 @@ const reducers = combineReducers({
   relatorioPAP,
   buscaAtivaRegistroAcoes,
   mapeamentoEstudantes,
+  encaminhamentoInstitucional,
   usuarioFilaEspera,
 });
 

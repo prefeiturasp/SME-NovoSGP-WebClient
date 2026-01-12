@@ -17,6 +17,7 @@ import InformacoesEscolares from './Componentes/InformacoesEscolares/informacoes
 import InformacoesSrmTabela from './Componentes/InformacoesSrm/InformacoesSrmTabela';
 import TabelaFrequenciaTurmaPAP from './Componentes/TabelaFrequenciaTurmaPAP/TabelaFrequenciaTurmaPAP';
 import TurmasProgramaTabela from './Componentes/TurmasPrograma/turmasProgramaTabela';
+import CampoDinamicoAlertCheckbox from './Componentes/campoDinamicoAlertCheckbox';
 import CampoDinamicoCheckbox from './Componentes/campoDinamicoCheckbox';
 import CampoDinamicoCombo from './Componentes/campoDinamicoCombo';
 import { CampoDinamicoComboJSON } from './Componentes/campoDinamicoComboJSON';
@@ -126,8 +127,9 @@ const QuestionarioDinamico = props => {
           case tipoQuestao.InformacoesFrequenciaTurmaPAP:
           case tipoQuestao.ProfissionaisEnvolvidos:
           case tipoQuestao.AvaliacoesExternasProvaSP:
-            valorRespostaAtual = resposta[0].texto
-              ? JSON.parse(resposta[0].texto)
+          case tipoQuestao.AlertCheckbox:
+            valorRespostaAtual = resposta[0].opcaoRespostaId
+              ? Number(resposta[0].opcaoRespostaId)
               : '';
             break;
           case tipoQuestao.ComboMultiplaEscolhaDinamico:
@@ -181,7 +183,7 @@ const QuestionarioDinamico = props => {
             break;
         }
       }
-
+      
       if (
         valorRespostaAtual?.length &&
         (questaoAtual?.tipoQuestao === tipoQuestao.ComboMultiplaEscolha ||
@@ -412,6 +414,18 @@ const QuestionarioDinamico = props => {
 
     let campoAtual = null;
     switch (questaoAtual?.tipoQuestao) {
+      case tipoQuestao.AlertCheckbox:
+        campoAtual = (
+          <CampoDinamicoAlertCheckbox
+            {...params}
+            desabilitado={desabilitarCampos}
+            onChange={() => {
+              dispatch(setQuestionarioDinamicoEmEdicao(true));
+              onChangeQuestionario();
+            }}
+          />
+        );
+        break;
       case tipoQuestao.Frase:
         campoAtual = (
           <CampoDinamicoFrase
