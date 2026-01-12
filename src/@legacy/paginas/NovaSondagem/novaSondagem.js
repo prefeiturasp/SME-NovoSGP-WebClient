@@ -11,7 +11,6 @@ const URL_REMOTE_ENTRY = `${URL_BASE_SONDAGEM}/assets/remoteEntry.js`;
 const inicializarContainerRemoto = async container => {
   console.log('🔍 [SGP Host] Iniciando imports...');
 
-  // Tentar usar o webpack share scopes primeiro
   if (
     typeof __webpack_share_scopes__ !== 'undefined' &&
     __webpack_share_scopes__.default
@@ -25,14 +24,12 @@ const inicializarContainerRemoto = async container => {
     return;
   }
 
-  // Se não tiver webpack share scopes, criar manualmente
   const ReactLib = await import('react');
   const ReactDOMLib = await import('react-dom');
   const ReactReduxLib = await import('react-redux');
   const AntdLib = await import('antd');
   console.log('🔍 [SGP Host] Imports concluídos');
 
-  // Formato alternativo de shareScope
   const shareScope = {
     react: {
       '^18.2.0': {
@@ -80,7 +77,6 @@ const carregarComponenteRemoto = async () => {
   const fabrica = await container.get('./Home');
   console.log('🔍 [SGP Host] Factory obtida:', typeof fabrica, fabrica);
 
-  // Verificar se fabrica é uma função ou já é o módulo
   const modulo = typeof fabrica === 'function' ? fabrica() : fabrica;
   console.log('🔍 [SGP Host] Módulo obtido:', modulo);
 
