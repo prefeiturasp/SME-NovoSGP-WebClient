@@ -1143,7 +1143,8 @@ route.set(ROUTES.RELATORIO_PLANEJAMENTO_DIARIO, {
 });
 
 route.set(ROUTES.SONDAGEM, {
-  breadcrumbName: 'Sistema Sondagem',
+  breadcrumbName: 'Sondagem',
+  menu: ['Diário de Classe'],
   parent: '/',
   component: NovaSondagem,
   exact: false,
