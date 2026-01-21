@@ -6,6 +6,10 @@ echo "REACT_APP_URL_SONDAGEM = ${REACT_APP_URL_SONDAGEM}"
 echo "REACT_APP_URL_SIGNALR = ${REACT_APP_URL_SIGNALR}"
 echo "REACT_APP_CES_URL = ${REACT_APP_CES_URL}"
 echo "REACT_APP_CES_TOKEN = ${REACT_APP_CES_TOKEN}"
+
+cp /usr/share/nginx/html/index.html /tmp/index.html
+envsubst '${REACT_APP_URL_SONDAGEM}' < /tmp/index.html > /usr/share/nginx/html/index.html
+
 cd /usr/share/nginx/html/static/js
 files=$(ls)
 for file in $files
