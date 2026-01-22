@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from '@/core/redux';
 
 const URL_BASE_SONDAGEM =
-  process.env.REACT_APP_URL_SONDAGEM || 'http://localhost:5173';
+  process.env.REACT_APP_URL_SONDAGEM;
 
 const URL_REMOTE_ENTRY = `${URL_BASE_SONDAGEM}/assets/remoteEntry.js`;
 
