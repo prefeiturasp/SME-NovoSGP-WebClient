@@ -137,6 +137,7 @@ import RelatorioSondagemPorTurma from '~/paginas/Relatorios/Sondagem/PorTurma/re
 import SemPermissao from '~/paginas/SemPermissao/sem-permissao';
 // import Sondagem from '~/paginas/Sondagem/sondagem';
 import NovaSondagem from '~/paginas/NovaSondagem/novaSondagem';
+import NovaSondagemRelatorio from '~/paginas/NovaSondagem/Relatorio/novaSondagemRelatorio';
 import { setRotas } from '~/redux/modulos/navegacao/actions';
 import InformacoesEducacionais from '~/paginas/Gestao/InformacoesEducacionais/painelEducacional';
 import ImportacaoDados from '~/paginas/Gestao/ImportacaoDados/importacaoDados';
@@ -1151,11 +1152,20 @@ route.set(ROUTES.SONDAGEM, {
   tipo: RotasTipo.EstruturadaAutenticada,
 });
 
+route.set(ROUTES.NOVA_SONDAGEM_RELATORIO, {
+  breadcrumbName: 'Relatório Sondagem',
+  parent: '/',
+  component: NovaSondagemRelatorio,
+  exact: true,
+  tipo: RotasTipo.EstruturadaAutenticada,
+  temPermissionamento: false,
+});
+
 route.set(ROUTES.NOVA_SONDAGEM, {
   breadcrumbName: 'Nova Sondagem',
   parent: '/',
   component: NovaSondagem,
-  exact: false,
+  exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: false,
 });

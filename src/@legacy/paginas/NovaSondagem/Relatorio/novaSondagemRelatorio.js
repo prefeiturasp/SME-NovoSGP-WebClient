@@ -22,7 +22,6 @@ const inicializarContainerRemoto = async container => {
   const ReactDOMLib = await import('react-dom');
   const ReactReduxLib = await import('react-redux');
   const AntdLib = await import('antd');
-
   const shareScope = {
     react: {
       '^18.2.0': {
@@ -62,7 +61,7 @@ const carregarComponenteRemoto = async () => {
 
   await inicializarContainerRemoto(container);
 
-  const fabrica = await container.get('./Home');
+  const fabrica = await container.get('./Relatorio');
   const modulo = typeof fabrica === 'function' ? fabrica() : fabrica;
   const Componente = modulo?.default || modulo;
 
@@ -73,7 +72,7 @@ const carregarComponenteRemoto = async () => {
   return Componente;
 };
 
-const NovaSondagem = () => {
+const NovaSondagemRelatorio = () => {
   const [ComponenteRemoto, setComponenteRemoto] = useState(null);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
@@ -150,4 +149,4 @@ const estilos = {
   },
 };
 
-export default NovaSondagem;
+export default NovaSondagemRelatorio;
