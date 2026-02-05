@@ -171,26 +171,60 @@ const Suporte = () => {
       erro('Campo login obrigatório');
       return;
     }
-    if (dreId) {
-      setCarregando(true);
-      const parametrosPost = {
-        codigoDre: dreId === OPCAO_TODOS ? '' : dreId,
-        codigoUe: ueId === OPCAO_TODOS ? '' : ueId,
-        nomeServidor: nomeUsuarioSelecionado,
-        codigoRf: rfSelecionado,
-      };
 
+    if (!dreId) {
       setListaUsuario([]);
-      const lista = await api
-        .post(`v1/unidades-escolares/usuarios`, parametrosPost)
-        .catch(e => erros(e))
-        .finally(() => setCarregando(false));
+      return;
+    }
 
-      if (lista?.data?.length) {
-        setListaUsuario(lista.data);
-      } else {
-        setListaUsuario([]);
+    if (dreId === OPCAO_TODOS) {
+      setCarregando(true);
+      setListaUsuario([]);
+      try {
+        const resposta = await api
+          .get('v1/usuarios/sme', {
+            params: {
+              rf: rfSelecionado || undefined,
+              nome: nomeUsuarioSelecionado || undefined,
+            },
+          })
+          .catch(e => erros(e));
+
+        const bruto = Array.isArray(resposta?.data?.items)
+          ? resposta.data.items
+          : Array.isArray(resposta?.data)
+          ? resposta.data
+          : [];
+
+        const lista = bruto.map(u => ({
+          ...u,
+          codigoRf: u.codigoRf || u.login,
+          nomeServidor: u.nomeServidor || u.nome,
+        }));
+
+        setListaUsuario(lista);
+      } finally {
+        setCarregando(false);
       }
+      return;
+    }
+
+    setCarregando(true);
+    const parametrosPost = {
+      codigoDre: dreId === OPCAO_TODOS ? '' : dreId,
+      codigoUe: ueId === OPCAO_TODOS ? '' : ueId,
+      nomeServidor: nomeUsuarioSelecionado,
+      codigoRf: rfSelecionado,
+    };
+
+    setListaUsuario([]);
+    const lista = await api
+      .post(`v1/unidades-escolares/usuarios`, parametrosPost)
+      .catch(e => erros(e))
+      .finally(() => setCarregando(false));
+
+    if (lista?.data?.length) {
+      setListaUsuario(lista.data);
     } else {
       setListaUsuario([]);
     }
