@@ -1,0 +1,95 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394083395' stop='1754394084546'>
+    <name>API - Autenticação do acesso de usuário</name>
+    <title>API - Autenticação do acesso de usuário</title>
+    <test-cases>
+        <test-case start='1754394083395' status='failed' stop='1754394083697'>
+            <name>Permitir realizar login com credenciais válidas</name>
+            <title>Permitir realizar login com credenciais válidas</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>expected 422 to equal 200</message>
+                <stack-trace>AssertionError: expected 422 to equal 200
+                    at Context.eval (cypress/e2e/api/autenticacao_login.cy.js:10:39)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394083721' status='failed' stop='1754394083914'>
+            <name>Não autorizar acesso com usuário inválido</name>
+            <title>Não autorizar acesso com usuário inválido</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>expected 422 to equal 401</message>
+                <stack-trace>AssertionError: expected 422 to equal 401
+                    at Context.eval (cypress/e2e/api/autenticacao_login.cy.js:22:39)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394083938' status='failed' stop='1754394084139'>
+            <name>Não autorizar acesso com senha inválida</name>
+            <title>Não autorizar acesso com senha inválida</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>expected 422 to equal 401</message>
+                <stack-trace>AssertionError: expected 422 to equal 401
+                    at Context.eval (cypress/e2e/api/autenticacao_login.cy.js:34:39)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394084161' status='failed' stop='1754394084394'>
+            <name>Não autorizar acesso com usuário inexistente</name>
+            <title>Não autorizar acesso com usuário inexistente</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>expected 422 to equal 401</message>
+                <stack-trace>AssertionError: expected 422 to equal 401
+                    at Context.eval (cypress/e2e/api/autenticacao_login.cy.js:46:39)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394084425' status='passed' stop='1754394084478'>
+            <name>Usuário deve ser inserido para acesso</name>
+            <title>Usuário deve ser inserido para acesso</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394084487' status='passed' stop='1754394084545'>
+            <name>Não permitir acesso sem inserir a senha</name>
+            <title>Não permitir acesso sem inserir a senha</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

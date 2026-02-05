@@ -1,0 +1,55 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394404862' stop='1754394406204'>
+    <name>API - Autenticação do acesso de usuário</name>
+    <title>API - Autenticação do acesso de usuário</title>
+    <test-cases>
+        <test-case start='1754394404862' status='passed' stop='1754394405530'>
+            <name>Permitir realizar login com credenciais válidas</name>
+            <title>Permitir realizar login com credenciais válidas</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394405541' status='passed' stop='1754394405788'>
+            <name>Não autorizar acesso com usuário inválido</name>
+            <title>Não autorizar acesso com usuário inválido</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394405797' status='passed' stop='1754394405850'>
+            <name>Não autorizar acesso com senha inválida</name>
+            <title>Não autorizar acesso com senha inválida</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394405858' status='passed' stop='1754394406121'>
+            <name>Não autorizar acesso com usuário inexistente</name>
+            <title>Não autorizar acesso com usuário inexistente</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394406130' status='passed' stop='1754394406159'>
+            <name>Usuário deve ser inserido para acesso</name>
+            <title>Usuário deve ser inserido para acesso</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394406169' status='passed' stop='1754394406203'>
+            <name>Não permitir acesso sem inserir a senha</name>
+            <title>Não permitir acesso sem inserir a senha</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

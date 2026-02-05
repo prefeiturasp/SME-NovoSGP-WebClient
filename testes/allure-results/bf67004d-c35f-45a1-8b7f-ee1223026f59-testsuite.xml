@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394420206' stop='1754394424168'>
+    <name>API - Reiniciar senha do usuário</name>
+    <title>API - Reiniciar senha do usuário</title>
+    <test-cases>
+        <test-case start='1754394420223' status='passed' stop='1754394421506'>
+            <name>Reiniciar senha de usuário válido</name>
+            <title>Reiniciar senha de usuário válido</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394421518' status='passed' stop='1754394424076'>
+            <name>Não reiniciar para usuário inválido</name>
+            <title>Não reiniciar para usuário inválido</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394424099' status='passed' stop='1754394424168'>
+            <name>Código da DRE deve ser obrigatório</name>
+            <title>Código da DRE deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

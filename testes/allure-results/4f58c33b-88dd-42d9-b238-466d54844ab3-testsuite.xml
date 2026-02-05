@@ -1,0 +1,39 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394543955' stop='1754394545130'>
+    <name>API - Fechamento - Detalhamento da turma através do conselho de classe, bimestre, aluno e componentes curriculares</name>
+    <title>API - Fechamento - Detalhamento da turma através do conselho de classe, bimestre, aluno e componentes curriculares</title>
+    <test-cases>
+        <test-case start='1754394543955' status='passed' stop='1754394544921'>
+            <name>Retorna dados através da situação do conselho de classe e alunos</name>
+            <title>Retorna dados através da situação do conselho de classe e alunos</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394544938' status='passed' stop='1754394544999'>
+            <name>Não retorna dados sem usuário autenticado</name>
+            <title>Não retorna dados sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394545008' status='passed' stop='1754394545055'>
+            <name>Não retorna dados com código da turma inválido</name>
+            <title>Não retorna dados com código da turma inválido</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394545071' status='passed' stop='1754394545129'>
+            <name>Não retorna dados com código do bimestre inválido</name>
+            <title>Não retorna dados com código do bimestre inválido</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

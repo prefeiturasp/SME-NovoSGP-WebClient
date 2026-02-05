@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394762572' stop='1754394766438'>
+    <name>API - Anos letivos anteriores e atual</name>
+    <title>API - Anos letivos anteriores e atual</title>
+    <test-cases>
+        <test-case start='1754394762589' status='passed' stop='1754394764514'>
+            <name>Retorna o ano letivo atual</name>
+            <title>Retorna o ano letivo atual</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394764539' status='passed' stop='1754394766333'>
+            <name>Retorna os anos letivos anteriores e atual</name>
+            <title>Retorna os anos letivos anteriores e atual</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394766354' status='passed' stop='1754394766438'>
+            <name>Não permitir acessar sem autenticação</name>
+            <title>Não permitir acessar sem autenticação</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>
