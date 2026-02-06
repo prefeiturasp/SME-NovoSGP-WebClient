@@ -16,7 +16,6 @@ import api from '~/servicos/api';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
-import { bool } from 'prop-types';
 
 // eslint-disable-next-line react/prop-types
 export default function ReiniciarSenha({ perfilSelecionado }) {
@@ -47,14 +46,6 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
   const [carregando, setCarregando] = useState(false);
 
   const { usuario } = store.getState();
-
-  const [pagina, setPagina] = useState(1);
-  const [quantidadeRegistrosPorPagina, setQuantidadeRegistrosPorPagina] =
-    useState(10);
-  const [totalPaginas, setTotalPaginas] = useState(0);
-  const [totalRegistros, setTotalRegistros] = useState(0);
-  const [origemFiltro, setOrigemFiltro] = useState('');
-
   const anoLetivo = useMemo(
     () =>
       (usuario.turmaSelecionada && usuario.turmaSelecionada.anoLetivo) ||
@@ -86,11 +77,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
         `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivo}`
       );
       if (dres.data) {
-        const todas = [
-          { abreviacao: 'Todas', codigo: 'Todas', nome: 'Todas', id: 0 },
-        ];
-        const ordenadas = dres.data.sort(FiltroHelper.ordenarLista('nome'));
-        setListaDres([...todas, ...ordenadas]);
+        setListaDres(dres.data.sort(FiltroHelper.ordenarLista('nome')));
       } else {
         setListaDres([]);
       }
@@ -126,7 +113,6 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
     setDreSelecionada(!dre ? '' : dre);
     setUeSelecionada(undefined);
     setListaUes([]);
-    setListaUsuario([]);
   };
 
   const onChangeUe = ue => {
@@ -149,10 +135,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
       if (ues.data) {
         setListaUes(ues.data);
       } else {
-        const todas = [
-          { abreviacao: 'Todas', codigo: 'Todas', nome: 'Todas', id: 0 },
-        ];
-        setListaUes(todas);
+        setListaUes([]);
       }
     },
     [consideraHistorico]
@@ -164,91 +147,34 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
     }
   }, [carregarUes, dreSelecionada]);
 
-  useEffect(() => {
-    if (
-      dreSelecionada === 'Todas' &&
-      (nomeUsuarioSelecionado || rfSelecionado || listaUsuario.length > 0)
-    ) {
-      onChangeFiltrarPaginacao();
-    }
-  }, [pagina]);
-
-  const filtrarUsuarios = async (resetPagina = false) => {
-    if (!dreSelecionada) {
-      setListaUsuario([]);
-      return;
-    }
-
-    
-    setCarregando(true);
-
-    try {
+  const onClickFiltrar = async () => {
+    if (dreSelecionada) {
+      setCarregando(true);
       const parametrosPost = {
         codigoDRE: dreSelecionada,
         nomeServidor: nomeUsuarioSelecionado,
         codigoRF: rfSelecionado,
-        ...(ueSelecionada?.length > 0 && { codigoUE: ueSelecionada }),
       };
 
-      let lista: any[] = [];
+      if (ueSelecionada && ueSelecionada.length > 0)
+        parametrosPost.codigoUE = ueSelecionada;
 
-      if (dreSelecionada === 'Todas') {
-        const rf = rfSelecionado || '';
-        const nome = nomeUsuarioSelecionado || '';
+      const lista = await api
+        .post(`v1/unidades-escolares/funcionarios`, parametrosPost)
+        .catch(() => {
+          setListaUsuario([]);
+        })
+        .finally(() => setCarregando(false));
 
-        const queryParams = new URLSearchParams({
-          ...(rf && { rf }),
-          ...(nome && { nome }),
-          pagina: resetPagina ? '1' : pagina.toString(),
-          registrosPorPagina: quantidadeRegistrosPorPagina.toString(),
-        });
-
-        const { data } = await api.get(
-          `v1/usuarios/sme?${queryParams.toString()}`
-        );
-
-        if (data?.totalRegistros) {
-          setTotalPaginas(data.totalPaginas);
-          setTotalRegistros(data.totalRegistros);
-        }
-
-        if (Array.isArray(data?.items)) {
-          lista = data.items.map(item => ({
-            codigoFuncaoAtividade: 0,
-            codigoFuncaoExterna: 0,
-            codigoRf: item.login,
-            estaAfastado: false,
-            login: item.login,
-            nomeServidor: item.nome,
-            podeEditar: false,
-            usuarioId: 0,
-          }));
-        }
+      if (lista && lista.data) {
+        setListaUsuario([]);
+        setListaUsuario(lista.data);
       } else {
-        const { data } = await api.post(
-          'v1/unidades-escolares/funcionarios',
-          parametrosPost
-        );
-        lista = Array.isArray(data) ? data : [];
+        setListaUsuario([]);
       }
-
-      setListaUsuario(lista);
-
-    } catch (error) {
-      console.error('Erro ao buscar usuários:', error);
+    } else {
       setListaUsuario([]);
-    } finally {
-      if (resetPagina) setPagina(1);
-      setCarregando(false);
     }
-  };
-
-  const onClickFiltrar = async () => {
-    await filtrarUsuarios(true);
-  };
-
-  const onChangeFiltrarPaginacao = async () => {
-    await filtrarUsuarios(false);
   };
 
   const reiniciarSenha = async linha => {
@@ -425,15 +351,12 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
             disabled={perfilSelecionado || !dreSelecionada}
             border
             className="text-center d-block mt-4 float-right w-100"
-            onClick={() => {
-              setOrigemFiltro('botao');
-              onClickFiltrar();
-            }}
+            onClick={onClickFiltrar}
           />
         </div>
       </div>
 
-      {listaUsuario.length > 0 && dreSelecionada !== 'Todas' && (
+      {listaUsuario.length > 0 && (
         <div className="row">
           <div className="col-md-12 pt-4">
             <DataTable
@@ -441,27 +364,6 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
               columns={colunas}
               dataSource={listaUsuario}
               semHover
-            />
-          </div>
-        </div>
-      )}
-      {listaUsuario.length > 0 && dreSelecionada === 'Todas' && (
-        <div className="row">
-          <div className="col-md-12 pt-4">
-            <DataTable
-              rowKey="codigoRf"
-              columns={colunas}
-              dataSource={listaUsuario}
-              semHover
-              pagination={{
-                current: pagina,
-                pageSize: quantidadeRegistrosPorPagina,
-                total: totalRegistros,
-                showSizeChanger: false,
-                onChange: newPage => {
-                  setPagina(newPage);
-                },
-              }}
             />
           </div>
         </div>
@@ -508,6 +410,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
           </Form>
         )}
       </Formik>
+
       <ModalConteudoHtml
         key="exibirModalMensagemReiniciarSenha"
         visivel={exibirModalMensagemReiniciarSenha}
