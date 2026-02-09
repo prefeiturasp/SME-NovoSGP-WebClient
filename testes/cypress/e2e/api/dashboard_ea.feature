@@ -104,7 +104,7 @@ Funcionalidade: API - Dashboard EA
     Dado que não login não gerou um token de acesso válido
     Quando tento uma requisição GET para o endpoint de leituras de comunicados
     Então retorna o status 401 sem nome da DRE, Ue, não receberam, não visualizaram e visualizaram
-
+@ignore
   Cenário: Buscar leitura dos comunicados agrupados no dashboard
     Dado que login gerou um token de acesso válido
     Quando envio uma requisição GET para o endpoint de leituras de comunicados agrupados

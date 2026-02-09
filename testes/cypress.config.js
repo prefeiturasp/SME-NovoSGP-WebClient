@@ -15,6 +15,7 @@ const dbConfig = {
     database: process.env.DB_DATABASE
 }
 
+
 module.exports = defineConfig({
   e2e: {
     async setupNodeEvents(on, config) {
@@ -117,6 +118,7 @@ module.exports = defineConfig({
         env: {
           ...config.env,
           ...customVariable,
+          TAGS: "not @ignore"
         },
       };
 

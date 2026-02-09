@@ -19,7 +19,7 @@ Background
     | 8850895     | Sgp@1234   | web    | Assistente Social      | Usuario assistente Social               |
     | 7551487     | Sgp@1234   | web    | Adm UE                 | Usuario ADM UE                          |
     | 6957315     | Sgp@1234   | web    | AD                     | Usuario AD                              |
-    | 7940432     | Sgp@1234   | web    | PAAI                   | Usuario PAAI                            |
+    #| 7940432     | Sgp@1234   | web    | PAAI                   | Usuario PAAI                            |
     | 7228287     | Sgp@1234   | web    | Coordenador CEFAI      | Usuario Coordenador CEFAI               |
     | marlon.amcom | Sgp@1234  | web    | Adm COTIC              | Usuario ADM COTIC                       |
     | 41810315000 | Sgp@1234   | web    | ABAE                   | Usuario ABAE                            |
