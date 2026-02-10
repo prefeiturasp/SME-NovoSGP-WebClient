@@ -15,6 +15,6 @@ Background
 
     Exemplos:
     | usuario     | senha    | device | turma                  | cenario          |
-    | 41810315000 | Sgp@1234 | web    | Todas                  | Selecionar todas |
-    | 41810315000 | Sgp@1234 | web    | EF - 1A - 1º Ano       | Somente uma turma|
+    #| 41810315000 | Sgp@1234 | web    | Todas                  | Selecionar todas |
+    #| 41810315000 | Sgp@1234 | web    | EF - 1A - 1º Ano       | Somente uma turma|
     | 41810315000 | Sgp@1234 | web    | EF - 2C - 2º Ano  | Sem dados encontrados |

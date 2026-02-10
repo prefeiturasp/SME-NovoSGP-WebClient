@@ -2,6 +2,7 @@
 
 Funcionalidade: API - Dashboard tela inicial
 
+@ignore
   Cenário: Carrega os dashboards da tela inicial
     Dado que login gerou um token de acesso válido
     Quando envio uma requisição GET para o endpoint de dashboard

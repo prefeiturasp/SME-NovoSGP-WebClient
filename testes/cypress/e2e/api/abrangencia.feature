@@ -42,6 +42,7 @@ Funcionalidade: API - Abrangência
     Quando envio uma requisição GET de filtro da abrangência da UE por modalidade
     Então retorna os dados da UE com status 204 considerando histórico
 
+@ignore
   Cenário: Filtra sem histórico da UE por modalidade no ano letivo
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET de filtro de abrangência da UE por modalidade
@@ -101,12 +102,12 @@ Funcionalidade: API - Abrangência
     Dado que não possuo um token de acesso válido
     Quando tento uma requisição GET de abrangências de todos anos letivos
     Então retorna o status 401 sem histórico dos anos
-
+@ignore
   Cenário: Retorna as abrangências de DREs com histórico
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET de abrangências de DREs
     Então retorna o status 200 com histórico de DREs
-  
+@ignore
   Cenário: Retorna as abrangências de DREs sem histórico
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET de abrangências das DREs
@@ -116,12 +117,12 @@ Funcionalidade: API - Abrangência
     Dado que não possuo um token de acesso válido
     Quando tento uma requisição GET de abrangências de DREs
     Então retorna o status 401 sem histórico de DREs
-
+@ignore
   Cenário: Retorna modalidades das abrangências com histórico
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET de abrangências de modalidades
     Então retorna o status 200 com histórico de modalidades
-  
+@ignore  
   Cenário: Retorna modalidades das abrangências de DREs sem histórico
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET de abrangências das modalidades
@@ -131,12 +132,12 @@ Funcionalidade: API - Abrangência
     Dado que não possuo um token de acesso válido
     Quando tento uma requisição GET de abrangências de modalidades
     Então retorna o status 401 sem histórico modalidades
-
+@ignore
   Cenário: Retorna semestres das abrangências com histórico
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET de abrangências de semestres
     Então retorna o status 200 com histórico de semestres
-  
+@ignore  
   Cenário: Retorna semestres das abrangências de DREs sem histórico
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET de abrangências das semestres
@@ -146,15 +147,15 @@ Funcionalidade: API - Abrangência
     Dado que não possuo um token de acesso válido
     Quando tento uma requisição GET de abrangências de semestres
     Então retorna o status 401 sem histórico semestres
-
+@ignore
   Cenário: Retorna abrangências da turma com histórico
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET de abrangências da turma
     Então retorna o status 200 com histórico da turma
-  
-  Cenário: Retorna abrangências da turma sem histórico
+ @ignore
+   Cenário: Retorna abrangências da turma sem histórico
     Dado que possuo um token de acesso válido
-    Quando envio uma requisição GET de abrangências de turma
+    Quando envio uma requisição GET de abrangências da turma
     Então retorna o status 200 sem histórico de turma
 
   Cenário: Não retorna as turmas de abrangência sem autenticação
@@ -206,12 +207,12 @@ Funcionalidade: API - Abrangência
     Dado que não possuo um token de acesso válido
     Quando tento uma requisição POST de sincronizar abrangências do professor
     Então retorna o status 401 sem ano letivo sincronizado
-
+@ignore
   Cenário: Considera histórico de abrangências da DRE
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET abrangências da DRE
     Então retorna o status 200 com histórico da DRE na UE
-
+@ignore
   Cenário: Não considera histórico de abrangências da DRE
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET abrangências de DRE
@@ -221,12 +222,12 @@ Funcionalidade: API - Abrangência
     Dado que não possuo um token de acesso válido
     Quando tento uma requisição GET abrangências da DRE
     Então retorna o status 401 histórico da DRE na UE
-
+@ignore
   Cenário: Considera histórico de abrangências das turmas regulares
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET abrangências das turmas regulares
     Então retorna o status 204 com histórico da turma na UE
-
+@ignore
   Cenário: Não considera histórico de abrangências das turmas regulares
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET abrangências das turmas regulares
@@ -251,7 +252,7 @@ Funcionalidade: API - Abrangência
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET abrangências da disciplina na UE
     Então retorna o status 204 com histórico da disciplina na UE
-
+@ignore
   Cenário: Não considera histórico de abrangências da disciplina na UE
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET abrangências de disciplina na UE

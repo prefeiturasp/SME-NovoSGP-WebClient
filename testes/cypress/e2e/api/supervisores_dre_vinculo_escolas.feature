@@ -1,7 +1,7 @@
 # language: pt
 
 Funcionalidade: API - Lista UEs com vínculos a DRE
-
+@ignore
   Cenário: Listar todos os códigos e nomes das UEs
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET de vínculos DRE

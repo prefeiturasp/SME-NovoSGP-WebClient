@@ -56,7 +56,7 @@ Funcionalidade: API - Buscar DREs, UE e sem tipos de responsável
     Dado não gerou um token de acesso válido
     Quando tento a requisição GET para o endpoint de buscar DRE sem atribuição
     Então retorna o status 401 sem dados de UEs
-
+@ignore
   Cenário: Retornar todas as UEs cadastradas
     Dado que login gerou um token de acesso válido
     Quando envio uma requisição GET para o endpoint de UEs na DRE

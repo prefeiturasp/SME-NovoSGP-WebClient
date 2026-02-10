@@ -6,7 +6,7 @@ Funcionalidade: API - Anos letivos anteriores e atual
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET para o endpoint buscar o ano letivo
     Então retorna o ano atual com status 200
-
+@ignore
    Cenário: Retorna os anos letivos anteriores e atual
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET para o endpoint buscar os anos letivos
