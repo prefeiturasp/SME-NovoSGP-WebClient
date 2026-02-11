@@ -23,3 +23,20 @@ Funcionalidade: API - Autenticação do primeiro acesso
     Quando tento a requisição PUT para o endpoint sem usuário
     Então retorna o status 401
 
+  Cenário: Não permitir confirmação vazia
+    Dado que insiro minhas credenciais
+    E a confirmação não é igual a senha
+    Quando tento a requisição POST para o endpoint de primeiro acesso
+    Então retorna o status 422 com a mensagem de senhas diferentes
+
+  Cenário: Não permitir nova senha menor que 8 caracteres
+    Dado que insiro as credenciais sem a nova senha
+    Quando tento a requisição POST para o endpoint com perfil inválido
+    Então retorna o status 422 com a mensagem de senha obrigatória
+
+  Cenário: Não permitir primeiro acesso com token expirado
+    Dado que minhas credenciais não autenticaram
+    Quando tento a requisição PUT para o endpoint sem usuário
+    Então retorna o status 401
+
+
