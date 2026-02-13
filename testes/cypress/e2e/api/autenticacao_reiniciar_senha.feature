@@ -13,7 +13,6 @@ Funcionalidade: API - Reiniciar senha do usuário
     Então retorna o status 601 que não foi possível reiniciar deste usuário
 
   Cenário: Código da DRE deve ser obrigatório
-    Dado que não possuo um token de acesso válido
+    Dado que possuo um token de acesso válido
     Quando envio uma requisição PUT sem a DRE para reiniciar a senha
-    Então retorna o status 601 que o código é obrigatório
-
+    Então retorna erro informando que o código da DRE é obrigatório
