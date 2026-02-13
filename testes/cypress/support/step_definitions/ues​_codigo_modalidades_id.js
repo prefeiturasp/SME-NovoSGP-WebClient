@@ -1,0 +1,119 @@
+import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
+
+let token
+
+Before(() => {
+  cy.gerar_token().then((token_valido) => {
+    token = token_valido
+  })
+})
+
+Given('que possuo um token de acesso válido', function () {
+  expect(token, 'valido').to.exist
+})
+
+// Retorna dados da modalidade no ano letivo
+When('envio uma requisição GET para o endpoint de modalidades', function () { 
+  cy.request({
+    method: 'GET',
+          url: Cypress.config('baseUrl') + `/api/v1/ues/${Cypress.env('UE_CODIGO')}/modalidades/${Cypress.env('MODALIDADE_CODIGO')}?ano=${Cypress.env('ANO_LETIVO')}`,
+          headers: {
+        accept: 'text/plain',
+        'Authorization': `Bearer ${token}`, 
+    },
+    failOnStatusCode: false
+  }).as('response')
+})
+
+Then('retorna os dados do ano letivo com status 200', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(200)        
+  })
+})
+
+// Retorna dados das modalidades da UE no ano letivo
+When('envio uma requisição GET para o endpoint de modalidades da UE', function () { 
+  return cy.request({
+        method: 'GET',
+              url: Cypress.config('baseUrl') + `/api/v1/ues/${Cypress.env('UE_CODIGO')}/modalidades/?ano=${Cypress.env('ANO_LETIVO')}`,
+              headers: {
+        accept: 'text/plain',
+        'Authorization': `Bearer ${token}`, 
+    },
+    failOnStatusCode: false
+  }).as('response')
+})
+
+Then('retorna o status 200 com os dados da turma', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(200)
+        expect(response.body).to.be.an('array').and.not.be.empty
+        response.body.forEach(item => {
+         expect(item).to.have.all.keys('id', 'nome')
+         expect(item.id).to.be.a('number')
+         expect(item.nome).to.be.a('string').and.not.be.empty
+    })      
+  })  
+}) 
+
+// UE deve ser obrigatório
+When('envio uma requisição GET para o endpoint de modalidades sem UE', function () { 
+  cy.request({
+    method: 'GET',
+        url: Cypress.config('baseUrl') + `/api/v1/ues//modalidades/${Cypress.env('MODALIDADE_CODIGO')}?ano=${Cypress.env('ANO_LETIVO')}`,
+        headers: {
+        accept: 'text/plain',
+        'Authorization': `Bearer ${token}`, 
+    },
+    failOnStatusCode: false
+  }).as('response')
+})
+
+Then('retorna o status 422 sem os dados do ano', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(500)      
+  })  
+}) 
+
+// Ano letivo deve ser obrigatório
+When('envio uma requisição GET para o endpoint de modalidades sem o ano', function () { 
+  cy.request({
+    method: 'GET',
+        url: Cypress.config('baseUrl') + `/api/v1/ues/${Cypress.env('UE_CODIGO')}/modalidades/${Cypress.env('MODALIDADE_CODIGO')}?ano=`,
+        headers: {
+        accept: 'text/plain',
+        'Authorization': `Bearer ${token}`, 
+    },
+    failOnStatusCode: false
+  }).as('response')
+})
+
+Then('retorna o status 422 sem da UE', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(422)
+         expect(response.body).to.have.property('existemErros', true)
+         expect(response.body.mensagens).to.be.an('array').that.includes("The value '' is invalid.")
+  })  
+}) 
+
+// Não retorna dados dados da modalidade no ano letivo sem usuário autenticado
+Given('que não possuo um token de acesso válido', () => {
+})
+
+When('tento uma requisição GET para o endpoint de modalidades', function () { 
+  cy.request({
+    method: 'GET',
+        url: Cypress.config('baseUrl') + `/api/v1/ues/${Cypress.env('UE_CODIGO')}/modalidades/${Cypress.env('MODALIDADE_CODIGO')}?ano=${Cypress.env('ANO_LETIVO')}`,
+        headers: {
+        accept: 'text/plain',
+        'Authorization': 'Bearer token_invalido'
+    },
+    failOnStatusCode: false
+  }).as('response')
+})
+
+Then('não retorna os dados da UE com status 401', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(401)
+  })
+})

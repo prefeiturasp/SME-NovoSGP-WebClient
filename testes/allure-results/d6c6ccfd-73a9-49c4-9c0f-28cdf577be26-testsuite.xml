@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394474179' stop='1754394475314'>
+    <name>API - Dashboard de fechamentos - Estudantes</name>
+    <title>API - Dashboard de fechamentos - Estudantes</title>
+    <test-cases>
+        <test-case start='1754394474180' status='passed' stop='1754394475263'>
+            <name>Carrega estudantes do dashboard de fechamentos</name>
+            <title>Carrega estudantes do dashboard de fechamentos</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394475273' status='passed' stop='1754394475314'>
+            <name>Não retorna estudantes sem usuário autenticado</name>
+            <title>Não retorna estudantes sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

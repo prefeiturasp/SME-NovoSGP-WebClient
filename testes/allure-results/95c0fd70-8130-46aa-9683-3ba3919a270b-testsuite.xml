@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394491732' stop='1754394493654'>
+    <name>API - Dashboard AEE de planos acessibilidades</name>
+    <title>API - Dashboard AEE de planos acessibilidades</title>
+    <test-cases>
+        <test-case start='1754394491732' status='passed' stop='1754394493559'>
+            <name>Retorna dados AEE planos acessibilidades</name>
+            <title>Retorna dados AEE planos acessibilidades</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394493576' status='passed' stop='1754394493610'>
+            <name>Não retorna dados sem usuário autenticado</name>
+            <title>Não retorna dados sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394493620' status='passed' stop='1754394493654'>
+            <name>Ano letivo deve ser obrigatório</name>
+            <title>Ano letivo deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

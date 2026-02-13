@@ -1,0 +1,511 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394057419' stop='1754394073653'>
+    <name>API - Aula prevista</name>
+    <title>API - Aula prevista</title>
+    <test-cases>
+        <test-case start='1754394057439' status='broken' stop='1754394057718'>
+            <name>Retornar aulas prevista por bimestre</name>
+            <title>Retornar aulas prevista por bimestre</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394057752' status='broken' stop='1754394057975'>
+            <name>Modalidade deve ser obrigatória</name>
+            <title>Modalidade deve ser obrigatória</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394057998' status='broken' stop='1754394058261'>
+            <name>Não retornar aula com modalidade inválida</name>
+            <title>Não retornar aula com modalidade inválida</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394058292' status='broken' stop='1754394058530'>
+            <name>Turma deve ser obrigatória</name>
+            <title>Turma deve ser obrigatória</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394058559' status='broken' stop='1754394058781'>
+            <name>Não retornar aula com turma inválida</name>
+            <title>Não retornar aula com turma inválida</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394058816' status='broken' stop='1754394059115'>
+            <name>Disciplina deve ser obrigatória</name>
+            <title>Disciplina deve ser obrigatória</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394059144' status='broken' stop='1754394059380'>
+            <name>Semestre deve ser obrigatório</name>
+            <title>Semestre deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394059413' status='broken' stop='1754394059656'>
+            <name>Não retornar aula no bimestre quando estiver deslogado</name>
+            <title>Não retornar aula no bimestre quando estiver deslogado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394059682' status='broken' stop='1754394060042'>
+            <name>Retornar aulas prevista através do ID</name>
+            <title>Retornar aulas prevista através do ID</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394060088' status='broken' stop='1754394060390'>
+            <name>Não retornar aula prevista quando estiver deslogado</name>
+            <title>Não retornar aula prevista quando estiver deslogado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394060419' status='broken' stop='1754394060740'>
+            <name>ID da aulas prevista deve ser obrigatório</name>
+            <title>ID da aulas prevista deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394060779' status='broken' stop='1754394061074'>
+            <name>Alterar aulas prevista através do ID</name>
+            <title>Alterar aulas prevista através do ID</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394061109' status='broken' stop='1754394061479'>
+            <name>Não alterar aulas prevista sem o ID</name>
+            <title>Não alterar aulas prevista sem o ID</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394061518' status='broken' stop='1754394061822'>
+            <name>Corpo da requisição não poderá estar vazio</name>
+            <title>Corpo da requisição não poderá estar vazio</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394061862' status='broken' stop='1754394062208'>
+            <name>Não alterar aula prevista quando estiver deslogado</name>
+            <title>Não alterar aula prevista quando estiver deslogado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394062241' status='broken' stop='1754394062611'>
+            <name>Componente curricular deve ser informado</name>
+            <title>Componente curricular deve ser informado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394062658' status='broken' stop='1754394063726'>
+            <name>Modalidade deve ser informada</name>
+            <title>Modalidade deve ser informada</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394063853' status='broken' stop='1754394065032'>
+            <name>Turma deve ser informada</name>
+            <title>Turma deve ser informada</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394065170' status='broken' stop='1754394066278'>
+            <name>Criar aulas prevista</name>
+            <title>Criar aulas prevista</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394066425' status='broken' stop='1754394067644'>
+            <name>Não criar aulas sem componente curricular informado</name>
+            <title>Não criar aulas sem componente curricular informado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394067780' status='broken' stop='1754394069010'>
+            <name>Não criar aulas sem modalidade informada</name>
+            <title>Não criar aulas sem modalidade informada</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394069190' status='broken' stop='1754394070478'>
+            <name>Não criar aulas sem turma informada</name>
+            <title>Não criar aulas sem turma informada</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394070687' status='broken' stop='1754394072090'>
+            <name>Corpo da requisição  para criar aula não poderá estar vazio</name>
+            <title>Corpo da requisição  para criar aula não poderá estar vazio</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394072250' status='broken' stop='1754394073559'>
+            <name>Não criar aula prevista quando estiver deslogado</name>
+            <title>Não criar aula prevista quando estiver deslogado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

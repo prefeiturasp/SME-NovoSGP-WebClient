@@ -1,0 +1,111 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394521027' stop='1754394522805'>
+    <name>API - Buscar DREs, UE e sem tipos de responsável</name>
+    <title>API - Buscar DREs, UE e sem tipos de responsável</title>
+    <test-cases>
+        <test-case start='1754394521048' status='passed' stop='1754394521441'>
+            <name>Retornar todas as DREs cadastradas</name>
+            <title>Retornar todas as DREs cadastradas</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394521453' status='passed' stop='1754394521518'>
+            <name>Sem retornar DREs quando usuário não está autenticado</name>
+            <title>Sem retornar DREs quando usuário não está autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394521527' status='passed' stop='1754394521641'>
+            <name>Buscar todas UEs sem Assistente Social</name>
+            <title>Buscar todas UEs sem Assistente Social</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394521651' status='passed' stop='1754394521756'>
+            <name>Buscar todas UEs sem PAAI</name>
+            <title>Buscar todas UEs sem PAAI</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394521767' status='passed' stop='1754394521866'>
+            <name>Buscar todas UEs sem Psicólogo Escolar</name>
+            <title>Buscar todas UEs sem Psicólogo Escolar</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394521875' status='passed' stop='1754394521974'>
+            <name>Buscar todas UEs sem Psicopedagogo</name>
+            <title>Buscar todas UEs sem Psicopedagogo</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394521984' status='passed' stop='1754394522083'>
+            <name>Buscar todas UEs sem Supervisor Escolar</name>
+            <title>Buscar todas UEs sem Supervisor Escolar</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394522096' status='passed' stop='1754394522169'>
+            <name>DRE deve ser informada</name>
+            <title>DRE deve ser informada</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394522177' status='passed' stop='1754394522239'>
+            <name>Tipo de responsável deve ser informado</name>
+            <title>Tipo de responsável deve ser informado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394522248' status='passed' stop='1754394522305'>
+            <name>Sem retornar UES quando usuário não está autenticado</name>
+            <title>Sem retornar UES quando usuário não está autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394522315' status='passed' stop='1754394522628'>
+            <name>Retornar todas as UEs cadastradas</name>
+            <title>Retornar todas as UEs cadastradas</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394522639' status='passed' stop='1754394522703'>
+            <name>DRE deve ser informada para buscar UE</name>
+            <title>DRE deve ser informada para buscar UE</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394522714' status='passed' stop='1754394522805'>
+            <name>Sem retornar UEs quando usuário não está autenticado</name>
+            <title>Sem retornar UEs quando usuário não está autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

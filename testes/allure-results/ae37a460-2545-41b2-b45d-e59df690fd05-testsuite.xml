@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394484774' stop='1754394485805'>
+    <name>API - Dashboard de acompanhamento aprendizagem por aluno e DRE</name>
+    <title>API - Dashboard de acompanhamento aprendizagem por aluno e DRE</title>
+    <test-cases>
+        <test-case start='1754394484774' status='passed' stop='1754394485694'>
+            <name>Retornar dashboard de acompanhamento do aluno e DRE</name>
+            <title>Retornar dashboard de acompanhamento do aluno e DRE</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394485713' status='passed' stop='1754394485751'>
+            <name>Não retorna dados sem usuário autenticado</name>
+            <title>Não retorna dados sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394485760' status='passed' stop='1754394485805'>
+            <name>Ano letivo deve ser informado</name>
+            <title>Ano letivo deve ser informado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

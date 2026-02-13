@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394448595' stop='1754394449570'>
+    <name>API - CEP</name>
+    <title>API - CEP</title>
+    <test-cases>
+        <test-case start='1754394448624' status='passed' stop='1754394449290'>
+            <name>Buscar dados com CEP válido</name>
+            <title>Buscar dados com CEP válido</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394449312' status='passed' stop='1754394449425'>
+            <name>CEP informado deve ser inválido</name>
+            <title>CEP informado deve ser inválido</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394449442' status='passed' stop='1754394449569'>
+            <name>CEP deve ser informado para busca</name>
+            <title>CEP deve ser informado para busca</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>
