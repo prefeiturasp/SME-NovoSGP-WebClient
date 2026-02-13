@@ -121,6 +121,7 @@ Funcionalidade: API - Aula prevista
     Dado que não login não gerou um token de acesso válido
     Quando tento a requisição POST
     Então retorna o status 401 sem realizar a alteração ao criar
+<<<<<<< HEAD
 
   Cenário: Validar retorno estruturado das aulas previstas após criação
     Dado que login gerou um token de acesso válido
@@ -182,3 +183,5 @@ Funcionalidade: API - Aula prevista
     Quando envio uma requisição PUT com o ID aula
     Então retorna o status 200 com a mensagem de sucesso
 
+=======
+>>>>>>> 30bf60295d01cd530ce194fd0d6be7b5374d3805

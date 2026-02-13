@@ -95,6 +95,7 @@ Funcionalidade: API - Atribuição CJ
   Cenário: Não busca as atribuições CJ dos dados de UE sem autenticação
     Dado que não possuo um token de acesso válido
     Quando tento a requisição GET para o endpoint com todos os campos
+<<<<<<< HEAD
     Então não retorna dados de UE de atribuições CJ mostrando o status 401
 
     Cenário: Validar retorno da listagem de atribuições autenticado
@@ -193,3 +194,6 @@ Funcionalidade: API - Atribuição CJ
     Então não retorna dados de UE de atribuições CJ mostrando o status 401
 
 
+=======
+    Então não retorna dados de UE de atribuições CJ mostrando o status 401
+>>>>>>> 30bf60295d01cd530ce194fd0d6be7b5374d3805

@@ -247,7 +247,11 @@ Funcionalidade: API - Abrangência
     Dado que não possuo um token de acesso válido
     Quando tento uma requisição GET abrangências das turmas regulares
     Então retorna o status 401 histórico da turmas na UE
+<<<<<<< HEAD
 @ignore
+=======
+
+>>>>>>> 30bf60295d01cd530ce194fd0d6be7b5374d3805
   Cenário: Considera histórico de abrangências da disciplina na UE
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET abrangências da disciplina na UE
@@ -262,7 +266,11 @@ Funcionalidade: API - Abrangência
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET abrangências sem histórico da disciplina na UE
     Então retorna o status 500 histórico é obrigatório disciplina
+<<<<<<< HEAD
 @ignore
+=======
+
+>>>>>>> 30bf60295d01cd530ce194fd0d6be7b5374d3805
   Cenário: UE é obrigatório na abrangências da disciplina na UE
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET abrangências da disciplina na UE

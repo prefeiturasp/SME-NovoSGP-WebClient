@@ -12,6 +12,7 @@ Funcionalidade: API - Sincronizar aulas infantil através do código da turma
     Quando tento sincronizar através do código da turma com requisição GET
     Então não sincroniza as aulas infantil retornando com status 401
 
+<<<<<<< HEAD
   Cenário: Validar que a sincronização retorna sucesso com token válido
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET para sincronizar através do código da turma
@@ -33,3 +34,5 @@ Funcionalidade: API - Sincronizar aulas infantil através do código da turma
     Então não sincroniza as aulas infantil retornando com status 401
 
 
+=======
+>>>>>>> 30bf60295d01cd530ce194fd0d6be7b5374d3805

@@ -12,6 +12,7 @@ Funcionalidade: API - Listar perfis do usuário
     Quando tento a requisição GET para o endpoint de listar perfis
     Então retorna o status 401 sem dados de perfis
 
+<<<<<<< HEAD
   Cenário: Realizar múltiplas consultas de perfis com token válido
     Dado que login gerou um token de acesso válido
     Quando envio uma requisição GET para o endpoint de listar perfis
@@ -21,3 +22,5 @@ Funcionalidade: API - Listar perfis do usuário
     Dado que não login não gerou um token de acesso válido
     Quando tento a requisição GET para o endpoint de listar perfis
     Então retorna o status 401 sem dados de perfis
+=======
+>>>>>>> 30bf60295d01cd530ce194fd0d6be7b5374d3805

@@ -32,6 +32,7 @@ Funcionalidade: API - Autenticação do acesso de usuário
     Quando envio a requisição POST com senha vazia
     Então não permitir acesso sem inserir a senha
 
+<<<<<<< HEAD
  Cenário: Realizar múltiplos logins válidos consecutivos
     Dado que vou autenticar
     Quando envio a requisição POST com credenciais válidas
@@ -61,3 +62,5 @@ Funcionalidade: API - Autenticação do acesso de usuário
     Dado que vou autenticar
     Quando envio a requisição POST com senha vazia
     Então não permitir acesso sem inserir a senha
+=======
+>>>>>>> 30bf60295d01cd530ce194fd0d6be7b5374d3805

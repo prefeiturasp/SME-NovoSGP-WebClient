@@ -103,6 +103,7 @@ Funcionalidade: API - Consultas de anotações de frequência do aluno
     Dado que não possuo um token de acesso válido
     Quando tento uma requisição GET para o endpoint de anotações na data
     Então não retorna os dados de aluno no período exibindo o status 401
+<<<<<<< HEAD
 
     Cenário: Validar estrutura da anotação do aluno
     Dado que possuo um token de acesso válido
@@ -181,3 +182,5 @@ Funcionalidade: API - Consultas de anotações de frequência do aluno
     Quando tento uma requisição GET para o endpoint de motivos de ausências
     Então não retorna as descrições exibindo o status 401
 
+=======
+>>>>>>> 30bf60295d01cd530ce194fd0d6be7b5374d3805

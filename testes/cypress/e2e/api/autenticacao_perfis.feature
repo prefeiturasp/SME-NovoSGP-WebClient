@@ -17,6 +17,7 @@ Funcionalidade: API - Autenticação de id do perfil do usuário
     Quando tento a requisição PUT para o endpoint de autenticação do perfil
     Então retorna o status 401
 
+<<<<<<< HEAD
   Cenário: Realizar seleção de perfil válido mais de uma vez
     Dado que login gerou um token de acesso válido
     Quando envio uma requisição PUT para o endpoint de autenticação do perfil
@@ -33,3 +34,5 @@ Funcionalidade: API - Autenticação de id do perfil do usuário
     Então retorna o status 401
 
 
+=======
+>>>>>>> 30bf60295d01cd530ce194fd0d6be7b5374d3805

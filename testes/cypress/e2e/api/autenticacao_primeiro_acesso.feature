@@ -23,6 +23,7 @@ Funcionalidade: API - Autenticação do primeiro acesso
     Quando tento a requisição PUT para o endpoint sem usuário
     Então retorna o status 401
 
+<<<<<<< HEAD
   Cenário: Não permitir confirmação vazia
     Dado que insiro minhas credenciais
     E a confirmação não é igual a senha
@@ -40,3 +41,5 @@ Funcionalidade: API - Autenticação do primeiro acesso
     Então retorna o status 401
 
 
+=======
+>>>>>>> 30bf60295d01cd530ce194fd0d6be7b5374d3805
