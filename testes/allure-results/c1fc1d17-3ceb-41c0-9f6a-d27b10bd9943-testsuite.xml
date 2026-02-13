@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394541495' stop='1754394542167'>
+    <name>API - Fechamento - Acompanhamento da turma, aluno e componentes curriculares e situação do fechamento</name>
+    <title>API - Fechamento - Acompanhamento da turma, aluno e componentes curriculares e situação do fechamento</title>
+    <test-cases>
+        <test-case start='1754394541495' status='passed' stop='1754394542035'>
+            <name>Retorna dados através da situação do fechamento, turma e bimestre</name>
+            <title>Retorna dados através da situação do fechamento, turma e bimestre</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394542046' status='passed' stop='1754394542114'>
+            <name>Não retorna dados sem usuário autenticado</name>
+            <title>Não retorna dados sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394542123' status='passed' stop='1754394542167'>
+            <name>Não retorna dados com código da turma inválido</name>
+            <title>Não retorna dados com código da turma inválido</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

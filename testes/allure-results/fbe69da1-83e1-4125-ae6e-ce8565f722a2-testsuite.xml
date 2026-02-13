@@ -1,0 +1,47 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394499160' stop='1754394499905'>
+    <name>API - Dashboard AEE de planos situações</name>
+    <title>API - Dashboard AEE de planos situações</title>
+    <test-cases>
+        <test-case start='1754394499160' status='passed' stop='1754394499658'>
+            <name>Retorna dados AEE de situações de planos</name>
+            <title>Retorna dados AEE de situações de planos</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394499669' status='passed' stop='1754394499701'>
+            <name>Não retorna dados sem usuário autenticado</name>
+            <title>Não retorna dados sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394499710' status='passed' stop='1754394499744'>
+            <name>Ano letivo deve ser obrigatório</name>
+            <title>Ano letivo deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394499753' status='passed' stop='1754394499851'>
+            <name>DRE deve ser obrigatório</name>
+            <title>DRE deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394499862' status='passed' stop='1754394499904'>
+            <name>UE deve ser obrigatório</name>
+            <title>UE deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

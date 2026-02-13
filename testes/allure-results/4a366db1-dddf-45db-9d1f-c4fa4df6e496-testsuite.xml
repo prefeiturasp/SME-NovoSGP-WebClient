@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394408844' stop='1754394410159'>
+    <name>API - Autenticação de id do perfil do usuário</name>
+    <title>API - Autenticação de id do perfil do usuário</title>
+    <test-cases>
+        <test-case start='1754394408859' status='passed' stop='1754394410009'>
+            <name>Selecionar perfil válido para o usuário</name>
+            <title>Selecionar perfil válido para o usuário</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394410022' status='passed' stop='1754394410090'>
+            <name>Não permitir selecionar perfil inválido</name>
+            <title>Não permitir selecionar perfil inválido</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394410099' status='passed' stop='1754394410159'>
+            <name>Não selecionar perfil sem autenticação</name>
+            <title>Não selecionar perfil sem autenticação</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

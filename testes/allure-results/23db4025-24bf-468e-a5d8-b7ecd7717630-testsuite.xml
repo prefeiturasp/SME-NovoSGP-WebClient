@@ -1,0 +1,79 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394619264' stop='1754394656412'>
+    <name>NAAPA - Consulta de crianças/estudantes ausentes</name>
+    <title>NAAPA - Consulta de crianças/estudantes ausentes</title>
+    <test-cases>
+        <test-case start='1754394619282' status='passed' stop='1754394624395'>
+            <name>Validar consulta de ausências pelo ABAE para o cenário "Ausente hoje" (example #1)</name>
+            <title>Validar consulta de ausências pelo ABAE para o cenário "Ausente hoje" (example #1)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394624416' status='passed' stop='1754394628033'>
+            <name>Validar consulta de ausências pelo ABAE para o cenário "Ausente 2 dias seguidos" (example #2)</name>
+            <title>Validar consulta de ausências pelo ABAE para o cenário "Ausente 2 dias seguidos" (example #2)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394628050' status='passed' stop='1754394631924'>
+            <name>Validar consulta de ausências pelo ABAE para o cenário "Ausente 3 dias seguidos" (example #3)</name>
+            <title>Validar consulta de ausências pelo ABAE para o cenário "Ausente 3 dias seguidos" (example #3)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394631943' status='passed' stop='1754394635935'>
+            <name>Validar consulta de ausências pelo ABAE para o cenário "Ausente 4 dias seguidos" (example #4)</name>
+            <title>Validar consulta de ausências pelo ABAE para o cenário "Ausente 4 dias seguidos" (example #4)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394635967' status='passed' stop='1754394640419'>
+            <name>Validar consulta de ausências pelo ABAE para o cenário "Ausente 5 dias seguidos" (example #5)</name>
+            <title>Validar consulta de ausências pelo ABAE para o cenário "Ausente 5 dias seguidos" (example #5)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394640436' status='passed' stop='1754394644366'>
+            <name>Validar consulta de ausências pelo ABAE para o cenário "Ausente 6 e 10 dias seguidos" (example #6)</name>
+            <title>Validar consulta de ausências pelo ABAE para o cenário "Ausente 6 e 10 dias seguidos" (example #6)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394644383' status='passed' stop='1754394648248'>
+            <name>Validar consulta de ausências pelo ABAE para o cenário "Ausente 11 e 15 dias seguidos" (example #7)</name>
+            <title>Validar consulta de ausências pelo ABAE para o cenário "Ausente 11 e 15 dias seguidos" (example #7)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394648265' status='passed' stop='1754394652424'>
+            <name>Validar consulta de ausências pelo ABAE para o cenário "Ausente mais de 15 dias seguidos" (example #8)</name>
+            <title>Validar consulta de ausências pelo ABAE para o cenário "Ausente mais de 15 dias seguidos" (example #8)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394652442' status='passed' stop='1754394656412'>
+            <name>Validar consulta de ausências pelo ABAE para o cenário "Ausente 3 dias nos últimos 10 dias" (example #9)</name>
+            <title>Validar consulta de ausências pelo ABAE para o cenário "Ausente 3 dias nos últimos 10 dias" (example #9)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>
