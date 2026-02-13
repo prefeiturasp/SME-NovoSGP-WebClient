@@ -95,4 +95,105 @@ Funcionalidade: API - Atribuição CJ
   Cenário: Não busca as atribuições CJ dos dados de UE sem autenticação
     Dado que não possuo um token de acesso válido
     Quando tento a requisição GET para o endpoint com todos os campos
+<<<<<<< HEAD
     Então não retorna dados de UE de atribuições CJ mostrando o status 401
+
+    Cenário: Validar retorno da listagem de atribuições autenticado
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint atribuições
+    Então retorna atribuições CJ com status 200
+
+  Cenário: Validar bloqueio da listagem sem autenticação
+    Dado que não possuo um token de acesso válido
+    Quando tento a requisição GET para o endpoint atribuições
+    Então não retorna atribuições CJ mostrando o status 401
+
+  Cenário: Validar cadastro com histórico true
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição POST para cadastrar atribuições CJ
+    Então retorna status 200 confirmando o cadastro
+
+  Cenário: Validar cadastro com histórico false
+    Dado que possuo um token de acesso válido
+    Quando envio a requisição CJS com historico false
+    Então o sistema deve retornar status 200 de cadastrado
+
+  Cenário: Validar bloqueio de cadastro sem autenticação
+    Dado que não possuo um token de acesso válido
+    Quando tento a requisição POST para cadastrar atribuições CJ
+    Então não cadastra atribuições CJ mostrando o status 401
+
+  Cenário: Validar obrigatoriedade da disciplina
+    Dado que possuo um token de acesso válido
+    Quando envio a requisição do CJ com disciplina vazia
+    Então deve retornar status 422 por não ter sido preenchido
+
+  Cenário: Validar obrigatoriedade da turma
+    Dado que possuo um token de acesso válido
+    Quando envio a requisição CJS com turma vazia
+    Então deve retornar status 422 de sem preenchimento
+
+  Cenário: Validar obrigatoriedade da modalidade
+    Dado que possuo um token de acesso válido
+    Quando envio a requisição CJS com modalidade vazia
+    Então deve retornar status 422 de sem modalidade
+
+  Cenário: Validar obrigatoriedade da DRE
+    Dado que possuo um token de acesso válido
+    Quando envio a requisição CJS com DRE vazio
+    Então deve retornar status 422 sem a DRE
+
+  Cenário: Validar obrigatoriedade da UE
+    Dado que possuo um token de acesso válido
+    Quando envio a requisição CJS com UE vazio
+    Então deve retornar status 422 sem a UE
+
+  Cenário: Validar obrigatoriedade do ano letivo no cadastro
+    Dado que possuo um token de acesso válido
+    Quando envio a requisição CJS com ano letivo vazio
+    Então deve retornar status 500 devido o ano ser obrigatório
+
+  Cenário: Validar busca por ano letivo autenticado
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint de atribuições CJ
+    Então retorna o status 200 da busca no ano letivo
+
+  Cenário: Validar bloqueio da busca por ano letivo sem autenticação
+    Dado que não possuo um token de acesso válido
+    Quando tento a requisição GET para o endpoint de atribuições CJ
+    Então não retorna no ano letivo mostrando o status 401
+
+  Cenário: Validar busca por dados completos de UE
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint com todos os campos
+    Então retorna o status 200 com dados de UE de atribuições CJ
+
+  Cenário: Validar obrigatoriedade do ano letivo na busca por UE
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint com os campos sem ano
+    Então retorna o status 422 que ano letivo deve ser preenchido na atribuições CJ
+
+  Cenário: Validar obrigatoriedade do professor na busca por UE
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint com os campos sem professores
+    Então retorna o status 500 que professor deve ser preenchido na atribuições CJ
+
+  Cenário: Validar obrigatoriedade da turma na busca por UE
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint com os campos sem turmas
+    Então retorna o status 500 que a turma deve ser preenchida na atribuições CJ
+
+  Cenário: Validar obrigatoriedade da UE na busca por UE
+    Dado que possuo um token de acesso válido
+    Quando envio uma requisição GET para o endpoint com os campos sem UEs
+    Então retorna o status 500 que a UE deve ser preenchida na atribuições CJ
+
+  Cenário: Validar bloqueio da busca por UE sem autenticação
+    Dado que não possuo um token de acesso válido
+    Quando tento a requisição GET para o endpoint com todos os campos
+    Então não retorna dados de UE de atribuições CJ mostrando o status 401
+
+
+=======
+    Então não retorna dados de UE de atribuições CJ mostrando o status 401
+>>>>>>> 30bf60295d01cd530ce194fd0d6be7b5374d3805

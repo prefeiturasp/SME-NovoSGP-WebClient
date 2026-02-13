@@ -12,6 +12,9 @@ import DistorcaoIdadeSerieUe from './componentes/DistorcaoIdadeSerieUe/Distorcao
 import GraficoAlfabetizacao from '../VisaoSmeDre/componentes/GraficoAnaliseDeAlfabetizacao/graficoAnaliseDeAlfabetizacao';
 import GraficoFrequenciaSemanalCollapse from './componentes/GraficoFrequenciaSemanal/GraficoFrequenciaSemanalCollapse';
 import PainelFrequenciaUe from './componentes/PainelFrequenciaUe/painelFrequenciaUe';
+import PlanoAEEUe from './componentes/PlanoAEEUE/PlanoAEEUe';
+import FluenciaLeitoraUe from './componentes/FluenciaLeitoraUE/tabelaFluenciaLeitoraUE';
+
 export default function DetalhesUnidadeEducacional({
   anoLetivo,
   ueCodigo,
@@ -110,13 +113,41 @@ export default function DetalhesUnidadeEducacional({
           </Row>
         </div>
 
+        {String(anoLetivo) === String(new Date().getFullYear()) && (
+          <div className="col-md-12 mb-32">
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                <GraficoFrequenciaSemanalCollapse
+                  anoLetivo={anoLetivo}
+                  ueCodigo={ueCodigo}
+                  ueNome={ueNome}
+                />
+              </Col>
+            </Row>
+          </div>
+        )}
+
         <div className="col-md-12 mb-32">
           <Row gutter={[16, 16]}>
             <Col span={24}>
-              <GraficoFrequenciaSemanalCollapse
+              {String(anoLetivo) === String(new Date().getFullYear()) ? (
+                <PlanoAEEUe
+                  anoLetivo={anoLetivo}
+                  ueCodigo={ueCodigo}
+                  dreCodigo={dreCodigo}
+                />
+              ) : null}
+            </Col>
+          </Row>
+        </div>
+
+        <div className="col-md-12 mb-32">
+          <Row gutter={[16, 16]}>
+            <Col span={24}>
+              <FluenciaLeitoraUe
                 anoLetivo={anoLetivo}
                 ueCodigo={ueCodigo}
-                ueNome={ueNome}
+                dreCodigo={dreCodigo}
               />
             </Col>
           </Row>
