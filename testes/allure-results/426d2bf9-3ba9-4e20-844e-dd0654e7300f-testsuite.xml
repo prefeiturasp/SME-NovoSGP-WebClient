@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394466711' stop='1754394467448'>
+    <name>API - Dashboard de fechamentos - Conselhos de classes - Notas finais</name>
+    <title>API - Dashboard de fechamentos - Conselhos de classes - Notas finais</title>
+    <test-cases>
+        <test-case start='1754394466711' status='passed' stop='1754394467354'>
+            <name>Carrega dashboard de fechamento do conselho de classe com notas finais</name>
+            <title>Carrega dashboard de fechamento do conselho de classe com notas finais</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394467366' status='passed' stop='1754394467448'>
+            <name>Não retorna notas finais de fechamento sem usuário autenticado</name>
+            <title>Não retorna notas finais de fechamento sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

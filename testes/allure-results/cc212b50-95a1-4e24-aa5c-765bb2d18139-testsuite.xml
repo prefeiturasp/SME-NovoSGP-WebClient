@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394451278' stop='1754394451920'>
+    <name>API - Dashboard</name>
+    <title>API - Dashboard</title>
+    <test-cases>
+        <test-case start='1754394451278' status='passed' stop='1754394451827'>
+            <name>Carrega os dashboards da tela inicial</name>
+            <title>Carrega os dashboards da tela inicial</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394451838' status='passed' stop='1754394451920'>
+            <name>Não mostra sem usuário autenticado</name>
+            <title>Não mostra sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

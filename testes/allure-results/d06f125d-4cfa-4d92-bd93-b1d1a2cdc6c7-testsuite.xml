@@ -1,0 +1,95 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394462692' stop='1754394464982'>
+    <name>API - Dashboard do diário de bordo</name>
+    <title>API - Dashboard do diário de bordo</title>
+    <test-cases>
+        <test-case start='1754394462712' status='passed' stop='1754394463528'>
+            <name>Retorna a quantidade preenchidos pendentes</name>
+            <title>Retorna a quantidade preenchidos pendentes</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394463540' status='passed' stop='1754394463602'>
+            <name>Ano letivo deve ser obrigatório no dashboard do diário de bordo</name>
+            <title>Ano letivo deve ser obrigatório no dashboard do diário de bordo</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394463611' status='passed' stop='1754394463675'>
+            <name>Modallidade deve ser obrigatória no dashboard do diário de bordo</name>
+            <title>Modallidade deve ser obrigatória no dashboard do diário de bordo</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394463685' status='passed' stop='1754394463748'>
+            <name>Usuário sem autenticação não acessa o dashboard do diário de bordo</name>
+            <title>Usuário sem autenticação não acessa o dashboard do diário de bordo</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394463756' status='passed' stop='1754394464429'>
+            <name>Retorna a quantidade preenchidos pendentes por DREs</name>
+            <title>Retorna a quantidade preenchidos pendentes por DREs</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394464443' status='passed' stop='1754394464513'>
+            <name>Retorna os pendentes das DREs no ano</name>
+            <title>Retorna os pendentes das DREs no ano</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394464523' status='passed' stop='1754394464596'>
+            <name>Ano letivo deve ser informado para consulta por DRE</name>
+            <title>Ano letivo deve ser informado para consulta por DRE</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394464604' status='passed' stop='1754394464670'>
+            <name>Usuário sem autenticação não acessa o dashboard do diário de bordo por DRE</name>
+            <title>Usuário sem autenticação não acessa o dashboard do diário de bordo por DRE</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394464680' status='passed' stop='1754394464750'>
+            <name>Buscar a consolidação do diário de bordo no dashboard</name>
+            <title>Buscar a consolidação do diário de bordo no dashboard</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394464760' status='passed' stop='1754394464827'>
+            <name>Ano letivo deve ser informado para consulta por DRE</name>
+            <title>Ano letivo deve ser informado para consulta por DRE</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394464836' status='passed' stop='1754394464982'>
+            <name>Usuário sem autenticação não acessa o dashboard do diário de bordo por DRE</name>
+            <title>Usuário sem autenticação não acessa o dashboard do diário de bordo por DRE</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

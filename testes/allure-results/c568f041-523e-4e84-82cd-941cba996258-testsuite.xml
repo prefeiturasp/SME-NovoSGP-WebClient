@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394734626' stop='1754394759364'>
+    <name>NAAPA - Registro de ações</name>
+    <title>NAAPA - Registro de ações</title>
+    <test-cases>
+        <test-case start='1754394734651' status='passed' stop='1754394743848'>
+            <name>Validar a busca de ações pelo ABAE para o cenário "Selecionar todas" (example #1)</name>
+            <title>Validar a busca de ações pelo ABAE para o cenário "Selecionar todas" (example #1)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394743877' status='passed' stop='1754394751469'>
+            <name>Validar a busca de ações pelo ABAE para o cenário "Somente uma turma" (example #2)</name>
+            <title>Validar a busca de ações pelo ABAE para o cenário "Somente uma turma" (example #2)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394751495' status='passed' stop='1754394759362'>
+            <name>Validar a busca de ações pelo ABAE para o cenário "Sem dados encontrados" (example #3)</name>
+            <title>Validar a busca de ações pelo ABAE para o cenário "Sem dados encontrados" (example #3)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394547037' stop='1754394547800'>
+    <name>API - Fechamento - Pendências de turma e bimestre através do componentes curriculares  </name>
+    <title>API - Fechamento - Pendências de turma e bimestre através do componentes curriculares  </title>
+    <test-cases>
+        <test-case start='1754394547037' status='passed' stop='1754394547742'>
+            <name>Retorna dados de pendência do componente curricular</name>
+            <title>Retorna dados de pendência do componente curricular</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394547754' status='passed' stop='1754394547799'>
+            <name>Não retorna dados sem usuário autenticado</name>
+            <title>Não retorna dados sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

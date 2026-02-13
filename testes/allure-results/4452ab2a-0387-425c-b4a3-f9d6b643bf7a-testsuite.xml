@@ -1,0 +1,39 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394416108' stop='1754394417458'>
+    <name>API - Autenticação do primeiro acesso</name>
+    <title>API - Autenticação do primeiro acesso</title>
+    <test-cases>
+        <test-case start='1754394416132' status='passed' stop='1754394417238'>
+            <name>Realizar o primeiro acesso do usuário</name>
+            <title>Realizar o primeiro acesso do usuário</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394417250' status='passed' stop='1754394417320'>
+            <name>Confirmação deve ser igual a nova senha</name>
+            <title>Confirmação deve ser igual a nova senha</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394417328' status='passed' stop='1754394417389'>
+            <name>Não permitir cadastro de senha vazia</name>
+            <title>Não permitir cadastro de senha vazia</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394417396' status='passed' stop='1754394417458'>
+            <name>Não realizar o primeiro acesso sem autenticação</name>
+            <title>Não realizar o primeiro acesso sem autenticação</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>
