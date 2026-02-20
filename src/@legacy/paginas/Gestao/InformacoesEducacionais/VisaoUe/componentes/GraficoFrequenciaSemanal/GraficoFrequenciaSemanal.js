@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Line } from '@ant-design/plots';
 import ServicoFrequenciaGrafico from '~/servicos/InformacoesEducacionais/ServicoFrequenciaGrafico';
+import './graficoFrequenciaSemanal.css';
 
 const GraficoFrequenciaSemanal = ({
   ueCodigo,
