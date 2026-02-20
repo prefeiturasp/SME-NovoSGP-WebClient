@@ -1,0 +1,47 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394575857' stop='1754394616207'>
+    <name>NAAPA - Busca ativa - Relatórios</name>
+    <title>NAAPA - Busca ativa - Relatórios</title>
+    <test-cases>
+        <test-case start='1754394575876' status='passed' stop='1754394584606'>
+            <name>Validar a geração de relatório pelo ABAE filtrando por "Todas as turmas" (example #1)</name>
+            <title>Validar a geração de relatório pelo ABAE filtrando por "Todas as turmas" (example #1)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394584638' status='passed' stop='1754394591494'>
+            <name>Validar a geração de relatório pelo ABAE filtrando por "Turma A" (example #2)</name>
+            <title>Validar a geração de relatório pelo ABAE filtrando por "Turma A" (example #2)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394591521' status='passed' stop='1754394597941'>
+            <name>Validar a geração de relatório pelo ABAE filtrando por "Turma B" (example #3)</name>
+            <title>Validar a geração de relatório pelo ABAE filtrando por "Turma B" (example #3)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394597964' status='passed' stop='1754394604726'>
+            <name>Validar a geração de relatório pelo ABAE filtrando por "Turma C" (example #4)</name>
+            <title>Validar a geração de relatório pelo ABAE filtrando por "Turma C" (example #4)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394604751' status='passed' stop='1754394616207'>
+            <name>Validar a geração de relatório pelo ABAE filtrando por "Turmas A, B e C" (example #5)</name>
+            <title>Validar a geração de relatório pelo ABAE filtrando por "Turmas A, B e C" (example #5)</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

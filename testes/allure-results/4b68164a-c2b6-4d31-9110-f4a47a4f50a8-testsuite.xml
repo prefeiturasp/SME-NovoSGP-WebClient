@@ -1,0 +1,39 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394524887' stop='1754394527343'>
+    <name>API - Dados de atribuições da DRE</name>
+    <title>API - Dados de atribuições da DRE</title>
+    <test-cases>
+        <test-case start='1754394524887' status='passed' stop='1754394526945'>
+            <name>Retorna dados da DRE</name>
+            <title>Retorna dados da DRE</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394526961' status='passed' stop='1754394527224'>
+            <name>Retorna dados da DRE no ano letivo</name>
+            <title>Retorna dados da DRE no ano letivo</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394527240' status='passed' stop='1754394527287'>
+            <name>Não retorna dados sem usuário autenticado</name>
+            <title>Não retorna dados sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394527297' status='passed' stop='1754394527342'>
+            <name>Código da DRE deve ser obrigatório</name>
+            <title>Código da DRE deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

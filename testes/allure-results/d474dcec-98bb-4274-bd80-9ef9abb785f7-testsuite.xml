@@ -1,0 +1,70 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394119511' stop='1754394120450'>
+    <name>API - CEP</name>
+    <title>API - CEP</title>
+    <test-cases>
+        <test-case start='1754394119531' status='broken' stop='1754394119962'>
+            <name>Buscar dados com CEP válido</name>
+            <title>Buscar dados com CEP válido</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394119988' status='broken' stop='1754394120209'>
+            <name>CEP informado deve ser inválido</name>
+            <title>CEP informado deve ser inválido</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+        <test-case start='1754394120228' status='broken' stop='1754394120443'>
+            <name>CEP deve ser informado para busca</name>
+            <title>CEP deve ser informado para busca</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+            <failure>
+                <message>Authentication failed with status: 422</message>
+                <stack-trace>Error: Authentication failed with status: 422
+                    at Context.eval (cypress/support/commands_api/commands_login.js:39:12)
+                    at getRet (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120949:20)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)
+                    at Promise.attempt.Promise.try (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:4285:29)
+                    at Context.thenFn (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:120960:66)
+                    at Context.then (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:121211:21)
+                    at wrapped (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:141532:19)
+                    at &lt;unknown> (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:147477:15)
+                    at tryCatcher (https://hom-novosgp.sme.prefeitura.sp.gov.br/__cypress/runner/cypress_runner.js:1777:23)</stack-trace>
+            </failure>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

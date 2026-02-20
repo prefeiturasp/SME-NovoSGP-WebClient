@@ -1,0 +1,39 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394505941' stop='1754394506592'>
+    <name>API - Dashboard de devolutivas consolidação por turma e ano</name>
+    <title>API - Dashboard de devolutivas consolidação por turma e ano</title>
+    <test-cases>
+        <test-case start='1754394505941' status='passed' stop='1754394506440'>
+            <name>Retorna dados da turma no ano</name>
+            <title>Retorna dados da turma no ano</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394506454' status='passed' stop='1754394506486'>
+            <name>Não retorna dados sem usuário autenticado</name>
+            <title>Não retorna dados sem usuário autenticado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394506495' status='passed' stop='1754394506533'>
+            <name>Ano deve ser obrigatório</name>
+            <title>Ano deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394506543' status='passed' stop='1754394506592'>
+            <name>Modalidade deve ser obrigatório</name>
+            <title>Modalidade deve ser obrigatório</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>

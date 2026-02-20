@@ -1,0 +1,23 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1754394429078' stop='1754394429621'>
+    <name>API - Autenticação do logout</name>
+    <title>API - Autenticação do logout</title>
+    <test-cases>
+        <test-case start='1754394429101' status='passed' stop='1754394429539'>
+            <name>Confirmar o logout do usuário</name>
+            <title>Confirmar o logout do usuário</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+        <test-case start='1754394429553' status='passed' stop='1754394429620'>
+            <name>Não confirmar quando estiver deslogado</name>
+            <title>Não confirmar quando estiver deslogado</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>
