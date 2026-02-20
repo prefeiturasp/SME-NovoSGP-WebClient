@@ -16,6 +16,8 @@ import TabelaEstudantesReclassificados from '../shared/estudantesReclassificados
 import DistorcaoIdadeSerie from '../shared/DistorcaoIdadeSerie/DistorcaoIdadeSerie';
 import PainelFrequenciaDre from './componentes/PainelFrequenciaDre/painelFrequenciaDre';
 import PlanoAEE from '../shared/PlanoAEE/PlanoAEE';
+import TabelaAprovacaoSmeDre from './componentes/Aprovacao/tabelaAprovacaoSmeDre';
+import TabelaInformacoesEducacionais from './componentes/TabelaInformacoesEducacionais/TabelaInformacoesEducacionais';
 
 export default function InformacoesEducacionais({
   anoLetivo,
@@ -206,6 +208,28 @@ export default function InformacoesEducacionais({
               ) : null}
             </Col>
           </Row>
+
+          <Row gutter={[32, 32]}>
+            <Col span={24}>
+              <TabelaAprovacaoSmeDre
+                codigoDre={dreCodigo}
+                codigoUe={ueCodigo}
+                anoLetivo={anoLetivo}
+              />
+            </Col>
+          </Row>
+
+          {dreCodigo !== '-99' && (
+            <Row gutter={[32, 32]}>
+              <Col span={24}>
+                <TabelaInformacoesEducacionais
+                  codigoDre={dreCodigo}
+                  codigoUe={ueCodigo}
+                  anoLetivo={anoLetivo}
+                />
+              </Col>
+            </Row>
+          )}
         </div>
       </CardEstilizado>
     </>

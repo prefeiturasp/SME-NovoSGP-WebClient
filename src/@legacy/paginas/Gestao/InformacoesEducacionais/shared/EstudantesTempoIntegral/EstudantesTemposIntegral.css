@@ -1,0 +1,176 @@
+.tabela-estudantes-integral {
+  margin-top: 16px;
+  margin: 0 !important;
+}
+
+.tabela-estudantes-integral .ant-table {
+  border: 1px solid #d9d9d9;
+  border-radius: 0 !important;
+}
+
+.tabela-estudantes-integral .ant-table-container {
+  border-radius: 0 !important;
+}
+
+.tabela-estudantes-integral .ant-table-thead > tr > th,
+.tabela-estudantes-integral .ant-table-tbody > tr > td {
+  padding: 4px 16px 4px 16px !important;
+  text-align: center !important;
+}
+
+.tabela-estudantes-integral .ant-table-thead > tr > th {
+  background: #e7e6f8 !important;
+}
+
+.tabela-estudantes-integral .ant-table-tbody > tr > td,
+.tabela-estudantes-integral .ant-table-thead > tr > th {
+  border-color: #d9d9d9 !important;
+}
+
+.tabela-estudantes-integral-title {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+.tabela-estudantes-integral-desc {
+  font-size: 14px;
+  color: #42474a;
+  margin-bottom: 15px;
+}
+
+.tabela-estudantes-integral .ant-table-tbody > tr > td[colspan='3'] {
+  background: #f6f5fa !important;
+  text-align: center !important;
+  font-weight: bold !important;
+  font-size: 16px;
+  color: #333;
+}
+
+.mini-resumo-estudantes-integral {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 12px;
+  background: #fafaff;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: inline-block;
+  min-width: 180px;
+}
+
+.tabela-estudantes-integral-modalidade {
+  font-weight: bold;
+  text-align: center;
+  display: block;
+}
+
+.tabela-estudantes-integral-header {
+  background: #f6f5fa !important;
+  text-align: center !important;
+  font-weight: bold !important;
+}
+
+.tabela-estudantes-integral {
+  margin: 0 !important;
+}
+.tabela-estudantes-integral .ant-table {
+  border: 1px solid #d9d9d9;
+  border-radius: 0 !important;
+  font-size: 15px;
+}
+.tabela-estudantes-integral .ant-table-tbody > tr > td {
+  border-color: #d9d9d9 !important;
+  padding: 6px 16px !important;
+  text-align: center !important;
+}
+.ei-group-title {
+  background: #e7e6f8;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  padding: 6px 8px;
+}
+.ei-modalidade-header {
+  background: #e7e6f8 !important;
+}
+.ei-subheader-bg {
+  background: #f6f5fa !important;
+  font-weight: bold;
+  text-align: center;
+}
+.ei-subheader {
+  color: #2c2857;
+  font-weight: bold;
+}
+.tabela-estudantes-integral .ant-table-tbody > tr > td {
+  font-weight: normal;
+  background: #fff;
+}
+.tabela-estudantes-integral .ant-table-tbody > tr > td[colspan='3'] {
+  background: #e7e6f8 !important;
+  font-weight: bold;
+  font-size: 16px;
+}
+.tabela-estudantes-integral .ant-table-tbody > tr > td[colspan='1'].ei-subheader-bg {
+  background: #f6f5fa !important;
+}
+
+.tabela-estudantes-integral {
+  margin: 0 !important;
+}
+.tabela-estudantes-integral .ant-table {
+  border: 1px solid #d9d9d9;
+  border-radius: 0 !important;
+  font-size: 15px;
+}
+.tabela-estudantes-integral .ant-table-tbody > tr > td {
+  border-color: #d9d9d9 !important;
+  padding: 6px 16px !important;
+  text-align: center !important;
+}
+.ei-group-title {
+  background: #e7e6f8;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  padding: 6px 8px;
+}
+.ei-modalidade-header {
+  background: #e7e6f8 !important;
+}
+.ei-matriculas-header-bg {
+  background: #f6f5fa !important;
+  font-weight: bold;
+  text-align: center;
+}
+.ei-matriculas-header {
+  color: #2c2857;
+  font-weight: bold;
+}
+.ei-subheader-bg {
+  background: #f6f5fa !important;
+  font-weight: bold;
+  text-align: center;
+}
+.ei-subheader {
+  color: #2c2857;
+  font-weight: bold;
+}
+.ei-empty-cell {
+  background: #fff !important;
+}
+.tabela-estudantes-integral .ant-table-tbody > tr > td {
+  font-weight: normal;
+  background: #fff;
+}
+.tabela-estudantes-integral .ant-table-tbody > tr > td[colspan='3'] {
+  background: #e7e6f8 !important;
+  font-weight: bold;
+  font-size: 16px;
+}
+.tabela-estudantes-integral .ant-table-tbody > tr > td[colspan='1'].ei-subheader-bg {
+  background: #f6f5fa !important;
+}
