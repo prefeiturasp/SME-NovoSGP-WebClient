@@ -466,6 +466,27 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
           </div>
         </div>
       )}
+      {listaUsuario.length > 0 && dreSelecionada === 'Todas' && (
+        <div className="row">
+          <div className="col-md-12 pt-4">
+            <DataTable
+              rowKey="codigoRf"
+              columns={colunas}
+              dataSource={listaUsuario}
+              semHover
+              pagination={{
+                current: pagina,
+                pageSize: quantidadeRegistrosPorPagina,
+                total: totalRegistros,
+                showSizeChanger: false,
+                onChange: newPage => {
+                  setPagina(newPage);
+                },
+              }}
+            />
+          </div>
+        </div>
+      )}
 
       <Formik
         ref={refFormik => setRefForm(refFormik)}
