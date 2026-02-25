@@ -1147,7 +1147,7 @@ route.set(ROUTES.SONDAGEM, {
   tipo: RotasTipo.EstruturadaAutenticada,
 });
 
-route.set(ROUTES.NOVA_SONDAGEM_RELATORIO, {
+route.set(ROUTES.RELATORIO_SONDAGEM_POR_TURMA, {
   breadcrumbName: 'Relatório Sondagem',
   menu: ['Relatórios', 'Sondagem', 'Por turma'],
   parent: '/',
