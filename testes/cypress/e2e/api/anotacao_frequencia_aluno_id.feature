@@ -57,7 +57,32 @@ Funcionalidade: API - Cadastro e alteração das anotações de frequência do a
     Quando envio uma requisição POST para o endpoint de cadastro o infantil
     Então retorna o status 422 que o valor é esperado
 
+
   Cenário: Não cadastra anotações através do id aluno sem autenticação
     Dado que não possuo um token de acesso válido de CP
     Quando tento uma requisição POST para o endpoint de cadastro de anotações
     Então retorna o status 401 sem cadastrar anotação para o aluno
+    
+
+  Cenário: Alteração pode ser realizada mais de uma vez com sucesso
+    Dado que possuo um token de acesso válido de CP
+    Quando envio uma requisição PUT para o endpoint de alterar anotações
+    Então retorna o status 200 que foi alterado para o aluno
+
+
+  Cenário: Continua bloqueando alteração sem autenticação
+    Dado que não possuo um token de acesso válido de CP
+    Quando tento uma requisição PUT para o endpoint de alterar anotações
+    Então retorna o status 401 sem alteração para o aluno
+
+
+  Cenário: Continua bloqueando cadastro sem autenticação
+    Dado que não possuo um token de acesso válido de CP
+    Quando tento uma requisição POST para o endpoint de cadastro de anotações
+    Então retorna o status 401 sem cadastrar anotação para o aluno
+
+
+  Cenário: Cadastro pode ser realizado novamente com sucesso
+    Dado que possuo um token de acesso válido de CP
+    Quando envio uma requisição POST para o endpoint de cadastro de anotações
+    Então retorna o status 200 que foi salvo com sucesso

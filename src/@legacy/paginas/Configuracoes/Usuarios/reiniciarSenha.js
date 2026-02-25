@@ -179,6 +179,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
       return;
     }
 
+    
     setCarregando(true);
 
     try {
@@ -189,7 +190,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
         ...(ueSelecionada?.length > 0 && { codigoUE: ueSelecionada }),
       };
 
-      let lista = [];
+      let lista: any[] = [];
 
       if (dreSelecionada === 'Todas') {
         const rf = rfSelecionado || '';
@@ -232,6 +233,7 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
       }
 
       setListaUsuario(lista);
+
     } catch (error) {
       console.error('Erro ao buscar usuários:', error);
       setListaUsuario([]);
@@ -439,6 +441,27 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
               columns={colunas}
               dataSource={listaUsuario}
               semHover
+            />
+          </div>
+        </div>
+      )}
+      {listaUsuario.length > 0 && dreSelecionada === 'Todas' && (
+        <div className="row">
+          <div className="col-md-12 pt-4">
+            <DataTable
+              rowKey="codigoRf"
+              columns={colunas}
+              dataSource={listaUsuario}
+              semHover
+              pagination={{
+                current: pagina,
+                pageSize: quantidadeRegistrosPorPagina,
+                total: totalRegistros,
+                showSizeChanger: false,
+                onChange: newPage => {
+                  setPagina(newPage);
+                },
+              }}
             />
           </div>
         </div>

@@ -22,3 +22,14 @@ Funcionalidade: API - Apanhado geral da turmas
     Quando tento a requisição GET para o endpoint de apanhado geral
     Então não retorna a quantidade do apanhado mostrando o status 401
 
+
+  Cenário: Não retorna dados sem token mesmo informando turma e semestre
+    Dado que não possuo um token de acesso válido
+    Quando tento a requisição GET para o endpoint de apanhado geral
+    Então não retorna a quantidade do apanhado mostrando o status 401
+
+
+  Cenário: Não retorna dados sem token ao tentar novamente a consulta
+    Dado que não possuo um token de acesso válido
+    Quando tento a requisição GET para o endpoint de apanhado geral
+    Então não retorna a quantidade do apanhado mostrando o status 401
