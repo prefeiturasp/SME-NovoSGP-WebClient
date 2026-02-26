@@ -233,7 +233,6 @@ export default function ReiniciarSenha({ perfilSelecionado }) {
       }
 
       setListaUsuario(lista);
-
     } catch (error) {
       console.error('Erro ao buscar usuários:', error);
       setListaUsuario([]);
