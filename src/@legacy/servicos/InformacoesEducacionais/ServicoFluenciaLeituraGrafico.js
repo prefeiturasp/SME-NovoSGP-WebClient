@@ -18,6 +18,22 @@ class ServicoFluenciaLeituraGrafico {
 
     return api.get(url);
   };
+
+  obterFluenciaLeituraUe = (codigoUe, tipoAvaliacao, anoLetivo) => {
+    const params = new URLSearchParams();
+
+    if (codigoUe !== undefined && codigoUe !== null && codigoUe !== '-99')
+      params.append('CodigoUe', codigoUe);
+    if (tipoAvaliacao) params.append('tipoAvaliacao', tipoAvaliacao);
+    if (anoLetivo) params.append('anoLetivo', anoLetivo);
+
+    const queryString = params.toString();
+    const url = queryString
+      ? `v1/painel-educacional/fluencia-leitora-ue?${queryString}`
+      : 'v1/painel-educacional/fluencia-leitora-ue';
+
+    return api.get(url);
+  };
 }
 
 export default new ServicoFluenciaLeituraGrafico();

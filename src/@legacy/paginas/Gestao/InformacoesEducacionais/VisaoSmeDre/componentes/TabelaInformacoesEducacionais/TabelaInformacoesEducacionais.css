@@ -1,0 +1,68 @@
+.tabela-infos-educacionais-tabela {
+  margin-top: 16px;
+  margin: 0 !important;
+}
+
+.tabela-infos-educacionais-tabela .ant-table {
+  border: 1px solid #d9d9d9;
+  border-radius: 0 !important;
+}
+
+.tabela-infos-educacionais-tabela .ant-table-container {
+  border-radius: 0 !important;
+}
+
+.tabela-infos-educacionais-tabela .ant-table-thead > tr > th,
+.tabela-infos-educacionais-tabela .ant-table-tbody > tr > td {
+  padding: 4px 16px 4px 16px !important;
+  text-align: center !important;
+}
+
+.tabela-infos-educacionais-tabela .ant-table-thead > tr > th {
+  background: #e7e6f8 !important;
+}
+
+.tabela-infos-educacionais-tabela .ant-table-tbody > tr > td,
+.tabela-infos-educacionais-tabela .ant-table-thead > tr > th {
+  border-color: #d9d9d9 !important;
+}
+
+.tabela-infos-educacionais-title {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+.tabela-infos-educacionais-desc {
+  font-size: 14px;
+  color: #42474a;
+  margin-bottom: 15px;
+}
+
+.tabela-infos-educacionais-mini-resumo {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 12px;
+  background: #fafaff;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: inline-block;
+  min-width: 180px;
+}
+
+.ant-table {
+  border-radius: 0 !important;
+}
+
+.ant-table-thead > tr > th {
+  background: #e7e6f8 !important;
+  text-align: center !important;
+  border-color: #d9d9d9 !important;
+}
+
+.ant-table-tbody > tr > td {
+  text-align: center !important;
+  border-color: #d9d9d9 !important;
+  font-size: 15px;
+}

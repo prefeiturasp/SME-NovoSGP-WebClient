@@ -15,6 +15,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
   const [ano, setarAno] = useState('');
   const [periodo, setarPeriodo] = useState(null);
   const [listaAnos, setListaAnos] = useState([]);
+  const [enviando, setEnviando] = useState(false);
 
   useEffect(() => {
     const anoAtual = new Date().getFullYear();
@@ -127,7 +128,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
       return;
     }
     const anoNum = String(anoSelecionado.nome);
-
+    setEnviando(true);
     try {
       const fmData = new FormData();
       let url = '';
@@ -162,7 +163,8 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         }
         url = 'v1/importar-arquivo/fluencia-leitora';
         const nomePeriodo = periodo === 'ENTRADA' ? 1 : 2;
-        fmData.append('periodo', nomePeriodo);
+        fmData.append('tipoAvaliacao', nomePeriodo);
+        fmData.append('anoLetivo', encodeURIComponent(anoNum));
       } else if (urlMap[valor]) {
         url = urlMap[valor];
         if (isBoletim) {
@@ -218,6 +220,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         okButtonProps: { style: { display: 'none' } },
       });
     } catch (e) {
+      setEnviando(false);
       Modal.error({
         icon: null,
         className: styles.modalError,
@@ -431,8 +434,9 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
         </Col>
         <Col>
           <Button
-            icon="upload"
+            icon={enviando ? undefined : 'upload'}
             disabled={
+              enviando ||
               !(
                 valor &&
                 ano &&
@@ -440,7 +444,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
                 (valor !== 'FLUENCIA' || ['ENTRADA', 'SAIDA'].includes(periodo))
               )
             }
-            label={'Importar Arquivo'}
+            label={enviando ? 'Enviando...' : 'Importar Arquivo'}
             color={Colors.Roxo}
             onClick={handleSubmit}
             bold
