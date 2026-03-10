@@ -19,7 +19,7 @@ const moduleFederationConfig = override(
     },
   ]),
   (config) => {
-    config.output.publicPath = 'auto';
+    config.output.publicPath = '/';
 
     config.plugins.push(
       new ModuleFederationPlugin({
