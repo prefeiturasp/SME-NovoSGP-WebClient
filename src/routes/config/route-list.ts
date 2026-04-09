@@ -1149,6 +1149,7 @@ route.set(ROUTES.SONDAGEM, {
 
 route.set(ROUTES.RELATORIO_SONDAGEM_POR_TURMA, {
   breadcrumbName: 'Relatório Sondagem',
+  menu: ['Relatórios', 'Sondagem', 'Por turma'],
   parent: '/',
   component: NovaSondagemRelatorio,
   exact: true,
