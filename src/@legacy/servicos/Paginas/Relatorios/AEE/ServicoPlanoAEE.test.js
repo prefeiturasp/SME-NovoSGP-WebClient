@@ -96,6 +96,20 @@ describe('ServicoPlanoAEE - Métodos básicos', () => {
     expect(api.get).toHaveBeenCalledWith('v1/plano-aee/paai-ue?codigoUe=8');
   });
 
+  it('existePlanoAEEEstudante com estudante e ue', async () => {
+    api.get.mockResolvedValue({ data: true });
+
+    const retorno = await ServicoPlanoAEE.existePlanoAEEEstudante({
+      estudanteCodigo: '7719808',
+      ueCodigo: '099058',
+    });
+
+    expect(api.get).toHaveBeenCalledWith(
+      'v1/plano-aee/estudante/7719808/existe/099058/ue'
+    );
+    expect(retorno).toBe(true);
+  });
+
   it('imprimirVersoes', async () => {
     await ServicoPlanoAEE.imprimirVersoes([1, 2, 3]);
     expect(api.post).toHaveBeenCalledWith('v1/plano-aee/imprimir', {
