@@ -57,6 +57,9 @@ module.exports = defineConfig({
         'AULA_CODIGO',
         'AULA_CODIGO_INVALIDO',
         'AULA_ANOTACAO_CODIGO',
+        'AULA_ID',
+        'AULA_ID_INVALIDO',
+        'AULA_RECORRENCIA_ID',
         'TURMA_CODIGO',
         'TURMA_CODIGO_INVALIDO',
         'TURMA_CODIGO_FECHAMENTO',
@@ -129,6 +132,7 @@ module.exports = defineConfig({
       return result;
     },
     baseUrl: 'https://hom-novosgp.sme.prefeitura.sp.gov.br',
+    baseUrlSondagem: 'https://hom-novasondagem.sme.prefeitura.sp.gov.br',
     viewportWidth: 1600,
     viewportHeight: 1050,
     video: false,
