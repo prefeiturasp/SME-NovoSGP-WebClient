@@ -34,6 +34,7 @@ import { sair } from '~/servicos/Paginas/ServicoUsuario';
 
 const Navbar = ({ bloqueado = false }) => {
   const retraido = useSelector(state => state.navegacao.retraido);
+  const menuOculto = useSelector(state => state.navegacao.menuOculto);
   const [carregando, setCarregando] = useState(false);
 
   const dispatch = useDispatch();
@@ -112,20 +113,24 @@ const Navbar = ({ bloqueado = false }) => {
         >
           <div className="container-fluid h-100">
             <div className="logo-navbar">
-              <Link
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                to={URL_HOME}
-                onClick={async e => {
-                  const pararAcao = await validarNavegacaoTela(e, URL_HOME);
-                  if (!pararAcao) navigate(URL_HOME);
-                }}
-              >
+              {menuOculto ? (
                 <Logo src={LogoDoSgp} alt="SGP" />
-              </Link>
+              ) : (
+                <Link
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  to={URL_HOME}
+                  onClick={async e => {
+                    const pararAcao = await validarNavegacaoTela(e, URL_HOME);
+                    if (!pararAcao) navigate(URL_HOME);
+                  }}
+                >
+                  <Logo src={LogoDoSgp} alt="SGP" />
+                </Link>
+              )}
             </div>
 
             <div className="d-flex align-items-center justify-content-between w-100">
