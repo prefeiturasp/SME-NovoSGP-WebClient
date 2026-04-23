@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useRef, useEffect, MouseEvent } from 'react';
+import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { Tooltip } from 'antd';
 import { Formik, Form } from 'formik';
@@ -19,6 +19,7 @@ import { Loader } from '@/@legacy/componentes';
 import { URL_RECUPERARSENHA } from '@/@legacy/constantes/url';
 import { setExibirMensagemSessaoExpirou } from '@/@legacy/redux/modulos/mensagens/actions';
 import { setMenuOculto } from '@/@legacy/redux/modulos/navegacao/actions';
+import { useAppSelector } from '@/core/hooks/use-redux';
 import { ROUTES } from '@/core/enum/routes';
 import {
   Logo,
@@ -42,7 +43,7 @@ const CampoTexto = CampoTextoJs as any;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Button = ButtonJs as any;
 
-const LoginSondagem: React.FC = () => {
+const LoginSondagem = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const paramsRoute = useParams();
@@ -54,10 +55,8 @@ const LoginSondagem: React.FC = () => {
   const [erroGeral, setErroGeral] = useState('');
   const [login, setLogin] = useState({ usuario: '', senha: '' });
 
-  const exibirMensagemSessaoExpirou = useSelector(
-    (store: any) => store.usuario.sessaoExpirou
-  );
-  const { versao } = useSelector((store: any) => store.sistema);
+  const exibirMensagemSessaoExpirou = useAppSelector((store) => store.usuario.sessaoExpirou);
+  const { versao } = useAppSelector((store) => store.sistema);
 
   const redirect = (paramsRoute as any)?.redirect || btoa(ROUTES.SONDAGEM);
   const helper = new LoginHelper(dispatch, redirect);
@@ -70,7 +69,7 @@ const LoginSondagem: React.FC = () => {
       senha: Yup.string()
         .required('Digite sua Senha')
         .min(4, 'A senha deve conter no mínimo 4 caracteres.'),
-    })
+    }),
   );
 
   const realizarLogin = async (dados: { usuario: string; senha: string }) => {
@@ -101,7 +100,7 @@ const LoginSondagem: React.FC = () => {
     }
   };
 
-  const aoClicarBotaoAutenticar = (form: any, e: React.MouseEvent) => {
+  const aoClicarBotaoAutenticar = (form: any, e: MouseEvent) => {
     (e as any).persist?.();
     form.validateForm().then(() => form.handleSubmit(e));
   };
@@ -123,9 +122,9 @@ const LoginSondagem: React.FC = () => {
   return (
     <FundoSondagem>
       <PainelImagemSondagem>
-        <img src={FundoLogin} alt='Login' />
+        <img src={FundoLogin} alt="Login" />
         <button
-          type='button'
+          type="button"
           onClick={() => {
             localStorage.removeItem('sgp-menu-oculto');
             navigate('/login');
@@ -149,19 +148,16 @@ const LoginSondagem: React.FC = () => {
           Voltar para o SGP
         </button>
       </PainelImagemSondagem>
-      <Cartao className='col-xl-6 col-lg-6 col-md-8 pt-1 pb-0 col-sm-8 col-xs-12 overflow-hidden'>
-        <CorpoCartao className=' overflow-hidden'>
-          <Centralizar className='row col-md-12 overflow-hidden'>
-            <Row className='col-md-12 p-0 d-flex justify-content-center align-self-start'>
-              <LogoSGP className='col-xl-8 col-md-8 col-sm-8 col-xs-12 d-flex justify-content-center'>
-                <Logo src='/imagens/LogoNovaSondagem.png' alt='Nova Sondagem' />
+      <Cartao className="col-xl-6 col-lg-6 col-md-8 pt-1 pb-0 col-sm-8 col-xs-12 overflow-hidden">
+        <CorpoCartao className=" overflow-hidden">
+          <Centralizar className="row col-md-12 overflow-hidden">
+            <Row className="col-md-12 p-0 d-flex justify-content-center align-self-start">
+              <LogoSGP className="col-xl-8 col-md-8 col-sm-8 col-xs-12 d-flex justify-content-center">
+                <Logo src="/imagens/LogoNovaSondagem.png" alt="Nova Sondagem" />
               </LogoSGP>
             </Row>
-            <Row className='col-md-12 d-flex justify-content-center align-self-start p-0'>
-              <Formulario
-                id='Formulario'
-                className='col-xl-8 col-md-8 col-sm-8 col-xs-12 p-0'
-              >
+            <Row className="col-md-12 d-flex justify-content-center align-self-start p-0">
+              <Formulario id="Formulario" className="col-xl-8 col-md-8 col-sm-8 col-xs-12 p-0">
                 {isBrowser || IOSView ? (
                   <Formik
                     enableReinitialize
@@ -173,49 +169,47 @@ const LoginSondagem: React.FC = () => {
                   >
                     {(form) => (
                       <Form>
-                        <Rotulo className='d-block' htmlFor='usuario'>
+                        <Rotulo className="d-block" htmlFor="usuario">
                           Usuário
-                          <Tooltip placement='top' title={TextoAjuda}>
-                            <i className='fas fa-question-circle ml-1' />
+                          <Tooltip placement="top" title={TextoAjuda}>
+                            <i className="fas fa-question-circle ml-1" />
                           </Tooltip>
                         </Rotulo>
                         <CampoTexto
                           form={form}
-                          name='usuario'
-                          id='usuario'
+                          name="usuario"
+                          id="usuario"
                           maxlength={50}
-                          classNameCampo='mb-3'
-                          placeholder='Informe o RF ou usuário'
-                          type='input'
+                          classNameCampo="mb-3"
+                          placeholder="Informe o RF ou usuário"
+                          type="input"
                           ref={inputUsuarioRf}
                           icon
                         />
-                        <Rotulo htmlFor='Senha'>Senha</Rotulo>
+                        <Rotulo htmlFor="Senha">Senha</Rotulo>
                         <CampoTexto
                           form={form}
-                          name='senha'
-                          id='senha'
+                          name="senha"
+                          id="senha"
                           maxlength={50}
-                          classNameCampo='mb-3'
-                          placeholder='Informe sua senha'
-                          type='input'
-                          maskType='password'
+                          classNameCampo="mb-3"
+                          placeholder="Informe sua senha"
+                          type="input"
+                          maskType="password"
                           icon
                         />
                         <FormGroup>
-                          <Loader loading={carregando} tip=''>
+                          <Loader loading={carregando} tip="">
                             <Button
                               id={shortid.generate()}
-                              className='btn-block d-block'
-                              label='Acessar'
+                              className="btn-block d-block"
+                              label="Acessar"
                               color={Colors.Roxo}
                               ref={btnAcessar}
-                              onClick={(e: React.MouseEvent) =>
-                                aoClicarBotaoAutenticar(form, e)
-                              }
+                              onClick={(e: MouseEvent) => aoClicarBotaoAutenticar(form, e)}
                             />
                           </Loader>
-                          <Centralizar className='mt-3'>
+                          <Centralizar className="mt-3">
                             <LabelLink onClick={navegarParaRecuperarSenha}>
                               Esqueci minha senha
                             </LabelLink>
@@ -223,8 +217,7 @@ const LoginSondagem: React.FC = () => {
                         </FormGroup>
                         {form.errors.usuario || form.errors.senha ? (
                           <ErroGeral>
-                            Você precisa informar um usuário e senha para acessar o
-                            sistema.
+                            Você precisa informar um usuário e senha para acessar o sistema.
                           </ErroGeral>
                         ) : null}
                         {erroGeral && !(form.errors.usuario || form.errors.senha) ? (
@@ -236,21 +229,21 @@ const LoginSondagem: React.FC = () => {
                 ) : (
                   <MensagemMobile>
                     <span>
-                      Para sua melhor experiência recomendamos que o acesso ao sistema
-                      seja realizado pelo computador.
+                      Para sua melhor experiência recomendamos que o acesso ao sistema seja
+                      realizado pelo computador.
                     </span>
                   </MensagemMobile>
                 )}
               </Formulario>
             </Row>
-            <Row className='col-md-12 d-flex justify-content-center align-self-end mb-3'>
-              <LogoSP className='col-xl-8 col-md-8 col-sm-8 col-xs-12 d-flex'>
-                <Logo src={LogoCidadeSP} alt='Cidade de São Paulo - Educação' />
+            <Row className="col-md-12 d-flex justify-content-center align-self-end mb-3">
+              <LogoSP className="col-xl-8 col-md-8 col-sm-8 col-xs-12 d-flex">
+                <Logo src={LogoCidadeSP} alt="Cidade de São Paulo - Educação" />
               </LogoSP>
             </Row>
             <Row>
-              {!versao ? '' : <strong>{versao}&nbsp;</strong>} - Sistema homologado
-              para navegadores: Google Chrome e Firefox
+              {!versao ? '' : <strong>{versao}&nbsp;</strong>} - Sistema homologado para
+              navegadores: Google Chrome e Firefox
             </Row>
           </Centralizar>
         </CorpoCartao>

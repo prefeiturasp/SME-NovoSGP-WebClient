@@ -33,6 +33,7 @@ import CampoTexto from '~/componentes/campoTexto';
 import { URL_RECUPERARSENHA } from '~/constantes/url';
 import { Loader } from '~/componentes';
 import { setExibirMensagemSessaoExpirou } from '~/redux/modulos/mensagens/actions';
+import { setMenuOculto } from '~/redux/modulos/navegacao/actions';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const Login = () => {
@@ -81,7 +82,7 @@ const Login = () => {
     });
 
     setErroGeral('');
-    localStorage.removeItem('sgp-menu-oculto');
+    dispatch(setMenuOculto(false));
     dispatch(setExibirMensagemSessaoExpirou(false));
 
     const { sucesso, ...retorno } = await helper.acessar({

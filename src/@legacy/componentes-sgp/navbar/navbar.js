@@ -21,6 +21,7 @@ import { URL_LOGIN, URL_HOME } from '~/constantes/url';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
 import { setExibirMensagemSessaoExpirou } from '~/redux/modulos/mensagens/actions';
 import { LimparSessao } from '~/redux/modulos/sessao/actions';
+import { setMenuOculto } from '~/redux/modulos/navegacao/actions';
 import ServicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 import { erros } from '~/servicos/alertas';
 import { TOKEN_EXPIRADO } from '~/constantes';
@@ -44,7 +45,7 @@ const Navbar = ({ bloqueado = false }) => {
     const pararAcao = await validarAcaoTela();
     if (pararAcao) return;
     await sair();
-    localStorage.removeItem('sgp-menu-oculto');
+    store.dispatch(setMenuOculto(false));
     store.dispatch(removerTurma());
     store.dispatch(limparDadosFiltro());
     store.dispatch(Deslogar());
