@@ -27,17 +27,22 @@ const Pagina = () => {
 
   const perfilStore = useSelector(e => e.perfil);
   const menuOculto = useSelector(e => e.navegacao.menuOculto);
+  const usuarioStore = useSelector(e => e.usuario);
 
   useEffect(() => {
     const ehAdministrador = perfilStore?.perfis?.some(perfil =>
       perfisAdministrador.includes(perfil.codigoPerfil)
     );
-    setUsuarioAdministrador(ehAdministrador || false);
+
+    const ehAdministradorSuporte =
+      usuarioStore?.administradorSuporte?.login?.length > 0;
+
+    setUsuarioAdministrador(ehAdministrador || ehAdministradorSuporte || false);
   }, [perfilStore]);
 
   useEffect(
     () => setBloquearTela(usuarioBloqueado && !usuarioAdministrador && !(SONDAGEM_BYPASS_FILA && menuOculto)),
-    [usuarioBloqueado, menuOculto]
+    [usuarioBloqueado, menuOculto, usuarioAdministrador]
   );
 
   useEffect(() => {
