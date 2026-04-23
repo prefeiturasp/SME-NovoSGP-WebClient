@@ -44,6 +44,7 @@ const Navbar = ({ bloqueado = false }) => {
     const pararAcao = await validarAcaoTela();
     if (pararAcao) return;
     await sair();
+    localStorage.removeItem('sgp-menu-oculto');
     store.dispatch(removerTurma());
     store.dispatch(limparDadosFiltro());
     store.dispatch(Deslogar());

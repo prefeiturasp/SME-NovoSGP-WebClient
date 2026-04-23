@@ -28,6 +28,7 @@ import {
   TextoAjuda,
   ErroGeral,
   MensagemMobile,
+  BannerSondagem,
 } from './login.css';
 import CampoTexto from '~/componentes/campoTexto';
 import { URL_RECUPERARSENHA } from '~/constantes/url';
@@ -81,6 +82,7 @@ const Login = () => {
     });
 
     setErroGeral('');
+    localStorage.removeItem('sgp-menu-oculto');
     dispatch(setExibirMensagemSessaoExpirou(false));
 
     const { sucesso, ...retorno } = await helper.acessar({
@@ -134,6 +136,10 @@ const Login = () => {
 
   return (
     <Fundo className="p-0 h-100 overflow-hidden">
+      <BannerSondagem>
+        <img src="/imagens/NovaSondagemDisponivel.png" alt="Nova sondagem disponível" />
+        <button type="button" onClick={() => navigate('/login-sondagem')}>Acesse aqui</button>
+      </BannerSondagem>
       <Grid cols={12} className="d-flex justify-content-end overflow-hidden">
         <Cartao className="col-xl-6 col-lg-6 col-md-8 pt-1 pb-0 col-sm-8 col-xs-12 overflow-hidden">
           <CorpoCartao className=" overflow-hidden">
