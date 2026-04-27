@@ -9,7 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import LoginHelper from '@/@legacy/paginas/Login/loginHelper';
 import Row from '@/@legacy/componentes/row';
-import LogoCidadeSP from '@/@legacy/recursos/LogoCidadeSP.svg';
+import LogoCidadeSP from '@/@legacy/recursos/prefeitura-sp-logo.png';
 import FundoLogin from '@/@legacy/recursos/FundoLogin.jpg';
 import { Colors } from '@/@legacy/componentes/colors';
 import FormGroup from '@/@legacy/componentes/formGroup';
@@ -145,7 +145,7 @@ const LoginSondagem = () => {
             cursor: 'pointer',
           }}
         >
-          Voltar para o SGP
+          Retornar ao SGP
         </button>
       </PainelImagemSondagem>
       <Cartao className="col-xl-6 col-lg-6 col-md-8 pt-1 pb-0 col-sm-8 col-xs-12 overflow-hidden">
@@ -153,7 +153,12 @@ const LoginSondagem = () => {
           <Centralizar className="row col-md-12 overflow-hidden">
             <Row className="col-md-12 p-0 d-flex justify-content-center align-self-start">
               <LogoSGP className="col-xl-8 col-md-8 col-sm-8 col-xs-12 d-flex justify-content-center">
-                <Logo src="/imagens/LogoNovaSondagem.png" alt="Nova Sondagem" />
+                <Logo
+                  src="/imagens/LogoNovaSondagem.png"
+                  alt="Nova Sondagem"
+                  width={303}
+                  height={102}
+                />
               </LogoSGP>
             </Row>
             <Row className="col-md-12 d-flex justify-content-center align-self-start p-0">
@@ -238,7 +243,7 @@ const LoginSondagem = () => {
             </Row>
             <Row className="col-md-12 d-flex justify-content-center align-self-end mb-3">
               <LogoSP className="col-xl-8 col-md-8 col-sm-8 col-xs-12 d-flex">
-                <Logo src={LogoCidadeSP} alt="Cidade de São Paulo - Educação" />
+                <Logo src={LogoCidadeSP} alt="Cidade de São Paulo - Educação" height={70} />
               </LogoSP>
             </Row>
             <Row>
