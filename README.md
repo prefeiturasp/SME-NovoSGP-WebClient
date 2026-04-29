@@ -162,3 +162,89 @@ Executar o comando na raiz da solução
 
 `docker-compose up --build`
 
+# GitNexus (arquitetura local)
+
+Para visualizar arvore de arquivos, dependencias e variacao de arquitetura neste repositorio, foi adicionado um fluxo manual com GitNexus.
+
+## Pre-requisitos
+
+- Node.js e npm instalados
+- Execucao a partir da raiz do projeto
+- Para usar via npx, GitNexus atual exige Node.js 20+
+- Se o projeto estiver em Node.js 16/18, usar scripts Docker abaixo
+
+## Scripts npm disponiveis
+
+- `npm run nexus:analyze` - indexacao inicial (mais rapida, sem embeddings e sem sobrescrever AGENTS/CLAUDE)
+- `npm run nexus:analyze:force` - reindexacao completa
+- `npm run nexus:analyze:skills` - gera skills por comunidades (opcional)
+- `npm run nexus:status` - estado do indice local do repositorio
+- `npm run nexus:list` - lista repos indexados no registro global do GitNexus
+- `npm run nexus:serve` - sobe backend local para o Web UI
+
+## Scripts Docker (fallback para Node abaixo de 20)
+
+- `npm run nexus:docker:analyze` - indexacao inicial via container
+- `npm run nexus:docker:analyze:force` - reindexacao completa via container
+- `npm run nexus:docker:status` - estado do indice da pasta montada
+- `npm run nexus:docker:list` - lista repos indexados
+- `npm run nexus:docker:serve` - sobe backend local para conexao com o Web UI
+
+## Fluxo recomendado
+
+1. Gerar indice:
+
+```bash
+npm run nexus:analyze
+```
+
+Se estiver em Node < 20:
+
+```bash
+npm run nexus:docker:analyze
+```
+
+2. Validar indice:
+
+```bash
+npm run nexus:status
+```
+
+3. Subir backend local:
+
+```bash
+npm run nexus:serve
+```
+
+Se estiver em Node < 20:
+
+```bash
+npm run nexus:docker:serve
+```
+
+4. Abrir a interface web em https://gitnexus.vercel.app e conectar no servidor local.
+
+### Repositorio grande e timeout na UI
+
+- A UI hospedada usa timeout fixo de requisicao em alguns endpoints. Para repositorio grande, evite iniciar analise pela tela da UI.
+- Rode a indexacao pelo terminal primeiro (`npm run nexus:docker:analyze`) e depois abra a UI apenas para explorar.
+- Na UI, selecione `Local Folder` e informe caminho absoluto do container: `/workspace`.
+- Se aparecer timeout em `/api/repo?repo=workspace`, faca hard refresh no navegador (Ctrl+F5) e reconecte ao backend local.
+
+## Como comparar novo codigo e legado
+
+- Use filtros de caminho e buscas por prefixo para analisar separadamente:
+	- novo codigo: `src/`
+	- legado: `src/@legacy/`
+- Para comparar variacoes apos mudancas estruturais, rode novamente:
+
+```bash
+npm run nexus:analyze
+```
+
+ou, se precisar reconstruir tudo:
+
+```bash
+npm run nexus:analyze:force
+```
+

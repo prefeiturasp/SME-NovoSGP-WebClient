@@ -27,3 +27,6 @@ yarn-error.log*
 
 .env.development
 .env.development
+
+# GitNexus
+.gitnexus/

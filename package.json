@@ -8,7 +8,18 @@
     "test": "jest --coverage",
     "eject": "react-scripts eject",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "nexus:analyze": "npx -y gitnexus@latest analyze . --skip-agents-md",
+    "nexus:analyze:force": "npx -y gitnexus@latest analyze . --force --skip-agents-md",
+    "nexus:analyze:skills": "npx -y gitnexus@latest analyze . --skills --skip-agents-md",
+    "nexus:serve": "npx -y gitnexus@latest serve",
+    "nexus:status": "npx -y gitnexus@latest status",
+    "nexus:list": "npx -y gitnexus@latest list",
+    "nexus:docker:analyze": "docker run --rm -w /workspace -v gitnexus-data:/data/gitnexus -v %cd%:/workspace ghcr.io/abhigyanpatwari/gitnexus:latest sh -lc \"git config --global --add safe.directory /workspace && export GITNEXUS_WORKER_SUB_BATCH_TIMEOUT_MS=120000 && export GITNEXUS_WORKER_SUB_BATCH_MAX_BYTES=16777216 && node /app/gitnexus/dist/cli/index.js analyze . --skip-agents-md\"",
+    "nexus:docker:analyze:force": "docker run --rm -w /workspace -v gitnexus-data:/data/gitnexus -v %cd%:/workspace ghcr.io/abhigyanpatwari/gitnexus:latest sh -lc \"git config --global --add safe.directory /workspace && export GITNEXUS_WORKER_SUB_BATCH_TIMEOUT_MS=120000 && export GITNEXUS_WORKER_SUB_BATCH_MAX_BYTES=16777216 && node /app/gitnexus/dist/cli/index.js analyze . --force --skip-agents-md\"",
+    "nexus:docker:status": "docker run --rm -w /workspace -v gitnexus-data:/data/gitnexus -v %cd%:/workspace ghcr.io/abhigyanpatwari/gitnexus:latest sh -lc \"git config --global --add safe.directory /workspace && node /app/gitnexus/dist/cli/index.js status\"",
+    "nexus:docker:list": "docker run --rm -v gitnexus-data:/data/gitnexus ghcr.io/abhigyanpatwari/gitnexus:latest node /app/gitnexus/dist/cli/index.js list",
+    "nexus:docker:serve": "docker run --rm -p 4747:4747 -v gitnexus-data:/data/gitnexus -v %cd%:/workspace ghcr.io/abhigyanpatwari/gitnexus:latest"
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
