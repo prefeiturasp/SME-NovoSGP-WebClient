@@ -9,7 +9,6 @@ import { isBrowser, IOSView } from 'react-device-detect';
 import LoginHelper from './loginHelper';
 import Row from '~/componentes/row';
 import LogoDoSgp from '~/recursos/LogoSgpTexto.svg';
-import LogoCidadeSP from '~/recursos/LogoCidadeSP.svg';
 import Grid from '~/componentes/grid';
 import { Colors } from '~/componentes/colors';
 import FormGroup from '~/componentes/formGroup';
@@ -237,8 +236,9 @@ const Login = () => {
               <Row className="col-md-12 d-flex justify-content-center align-self-end mb-3">
                 <LogoSP className="col-xl-8 col-md-8 col-sm-8 col-xs-12 d-flex">
                   <Logo
-                    src={LogoCidadeSP}
-                    alt="Cidade de São Paulo - Educação"
+                    src="/imagens/logo-prefeitura.png"
+                    alt="Prefeitura de São Paulo"
+                    style={{ width: '171px', height: 'auto' }}
                   />
                 </LogoSP>
               </Row>
