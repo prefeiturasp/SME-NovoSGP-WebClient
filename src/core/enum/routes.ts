@@ -94,7 +94,6 @@ export enum ROUTES {
   ENCAMINHAMENTO_NAAPA = '/naapa/encaminhamento',
   RELATORIO_ENCAMINHAMENTO_NAAPA = '/relatorios/naapa/encaminhamento',
   LOGIN = '/login',
-  LOGIN_SONDAGEM = '/login-sondagem',
   REDEFINIR_SENHA = '/redefinir-senha',
   REDEFINIR_SENHA_TOKEN = '/redefinir-senha/:token',
   RECUPERAR_SENHA = '/recuperar-senha',

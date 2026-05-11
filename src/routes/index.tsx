@@ -14,7 +14,6 @@ import ReactGA from 'react-ga';
 import Auth from '@/routes/config/auth';
 import AutenticacaoFrequencia from '@/@legacy/paginas/AutenticacaoFrequencia/autenticacaoFrequencia';
 import TelaLoaderTrocaPerfil from '../@legacy/componentes-sgp/TelaLoaderTrocaPerfil';
-import LoginSondagem from '@/pages/login-sondagem';
 
 const Routes = () => {
   const location = useLocation();
@@ -23,7 +22,6 @@ const Routes = () => {
 
   const page = createElement(Pagina);
   const loginPage = createElement(Login);
-  const loginSondagemPage = createElement(LoginSondagem);
   const elementRedefinirSenha = createElement(RedefinirSenha);
   const elementRecuperarSenha = createElement(RecuperarSenha);
   const autenticacaoFrequenciaPage = createElement(AutenticacaoFrequencia);
@@ -68,7 +66,6 @@ const Routes = () => {
         <BaseRoutes>
           <Route path="*" element={<Navigate to={ROUTES.LOGIN} />} />
           <Route path={ROUTES.LOGIN} element={loginPage} />
-          <Route path={ROUTES.LOGIN_SONDAGEM} element={loginSondagemPage} />
           <Route path={ROUTES.RECUPERAR_SENHA} element={elementRecuperarSenha} />
           <Route path={ROUTES.REDEFINIR_SENHA_TOKEN} element={elementRedefinirSenha} />
           <Route

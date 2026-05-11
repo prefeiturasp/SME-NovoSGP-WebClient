@@ -21,7 +21,6 @@ import { URL_LOGIN, URL_HOME } from '~/constantes/url';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
 import { setExibirMensagemSessaoExpirou } from '~/redux/modulos/mensagens/actions';
 import { LimparSessao } from '~/redux/modulos/sessao/actions';
-import { setMenuOculto } from '~/redux/modulos/navegacao/actions';
 import ServicoNotificacao from '~/servicos/Paginas/ServicoNotificacao';
 import { erros } from '~/servicos/alertas';
 import { TOKEN_EXPIRADO } from '~/constantes';
@@ -34,7 +33,6 @@ import { sair } from '~/servicos/Paginas/ServicoUsuario';
 
 const Navbar = ({ bloqueado = false }) => {
   const retraido = useSelector(state => state.navegacao.retraido);
-  const menuOculto = useSelector(state => state.navegacao.menuOculto);
   const [carregando, setCarregando] = useState(false);
 
   const dispatch = useDispatch();
@@ -46,7 +44,6 @@ const Navbar = ({ bloqueado = false }) => {
     const pararAcao = await validarAcaoTela();
     if (pararAcao) return;
     await sair();
-    store.dispatch(setMenuOculto(false));
     store.dispatch(removerTurma());
     store.dispatch(limparDadosFiltro());
     store.dispatch(Deslogar());
@@ -113,24 +110,20 @@ const Navbar = ({ bloqueado = false }) => {
         >
           <div className="container-fluid h-100">
             <div className="logo-navbar">
-              {menuOculto ? (
+              <Link
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                to={URL_HOME}
+                onClick={async e => {
+                  const pararAcao = await validarNavegacaoTela(e, URL_HOME);
+                  if (!pararAcao) navigate(URL_HOME);
+                }}
+              >
                 <Logo src={LogoDoSgp} alt="SGP" />
-              ) : (
-                <Link
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  to={URL_HOME}
-                  onClick={async e => {
-                    const pararAcao = await validarNavegacaoTela(e, URL_HOME);
-                    if (!pararAcao) navigate(URL_HOME);
-                  }}
-                >
-                  <Logo src={LogoDoSgp} alt="SGP" />
-                </Link>
-              )}
+              </Link>
             </div>
 
             <div className="d-flex align-items-center justify-content-between w-100">

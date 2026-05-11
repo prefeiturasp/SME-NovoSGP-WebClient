@@ -9,7 +9,6 @@ import Conteudo from './conteudo';
 import FilaEspera from '~/paginas/FilaEspera/fila-espera';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { SONDAGEM_BYPASS_FILA } from '@/core/config/feature-flags';
 
 const Pagina = () => {
   const navigate = useNavigate();
@@ -26,23 +25,17 @@ const Pagina = () => {
   );
 
   const perfilStore = useSelector(e => e.perfil);
-  const menuOculto = useSelector(e => e.navegacao.menuOculto);
-  const usuarioStore = useSelector(e => e.usuario);
 
   useEffect(() => {
     const ehAdministrador = perfilStore?.perfis?.some(perfil =>
       perfisAdministrador.includes(perfil.codigoPerfil)
     );
-
-    const ehAdministradorSuporte =
-      usuarioStore?.administradorSuporte?.login?.length > 0;
-
-    setUsuarioAdministrador(ehAdministrador || ehAdministradorSuporte || false);
+    setUsuarioAdministrador(ehAdministrador || false);
   }, [perfilStore]);
 
   useEffect(
-    () => setBloquearTela(usuarioBloqueado && !usuarioAdministrador && !(SONDAGEM_BYPASS_FILA && menuOculto)),
-    [usuarioBloqueado, menuOculto, usuarioAdministrador]
+    () => setBloquearTela(usuarioBloqueado && !usuarioAdministrador),
+    [usuarioBloqueado]
   );
 
   useEffect(() => {
@@ -94,12 +87,12 @@ const Pagina = () => {
   return (
     <CapturaErros navigate={navigate}>
       <Layout
-        hasSider={!bloquearTela && !menuOculto}
+        hasSider={!bloquearTela}
         style={{
           minHeight: '100vh',
         }}
       >
-        {!bloquearTela && !menuOculto && <SiderSGP />}
+        {!bloquearTela && <SiderSGP />}
         <Layout>
           <Navbar bloqueado={bloquearTela} />
           {bloquearTela ? (

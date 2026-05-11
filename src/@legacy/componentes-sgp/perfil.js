@@ -26,7 +26,6 @@ import {
 } from '../constantes/ids/menu';
 import { useNavigate } from 'react-router-dom';
 import { Button, Dropdown } from 'antd';
-import { ROUTES } from '@/core/enum/routes';
 
 const ContainerPerfil = styled(Button)`
   background: #f5f6f8;
@@ -48,7 +47,6 @@ const Perfil = () => {
   const [ocultaPerfis, setarOcultaPerfis] = useState(false);
   const perfilStore = useSelector(e => e.perfil);
   const usuarioStore = useSelector(e => e.usuario);
-  const menuOculto = useSelector(e => e.navegacao.menuOculto);
   const navigate = useNavigate();
 
   const ItensPerfil = styled.div`
@@ -172,7 +170,7 @@ const Perfil = () => {
               store.dispatch(Deslogar());
             }, 2000);
           });
-        navigate(menuOculto ? ROUTES.SONDAGEM : '/');
+        navigate('/');
       } else {
         store.dispatch(perfilSelecionado(perfilNovo[0]));
         store.dispatch(setTrocouPerfil(true));

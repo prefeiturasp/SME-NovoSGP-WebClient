@@ -8,26 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import './fila-espera.css';
 
-const TextoSondagem = styled.span`
-  font-family: Roboto;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 25px;
-  color: #6933ff;
-`;
-
-const LinkSondagem = styled.span`
-  font-family: Roboto;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 25px;
-  color: #6933ff;
-  cursor: pointer;
-  text-decoration: underline;
-`;
-
 const FilaEspera = () => {
-  const navigate = useNavigate();
   const numeroFila = useSelector(state => state.usuarioFilaEspera.numeroFila);
 
   const [usuarioNumeroFila, setUsuarioNumeroFila] = useState(numeroFila);
@@ -53,15 +34,6 @@ const FilaEspera = () => {
             </p>
             <p className="desc">
               <strong> Sua posição na fila: {usuarioNumeroFila}</strong>
-            </p>
-            <p className="desc">
-              Disponibilizamos o novo módulo de{' '}
-              <TextoSondagem>Sondagem</TextoSondagem>, caso deseje preencher a
-              avaliação de seus estudantes,{' '}
-              <LinkSondagem onClick={() => navigate('/login-sondagem')}>
-                clique aqui
-              </LinkSondagem>
-              .
             </p>
           </div>
           <div className="logo-prefeitura">

@@ -41,7 +41,6 @@ const BreadcrumbSgp = () => {
   const NavegacaoStore = useSelector(
     storeNavegacao => storeNavegacao.navegacao
   );
-  const menuOculto = useSelector(state => state.navegacao.menuOculto);
 
   const UsuarioStrore = useSelector(storeUsuario => storeUsuario.usuario);
   const modalidadesFiltroPrincipal = useSelector(
@@ -198,9 +197,7 @@ const BreadcrumbSgp = () => {
                 state={location.state}
                 hidden={item.ehEstatico}
                 to={item.path}
-                style={menuOculto ? { pointerEvents: 'none' } : undefined}
                 onClick={async e => {
-                  if (menuOculto) { e.preventDefault(); return; }
                   const pararAcao = await validarNavegacaoTela(e, item.path);
                   if (!pararAcao)
                     navigate(item.path, { state: location?.state });
