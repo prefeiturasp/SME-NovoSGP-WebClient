@@ -32,3 +32,10 @@ export function setSomenteConsulta(somenteConsulta) {
     payload: somenteConsulta,
   };
 }
+
+export function setMenuOculto(oculto) {
+  return {
+    type: '@navegacao/menuOculto',
+    payload: oculto,
+  };
+}
