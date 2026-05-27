@@ -17,3 +17,12 @@ Funcionalidade: API - Mural de atividades infantis
     Quando tento requisição GET para o endpoint do mural
     Então não retorna as atividades mostrando o status 401
 
+  Cenário: Não retorna as atividades com token inválido
+    Dado que não possuo um token de acesso válido
+    Quando tento requisição GET para o endpoint do mural
+    Então não retorna as atividades mostrando o status 401
+
+  Cenário: Não retorna as atividades com token expirado
+    Dado que não possuo um token de acesso válido
+    Quando tento requisição GET para o endpoint do mural
+    Então não retorna as atividades mostrando o status 401

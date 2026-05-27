@@ -1,32 +1,31 @@
-const { defineConfig } = require('cypress')
-const allureWriter = require('@shelex/cypress-allure-plugin/writer')
+const { defineConfig } = require('cypress');
+const allureWriter = require('@shelex/cypress-allure-plugin/writer');
 const { cloudPlugin } = require('cypress-cloud/plugin');
-const dotenv = require('dotenv')
-const cucumber = require('cypress-cucumber-preprocessor').default
-const postgreSQL = require('cypress-postgresql')
-const pg = require('pg')
+const dotenv = require('dotenv');
+const cucumber = require('cypress-cucumber-preprocessor').default;
+const postgreSQL = require('cypress-postgresql');
+const pg = require('pg');
 
-dotenv.config()
+dotenv.config();
 
 const dbConfig = {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    database: process.env.DB_DATABASE
-}
-
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  host: process.env.DB_HOST,
+  database: process.env.DB_DATABASE,
+};
 
 module.exports = defineConfig({
   e2e: {
     async setupNodeEvents(on, config) {
-      allureWriter(on, config)
-      require('./cypress/plugin/index')(on, config)
+      allureWriter(on, config);
+      require('./cypress/plugin/index')(on, config);
 
-      on('file:preprocessor', cucumber())
+      on('file:preprocessor', cucumber());
 
-      const pool = new pg.Pool(dbConfig)
-      const tasks = postgreSQL.loadDBPlugin(pool)
-      on('task', tasks)
+      const pool = new pg.Pool(dbConfig);
+      const tasks = postgreSQL.loadDBPlugin(pool);
+      on('task', tasks);
       const envKeys = [
         'LOGIN_ADM_COTIC',
         'LOGIN_PROFESSOR',
@@ -40,6 +39,8 @@ module.exports = defineConfig({
         'NOME_SERVIDOR',
         'SENHA',
         'SENHA_INVALIDA',
+        'SENHA_ADMIN',
+        'SENHA_INEXISTENTE',
         'TOKEN_VALIDO',
         'TOKEN_INVALIDO',
         'EMAIL',
@@ -52,10 +53,13 @@ module.exports = defineConfig({
         'TIPO_RESPONSAVEL_PSICOPEDAGOGO',
         'TIPO_RESPONSAVEL_ASSISTENTE_SOCIAL',
         'DRE_CODIGO',
-        'UE_CODIGO',      
+        'UE_CODIGO',
         'AULA_CODIGO',
         'AULA_CODIGO_INVALIDO',
         'AULA_ANOTACAO_CODIGO',
+        'AULA_ID',
+        'AULA_ID_INVALIDO',
+        'AULA_RECORRENCIA_ID',
         'TURMA_CODIGO',
         'TURMA_CODIGO_INVALIDO',
         'TURMA_CODIGO_FECHAMENTO',
@@ -99,7 +103,7 @@ module.exports = defineConfig({
         'SITUACAO_CONSELHO_CLASSE_ID_INVALIDO',
         'FECHAMENTO_ACOMPANHAMENTO_PENDENCIA_ID',
         'FECHAMENTO_ACOMPANHAMENTO_PENDENCIA_ID_INVALIDO',
-        'TIPO_PENDENCIA_ID',       
+        'TIPO_PENDENCIA_ID',
         'CONCEITO_ID',
         'NOTIFICACAO_CODIGO',
         'NOTIFICACAO_CODIGO_INVALIDO',
@@ -108,17 +112,19 @@ module.exports = defineConfig({
         'NOTA',
         'SINTESE_ID',
         'CEP_VALIDO',
-        'CEP_INVALIDO'
-      ]
+        'CEP_INVALIDO',
+      ];
 
-      const customVariable = Object.fromEntries(envKeys.map(key => [key, process.env[key] ?? ""]));
-      
+      const customVariable = Object.fromEntries(
+        envKeys.map((key) => [key, process.env[key] ?? '']),
+      );
+
       const enhancedConfig = {
         ...config,
         env: {
           ...config.env,
           ...customVariable,
-          TAGS: "not @ignore"
+          TAGS: 'not @ignore',
         },
       };
 
@@ -126,12 +132,13 @@ module.exports = defineConfig({
       return result;
     },
     baseUrl: 'https://hom-novosgp.sme.prefeitura.sp.gov.br',
+    baseUrlSondagem: 'https://hom-novasondagem.sme.prefeitura.sp.gov.br',
     viewportWidth: 1600,
     viewportHeight: 1050,
     video: false,
     retries: {
       runMode: 2,
-      openMode: 0
+      openMode: 0,
     },
     screenshotOnRunFailure: false,
     chromeWebSecurity: false,
@@ -143,7 +150,6 @@ module.exports = defineConfig({
     execTimeout: 60000,
     pageLoadTimeout: 60000,
     waitForAnimations: true,
-    animationDistanceThreshold: 5
-  }
-})
-
+    animationDistanceThreshold: 5,
+  },
+});
