@@ -1,19 +1,19 @@
 import styled from 'styled-components';
 import LinkRouter from '~/componentes/linkRouter';
 import Row from '~/componentes/row';
-import FundoLogin from '~/recursos/FundoLogin.jpg';
 import Card from '~/componentes/cardBootstrap';
 import { Base } from '~/componentes/colors';
 import CardBody from '~/componentes/cardBody';
 
 export const Fundo = styled(Row)`
-  background: url(${FundoLogin});
+  background: url('/imagens/ImagemSondagemLogin.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   height: -moz-available;
   height: -webkit-fill-available;
   height: fill-available;
+  position: relative;
 `;
 
 export const Logo = styled.img`
@@ -159,3 +159,61 @@ export const MensagemMobile = styled.div`
 
 export const TextoAjuda =
   'Digite seu RF. Para usuários externos, insira seus dados de usuário. Caso não possua, procure a SME.';
+
+export const FundoSondagem = styled.div`
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+`;
+
+export const PainelImagemSondagem = styled.div`
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 767px) {
+    display: none;
+  }
+`;
+
+export const BannerSondagem = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 25%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 20px;
+  padding: 32px 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  z-index: 10;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+
+  @media (max-width: 991px) {
+    left: 16.67%;
+  }
+
+  button {
+    background: #ffffff;
+    border: 1px solid #5170ff;
+    color: #5170ff;
+    border-radius: 4px;
+    padding: 10px 32px;
+    font-size: 15px;
+    font-family: Roboto;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #f0f3ff;
+    }
+  }
+`;
