@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { limparDadosFiltro } from '~/redux/modulos/filtro/actions';
-import {
-  setLoaderGeral,
-  setLoaderTrocaPerfil,
-} from '~/redux/modulos/loader/actions';
+import { setLoaderGeral, setLoaderTrocaPerfil } from '~/redux/modulos/loader/actions';
 import {
   Deslogar,
   removerTurma,
