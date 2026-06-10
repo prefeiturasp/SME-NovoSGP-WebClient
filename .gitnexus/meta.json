@@ -1,0 +1,14 @@
+{
+  "repoPath": "/workspace",
+  "lastCommit": "60a3feb26456cece3975e9e50bf7be8f49bfbc77",
+  "indexedAt": "2026-04-28T18:34:11.072Z",
+  "remoteUrl": "https://github.com/prefeiturasp/SME-NovoSGP-WebClient",
+  "stats": {
+    "files": 2391,
+    "nodes": 23433,
+    "edges": 37900,
+    "communities": 844,
+    "processes": 254,
+    "embeddings": 0
+  }
+}
