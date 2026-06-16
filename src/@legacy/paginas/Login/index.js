@@ -34,6 +34,7 @@ import { URL_RECUPERARSENHA } from '~/constantes/url';
 import { Loader } from '~/componentes';
 import { setExibirMensagemSessaoExpirou } from '~/redux/modulos/mensagens/actions';
 import { setMenuOculto } from '~/redux/modulos/navegacao/actions';
+import { setLoginSource } from '~/redux/modulos/usuario/actions';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const Login = () => {
@@ -92,6 +93,7 @@ const Login = () => {
       navigate,
     });
 
+    if (sucesso) dispatch(setLoginSource('sgp'));
     if (!sucesso) {
       setErroGeral(retorno.erroGeral);
       setCarregando(false);
