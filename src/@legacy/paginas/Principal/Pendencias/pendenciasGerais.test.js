@@ -40,9 +40,6 @@ describe('PendenciasGerais (teste simplificado)', () => {
   it('renderiza o título "Pendências"', async () => {
     const ServicoPendencias = require('~/servicos/Paginas/ServicoPendencias');
     ServicoPendencias.buscarTurmas.mockResolvedValue({ data: [] });
-    ServicoPendencias.obterPendenciasListaPaginada.mockResolvedValue({
-      data: { items: [], totalRegistros: 0 },
-    });
 
     renderWithProvider(<PendenciasGerais />);
     expect(await screen.findByText(/Pendências/i)).toBeInTheDocument();
@@ -61,22 +58,28 @@ describe('PendenciasGerais (teste simplificado)', () => {
     ).toBeInTheDocument();
   });
 
-  it('exibe dados de uma pendência', async () => {
+  it('não consulta pendências automaticamente sem tipo selecionado', async () => {
     const ServicoPendencias = require('~/servicos/Paginas/ServicoPendencias');
     ServicoPendencias.buscarTurmas.mockResolvedValue({ data: [] });
     ServicoPendencias.obterPendenciasListaPaginada.mockResolvedValue({
       data: {
-        items: [
-          {
-            titulo: 'Pendência A',
-            detalhe: '<p>Detalhe da pendência</p>',
-          },
-        ],
-        totalRegistros: 1,
+        items: [],
+        totalRegistros: 0,
       },
     });
 
     renderWithProvider(<PendenciasGerais />);
-    expect(await screen.findByText('Pendência A')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(ServicoPendencias.buscarTurmas).toHaveBeenCalledTimes(1);
+    });
+
+    expect(
+      ServicoPendencias.obterPendenciasListaPaginada
+    ).not.toHaveBeenCalled();
+    expect(
+      screen.getByText('Para exibir suas pendências selecione o Tipo desejado.')
+    ).toBeInTheDocument();
+    expect(screen.getByText('Tipo *')).toBeInTheDocument();
   });
 });
