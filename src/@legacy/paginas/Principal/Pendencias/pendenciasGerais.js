@@ -36,6 +36,7 @@ const PendenciasGerais = () => {
   const [carregandoTipoPendenciaGrupo, setCarregandoTipoPendenciaGrupo] =
     useState(false);
   const [timeoutTitulo, setTimeoutTitulo] = useState();
+  const tipoPendenciaSelecionada = !!tipoPendenciaGrupo;
 
   const configCabecalho = {
     altura: '45px',
@@ -44,28 +45,38 @@ const PendenciasGerais = () => {
 
   const obterPendencias = useCallback(
     async (paginaAtual, numeroPag) => {
-      if (carregouTurmas) {
-        setCarregando(true);
-        const resposta = await ServicoPendencias.obterPendenciasListaPaginada(
-          codigoTurma,
-          tipoPendenciaGrupo,
-          titulo,
-          paginaAtual,
-          numeroPag
-        )
-          .catch(e => erros(e))
-          .finally(() => setCarregando(false));
-
-        if (resposta?.data?.items) {
-          setDadosPendencias(resposta.data);
-          setNumeroRegistros(resposta.data.totalRegistros);
-        } else {
-          setDadosPendencias([]);
-        }
-        setCollapseExpandido();
+      if (!carregouTurmas || !tipoPendenciaSelecionada) {
+        setDadosPendencias([]);
+        setNumeroRegistros(0);
+        return;
       }
+
+      setCarregando(true);
+      const resposta = await ServicoPendencias.obterPendenciasListaPaginada(
+        codigoTurma,
+        tipoPendenciaGrupo,
+        titulo,
+        paginaAtual,
+        numeroPag
+      )
+        .catch(e => erros(e))
+        .finally(() => setCarregando(false));
+
+      if (resposta?.data?.items) {
+        setDadosPendencias(resposta.data);
+        setNumeroRegistros(resposta.data.totalRegistros);
+      } else {
+        setDadosPendencias([]);
+      }
+      setCollapseExpandido();
     },
-    [carregouTurmas, codigoTurma, tipoPendenciaGrupo, titulo]
+    [
+      carregouTurmas,
+      codigoTurma,
+      tipoPendenciaGrupo,
+      tipoPendenciaSelecionada,
+      titulo,
+    ]
   );
 
   const onChangePaginacao = async pagina => {
@@ -113,8 +124,19 @@ const PendenciasGerais = () => {
   const onChangeTipoPendenciaGrupo = valor => setTipoPendenciaGrupo(valor);
 
   useEffect(() => {
-    if (titulo.length >= 3 || titulo.length === 0) obterPendencias();
-  }, [obterPendencias, titulo]);
+    if ((titulo.length >= 3 || titulo.length === 0) && tipoPendenciaSelecionada)
+      obterPendencias();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [titulo]);
+
+  useEffect(() => {
+    if (tipoPendenciaSelecionada) {
+      obterPendencias();
+    } else {
+      setDadosPendencias([]);
+      setNumeroRegistros(0);
+    }
+  }, [obterPendencias, tipoPendenciaSelecionada]);
 
   const validarObterPendenciasDebounce = useCallback(
     (texto, onChangeFiltros) => {
@@ -203,13 +225,14 @@ const PendenciasGerais = () => {
               style={{ background: '#fff' }}
               removeAffix
             />
+            <div>Para exibir suas pendências selecione o Tipo desejado.</div>
           </div>
           <div className="row justify-content-left px-3">
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-2 mb-2">
               <Loader loading={carregandoTipoPendenciaGrupo} ignorarTip>
                 <SelectComponent
                   id={SGP_SELECT_TIPO_PENDENCIA}
-                  label="Tipo"
+                  label="* Tipo"
                   name="tipoId"
                   lista={listaTipoPendenciaGrupos}
                   valueOption="valor"

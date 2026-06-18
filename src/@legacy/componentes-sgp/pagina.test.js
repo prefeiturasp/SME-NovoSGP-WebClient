@@ -33,7 +33,7 @@ beforeEach(() => {
 });
 
 test('renderiza Sider e Conteudo quando não está bloqueado', () => {
-  mockUseSelector([false, { perfis: [] }, {}]);
+  mockUseSelector([false, { perfis: [] }, false, {}]);
 
   render(<Pagina />);
 
@@ -46,6 +46,7 @@ test('renderiza FilaEspera quando bloqueado e não é administrador', () => {
   mockUseSelector([
     true,
     { perfis: [] },
+    false,
     { administradorSuporte: { login: '' } },
   ]);
 
@@ -59,6 +60,7 @@ test('não renderiza FilaEspera quando bloqueado mas usuário é administrador',
   mockUseSelector([
     true,
     { perfis: [{ codigoPerfil: '5be1e074-37d6-e911-abd6-f81654fe895d' }] },
+    false,
     {},
   ]);
 
@@ -69,7 +71,7 @@ test('não renderiza FilaEspera quando bloqueado mas usuário é administrador',
 });
 
 test('pressionar F5 chama confirm e recarrega quando confirmado', () => {
-  mockUseSelector([false, { perfis: [] }, {}]);
+  mockUseSelector([false, { perfis: [] }, false, {}]);
 
   const originalLocation = window.location;
   try {
@@ -93,7 +95,7 @@ test('pressionar F5 chama confirm e recarrega quando confirmado', () => {
 });
 
 test('pressionar F5 não recarrega quando confirmação é cancelada', () => {
-  mockUseSelector([false, { perfis: [] }, {}]);
+  mockUseSelector([false, { perfis: [] }, false, {}]);
 
   const originalLocation = window.location;
   try {

@@ -38,7 +38,7 @@ const Pagina = () => {
       usuarioStore?.administradorSuporte?.login?.length > 0;
 
     setUsuarioAdministrador(ehAdministrador || ehAdministradorSuporte || false);
-  }, [perfilStore]);
+  }, [perfilStore, usuarioStore]);
 
   useEffect(
     () => setBloquearTela(usuarioBloqueado && !usuarioAdministrador && !(SONDAGEM_BYPASS_FILA && menuOculto)),
