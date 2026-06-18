@@ -121,3 +121,64 @@ Funcionalidade: API - Aula prevista
     Dado que não login não gerou um token de acesso válido
     Quando tento a requisição POST
     Então retorna o status 401 sem realizar a alteração ao criar
+
+  Cenário: Validar retorno estruturado das aulas previstas após criação
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição POST 
+    Então retorna o status 200 com a mensagem de aulas previstas no bimestre
+
+  Cenário: Validar retorno estruturado após alteração
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição PUT com o ID aula
+    Então retorna o status 200 com a mensagem de sucesso
+
+  Cenário: Validar bloqueio de criação e consulta no mesmo fluxo sem autenticação
+    Dado que não gerou um token de acesso válido
+    Quando tento a requisição POST
+    Então retorna o status 401 sem realizar a alteração ao criar
+
+  Cenário: Validar bloqueio de alteração e consulta no mesmo fluxo sem autenticação
+    Dado que não gerou um token de acesso válido
+    Quando tento a requisição PUT com o ID aula
+    Então retorna o status 401 sem realizar a alteração
+
+  Cenário: Validar que ID inválido não permite alteração
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição PUT sem o ID aula
+    Então retorna o status 405 sem realizar a alteração
+
+  Cenário: Validar que ID inválido não permite consulta
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição GET para buscar sem o ID
+    Então retorna o status 405 de método inválido
+
+  Cenário: Validar obrigatoriedade completa dos campos no PUT
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição PUT sem o componente curricular
+    Então retorna o status 422 com a mensagem que a disciplina deve ser informada para alterar
+
+  Cenário: Validar obrigatoriedade completa dos campos no POST
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição POST sem o componente curricular
+    Então retorna o status 422 com a mensagem que a disciplina deve ser informada para criar
+
+  Cenário: Validar que requisição vazia sempre retorna 415 no PUT
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição PUT sem o corpo da requisição
+    Então retorna o status 415 com a mensagem de vazio
+
+  Cenário: Validar que requisição vazia sempre retorna 415 no POST
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição POST sem o corpo da requisição
+    Então retorna o status 415 com a mensagem de vazio ao criar
+
+  Cenário: Validar consistência após criação e consulta por ID
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição POST 
+    Então retorna o status 200 com a mensagem de aulas previstas no bimestre
+
+  Cenário: Validar consistência após alteração e consulta por ID
+    Dado que login gerou um token de acesso válido
+    Quando envio uma requisição PUT com o ID aula
+    Então retorna o status 200 com a mensagem de sucesso
+
