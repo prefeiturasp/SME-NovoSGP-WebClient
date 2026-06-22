@@ -215,6 +215,14 @@ const PendenciasGerais = () => {
     );
   };
 
+  const labelTipoPendencia = () => {
+    return (
+      <>
+        <span className="text-danger">*</span> Tipo
+      </>
+    );
+  };
+
   return (
     <Loader loading={carregando}>
       <Card className="mb-4 mt-4">
@@ -225,14 +233,16 @@ const PendenciasGerais = () => {
               style={{ background: '#fff' }}
               removeAffix
             />
-            <div>Para exibir suas pendências selecione o Tipo desejado.</div>
+            <div className="mt-3 mb-4">
+              Para exibir as pendências selecione o Tipo desejado.
+            </div>
           </div>
           <div className="row justify-content-left px-3">
             <div className="col-sm-12 col-md-4 col-lg-4 col-xl-2 mb-2">
               <Loader loading={carregandoTipoPendenciaGrupo} ignorarTip>
                 <SelectComponent
                   id={SGP_SELECT_TIPO_PENDENCIA}
-                  label="* Tipo"
+                  label={labelTipoPendencia()}
                   name="tipoId"
                   lista={listaTipoPendenciaGrupos}
                   valueOption="valor"
@@ -275,35 +285,37 @@ const PendenciasGerais = () => {
             </div>
           </div>
           <div className="col-md-12">
-            {dadosPendencias?.items?.length ? (
-              dadosPendencias.items.map((item, index) => {
-                return (
-                  <div key={shortid.generate()} className="mb-3">
-                    <CardCollapse
-                      key={`pendencia-${shortid.generate()}-collapse-key`}
-                      titulo={titutoPersonalizado(item)}
-                      indice={`pendencia-${shortid.generate()}-collapse-indice`}
-                      alt={`pendencia-${shortid.generate()}-alt`}
-                      configCabecalho={configCabecalho}
-                      styleCardBody={{ backgroundColor: Base.CinzaBadge }}
-                      show={collapseExpandido === index}
-                      onClick={() => {
-                        setCollapseExpandido(index);
-                      }}
-                    >
-                      <span
-                        // eslint-disable-next-line react/no-danger
-                        dangerouslySetInnerHTML={{
-                          __html: item.detalhe,
+            {dadosPendencias?.items?.length
+              ? dadosPendencias.items.map((item, index) => {
+                  return (
+                    <div key={shortid.generate()} className="mb-3">
+                      <CardCollapse
+                        key={`pendencia-${shortid.generate()}-collapse-key`}
+                        titulo={titutoPersonalizado(item)}
+                        indice={`pendencia-${shortid.generate()}-collapse-indice`}
+                        alt={`pendencia-${shortid.generate()}-alt`}
+                        configCabecalho={configCabecalho}
+                        styleCardBody={{ backgroundColor: Base.CinzaBadge }}
+                        show={collapseExpandido === index}
+                        onClick={() => {
+                          setCollapseExpandido(index);
                         }}
-                      />
-                    </CardCollapse>
+                      >
+                        <span
+                          // eslint-disable-next-line react/no-danger
+                          dangerouslySetInnerHTML={{
+                            __html: item.detalhe,
+                          }}
+                        />
+                      </CardCollapse>
+                    </div>
+                  );
+                })
+              : tipoPendenciaGrupo && (
+                  <div className="text-center mt-4 mb-4">
+                    Não há pendências deste tipo a serem exibidas.
                   </div>
-                );
-              })
-            ) : (
-              <div className="text-center">Você não tem nenhuma pendência.</div>
-            )}
+                )}
           </div>
 
           {dadosPendencias?.items?.length && numeroRegistros ? (
