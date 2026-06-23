@@ -90,7 +90,6 @@ import DocPlanosTrabalhoCadastro from '~/paginas/Gestao/DocumentosPlanosTrabalho
 import DocPlanosTrabalhoLista from '~/paginas/Gestao/DocumentosPlanosTrabalho/lista/docPlanosTrabalhoLista';
 import CadastroOcorrencias from '~/paginas/Gestao/Ocorrencia/CadastroOcorrencias';
 import ListaOcorrencias from '~/paginas/Gestao/Ocorrencia/lista/listaOcorrencias';
-import Login from '~/paginas/Login';
 import CadastroEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Cadastro/encaminhamentoNAAPA';
 import ListaEncaminhamentoNAAPA from '~/paginas/NAAPA/Encaminhamento/Lista/listaEncaminhamentoNAAPA';
 import DetalheNotificacao from '~/paginas/Notificacoes/Detalhes/detalheNotificacao';
@@ -154,15 +153,6 @@ export interface RouteProps {
 
 const route = new Map();
 const routesArray: RouteProps[] = [];
-
-route.set(ROUTES.LOGIN, {
-  breadcrumbName: [],
-  menu: [],
-  parent: '',
-  component: Login,
-  temPermissionamento: false,
-  chavePermissao: '',
-});
 
 route.set(ROUTES.RELATORIO_BOLETIM_SIMPLES, {
   breadcrumbName: ['Boletim'],
