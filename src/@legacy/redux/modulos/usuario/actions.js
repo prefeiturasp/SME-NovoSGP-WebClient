@@ -141,3 +141,10 @@ export function setListaUrlAjudaDoSistema(payload) {
     payload,
   };
 }
+
+export function setLoginSource(loginSource) {
+  return {
+    type: '@usuario/setLoginSource',
+    payload: loginSource,
+  };
+}

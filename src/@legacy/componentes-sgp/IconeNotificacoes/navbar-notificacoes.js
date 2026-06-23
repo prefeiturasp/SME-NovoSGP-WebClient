@@ -41,6 +41,7 @@ const NavbarNotificacoes = props => {
 
   const usuario = useSelector(store => store.usuario);
   const usuarioRf = usuario?.rf;
+  const loginSource = usuario?.loginSource || 'sgp';
 
   const listaRef = useRef();
 
@@ -61,7 +62,7 @@ const NavbarNotificacoes = props => {
   const conectarSignalR = useCallback(async () => {
     if (urlConnection) {
       const hubConnection = new HubConnectionBuilder()
-        .withUrl(`${urlConnection}/notificacao?usuarioRf=${usuarioRf}`, {
+        .withUrl(`${urlConnection}/notificacao?usuarioRf=${usuarioRf}&loginSource=${loginSource}`, {
           skipNegotiation: true,
           transport: HttpTransportType.WebSockets,
         })
