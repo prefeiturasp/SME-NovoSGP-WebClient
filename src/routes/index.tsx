@@ -58,6 +58,7 @@ const Routes = () => {
               {routesArray.map((rota: any) => montarRota(rota))}
             </Route>
             <Route path={ROUTES.REDEFINIR_SENHA} element={elementRedefinirSenha} />
+            <Route path={ROUTES.LOGIN_SONDAGEM} element={loginSondagemPage} />
             <Route
               path={ROUTES.AUTENTICACAO_INTEGRACOES_FREQUENCIA}
               element={autenticacaoFrequenciaPage}

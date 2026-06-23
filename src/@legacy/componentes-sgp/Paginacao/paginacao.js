@@ -25,10 +25,11 @@ const Paginacao = props => {
 
   const [paginaAtual, setPaginaAtual] = useState(initialState);
 
-  const executaPaginacao = pagina => {
-    onChangePaginacao(pagina);
+  const executaPaginacao = (pagina, tamanhoPagina) => {
+    onChangePaginacao(pagina, tamanhoPagina);
     const novaPagina = { ...paginaAtual };
     novaPagina.current = pagina;
+    novaPagina.pageSize = tamanhoPagina;
     setPaginaAtual(novaPagina);
   };
 
