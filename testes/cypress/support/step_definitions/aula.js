@@ -115,7 +115,7 @@ When(
 When(
   'envio uma requisição GET para o endpoint de aula por data e componente curricular para cadastro com dados válidos',
   function () {
-    const dataAula = new Date().toISOString().split('T')[0];
+    const dataAula = new Date().getFullYear() + '-09-10';
     const componenteCurricularId = 139;
 
     cy.request({
@@ -135,7 +135,7 @@ When(
 When(
   'envio uma requisição GET para o endpoint de aula por data e componente curricular para cadastro sem token de acesso',
   function () {
-    const dataAula = new Date().toISOString().split('T')[0];
+    const dataAula = new Date().getFullYear() + '-09-10';
     const componenteCurricularId = 139;
 
     cy.request({
@@ -194,7 +194,7 @@ When(
 When(
   'envio uma requisição GET para o endpoint de aula por data e componente curricular para cadastro com tipo aula inválida',
   function () {
-    const dataAula = new Date().toISOString().split('T')[0];
+    const dataAula = new Date().getFullYear() + '-09-10';
     const componenteCurricularId = 139;
     const tipoAulaInvalido = 0;
 
