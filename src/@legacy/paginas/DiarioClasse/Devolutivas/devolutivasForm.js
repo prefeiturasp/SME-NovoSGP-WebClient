@@ -39,6 +39,7 @@ import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { removerTagsHtml } from '~/utils';
+import { formularioEhValido } from '~/utils/formikRefHelper';
 import DadosPlanejamentoDiarioBordo from './DadosPlanejamentoDiarioBordo/dadosPlanejamentoDiarioBordo';
 import { ANO_BASE_DEVOLUTIVA_UNIFICADA } from '~/constantes';
 
@@ -524,10 +525,7 @@ const DevolutivasForm = () => {
       refForm.setFieldTouched(campo, true, true);
     });
     return refForm.validateForm().then(() => {
-      if (
-        refForm.getFormikContext().isValid ||
-        Object.keys(refForm.getFormikContext().errors).length === 0
-      ) {
+      if (formularioEhValido(refForm)) {
         return salvarDevolutivas(refForm?.state?.values, clicouBtnSalvar);
       }
       return false;
@@ -624,7 +622,7 @@ const DevolutivasForm = () => {
         initialValues={valoresIniciais}
         validateOnBlur
         validateOnChange
-        ref={refFormik => setRefForm(refFormik)}
+        innerRef={refFormik => setRefForm(refFormik)}
       >
         {form => (
           <Form>

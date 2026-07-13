@@ -1,25 +1,24 @@
 import React from 'react';
 import t from 'prop-types';
+import { dateAdapter } from '@/core/date/adapter';
 
 function DataInicioFim({ dadosAula }) {
   return (
     !!dadosAula.dataInicio &&
     !!dadosAula.dataFim &&
-    window.moment(dadosAula.dataInicio).format(`YYYY-MM-DD`) !==
-      window.moment(dadosAula.dataFim).format(`YYYY-MM-DD`) && (
+    dateAdapter.format(dadosAula.dataInicio, 'YYYY-MM-DD') !==
+      dateAdapter.format(dadosAula.dataFim, 'YYYY-MM-DD') && (
       <span>
         <span>
           Data Início: &nbsp;
           <strong>
-            {window.moment(dadosAula.dataInicio).format(`DD/MM/YYYY`)}
+            {dateAdapter.format(dadosAula.dataInicio, 'DD/MM/YYYY')}
           </strong>
         </span>
         &nbsp;-&nbsp;
         <span>
           Data Fim: &nbsp;
-          <strong>
-            {window.moment(dadosAula.dataFim).format(`DD/MM/YYYY`)}
-          </strong>
+          <strong>{dateAdapter.format(dadosAula.dataFim, 'DD/MM/YYYY')}</strong>
         </span>
       </span>
     )
