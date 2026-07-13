@@ -1,9 +1,15 @@
-import moment from 'moment';
+import { dateAdapter } from '@/core/date/adapter';
 
-moment.locale('pt-br');
-window.moment = moment;
+const momentCompat = (...args) => dateAdapter.parse(args[0], args[1]);
+
+Object.assign(momentCompat, dateAdapter.dayjs, {
+  utc: (...args) => dateAdapter.utc(args[0]),
+  isMoment: (valor) => dateAdapter.dayjs.isDayjs(valor),
+});
+
+window.moment = momentCompat as any;
 
 // eslint-disable-next-line no-extend-native, func-names
 Date.prototype.toISOString = function () {
-  return moment(this).format('YYYY-MM-DDTHH:mm:ss');
+  return dateAdapter.format(this, 'YYYY-MM-DDTHH:mm:ss');
 };
