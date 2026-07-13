@@ -27,6 +27,7 @@ import {
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
+import { formularioEhValido, obterErrosFormik } from '~/utils/formikRefHelper';
 import { ServicoCalendarios } from '../../Calendario';
 
 const urlPadrao = 'v1/encaminhamento-aee';
@@ -181,10 +182,7 @@ class ServicoEncaminhamentoAEE {
         refForm.setFieldTouched(campo, true, true);
       });
       return refForm.validateForm().then(() => {
-        if (
-          refForm.getFormikContext().isValid ||
-          Object.keys(refForm.getFormikContext().errors).length === 0
-        ) {
+        if (formularioEhValido(refForm)) {
           contadorFormsValidos += 1;
         } else {
           const dadosSecao = dadosSecoesPorEtapaDeEncaminhamentoAEE.find(
@@ -381,8 +379,7 @@ class ServicoEncaminhamentoAEE {
           return {
             questoes,
             secaoId: item?.secaoId || 0,
-            concluido:
-              Object.keys(form.getFormikContext().errors)?.length === 0,
+            concluido: Object.keys(obterErrosFormik(form))?.length === 0,
           };
         });
 

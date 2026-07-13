@@ -40,6 +40,7 @@ import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import { SGP_BUTTON_ALTERAR_CADASTRAR } from '~/constantes/ids/button';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
+import { dateAdapter } from '@/core/date/adapter';
 
 function RegistroPOAForm() {
   const dispatch = useDispatch();
@@ -51,7 +52,7 @@ function RegistroPOAForm() {
   const permissoesTela = useSelector(store => store.usuario.permissoes);
   const anoLetivo =
     useSelector(store => store.usuario.turmaSelecionada.anoLetivo) ||
-    window.moment().format('YYYY');
+    dateAdapter.now().format('YYYY');
 
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
@@ -265,7 +266,7 @@ function RegistroPOAForm() {
           initialValues={valoresIniciais}
           validationSchema={validacoes}
           onSubmit={valores => onSubmitFormulario(valores)}
-          ref={refFormik => setRefForm(refFormik)}
+          innerRef={refFormik => setRefForm(refFormik)}
           validateOnBlur
           validateOnChange
         >
