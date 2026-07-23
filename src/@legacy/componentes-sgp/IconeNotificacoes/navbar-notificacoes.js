@@ -62,10 +62,13 @@ const NavbarNotificacoes = props => {
   const conectarSignalR = useCallback(async () => {
     if (urlConnection) {
       const hubConnection = new HubConnectionBuilder()
-        .withUrl(`${urlConnection}/notificacao?usuarioRf=${usuarioRf}&loginSource=${loginSource}`, {
-          skipNegotiation: true,
-          transport: HttpTransportType.WebSockets,
-        })
+        .withUrl(
+          `${urlConnection}/notificacao?usuarioRf=${usuarioRf}&loginSource=${loginSource}`,
+          {
+            skipNegotiation: true,
+            transport: HttpTransportType.WebSockets,
+          }
+        )
         .withAutomaticReconnect({
           nextRetryDelayInMilliseconds: () => 60000,
         })

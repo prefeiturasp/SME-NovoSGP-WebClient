@@ -296,6 +296,97 @@ export default createGlobalStyle`
     inset-inline-end: 8px !important;
   }
 
+  /* Bootstrap 4 compatibility layer during incremental Bootstrap 5 migration */
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -5px;
+    margin-left: -5px;
+  }
+
+  .form-row > .col,
+  .form-row > [class*='col-'] {
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .justify-content-left {
+    justify-content: flex-start !important;
+  }
+
+  .text-left {
+    text-align: left !important;
+  }
+
+  .text-right {
+    text-align: right !important;
+  }
+
+  .float-left {
+    float: left !important;
+  }
+
+  .float-right {
+    float: right !important;
+  }
+
+  .btn-block {
+    display: block;
+    width: 100%;
+  }
+
+  .ml-auto {
+    margin-left: auto !important;
+  }
+
+  .mr-auto {
+    margin-right: auto !important;
+  }
+
+  .ml-0 { margin-left: 0 !important; }
+  .ml-1 { margin-left: 0.25rem !important; }
+  .ml-2 { margin-left: 0.5rem !important; }
+  .ml-3 { margin-left: 1rem !important; }
+  .ml-4 { margin-left: 1.5rem !important; }
+  .ml-5 { margin-left: 3rem !important; }
+
+  .mr-0 { margin-right: 0 !important; }
+  .mr-1 { margin-right: 0.25rem !important; }
+  .mr-2 { margin-right: 0.5rem !important; }
+  .mr-3 { margin-right: 1rem !important; }
+  .mr-4 { margin-right: 1.5rem !important; }
+  .mr-5 { margin-right: 3rem !important; }
+
+  .pl-0 { padding-left: 0 !important; }
+  .pl-1 { padding-left: 0.25rem !important; }
+  .pl-2 { padding-left: 0.5rem !important; }
+  .pl-3 { padding-left: 1rem !important; }
+  .pl-4 { padding-left: 1.5rem !important; }
+  .pl-5 { padding-left: 3rem !important; }
+
+  .pr-0 { padding-right: 0 !important; }
+  .pr-1 { padding-right: 0.25rem !important; }
+  .pr-2 { padding-right: 0.5rem !important; }
+  .pr-3 { padding-right: 1rem !important; }
+  .pr-4 { padding-right: 1.5rem !important; }
+  .pr-5 { padding-right: 3rem !important; }
+
+  .ml-n1 { margin-left: -0.25rem !important; }
+  .ml-n2 { margin-left: -0.5rem !important; }
+  .ml-n3 { margin-left: -1rem !important; }
+  .ml-n4 { margin-left: -1.5rem !important; }
+  .ml-n5 { margin-left: -3rem !important; }
+
+  .mr-n1 { margin-right: -0.25rem !important; }
+  .mr-n2 { margin-right: -0.5rem !important; }
+  .mr-n3 { margin-right: -1rem !important; }
+  .mr-n4 { margin-right: -1.5rem !important; }
+  .mr-n5 { margin-right: -3rem !important; }
+
   .desabilitar-elemento {
     pointer-events: none !important;
     opacity: 0.6 !important;
