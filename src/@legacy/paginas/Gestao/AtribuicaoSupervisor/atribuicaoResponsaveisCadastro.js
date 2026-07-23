@@ -406,7 +406,11 @@ const AtribuicaoResponsaveisCadastro = () => {
               onClick={() => salvarAtribuicao()}
               disabled={
                 salvando ||
-                (!permissoesTela.podeIncluir && !permissoesTela.podeAlterar)
+                (!permissoesTela.podeIncluir && !permissoesTela.podeAlterar) ||
+                carregandoDres ||
+                carregandoTipoResponsavel ||
+                carregandoResponsavel ||
+                carregandoUes
               }
             />
           </Col>
