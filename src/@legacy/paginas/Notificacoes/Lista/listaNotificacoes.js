@@ -27,6 +27,7 @@ import { SGP_BUTTON_LIDA } from '~/constantes/ids/button';
 
 export default function NotificacoesLista() {
   const navigate = useNavigate();
+  const menuOculto = useSelector(state => state.navegacao.menuOculto);
 
   const [idNotificacoesSelecionadas, setIdNotificacoesSelecionadas] = useState(
     []
@@ -329,7 +330,7 @@ export default function NotificacoesLista() {
   }
 
   function quandoClicarVoltar() {
-    navigate(URL_HOME);
+    navigate(menuOculto ? ROUTES.SONDAGEM : URL_HOME);
   }
 
   return (

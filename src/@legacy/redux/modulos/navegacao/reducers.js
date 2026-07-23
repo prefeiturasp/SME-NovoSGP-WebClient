@@ -1,5 +1,7 @@
 import produce from 'immer';
 
+const MENU_OCULTO_KEY = 'sgp-menu-oculto';
+
 const rotas = new Map();
 const inicial = {
   retraido: false,
@@ -7,6 +9,7 @@ const inicial = {
   rotas,
   menuSelecionado: [],
   somenteConsulta: false,
+  menuOculto: localStorage.getItem(MENU_OCULTO_KEY) === 'true',
 };
 
 export default function navegacao(state = inicial, action) {
@@ -26,6 +29,10 @@ export default function navegacao(state = inicial, action) {
         break;
       case '@navegacao/somenteConsulta':
         draft.somenteConsulta = action.payload;
+        break;
+      case '@navegacao/menuOculto':
+        draft.menuOculto = action.payload;
+        localStorage.setItem(MENU_OCULTO_KEY, action.payload ? 'true' : 'false');
         break;
       default:
         break;

@@ -9,6 +9,7 @@ import { isBrowser, IOSView } from 'react-device-detect';
 import LoginHelper from './loginHelper';
 import Row from '~/componentes/row';
 import LogoDoSgp from '~/recursos/LogoSgpTexto.svg';
+import LogoCidadeSP from '~/recursos/prefeitura-sp-logo.png';
 import Grid from '~/componentes/grid';
 import { Colors } from '~/componentes/colors';
 import FormGroup from '~/componentes/formGroup';
@@ -27,11 +28,13 @@ import {
   TextoAjuda,
   ErroGeral,
   MensagemMobile,
+  BannerSondagem,
 } from './login.css';
 import CampoTexto from '~/componentes/campoTexto';
 import { URL_RECUPERARSENHA } from '~/constantes/url';
 import { Loader } from '~/componentes';
 import { setExibirMensagemSessaoExpirou } from '~/redux/modulos/mensagens/actions';
+import { setMenuOculto } from '~/redux/modulos/navegacao/actions';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const Login = () => {
@@ -80,6 +83,7 @@ const Login = () => {
     });
 
     setErroGeral('');
+    dispatch(setMenuOculto(false));
     dispatch(setExibirMensagemSessaoExpirou(false));
 
     const { sucesso, ...retorno } = await helper.acessar({
@@ -133,6 +137,10 @@ const Login = () => {
 
   return (
     <Fundo className="p-0 h-100 overflow-hidden">
+      <BannerSondagem>
+        <img src="/imagens/NovaSondagemDisponivel.png" alt="Nova sondagem disponível" />
+        <button type="button" onClick={() => navigate('/login-sondagem')}>Acesse aqui</button>
+      </BannerSondagem>
       <Grid cols={12} className="d-flex justify-content-end overflow-hidden">
         <Cartao className="col-xl-6 col-lg-6 col-md-8 pt-1 pb-0 col-sm-8 col-xs-12 overflow-hidden">
           <CorpoCartao className=" overflow-hidden">
@@ -236,9 +244,9 @@ const Login = () => {
               <Row className="col-md-12 d-flex justify-content-center align-self-end mb-3">
                 <LogoSP className="col-xl-8 col-md-8 col-sm-8 col-xs-12 d-flex">
                   <Logo
-                    src="/imagens/logo-prefeitura.png"
-                    alt="Prefeitura de São Paulo"
-                    style={{ width: '171px', height: 'auto' }}
+                    src={LogoCidadeSP}
+                    alt="Cidade de São Paulo - Educação"
+                    height={70}
                   />
                 </LogoSP>
               </Row>
