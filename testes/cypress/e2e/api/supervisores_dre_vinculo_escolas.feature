@@ -2,6 +2,7 @@
 
 Funcionalidade: API - Lista UEs com vínculos a DRE
 @ignore
+
   Cenário: Listar todos os códigos e nomes das UEs
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET de vínculos DRE
@@ -12,3 +13,12 @@ Funcionalidade: API - Lista UEs com vínculos a DRE
     Quando tento a requisição GET de vínculos DRE
     Então não retorna todos os códigos e nomes das UEs mostrando o status 401
 
+  Cenário: Não retorna dados com token expirado
+    Dado que não possuo um token de acesso válido
+    Quando tento a requisição GET de vínculos DRE
+    Então não retorna todos os códigos e nomes das UEs mostrando o status 401
+
+  Cenário: Garante que chamadas repetidas sem autenticação continuam bloqueadas
+    Dado que não possuo um token de acesso válido
+    Quando tento a requisição GET de vínculos DRE
+    Então não retorna todos os códigos e nomes das UEs mostrando o status 401
