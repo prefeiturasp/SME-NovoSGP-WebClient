@@ -61,8 +61,8 @@ const CardHeader = props => {
       {children}
       {icon ? (
         <Link
-          className="text-decoration-none ml-auto"
-          data-toggle="collapse"
+          className="text-decoration-none ms-auto"
+          data-bs-toggle="collapse"
           href={`#${indice}`}
           id={`expandir-retrair-${indice}`}
           role="button"

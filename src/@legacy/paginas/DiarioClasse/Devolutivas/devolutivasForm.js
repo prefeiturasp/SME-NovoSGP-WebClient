@@ -1,7 +1,6 @@
 import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
-import $ from 'jquery';
 import * as moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -760,10 +759,13 @@ const DevolutivasForm = () => {
                             name="descricao"
                             id="editor-devolutiva"
                             onChange={v => {
-                              const campo = $(v);
+                              const campo = removerTagsHtml(v)?.replaceAll(
+                                /\s/g,
+                                ''
+                              );
                               if (
                                 valoresIniciais?.descricao !== v &&
-                                valoresIniciais?.descricao !== campo?.text()
+                                valoresIniciais?.descricao !== campo
                               ) {
                                 setModoEdicao(true);
                               }

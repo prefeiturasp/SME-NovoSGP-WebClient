@@ -232,6 +232,7 @@ const PendenciasGerais = () => {
           <div className="col-md-12 mb-3">
             <Cabecalho
               pagina="Pendências"
+              classes={styles.cabecalhoSemOverflow}
               style={{ background: '#fff' }}
               removeAffix
             />
