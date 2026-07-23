@@ -30,6 +30,7 @@ const inicial = {
   ehPerfilProfessor: false,
   recarregarFiltroPrincipal: false,
   listaUrlAjudaDoSistema: [],
+  loginSource: 'sgp',
 };
 
 export default function usuario(state = inicial, action) {
@@ -125,6 +126,9 @@ export default function usuario(state = inicial, action) {
         break;
       case '@usuario/setListaUrlAjudaDoSistema':
         draft.listaUrlAjudaDoSistema = action.payload;
+        break;
+      case '@usuario/setLoginSource':
+        draft.loginSource = action.payload;
         break;
       default:
         break;

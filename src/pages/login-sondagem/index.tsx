@@ -19,6 +19,7 @@ import { Loader } from '@/@legacy/componentes';
 import { URL_RECUPERARSENHA } from '@/@legacy/constantes/url';
 import { setExibirMensagemSessaoExpirou } from '@/@legacy/redux/modulos/mensagens/actions';
 import { setMenuOculto } from '@/@legacy/redux/modulos/navegacao/actions';
+import { setLoginSource } from '@/@legacy/redux/modulos/usuario/actions';
 import { useAppSelector } from '@/core/hooks/use-redux';
 import { ROUTES } from '@/core/enum/routes';
 import {
@@ -86,6 +87,7 @@ const LoginSondagem = () => {
       navigate,
     });
 
+    if (sucesso) dispatch(setLoginSource('sondagem'));
     if (!sucesso) {
       setErroGeral((retorno as any).erroGeral);
       setCarregando(false);

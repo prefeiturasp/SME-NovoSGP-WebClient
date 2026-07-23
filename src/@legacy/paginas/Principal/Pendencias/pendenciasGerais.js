@@ -79,14 +79,16 @@ const PendenciasGerais = () => {
     ]
   );
 
-  const onChangePaginacao = async pagina => {
-    obterPendencias(pagina, numeroRegistrosPagina);
+  const onChangePaginacao = async (
+    pagina,
+    tamanhoPagina = numeroRegistrosPagina
+  ) => {
+    setNumeroRegistrosPagina(tamanhoPagina);
+    obterPendencias(pagina, tamanhoPagina);
   };
 
-  const onChangeNumeroLinhas = async (paginaAtual, numeroLinhas) => {
-    setNumeroRegistros(numeroLinhas);
-    setNumeroRegistrosPagina(numeroLinhas);
-    obterPendencias(paginaAtual, numeroLinhas);
+  const onChangeNumeroLinhas = (_, tamanhoPagina) => {
+    setNumeroRegistrosPagina(tamanhoPagina);
   };
 
   const obterTurmas = async () => {
