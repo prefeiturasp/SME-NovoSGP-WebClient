@@ -297,21 +297,81 @@ export default createGlobalStyle`
   }
 
   /* Bootstrap 4 compatibility layer during incremental Bootstrap 5 migration */
+  .row {
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+
+  .row > .col,
+  .row > [class*='col-'] {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
   .form-row {
     display: flex;
     flex-wrap: wrap;
-    margin-right: -5px;
-    margin-left: -5px;
+    margin-right: -15px;
+    margin-left: -15px;
   }
 
   .form-row > .col,
   .form-row > [class*='col-'] {
-    padding-right: 5px;
-    padding-left: 5px;
+    padding-right: 15px;
+    padding-left: 15px;
   }
 
   .form-group {
     margin-bottom: 1rem;
+  }
+
+  .form-group > label,
+  .form-group .col-form-label,
+  .form-label {
+    margin-bottom: 0.5rem;
+  }
+
+  .card-header {
+    padding: 0.75rem 1.25rem;
+  }
+
+  .card-body {
+    padding: 1.25rem;
+  }
+
+  .card-footer {
+    padding: 0.75rem 1.25rem;
+  }
+
+  .table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    border-collapse: collapse;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+  }
+
+  .table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+  }
+
+  .badge-pill {
+    border-radius: 10rem;
+  }
+
+  .font-weight-light {
+    font-weight: 300 !important;
+  }
+
+  .font-weight-bold {
+    font-weight: 700 !important;
   }
 
   .justify-content-left {
