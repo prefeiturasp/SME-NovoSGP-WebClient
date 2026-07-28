@@ -14,8 +14,8 @@ Background
 
     Exemplos:
     | usuario     | senha    | device | turma                  | cenario         |
-    #| 41810315000 | Sgp@1234 | web    | Todas                  | Todas as turmas |
-    #| 41810315000 | Sgp@1234 | web    | EF - 1A - 1º Ano       | Turma A |
-    #| 41810315000 | Sgp@1234 | web    | EF - 1B - 1º Ano       | Turma B |
-    #| 41810315000 | Sgp@1234 | web    | EF - 1C - 1º Ano       | Turma C |
+    | 41810315000 | Sgp@1234 | web    | Todas                  | Todas as turmas |
+    | 41810315000 | Sgp@1234 | web    | EF - 1A - 1º Ano       | Turma A |
+    | 41810315000 | Sgp@1234 | web    | EF - 1B - 1º Ano       | Turma B |
+    | 41810315000 | Sgp@1234 | web    | EF - 1C - 1º Ano       | Turma C |
     | 41810315000 | Sgp@1234 | web    | EF - 1A - 1º Ano,EF - 1B - 1º Ano,EF - 1C - 1º Ano | Turmas A, B e C |

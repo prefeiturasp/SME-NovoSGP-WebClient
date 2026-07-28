@@ -4,15 +4,15 @@ const Dado = Given
 const Quando = When
 const Entao = Then
 
-Dado('que eu acesso o sistema com a visualização {string}', function (device) {
+Dado('que eu acesso o sistema com a visualização {string} para registro de ações', function (device) {
     cy.login_sgp(device)
 })
 
-Quando('informo os dados nos campos {string} e {string}', function (usuario, senha) {
+Quando('informo os dados nos campos {string} e {string} para registro de ações', function (usuario, senha) {
     cy.dados_de_login(usuario, senha)
 })
 
-Quando('clico no botão de acessar', function () {
+Quando('clico no botão de acessar para registro de ações', function () {
     cy.clicar_botao()
 })
 
@@ -20,7 +20,7 @@ Quando('acesso a tela de registro de ações', function () {
     cy.acessar_registro_acoes_busca()
 })
 
-Quando('seleciono {string} no campo de turma', function (turma) {
+Quando('seleciono {string} no campo de turma do registro de ações', function (turma) {
     cy.inserir_turma_registro_acoes_busca(turma)
 })
 

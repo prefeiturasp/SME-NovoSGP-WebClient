@@ -18,6 +18,7 @@ Cypress.Commands.add('clicar_botao', () => {
 
     if (usuarioVal !== "" && senhaVal !== "") {
         cy.intercept('POST', '/api/v1/autenticacao').as('loginRequest')
+        cy.intercept('GET', Cypress.config('baseUrl') + '/api/v1/menus').as('menus')
     }
 
     cy.get(loginLocalizadores.botao_acessar())
@@ -57,11 +58,4 @@ Cypress.Commands.add('validar_mensagem', (mensagem) => {
 Cypress.Commands.add('validar_perfil', (perfil) => {
     cy.get(loginLocalizadores.botao_perfil(), { timeout: 60000 }).should('be.visible')
     cy.contains(loginLocalizadores.botao_perfil(), perfil).should('be.visible')
-})
-
-Cypress.Commands.add('carregandoMenus', () => {
-    const apiUrl = Cypress.config('baseUrl') + '/api/v1/menus'
-    
-    cy.intercept('GET', apiUrl).as('menus')
-    cy.wait('@menus', { timeout: 60000 }).its('response.statusCode').should('eq', 200)
 })

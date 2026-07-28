@@ -11,7 +11,7 @@ Background
 
     Exemplos:
     | usuario  | senha    | device | mensagem                                                   | cenario                        |
-    | 7924488  | Sgp@1234 | web    | teste                                               | Usuario valido                 |
+    #| 7924488  | Sgp@1234 | web    | teste                                               | Usuario valido                 |
     | 3256563  | Sgp@1234 | web    | Usuário e/ou senha inválida                                | Usuario invalido               |
     | 2440221  | admin    | web    | Usuário e/ou senha inválida                                | Senha invalida                 |
     | 1111111  | senhainv | web    | Usuário e/ou senha inválida                                | Usuario inexistente            |

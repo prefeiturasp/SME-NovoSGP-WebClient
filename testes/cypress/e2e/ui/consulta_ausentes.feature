@@ -19,5 +19,5 @@ Background
     | 41810315000 | Sgp@1234 | web    | Há 4 dias seguidos          | Ausente 4 dias seguidos |
     | 41810315000 | Sgp@1234 | web    | Há 5 dias seguidos          | Ausente 5 dias seguidos |
     | 41810315000 | Sgp@1234 | web    | Entre 11 e 15 dias seguidos | Ausente 11 e 15 dias seguidos |
-    | 41810315000 | Sgp@1234 | we     | Há mais de 15 dias seguidos | Ausente mais de 15 dias seguidos |
+    | 41810315000 | Sgp@1234 | web    | Há mais de 15 dias seguidos | Ausente mais de 15 dias seguidos |
     | 41810315000 | Sgp@1234 | web    | 3 ausências nos últimos 10 dias | Ausente 3 dias nos últimos 10 dias |
