@@ -46,7 +46,7 @@ function getDefaultColumns(tipoExtra) {
         );
       },
     },
-    ...extra,
+
     {
       title: 'Nível de frequência',
       dataIndex: 'nivelFrequencia',
@@ -157,8 +157,6 @@ export default function PainelFrequenciaBase({ tipoExtra, codigo, anoLetivo }) {
   const nextDisabled =
     !dataFrequencia || !dataFrequencia.isBefore(dayjs(), 'day');
 
-  const columns = getDefaultColumns(tipoExtra);
-
   const disabledDate = current => {
     if (!current) return false;
     const hoje = dayjs();
@@ -166,6 +164,8 @@ export default function PainelFrequenciaBase({ tipoExtra, codigo, anoLetivo }) {
     const inicioAno = hoje.startOf('year');
     return current.isBefore(inicioAno, 'day') || current.isAfter(ontem, 'day');
   };
+
+  const columns = getDefaultColumns(tipoExtra);
 
   const anoAtual = dayjs().year();
   if (String(anoLetivo) !== String(anoAtual)) {

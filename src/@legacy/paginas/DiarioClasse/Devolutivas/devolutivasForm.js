@@ -1,7 +1,6 @@
 import { ROUTES } from '@/core/enum/routes';
 import { Col, Row } from 'antd';
 import { Form, Formik } from 'formik';
-import $ from 'jquery';
 import * as moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -39,6 +38,7 @@ import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { removerTagsHtml } from '~/utils';
+import { formularioEhValido } from '~/utils/formikRefHelper';
 import DadosPlanejamentoDiarioBordo from './DadosPlanejamentoDiarioBordo/dadosPlanejamentoDiarioBordo';
 import { ANO_BASE_DEVOLUTIVA_UNIFICADA } from '~/constantes';
 
@@ -524,10 +524,7 @@ const DevolutivasForm = () => {
       refForm.setFieldTouched(campo, true, true);
     });
     return refForm.validateForm().then(() => {
-      if (
-        refForm.getFormikContext().isValid ||
-        Object.keys(refForm.getFormikContext().errors).length === 0
-      ) {
+      if (formularioEhValido(refForm)) {
         return salvarDevolutivas(refForm?.state?.values, clicouBtnSalvar);
       }
       return false;
@@ -624,7 +621,7 @@ const DevolutivasForm = () => {
         initialValues={valoresIniciais}
         validateOnBlur
         validateOnChange
-        ref={refFormik => setRefForm(refFormik)}
+        innerRef={refFormik => setRefForm(refFormik)}
       >
         {form => (
           <Form>
@@ -762,10 +759,13 @@ const DevolutivasForm = () => {
                             name="descricao"
                             id="editor-devolutiva"
                             onChange={v => {
-                              const campo = $(v);
+                              const campo = removerTagsHtml(v)?.replaceAll(
+                                /\s/g,
+                                ''
+                              );
                               if (
                                 valoresIniciais?.descricao !== v &&
-                                valoresIniciais?.descricao !== campo?.text()
+                                valoresIniciais?.descricao !== campo
                               ) {
                                 setModoEdicao(true);
                               }

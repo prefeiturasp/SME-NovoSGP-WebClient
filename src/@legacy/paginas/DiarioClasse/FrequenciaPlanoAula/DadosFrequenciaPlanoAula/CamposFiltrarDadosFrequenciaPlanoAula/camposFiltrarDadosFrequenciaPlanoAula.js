@@ -25,6 +25,31 @@ import servicoSalvarFrequenciaPlanoAula from '../../servicoSalvarFrequenciaPlano
 import ModalSelecionarAulaFrequenciaPlanoAula from '../ModalSelecionarAula/modalSelecionarAulaFrequenciaPlanoAula';
 import { setLimparTurmaFiltroAutenticacaoFrequencia } from '@/@legacy/redux/modulos/turmaFiltroAutenticacaoFrequencia/actions';
 
+const possuiCodigoComponenteEquivalente = (
+  componente,
+  componenteCurricularId
+) => {
+  const codigo = Number(componenteCurricularId);
+
+  if (!componente || Number.isNaN(codigo)) {
+    return false;
+  }
+
+  return [
+    componente.codigoComponenteCurricular,
+    componente.id,
+    componente.codigoComponenteCurricularTerritorioSaber,
+    componente.CodigoComponenteCurricularTerritorioSaber,
+    componente.codDisciplinaPai,
+    componente.cdComponenteCurricularPai,
+  ].some(
+    codigoEquivalente =>
+      codigoEquivalente !== undefined &&
+      codigoEquivalente !== null &&
+      Number(codigoEquivalente) === codigo
+  );
+};
+
 const CamposFiltrarDadosFrequenciaPlanoAula = () => {
   const dispatch = useDispatch();
 
@@ -145,8 +170,8 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       ) {
         const componenteNaLista = lista.find(
           item =>
-            String(item?.codigoComponenteCurricular) ===
-            String(
+            possuiCodigoComponenteEquivalente(
+              item,
               dadosFiltroAutenticacaoFrequencia?.componenteCurricularCodigo
             )
         );
@@ -199,7 +224,17 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       listaComponenteCurricular.length &&
       componenteCurricular
     ) {
-      setCodigoComponenteCurricular(String(componenteCurricular.id));
+      const componenteSelecionado = listaComponenteCurricular.find(componente =>
+        possuiCodigoComponenteEquivalente(
+          componente,
+          componenteCurricular.id ||
+            componenteCurricular.codigoComponenteCurricular
+        )
+      );
+
+      setCodigoComponenteCurricular(
+        componenteSelecionado ? String(componenteSelecionado.id) : undefined
+      );
     } else {
       setCodigoComponenteCurricular(undefined);
     }
@@ -224,12 +259,10 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
         if (codigoComponenteCurricularId) {
           const componente = listaComponenteCurricular.find(
             item =>
-              String(item.codigoComponenteCurricular) ===
-                codigoComponenteCurricularId ||
-              String(item.id) === codigoComponenteCurricularId ||
-              String(item.CodigoComponenteCurricularTerritorioSaber) ===
-                codigoComponenteCurricularId ||
-              String(item.codDisciplinaPai) === codigoComponenteCurricularId
+              possuiCodigoComponenteEquivalente(
+                item,
+                codigoComponenteCurricularId
+              )
           );
           dispatch(setComponenteCurricularFrequenciaPlanoAula(componente));
         } else {

@@ -3,7 +3,7 @@ Funcionalidade: Login
 
 Background
 
-  Esquema do Cenário: Validar login para o cenário "<cenario>" 
+  Esquema do Cenário: Validar login para o cenário "<cenario>"
     Dado que eu acesso o sistema com a visualização "<device>"
     E informo os dados nos campos "<usuario>" e "<senha>"
     Quando clico no botão de acessar

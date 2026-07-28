@@ -1,6 +1,6 @@
 import { store } from '@/core/redux';
 import { Col, Row } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Button, Card, Colors, Loader, SelectComponent } from '~/componentes';
 import { Cabecalho } from '~/componentes-sgp';
@@ -54,6 +54,8 @@ const AtribuicaoResponsaveisCadastro = () => {
   const [carregandoUes, setCarregandoUes] = useState(false);
 
   const [modoEdicao, setModoEdicao] = useState(false);
+  const [salvando, setSalvando] = useState(false);
+  const salvandoRef = useRef(false);
 
   const [auditoria, setAuditoria] = useState({});
 
@@ -86,27 +88,42 @@ const AtribuicaoResponsaveisCadastro = () => {
   };
 
   const salvarAtribuicao = async () => {
+    if (salvandoRef.current) return false;
+
     const atribuicao = {
       dreId,
       responsavelId: responsavel,
       uesIds: uesAtribuidas?.map?.(item => item?.codigo) || [],
       tipoResponsavelAtribuicao: tipoResponsavel,
     };
-    ServicoResponsaveis.salvarAtribuicao(atribuicao)
-      .then(() => {
-        sucesso('Atribuição realizada com sucesso.');
-        navigate(ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA);
-      })
-      .catch(e => {
-        if (e.response.status === 601) {
-          erro(e.response.data.mensagem);
-        } else {
-          erros(e);
-        }
-      });
+
+    salvandoRef.current = true;
+    setSalvando(true);
+
+    try {
+      await ServicoResponsaveis.salvarAtribuicao(atribuicao);
+      sucesso('Atribuição realizada com sucesso.');
+      navigate(ROUTES.ATRIBUICAO_RESPONSAVEIS_LISTA);
+      return true;
+    } catch (e) {
+      if (e?.response?.status === 601) {
+        const mensagem =
+          e?.response?.data?.mensagem ||
+          e?.response?.data?.mensagens?.join(' ');
+        erro(mensagem || 'Não foi possível salvar a atribuição.');
+      } else {
+        erros(e);
+      }
+      return false;
+    } finally {
+      salvandoRef.current = false;
+      setSalvando(false);
+    }
   };
 
   const onClickVoltar = async () => {
+    if (salvandoRef.current) return;
+
     if (modoEdicao) {
       const confirmado = await confirmar(
         'Atenção',
@@ -125,6 +142,8 @@ const AtribuicaoResponsaveisCadastro = () => {
   };
 
   const onClickCancelar = async () => {
+    if (salvandoRef.current) return;
+
     if (modoEdicao) {
       const confirmou = await confirmar(
         'Atenção',
@@ -375,18 +394,23 @@ const AtribuicaoResponsaveisCadastro = () => {
               border
               bold
               onClick={() => onClickCancelar()}
-              disabled={!dreId || !modoEdicao}
+              disabled={salvando || !dreId || !modoEdicao}
             />
           </Col>
           <Col>
             <Button
               id={SGP_BUTTON_SALVAR}
-              label="Salvar"
+              label={salvando ? 'Salvando...' : 'Salvar'}
               color={Colors.Roxo}
               bold
               onClick={() => salvarAtribuicao()}
               disabled={
-                !permissoesTela.podeIncluir && !permissoesTela.podeAlterar
+                salvando ||
+                (!permissoesTela.podeIncluir && !permissoesTela.podeAlterar) ||
+                carregandoDres ||
+                carregandoTipoResponsavel ||
+                carregandoResponsavel ||
+                carregandoUes
               }
             />
           </Col>
@@ -404,7 +428,9 @@ const AtribuicaoResponsaveisCadastro = () => {
                   valueOption="codigo"
                   valueText="nome"
                   disabled={
-                    !permissoesTela.podeConsultar || listaDres?.length === 1
+                    salvando ||
+                    !permissoesTela.podeConsultar ||
+                    listaDres?.length === 1
                   }
                   onChange={onChangeDre}
                   valueSelect={dreId}
@@ -423,6 +449,7 @@ const AtribuicaoResponsaveisCadastro = () => {
                   valueOption="codigo"
                   valueText="descricao"
                   disabled={
+                    salvando ||
                     !dreId ||
                     (tipoResponsavel && listaTipoResponsavel?.length === 1) ||
                     !permissoesTela.podeConsultar
@@ -443,6 +470,7 @@ const AtribuicaoResponsaveisCadastro = () => {
                   valueOption="supervisorId"
                   valueText="descricaoCodigo"
                   disabled={
+                    salvando ||
                     !dreId ||
                     !tipoResponsavel ||
                     listaResponsavel?.length === 1 ||
@@ -456,11 +484,15 @@ const AtribuicaoResponsaveisCadastro = () => {
               </Loader>
             </Col>
             <Col sm={24}>
-              <Loader loading={carregandoUes} ignorarTip>
+              <Loader
+                loading={carregandoUes || salvando}
+                ignorarTip={!salvando}
+                tip="Salvando a atribuição e atualizando os Planos AEE. Aguarde..."
+              >
                 <ListaTransferenciaResponsaveis
                   ueSelecionaGrid={codigoUeSelecionadoGrid}
                   temResponsavel={!!responsavel}
-                  podeConsultar={permissoesTela.podeConsultar}
+                  podeConsultar={permissoesTela.podeConsultar && !salvando}
                   dadosEsquerda={
                     !carregandoUes
                       ? uesSemAtribuicao?.length

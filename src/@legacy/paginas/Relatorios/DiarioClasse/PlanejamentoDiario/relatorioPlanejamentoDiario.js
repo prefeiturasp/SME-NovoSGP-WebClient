@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import { dateAdapter } from '@/core/date/adapter';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   CheckboxComponent,
@@ -134,7 +134,7 @@ const RelatorioPlanejamentoDiario = () => {
     setModoEdicao(true);
   };
 
-  const [anoAtual] = useState(moment().format('YYYY'));
+  const [anoAtual] = useState(dateAdapter.now().format('YYYY'));
 
   const obterDres = useCallback(async () => {
     if (anoLetivo) {
@@ -328,9 +328,9 @@ const RelatorioPlanejamentoDiario = () => {
   }, [modalidadeId, anoLetivo]);
 
   const checarPeriodoEhMaior = data => {
-    return moment(moment(data).format('YYYY-MM-DD')).isAfter(
-      moment().format('YYYY-MM-DD')
-    );
+    return dateAdapter
+      .parse(dateAdapter.format(data, 'YYYY-MM-DD'))
+      .isAfter(dateAdapter.now().format('YYYY-MM-DD'));
   };
 
   const checarPeriodoFinalBimestre = async () => {

@@ -1,8 +1,8 @@
-import { Given, When, Then } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then } from 'cypress-cucumber-preprocessor/steps';
 
-const Dado = Given
-const Quando = When
-const Entao = Then
+const Dado = Given;
+const Quando = When;
+const Entao = Then;
 
 Dado('que eu acesso o sistema com a visualização {string} para registro de ações', function (device) {
     cy.login_sgp(device)
@@ -17,21 +17,21 @@ Quando('clico no botão de acessar para registro de ações', function () {
 })
 
 Quando('acesso a tela de registro de ações', function () {
-    cy.acessar_registro_acoes_busca()
-})
+  cy.acessar_registro_acoes_busca();
+});
 
 Quando('seleciono {string} no campo de turma do registro de ações', function (turma) {
     cy.inserir_turma_registro_acoes_busca(turma)
 })
 
 Quando('escolho o período', function () {
-    cy.inserir_periodo_registro_acoes_busca()
-})
+  cy.inserir_periodo_registro_acoes_busca();
+});
 
 Quando('meio de contato', function () {
-    cy.selecionar_contato_registro_acoes_busca()
-})
-  
+  cy.selecionar_contato_registro_acoes_busca();
+});
+
 Entao('o sistema realiza a validação para o cenario {string}', function (cenario) {
-    cy.dados_carregados_registro_acoes_busca(cenario)
-})
+  cy.dados_carregados_registro_acoes_busca(cenario);
+});

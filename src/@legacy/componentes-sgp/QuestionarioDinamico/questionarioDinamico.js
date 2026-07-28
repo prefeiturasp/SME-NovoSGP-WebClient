@@ -1,6 +1,6 @@
 import { Form, Formik } from 'formik';
 import { cloneDeep } from 'lodash';
-import * as moment from 'moment';
+import { dateAdapter } from '@/core/date/adapter';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -107,13 +107,13 @@ const QuestionarioDinamico = props => {
             break;
           case tipoQuestao.Data:
             valorRespostaAtual = resposta[0].texto
-              ? moment(resposta[0].texto)
+              ? dateAdapter.parse(resposta[0].texto)
               : '';
             break;
           case tipoQuestao.Periodo:
             valorRespostaAtual = {
-              periodoInicio: moment(resposta[0].periodoInicio),
-              periodoFim: moment(resposta[0].periodoFim),
+              periodoInicio: dateAdapter.parse(resposta[0].periodoInicio),
+              periodoFim: dateAdapter.parse(resposta[0].periodoFim),
             };
             break;
           case tipoQuestao.FrequenciaEstudanteAEE:
@@ -780,7 +780,7 @@ const QuestionarioDinamico = props => {
       }
       validateOnChange
       validateOnBlur
-      ref={refFormik => setRefForm(refFormik)}
+      innerRef={refFormik => setRefForm(refFormik)}
     >
       {form => (
         <Form>

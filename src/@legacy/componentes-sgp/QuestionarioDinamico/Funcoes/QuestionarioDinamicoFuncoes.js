@@ -1,4 +1,4 @@
-import * as moment from 'moment';
+import { dateAdapter } from '@/core/date/adapter';
 import { store } from '@/core/redux';
 import _, { cloneDeep, groupBy } from 'lodash';
 import tipoQuestao from '~/dtos/tipoQuestao';
@@ -13,6 +13,18 @@ import {
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, erros } from '~/servicos';
 class QuestionarioDinamicoFuncoes {
+  obterContextoFormik = formRef => {
+    if (!formRef) {
+      return {};
+    }
+
+    if (typeof formRef.getFormikContext === 'function') {
+      return formRef.getFormikContext();
+    }
+
+    return formRef;
+  };
+
   agruparCamposDuplicados = (data, campo) => {
     if (data?.length) {
       let novoMap = _.cloneDeep(data);
@@ -516,7 +528,7 @@ class QuestionarioDinamicoFuncoes {
 
     const validaAntesDoSubmit = (refForm, secaoId) => {
       let arrayCampos = [];
-      const camposValidar = refForm?.state?.values;
+      const camposValidar = refForm?.state?.values || refForm?.values;
 
       if (camposValidar && Object.keys(camposValidar)?.length) {
         arrayCampos = Object.keys(camposValidar);
@@ -527,9 +539,11 @@ class QuestionarioDinamicoFuncoes {
       });
 
       return refForm.validateForm().then(() => {
+        const contextoFormik = this.obterContextoFormik(refForm);
+
         if (
-          refForm.getFormikContext().isValid ||
-          Object.keys(refForm.getFormikContext().errors).length === 0
+          contextoFormik?.isValid ||
+          Object.keys(contextoFormik?.errors || {}).length === 0
         ) {
           contadorFormsValidos += 1;
         } else {
@@ -653,10 +667,13 @@ class QuestionarioDinamicoFuncoes {
                 if (campos[key]?.periodoInicio && campos[key]?.periodoFim) {
                   questao.resposta = JSON.stringify([
                     campos[key].periodoInicio
-                      ? moment(campos[key].periodoInicio).format('DD/MM/YYYY')
+                      ? dateAdapter.format(
+                          campos[key].periodoInicio,
+                          'DD/MM/YYYY'
+                        )
                       : '',
                     campos[key].periodoFim
-                      ? moment(campos[key].periodoFim).format('DD/MM/YYYY')
+                      ? dateAdapter.format(campos[key].periodoFim, 'DD/MM/YYYY')
                       : '',
                   ]);
                 } else {
@@ -778,12 +795,13 @@ class QuestionarioDinamicoFuncoes {
             }
           });
 
+          const contextoFormik = this.obterContextoFormik(form);
+
           return {
             questoes,
             secaoNome: nomeCompoente || '',
             secaoId: item?.secaoId || 0,
-            concluido:
-              Object.keys(form.getFormikContext().errors)?.length === 0,
+            concluido: Object.keys(contextoFormik?.errors || {})?.length === 0,
           };
         });
 

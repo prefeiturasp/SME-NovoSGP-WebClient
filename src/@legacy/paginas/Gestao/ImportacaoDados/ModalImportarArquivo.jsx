@@ -129,6 +129,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
     }
     const anoNum = String(anoSelecionado.nome);
     setEnviando(true);
+
     try {
       const fmData = new FormData();
       let url = '';
@@ -178,6 +179,7 @@ function ModalImportarArquivo({ setarModal, resetarLista, abrirDrawer }) {
 
       const resposta = await api.post(url, fmData, config);
 
+      setEnviando(false);
       setarModal(false);
       resetarLista((prev) => prev + 1);
 

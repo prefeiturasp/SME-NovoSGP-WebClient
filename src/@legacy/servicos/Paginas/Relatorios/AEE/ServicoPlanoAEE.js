@@ -13,6 +13,7 @@ import {
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
+import { formularioEhValido } from '~/utils/formikRefHelper';
 
 const urlPadrao = 'v1/plano-aee';
 
@@ -88,10 +89,7 @@ class ServicoPlanoAEE {
         refForm.setFieldTouched(campo, true, true);
       });
       return refForm.validateForm().then(() => {
-        if (
-          refForm.getFormikContext().isValid ||
-          Object.keys(refForm.getFormikContext().errors).length === 0
-        ) {
+        if (formularioEhValido(refForm)) {
           contadorFormsValidos += 1;
         }
       });
