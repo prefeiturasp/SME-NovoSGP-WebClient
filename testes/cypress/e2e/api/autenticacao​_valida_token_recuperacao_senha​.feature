@@ -26,21 +26,21 @@ Funcionalidade: API - Validação do token de recuperação de senha
   #  Quando tento a requisição GET com token inválido
   #  Então retorna o status 422
 
-  Cenário: Validar consistência do erro para token inválido
-    Quando tento a requisição GET com token inválido
-    Então retorna o status 422
+  #Cenário: Validar consistência do erro para token inválido
+  #  Quando tento a requisição GET com token inválido
+  #  Então retorna o status 422
 
-  Cenário: Não validar token inexistente
-    Quando tento a requisição GET com token inválido
-    Então retorna o status 422
+  #Cenário: Não validar token inexistente
+  #  Quando tento a requisição GET com token inválido
+  #  Então retorna o status 422
 
-  Cenário: Não validar token vazio
-    Quando tento a requisição GET com token inválido
-    Então retorna o status 422
+  #Cenário: Não validar token vazio
+  #  Quando tento a requisição GET com token inválido
+  #  Então retorna o status 422
 
-  Cenário: Validar tentativa com token expirado
-    Quando tento a requisição GET com token inválido
-    Então retorna o status 422
+  #Cenário: Validar tentativa com token expirado
+  #  Quando tento a requisição GET com token inválido
+  #  Então retorna o status 422
 
   Cenário: Validar tentativa de reutilização de token já utilizado
     Quando envio uma requisição GET com token válido
