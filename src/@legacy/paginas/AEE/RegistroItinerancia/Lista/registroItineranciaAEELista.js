@@ -472,7 +472,7 @@ const RegistroItineranciaAEELista = () => {
         </Row>
       </Cabecalho>
       <Card>
-        <div className="col-md-12">
+        <div className="col-md-12 qa-ajuste-registro-itinerancia">
           <div className="row mb-4">
             <div className="col-sm-12">
               <CheckboxComponent
@@ -560,7 +560,7 @@ const RegistroItineranciaAEELista = () => {
                 campoDescricao="nome"
               />
             </div>
-            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4 p-0">
+            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-4">
               <LocalizadorEstudantesAtivos
                 id="estudante"
                 showLabel
@@ -603,13 +603,14 @@ const RegistroItineranciaAEELista = () => {
                 desabilitarData={desabilitarData}
               />
             </div>
-            <div className="col-sm-3 col-md-6 pt-4">
+            <div className="col-sm-12 col-md-6 col-lg-6 col-xl-6">
               <CampoData
                 formatoData="DD/MM/YYYY"
                 name="dataFinal"
                 valor={dataFinal}
                 onChange={mudarDataFinal}
                 placeholder="Data final"
+                label=" "
                 desabilitarData={desabilitarDataFinal}
               />
             </div>

@@ -447,6 +447,63 @@ export default createGlobalStyle`
   .mr-n4 { margin-right: -1.5rem !important; }
   .mr-n5 { margin-right: -3rem !important; }
 
+  .qa-ajuste-registro-poa form,
+  .qa-ajuste-atribuicao-cj form,
+  .qa-ajuste-atribuicao-esporadica form {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .qa-ajuste-registro-poa .row,
+  .qa-ajuste-atribuicao-cj .row,
+  .qa-ajuste-atribuicao-esporadica .row {
+    margin-left: 0;
+    margin-right: 0;
+    align-items: flex-end;
+  }
+
+  .qa-ajuste-registro-poa .row > [class*='col-'],
+  .qa-ajuste-atribuicao-cj .row > [class*='col-'],
+  .qa-ajuste-atribuicao-esporadica .row > [class*='col-'] {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .qa-ajuste-registro-poa .row > [class*='col-']:first-child,
+  .qa-ajuste-atribuicao-cj .row > [class*='col-']:first-child,
+  .qa-ajuste-atribuicao-esporadica .row > [class*='col-']:first-child {
+    padding-left: 0;
+  }
+
+  .qa-ajuste-registro-poa .row > [class*='col-']:last-child,
+  .qa-ajuste-atribuicao-cj .row > [class*='col-']:last-child,
+  .qa-ajuste-atribuicao-esporadica .row > [class*='col-']:last-child {
+    padding-right: 0;
+  }
+
+  .qa-ajuste-plano-aee .ant-table-thead > tr > th {
+    vertical-align: middle !important;
+    line-height: 1.2;
+  }
+
+  .qa-ajuste-registro-itinerancia .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .qa-ajuste-registro-itinerancia .row > [class*='col-'] {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .qa-ajuste-registro-itinerancia .row > [class*='col-']:first-child {
+    padding-left: 0;
+  }
+
+  .qa-ajuste-registro-itinerancia .row > [class*='col-']:last-child {
+    padding-right: 0;
+  }
+
   .desabilitar-elemento {
     pointer-events: none !important;
     opacity: 0.6 !important;
