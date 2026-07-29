@@ -16,9 +16,20 @@ Cypress.Commands.add('acessar_registro_acoes_busca', () => {
 Cypress.Commands.add('inserir_turma_registro_acoes_busca', (turma) => {
     cy.get(registroAcoesBuscaSGPlocalizadores.campo_turma_registro_acoes_busca()).click({ force: true })
     cy.wait(1000)
-    cy.get(registroAcoesBuscaSGPlocalizadores.clica_turma_registro_acoes_busca(), { timeout: 5000 })
-       .contains(turma.trim()).should('be.visible').click({ force: true })
-    cy.get(registroAcoesBuscaSGPlocalizadores.campo_turma_registro_acoes_busca()).click()         
+
+    cy.get('body').then(($body) => {
+        if ($body.find(registroAcoesBuscaSGPlocalizadores.clica_turma_registro_acoes_busca()).length > 0) {
+            cy.get(registroAcoesBuscaSGPlocalizadores.clica_turma_registro_acoes_busca(), { timeout: 60000 })
+              .contains(turma.trim()).should('be.visible').click({ force: true })
+        } else {
+            cy.get(registroAcoesBuscaSGPlocalizadores.campo_turma_registro_acoes_busca()).click({ force: true })
+            cy.wait(1000)
+            cy.get(registroAcoesBuscaSGPlocalizadores.clica_turma_registro_acoes_busca(), { timeout: 60000 })
+              .contains(turma.trim()).should('be.visible').click({ force: true })
+        }
+    })
+
+    cy.get(registroAcoesBuscaSGPlocalizadores.campo_turma_registro_acoes_busca()).click()
 })
 
 Cypress.Commands.add('inserir_periodo_registro_acoes_busca', () => {

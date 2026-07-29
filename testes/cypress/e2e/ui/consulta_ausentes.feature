@@ -13,11 +13,11 @@ Background
 
     Exemplos:
     | usuario     | senha    | device | ausencia                    | cenario                 |
-    | 41810315000 | SENHA | web    | No dia de hoje              | Ausente hoje            |
-    | 41810315000 | SENHA | web    | Há 2 dias seguidos          | Ausente 2 dias seguidos |
-    | 41810315000 | SENHA | web    | Há 3 dias seguidos          | Ausente 3 dias seguidos |
-    | 41810315000 | SENHA | web    | Há 4 dias seguidos          | Ausente 4 dias seguidos |
-    | 41810315000 | SENHA | web    | Há 5 dias seguidos          | Ausente 5 dias seguidos |
-    | 41810315000 | SENHA | web    | Entre 11 e 15 dias seguidos | Ausente 11 e 15 dias seguidos |
-    | 41810315000 | SENHA | we     | Há mais de 15 dias seguidos | Ausente mais de 15 dias seguidos |
-    | 41810315000 | SENHA | web    | 3 ausências nos últimos 10 dias | Ausente 3 dias nos últimos 10 dias |
+    | 41810315000 | Sgp@1234 | web    | No dia de hoje              | Ausente hoje            |
+    | 41810315000 | Sgp@1234 | web    | Há 2 dias seguidos          | Ausente 2 dias seguidos |
+    | 41810315000 | Sgp@1234 | web    | Há 3 dias seguidos          | Ausente 3 dias seguidos |
+    | 41810315000 | Sgp@1234 | web    | Há 4 dias seguidos          | Ausente 4 dias seguidos |
+    | 41810315000 | Sgp@1234 | web    | Há 5 dias seguidos          | Ausente 5 dias seguidos |
+    | 41810315000 | Sgp@1234 | web    | Entre 11 e 15 dias seguidos | Ausente 11 e 15 dias seguidos |
+    | 41810315000 | Sgp@1234 | web    | Há mais de 15 dias seguidos | Ausente mais de 15 dias seguidos |
+    | 41810315000 | Sgp@1234 | web    | 3 ausências nos últimos 10 dias | Ausente 3 dias nos últimos 10 dias |
