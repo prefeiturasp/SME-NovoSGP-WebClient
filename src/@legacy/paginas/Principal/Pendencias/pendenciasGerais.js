@@ -217,14 +217,6 @@ const PendenciasGerais = () => {
     );
   };
 
-  const labelTipoPendencia = () => {
-    return (
-      <>
-        <span className="text-danger">*</span> Tipo
-      </>
-    );
-  };
-
   return (
     <Loader loading={carregando}>
       <Card className="mb-4 mt-4">
@@ -236,7 +228,7 @@ const PendenciasGerais = () => {
               style={{ background: '#fff' }}
               removeAffix
             />
-            <div className="mt-3 mb-4">
+            <div className={`mt-3 mb-4 ${styles.textoIntroAlinhado}`}>
               Para exibir as pendências selecione o Tipo desejado.
             </div>
           </div>
@@ -245,7 +237,9 @@ const PendenciasGerais = () => {
               <Loader loading={carregandoTipoPendenciaGrupo} ignorarTip>
                 <SelectComponent
                   id={SGP_SELECT_TIPO_PENDENCIA}
-                  label={labelTipoPendencia()}
+                  label="Tipo"
+                  labelRequired
+                  requiredOffset={0}
                   name="tipoId"
                   lista={listaTipoPendenciaGrupos}
                   valueOption="valor"

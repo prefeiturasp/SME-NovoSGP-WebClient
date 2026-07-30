@@ -44,6 +44,7 @@ const Label = ({
   altura,
   isRequired,
   withDiv,
+  requiredOffset,
 }) => {
   return (
     <Container
@@ -54,7 +55,7 @@ const Label = ({
       {isRequired && (
         <span
           style={{
-            marginLeft: '-11px',
+            marginLeft: `${requiredOffset}px`,
             color: Base.Vermelho,
             marginRight: '4px',
           }}
@@ -101,6 +102,7 @@ Label.propTypes = {
   altura: PropTypes.string,
   isRequired: PropTypes.bool,
   withDiv: PropTypes.bool,
+  requiredOffset: PropTypes.number,
 };
 
 Label.defaultProps = {
@@ -114,6 +116,7 @@ Label.defaultProps = {
   altura: '17',
   isRequired: false,
   withDiv: false,
+  requiredOffset: 0,
 };
 
 export default Label;
