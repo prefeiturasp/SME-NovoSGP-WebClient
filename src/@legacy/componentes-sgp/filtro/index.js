@@ -69,6 +69,9 @@ const Filtro = () => {
 
   const usuarioStore = useSelector(state => state.usuario);
   const trocouPerfil = useSelector(state => state.perfil)?.trocouPerfil;
+  const ehSupervisor =
+    useSelector(state => state.perfil?.perfilSelecionado?.nomePerfil) ===
+    'Supervisor';
   const dadosFiltroAutenticacaoFrequencia = useSelector(
     state => state.turmaFiltroAutenticacaoFrequencia
   )?.dadosFiltroAutenticacaoFrequencia;
@@ -431,7 +434,10 @@ const Filtro = () => {
 
   const obterDres = useCallback(
     async (estado, periodo) => {
-      if (campoVazio(anoLetivoSelecionado) || campoVazio(modalidadeSelecionada))
+      if (
+        campoVazio(anoLetivoSelecionado) ||
+        (campoVazio(modalidadeSelecionada) && !ehSupervisor)
+      )
         return [];
 
       setCarregandoDres(true);
@@ -452,7 +458,7 @@ const Filtro = () => {
       setCarregandoDres(false);
       return listaDres;
     },
-    [anoLetivoSelecionado, consideraHistorico, dispatch, modalidadeSelecionada]
+    [anoLetivoSelecionado, consideraHistorico, dispatch, modalidadeSelecionada, ehSupervisor,]
   );
 
   const obterUnidadesEscolares = useCallback(
@@ -599,7 +605,7 @@ const Filtro = () => {
       return estado;
     };
 
-    if (!anoLetivoSelecionado || !modalidadeSelecionada) {
+    if (!anoLetivoSelecionado || (!modalidadeSelecionada && !ehSupervisor)) {
       setPeriodoSelecionado(undefined);
       setDreSelecionada();
       setCampoPeriodoDesabilitado(true);
@@ -621,6 +627,7 @@ const Filtro = () => {
     obterDres,
     obterPeriodos,
     ehEJAOuCelp,
+    ehSupervisor,
   ]);
 
   useEffect(() => {

@@ -51,12 +51,14 @@ class ServicoFiltro {
     const periodoQuery = periodoSelecionado
       ? `&periodo=${periodoSelecionado}`
       : '';
+      
+    const modalidadeQuery = modalidadeSelecionada
+      ? `&modalidade=${modalidadeSelecionada}`
+      : '';
 
     return api
       .get(
-        `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivoSelecionado}&modalidade=${
-          modalidadeSelecionada || 0
-        }${periodoQuery}`
+        `v1/abrangencias/${consideraHistorico}/dres?anoLetivo=${anoLetivoSelecionado}${modalidadeQuery}${periodoQuery}`
       )
       .then(resposta => resposta);
   };
