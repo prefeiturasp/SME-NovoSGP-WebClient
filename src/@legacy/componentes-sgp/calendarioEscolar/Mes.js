@@ -77,7 +77,7 @@ const Mes = props => {
   }, [meses, numeroMes]);
 
   return (
-    <Div className="col-3 w-100 px-0">
+    <Div className="col-3 px-0">
       <Div
         className={mesSelecionado.className}
         onClick={abrirMes}

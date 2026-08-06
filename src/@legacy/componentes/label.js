@@ -7,15 +7,17 @@ const Container = styled.div`
   label,
   div {
     font-family: Roboto;
-    height: ${({ altura }) => `${altura}px`};
+    min-height: ${({ altura }) => `${altura}px`};
     font-size: ${({ tamanhoFonte }) => `${tamanhoFonte}px`};
     font-weight: normal;
     font-style: normal;
     font-stretch: normal;
-    line-height: normal;
+    line-height: ${({ altura }) => `${altura}px`};
     letter-spacing: 0.14px;
     color: #42474a;
     font-weight: bold;
+    display: inline-block;
+    margin-bottom: 3px;
   }
 
   span {
@@ -42,6 +44,7 @@ const Label = ({
   altura,
   isRequired,
   withDiv,
+  requiredOffset,
 }) => {
   return (
     <Container
@@ -52,7 +55,7 @@ const Label = ({
       {isRequired && (
         <span
           style={{
-            marginLeft: '-11px',
+            marginLeft: `${requiredOffset}px`,
             color: Base.Vermelho,
             marginRight: '4px',
           }}
@@ -99,6 +102,7 @@ Label.propTypes = {
   altura: PropTypes.string,
   isRequired: PropTypes.bool,
   withDiv: PropTypes.bool,
+  requiredOffset: PropTypes.number,
 };
 
 Label.defaultProps = {
@@ -112,6 +116,7 @@ Label.defaultProps = {
   altura: '17',
   isRequired: false,
   withDiv: false,
+  requiredOffset: 0,
 };
 
 export default Label;

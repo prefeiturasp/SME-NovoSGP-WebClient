@@ -19,12 +19,16 @@ import FormularioSenha from './FormularioSenha/formularioSenha';
 const Campos = styled.div`
   margin-right: 10px;
   margin-left: 40px;
-  .campo {
+
+  .row.campo {
     margin-top: 50px;
+    align-items: flex-end;
   }
 
-  .botao {
-    margin-top: 25px;
+  .row.campo .botao {
+    margin-top: 0;
+    display: flex;
+    justify-content: flex-end;
   }
 `;
 

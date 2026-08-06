@@ -190,7 +190,7 @@ function RegistroPOALista() {
         </Cabecalho>
         <Card>
           {!ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
-            <div className="col-md-12">
+            <div className="col-md-12 qa-ajuste-registro-poa">
               <Filtro onFiltrar={onChangeFiltro} />
               <ListaPaginada
                 id="lista-atribuicoes-cj"
