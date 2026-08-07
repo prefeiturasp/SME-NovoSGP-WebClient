@@ -51,6 +51,9 @@ import {
 } from './componentes';
 import { NOME_CAMPO_QUESTAO } from './componentes/ConstantesCamposDinâmicos';
 
+const MENSAGEM_CONSULTA_COM_ANALISE =
+  'Você possui permissão de consulta sobre o conteúdo deste registro e uma solicitação pendente para análise.';
+
 const RegistroItineranciaAEECadastro = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -97,6 +100,12 @@ const RegistroItineranciaAEECadastro = () => {
   const usuario = useSelector(store => store.usuario);
   const permissoesTela =
     usuario.permissoes[ROUTES.RELATORIO_AEE_REGISTRO_ITINERANCIA];
+  const permissoesNotificacoes = usuario.permissoes[ROUTES.NOTIFICACOES];
+
+  const podeAnalisarSolicitacao =
+    !!itineranciaAlteracao?.notificacaoIdAnalise &&
+    !!permissoesNotificacoes?.podeConsultar &&
+    !!permissoesNotificacoes?.podeAlterar;
 
   const permissaoStatus = itineranciaId && !itineranciaAlteracao?.podeEditar;
 
@@ -479,7 +488,6 @@ const RegistroItineranciaAEECadastro = () => {
         setItineranciaAlteracao(_.cloneDeep(itinerancia));
         construirItineranciaAlteracao(_.cloneDeep(itinerancia));
         setSomenteConsulta(itinerancia.criadoRF !== usuario.rf);
-        setSomenteConsultaManual(itinerancia.criadoRF !== usuario.rf);
         setAuditoria(itinerancia.auditoria);
       }
       setCarregandoGeral(false);
@@ -530,11 +538,35 @@ const RegistroItineranciaAEECadastro = () => {
     setSomenteConsulta(verificaSomenteConsulta(permissoesTela));
   }, [permissoesTela]);
 
+  useEffect(() => {
+    if (itineranciaId && itineranciaAlteracao?.criadoRF) {
+      const somenteConsultaRegistro =
+        itineranciaAlteracao.criadoRF !== usuario.rf;
+      setSomenteConsultaManual(
+        somenteConsultaRegistro,
+        somenteConsultaRegistro && podeAnalisarSolicitacao
+          ? MENSAGEM_CONSULTA_COM_ANALISE
+          : null
+      );
+    }
+  }, [
+    itineranciaId,
+    itineranciaAlteracao?.criadoRF,
+    podeAnalisarSolicitacao,
+    usuario.rf,
+  ]);
+
   const desabilitarDataVisita = dataCorrente => {
     return (
       dataCorrente > window.moment() ||
       dataCorrente < window.moment().startOf('year')
     );
+  };
+
+  const analisarSolicitacao = () => {
+    navigate(`/notificacoes/${itineranciaAlteracao.notificacaoIdAnalise}`, {
+      state: { voltarPara: location.pathname },
+    });
   };
 
   const desabilitarDataRetorno = dataCorrente => {
@@ -899,11 +931,22 @@ const RegistroItineranciaAEECadastro = () => {
                     />
                   </Loader>
                 </div>
-                <div>
+                <div className="d-flex flex-column align-items-end">
                   {itineranciaAlteracao?.statusWorkflow && (
                     <MarcadorSituacao corFundo={Colors.Azul}>
                       {itineranciaAlteracao?.statusWorkflow}
                     </MarcadorSituacao>
+                  )}
+                  {podeAnalisarSolicitacao && (
+                    <Button
+                      id="btn-analisar-solicitacao-itinerancia"
+                      className="mt-2"
+                      label="Analisar solicitação"
+                      color={Colors.Roxo}
+                      border
+                      bold
+                      onClick={analisarSolicitacao}
+                    />
                   )}
                 </div>
               </div>
