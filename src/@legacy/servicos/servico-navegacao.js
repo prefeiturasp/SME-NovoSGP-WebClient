@@ -3,7 +3,10 @@ import { store } from '@/core/redux';
 import { FiltroHelper } from '~/componentes-sgp';
 import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import tipoPermissao from '~/dtos/tipoPermissao';
-import { setSomenteConsulta } from '~/redux/modulos/navegacao/actions';
+import {
+  setMensagemSomenteConsulta,
+  setSomenteConsulta,
+} from '~/redux/modulos/navegacao/actions';
 import {
   setListaUrlAjudaDoSistema,
   setMenu,
@@ -112,6 +115,8 @@ const getObjetoStorageUsuario = objeto => {
 };
 
 const verificaSomenteConsulta = (permissoes, naoSetarResultadoNoStore) => {
+  store.dispatch(setMensagemSomenteConsulta(null));
+
   if (
     permissoes &&
     permissoes[tipoPermissao.podeConsultar] &&
@@ -130,8 +135,9 @@ const verificaSomenteConsulta = (permissoes, naoSetarResultadoNoStore) => {
   return false;
 };
 
-const setSomenteConsultaManual = valor => {
+const setSomenteConsultaManual = (valor, mensagem = null) => {
   store.dispatch(setSomenteConsulta(valor));
+  store.dispatch(setMensagemSomenteConsulta(mensagem));
 };
 
 const obterDescricaoNomeMenu = (

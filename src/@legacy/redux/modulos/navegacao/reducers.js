@@ -9,6 +9,7 @@ const inicial = {
   rotas,
   menuSelecionado: [],
   somenteConsulta: false,
+  mensagemSomenteConsulta: null,
   menuOculto: localStorage.getItem(MENU_OCULTO_KEY) === 'true',
 };
 
@@ -30,9 +31,15 @@ export default function navegacao(state = inicial, action) {
       case '@navegacao/somenteConsulta':
         draft.somenteConsulta = action.payload;
         break;
+      case '@navegacao/mensagemSomenteConsulta':
+        draft.mensagemSomenteConsulta = action.payload;
+        break;
       case '@navegacao/menuOculto':
         draft.menuOculto = action.payload;
-        localStorage.setItem(MENU_OCULTO_KEY, action.payload ? 'true' : 'false');
+        localStorage.setItem(
+          MENU_OCULTO_KEY,
+          action.payload ? 'true' : 'false'
+        );
         break;
       default:
         break;
