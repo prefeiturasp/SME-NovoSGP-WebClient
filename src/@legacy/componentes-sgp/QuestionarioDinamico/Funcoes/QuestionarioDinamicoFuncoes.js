@@ -12,6 +12,7 @@ import {
   setResetarTabela,
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, erros } from '~/servicos';
+import { obterValoresFormik, validarFormik } from '~/utils/formikRefHelper';
 class QuestionarioDinamicoFuncoes {
   obterContextoFormik = formRef => {
     if (!formRef) {
@@ -528,7 +529,7 @@ class QuestionarioDinamicoFuncoes {
 
     const validaAntesDoSubmit = (refForm, secaoId) => {
       let arrayCampos = [];
-      const camposValidar = refForm?.state?.values || refForm?.values;
+      const camposValidar = obterValoresFormik(refForm);
 
       if (camposValidar && Object.keys(camposValidar)?.length) {
         arrayCampos = Object.keys(camposValidar);
@@ -538,7 +539,7 @@ class QuestionarioDinamicoFuncoes {
         refForm.setFieldTouched(campo, true, true);
       });
 
-      return refForm.validateForm().then(() => {
+      return validarFormik(refForm).then(() => {
         const contextoFormik = this.obterContextoFormik(refForm);
 
         if (
@@ -594,7 +595,7 @@ class QuestionarioDinamicoFuncoes {
 
         valoresParaSalvar.secoes = formsParaSalvar.map(item => {
           const form = item.form();
-          const campos = form.state.values;
+          const campos = obterValoresFormik(form);
           const questoes = [];
           const nomeCompoente =
             dadosSecoes.find(secao => secao.id === item?.secaoId)

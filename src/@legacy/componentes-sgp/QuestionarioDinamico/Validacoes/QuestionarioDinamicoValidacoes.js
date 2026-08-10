@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import * as moment from 'moment';
 import tipoQuestao from '~/dtos/tipoQuestao';
 import { momentSchema } from '~/componentes/campoData/campoData';
+import { obterValoresFormik } from '~/utils/formikRefHelper';
 
 class QuestionarioDinamicoValidacoes {
   obterValidationSchema = (
@@ -9,12 +10,14 @@ class QuestionarioDinamicoValidacoes {
     form,
     validarCampoObrigatorioCustomizado
   ) => {
-    if (dadosQuestionarioAtual?.length && form?.state?.values) {
+    const valoresFormik = obterValoresFormik(form);
+
+    if (dadosQuestionarioAtual?.length && Object.keys(valoresFormik)?.length) {
       const camposComValidacao = {};
 
       let arrayCampos = [];
 
-      const camposValidar = form?.state?.values;
+      const camposValidar = valoresFormik;
       if (camposValidar && Object.keys(camposValidar)?.length) {
         arrayCampos = Object.keys(camposValidar);
       }
@@ -40,7 +43,7 @@ class QuestionarioDinamicoValidacoes {
           if (validarCampoObrigatorioCustomizado) {
             questaoAtualObrigatorio = validarCampoObrigatorioCustomizado(
               questaoAtual,
-              form.state.values
+              valoresFormik
             );
           }
 
