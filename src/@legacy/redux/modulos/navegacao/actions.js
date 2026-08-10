@@ -33,6 +33,13 @@ export function setSomenteConsulta(somenteConsulta) {
   };
 }
 
+export function setMensagemSomenteConsulta(mensagem) {
+  return {
+    type: '@navegacao/mensagemSomenteConsulta',
+    payload: mensagem,
+  };
+}
+
 export function setMenuOculto(oculto) {
   return {
     type: '@navegacao/menuOculto',

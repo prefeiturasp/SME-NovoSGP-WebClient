@@ -35,6 +35,7 @@ const DetalheNotificacao = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const paramsRoute = useParams();
+  const urlRetorno = location.state?.voltarPara || urlTelaNotificacoes;
 
   const idNotificacao = paramsRoute?.id || 0;
 
@@ -158,7 +159,7 @@ const DetalheNotificacao = () => {
           }
         });
 
-        navigate(urlTelaNotificacoes);
+        navigate(urlRetorno);
         if (usuario.rf.length > 0)
           servicoNotificacao.validarBuscaNotificacoesPorAnoRf(
             anoAtual,
@@ -194,7 +195,7 @@ const DetalheNotificacao = () => {
             }
           });
 
-          navigate(urlTelaNotificacoes);
+          navigate(urlRetorno);
           if (usuario.rf.length > 0) {
             servicoNotificacao.validarBuscaNotificacoesPorAnoRf(
               anoAtual,
@@ -234,7 +235,7 @@ const DetalheNotificacao = () => {
             aviso(data.mensagens[0]);
           } else sucesso(msgSucesso);
           setCarregandoTela(false);
-          navigate(urlTelaNotificacoes);
+          navigate(urlRetorno);
         }
       } catch (listaErros) {
         setCarregandoTela(false);
@@ -261,9 +262,7 @@ const DetalheNotificacao = () => {
               <Cabecalho pagina="Notificações">
                 <Row gutter={[8, 8]} type="flex">
                   <Col>
-                    <BotaoVoltarPadrao
-                      onClick={() => navigate(urlTelaNotificacoes)}
-                    />
+                    <BotaoVoltarPadrao onClick={() => navigate(urlRetorno)} />
                   </Col>
                   <Col>
                     <Button
