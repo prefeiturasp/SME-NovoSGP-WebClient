@@ -27,7 +27,12 @@ import {
 } from '~/redux/modulos/questionarioDinamico/actions';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
-import { formularioEhValido, obterErrosFormik } from '~/utils/formikRefHelper';
+import {
+  formularioEhValido,
+  obterErrosFormik,
+  obterValoresFormik,
+  validarFormik,
+} from '~/utils/formikRefHelper';
 import { ServicoCalendarios } from '../../Calendario';
 
 const urlPadrao = 'v1/encaminhamento-aee';
@@ -173,7 +178,7 @@ class ServicoEncaminhamentoAEE {
     const validaAntesDoSubmit = (refForm, secaoId) => {
       let arrayCampos = [];
 
-      const camposValidar = refForm?.state?.values;
+      const camposValidar = obterValoresFormik(refForm);
       if (camposValidar && Object.keys(camposValidar)?.length) {
         arrayCampos = Object.keys(camposValidar);
       }
@@ -181,7 +186,7 @@ class ServicoEncaminhamentoAEE {
       arrayCampos.forEach(campo => {
         refForm.setFieldTouched(campo, true, true);
       });
-      return refForm.validateForm().then(() => {
+      return validarFormik(refForm).then(() => {
         if (formularioEhValido(refForm)) {
           contadorFormsValidos += 1;
         } else {
@@ -243,7 +248,7 @@ class ServicoEncaminhamentoAEE {
         };
         valoresParaSalvar.secoes = formsParaSalvar.map(item => {
           const form = item.form();
-          const campos = form.state.values;
+          const campos = obterValoresFormik(form);
           const questoes = [];
 
           Object.keys(campos).forEach(key => {

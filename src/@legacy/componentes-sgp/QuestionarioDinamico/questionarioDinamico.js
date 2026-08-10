@@ -2,7 +2,7 @@ import { Form, Formik } from 'formik';
 import { cloneDeep } from 'lodash';
 import { dateAdapter } from '@/core/date/adapter';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Label } from '~/componentes';
 import tipoQuestao from '~/dtos/tipoQuestao';
@@ -61,12 +61,12 @@ const QuestionarioDinamico = props => {
 
   const [valoresIniciais, setValoresIniciais] = useState();
 
-  const [refForm, setRefForm] = useState({});
+  const refForm = useRef({});
 
-  const obterForm = () => refForm;
+  const obterForm = () => refForm.current;
 
   useEffect(() => {
-    if (refForm) {
+    if (refForm.current) {
       QuestionarioDinamicoFuncoes.adicionarFormsQuestionarioDinamico(
         () => obterForm(),
         dados.questionarioId,
@@ -74,7 +74,7 @@ const QuestionarioDinamico = props => {
         dados?.id
       );
     }
-  }, [refForm]);
+  }, [dados.questionarioId, dadosQuestionarioAtual, dados?.id]);
 
   const montarValoresIniciais = useCallback(() => {
     const valores = {};
@@ -774,21 +774,26 @@ const QuestionarioDinamico = props => {
       validationSchema={() =>
         QuestionarioDinamicoValidacoes.obterValidationSchema(
           dadosQuestionarioAtual,
-          refForm,
+          refForm.current,
           validarCampoObrigatorioCustomizado
         )
       }
       validateOnChange
       validateOnBlur
-      innerRef={refFormik => setRefForm(refFormik)}
+      innerRef={refFormik => {
+        refForm.current = refFormik;
+      }}
     >
-      {form => (
-        <Form>
-          <div className="row">
-            {montarQuestionarioAtual(dadosQuestionarioAtual, form)}
-          </div>
-        </Form>
-      )}
+      {form => {
+        refForm.current = form;
+        return (
+          <Form>
+            <div className="row">
+              {montarQuestionarioAtual(dadosQuestionarioAtual, form)}
+            </div>
+          </Form>
+        );
+      }}
     </Formik>
   ) : (
     <></>
