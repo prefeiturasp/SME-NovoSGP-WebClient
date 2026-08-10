@@ -12,6 +12,11 @@ export const MesCompletoWrapper = styled.div`
   border-left: 1px solid ${Base.CinzaBordaCalendario};
   border-right: 1px solid ${Base.CinzaBordaCalendario};
 
+  .ant-spin-nested-loading,
+  .ant-spin-container {
+    width: 100%;
+  }
+
   &.visivel {
     max-height: 1000px !important;
     height: auto !important;
