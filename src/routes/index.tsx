@@ -9,7 +9,6 @@ import RedefinirSenha from '~/paginas/RedefinirSenha';
 import { RouteProps, getRoutesArray } from '@/routes/config/route-list';
 import { rotaAtiva } from '~/redux/modulos/navegacao/actions';
 import { store } from '@/core/redux';
-import ReactGA from 'react-ga';
 
 import Auth from '@/routes/config/auth';
 import AutenticacaoFrequencia from '@/@legacy/paginas/AutenticacaoFrequencia/autenticacaoFrequencia';
@@ -32,10 +31,18 @@ const Routes = () => {
   const routesArray = getRoutesArray();
 
   useEffect(() => {
+    const currentPath = `${location.pathname}${location.search}${location.hash}`;
+
     localStorage.setItem('rota-atual', location.pathname);
     store.dispatch(rotaAtiva(location.pathname));
-    ReactGA.set({ page: location.pathname });
-    ReactGA.pageview(location.pathname);
+
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'page_view', {
+        page_path: currentPath,
+        page_title: document.title,
+        page_location: window.location.href,
+      });
+    }
   }, [location]);
 
   const montarRota = (route: RouteProps) => {
