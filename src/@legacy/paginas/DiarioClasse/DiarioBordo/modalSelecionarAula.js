@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { ModalConteudoHtml, SelectComponent } from '~/componentes';
 import tipoAula from '~/dtos/tipoAula';
+import { formularioEhValido } from '~/utils/formikRefHelper';
 
 const ModalSelecionarAula = props => {
   const {
@@ -53,10 +54,7 @@ const ModalSelecionarAula = props => {
       refForm.setFieldTouched(campo, true, true);
     });
     refForm.validateForm().then(() => {
-      if (
-        refForm.getFormikContext().isValid ||
-        Object.keys(refForm.getFormikContext().errors).length === 0
-      ) {
+      if (formularioEhValido(refForm)) {
         refForm.handleSubmit(e => e);
       }
     });
@@ -88,7 +86,7 @@ const ModalSelecionarAula = props => {
         validationSchema={validacoes}
         validateOnChange
         validateOnBlur
-        ref={refFormik => setRefForm(refFormik)}
+        innerRef={refFormik => setRefForm(refFormik)}
       >
         {form => (
           <Form className="col-md-12">
