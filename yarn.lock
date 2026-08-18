@@ -2433,7 +2433,7 @@
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-build-classic/-/ckeditor5-build-classic-16.0.0.tgz#9141e94ea6765eda4925aaf062448507410bbe70"
   integrity sha512-gBfZqWg3hmCvhq6/wX5UJp4qwl6gB+NJPpOkya2Y3jWKA0HKf3UdlhIvaHq7dRaqhi4unmqaJZVEk5VpZ1vDOg==
 
-"@ckeditor/ckeditor5-react@^2.0.0":
+"@ckeditor/ckeditor5-react@2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-react/-/ckeditor5-react-2.1.0.tgz#f612546a5a328899a436d71b72ffd632600049e8"
   integrity sha512-rlHjRKhwP9tNK0Yj2UJShL14mRfxLPgJ+Pv6zTv/Mvmd4wrwGnJf+5ybOAGK92S02hP1cXH+9km+PRO1b4V+ng==
@@ -9029,20 +9029,25 @@ jest@^27.4.3, jest@^27.5.1:
     import-local "^3.0.2"
     jest-cli "^27.5.1"
 
-jodit-react@1.3.39:
-  version "1.3.39"
-  resolved "https://registry.yarnpkg.com/jodit-react/-/jodit-react-1.3.39.tgz#9a2e0518fb53d89884ec115e17b9f3e35f0de44a"
-  integrity sha512-uZSRadPlgvcB6Wn54RGZ6XQEN+JHj0dB1SI4OH42yTC5WTeoYavksUwzCgFuQF4+janjSCxn0CXNqzd0MJEhVw==
+jodit-react@5.3.21:
+  version "5.3.21"
+  resolved "https://registry.yarnpkg.com/jodit-react/-/jodit-react-5.3.21.tgz#cd681d12ab2f2064b876fec3f83b79af6cc042c4"
+  integrity sha512-dSFVKkrDVbhVwKDjuFMJ3HhPdqeEz/Yz5MhJf9v9B3Gg29CnelKCZ00h6MxXzlhglF3qvtvUTc2HSKrSB15khw==
   dependencies:
-    jodit "^3.20.2"
+    jodit "^4.9.4"
 
-jodit@^3.20.2:
+jodit@3.24.7:
   version "3.24.7"
   resolved "https://registry.yarnpkg.com/jodit/-/jodit-3.24.7.tgz#90cfcc6787d5cd7f11207c04382c33348b94873a"
   integrity sha512-npX8S10uN55pr6ESAgaKML/pBSaM4AxdTYLpM/DWEQWqdG00YdgHY0i6KiyKA8SQL4bqbAY5HHhc9sxGVyL8bQ==
   dependencies:
     autobind-decorator "^2.4.0"
     core-js "^3.28.0"
+
+jquery@^3.4.1:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.4.tgz#ba065c188142100be4833699852bf7c24dc0252f"
+  integrity sha512-v28EW9DWDFpzcD9O5iyJXg3R3+q+mET5JhnjJzQUZMHOv67bpSIHq81GEYpPNZHG+XXHsfSme3nxp/hndKEcsQ==
 
 js-sdsl@^4.1.4:
   version "4.3.0"
