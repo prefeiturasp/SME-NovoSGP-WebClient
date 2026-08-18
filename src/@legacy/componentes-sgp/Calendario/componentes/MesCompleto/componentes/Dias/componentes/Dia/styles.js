@@ -6,8 +6,12 @@ import { Base } from '~/componentes/colors';
 export const DiaWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  position: relative;
+  flex: 0 0 14.2857%;
+  box-sizing: border-box;
   min-width: 14.28% !important;
   max-width: 14.28% !important;
+  padding: 0 !important;
   height: 62px;
   cursor: pointer;
   font-size: 16px;
@@ -49,8 +53,13 @@ export const DiaWrapper = styled.div`
 `;
 
 export const TipoEventosLista = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: absolute;
   bottom: 5px;
   right: 10px;
+  z-index: 1;
 `;
 
 export const IconeAtividadeAvaliativa = styled.i`

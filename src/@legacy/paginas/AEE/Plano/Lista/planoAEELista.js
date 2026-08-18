@@ -650,7 +650,7 @@ const PlanoAEELista = () => {
         </Row>
       </Cabecalho>
       <Card>
-        <div className="col-md-12">
+        <div className="col-md-12 qa-ajuste-plano-aee">
           <div className="row">
             <div className="col-sm-12 mb-4">
               <CheckboxComponent

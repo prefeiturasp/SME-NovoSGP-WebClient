@@ -604,6 +604,7 @@ const PeriodosEscolares = () => {
                       temErro={modoEdicao && !calendarioEscolarSelecionado}
                       mensagemErro="Campo obrigatório"
                       labelRequired
+                      requiredOffset={0}
                     />
                   </Loader>
                 </div>
