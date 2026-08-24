@@ -3,6 +3,7 @@ import shortid from 'shortid';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Ant
 import { Table } from 'antd';
 
@@ -192,4 +193,4 @@ TabelaTotalEstudantes.defaultProps = {
   anos: false,
 };
 
-export default TabelaTotalEstudantes;
+export default comDefaultProps(TabelaTotalEstudantes, TabelaTotalEstudantes.defaultProps);

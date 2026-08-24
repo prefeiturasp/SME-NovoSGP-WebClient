@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { SelectComponent } from '~/componentes';
 
@@ -72,4 +73,4 @@ TurmasDropDown.defaultProps = {
   label: null,
 };
 
-export default TurmasDropDown;
+export default comDefaultProps(TurmasDropDown, TurmasDropDown.defaultProps);

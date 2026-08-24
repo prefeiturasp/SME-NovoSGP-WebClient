@@ -5,6 +5,7 @@ import Button from '~/componentes/button';
 import { SGP_BUTTON_EXCLUIR } from '../../constantes/ids/button';
 import { Colors } from '~/componentes/colors';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BotaoExcluirPadrao = props => {
   const { onClick, disabled, className, id } = props;
 
@@ -45,4 +46,4 @@ BotaoExcluirPadrao.defaultProps = {
   id: '',
 };
 
-export default BotaoExcluirPadrao;
+export default comDefaultProps(BotaoExcluirPadrao, BotaoExcluirPadrao.defaultProps);

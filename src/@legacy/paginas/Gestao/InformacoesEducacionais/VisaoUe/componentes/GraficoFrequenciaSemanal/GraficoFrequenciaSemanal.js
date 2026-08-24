@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Line } from '@ant-design/plots';
 import ServicoFrequenciaGrafico from '~/servicos/InformacoesEducacionais/ServicoFrequenciaGrafico';
+import comDefaultProps from '~/utils/comDefaultProps';
 import './graficoFrequenciaSemanal.css';
 
 const GraficoFrequenciaSemanal = ({
@@ -152,4 +153,4 @@ GraficoFrequenciaSemanal.defaultProps = {
   xAxisLabelColor: '#42474a',
 };
 
-export default GraficoFrequenciaSemanal;
+export default comDefaultProps(GraficoFrequenciaSemanal, GraficoFrequenciaSemanal.defaultProps);

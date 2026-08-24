@@ -8,6 +8,7 @@ import { store } from '@/core/redux';
 import { selecionaMes } from '~/redux/modulos/calendarioProfessor/actions';
 import api from '~/servicos/api';
 import Loader from '~/componentes/loader';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const Div = styled.div``;
 
@@ -251,4 +252,4 @@ MesCompleto.defaultProps = {
   filtros: {},
 };
 
-export default MesCompleto;
+export default comDefaultProps(MesCompleto, MesCompleto.defaultProps);

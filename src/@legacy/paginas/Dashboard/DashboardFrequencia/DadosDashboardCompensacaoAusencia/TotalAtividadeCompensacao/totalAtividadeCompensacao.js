@@ -5,6 +5,7 @@ import { Base, CardCollapse } from '~/componentes';
 
 import GraficoTotalAtividadeCompensacao from './GraficoTotalAtividadeCompensacao';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TotalAtividadeCompensacao = ({
   anoLetivo,
   dreId,
@@ -64,4 +65,4 @@ TotalAtividadeCompensacao.defaultProps = {
   semestre: null,
 };
 
-export default TotalAtividadeCompensacao;
+export default comDefaultProps(TotalAtividadeCompensacao, TotalAtividadeCompensacao.defaultProps);

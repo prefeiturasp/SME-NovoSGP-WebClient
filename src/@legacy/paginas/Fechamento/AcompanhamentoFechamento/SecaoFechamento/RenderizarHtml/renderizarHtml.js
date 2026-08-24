@@ -1,6 +1,7 @@
 import { createElement } from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RenderizarHtml = ({ textoHtml, tag, ...rest }) =>
   createElement(tag, {
     dangerouslySetInnerHTML: {
@@ -19,4 +20,4 @@ RenderizarHtml.propTypes = {
   tag: PropTypes.string,
 };
 
-export default RenderizarHtml;
+export default comDefaultProps(RenderizarHtml, RenderizarHtml.defaultProps);

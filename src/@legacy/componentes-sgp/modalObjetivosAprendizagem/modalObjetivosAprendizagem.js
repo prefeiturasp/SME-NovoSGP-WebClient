@@ -14,6 +14,7 @@ import {
 } from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 import { confirmar } from '~/servicos';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const ModalObjetivosAprendizagem = props => {
   const {
@@ -190,4 +191,7 @@ ModalObjetivosAprendizagem.defaultProps = {
   desabilitar: false,
 };
 
-export default ModalObjetivosAprendizagem;
+export default comDefaultProps(
+  ModalObjetivosAprendizagem,
+  ModalObjetivosAprendizagem.defaultProps
+);

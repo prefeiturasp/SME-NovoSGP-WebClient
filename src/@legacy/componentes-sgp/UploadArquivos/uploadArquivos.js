@@ -10,6 +10,7 @@ import { erro, erros, sucesso } from '~/servicos';
 import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
 import { downloadBlob, permiteInserirFormato } from '~/utils/funcoes/gerais';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const { Dragger } = Upload;
 
 export const ContainerDragger = styled(Dragger)`
@@ -335,4 +336,4 @@ UploadArquivos.defaultProps = {
   labelRequired: false,
 };
 
-export default UploadArquivos;
+export default comDefaultProps(UploadArquivos, UploadArquivos.defaultProps);

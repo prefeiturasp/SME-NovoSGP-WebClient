@@ -4,6 +4,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import GraficoDiariosBordoPreenchidosPendentes from './graficoDiariosBordoPreenchidosPendentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DiariosBordoPreenchidosPendentes = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -58,4 +59,4 @@ DiariosBordoPreenchidosPendentes.defaultProps = {
   modalidade: null,
 };
 
-export default DiariosBordoPreenchidosPendentes;
+export default comDefaultProps(DiariosBordoPreenchidosPendentes, DiariosBordoPreenchidosPendentes.defaultProps);

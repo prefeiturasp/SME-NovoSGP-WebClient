@@ -6,6 +6,7 @@ import { formatarFrequencia, ordenarPor } from '~/utils/funcoes/gerais';
 
 import { CardTabelaAlunos } from '../styles';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaAlunos = props => {
   const { lista, idsAlunos, onSelectRow } = props;
 
@@ -81,4 +82,4 @@ ListaAlunos.defaultProps = {
   onSelectRow: () => {},
 };
 
-export default ListaAlunos;
+export default comDefaultProps(ListaAlunos, ListaAlunos.defaultProps);

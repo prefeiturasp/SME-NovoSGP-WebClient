@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import shortid from 'shortid';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { Base, Active, Hover } from './colors';
 import Remover from '../recursos/Remover.svg';
 
@@ -166,4 +167,4 @@ Button.defaultProps = {
   semMargemDireita: false,
 };
 
-export default Button;
+export default comDefaultProps(Button, Button.defaultProps);

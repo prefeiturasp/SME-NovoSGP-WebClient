@@ -6,6 +6,7 @@ import { AbrangenciaServico, erros } from '~/servicos';
 import ServicoDashboardEscolaAqui from '~/servicos/Paginas/Dashboard/ServicoDashboardEscolaAqui';
 import GraficoBarraDashboard from '../../../ComponentesDashboard/graficoBarraDashboard';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DadosComunicadosTotais = props => {
   const { codigoDre, codigoUe } = props;
 
@@ -231,4 +232,4 @@ DadosComunicadosTotais.defaultProps = {
   codigoUe: '',
 };
 
-export default DadosComunicadosTotais;
+export default comDefaultProps(DadosComunicadosTotais, DadosComunicadosTotais.defaultProps);

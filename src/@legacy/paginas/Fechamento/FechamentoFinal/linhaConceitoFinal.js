@@ -6,6 +6,7 @@ import shortid from 'shortid';
 import { MarcadorTriangulo } from '~/componentes';
 import { tratarStringComponenteCurricularNome } from '~/utils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LinhaConceitoFinal = props => {
   const expandirLinha = useSelector(
     store => store.notasConceitos.expandirLinha
@@ -55,4 +56,4 @@ LinhaConceitoFinal.defaultProps = {
   indexLinha: null,
 };
 
-export default LinhaConceitoFinal;
+export default comDefaultProps(LinhaConceitoFinal, LinhaConceitoFinal.defaultProps);

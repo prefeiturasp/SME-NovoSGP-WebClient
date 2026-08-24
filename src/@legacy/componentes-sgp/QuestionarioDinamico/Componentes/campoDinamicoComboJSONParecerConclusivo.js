@@ -2,12 +2,13 @@ import conselhoClasseService from '@/core/services/conselho-classe-service';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import Loader from '~/componentes/loader';
-import { CampoDinamicoComboJSON } from './campoDinamicoComboJSON';
-import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
-import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 import SelectComponent from '~/componentes/select';
+import comDefaultProps from '~/utils/comDefaultProps';
+import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
+import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
+import { CampoDinamicoComboJSON } from './campoDinamicoComboJSON';
 
-export const CampoDinamicoComboJSONParecerConclusivo = props => {
+const CampoDinamicoComboJSONParecerConclusivoBase = props => {
   const {
     questaoAtual,
     form,
@@ -75,7 +76,7 @@ export const CampoDinamicoComboJSONParecerConclusivo = props => {
   );
 };
 
-CampoDinamicoComboJSONParecerConclusivo.propTypes = {
+CampoDinamicoComboJSONParecerConclusivoBase.propTypes = {
   questaoAtual: PropTypes.oneOfType([PropTypes.any]),
   form: PropTypes.oneOfType([PropTypes.any]),
   label: PropTypes.oneOfType([PropTypes.any]),
@@ -84,7 +85,7 @@ CampoDinamicoComboJSONParecerConclusivo.propTypes = {
   onChange: PropTypes.oneOfType([PropTypes.any]),
 };
 
-CampoDinamicoComboJSONParecerConclusivo.defaultProps = {
+CampoDinamicoComboJSONParecerConclusivoBase.defaultProps = {
   questaoAtual: null,
   form: null,
   label: '',
@@ -92,3 +93,8 @@ CampoDinamicoComboJSONParecerConclusivo.defaultProps = {
   desabilitado: false,
   onChange: () => {},
 };
+
+export const CampoDinamicoComboJSONParecerConclusivo = comDefaultProps(
+  CampoDinamicoComboJSONParecerConclusivoBase,
+  CampoDinamicoComboJSONParecerConclusivoBase.defaultProps
+);

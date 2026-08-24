@@ -9,6 +9,7 @@ import { erros } from '~/servicos';
 
 import ServicoDashboardFechamento from '~/servicos/Paginas/Dashboard/ServicoDashboardFechamento';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoSituacaoProcessoFechamento = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
 
@@ -85,4 +86,4 @@ GraficoSituacaoProcessoFechamento.defaultProps = {
   bimestre: null,
 };
 
-export default GraficoSituacaoProcessoFechamento;
+export default comDefaultProps(GraficoSituacaoProcessoFechamento, GraficoSituacaoProcessoFechamento.defaultProps);

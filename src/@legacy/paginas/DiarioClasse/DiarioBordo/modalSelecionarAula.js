@@ -6,6 +6,7 @@ import { ModalConteudoHtml, SelectComponent } from '~/componentes';
 import tipoAula from '~/dtos/tipoAula';
 import { formularioEhValido } from '~/utils/formikRefHelper';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalSelecionarAula = props => {
   const {
     visivel,
@@ -131,4 +132,4 @@ ModalSelecionarAula.defaultProps = {
   onClickSelecionarAula: () => {},
 };
 
-export default ModalSelecionarAula;
+export default comDefaultProps(ModalSelecionarAula, ModalSelecionarAula.defaultProps);

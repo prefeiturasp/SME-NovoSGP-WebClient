@@ -9,6 +9,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros, ServicoDashboardFrequencia } from '~/servicos';
 import ServicoDashboardDevolutivas from '~/servicos/Paginas/Dashboard/ServicoDashboardDevolutivas';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoTotalDevolutivasPorDRE = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -138,4 +139,4 @@ GraficoTotalDevolutivasPorDRE.defaultProps = {
   modalidade: null,
 };
 
-export default GraficoTotalDevolutivasPorDRE;
+export default comDefaultProps(GraficoTotalDevolutivasPorDRE, GraficoTotalDevolutivasPorDRE.defaultProps);

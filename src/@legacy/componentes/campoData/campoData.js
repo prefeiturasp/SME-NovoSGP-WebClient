@@ -12,6 +12,7 @@ import { faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons';
 
 import { Base } from '../colors';
 import Label from '../label';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 import { Campo, IconeEstilizado } from './campoDataNovo.css';
 
@@ -363,6 +364,11 @@ CampoData.defaultProps = {
   allowClear: true,
 };
 
+const CampoDataComDefaultProps = comDefaultProps(
+  CampoData,
+  CampoData.defaultProps
+);
+
 const momentSchema = new MomentSchema();
 
 Yup.addMethod(
@@ -407,4 +413,4 @@ Yup.addMethod(
   }
 );
 
-export { CampoData, momentSchema };
+export { CampoDataComDefaultProps as CampoData, momentSchema };

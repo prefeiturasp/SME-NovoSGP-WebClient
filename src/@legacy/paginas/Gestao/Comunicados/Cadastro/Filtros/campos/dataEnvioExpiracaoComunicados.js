@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { CampoData } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DataEnvioExpiracaoComunicados = ({
   form,
   onChangeCampos,
@@ -68,4 +69,4 @@ DataEnvioExpiracaoComunicados.defaultProps = {
   desabilitar: false,
 };
 
-export default DataEnvioExpiracaoComunicados;
+export default comDefaultProps(DataEnvioExpiracaoComunicados, DataEnvioExpiracaoComunicados.defaultProps);

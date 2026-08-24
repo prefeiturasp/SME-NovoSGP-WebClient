@@ -8,6 +8,7 @@ import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros } from '~/servicos';
 import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoQuantidadeJustificativasPorMotivo = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, codigoUe } = props;
 
@@ -208,4 +209,4 @@ GraficoQuantidadeJustificativasPorMotivo.defaultProps = {
   codigoUe: '',
 };
 
-export default GraficoQuantidadeJustificativasPorMotivo;
+export default comDefaultProps(GraficoQuantidadeJustificativasPorMotivo, GraficoQuantidadeJustificativasPorMotivo.defaultProps);

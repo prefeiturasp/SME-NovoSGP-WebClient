@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Styles
 import { VerticalCentralizado } from '../styles';
 
@@ -46,4 +47,4 @@ TextoDiasDaSemana.propTypes = {
   diasSemana: PropTypes.oneOfType([PropTypes.array]),
 };
 
-export default TextoDiasDaSemana;
+export default comDefaultProps(TextoDiasDaSemana, TextoDiasDaSemana.defaultProps);

@@ -6,6 +6,7 @@ import ListaLocalOcorrencia from '~/constantes/localOcorrencia';
 import tipoEvento from '~/dtos/tipoEvento';
 import EventosCadastroContext from '../eventosCadastroContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TipoEventoCadastroEventos = ({ form, onChangeCampos, desabilitar }) => {
   const {
     listaTipoEvento,
@@ -111,4 +112,4 @@ TipoEventoCadastroEventos.defaultProps = {
   desabilitar: false,
 };
 
-export default TipoEventoCadastroEventos;
+export default comDefaultProps(TipoEventoCadastroEventos, TipoEventoCadastroEventos.defaultProps);

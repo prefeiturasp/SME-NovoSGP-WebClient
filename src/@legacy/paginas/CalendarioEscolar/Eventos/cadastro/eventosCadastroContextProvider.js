@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import EventosCadastroContext from './eventosCadastroContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const EventosCadastroContextProvider = ({ children }) => {
   const [emEdicao, setEmEdicao] = useState(false);
   const [podeAlterarEvento, setPodeAlterarEvento] = useState(true);
@@ -110,4 +111,4 @@ EventosCadastroContextProvider.propTypes = {
   children: PropTypes.node,
 };
 
-export default EventosCadastroContextProvider;
+export default comDefaultProps(EventosCadastroContextProvider, EventosCadastroContextProvider.defaultProps);

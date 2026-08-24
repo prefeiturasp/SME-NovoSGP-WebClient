@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Base } from '~/componentes/colors';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const Container = styled.div`
   width: 30px !important;
   position: absolute;
@@ -35,4 +36,4 @@ ReposicaoLabel.propTypes = {
 ReposicaoLabel.defaultProps = {
   linhaDetalhe: false,
 };
-export default ReposicaoLabel;
+export default comDefaultProps(ReposicaoLabel, ReposicaoLabel.defaultProps);

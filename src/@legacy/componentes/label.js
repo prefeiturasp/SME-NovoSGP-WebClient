@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { Base } from './colors';
 
 const Container = styled.div`
@@ -119,4 +120,4 @@ Label.defaultProps = {
   requiredOffset: 0,
 };
 
-export default Label;
+export default comDefaultProps(Label, Label.defaultProps);

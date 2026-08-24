@@ -6,6 +6,7 @@ import { MesCompletoWrapper } from './styles';
 
 // Componentes
 import { Loader } from '~/componentes';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 // Componentes internos
 import DiasDaSemana from './componentes/DiasDaSemana';
@@ -77,4 +78,4 @@ MesCompleto.defaultProps = {
   tipoCalendarioId: null,
 };
 
-export default MesCompleto;
+export default comDefaultProps(MesCompleto, MesCompleto.defaultProps);

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Redux
 import { useSelector } from 'react-redux';
 
@@ -49,4 +50,4 @@ AnoLetivoDropDown.defaultProps = {
   label: null,
 };
 
-export default AnoLetivoDropDown;
+export default comDefaultProps(AnoLetivoDropDown, AnoLetivoDropDown.defaultProps);

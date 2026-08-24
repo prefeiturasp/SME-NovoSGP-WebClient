@@ -13,6 +13,7 @@ import {
   BotaoLista,
 } from './transferenciaLista.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TransferenciaLista = props => {
   const { listaEsquerda, listaDireita, onClickAdicionar, onClickRemover } =
     props;
@@ -122,4 +123,4 @@ TransferenciaLista.defaultProps = {
   onClickRemover: () => {},
 };
 
-export default TransferenciaLista;
+export default comDefaultProps(TransferenciaLista, TransferenciaLista.defaultProps);

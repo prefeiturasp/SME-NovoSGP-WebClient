@@ -8,6 +8,7 @@ import { statusAcompanhamentoConselhoClasse } from '~/dtos';
 import { DetalhesConselhoClasse } from './DetalhesConselhoClasse';
 import { CardStatus } from '../CardStatus';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const SecaoConselhoClasse = ({
   dadosStatusConsselhoClasse,
   dadosTurmas,
@@ -59,4 +60,4 @@ SecaoConselhoClasse.propTypes = {
   parametrosFiltro: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
 
-export default SecaoConselhoClasse;
+export default comDefaultProps(SecaoConselhoClasse, SecaoConselhoClasse.defaultProps);

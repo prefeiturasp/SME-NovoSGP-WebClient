@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { RadioGroupButton } from '~/componentes';
 import { SGP_RADIO_EXIBIR_PLANOS_ENCERRADOS } from '~/constantes/ids/radio';
 
-export const ExibirPlanosEncerrados = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const ExibirPlanosEncerradosComponent = ({
   name,
   form,
   onChange,
@@ -38,7 +39,7 @@ export const ExibirPlanosEncerrados = ({
   );
 };
 
-ExibirPlanosEncerrados.propTypes = {
+ExibirPlanosEncerradosComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
@@ -47,7 +48,7 @@ ExibirPlanosEncerrados.propTypes = {
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
-ExibirPlanosEncerrados.defaultProps = {
+ExibirPlanosEncerradosComponent.defaultProps = {
   form: null,
   disabled: false,
   valorInicial: false,
@@ -55,3 +56,8 @@ ExibirPlanosEncerrados.defaultProps = {
   onChange: () => null,
   name: 'exibirPlanosEncerrados',
 };
+
+export const ExibirPlanosEncerrados = comDefaultProps(
+  ExibirPlanosEncerradosComponent,
+  ExibirPlanosEncerradosComponent.defaultProps
+);

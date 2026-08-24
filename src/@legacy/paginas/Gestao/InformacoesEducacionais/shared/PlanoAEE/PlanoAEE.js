@@ -4,6 +4,7 @@ import './PlanoAEE.css';
 import PropTypes from 'prop-types';
 import ServicoPlanoAEE from '~/servicos/InformacoesEducacionais/ServicoPlanoAEE';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const SITUACOES_PADRAO = [
   {
     backend: 'Aguardando atribuição de PAAI',
@@ -117,4 +118,4 @@ PlanoAEE.defaultProps = {
   anoLetivo: null,
 };
 
-export default PlanoAEE;
+export default comDefaultProps(PlanoAEE, PlanoAEE.defaultProps);

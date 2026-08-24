@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import { Loader } from '~/componentes';
 import FechaReabListaContext from './fechaReabListaContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const FechaReabListaLoader = props => {
   const { children } = props;
   const { exibirLoaderLista } = useContext(FechaReabListaContext);
@@ -22,4 +23,4 @@ FechaReabListaLoader.defaultProps = {
   children: () => {},
 };
 
-export default FechaReabListaLoader;
+export default comDefaultProps(FechaReabListaLoader, FechaReabListaLoader.defaultProps);

@@ -5,6 +5,7 @@ import Label from '~/componentes/label';
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 import { SGP_TABLE_TURMAS_PROGRAMA } from '~/constantes/ids/table';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TurmasProgramaTabela = props => {
   const { label, questaoAtual, form } = props;
 
@@ -55,4 +56,4 @@ TurmasProgramaTabela.defaultProps = {
   questaoAtual: null,
 };
 
-export default TurmasProgramaTabela;
+export default comDefaultProps(TurmasProgramaTabela, TurmasProgramaTabela.defaultProps);

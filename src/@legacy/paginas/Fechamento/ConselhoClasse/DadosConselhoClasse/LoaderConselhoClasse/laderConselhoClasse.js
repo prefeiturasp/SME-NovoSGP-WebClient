@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LoaderConselhoClasse = ({ children }) => {
   const exibirLoaderGeralConselhoClasse = useSelector(
     store => store.conselhoClasse.exibirLoaderGeralConselhoClasse
@@ -19,4 +20,4 @@ LoaderConselhoClasse.defaultProps = {
   children: () => {},
 };
 
-export default LoaderConselhoClasse;
+export default comDefaultProps(LoaderConselhoClasse, LoaderConselhoClasse.defaultProps);

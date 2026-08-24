@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Form
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -333,4 +334,4 @@ ModalRecorrencia.propTypes = {
   onSaveRecorrencia: PropTypes.func,
 };
 
-export default ModalRecorrencia;
+export default comDefaultProps(ModalRecorrencia, ModalRecorrencia.defaultProps);

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import GraficoQuantidadeMatriculasPorAno from './QuantidadeMatriculasPorAno/graficoQuantidadeMatriculasPorAno';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficosMatriculas = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
   return (
@@ -28,4 +29,4 @@ GraficosMatriculas.defaultProps = {
   modalidade: '',
 };
 
-export default GraficosMatriculas;
+export default comDefaultProps(GraficosMatriculas, GraficosMatriculas.defaultProps);

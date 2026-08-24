@@ -15,6 +15,7 @@ import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 import QuestionarioDinamicoFuncoes from '../../Funcoes/QuestionarioDinamicoFuncoes';
 import { SGP_TABLE_ATIVIDADE_CONTRATURNO } from '~/constantes/ids/table';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AtividadeContraturnoTabela = props => {
   const { label, questaoAtual, form, disabled, onChange } = props;
 
@@ -162,4 +163,4 @@ AtividadeContraturnoTabela.defaultProps = {
   questaoAtual: null,
 };
 
-export default AtividadeContraturnoTabela;
+export default comDefaultProps(AtividadeContraturnoTabela, AtividadeContraturnoTabela.defaultProps);

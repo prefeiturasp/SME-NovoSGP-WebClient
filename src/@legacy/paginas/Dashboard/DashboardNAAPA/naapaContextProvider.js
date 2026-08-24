@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import NAAPAContext from './naapaContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const NAAPAContextProvider = ({ children }) => {
   const [consideraHistorico, setConsideraHistorico] = useState(false);
   const [anoLetivo, setAnoLetivo] = useState();
@@ -49,4 +50,4 @@ NAAPAContextProvider.propTypes = {
   children: PropTypes.node,
 };
 
-export default NAAPAContextProvider;
+export default comDefaultProps(NAAPAContextProvider, NAAPAContextProvider.defaultProps);

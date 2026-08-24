@@ -18,6 +18,7 @@ import {
   SGP_INPUT_TIPO_LOGRADOURO_ENDERECO_RESIDENCIAL_MODAL,
 } from '~/constantes/ids/input';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalCadastroEnderecoResidencial = props => {
   const { onClose, exibirModal, dadosIniciais, disabled } = props;
 
@@ -194,4 +195,4 @@ ModalCadastroEnderecoResidencial.defaultProps = {
   dadosIniciais: null,
 };
 
-export default ModalCadastroEnderecoResidencial;
+export default comDefaultProps(ModalCadastroEnderecoResidencial, ModalCadastroEnderecoResidencial.defaultProps);

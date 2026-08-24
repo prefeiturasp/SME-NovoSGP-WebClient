@@ -20,6 +20,7 @@ import { validaSeObjetoEhNuloOuVazio } from '~/utils/funcoes/gerais';
 import { selecionarUe } from '~/redux/modulos/atribuicaoEsporadica/actions';
 import { FiltroHelper } from '~/componentes-sgp';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const Filtro = memo(({ onFiltrar }) => {
   const dispatch = useDispatch();
   const [refForm, setRefForm] = useState({});
@@ -180,4 +181,4 @@ Filtro.defaultProps = {
   onFiltrar: () => null,
 };
 
-export default Filtro;
+export default comDefaultProps(Filtro, Filtro.defaultProps);

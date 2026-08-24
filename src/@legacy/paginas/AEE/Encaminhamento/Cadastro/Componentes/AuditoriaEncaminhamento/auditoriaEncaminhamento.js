@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Auditoria } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AuditoriaEncaminhamento = props => {
   const { dadosAuditoria } = props;
 
@@ -27,4 +28,4 @@ AuditoriaEncaminhamento.defaultProps = {
   dadosAuditoria: null,
 };
 
-export default AuditoriaEncaminhamento;
+export default comDefaultProps(AuditoriaEncaminhamento, AuditoriaEncaminhamento.defaultProps);

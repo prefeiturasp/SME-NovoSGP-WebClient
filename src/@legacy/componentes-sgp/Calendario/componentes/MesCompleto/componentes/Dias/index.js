@@ -5,6 +5,7 @@ import _ from 'lodash';
 
 // Redux
 import { useSelector } from 'react-redux';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 // Componentes internos
 import Dia from './componentes/Dia';
@@ -139,4 +140,4 @@ Dias.defaultProps = {
   tipoCalendarioId: null,
 };
 
-export default Dias;
+export default comDefaultProps(Dias, Dias.defaultProps);

@@ -11,6 +11,7 @@ import {
 } from '../../../ComponentesDashboard/graficosDashboardUtils';
 import GraficoBarraDashboard from '../../../ComponentesDashboard/graficoBarraDashboard';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LeituraDeComunicadosPorModalidades = props => {
   const { chavesGrafico, modoVisualizacao, comunicado, listaComunicado } =
     props;
@@ -138,4 +139,4 @@ LeituraDeComunicadosPorModalidades.defaultProps = {
   listaComunicado: [],
 };
 
-export default LeituraDeComunicadosPorModalidades;
+export default comDefaultProps(LeituraDeComunicadosPorModalidades, LeituraDeComunicadosPorModalidades.defaultProps);

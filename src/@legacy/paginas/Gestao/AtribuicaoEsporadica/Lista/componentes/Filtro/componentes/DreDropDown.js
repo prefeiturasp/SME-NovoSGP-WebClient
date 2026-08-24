@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { SelectComponent } from '~/componentes';
 
@@ -63,4 +64,4 @@ DreDropDown.defaultProps = {
   onChange: () => {},
 };
 
-export default DreDropDown;
+export default comDefaultProps(DreDropDown, DreDropDown.defaultProps);

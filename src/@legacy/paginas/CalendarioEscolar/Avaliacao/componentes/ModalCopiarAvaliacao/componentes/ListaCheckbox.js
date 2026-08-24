@@ -1,6 +1,7 @@
 import React from 'react';
 import t from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { CheckboxComponent } from '~/componentes';
 
@@ -53,4 +54,4 @@ ListaCheckbox.defaultProps = {
   valores: null,
 };
 
-export default ListaCheckbox;
+export default comDefaultProps(ListaCheckbox, ListaCheckbox.defaultProps);

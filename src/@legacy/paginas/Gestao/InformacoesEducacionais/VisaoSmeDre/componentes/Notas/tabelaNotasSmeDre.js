@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Table, Select } from 'antd';
 import PropTypes from 'prop-types';
 import ServicoNotas from '~/servicos/InformacoesEducacionais/ServicoNotas';
+import comDefaultProps from '~/utils/comDefaultProps';
 import './tabelaNotasSmeDre.css';
 const { Option } = Select;
 
@@ -205,4 +206,4 @@ TabelaNotasSmeDre.defaultProps = {
   anoLetivo: null,
 };
 
-export default TabelaNotasSmeDre;
+export default comDefaultProps(TabelaNotasSmeDre, TabelaNotasSmeDre.defaultProps);

@@ -39,6 +39,7 @@ import TabelaAvaliacoesFechamento from './componentes/tabelaAvaliacoesFechamento
 import FiltroComponentesRegenciaListao from '../componentes/filtroComponentesRegenciaListao';
 import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 export const ContainerTableFechamento = styled.div`
   tr {
     position: relative;
@@ -803,4 +804,4 @@ ListaoListaFechamento.defaultProps = {
   ehEJA: false,
 };
 
-export default ListaoListaFechamento;
+export default comDefaultProps(ListaoListaFechamento, ListaoListaFechamento.defaultProps);

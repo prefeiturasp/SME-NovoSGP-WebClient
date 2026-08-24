@@ -5,6 +5,7 @@ import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO } from '~/constantes';
 import { erros, sucesso } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BotaoGerarRelatorioEncaminhamentoAEE = props => {
   const { ids, disabled } = props;
 
@@ -42,4 +43,4 @@ BotaoGerarRelatorioEncaminhamentoAEE.defaultProps = {
   disabled: false,
 };
 
-export default BotaoGerarRelatorioEncaminhamentoAEE;
+export default comDefaultProps(BotaoGerarRelatorioEncaminhamentoAEE, BotaoGerarRelatorioEncaminhamentoAEE.defaultProps);

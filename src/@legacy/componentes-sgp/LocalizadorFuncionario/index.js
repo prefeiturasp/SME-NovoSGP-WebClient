@@ -9,6 +9,7 @@ import InputCodigo from './componentes/InputCodigo';
 import InputNome from './componentes/InputNome';
 import ServicoLocalizadorFuncionario from './services/ServicoLocalizadorFuncionario';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LocalizadorFuncionario = props => {
   const {
     onChange,
@@ -379,4 +380,4 @@ LocalizadorFuncionario.defaultProps = {
   novaEstrutura: false,
 };
 
-export default LocalizadorFuncionario;
+export default comDefaultProps(LocalizadorFuncionario, LocalizadorFuncionario.defaultProps);

@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LoaderCartaIntencoes = ({ children }) => {
   const carregandoCartaIntencoes = useSelector(
     store => store.cartaIntencoes.carregandoCartaIntencoes
@@ -19,4 +20,4 @@ LoaderCartaIntencoes.defaultProps = {
   children: () => {},
 };
 
-export default LoaderCartaIntencoes;
+export default comDefaultProps(LoaderCartaIntencoes, LoaderCartaIntencoes.defaultProps);

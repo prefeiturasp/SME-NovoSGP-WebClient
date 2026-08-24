@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Base } from '~/componentes/colors';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 export const Container = styled.span`
   background-color: ${Base.Azul};
   border-radius: 4px;
@@ -34,4 +35,4 @@ LabelTotalMatriculas.defaultProps = {
   total: '',
 };
 
-export default LabelTotalMatriculas;
+export default comDefaultProps(LabelTotalMatriculas, LabelTotalMatriculas.defaultProps);

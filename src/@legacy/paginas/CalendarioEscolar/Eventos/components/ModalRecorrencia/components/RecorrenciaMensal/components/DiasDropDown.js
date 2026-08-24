@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Components
 import SelectComponent from '~/componentes/select';
 
@@ -63,4 +64,4 @@ DiasDropDown.propTypes = {
   selected: PropTypes.oneOfType([PropTypes.any]),
 };
 
-export default DiasDropDown;
+export default comDefaultProps(DiasDropDown, DiasDropDown.defaultProps);

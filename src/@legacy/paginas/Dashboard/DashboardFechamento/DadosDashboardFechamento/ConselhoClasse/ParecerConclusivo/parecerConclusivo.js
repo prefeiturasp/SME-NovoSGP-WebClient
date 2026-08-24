@@ -5,6 +5,7 @@ import { Base, CardCollapse } from '~/componentes';
 
 import GraficoParecerConclusivo from './graficoParecerConclusivo';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ParecerConclusivo = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
 
@@ -65,4 +66,4 @@ ParecerConclusivo.defaultProps = {
   bimestre: null,
 };
 
-export default ParecerConclusivo;
+export default comDefaultProps(ParecerConclusivo, ParecerConclusivo.defaultProps);

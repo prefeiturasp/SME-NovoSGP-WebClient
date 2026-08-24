@@ -2,6 +2,7 @@ import t from 'prop-types';
 import { useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import shortid from 'shortid';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 // Ant
 import { Tooltip } from 'antd';
@@ -308,4 +309,4 @@ DiaCompleto.defaultProps = {
   tipoCalendarioId: null,
 };
 
-export default DiaCompleto;
+export default comDefaultProps(DiaCompleto, DiaCompleto.defaultProps);

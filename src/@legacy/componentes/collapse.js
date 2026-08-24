@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse as PainelCollapse } from 'antd';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const Collapse = ({ idPaineisAbertos, onChange, children }) => {
   return (
@@ -25,4 +26,4 @@ Collapse.defaultProps = {
   show: false,
 };
 
-export default Collapse;
+export default comDefaultProps(Collapse, Collapse.defaultProps);

@@ -8,6 +8,7 @@ import ModalCadastroEnderecoResidencial from './modalCadastroEnderecoResidencial
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 import { SGP_TABLE_ENDERECO_RESIDENCIAL } from '~/constantes/ids/table';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const EnderecoResidencialTabela = props => {
   const { label, questaoAtual, form, onChange, disabled } = props;
 
@@ -128,4 +129,4 @@ EnderecoResidencialTabela.defaultProps = {
   questaoAtual: null,
 };
 
-export default EnderecoResidencialTabela;
+export default comDefaultProps(EnderecoResidencialTabela, EnderecoResidencialTabela.defaultProps);

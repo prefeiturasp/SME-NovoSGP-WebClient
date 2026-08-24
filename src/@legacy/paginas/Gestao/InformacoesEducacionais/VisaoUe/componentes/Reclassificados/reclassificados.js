@@ -4,6 +4,7 @@ import CardCollapse from '~/componentes/cardCollapse';
 import { Base } from '~/componentes';
 import TabelaEstudantesReclassificados from '../../../shared/estudantesReclassificados/tabelaEstudantesReclassificados';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function Reclassificados({ ueCodigo, anoLetivo, dreCodigo }) {
   const [exibirReclassificadosUe, setExibirReclassificadosUe] = useState(false);
 
@@ -50,4 +51,4 @@ Reclassificados.defaultProps = {
   dreCodigo: null,
 };
 
-export default Reclassificados;
+export default comDefaultProps(Reclassificados, Reclassificados.defaultProps);

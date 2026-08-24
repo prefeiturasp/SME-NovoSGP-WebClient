@@ -8,6 +8,7 @@ import MesCompleto from './MesCompleto';
 import { Base } from '~/componentes/colors';
 import api from '~/servicos/api';
 import { Loader } from '~/componentes';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const Div = styled.div`
   .border {
@@ -111,4 +112,4 @@ Calendario.defaultProps = {
   filtros: {},
 };
 
-export default Calendario;
+export default comDefaultProps(Calendario, Calendario.defaultProps);

@@ -11,6 +11,7 @@ import { setListaUsuariosNotificacao } from '~/redux/modulos/observacoesUsuario/
 import { confirmar, erro } from '~/servicos';
 import { BotaoEstilizado, TextoEstilizado } from './modalNotificarUsuarios.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalNotificarUsuarios = ({
   modalVisivel,
   setModalVisivel,
@@ -202,4 +203,4 @@ ModalNotificarUsuarios.propTypes = {
   ueId: PropTypes.oneOfType([PropTypes.any]),
 };
 
-export default ModalNotificarUsuarios;
+export default comDefaultProps(ModalNotificarUsuarios, ModalNotificarUsuarios.defaultProps);

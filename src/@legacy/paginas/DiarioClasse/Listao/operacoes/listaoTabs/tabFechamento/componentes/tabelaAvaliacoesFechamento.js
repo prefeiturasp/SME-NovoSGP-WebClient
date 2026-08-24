@@ -12,6 +12,7 @@ import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConc
 import shortid from 'shortid';
 import ListaoContext from '../../../../listaoContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TabelaAvaliacoesFechamento = props => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -188,4 +189,4 @@ TabelaAvaliacoesFechamento.defaultProps = {
   listaTiposConceitos: [],
 };
 
-export default TabelaAvaliacoesFechamento;
+export default comDefaultProps(TabelaAvaliacoesFechamento, TabelaAvaliacoesFechamento.defaultProps);

@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Redux
 import { useSelector } from 'react-redux';
 
@@ -367,4 +368,4 @@ TerritorioSaber.propTypes = {};
 
 TerritorioSaber.defaultProps = {};
 
-export default TerritorioSaber;
+export default comDefaultProps(TerritorioSaber, TerritorioSaber.defaultProps);

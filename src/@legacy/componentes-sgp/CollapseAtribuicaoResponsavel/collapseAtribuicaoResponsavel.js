@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CardCollapse from '~/componentes/cardCollapse';
 import CollapseAtribuicaoResponsavelDados from './collapseAtribuicaoResponsavelDados';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CollapseAtribuicaoResponsavel = props => {
   const {
     validarAntesAtribuirResponsavel,
@@ -47,4 +48,4 @@ CollapseAtribuicaoResponsavel.defaultProps = {
   codigoTurma: '',
 };
 
-export default CollapseAtribuicaoResponsavel;
+export default comDefaultProps(CollapseAtribuicaoResponsavel, CollapseAtribuicaoResponsavel.defaultProps);

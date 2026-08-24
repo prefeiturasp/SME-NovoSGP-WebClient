@@ -5,6 +5,7 @@ import Label from '~/componentes/label';
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 import { SGP_TABLE_INFORMACOES_SRM } from '~/constantes/ids/table';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const InformacoesSrmTabela = props => {
   const { label, questaoAtual, form } = props;
 
@@ -55,4 +56,4 @@ InformacoesSrmTabela.defaultProps = {
   questaoAtual: null,
 };
 
-export default InformacoesSrmTabela;
+export default comDefaultProps(InformacoesSrmTabela, InformacoesSrmTabela.defaultProps);
