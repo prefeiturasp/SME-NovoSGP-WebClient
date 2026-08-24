@@ -13,6 +13,7 @@ import {
   TabelaColunasFixas,
 } from './informacoesEscolares.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AusenciasEstudante = props => {
   const { indexLinha, dados, anoLetivo, codigoTurma } = props;
 
@@ -148,4 +149,4 @@ AusenciasEstudante.defaultProps = {
   anoLetivo: null,
 };
 
-export default AusenciasEstudante;
+export default comDefaultProps(AusenciasEstudante, AusenciasEstudante.defaultProps);

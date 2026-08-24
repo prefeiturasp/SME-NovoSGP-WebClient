@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Formulario
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
@@ -429,4 +430,4 @@ Filtro.defaultProps = {
   onFiltrar: () => null,
 };
 
-export default Filtro;
+export default comDefaultProps(Filtro, Filtro.defaultProps);

@@ -9,6 +9,7 @@ import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoE
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CampoDinamicoPeriodoEscolar = props => {
   const {
     questaoAtual,
@@ -130,4 +131,4 @@ CampoDinamicoPeriodoEscolar.defaultProps = {
   questionarioId: null,
 };
 
-export default CampoDinamicoPeriodoEscolar;
+export default comDefaultProps(CampoDinamicoPeriodoEscolar, CampoDinamicoPeriodoEscolar.defaultProps);

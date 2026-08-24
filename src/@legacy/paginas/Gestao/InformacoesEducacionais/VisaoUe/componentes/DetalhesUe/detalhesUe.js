@@ -5,6 +5,7 @@ import ServicoDetalhesUe from '~/servicos/InformacoesEducacionais/ServicoDetalhe
 import { erros } from '~/servicos';
 import { Loader } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function DetalhesUe({ codigoUe, nomeUe, nomeDre }) {
   const [dados, setDados] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -80,4 +81,4 @@ DetalhesUe.defaultProps = {
   nomeDre: null,
 };
 
-export default DetalhesUe;
+export default comDefaultProps(DetalhesUe, DetalhesUe.defaultProps);

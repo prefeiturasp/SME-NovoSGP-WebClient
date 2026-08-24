@@ -10,6 +10,7 @@ import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import { confirmar } from '~/servicos/alertas';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BotoesAcoessNotasConceitos = props => {
   const { onClickVoltar, onClickCancelar, onClickSalvar, desabilitarBotao } =
     props;
@@ -77,4 +78,4 @@ BotoesAcoessNotasConceitos.defaultProps = {
   desabilitarBotao: false,
 };
 
-export default BotoesAcoessNotasConceitos;
+export default comDefaultProps(BotoesAcoessNotasConceitos, BotoesAcoessNotasConceitos.defaultProps);

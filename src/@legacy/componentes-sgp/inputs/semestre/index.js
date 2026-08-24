@@ -7,7 +7,8 @@ import { OPCAO_TODOS } from '~/constantes';
 import { SGP_SELECT_SEMESTRE } from '~/constantes/ids/select';
 import { AbrangenciaServico, erros } from '~/servicos';
 
-export const Semestre = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const SemestreComponent = ({
   name,
   form,
   onChange,
@@ -133,7 +134,7 @@ export const Semestre = ({
   );
 };
 
-Semestre.propTypes = {
+SemestreComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
@@ -143,7 +144,7 @@ Semestre.propTypes = {
   nameList: PropTypes.string,
 };
 
-Semestre.defaultProps = {
+SemestreComponent.defaultProps = {
   form: null,
   disabled: false,
   name: 'semestre',
@@ -152,3 +153,8 @@ Semestre.defaultProps = {
   labelRequired: true,
   nameList: 'listaSemestres',
 };
+
+export const Semestre = comDefaultProps(
+  SemestreComponent,
+  SemestreComponent.defaultProps
+);

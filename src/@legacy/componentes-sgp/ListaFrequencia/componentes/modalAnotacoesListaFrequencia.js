@@ -6,6 +6,7 @@ import {
   setExibirModalAnotacaoFrequencia,
 } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import ModalAnotacoesFrequencia from '~/componentes-sgp/ModalAnotacoes/modalAnotacoes';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const ModalAnotacoesListaFrequencia = ({
   dadosListaFrequencia,
@@ -61,4 +62,7 @@ ModalAnotacoesListaFrequencia.defaultProps = {
   desabilitarCampos: false,
 };
 
-export default ModalAnotacoesListaFrequencia;
+export default comDefaultProps(
+  ModalAnotacoesListaFrequencia,
+  ModalAnotacoesListaFrequencia.defaultProps
+);

@@ -9,6 +9,7 @@ import LabelAusenteCellTable from './labelAusenteCellTable';
 
 import { Container } from './style';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const Nota = props => {
   const {
     dadosNota,
@@ -229,4 +230,4 @@ Nota.defaultProps = {
   notaValorInicial: '',
 };
 
-export default Nota;
+export default comDefaultProps(Nota, Nota.defaultProps);

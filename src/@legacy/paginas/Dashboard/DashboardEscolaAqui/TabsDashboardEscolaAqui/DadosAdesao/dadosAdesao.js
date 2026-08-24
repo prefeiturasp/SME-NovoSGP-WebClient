@@ -13,6 +13,7 @@ import GraficoBarraDashboard from '~/paginas/Dashboard/ComponentesDashboard/graf
 import GraficoPizzaDashboard from '~/paginas/Dashboard/ComponentesDashboard/graficoPizzaDashboard';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DadosAdesao = props => {
   const { codigoDre, codigoUe } = props;
 
@@ -260,4 +261,4 @@ DadosAdesao.defaultProps = {
   codigoUe: '',
 };
 
-export default DadosAdesao;
+export default comDefaultProps(DadosAdesao, DadosAdesao.defaultProps);

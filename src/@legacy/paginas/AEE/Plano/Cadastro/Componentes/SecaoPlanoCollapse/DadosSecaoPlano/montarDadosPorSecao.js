@@ -7,6 +7,7 @@ import QuestionarioDinamico from '~/componentes-sgp/QuestionarioDinamico/questio
 import situacaoPlanoAEE from '~/dtos/situacaoPlanoAEE';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const MontarDadosPorSecao = props => {
   const { dados, dadosQuestionarioAtual, auditoria } = props;
 
@@ -79,4 +80,4 @@ MontarDadosPorSecao.defaultProps = {
   dadosQuestionarioAtual: [],
 };
 
-export default MontarDadosPorSecao;
+export default comDefaultProps(MontarDadosPorSecao, MontarDadosPorSecao.defaultProps);

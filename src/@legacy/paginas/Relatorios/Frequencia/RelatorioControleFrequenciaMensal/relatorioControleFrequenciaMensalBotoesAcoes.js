@@ -11,6 +11,7 @@ import { ServicoRelatorioFrequencia, erro, erros, sucesso } from '~/servicos';
 import { useNavigate } from 'react-router-dom';
 import { TIPO_FORMATO_RELATORIO } from '@/core/enum/tipo-formato-relatorio';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioControleFrequenciaMensalBotoesAcoes = props => {
   const navigate = useNavigate();
 
@@ -114,4 +115,4 @@ RelatorioControleFrequenciaMensalBotoesAcoes.defaultProps = {
   setDesabilitarGerar: () => false,
 };
 
-export default RelatorioControleFrequenciaMensalBotoesAcoes;
+export default comDefaultProps(RelatorioControleFrequenciaMensalBotoesAcoes, RelatorioControleFrequenciaMensalBotoesAcoes.defaultProps);

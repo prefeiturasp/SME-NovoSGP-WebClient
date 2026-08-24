@@ -3,6 +3,7 @@ import { Field } from 'formik';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { Base } from './colors';
 import Label from './label';
 
@@ -231,4 +232,4 @@ SelectAutocomplete.propTypes = {
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
-export default SelectAutocomplete;
+export default comDefaultProps(SelectAutocomplete, SelectAutocomplete.defaultProps);

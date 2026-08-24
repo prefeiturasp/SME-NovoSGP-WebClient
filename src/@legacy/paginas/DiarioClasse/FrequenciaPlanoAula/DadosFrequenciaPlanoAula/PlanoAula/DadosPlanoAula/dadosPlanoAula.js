@@ -17,6 +17,7 @@ import ModalErrosPlanoAula from './ModalErros/modalErrosPlanoAula';
 import MuralPlanoAula from './muralPlanoAula';
 import ObjetivosAprendizagemDesenvolvimento from './ObjetivosAprendizagemDesenvolvimento/objetivosAprendizagemDesenvolvimento';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DadosPlanoAula = props => {
   const dispatch = useDispatch();
 
@@ -105,4 +106,4 @@ DadosPlanoAula.defaultProps = {
   aulaId: 0,
 };
 
-export default DadosPlanoAula;
+export default comDefaultProps(DadosPlanoAula, DadosPlanoAula.defaultProps);

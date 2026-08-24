@@ -2,6 +2,7 @@ import React from 'react';
 import t from 'prop-types';
 import shortid from 'shortid';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Ant
 import { Tooltip } from 'antd';
 
@@ -99,4 +100,4 @@ BarraNavegacao.defaultProps = {
   somenteConsulta: false,
 };
 
-export default BarraNavegacao;
+export default comDefaultProps(BarraNavegacao, BarraNavegacao.defaultProps);

@@ -2,6 +2,7 @@ import { Button, Input } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import Loader from '~/componentes/loader';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { InputRFEstilo } from './styles';
 
 const InputCodigo = props => {
@@ -84,4 +85,4 @@ InputCodigo.defaultProps = {
   exibirLoader: false,
 };
 
-export default InputCodigo;
+export default comDefaultProps(InputCodigo, InputCodigo.defaultProps);

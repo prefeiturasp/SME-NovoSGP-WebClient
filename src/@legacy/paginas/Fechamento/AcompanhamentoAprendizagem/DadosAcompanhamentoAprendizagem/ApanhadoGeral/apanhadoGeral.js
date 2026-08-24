@@ -6,6 +6,7 @@ import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/Aco
 import AuditoriaApanhadoGeral from './auditoriaApanhadoGeral';
 import CampoApanhadoGeral from './campoApanhadoGeral';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ApanhadoGeral = props => {
   const { semestreSelecionado } = props;
 
@@ -43,4 +44,4 @@ ApanhadoGeral.defaultProps = {
   semestreSelecionado: '',
 };
 
-export default ApanhadoGeral;
+export default comDefaultProps(ApanhadoGeral, ApanhadoGeral.defaultProps);

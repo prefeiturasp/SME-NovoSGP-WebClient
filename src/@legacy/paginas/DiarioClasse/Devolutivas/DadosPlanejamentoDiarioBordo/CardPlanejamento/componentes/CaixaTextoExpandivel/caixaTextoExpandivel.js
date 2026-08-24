@@ -19,6 +19,7 @@ import {
   MarcadorInseridoCJ,
 } from './caixaTextoExpandivel.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CaixaTextoExpandivel = ({ item }) => {
   const [icone, setIcone] = useState('expand-alt');
 
@@ -119,4 +120,4 @@ CaixaTextoExpandivel.propTypes = {
   item: PropTypes.oneOfType([PropTypes.object]),
 };
 
-export default CaixaTextoExpandivel;
+export default comDefaultProps(CaixaTextoExpandivel, CaixaTextoExpandivel.defaultProps);

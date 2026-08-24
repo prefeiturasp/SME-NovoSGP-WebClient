@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Components
 import CampoNumero from '~/componentes/campoNumero';
 
@@ -29,4 +30,4 @@ NumeroDia.propTypes = {
   value: PropTypes.number,
 };
 
-export default NumeroDia;
+export default comDefaultProps(NumeroDia, NumeroDia.defaultProps);

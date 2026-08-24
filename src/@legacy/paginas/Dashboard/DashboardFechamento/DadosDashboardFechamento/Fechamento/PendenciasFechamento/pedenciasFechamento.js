@@ -4,6 +4,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import GraficoPendenciasFechamento from './graficoPendenciasFechamento';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const PendenciasFechamento = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
 
@@ -64,4 +65,4 @@ PendenciasFechamento.defaultProps = {
   bimestre: null,
 };
 
-export default PendenciasFechamento;
+export default comDefaultProps(PendenciasFechamento, PendenciasFechamento.defaultProps);

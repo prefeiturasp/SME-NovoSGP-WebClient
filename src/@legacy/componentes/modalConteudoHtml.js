@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Row } from 'antd';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import comDefaultProps from '~/utils/comDefaultProps';
 import Card from './cardBootstrap';
 import Button from './button';
 import { Base, Colors } from './colors';
@@ -222,4 +223,4 @@ ModalConteudoHtml.defaultProps = {
   labelBotaoSecundario: '',
 };
 
-export default ModalConteudoHtml;
+export default comDefaultProps(ModalConteudoHtml, ModalConteudoHtml.defaultProps);

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Components
 import LinhaBootstrap from '../LinhaBootstrap';
 import DiasDropDown from './components/DiasDropDown';
@@ -83,4 +84,4 @@ RecorrenciaMensal.propTypes = {
   ]),
 };
 
-export default RecorrenciaMensal;
+export default comDefaultProps(RecorrenciaMensal, RecorrenciaMensal.defaultProps);

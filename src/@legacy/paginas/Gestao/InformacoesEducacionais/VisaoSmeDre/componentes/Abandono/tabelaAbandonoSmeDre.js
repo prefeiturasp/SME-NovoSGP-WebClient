@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { erros } from '~/servicos';
 import ServicoAbandono from '~/servicos/InformacoesEducacionais/ServicoAbandono';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function agruparModalidadesParaTabela(modalidades) {
   const agrupado = {};
   modalidades.forEach(m => {
@@ -167,4 +168,4 @@ TabelaAbandonoSmeDre.defaultProps = {
   anoLetivo: null,
 };
 
-export default TabelaAbandonoSmeDre;
+export default comDefaultProps(TabelaAbandonoSmeDre, TabelaAbandonoSmeDre.defaultProps);

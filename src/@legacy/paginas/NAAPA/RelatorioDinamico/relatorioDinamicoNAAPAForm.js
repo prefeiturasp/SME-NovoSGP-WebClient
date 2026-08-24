@@ -10,6 +10,7 @@ import {
 } from '~/componentes-sgp/inputs';
 import RelatorioDinamicoNAAPAFormDinamico from './formDinamico/relatorioDinamicoNAAPAFormDinamico';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioDinamicoNAAPAForm = props => {
   const { form } = props;
 
@@ -61,4 +62,4 @@ RelatorioDinamicoNAAPAForm.defaultProps = {
   form: null,
 };
 
-export default RelatorioDinamicoNAAPAForm;
+export default comDefaultProps(RelatorioDinamicoNAAPAForm, RelatorioDinamicoNAAPAForm.defaultProps);

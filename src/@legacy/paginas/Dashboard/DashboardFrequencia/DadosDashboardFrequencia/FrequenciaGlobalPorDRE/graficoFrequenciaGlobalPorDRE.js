@@ -8,6 +8,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoFrequenciaGlobalPorDRE = props => {
   const { anoLetivo, modalidade, semestre } = props;
 
@@ -129,4 +130,4 @@ GraficoFrequenciaGlobalPorDRE.defaultProps = {
   semestre: null,
 };
 
-export default GraficoFrequenciaGlobalPorDRE;
+export default comDefaultProps(GraficoFrequenciaGlobalPorDRE, GraficoFrequenciaGlobalPorDRE.defaultProps);

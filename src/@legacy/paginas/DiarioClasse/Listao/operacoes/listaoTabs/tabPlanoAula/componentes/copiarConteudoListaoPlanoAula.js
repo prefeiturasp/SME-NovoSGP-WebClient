@@ -7,6 +7,7 @@ import { Base } from '~/componentes';
 import ModalCopiarConteudoPlanoAula from '~/componentes-sgp/ModalCopiarConteudo/modalCopiarConteudoPlanoAula';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BtnCopiarConteudo = styled.div`
   font-size: 14px;
   color: ${Base.CinzaMako};
@@ -160,4 +161,4 @@ CopiarConteudoListaoPlanoAula.defaultProps = {
   setExecutarObterPlanoAulaPorPeriodo: () => null,
 };
 
-export default CopiarConteudoListaoPlanoAula;
+export default comDefaultProps(CopiarConteudoListaoPlanoAula, CopiarConteudoListaoPlanoAula.defaultProps);

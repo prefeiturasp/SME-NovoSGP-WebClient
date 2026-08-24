@@ -37,6 +37,7 @@ import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
 import FiltroComponentesRegencia from '../FiltroComponentesRegencia';
 import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const Avaliacao = props => {
   const dispatch = useDispatch();
 
@@ -511,4 +512,4 @@ Avaliacao.defaultProps = {
   exibirStatusAlunoAusente: false,
 };
 
-export default Avaliacao;
+export default comDefaultProps(Avaliacao, Avaliacao.defaultProps);

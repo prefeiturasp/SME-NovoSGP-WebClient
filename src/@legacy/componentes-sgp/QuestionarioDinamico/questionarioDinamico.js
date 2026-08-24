@@ -35,6 +35,7 @@ import QuestionarioDinamicoFuncoes from './Funcoes/QuestionarioDinamicoFuncoes';
 import QuestionarioDinamicoValidacoes from './Validacoes/QuestionarioDinamicoValidacoes';
 import { CampoDinamicoComboJSONParecerConclusivo } from './Componentes/campoDinamicoComboJSONParecerConclusivo';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const QuestionarioDinamico = props => {
   const dispatch = useDispatch();
 
@@ -834,4 +835,4 @@ QuestionarioDinamico.defaultProps = {
   codigoDre: '',
 };
 
-export default QuestionarioDinamico;
+export default comDefaultProps(QuestionarioDinamico, QuestionarioDinamico.defaultProps);

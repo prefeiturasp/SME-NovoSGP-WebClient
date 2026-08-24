@@ -4,7 +4,8 @@ import { SelectComponent } from '~/componentes';
 import { SGP_SELECT_PERIODO_SONDAGEM } from '~/constantes/ids/select';
 import { TIPO_SONDAGEM } from '@/core/enum/tipo-sondagem';
 
-export const PeriodoSondagem = ({ form, onChange }) => {
+import comDefaultProps from '~/utils/comDefaultProps';
+const PeriodoSondagemComponent = ({ form, onChange }) => {
   const [lista, setLista] = useState([]);
 
   const tipoSondagem = form.values?.tipoSondagem;
@@ -124,12 +125,17 @@ export const PeriodoSondagem = ({ form, onChange }) => {
   );
 };
 
-PeriodoSondagem.propTypes = {
+PeriodoSondagemComponent.propTypes = {
   onChange: PropTypes.func,
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
-PeriodoSondagem.defaultProps = {
+PeriodoSondagemComponent.defaultProps = {
   form: null,
   onChange: () => null,
 };
+
+export const PeriodoSondagem = comDefaultProps(
+  PeriodoSondagemComponent,
+  PeriodoSondagemComponent.defaultProps
+);

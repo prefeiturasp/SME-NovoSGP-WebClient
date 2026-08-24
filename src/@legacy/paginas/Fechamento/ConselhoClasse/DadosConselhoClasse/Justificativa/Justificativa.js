@@ -17,6 +17,7 @@ import {
 import { confirmar } from '~/servicos';
 import servicoSalvarConselhoClasse from '../../servicoSalvarConselhoClasse';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const Justificativa = props => {
   const { alunoDesabilitado } = props;
 
@@ -215,4 +216,4 @@ Justificativa.defaultProps = {
   alunoDesabilitado: false,
 };
 
-export default Justificativa;
+export default comDefaultProps(Justificativa, Justificativa.defaultProps);

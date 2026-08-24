@@ -16,6 +16,7 @@ import { SituacaoEncaminhamentoAEE } from '~/componentes-sgp/inputs/situacao-enc
 import { OPCAO_TODOS } from '~/constantes';
 import { situacaoAEE } from '~/dtos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioEncaminhamentoAEEForm = props => {
   const { form, onChangeCampos } = props;
 
@@ -125,4 +126,4 @@ RelatorioEncaminhamentoAEEForm.defaultProps = {
   onChangeCampos: () => null,
 };
 
-export default RelatorioEncaminhamentoAEEForm;
+export default comDefaultProps(RelatorioEncaminhamentoAEEForm, RelatorioEncaminhamentoAEEForm.defaultProps);

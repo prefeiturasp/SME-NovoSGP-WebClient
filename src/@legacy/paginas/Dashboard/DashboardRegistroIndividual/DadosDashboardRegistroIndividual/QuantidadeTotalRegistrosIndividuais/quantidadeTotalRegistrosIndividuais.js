@@ -4,6 +4,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import GraficoQuantidadeTotalRegistrosIndividuais from './graficoQuantidadeTotalRegistrosIndividuais';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const QuantidadeTotalRegistrosIndividuais = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -58,4 +59,4 @@ QuantidadeTotalRegistrosIndividuais.defaultProps = {
   modalidade: null,
 };
 
-export default QuantidadeTotalRegistrosIndividuais;
+export default comDefaultProps(QuantidadeTotalRegistrosIndividuais, QuantidadeTotalRegistrosIndividuais.defaultProps);

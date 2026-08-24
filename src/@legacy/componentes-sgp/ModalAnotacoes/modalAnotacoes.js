@@ -15,6 +15,7 @@ import { EditorAnotacao } from './modalAnotacoes.css';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import { Typography } from 'antd';
+import comDefaultProps from '~/utils/comDefaultProps';
 const { Text } = Typography;
 
 const ModalAnotacoesFrequencia = props => {
@@ -508,4 +509,4 @@ ModalAnotacoesFrequencia.defaultProps = {
   listaPadraoMotivoAusencia: [],
 };
 
-export default ModalAnotacoesFrequencia;
+export default comDefaultProps(ModalAnotacoesFrequencia, ModalAnotacoesFrequencia.defaultProps);

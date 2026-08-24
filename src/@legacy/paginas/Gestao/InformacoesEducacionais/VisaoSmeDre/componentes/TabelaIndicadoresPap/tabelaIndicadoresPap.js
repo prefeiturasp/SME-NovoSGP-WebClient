@@ -7,6 +7,7 @@ import ServicoPap from '~/servicos/InformacoesEducacionais/ServicoPap';
 import TabelaIndicadoresPapDetalhes from './tabelaIndicadoresPapDetalhes';
 import Title from 'antd/es/typography/Title';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TabelaIndicadoresPap = ({ anoLetivo, codigoDre, codigoUe }) => {
   const [dados, setDados] = useState([]);
   const [exibirLoader, setExibirLoader] = useState(false);
@@ -79,4 +80,4 @@ TabelaIndicadoresPap.defaultProps = {
   anoLetivo: new Date().getFullYear(),
 };
 
-export default TabelaIndicadoresPap;
+export default comDefaultProps(TabelaIndicadoresPap, TabelaIndicadoresPap.defaultProps);

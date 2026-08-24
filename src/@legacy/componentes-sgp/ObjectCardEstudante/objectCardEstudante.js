@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 import DetalhesAluno from '~/componentes/Alunos/Detalhes';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { setDadosObjectCardEstudante } from '~/redux/modulos/objectCardEstudante/actions';
 import { erros } from '~/servicos';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
@@ -136,4 +137,4 @@ ObjectCardEstudante.defaultProps = {
   consultarFrequenciaGlobal: false,
 };
 
-export default ObjectCardEstudante;
+export default comDefaultProps(ObjectCardEstudante, ObjectCardEstudante.defaultProps);

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Components
 import SelectComponent from '~/componentes/select';
 
@@ -68,4 +69,4 @@ RecorrenciaDropDown.propTypes = {
   ]),
 };
 
-export default RecorrenciaDropDown;
+export default comDefaultProps(RecorrenciaDropDown, RecorrenciaDropDown.defaultProps);

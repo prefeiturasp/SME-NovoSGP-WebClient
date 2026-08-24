@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Redux
 import { useSelector } from 'react-redux';
 
@@ -431,4 +432,4 @@ Localizador.defaultProps = {
   novaEstrutura: false,
 };
 
-export default Localizador;
+export default comDefaultProps(Localizador, Localizador.defaultProps);

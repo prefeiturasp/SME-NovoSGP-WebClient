@@ -14,6 +14,7 @@ import {
   SGP_BUTTON_EXPANDIR_RETRAIR_TABELA_RETRATIL,
   SGP_BUTTON_PROXIMO_TABELA_RETRATIL,
 } from '~/constantes/ids/button';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 function Cabecalho({
   titulo,
@@ -93,4 +94,4 @@ Cabecalho.defaultProps = {
   onClickProximo: () => {},
 };
 
-export default Cabecalho;
+export default comDefaultProps(Cabecalho, Cabecalho.defaultProps);

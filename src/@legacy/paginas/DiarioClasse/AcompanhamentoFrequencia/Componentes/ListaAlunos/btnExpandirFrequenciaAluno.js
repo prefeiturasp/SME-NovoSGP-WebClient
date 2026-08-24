@@ -7,6 +7,7 @@ import {
 } from '~/redux/modulos/acompanhamentoFrequencia/actions';
 import { ContainerColunaMotivoAusencia } from './listaAlunos.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BtnExpandirFrequenciaAluno = props => {
   const dispatch = useDispatch();
 
@@ -54,4 +55,4 @@ BtnExpandirFrequenciaAluno.propTypes = {
   codigoAluno: PropTypes.string,
 };
 
-export default BtnExpandirFrequenciaAluno;
+export default comDefaultProps(BtnExpandirFrequenciaAluno, BtnExpandirFrequenciaAluno.defaultProps);

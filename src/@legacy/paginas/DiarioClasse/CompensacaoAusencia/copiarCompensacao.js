@@ -11,6 +11,7 @@ import { SGP_SELECT_BIMESTRE, SGP_SELECT_TURMA } from '~/constantes/ids/select';
 import { erros } from '~/servicos/alertas';
 import ServicoCompensacaoAusencia from '~/servicos/Paginas/DiarioClasse/ServicoCompensacaoAusencia';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CopiarCompensacao = ({
   visivel,
   turmaId,
@@ -157,4 +158,4 @@ CopiarCompensacao.defaultProps = {
   bimestreSugerido: '',
 };
 
-export default CopiarCompensacao;
+export default comDefaultProps(CopiarCompensacao, CopiarCompensacao.defaultProps);

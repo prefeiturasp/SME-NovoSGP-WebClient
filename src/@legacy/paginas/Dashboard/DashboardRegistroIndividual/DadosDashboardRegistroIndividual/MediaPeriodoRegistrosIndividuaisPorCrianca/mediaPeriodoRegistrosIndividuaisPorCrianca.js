@@ -4,6 +4,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import GraficoMediaPeriodoPorCrianca from './graficoMediaPeriodoPorCrianca';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const MediaPeriodoRegistrosIndividuaisPorCrianca = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -58,4 +59,4 @@ MediaPeriodoRegistrosIndividuaisPorCrianca.defaultProps = {
   modalidade: null,
 };
 
-export default MediaPeriodoRegistrosIndividuaisPorCrianca;
+export default comDefaultProps(MediaPeriodoRegistrosIndividuaisPorCrianca, MediaPeriodoRegistrosIndividuaisPorCrianca.defaultProps);

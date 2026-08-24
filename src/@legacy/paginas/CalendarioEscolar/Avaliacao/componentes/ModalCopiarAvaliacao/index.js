@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useReducer } from 'react';
 import t from 'prop-types';
 import shortid from 'shortid';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Redux
 import { useSelector } from 'react-redux';
 
@@ -239,4 +240,4 @@ ModalCopiarAvaliacao.defaultProps = {
   onSalvarCopias: null,
 };
 
-export default ModalCopiarAvaliacao;
+export default comDefaultProps(ModalCopiarAvaliacao, ModalCopiarAvaliacao.defaultProps);

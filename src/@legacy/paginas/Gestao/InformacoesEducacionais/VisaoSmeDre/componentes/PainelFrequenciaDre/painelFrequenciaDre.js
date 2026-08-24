@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import PainelFrequenciaBase from '~/paginas/Gestao/InformacoesEducacionais/shared/PainelFrequenciaBase/PainelFrequenciaBase';
+import comDefaultProps from '~/utils/comDefaultProps';
 import '~/paginas/Gestao/InformacoesEducacionais/shared/PainelFrequenciaBase/painelFrequenciaBase.css';
 
-export default function PainelFrequenciaDre({ dreCodigo, anoLetivo }) {
+function PainelFrequenciaDre({ dreCodigo, anoLetivo }) {
   return (
     <div className="painel-frequencia painel-frequencia-padding">
       <div className="painel-frequencia-introducao">
@@ -33,3 +34,5 @@ PainelFrequenciaDre.defaultProps = {
   dreCodigo: null,
   anoLetivo: null,
 };
+
+export default comDefaultProps(PainelFrequenciaDre, PainelFrequenciaDre.defaultProps);

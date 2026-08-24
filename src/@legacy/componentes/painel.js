@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
 import { Collapse } from 'antd';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const { Panel } = Collapse;
 
@@ -23,4 +24,4 @@ Painel.defaultProps = {
   children: () => {},
 };
 
-export default Painel;
+export default comDefaultProps(Painel, Painel.defaultProps);

@@ -18,6 +18,7 @@ import {
 import { confirmar } from '~/servicos/alertas';
 import { ContainerCampoObservacao } from './observacoesUsuario.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CampoObservacao = props => {
   const {
     salvarObservacao,
@@ -209,4 +210,4 @@ CampoObservacao.defaultProps = {
   ueId: '',
 };
 
-export default CampoObservacao;
+export default comDefaultProps(CampoObservacao, CampoObservacao.defaultProps);

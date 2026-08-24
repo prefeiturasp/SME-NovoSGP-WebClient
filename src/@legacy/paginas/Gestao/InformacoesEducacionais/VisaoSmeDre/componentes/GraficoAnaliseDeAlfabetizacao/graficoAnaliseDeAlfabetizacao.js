@@ -6,6 +6,7 @@ import { erros } from '~/servicos';
 import ServicoAlfabetizacaoGrafico from '~/servicos/InformacoesEducacionais/ServicoAlfabetizacaoGrafico';
 import { SelectComponent } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const listaPeriodicidade = [
   { valor: 1, desc: '1º bimestre' },
   { valor: 2, desc: '2º bimestre' },
@@ -152,4 +153,4 @@ GraficoAlfabetizacao.defaultProps = {
   dreId: null,
 };
 
-export default GraficoAlfabetizacao;
+export default comDefaultProps(GraficoAlfabetizacao, GraficoAlfabetizacao.defaultProps);

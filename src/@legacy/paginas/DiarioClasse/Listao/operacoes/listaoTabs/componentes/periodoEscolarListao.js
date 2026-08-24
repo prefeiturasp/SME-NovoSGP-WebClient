@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Loader, SelectComponent } from '~/componentes';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { SGP_SELECT_PERIODO_POR_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 import { erros } from '~/servicos';
 import ServicoPeriodoEscolar from '~/servicos/Paginas/Calendario/ServicoPeriodoEscolar';
@@ -138,4 +139,4 @@ PeriodoEscolarListao.defaultProps = {
   exibirDataFutura: false,
 };
 
-export default PeriodoEscolarListao;
+export default comDefaultProps(PeriodoEscolarListao, PeriodoEscolarListao.defaultProps);

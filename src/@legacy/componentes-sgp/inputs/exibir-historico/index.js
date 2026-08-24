@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { CheckboxComponent } from '~/componentes';
 import { SGP_CHECKBOX_EXIBIR_HISTORICO } from '~/constantes/ids/checkbox';
 
-export const ExibirHistorico = ({ name, form, onChange, disabled }) => {
+import comDefaultProps from '~/utils/comDefaultProps';
+const ExibirHistoricoComponent = ({ name, form, onChange, disabled }) => {
   return (
     <CheckboxComponent
       form={form}
@@ -23,16 +24,21 @@ export const ExibirHistorico = ({ name, form, onChange, disabled }) => {
   );
 };
 
-ExibirHistorico.propTypes = {
+ExibirHistoricoComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
-ExibirHistorico.defaultProps = {
+ExibirHistoricoComponent.defaultProps = {
   form: null,
   disabled: false,
   onChange: () => null,
   name: 'consideraHistorico',
 };
+
+export const ExibirHistorico = comDefaultProps(
+  ExibirHistoricoComponent,
+  ExibirHistoricoComponent.defaultProps
+);

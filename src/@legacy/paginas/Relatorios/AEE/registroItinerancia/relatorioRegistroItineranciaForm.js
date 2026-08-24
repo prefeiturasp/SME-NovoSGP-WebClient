@@ -11,6 +11,7 @@ import {
 import { SituacaoItinerancia } from '@/@legacy/componentes-sgp/inputs/situacao-itinerancia';
 import { OPCAO_TODOS } from '@/@legacy/constantes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioRegistroItineranciaForm = props => {
   const { form, onChangeCampos } = props;
 
@@ -69,4 +70,4 @@ RelatorioRegistroItineranciaForm.defaultProps = {
   onChangeCampos: () => null,
 };
 
-export default RelatorioRegistroItineranciaForm;
+export default comDefaultProps(RelatorioRegistroItineranciaForm, RelatorioRegistroItineranciaForm.defaultProps);

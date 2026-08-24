@@ -4,7 +4,8 @@ import { SelectComponent } from '~/componentes';
 import { SGP_SELECT_FORMATO } from '~/constantes/ids/select';
 import { TIPO_FORMATO_RELATORIO } from '@/core/enum/tipo-formato-relatorio';
 
-export const FormatoRelatorio = ({ form, onChange, disabled }) => {
+import comDefaultProps from '~/utils/comDefaultProps';
+const FormatoRelatorioComponent = ({ form, onChange, disabled }) => {
   const lista = [
     { value: TIPO_FORMATO_RELATORIO.PDF, label: 'PDF' },
     { value: TIPO_FORMATO_RELATORIO.XLSX, label: 'EXCEL' },
@@ -34,14 +35,19 @@ export const FormatoRelatorio = ({ form, onChange, disabled }) => {
   );
 };
 
-FormatoRelatorio.propTypes = {
+FormatoRelatorioComponent.propTypes = {
   onChange: PropTypes.func,
   form: PropTypes.oneOfType([PropTypes.any]),
   disabled: PropTypes.bool,
 };
 
-FormatoRelatorio.defaultProps = {
+FormatoRelatorioComponent.defaultProps = {
   form: null,
   onChange: () => null,
   disabled: false,
 };
+
+export const FormatoRelatorio = comDefaultProps(
+  FormatoRelatorioComponent,
+  FormatoRelatorioComponent.defaultProps
+);

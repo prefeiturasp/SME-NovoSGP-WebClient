@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { AutoComplete, Input } from 'antd';
 import { Label, Loader } from '~/componentes';
@@ -140,4 +141,4 @@ LocalizadorPadrao.defaultProps = {
   placeholder: '',
 };
 
-export default LocalizadorPadrao;
+export default comDefaultProps(LocalizadorPadrao, LocalizadorPadrao.defaultProps);

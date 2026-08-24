@@ -6,6 +6,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardFrequencia from '~/servicos/Paginas/Dashboard/ServicoDashboardFrequencia';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoQuantidadeAusenciasPossuemJustificativa = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre } = props;
 
@@ -72,4 +73,4 @@ GraficoQuantidadeAusenciasPossuemJustificativa.defaultProps = {
   semestre: null,
 };
 
-export default GraficoQuantidadeAusenciasPossuemJustificativa;
+export default comDefaultProps(GraficoQuantidadeAusenciasPossuemJustificativa, GraficoQuantidadeAusenciasPossuemJustificativa.defaultProps);

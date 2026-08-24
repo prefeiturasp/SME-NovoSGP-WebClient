@@ -6,6 +6,7 @@ import { erros, ServicoAcompanhamentoFechamento } from '~/servicos';
 
 import { TabelaComponentesCurriculares } from '../TabelaComponentesCurriculares';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DetalhesFechamento = ({ turmaId, parametrosFiltro }) => {
   const [exibirDetalhamento, setExibirDetalhamento] = useState(false);
   const [
@@ -83,4 +84,4 @@ DetalhesFechamento.propTypes = {
   parametrosFiltro: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
-export default DetalhesFechamento;
+export default comDefaultProps(DetalhesFechamento, DetalhesFechamento.defaultProps);

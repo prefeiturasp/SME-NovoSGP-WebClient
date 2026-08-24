@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_CLASSIFICACAO_DOCUMENTO } from '~/constantes/ids/select';
 
-export const ClassificacaoDocumento = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const ClassificacaoDocumentoComponent = ({
   name,
   form,
   onChange,
@@ -42,7 +43,7 @@ export const ClassificacaoDocumento = ({
   );
 };
 
-ClassificacaoDocumento.propTypes = {
+ClassificacaoDocumentoComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
@@ -51,7 +52,7 @@ ClassificacaoDocumento.propTypes = {
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
-ClassificacaoDocumento.defaultProps = {
+ClassificacaoDocumentoComponent.defaultProps = {
   form: null,
   disabled: false,
   showSearch: true,
@@ -59,3 +60,8 @@ ClassificacaoDocumento.defaultProps = {
   onChange: () => null,
   name: 'classificacaoId',
 };
+
+export const ClassificacaoDocumento = comDefaultProps(
+  ClassificacaoDocumentoComponent,
+  ClassificacaoDocumentoComponent.defaultProps
+);

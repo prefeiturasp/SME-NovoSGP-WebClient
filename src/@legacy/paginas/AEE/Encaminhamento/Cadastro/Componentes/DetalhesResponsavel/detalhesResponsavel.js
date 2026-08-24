@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Base } from '~/componentes/colors';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DadosAluno = styled.div`
   border: 1px solid ${Base.CinzaDesabilitado};
   display: flex;
@@ -54,4 +55,4 @@ DetalhesResponsavel.defaultProps = {
   nomeServidor: '',
 };
 
-export default DetalhesResponsavel;
+export default comDefaultProps(DetalhesResponsavel, DetalhesResponsavel.defaultProps);

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import SelectComponent from '~/componentes/select';
+import comDefaultProps from '~/utils/comDefaultProps';
 import MetodosListaFrequencia from '../MetodosListaFrequencia';
 import CampoTipoFreqSomenteLeitura from './campoTipoFreqSomenteLeitura';
 import { ContainerTipoFrequencia } from './style';
@@ -84,4 +85,4 @@ CampoTipoFrequencia.defaultProps = {
   desabilitar: false,
 };
 
-export default CampoTipoFrequencia;
+export default comDefaultProps(CampoTipoFrequencia, CampoTipoFrequencia.defaultProps);

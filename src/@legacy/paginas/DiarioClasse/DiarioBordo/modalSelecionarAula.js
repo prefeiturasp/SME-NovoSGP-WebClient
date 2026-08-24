@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { ModalConteudoHtml, SelectComponent } from '~/componentes';
 import tipoAula from '~/dtos/tipoAula';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalSelecionarAula = props => {
   const {
     visivel,
@@ -133,4 +134,4 @@ ModalSelecionarAula.defaultProps = {
   onClickSelecionarAula: () => {},
 };
 
-export default ModalSelecionarAula;
+export default comDefaultProps(ModalSelecionarAula, ModalSelecionarAula.defaultProps);

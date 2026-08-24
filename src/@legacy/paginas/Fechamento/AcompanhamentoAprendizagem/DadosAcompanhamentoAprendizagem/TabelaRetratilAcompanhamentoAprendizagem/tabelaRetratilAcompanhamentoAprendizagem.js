@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import TabelaRetratil from '~/componentes/TabelaRetratil';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TabelaRetratilAcompanhamentoAprendizagem = ({
   onChangeAlunoSelecionado,
   permiteOnChangeAluno,
@@ -51,4 +52,4 @@ TabelaRetratilAcompanhamentoAprendizagem.defaultProps = {
   children: () => {},
 };
 
-export default TabelaRetratilAcompanhamentoAprendizagem;
+export default comDefaultProps(TabelaRetratilAcompanhamentoAprendizagem, TabelaRetratilAcompanhamentoAprendizagem.defaultProps);

@@ -4,8 +4,9 @@ import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_SITUACAO_ENCAMINHAMENTO_AEE } from '~/constantes/ids/select';
 import { erros } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
+import comDefaultProps from '~/utils/comDefaultProps';
 
-export const SituacaoEncaminhamentoAEE = ({
+const SituacaoEncaminhamentoAEEComponent = ({
   name,
   form,
   onChange,
@@ -67,7 +68,7 @@ export const SituacaoEncaminhamentoAEE = ({
   );
 };
 
-SituacaoEncaminhamentoAEE.propTypes = {
+SituacaoEncaminhamentoAEEComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -78,7 +79,7 @@ SituacaoEncaminhamentoAEE.propTypes = {
   updateData: PropTypes.oneOfType([PropTypes.any]),
 };
 
-SituacaoEncaminhamentoAEE.defaultProps = {
+SituacaoEncaminhamentoAEEComponent.defaultProps = {
   form: null,
   disabled: false,
   multiple: true,
@@ -88,3 +89,8 @@ SituacaoEncaminhamentoAEE.defaultProps = {
   name: 'situacaoEncaminhamentoAEE',
   updateData: () => null,
 };
+
+export const SituacaoEncaminhamentoAEE = comDefaultProps(
+  SituacaoEncaminhamentoAEEComponent,
+  SituacaoEncaminhamentoAEEComponent.defaultProps
+);

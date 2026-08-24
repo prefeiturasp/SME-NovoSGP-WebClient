@@ -8,6 +8,7 @@ import ServicoImagemEstudante from '~/servicos/Componentes/ServicoImagemEstudant
 import ModalTrocarImagem from './modalTrocarImagem';
 import { ContainerAvatar } from './styles';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ImagemEstudanteObjectCard = props => {
   const { codigoEOL, permiteAlterarImagem } = props;
 
@@ -109,4 +110,4 @@ ImagemEstudanteObjectCard.defaultProps = {
   permiteAlterarImagem: true,
 };
 
-export default ImagemEstudanteObjectCard;
+export default comDefaultProps(ImagemEstudanteObjectCard, ImagemEstudanteObjectCard.defaultProps);

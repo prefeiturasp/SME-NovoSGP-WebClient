@@ -6,6 +6,7 @@ import { Loader, SelectComponent } from '~/componentes';
 import { OPCAO_TODOS } from '~/constantes';
 import { ServicoCalendarios, erros } from '~/servicos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TipoCalendarioComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaCalendario, setListaCalendario] = useState([]);
@@ -118,4 +119,4 @@ TipoCalendarioComunicados.defaultProps = {
   desabilitar: false,
 };
 
-export default TipoCalendarioComunicados;
+export default comDefaultProps(TipoCalendarioComunicados, TipoCalendarioComunicados.defaultProps);

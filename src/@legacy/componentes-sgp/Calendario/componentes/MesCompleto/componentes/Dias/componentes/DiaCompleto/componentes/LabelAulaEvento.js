@@ -3,6 +3,7 @@ import React from 'react';
 import shortid from 'shortid';
 import { Base, Colors } from '~/componentes';
 import { TipoEvento } from '~/componentes-sgp/calendarioProfessor/Semana.css';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { Botao } from '../styles';
 
 function LabelAulaEvento({ dadosEvento }) {
@@ -53,4 +54,4 @@ LabelAulaEvento.defaultProps = {
   dadosEvento: {},
 };
 
-export default LabelAulaEvento;
+export default comDefaultProps(LabelAulaEvento, LabelAulaEvento.defaultProps);

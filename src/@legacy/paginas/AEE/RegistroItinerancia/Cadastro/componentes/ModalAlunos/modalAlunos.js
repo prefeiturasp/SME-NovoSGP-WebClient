@@ -11,6 +11,7 @@ import { confirmar } from '~/servicos';
 
 import { BotaoEstilizado } from './modalAlunos.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalAlunos = ({
   codigoUe,
   modalVisivel,
@@ -159,4 +160,4 @@ ModalAlunos.propTypes = {
   dataVisita: PropTypes.oneOfType([PropTypes.any]),
 };
 
-export default ModalAlunos;
+export default comDefaultProps(ModalAlunos, ModalAlunos.defaultProps);

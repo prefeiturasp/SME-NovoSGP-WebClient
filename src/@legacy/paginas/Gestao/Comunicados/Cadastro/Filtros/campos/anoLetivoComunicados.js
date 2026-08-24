@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AnoLetivoComunicados = ({ form, comunicadoId, onChangeCampos }) => {
   const [listaAnosLetivos, setListaAnosLetivos] = useState([]);
 
@@ -66,4 +67,4 @@ AnoLetivoComunicados.defaultProps = {
   onChangeCampos: () => null,
 };
 
-export default AnoLetivoComunicados;
+export default comDefaultProps(AnoLetivoComunicados, AnoLetivoComunicados.defaultProps);

@@ -7,6 +7,7 @@ import { Colors } from '~/componentes/colors';
 import Loader from '~/componentes/loader';
 import BotaoVoltarPadrao from './BotoesAcaoPadrao/botaoVoltarPadrao';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BotoesAcaoRelatorio = props => {
   const {
     onClickVoltar,
@@ -92,4 +93,4 @@ BotoesAcaoRelatorio.defaultProps = {
   exibirBotaoImpressao: true,
 };
 
-export default BotoesAcaoRelatorio;
+export default comDefaultProps(BotoesAcaoRelatorio, BotoesAcaoRelatorio.defaultProps);

@@ -26,6 +26,7 @@ import PlanoAulaServico from '~/servicos/Paginas/PlanoAula';
 import ListaCheckbox from './componentes/ListaCheckbox';
 import { Row } from './modalCopiarConteudoPlanoAula.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalCopiarConteudoPlanoAula = props => {
   const {
     codigoComponenteCurricular,
@@ -405,4 +406,4 @@ ModalCopiarConteudoPlanoAula.defaultProps = {
   aposCopiarConteudo: () => null,
 };
 
-export default ModalCopiarConteudoPlanoAula;
+export default comDefaultProps(ModalCopiarConteudoPlanoAula, ModalCopiarConteudoPlanoAula.defaultProps);

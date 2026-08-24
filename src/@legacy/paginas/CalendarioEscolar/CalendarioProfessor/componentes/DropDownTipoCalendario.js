@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import t from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { Loader, SelectComponent } from '~/componentes';
 
@@ -91,4 +92,4 @@ DropDownTipoCalendario.defaultProps = {
   valor: undefined,
 };
 
-export default DropDownTipoCalendario;
+export default comDefaultProps(DropDownTipoCalendario, DropDownTipoCalendario.defaultProps);

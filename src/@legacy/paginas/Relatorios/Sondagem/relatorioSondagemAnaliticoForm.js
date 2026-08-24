@@ -8,6 +8,7 @@ import { FiltroHelper } from '~/componentes-sgp';
 import { CheckboxComponent } from '~/componentes';
 import { SGP_CHECKBOX_EXIBIR_TURMAS_SEM_LANCAMENTO } from '~/constantes/ids/checkbox';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioSondagemAnaliticoForm = props => {
   const { form, onChangeCampos } = props;
 
@@ -110,4 +111,4 @@ RelatorioSondagemAnaliticoForm.defaultProps = {
   onChangeCampos: () => null,
 };
 
-export default RelatorioSondagemAnaliticoForm;
+export default comDefaultProps(RelatorioSondagemAnaliticoForm, RelatorioSondagemAnaliticoForm.defaultProps);

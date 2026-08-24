@@ -8,6 +8,7 @@ import ServicoDashboardInformacoesEscolares from '~/servicos/Paginas/Dashboard/S
 import DataUltimaAtualizacaoDashboardInformacoesEscolares from '../../../dataUltimaAtualizacaoDashboardInformacoesEscolares';
 import LabelTotalMatriculas from '../../../labelTotalMatriculas';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoQuantidadeMatriculasPorAno = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -216,4 +217,4 @@ GraficoQuantidadeMatriculasPorAno.defaultProps = {
   modalidade: '',
 };
 
-export default GraficoQuantidadeMatriculasPorAno;
+export default comDefaultProps(GraficoQuantidadeMatriculasPorAno, GraficoQuantidadeMatriculasPorAno.defaultProps);

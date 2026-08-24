@@ -19,7 +19,8 @@ import PlanoAEE from '../shared/PlanoAEE/PlanoAEE';
 import TabelaAprovacaoSmeDre from './componentes/Aprovacao/tabelaAprovacaoSmeDre';
 import TabelaInformacoesEducacionais from './componentes/TabelaInformacoesEducacionais/TabelaInformacoesEducacionais';
 
-export default function InformacoesEducacionais({
+import comDefaultProps from '~/utils/comDefaultProps';
+function InformacoesEducacionais({
   anoLetivo,
   dreCodigo,
   ueCodigo,
@@ -255,3 +256,5 @@ InformacoesEducacionais.defaultProps = {
   tipoVisualizacao: null,
   periodicidade: null,
 };
+
+export default comDefaultProps(InformacoesEducacionais, InformacoesEducacionais.defaultProps);

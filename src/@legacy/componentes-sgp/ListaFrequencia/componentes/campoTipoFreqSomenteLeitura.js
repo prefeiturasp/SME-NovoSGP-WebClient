@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import { Base } from '~/componentes/colors';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const Container = styled.div`
   height: 45px;
@@ -75,4 +76,7 @@ CampoTipoFreqSomenteLeitura.defaultProps = {
   desabilitar: false,
 };
 
-export default CampoTipoFreqSomenteLeitura;
+export default comDefaultProps(
+  CampoTipoFreqSomenteLeitura,
+  CampoTipoFreqSomenteLeitura.defaultProps
+);

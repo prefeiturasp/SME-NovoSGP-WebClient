@@ -5,6 +5,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import GraficoQuantidadeCriancasSemRegistros from './graficoQuantidadeCriancasSemRegistros';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const QuantidadeCriancasSemRegistros = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -69,4 +70,4 @@ QuantidadeCriancasSemRegistros.defaultProps = {
   modalidade: null,
 };
 
-export default QuantidadeCriancasSemRegistros;
+export default comDefaultProps(QuantidadeCriancasSemRegistros, QuantidadeCriancasSemRegistros.defaultProps);
