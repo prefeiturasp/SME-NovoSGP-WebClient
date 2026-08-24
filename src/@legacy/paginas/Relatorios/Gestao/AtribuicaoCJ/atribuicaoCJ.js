@@ -519,6 +519,7 @@ const AtribuicaoCJ = () => {
                 placeholderRF="Procure pelo RF do usuário"
                 placeholderNome="Procure pelo nome do usuário"
                 labelNome="Nome"
+                classesNome=""
                 rfEdicao={usuarioRf}
                 buscandoDados={setCarregandoGeral}
                 dreId={dreCodigo}

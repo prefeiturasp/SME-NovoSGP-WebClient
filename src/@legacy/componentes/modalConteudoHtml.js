@@ -121,6 +121,7 @@ const ModalConteudoHtml = props => {
                     </TextoAlerta>
                     <div
                       className="d-flex justify-content-end"
+                      style={{ gap: '8px' }}
                       hidden={esconderBotoes}
                     >
                       <Button
@@ -130,7 +131,7 @@ const ModalConteudoHtml = props => {
                         color={colorBotaoSecundario}
                         bold
                         border
-                        className="mr-2 padding-btn-confirmacao"
+                        className="padding-btn-confirmacao"
                         onClick={onConfirmacaoSecundaria}
                         disabled={loader}
                       />
@@ -152,7 +153,15 @@ const ModalConteudoHtml = props => {
           </>
         ) : !esconderBotoes &&
           (!esconderBotaoPrincipal || !esconderBotaoSecundario) ? (
-          <div className="row d-flex justify-content-end">
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '8px',
+            }}
+          >
             <Button
               id={idBotaoPrincipal || SGP_BUTTON_SALVAR_MODAL}
               key="btn-sim-confirmacao"
@@ -160,7 +169,7 @@ const ModalConteudoHtml = props => {
               color={colorBotaoSecundario}
               bold
               border
-              className="mr-2 padding-btn-confirmacao"
+              className="padding-btn-confirmacao"
               onClick={onConfirmacaoSecundaria}
               hidden={esconderBotaoSecundario}
               disabled={loader}

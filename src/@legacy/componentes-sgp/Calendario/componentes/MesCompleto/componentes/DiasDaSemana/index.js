@@ -18,7 +18,7 @@ function DiasDaSemana() {
   return (
     <DiasDaSemanaWrapper>
       {Dias.map(dia => (
-        <div key={shortid.generate()} className="col">
+        <div key={shortid.generate()} className="dia-semana">
           <div className="text-muted text-center fonte-12">{dia}</div>
         </div>
       ))}

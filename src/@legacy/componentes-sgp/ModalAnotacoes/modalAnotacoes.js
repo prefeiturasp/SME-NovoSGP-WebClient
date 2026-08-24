@@ -11,6 +11,7 @@ import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import SelectComponent from '~/componentes/select';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import ServicoAnotacaoFrequenciaAluno from '~/servicos/Paginas/DiarioClasse/ServicoAnotacaoFrequenciaAluno';
+import { formularioEhValido } from '~/utils/formikRefHelper';
 import { EditorAnotacao } from './modalAnotacoes.css';
 import moment from 'moment';
 import 'moment/locale/pt-br';
@@ -251,10 +252,7 @@ const ModalAnotacoesFrequencia = props => {
         refForm.setFieldTouched(campo, true, true);
       });
       refForm.validateForm().then(() => {
-        if (
-          refForm.getFormikContext().isValid ||
-          Object.keys(refForm.getFormikContext().errors).length === 0
-        ) {
+        if (formularioEhValido(refForm)) {
           setLoaderSalvarEditar(true);
           setTimeout(() => {
             refForm.handleSubmit(e => e);
@@ -319,7 +317,7 @@ const ModalAnotacoesFrequencia = props => {
       closable
     >
       <Formik
-        ref={f => setRefForm(f)}
+        innerRef={f => setRefForm(f)}
         enableReinitialize
         initialValues={valoresIniciais}
         validationSchema={validacoes}
@@ -396,7 +394,7 @@ const ModalAnotacoesFrequencia = props => {
                     name="anotacao"
                     onChange={() => {
                       if (!exibirEditor.current) {
-                        exibirEditor.current = true
+                        exibirEditor.current = true;
                         return;
                       }
                       onChangeCampos();
@@ -417,8 +415,8 @@ const ModalAnotacoesFrequencia = props => {
                   style={{ marginTop: '-15px' }}
                 >
                   {valoresIniciais &&
-                    valoresIniciais.auditoria &&
-                    valoresIniciais.auditoria.criadoPor ? (
+                  valoresIniciais.auditoria &&
+                  valoresIniciais.auditoria.criadoPor ? (
                     <Auditoria
                       criadoPor={valoresIniciais.auditoria.criadoPor}
                       criadoEm={valoresIniciais.auditoria.criadoEm}
@@ -502,10 +500,10 @@ ModalAnotacoesFrequencia.defaultProps = {
   componenteCurricularId: '',
   desabilitarCampos: false,
   exibirModal: false,
-  setExibirModal: () => { },
+  setExibirModal: () => {},
   dadosModal: [],
-  setDadosModal: () => { },
-  fechouModal: () => { },
+  setDadosModal: () => {},
+  fechouModal: () => {},
   listaPadraoMotivoAusencia: [],
 };
 

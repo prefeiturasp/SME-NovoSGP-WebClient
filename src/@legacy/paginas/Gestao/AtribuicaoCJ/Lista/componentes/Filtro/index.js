@@ -77,7 +77,7 @@ function Filtro({ onFiltrar }) {
       validateOnBlur
     >
       {form => (
-        <Form className="col-md-12 mb-4">
+        <Form className="mb-4">
           <Linha className="row mb-2">
             <CheckboxComponent
               name="exibirHistorico"

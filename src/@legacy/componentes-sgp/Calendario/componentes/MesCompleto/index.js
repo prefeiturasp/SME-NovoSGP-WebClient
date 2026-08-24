@@ -31,7 +31,11 @@ function MesCompleto({
   return (
     <MesCompletoWrapper className={`${mes.nome} ${deveExibir && `visivel`}`}>
       {deveExibir && (
-        <Loader loading={carregandoMes} tip="Carregando...">
+        <Loader
+          loading={carregandoMes}
+          tip="Carregando..."
+          style={{ width: '100%' }}
+        >
           <DiasDaSemana />
           <Dias
             eventos={

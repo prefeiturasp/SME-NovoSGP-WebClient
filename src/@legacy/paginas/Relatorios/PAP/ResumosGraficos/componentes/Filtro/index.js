@@ -27,6 +27,8 @@ import { erros } from '~/servicos/alertas';
 
 // Funções
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
+import { dateAdapter } from '@/core/date/adapter';
+import { formularioEhValido } from '~/utils/formikRefHelper';
 
 function objetoExistaNaLista(objeto, lista) {
   return lista.some(
@@ -62,8 +64,7 @@ function Filtro({ onFiltrar }) {
   };
 
   const validarFiltro = valores => {
-    const formContext = refForm && refForm.getFormikContext();
-    if (formContext.isValid && Object.keys(formContext.errors).length === 0) {
+    if (formularioEhValido(refForm)) {
       onFiltrar(valores);
     }
   };
@@ -83,7 +84,7 @@ function Filtro({ onFiltrar }) {
     setCarregandoCiclos(true);
 
     const params = {
-      anoSelecionado: window.moment().format('YYYY'),
+      anoSelecionado: dateAdapter.now().format('YYYY'),
       modalidade: 5,
       anos: ['3', '4', '5', '6', '7', '8', '9'],
     };
@@ -309,7 +310,7 @@ function Filtro({ onFiltrar }) {
       initialValues={valoresIniciais}
       validationSchema={validacoes()}
       onSubmit={valores => onFiltrar(valores)}
-      ref={refFormik => setRefForm(refFormik)}
+      innerRef={refFormik => setRefForm(refFormik)}
       validate={valores => validarFiltro(valores)}
       validateOnChange
       validateOnBlur

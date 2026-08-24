@@ -137,7 +137,7 @@ function AtribuicaoEsporadicaLista() {
           />
         </Cabecalho>
         <Card>
-          <div className="col-md-12">
+          <div className="col-md-12 qa-ajuste-atribuicao-esporadica">
             <Filtro onFiltrar={onChangeFiltro} />
             <ListaPaginada
               url="v1/atribuicao/esporadica/listar"

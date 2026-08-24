@@ -7,3 +7,7 @@ Cypress.Commands.add('configurar_visualizacao', (device) => {
 		break
 	}
 })
+
+Cypress.Commands.add('carregandoMenus', () => {
+    cy.wait('@menus', { timeout: 60000 }).its('response.statusCode').should('eq', 200)
+})

@@ -5,8 +5,13 @@ import Mensagens from './mensagens/mensagens';
 import ModalConfirmacao from './modalConfirmacao';
 import TempoExpiracaoSessao from './tempoExpiracaoSessao/tempoExpiracaoSessao';
 import Versao from './versao';
+import { buscarVersao } from '../servicos/Paginas/ServicoUsuario';
 
 const Conteudo = () => {
+  React.useEffect(() => {
+    buscarVersao();
+  }, []);
+
   return (
     <div className="secao-conteudo">
       <TempoExpiracaoSessao />

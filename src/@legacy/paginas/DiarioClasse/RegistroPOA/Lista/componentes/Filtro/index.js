@@ -18,11 +18,13 @@ import { DreDropDown, UeDropDown } from '~/componentes-sgp';
 // Styles
 import { Linha } from '~/componentes/EstilosGlobais';
 import { store } from '@/core/redux';
+import { dateAdapter } from '@/core/date/adapter';
+import { formularioEhValido } from '~/utils/formikRefHelper';
 
 function Filtro({ onFiltrar }) {
   const anoLetivo =
     store.getState().usuario.turmaSelecionada.anoLetivo ||
-    window.moment().format('YYYY');
+    dateAdapter.now().format('YYYY');
   const [refForm, setRefForm] = useState({});
   const [valoresIniciais] = useState({
     titulo: '',
@@ -33,8 +35,7 @@ function Filtro({ onFiltrar }) {
   };
 
   const validarFiltro = valores => {
-    const formContext = refForm && refForm.getFormikContext();
-    if (formContext.isValid && Object.keys(formContext.errors).length === 0) {
+    if (formularioEhValido(refForm)) {
       onFiltrar(valores);
     }
   };
@@ -45,13 +46,13 @@ function Filtro({ onFiltrar }) {
       initialValues={valoresIniciais}
       validationSchema={validacoes()}
       onSubmit={valores => onFiltrar(valores)}
-      ref={refFormik => setRefForm(refFormik)}
+      innerRef={refFormik => setRefForm(refFormik)}
       validate={valores => validarFiltro(valores)}
       validateOnChange
       validateOnBlur
     >
       {form => (
-        <Form className="col-md-12 mb-4">
+        <Form className="mb-4">
           <Linha className="row mb-2">
             <Grid cols={6}>
               <DreDropDown

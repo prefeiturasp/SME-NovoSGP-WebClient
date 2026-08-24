@@ -1,5 +1,4 @@
 import { Col, Row } from 'antd';
-import $ from 'jquery';
 import _ from 'lodash';
 import React, { useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,7 +30,7 @@ import {
 } from '~/servicos';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
-import { editorTemValor } from '~/utils';
+import { editorTemValor, removerTagsHtml } from '~/utils';
 import {
   LISTAO_TAB_AVALIACOES,
   LISTAO_TAB_DIARIO_BORDO,
@@ -449,8 +448,7 @@ const ListaoOperacoesBotoesAcao = () => {
     const errosDiarioBordo = [];
     const qtdMinimaCaracteres = 200;
     dadosAlterados.forEach(item => {
-      const planejamento = $(item?.planejamento);
-      const textoAtualPlanejamento = planejamento?.text();
+      const textoAtualPlanejamento = removerTagsHtml(item?.planejamento);
       if (!textoAtualPlanejamento) {
         errosDiarioBordo.push(`${item.titulo} - Planejamento é obrigatório`);
       }

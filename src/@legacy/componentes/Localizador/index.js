@@ -41,6 +41,7 @@ function Localizador({
   validaPerfilProfessor,
   mensagemErroConsultaRF,
   colunasNome,
+  classesNome,
   buscarCaracterPartir,
   ueId,
   buscarPorAbrangencia,
@@ -346,7 +347,7 @@ function Localizador({
           exibirLoader={exibirLoader}
         />
       </Grid>
-      <Grid className="pr-0" cols={colunasNome}>
+      <Grid className={classesNome} cols={colunasNome}>
         {showLabel && (
           <Label
             text={labelNome}
@@ -397,6 +398,7 @@ Localizador.propTypes = {
   validaPerfilProfessor: PropTypes.bool,
   mensagemErroConsultaRF: PropTypes.string,
   colunasNome: PropTypes.string,
+  classesNome: PropTypes.string,
   buscarCaracterPartir: PropTypes.number,
   ueId: PropTypes.string,
   buscarPorAbrangencia: PropTypes.bool,
@@ -424,6 +426,7 @@ Localizador.defaultProps = {
   validaPerfilProfessor: true,
   mensagemErroConsultaRF: '',
   colunasNome: '8',
+  classesNome: 'pr-0',
   buscarCaracterPartir: 3,
   ueId: null,
   buscarPorAbrangencia: false,

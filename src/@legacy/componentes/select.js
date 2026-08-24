@@ -75,6 +75,7 @@ const SelectComponent = React.forwardRef((props, ref) => {
     setValueOnlyOnChange,
     labelRequired,
     labelInValue,
+    requiredOffset,
   } = props;
 
   const { Option } = Select;
@@ -129,8 +130,9 @@ const SelectComponent = React.forwardRef((props, ref) => {
       suffixIcon={<i className="fas fa-angle-down" style={{ fontSize: 18 }} />}
       className={
         form
-          ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${className || ''
-          }`
+          ? `overflow-hidden ${possuiErro() ? 'is-invalid' : ''} ${
+              className || ''
+            }`
           : ''
       }
       name={name}
@@ -200,7 +202,12 @@ const SelectComponent = React.forwardRef((props, ref) => {
       color={color}
     >
       {label ? (
-        <Label text={label} control={name} isRequired={labelRequired} />
+        <Label
+          text={label}
+          control={name}
+          isRequired={labelRequired}
+          requiredOffset={requiredOffset}
+        />
       ) : (
         <></>
       )}
@@ -237,6 +244,7 @@ SelectComponent.propTypes = {
   setValueOnlyOnChange: PropTypes.bool,
   labelRequired: PropTypes.bool,
   labelInValue: PropTypes.bool,
+  requiredOffset: PropTypes.number,
 };
 
 SelectComponent.defaultProps = {
@@ -248,6 +256,7 @@ SelectComponent.defaultProps = {
   labelRequired: false,
   showSearch: true,
   labelInValue: false,
+  requiredOffset: 0,
 };
 
 export default comDefaultProps(SelectComponent, SelectComponent.defaultProps);

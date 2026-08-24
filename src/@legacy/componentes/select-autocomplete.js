@@ -68,6 +68,7 @@ const SelectAutocomplete = ({
   temErro,
   mensagemErro,
   labelRequired,
+  requiredOffset,
 }) => {
   const [itensFiltrados, setItensFiltrados] = useState(lista);
 
@@ -174,7 +175,12 @@ const SelectAutocomplete = ({
   return (
     <Container>
       {!hideLabel && (
-        <Label text={label} control={name} isRequired={labelRequired} />
+        <Label
+          text={label}
+          control={name}
+          isRequired={labelRequired}
+          requiredOffset={requiredOffset}
+        />
       )}
       {form ? campoComValidacoes() : campoSemValidacoes()}
       {obterErros()}
@@ -205,6 +211,7 @@ SelectAutocomplete.defaultProps = {
   mensagemErro: '',
   labelRequired: false,
   form: null,
+  requiredOffset: 0,
 };
 
 SelectAutocomplete.propTypes = {
@@ -230,6 +237,7 @@ SelectAutocomplete.propTypes = {
   mensagemErro: PropTypes.string,
   labelRequired: PropTypes.bool,
   form: PropTypes.oneOfType([PropTypes.any]),
+  requiredOffset: PropTypes.number,
 };
 
 export default comDefaultProps(SelectAutocomplete, SelectAutocomplete.defaultProps);
