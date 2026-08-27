@@ -1,14 +1,12 @@
-import 'moment/locale/pt-br';
-
 import DatePickerMoment from './datePickerMoment';
 import { LoadingOutlined, CalendarOutlined } from '@ant-design/icons';
 import locale from 'antd/es/date-picker/locale/pt_BR';
 import { Field } from 'formik';
-import moment from 'moment';
 import PropTypes from 'prop-types';
 import React from 'react';
 import * as Yup from 'yup';
 import { faLongArrowAltRight } from '@fortawesome/free-solid-svg-icons';
+import { dayjs } from '@/core/date/dayjs';
 
 import { Base } from '../colors';
 import Label from '../label';
@@ -16,12 +14,25 @@ import comDefaultProps from '~/utils/comDefaultProps';
 
 import { Campo, IconeEstilizado } from './campoDataNovo.css';
 
+const paraDayjs = valor => {
+  if (!valor) return null;
+  if (dayjs.isDayjs(valor)) {
+    return valor.isValid() ? valor : null;
+  }
+  if (typeof valor.toDate === 'function') {
+    const data = dayjs(valor.toDate());
+    return data.isValid() ? data : null;
+  }
+  const data = dayjs(valor);
+  return data.isValid() ? data : null;
+};
+
 class MomentSchema extends Yup.mixed {
   constructor() {
     super({ type: 'momentschema' });
     this.transforms.push(value => {
-      if (this.isType(value)) return moment(value);
-      return moment.invalid();
+      if (!this.isType(value)) return dayjs(null);
+      return paraDayjs(value) || dayjs(null);
     });
   }
 }
@@ -104,15 +115,15 @@ const CampoData = ({
     if (diasParaSinalizar?.length) {
       const temDiaNaLista = diasParaSinalizar.find(dataSinalizar =>
         dataSinalizar?.isSame(
-          moment(dataRenderizar).format('YYYY-MM-DD'),
+          paraDayjs(dataRenderizar)?.format('YYYY-MM-DD'),
           'date'
         )
       );
       if (
         temDiaNaLista &&
-        moment.isMoment(dataAtualSelecionada) &&
+        dayjs.isDayjs(dataAtualSelecionada) &&
         !dataRenderizar?.isSame(
-          moment(dataAtualSelecionada).format('YYYY-DD-MM'),
+          paraDayjs(dataAtualSelecionada)?.format('YYYY-MM-DD'),
           'date'
         )
       ) {
@@ -153,17 +164,18 @@ const CampoData = ({
                     : ''
                 }
                 onChange={valorData => {
+                  const valorConvertido = paraDayjs(valorData) || '';
                   if (!executarOnChangeExterno) {
-                    setFieldValue(name, valorData || '');
+                    setFieldValue(name, valorConvertido);
                     setFieldTouched(name, true, true);
                   }
-                  onChange(valorData);
+                  onChange(valorConvertido);
                 }}
                 disabledDate={habilitarDatas}
                 showToday={false}
-                value={value || null}
-                defaultPickerValue={valorPadrao}
-                dataRender={dataRender}
+                value={paraDayjs(value)}
+                defaultPickerValue={paraDayjs(valorPadrao)}
+                dateRender={dataRender}
               />
             </div>
           </div>
@@ -186,12 +198,12 @@ const CampoData = ({
         className={`${possuiErro() ? 'is-invalid' : ''} ${className || ''}`}
         onBlur={executaOnBlur}
         onChange={valorData => {
-          onChange(valorData || '');
+          onChange(paraDayjs(valorData) || '');
         }}
-        value={valor || null}
+        value={paraDayjs(valor)}
         disabledDate={habilitarDatas}
         showToday={false}
-        defaultPickerValue={valorPadrao}
+        defaultPickerValue={paraDayjs(valorPadrao)}
         dateRender={dataRender}
         allowClear={allowClear}
       />
@@ -213,11 +225,12 @@ const CampoData = ({
           form ? `${possuiErro() ? 'is-invalid' : ''} ${className || ''}` : ''
         }
         onChange={valorHora => {
-          form.setFieldValue(name, valorHora || '');
-          onChange(valorHora);
+          const valorConvertido = paraDayjs(valorHora) || '';
+          form.setFieldValue(name, valorConvertido);
+          onChange(valorConvertido);
           form.setFieldTouched(name, true, true);
         }}
-        value={form.values[name] || null}
+        value={paraDayjs(form.values[name])}
         showToday={false}
       />
     );
@@ -235,9 +248,9 @@ const CampoData = ({
         onBlur={executaOnBlur}
         className={`${possuiErro() ? 'is-invalid' : ''} ${className || ''}`}
         onChange={valorHora => {
-          onChange(valorHora);
+          onChange(paraDayjs(valorHora));
         }}
-        value={valor || null}
+        value={paraDayjs(valor)}
         showToday={false}
       />
     );
@@ -257,13 +270,21 @@ const CampoData = ({
           className={`${possuiErro() ? 'is-invalid' : ''} ${className || ''}`}
           onBlur={executaOnBlur}
           onChange={valorData => {
-            onChange(valorData || '');
+            onChange(
+              Array.isArray(valorData)
+                ? valorData.map(item => paraDayjs(item))
+                : ''
+            );
           }}
           separator=""
-          value={valor || [null, null]}
+          value={
+            Array.isArray(valor)
+              ? valor.map(item => paraDayjs(item))
+              : [null, null]
+          }
           disabledDate={habilitarDatas}
           showToday={false}
-          defaultPickerValue={valorPadrao}
+          defaultPickerValue={paraDayjs(valorPadrao)}
           dateRender={dataRender}
         />
       </>
@@ -371,6 +392,13 @@ const CampoDataComDefaultProps = comDefaultProps(
 
 const momentSchema = new MomentSchema();
 
+const dataEhMesmaOuPosterior = (dataInicial, dataFinal) => {
+  const inicio = paraDayjs(dataInicial);
+  const fim = paraDayjs(dataFinal);
+  if (!inicio || !fim) return false;
+  return !inicio.isBefore(fim, 'day');
+};
+
 Yup.addMethod(
   Yup.mixed,
   'dataMenorIgualQue',
@@ -385,7 +413,7 @@ Yup.addMethod(
       if (
         dataInicial &&
         dataFinal &&
-        dataInicial.isSameOrAfter(dataFinal, 'date')
+        dataEhMesmaOuPosterior(dataInicial, dataFinal)
       ) {
         dataValida = false;
       }
@@ -405,7 +433,10 @@ Yup.addMethod(
       const dataInicial = this.parent[nomeDataInicial];
       const dataFinal = this.parent[nomeDataFinal];
 
-      if (dataInicial && dataFinal && dataInicial.isAfter(dataFinal, 'date')) {
+      const inicio = paraDayjs(dataInicial);
+      const fim = paraDayjs(dataFinal);
+
+      if (inicio && fim && inicio.isAfter(fim, 'day')) {
         dataValida = false;
       }
       return dataValida;

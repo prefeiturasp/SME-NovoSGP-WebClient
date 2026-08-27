@@ -1,13 +1,22 @@
 import { Dayjs, dayjs } from './dayjs';
 
-type DateInput = string | number | Date | Dayjs | null | undefined;
+type DateLike = { toDate: () => Date };
+type DateInput = string | number | Date | Dayjs | DateLike | null | undefined;
 
 const parse = (value?: DateInput, format?: string) => {
+  if (dayjs.isDayjs(value)) {
+    return value;
+  }
+
+  if (value && typeof (value as DateLike).toDate === 'function') {
+    return dayjs((value as DateLike).toDate());
+  }
+
   if (format) {
     return dayjs(value as string, format);
   }
 
-  return dayjs(value);
+  return dayjs(value as string | number | Date);
 };
 
 const now = () => dayjs();
@@ -17,10 +26,14 @@ const utc = (value?: DateInput) => {
     return dayjs.utc();
   }
 
-  return dayjs.utc(value);
+  if (value && typeof (value as DateLike).toDate === 'function') {
+    return dayjs.utc((value as DateLike).toDate());
+  }
+
+  return dayjs.utc(value as string | number | Date | Dayjs);
 };
 
-const format = (value: DateInput, outputFormat: string) => dayjs(value).format(outputFormat);
+const format = (value: DateInput, outputFormat: string) => parse(value).format(outputFormat);
 
 export const dateAdapter = {
   dayjs,
