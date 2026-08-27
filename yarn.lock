@@ -9049,10 +9049,10 @@ jodit@3.24.7:
     autobind-decorator "^2.4.0"
     core-js "^3.28.0"
 
-jquery@^3.4.1:
-  version "3.6.4"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.4.tgz#ba065c188142100be4833699852bf7c24dc0252f"
-  integrity sha512-v28EW9DWDFpzcD9O5iyJXg3R3+q+mET5JhnjJzQUZMHOv67bpSIHq81GEYpPNZHG+XXHsfSme3nxp/hndKEcsQ==
+jodit@^4.9.4:
+  version "4.13.23"
+  resolved "https://registry.yarnpkg.com/jodit/-/jodit-4.13.23.tgz#d1fd6e870305b295dda4442d72c515c053e1a996"
+  integrity sha512-RP1K2S6aGzAeRHOIqB7ZV6Ii3AxIbdMLE8wTQSKmCDCyFNBkpmvIiqN2pOCkQcWSnVyXTCW9GWqDBOrFLrtm4g==
 
 js-sdsl@^4.1.4:
   version "4.3.0"

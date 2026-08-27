@@ -1,8 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { CampoData } from './campoData';
+import * as Yup from 'yup';
 import { Formik } from 'formik';
-import moment from 'moment';
+import { CampoData, momentSchema } from './campoData';
+import { dayjs } from '@/core/date/dayjs';
 
 jest.mock('antd/es/date-picker/locale/pt_BR', () => ({}));
 jest.mock('@ant-design/icons', () => ({
@@ -26,7 +27,7 @@ describe('CampoData Component', () => {
 
   const renderComponent = (props = {}) => {
     return render(
-      <Formik initialValues={{ testDate: moment() }} onSubmit={jest.fn()}>
+      <Formik initialValues={{ testDate: dayjs() }} onSubmit={jest.fn()}>
         <CampoData {...defaultProps} {...props} />
       </Formik>
     );
@@ -54,5 +55,36 @@ describe('CampoData Component', () => {
     renderComponent({ desabilitado: true });
 
     expect(screen.getByPlaceholderText('Select Date')).toBeDisabled();
+  });
+});
+
+describe('momentSchema com dayjs', () => {
+  const schema = Yup.object().shape({
+    primeiroBimestreDataFinal: momentSchema.required('Data final obrigatória'),
+    segundoBimestreDataInicial: momentSchema
+      .required('Data inicial obrigatória')
+      .dataMenorIgualQue(
+        'primeiroBimestreDataFinal',
+        'segundoBimestreDataInicial',
+        'Data inválida'
+      ),
+  });
+
+  test('aceita inicio do proximo bimestre posterior ao fim do anterior', async () => {
+    await expect(
+      schema.validate({
+        primeiroBimestreDataFinal: dayjs('2026-04-30T00:00:00'),
+        segundoBimestreDataInicial: dayjs('2026-05-05T00:00:00'),
+      })
+    ).resolves.toMatchObject({});
+  });
+
+  test('rejeita inicio do proximo bimestre anterior ao fim do anterior', async () => {
+    await expect(
+      schema.validate({
+        primeiroBimestreDataFinal: dayjs('2026-05-10T00:00:00'),
+        segundoBimestreDataInicial: dayjs('2026-05-05T00:00:00'),
+      })
+    ).rejects.toThrow('Data inválida');
   });
 });
