@@ -4,7 +4,10 @@ import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { ModalConteudoHtml, SelectComponent } from '~/componentes';
 import tipoAula from '~/dtos/tipoAula';
-import { formularioEhValido } from '~/utils/formikRefHelper';
+import {
+  formularioEhValido,
+  obterContextoFormik,
+} from '~/utils/formikRefHelper';
 
 import comDefaultProps from '~/utils/comDefaultProps';
 const ModalSelecionarAula = props => {
@@ -45,24 +48,29 @@ const ModalSelecionarAula = props => {
       item => String(item.aulaId) === valores.aula
     );
     onClickSelecionarAula(aula);
-    refForm.resetForm();
+    obterContextoFormik(refForm).resetForm?.();
     setValoresIniciais(inicial);
   };
 
   const validaAntesDoSubmit = () => {
+    const contexto = obterContextoFormik(refForm);
+    if (typeof contexto?.setFieldTouched !== 'function') {
+      return;
+    }
+
     const arrayCampos = Object.keys(valoresIniciais);
     arrayCampos.forEach(campo => {
-      refForm.setFieldTouched(campo, true, true);
+      contexto.setFieldTouched(campo, true, true);
     });
-    refForm.validateForm().then(() => {
-      if (formularioEhValido(refForm)) {
-        refForm.handleSubmit(e => e);
+    contexto.validateForm().then(() => {
+      if (formularioEhValido(contexto)) {
+        contexto.handleSubmit(e => e);
       }
     });
   };
 
   const onClickCancelar = () => {
-    refForm.resetForm();
+    obterContextoFormik(refForm).resetForm?.();
     setValoresIniciais(inicial);
     onClickFecharModal();
   };
@@ -87,7 +95,7 @@ const ModalSelecionarAula = props => {
         validationSchema={validacoes}
         validateOnChange
         validateOnBlur
-        innerRef={refFormik => setRefForm(refFormik)}
+        ref={refFormik => setRefForm(refFormik)}
       >
         {form => (
           <Form className="col-md-12">

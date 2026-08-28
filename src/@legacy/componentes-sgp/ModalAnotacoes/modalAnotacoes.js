@@ -11,7 +11,10 @@ import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import SelectComponent from '~/componentes/select';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import ServicoAnotacaoFrequenciaAluno from '~/servicos/Paginas/DiarioClasse/ServicoAnotacaoFrequenciaAluno';
-import { formularioEhValido } from '~/utils/formikRefHelper';
+import {
+  formularioEhValido,
+  obterContextoFormik,
+} from '~/utils/formikRefHelper';
 import { EditorAnotacao } from './modalAnotacoes.css';
 import moment from 'moment';
 import 'moment/locale/pt-br';
@@ -88,8 +91,9 @@ const ModalAnotacoesFrequencia = props => {
   const [dadosEstudanteOuCrianca, setDadosEstudanteOuCrianca] = useState({});
 
   const onCloseModal = (salvou, excluiu) => {
-    refForm.resetForm({});
-    refForm.setFieldValue('anotacao', null);
+    const contexto = obterContextoFormik(refForm);
+    contexto.resetForm?.({});
+    contexto.setFieldValue?.('anotacao', null);
     setValoresIniciais({});
     setValoresIniciais({ ...iniciar });
     setRefForm({});
@@ -245,17 +249,22 @@ const ModalAnotacoesFrequencia = props => {
     }
   };
 
-  const validaAntesDoSubmit = () => {
+  const validaAntesDoSubmit = form => {
     if (!desabilitarCampos) {
+      const contexto = obterContextoFormik(form || refForm);
+      if (typeof contexto?.setFieldTouched !== 'function') {
+        return;
+      }
+
       const arrayCampos = Object.keys(valoresIniciais);
       arrayCampos.forEach(campo => {
-        refForm.setFieldTouched(campo, true, true);
+        contexto.setFieldTouched(campo, true, true);
       });
-      refForm.validateForm().then(() => {
-        if (formularioEhValido(refForm)) {
+      contexto.validateForm().then(() => {
+        if (formularioEhValido(contexto)) {
           setLoaderSalvarEditar(true);
           setTimeout(() => {
-            refForm.handleSubmit(e => e);
+            contexto.handleSubmit(e => e);
           }, 400);
         }
       });
@@ -288,7 +297,7 @@ const ModalAnotacoesFrequencia = props => {
       );
       if (confirmado) {
         if (refForm) {
-          validaAntesDoSubmit();
+          validaAntesDoSubmit(refForm);
         }
       } else {
         onCloseModal();
@@ -317,7 +326,7 @@ const ModalAnotacoesFrequencia = props => {
       closable
     >
       <Formik
-        innerRef={f => setRefForm(f)}
+        ref={f => setRefForm(f)}
         enableReinitialize
         initialValues={valoresIniciais}
         validationSchema={validacoes}

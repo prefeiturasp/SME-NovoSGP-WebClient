@@ -38,7 +38,10 @@ import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import { setBreadcrumbManual } from '~/servicos/breadcrumb-services';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
 import { removerTagsHtml } from '~/utils';
-import { formularioEhValido } from '~/utils/formikRefHelper';
+import {
+  formularioEhValido,
+  obterContextoFormik,
+} from '~/utils/formikRefHelper';
 import DadosPlanejamentoDiarioBordo from './DadosPlanejamentoDiarioBordo/dadosPlanejamentoDiarioBordo';
 import { ANO_BASE_DEVOLUTIVA_UNIFICADA } from '~/constantes';
 
@@ -191,9 +194,7 @@ const DevolutivasForm = () => {
     dispatch(setPlanejamentoExpandido(false));
     dispatch(setPlanejamentoSelecionado([]));
     dispatch(setAlterouCaixaSelecao(false));
-    if (refForm && refForm.resetForm) {
-      refForm.resetForm();
-    }
+    obterContextoFormik(refForm).resetForm?.();
   }, [dispatch, refForm]);
 
   useEffect(() => {
@@ -381,8 +382,10 @@ const DevolutivasForm = () => {
           String(componentes.data[0].codigoComponenteCurricular)
         );
       } else {
-        refForm?.setFieldValue &&
-          refForm.setFieldValue('codigoComponenteCurricular', undefined);
+        obterContextoFormik(refForm).setFieldValue?.(
+          'codigoComponenteCurricular',
+          undefined
+        );
         setCodigoComponenteCurricular(undefined);
       }
     } else {
@@ -519,13 +522,18 @@ const DevolutivasForm = () => {
   };
 
   const validaAntesDoSubmit = (form, clicouBtnSalvar) => {
+    const contexto = obterContextoFormik(form || refForm);
+    if (typeof contexto?.setFieldTouched !== 'function') {
+      return Promise.resolve(false);
+    }
+
     const arrayCampos = Object.keys(valoresIniciais);
     arrayCampos.forEach(campo => {
-      refForm.setFieldTouched(campo, true, true);
+      contexto.setFieldTouched(campo, true, true);
     });
-    return refForm.validateForm().then(() => {
-      if (formularioEhValido(refForm)) {
-        return salvarDevolutivas(refForm?.state?.values, clicouBtnSalvar);
+    return contexto.validateForm().then(() => {
+      if (formularioEhValido(contexto)) {
+        return salvarDevolutivas(contexto.values, clicouBtnSalvar);
       }
       return false;
     });
@@ -621,7 +629,7 @@ const DevolutivasForm = () => {
         initialValues={valoresIniciais}
         validateOnBlur
         validateOnChange
-        innerRef={refFormik => setRefForm(refFormik)}
+        ref={refFormik => setRefForm(refFormik)}
       >
         {form => (
           <Form>

@@ -28,7 +28,10 @@ import { erros } from '~/servicos/alertas';
 // Funções
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 import { dateAdapter } from '@/core/date/adapter';
-import { formularioEhValido } from '~/utils/formikRefHelper';
+import {
+  formularioEhValido,
+  obterContextoFormik,
+} from '~/utils/formikRefHelper';
 
 function objetoExistaNaLista(objeto, lista) {
   return lista.some(
@@ -38,6 +41,10 @@ function objetoExistaNaLista(objeto, lista) {
 
 function Filtro({ onFiltrar }) {
   const [refForm, setRefForm] = useState({});
+
+  const setCampoForm = (campo, valor) => {
+    obterContextoFormik(refForm).setFieldValue?.(campo, valor);
+  };
 
   const [dreId, setDreId] = useState(undefined);
   const [ueId, setUeId] = useState(undefined);
@@ -72,7 +79,7 @@ function Filtro({ onFiltrar }) {
   const aoTrocarDreId = id => {
     if (!id) {
       setUeId(undefined);
-      refForm.setFieldValue('ueId', undefined);
+      setCampoForm('ueId', undefined);
     }
     setDreId(id);
   };
@@ -138,7 +145,7 @@ function Filtro({ onFiltrar }) {
         setListaTurmas([]);
       }
       setTurmaId(undefined);
-      refForm.setFieldValue('turmaId', undefined);
+      setCampoForm('turmaId', undefined);
 
       setAno(valorAno);
     },
@@ -149,7 +156,7 @@ function Filtro({ onFiltrar }) {
     if (listaTurmas) {
       if (listaTurmas.length === 1) {
         setTurmaId(listaTurmas[0].codigo);
-        refForm.setFieldValue('turmaId', listaTurmas[0].codigo);
+        setCampoForm('turmaId', listaTurmas[0].codigo);
         setAnoDesabilitado(true);
       } else {
         setAnoDesabilitado(false);
@@ -199,10 +206,10 @@ function Filtro({ onFiltrar }) {
     }
 
     setAno(undefined);
-    refForm.setFieldValue('ano', undefined);
+    setCampoForm('ano', undefined);
 
     setTurmaId(undefined);
-    refForm.setFieldValue('turmaId', undefined);
+    setCampoForm('turmaId', undefined);
 
     setCicloId(id);
     setCarregandoAnos(false);
@@ -217,14 +224,14 @@ function Filtro({ onFiltrar }) {
 
   useEffect(() => {
     if (!dreId && refForm && Object.entries(refForm).length) {
-      refForm.setFieldValue('cicloId', undefined);
+      setCampoForm('cicloId', undefined);
       setCicloId(undefined);
-      refForm.setFieldValue('ano', undefined);
+      setCampoForm('ano', undefined);
       setAno(undefined);
       setListaTurmas([]);
-      refForm.setFieldValue('turmaId', undefined);
+      setCampoForm('turmaId', undefined);
       setTurmaId(undefined);
-      refForm.setFieldValue('periodo', undefined);
+      setCampoForm('periodo', undefined);
       setPeriodo(undefined);
     }
   }, [dreId, refForm]);
@@ -237,21 +244,21 @@ function Filtro({ onFiltrar }) {
         buscarTurmas();
       }
     } else if (refForm && Object.entries(refForm).length) {
-      refForm.setFieldValue('cicloId', undefined);
+      setCampoForm('cicloId', undefined);
       setCicloId(undefined);
-      refForm.setFieldValue('ano', undefined);
+      setCampoForm('ano', undefined);
       setAno(undefined);
       setListaTurmas([]);
-      refForm.setFieldValue('turmaId', undefined);
+      setCampoForm('turmaId', undefined);
       setTurmaId(undefined);
-      refForm.setFieldValue('periodo', undefined);
+      setCampoForm('periodo', undefined);
       setPeriodo(undefined);
     }
   }, [ano, buscarTurmas, cicloId, refForm, ueId]);
 
   const aoTrocarUeId = valorUe => {
     setCicloId(undefined);
-    refForm.setFieldValue('cicloId', undefined);
+    setCampoForm('cicloId', undefined);
     aoTrocarCiclo(undefined);
     setUeId(valorUe);
   };
@@ -290,7 +297,7 @@ function Filtro({ onFiltrar }) {
 
   useEffect(() => {
     if (anoLetivo) {
-      refForm.setFieldValue('anoLetivo', anoLetivo);
+      setCampoForm('anoLetivo', anoLetivo);
     }
   }, [refForm, anoLetivo]);
 
@@ -301,8 +308,8 @@ function Filtro({ onFiltrar }) {
   const limparFiltrosSelecionados = () => {
     setDreId(undefined);
     setUeId(undefined);
-    refForm.setFieldValue('ueId', undefined);
-    refForm.setFieldValue('dreId', undefined);
+    setCampoForm('ueId', undefined);
+    setCampoForm('dreId', undefined);
   };
   return (
     <Formik
@@ -310,7 +317,7 @@ function Filtro({ onFiltrar }) {
       initialValues={valoresIniciais}
       validationSchema={validacoes()}
       onSubmit={valores => onFiltrar(valores)}
-      innerRef={refFormik => setRefForm(refFormik)}
+      ref={refFormik => setRefForm(refFormik)}
       validate={valores => validarFiltro(valores)}
       validateOnChange
       validateOnBlur

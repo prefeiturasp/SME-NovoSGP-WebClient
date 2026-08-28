@@ -710,7 +710,7 @@ const DiarioBordo = () => {
         initialValues={valoresIniciais}
         validateOnBlur
         validateOnChange
-        innerRef={refFormik => setRefForm(refFormik)}
+        ref={refFormik => setRefForm(refFormik)}
       >
         {form => (
           <>
