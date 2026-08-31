@@ -13,6 +13,11 @@ import {
 import { setQuestionarioDinamicoEmEdicao } from '~/redux/modulos/questionarioDinamico/actions';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import api from '~/servicos/api';
+import {
+  formularioEhValido,
+  obterValoresFormik,
+  validarFormik,
+} from '~/utils/formikRefHelper';
 
 const urlPadrao = 'v1/plano-aee';
 
@@ -79,7 +84,7 @@ class ServicoPlanoAEE {
     const validaAntesDoSubmit = refForm => {
       let arrayCampos = [];
 
-      const camposValidar = refForm?.state?.values;
+      const camposValidar = obterValoresFormik(refForm);
       if (camposValidar && Object.keys(camposValidar)?.length) {
         arrayCampos = Object.keys(camposValidar);
       }
@@ -87,11 +92,8 @@ class ServicoPlanoAEE {
       arrayCampos.forEach(campo => {
         refForm.setFieldTouched(campo, true, true);
       });
-      return refForm.validateForm().then(() => {
-        if (
-          refForm.getFormikContext().isValid ||
-          Object.keys(refForm.getFormikContext().errors).length === 0
-        ) {
+      return validarFormik(refForm).then(() => {
+        if (formularioEhValido(refForm)) {
           contadorFormsValidos += 1;
         }
       });
@@ -114,7 +116,7 @@ class ServicoPlanoAEE {
       if (todosOsFormsEstaoValidos) {
         let questoesSalvar = formPlanoAEE.map(item => {
           const form = item.form();
-          const campos = form.state.values;
+          const campos = obterValoresFormik(form);
           const questoes = [];
           Object.keys(campos).forEach(key => {
             const questaoAtual = QuestionarioDinamicoFuncoes.obterQuestaoPorId(

@@ -125,7 +125,7 @@ function AtribuicaoCJLista() {
           />
         </Cabecalho>
         <Card>
-          <div className="col-md-12">
+          <div className="col-md-12 qa-ajuste-atribuicao-cj">
             <Filtro onFiltrar={onChangeFiltro} />
             <DataTable
               id="lista-atribuicoes-cj"

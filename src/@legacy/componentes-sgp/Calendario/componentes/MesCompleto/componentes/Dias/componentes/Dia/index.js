@@ -29,7 +29,6 @@ function Dia({
       numeroDia={numeroDia}
       mesAtual={Number(mesSelecionado.numeroMes) === Number(dia.getMonth() + 1)}
       selecionado={selecionado}
-      className="col"
       onClick={() => onClick()}
     >
       <div className="numeroDia">
@@ -52,7 +51,7 @@ function Dia({
         </div>
       </div>
       {eventos && (
-        <TipoEventosLista className="position-absolute">
+        <TipoEventosLista>
           {eventos.temAula && <TipoEvento cor={Base.Roxo}>Aula</TipoEvento>}
           {eventos.temAulaCJ && <TipoEvento cor={Base.Laranja}>CJ</TipoEvento>}
           {eventos.temEvento && (

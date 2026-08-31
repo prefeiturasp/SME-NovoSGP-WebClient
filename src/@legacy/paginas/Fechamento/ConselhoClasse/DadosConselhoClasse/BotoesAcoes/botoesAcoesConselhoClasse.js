@@ -103,7 +103,7 @@ const BotoesAcoesConselhoClasse = () => {
     }
   };
   return (
-    <>
+    <div className="d-flex align-items-center flex-wrap" style={{ gap: '8px' }}>
       <BotaoVoltarPadrao className="mr-2" onClick={() => onClickVoltar()} />
       <Button
         id={SGP_BUTTON_CANCELAR}
@@ -132,7 +132,7 @@ const BotoesAcoesConselhoClasse = () => {
           (!conselhoClasseEmEdicao && !notaConceitoPosConselhoAtual.ehEdicao)
         }
       />
-    </>
+    </div>
   );
 };
 

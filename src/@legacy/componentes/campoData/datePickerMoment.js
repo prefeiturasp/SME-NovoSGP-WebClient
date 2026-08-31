@@ -1,6 +1,5 @@
-import momentGenerateConfig from 'rc-picker/lib/generate/moment';
-import generatePicker from 'antd/es/date-picker/generatePicker';
+import DatePicker from 'antd/es/date-picker';
 
-const DatePickerMoment = generatePicker(momentGenerateConfig);
+const DatePickerMoment = DatePicker;
 
 export default DatePickerMoment;

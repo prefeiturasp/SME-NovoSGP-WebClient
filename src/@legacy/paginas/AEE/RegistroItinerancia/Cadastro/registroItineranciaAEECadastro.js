@@ -1,6 +1,5 @@
 import { Col, Row } from 'antd';
 import _ from 'lodash';
-import moment from 'moment';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -719,7 +718,7 @@ const RegistroItineranciaAEECadastro = () => {
   };
 
   const obterDres = useCallback(async () => {
-    if (dataVisita && moment.isMoment(dataVisita)) {
+    if (dataVisita && typeof dataVisita.get === 'function') {
       const anoLetivo = dataVisita.get('year');
       const anoLetivoAtual = new Date().getFullYear();
       const consideraHistorico = anoLetivo !== anoLetivoAtual;
@@ -754,7 +753,7 @@ const RegistroItineranciaAEECadastro = () => {
   }, [dataVisita, obterDres]);
 
   const obterUes = useCallback(async () => {
-    if (dataVisita && moment.isMoment(dataVisita) && dreId) {
+    if (dataVisita && typeof dataVisita.get === 'function' && dreId) {
       const anoLetivo = dataVisita.get('year');
       const anoLetivoAtual = new Date().getFullYear();
       const consideraHistorico = anoLetivo !== anoLetivoAtual;

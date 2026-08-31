@@ -10,4 +10,11 @@ export const DiasDaSemanaWrapper = styled.div`
   padding-top: 1.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid ${Base.CinzaBordaCalendario};
+
+  .dia-semana {
+    box-sizing: border-box;
+    flex: 0 0 14.2857%;
+    max-width: 14.2857%;
+    padding: 0;
+  }
 `;
