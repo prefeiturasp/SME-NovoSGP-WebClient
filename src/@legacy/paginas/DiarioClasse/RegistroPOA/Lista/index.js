@@ -6,6 +6,7 @@ import { setLoaderSecao } from '~/redux/modulos/loader/actions';
 
 // Servicos
 import { ROUTES } from '@/core/enum/routes';
+import { dateAdapter } from '@/core/date/adapter';
 import RegistroPOAServico from '~/servicos/Paginas/DiarioClasse/RegistroPOA';
 import { confirmar, erro, sucesso } from '~/servicos/alertas';
 import { verificaSomenteConsulta } from '~/servicos/servico-navegacao';
@@ -33,7 +34,8 @@ function RegistroPOALista() {
   const usuarioLogado = useSelector(store => store.usuario);
   const permissoesTela = usuarioLogado.permissoes;
   const anoLetivo =
-    usuarioLogado.turmaSelecionada.anoLetivo || window.moment().format('YYYY');
+    usuarioLogado.turmaSelecionada.anoLetivo ||
+    dateAdapter.now().format('YYYY');
   const modalidadesFiltroPrincipal = useSelector(
     store => store.filtro.modalidades
   );
@@ -190,7 +192,7 @@ function RegistroPOALista() {
         </Cabecalho>
         <Card>
           {!ehTurmaInfantil(modalidadesFiltroPrincipal, turmaSelecionada) ? (
-            <div className="col-md-12">
+            <div className="col-md-12 qa-ajuste-registro-poa">
               <Filtro onFiltrar={onChangeFiltro} />
               <ListaPaginada
                 id="lista-atribuicoes-cj"

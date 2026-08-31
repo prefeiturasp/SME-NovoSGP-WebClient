@@ -382,7 +382,7 @@ const CalendarioEscolar = () => {
       <Cabecalho pagina="Calendário escolar">
         <BotaoVoltarPadrao onClick={() => aoClicarBotaoVoltar()} />
       </Cabecalho>
-      <Card>
+      <Card padding="24px 24px">
         <Grid cols={12}>
           <Div className="row">
             <div className="col-sm-12 mb-4">

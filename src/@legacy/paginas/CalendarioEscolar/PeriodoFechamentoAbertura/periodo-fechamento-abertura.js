@@ -553,6 +553,7 @@ const PeriodoFechamentoAbertura = () => {
                         value={valorTipoCalendario}
                         label="Calendário"
                         labelRequired
+                        requiredOffset={0}
                         temErro={modoEdicao && !valorTipoCalendario}
                         mensagemErro="Campo obrigatório"
                       />

@@ -4,6 +4,7 @@ import { Base } from '~/componentes/colors';
 export const DiasWrapper = styled.div`
   display: flex !important;
   flex-wrap: wrap !important;
+  width: 100%;
   cursor: pointer !important;
 `;
 

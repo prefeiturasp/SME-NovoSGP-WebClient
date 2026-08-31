@@ -11,6 +11,10 @@ import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import SelectComponent from '~/componentes/select';
 import { confirmar, erros, sucesso } from '~/servicos/alertas';
 import ServicoAnotacaoFrequenciaAluno from '~/servicos/Paginas/DiarioClasse/ServicoAnotacaoFrequenciaAluno';
+import {
+  formularioEhValido,
+  obterContextoFormik,
+} from '~/utils/formikRefHelper';
 import { EditorAnotacao } from './modalAnotacoes.css';
 import moment from 'moment';
 import 'moment/locale/pt-br';
@@ -86,8 +90,9 @@ const ModalAnotacoesFrequencia = props => {
   const [dadosEstudanteOuCrianca, setDadosEstudanteOuCrianca] = useState({});
 
   const onCloseModal = (salvou, excluiu) => {
-    refForm.resetForm({});
-    refForm.setFieldValue('anotacao', null);
+    const contexto = obterContextoFormik(refForm);
+    contexto.resetForm?.({});
+    contexto.setFieldValue?.('anotacao', null);
     setValoresIniciais({});
     setValoresIniciais({ ...iniciar });
     setRefForm({});
@@ -243,20 +248,22 @@ const ModalAnotacoesFrequencia = props => {
     }
   };
 
-  const validaAntesDoSubmit = () => {
+  const validaAntesDoSubmit = form => {
     if (!desabilitarCampos) {
+      const contexto = obterContextoFormik(form || refForm);
+      if (typeof contexto?.setFieldTouched !== 'function') {
+        return;
+      }
+
       const arrayCampos = Object.keys(valoresIniciais);
       arrayCampos.forEach(campo => {
-        refForm.setFieldTouched(campo, true, true);
+        contexto.setFieldTouched(campo, true, true);
       });
-      refForm.validateForm().then(() => {
-        if (
-          refForm.getFormikContext().isValid ||
-          Object.keys(refForm.getFormikContext().errors).length === 0
-        ) {
+      contexto.validateForm().then(() => {
+        if (formularioEhValido(contexto)) {
           setLoaderSalvarEditar(true);
           setTimeout(() => {
-            refForm.handleSubmit(e => e);
+            contexto.handleSubmit(e => e);
           }, 400);
         }
       });
@@ -289,7 +296,7 @@ const ModalAnotacoesFrequencia = props => {
       );
       if (confirmado) {
         if (refForm) {
-          validaAntesDoSubmit();
+          validaAntesDoSubmit(refForm);
         }
       } else {
         onCloseModal();
@@ -395,7 +402,7 @@ const ModalAnotacoesFrequencia = props => {
                     name="anotacao"
                     onChange={() => {
                       if (!exibirEditor.current) {
-                        exibirEditor.current = true
+                        exibirEditor.current = true;
                         return;
                       }
                       onChangeCampos();
@@ -416,8 +423,8 @@ const ModalAnotacoesFrequencia = props => {
                   style={{ marginTop: '-15px' }}
                 >
                   {valoresIniciais &&
-                    valoresIniciais.auditoria &&
-                    valoresIniciais.auditoria.criadoPor ? (
+                  valoresIniciais.auditoria &&
+                  valoresIniciais.auditoria.criadoPor ? (
                     <Auditoria
                       criadoPor={valoresIniciais.auditoria.criadoPor}
                       criadoEm={valoresIniciais.auditoria.criadoEm}
@@ -501,10 +508,10 @@ ModalAnotacoesFrequencia.defaultProps = {
   componenteCurricularId: '',
   desabilitarCampos: false,
   exibirModal: false,
-  setExibirModal: () => { },
+  setExibirModal: () => {},
   dadosModal: [],
-  setDadosModal: () => { },
-  fechouModal: () => { },
+  setDadosModal: () => {},
+  fechouModal: () => {},
   listaPadraoMotivoAusencia: [],
 };
 

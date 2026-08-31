@@ -1,7 +1,15 @@
-import $ from 'jquery';
 import moment from 'moment';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 import notificacaoStatus from '~/dtos/notificacaoStatus';
+
+const obterTextoHtml = html => {
+  if (!html) return '';
+
+  const container = document.createElement('div');
+  container.innerHTML = html;
+
+  return container.textContent || container.innerText || '';
+};
 
 /**
  * @description Verifica se o objeto está inteiro vazio ou nulo
@@ -259,8 +267,7 @@ const primeiroMaisculo = valor => {
 };
 
 const editorTemValor = descricao => {
-  const somenteDescricao = $(descricao);
-  const temTexto = somenteDescricao?.text()?.trim();
+  const temTexto = obterTextoHtml(descricao)?.trim();
   const temVideo = descricao?.includes?.('<video');
   const temImagem = descricao?.includes?.('<img');
   return !!(temTexto || temVideo || temImagem);

@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { ModalConteudoHtml, SelectComponent } from '~/componentes';
 import tipoAula from '~/dtos/tipoAula';
+import {
+  formularioEhValido,
+  obterContextoFormik,
+} from '~/utils/formikRefHelper';
 
 const ModalSelecionarAula = props => {
   const {
@@ -43,27 +47,29 @@ const ModalSelecionarAula = props => {
       item => String(item.aulaId) === valores.aula
     );
     onClickSelecionarAula(aula);
-    refForm.resetForm();
+    obterContextoFormik(refForm).resetForm?.();
     setValoresIniciais(inicial);
   };
 
   const validaAntesDoSubmit = () => {
+    const contexto = obterContextoFormik(refForm);
+    if (typeof contexto?.setFieldTouched !== 'function') {
+      return;
+    }
+
     const arrayCampos = Object.keys(valoresIniciais);
     arrayCampos.forEach(campo => {
-      refForm.setFieldTouched(campo, true, true);
+      contexto.setFieldTouched(campo, true, true);
     });
-    refForm.validateForm().then(() => {
-      if (
-        refForm.getFormikContext().isValid ||
-        Object.keys(refForm.getFormikContext().errors).length === 0
-      ) {
-        refForm.handleSubmit(e => e);
+    contexto.validateForm().then(() => {
+      if (formularioEhValido(contexto)) {
+        contexto.handleSubmit(e => e);
       }
     });
   };
 
   const onClickCancelar = () => {
-    refForm.resetForm();
+    obterContextoFormik(refForm).resetForm?.();
     setValoresIniciais(inicial);
     onClickFecharModal();
   };
