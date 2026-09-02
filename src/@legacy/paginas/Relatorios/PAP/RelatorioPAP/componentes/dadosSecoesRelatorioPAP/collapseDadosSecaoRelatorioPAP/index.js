@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import MontarDadosPorSecaoRelatorioPAP from '../montarDadosPorSecaoRelatorioPAP';
@@ -6,13 +6,13 @@ import MontarDadosPorSecaoRelatorioPAP from '../montarDadosPorSecaoRelatorioPAP'
 const CollapseDadosSecaoRelatorioPAP = props => {
   const { dados, index } = props;
   const { nome } = dados;
-  const [show, setShow] = useState(true);
 
   const configCabecalho = {
     altura: '50px',
     corBorda: Base.AzulBordaCard,
   };
 
+  const onClickCardCollapse = () => {};
   return (
     <>
       <CardCollapse
@@ -20,9 +20,9 @@ const CollapseDadosSecaoRelatorioPAP = props => {
         titulo={nome}
         indice={`secao-${index}-collapse-indice`}
         alt={`secao-${index}-alt`}
-        onClick={() => setShow(valorAtual => !valorAtual)}
+        onClick={onClickCardCollapse}
         configCabecalho={configCabecalho}
-        show={show}
+        show
       >
         <MontarDadosPorSecaoRelatorioPAP dados={dados} />
       </CardCollapse>

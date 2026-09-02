@@ -61,7 +61,7 @@ export const SecoesRelatorioPAP = () => {
 
   return dadosSecoesRelatorioPAP?.secoes?.map((item, index) => (
     <CollapseDadosSecaoRelatorioPAP
-      key={item?.papSecaoId || `secao-${item?.id}`}
+      key={`secao-${item?.id}`}
       dados={item}
       index={index}
     />

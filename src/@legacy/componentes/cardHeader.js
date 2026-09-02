@@ -4,46 +4,42 @@ import PropTypes from 'prop-types';
 import shortid from 'shortid';
 import { Base } from './colors';
 
-const Header = styled.div`
-  height: ${({ $altura }) => $altura};
-  ${({ $border, $corBorda }) =>
-    $border
-      ? `
-      border-top-width: 0px !important;
-      border-bottom-width: 0px !important;
-      border-left: 8px solid ${$corBorda} !important;`
-      : null}
-  &.expanded {
-    border-bottom-width: 1px !important;
-  }
-`;
-
-const Icon = styled.i`
-  color: ${Base.CinzaBarras} !important;
-`;
-
-const Link = styled.a`
-  padding: 0.7rem 0.8rem !important;
-  margin-left: auto;
-
-  &:hover {
-    background: ${Base.CinzaFundo} !important;
-    border-radius: 50% !important;
-  }
-
-  &[aria-expanded='true'] ${Icon} {
-    color: ${Base.CinzaMako} !important;
-    transform: rotate(180deg) !important;
-  }
-`;
-
 const CardHeader = props => {
   const { id, indice, children, border, icon, show, onClick, configuracao } =
     props;
 
-  const handleHeader = event => {
-    event.preventDefault();
+  const Header = styled.div`
+    height: ${configuracao.altura};
+    ${border
+      ? `
+      border-top-width: 0px !important;
+      border-bottom-width: 0px !important;
+      border-left: 8px solid ${configuracao.corBorda} !important;`
+      : null}
+    &.expanded {
+      border-bottom-width: 1px !important;
+    }
+  `;
 
+  const Icon = styled.i`
+    color: ${Base.CinzaBarras} !important;
+  `;
+
+  const Link = styled.a`
+    padding: 0.7rem 0.8rem !important;
+
+    &:hover {
+      background: ${Base.CinzaFundo} !important;
+      border-radius: 50% !important;
+    }
+
+    &[aria-expanded='true'] ${Icon} {
+      color: ${Base.CinzaMako} !important;
+      transform: rotate(180deg) !important;
+    }
+  `;
+
+  const handleHeader = event => {
     const header = event.target.parentElement.parentElement.classList;
     if (!header.contains('expanded')) header.add('expanded');
     else header.remove('expanded');
@@ -57,12 +53,9 @@ const CardHeader = props => {
 
   return (
     <Header
-      $altura={configuracao.altura}
-      $border={border}
-      $corBorda={configuracao.corBorda}
       id={id ? `${id}_HEADER` : ''}
       className={`card-header shadow-sm rounded bg-white d-flex align-items-center ${
-        show ? 'expanded' : ''
+        show && 'expanded'
       } ${icon ? 'py-3' : 'py-4'} fonte-16`}
     >
       {children}
