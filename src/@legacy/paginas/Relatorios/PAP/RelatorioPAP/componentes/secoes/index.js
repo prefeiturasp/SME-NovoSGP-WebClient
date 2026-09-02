@@ -60,7 +60,11 @@ export const SecoesRelatorioPAP = () => {
   if (!dadosSecoesRelatorioPAP?.secoes?.length) return <></>;
 
   return dadosSecoesRelatorioPAP?.secoes?.map((item, index) => (
-    <CollapseDadosSecaoRelatorioPAP key={index} dados={item} index={index} />
+    <CollapseDadosSecaoRelatorioPAP
+      key={item?.papSecaoId || `secao-${item?.id}`}
+      dados={item}
+      index={index}
+    />
   ));
 };
 
