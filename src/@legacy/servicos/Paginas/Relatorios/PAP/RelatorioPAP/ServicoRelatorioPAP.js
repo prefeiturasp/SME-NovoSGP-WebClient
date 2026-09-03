@@ -20,14 +20,57 @@ import api from '~/servicos/api';
 
 const URL_PADRAO = 'v1/relatorios/pap';
 
+const obterDataAuditoria = secao =>
+  secao?.auditoria?.alteradoEm || secao?.auditoria?.criadoEm;
+
+const devePriorizarSecao = (secaoAtual, candidata) => {
+  if (!secaoAtual) return true;
+  if (!secaoAtual?.papSecaoId && candidata?.papSecaoId) return true;
+  if (secaoAtual?.papSecaoId && !candidata?.papSecaoId) return false;
+
+  const dataAtual = new Date(obterDataAuditoria(secaoAtual)).getTime();
+  const dataCandidata = new Date(obterDataAuditoria(candidata)).getTime();
+
+  if (!Number.isNaN(dataAtual) && !Number.isNaN(dataCandidata)) {
+    return dataCandidata >= dataAtual;
+  }
+
+  return (
+    Number(candidata?.papSecaoId || 0) >= Number(secaoAtual?.papSecaoId || 0)
+  );
+};
+
+export const normalizarSecoesRelatorioPAP = secoes => {
+  const secoesPorId = new Map();
+
+  secoes?.forEach(secao => {
+    const secaoAtual = secoesPorId.get(secao?.id);
+    if (devePriorizarSecao(secaoAtual, secao)) {
+      secoesPorId.set(secao?.id, secao);
+    }
+  });
+
+  return Array.from(secoesPorId.values());
+};
+
 class ServicoRelatorioPAP {
   obterPeriodos = turmaCodigo => {
     return api.get(`${URL_PADRAO}/periodos/${turmaCodigo}`);
   };
 
-  obterDadosSecoes = (turmaCodigo, alunoCodigo, periodoRelatorioPAPId) => {
+  obterDadosSecoes = async (
+    turmaCodigo,
+    alunoCodigo,
+    periodoRelatorioPAPId
+  ) => {
     const url = `${URL_PADRAO}/turma/${turmaCodigo}/aluno/${alunoCodigo}/periodo/${periodoRelatorioPAPId}/secoes`;
-    return api.get(url);
+    const retorno = await api.get(url);
+
+    if (retorno?.data?.secoes) {
+      retorno.data.secoes = normalizarSecoesRelatorioPAP(retorno.data.secoes);
+    }
+
+    return retorno;
   };
 
   obterQuestionario = param => {
@@ -107,10 +150,12 @@ class ServicoRelatorioPAP {
         papAlunoId: dadosSecoesRelatorioPAP?.papAlunoId,
       };
 
+      const secoesPorId = new Map(
+        dadosSecoesRelatorioPAP?.secoes?.map(secao => [secao?.id, secao])
+      );
+
       paramsSalvar.secoes = dadosMapeados.secoes.map(secao => {
-        const dadosSecao = dadosSecoesRelatorioPAP?.secoes?.find(
-          s => s?.id === secao?.secaoId
-        );
+        const dadosSecao = secoesPorId.get(secao?.secaoId);
 
         const respostasQuestoe = secao?.questoes?.filter(
           q => q?.tipoQuestao !== tipoQuestao.InformacoesFrequenciaTurmaPAP
@@ -145,22 +190,31 @@ class ServicoRelatorioPAP {
         .catch(e => erros(e));
 
       if (!limparDadosAoSalvar && resposta?.status === HttpStatusCode.Ok) {
-        const dadosParaAtualizar = _.cloneDeep(dadosSecoesRelatorioPAP);
-        dadosParaAtualizar.papAlunoId = resposta.data.papAlunoId;
-        dadosParaAtualizar.papTurmaId = resposta.data.papTurmaId;
-        dadosParaAtualizar.secoes.forEach(secaoAlterar => {
-          const secoesAtualizadas = resposta.data.secoes;
+        const dadosAtualizados = await this.obterDadosSecoes(
+          turmaSelecionada?.turma,
+          estudanteSelecionadoRelatorioPAP?.codigoEOL,
+          periodoSelecionadoPAP?.periodoRelatorioPAPId
+        ).catch(e => erros(e));
 
-          const dadosAtualizados = secoesAtualizadas.find(
-            secaoRetorno => secaoRetorno?.auditoria?.id === secaoAlterar?.id
-          );
-          if (dadosAtualizados) {
-            secaoAlterar.auditoria = dadosAtualizados.auditoria;
-            secaoAlterar.papSecaoId = dadosAtualizados.secaoId;
-          }
-        });
+        if (dadosAtualizados?.data?.secoes?.length) {
+          dispatch(setDadosSecoesRelatorioPAP(dadosAtualizados.data));
+        } else {
+          const dadosParaAtualizar = _.cloneDeep(dadosSecoesRelatorioPAP);
+          dadosParaAtualizar.papAlunoId = resposta.data.papAlunoId;
+          dadosParaAtualizar.papTurmaId = resposta.data.papTurmaId;
+          dadosParaAtualizar.secoes.forEach(secaoAlterar => {
+            const secaoAtualizada = resposta.data.secoes.find(
+              secaoRetorno => secaoRetorno?.auditoria?.id === secaoAlterar?.id
+            );
 
-        dispatch(setDadosSecoesRelatorioPAP(_.cloneDeep(dadosParaAtualizar)));
+            if (secaoAtualizada) {
+              secaoAlterar.auditoria = secaoAtualizada.auditoria;
+              secaoAlterar.papSecaoId = secaoAtualizada.secaoId;
+            }
+          });
+
+          dispatch(setDadosSecoesRelatorioPAP(dadosParaAtualizar));
+        }
       }
 
       if (limparDadosAoSalvar) {
