@@ -2,20 +2,31 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import PainelFrequenciaBase from './PainelFrequenciaBase';
 
-jest.mock('~/servicos/api', () => ({
-  get: jest.fn(() =>
+jest.mock('~/servicos/InformacoesEducacionais/ServicoFrequenciaDiaria', () => ({
+  ObterFrequenciaDiariaUe: jest.fn(() =>
     Promise.resolve({
-      data: { turmas: [], ues: [], totalPaginas: 0, totalRegistros: 0 },
+      data: { turmas: [], totalPaginas: 0, totalRegistros: 0 },
+    })
+  ),
+  ObterFrequenciaDiariaDre: jest.fn(() =>
+    Promise.resolve({
+      data: { ues: [], totalPaginas: 0, totalRegistros: 0 },
     })
   ),
 }));
 
+const anoLetivoAtual = new Date().getFullYear();
+
 describe('PainelFrequenciaBase', () => {
-  it('renderiza controles de data e legenda', () => {
+  it('renderiza controles de data e legenda', async () => {
     render(
-      <PainelFrequenciaBase tipoExtra="ue" codigo={123} anoLetivo={2024} />
+      <PainelFrequenciaBase
+        tipoExtra="ue"
+        codigo={123}
+        anoLetivo={anoLetivoAtual}
+      />
     );
-    expect(screen.getByText(/Dados do dia:/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Dados do dia:/i)).toBeInTheDocument();
     expect(screen.getByText(/Nível de frequência:/i)).toBeInTheDocument();
     expect(screen.getByText(/Alto/i)).toBeInTheDocument();
     expect(screen.getByText(/Médio/i)).toBeInTheDocument();
@@ -28,41 +39,63 @@ describe('PainelFrequenciaBase', () => {
     ).toBeInTheDocument();
   });
 
-  it('renderiza tabela vazia inicialmente', () => {
+  it('renderiza tabela vazia inicialmente', async () => {
     render(
-      <PainelFrequenciaBase tipoExtra="ue" codigo={123} anoLetivo={2024} />
+      <PainelFrequenciaBase
+        tipoExtra="ue"
+        codigo={123}
+        anoLetivo={anoLetivoAtual}
+      />
     );
-    expect(screen.getByText(/Sem dados/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Sem dados/i)).toBeInTheDocument();
   });
 
-  it('muda página ao clicar na paginação', () => {
+  it('muda página ao clicar na paginação', async () => {
     render(
-      <PainelFrequenciaBase tipoExtra="ue" codigo={123} anoLetivo={2024} />
+      <PainelFrequenciaBase
+        tipoExtra="ue"
+        codigo={123}
+        anoLetivo={anoLetivoAtual}
+      />
     );
-    expect(screen.getByRole('table')).toBeInTheDocument();
+    expect(await screen.findByRole('table')).toBeInTheDocument();
   });
 
-  it('chama função de mudar dia ao clicar nos botões', () => {
+  it('chama função de mudar dia ao clicar nos botões', async () => {
     render(
-      <PainelFrequenciaBase tipoExtra="ue" codigo={123} anoLetivo={2024} />
+      <PainelFrequenciaBase
+        tipoExtra="ue"
+        codigo={123}
+        anoLetivo={anoLetivoAtual}
+      />
     );
-    const btnAnterior = screen.getByRole('button', { name: /Dia anterior/i });
-    const btnProximo = screen.getByRole('button', { name: /Próximo dia/i });
-    fireEvent.click(btnAnterior);
-    fireEvent.click(btnProximo);
+    fireEvent.click(
+      await screen.findByRole('button', { name: /Dia anterior/i })
+    );
+    fireEvent.click(screen.getByRole('button', { name: /Próximo dia/i }));
   });
 
-  it('renderiza coluna Turma para tipoExtra="ue"', () => {
+  it('renderiza coluna Turma para tipoExtra="ue"', async () => {
     render(
-      <PainelFrequenciaBase tipoExtra="ue" codigo={123} anoLetivo={2024} />
+      <PainelFrequenciaBase
+        tipoExtra="ue"
+        codigo={123}
+        anoLetivo={anoLetivoAtual}
+      />
     );
-    expect(screen.getByText(/Turma/i)).toBeInTheDocument();
+    expect(await screen.findAllByText(/^Turma$/i)).not.toHaveLength(0);
   });
 
-  it('renderiza coluna Unidade educacional (UE) para tipoExtra="dre"', () => {
+  it('renderiza coluna Unidade educacional (UE) para tipoExtra="dre"', async () => {
     render(
-      <PainelFrequenciaBase tipoExtra="dre" codigo={123} anoLetivo={2024} />
+      <PainelFrequenciaBase
+        tipoExtra="dre"
+        codigo={123}
+        anoLetivo={anoLetivoAtual}
+      />
     );
-    expect(screen.getByText(/Unidade educacional \(UE\)/i)).toBeInTheDocument();
+    expect(
+      await screen.findAllByText(/Unidade educacional \(UE\)/i)
+    ).not.toHaveLength(0);
   });
 });

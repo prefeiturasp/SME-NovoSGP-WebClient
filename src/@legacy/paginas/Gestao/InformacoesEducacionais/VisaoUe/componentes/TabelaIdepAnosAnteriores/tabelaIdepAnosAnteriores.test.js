@@ -12,10 +12,10 @@ jest.mock('~/servicos/alertas', () => ({
 jest.mock(
   './tabelaIdepAnosAnterioresDetalhes',
   () =>
-    ({ dados, carregando }) =>
+    ({ dados = [] }) =>
       (
         <div data-testid="tabela-detalhes">
-          Dados: {dados.length}, Carregando: {carregando.toString()}
+          Dados: {dados.length}
         </div>
       )
 );
