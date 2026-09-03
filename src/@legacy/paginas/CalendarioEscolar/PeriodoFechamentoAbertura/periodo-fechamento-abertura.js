@@ -57,7 +57,7 @@ const PeriodoFechamentoAbertura = () => {
   const [idFechamentoAbertura, setIdFechamentoAbertura] = useState(0);
   const [ehRegistroExistente, setEhRegistroExistente] = useState(false);
 
-  const obtemPeriodosIniciais = () => {
+  const obtemPeriodosIniciais = useCallback(() => {
     return {
       tipoCalendarioId: null,
       periodoEscolarId: null,
@@ -73,7 +73,7 @@ const PeriodoFechamentoAbertura = () => {
       bimestre4InicioDoFechamento: '',
       bimestre4FinalDoFechamento: '',
     };
-  };
+  }, []);
   const [fechamento, setFechamento] = useState(obtemPeriodosIniciais());
   const [auditoria, setAuditoria] = useState({});
   const [isTipoCalendarioAnual, setIsTipoCalendarioAnual] = useState(true);
@@ -83,6 +83,15 @@ const PeriodoFechamentoAbertura = () => {
   const [pesquisaTipoCalendario, setPesquisaTipoCalendario] = useState('');
   const [isModalidadeFundMedio, setIsModalidadeFundMedio] = useState(false);
   const [valorAplicacao, setValorAplicacao] = useState('');
+
+  const limparRegistroCarregado = useCallback(() => {
+    setFechamento(obtemPeriodosIniciais());
+    setIdFechamentoAbertura(0);
+    setEhRegistroExistente(false);
+    setRegistroMigrado(false);
+    setAuditoria({});
+    setValorAplicacao('');
+  }, [obtemPeriodosIniciais]);
 
   const validacaoPrimeiroBim = {
     bimestre1InicioDoFechamento: momentSchema.required(
@@ -260,7 +269,7 @@ const PeriodoFechamentoAbertura = () => {
               item.inicioMinimo = obterDataMoment(item.inicioMinimo);
               item.finalMaximo = obterDataMoment(item.finalMaximo);
             });
-            setEhRegistroExistente(resposta.data.id);
+            setEhRegistroExistente(!!resposta.data.id);
             setFechamento(resposta.data);
             setRegistroMigrado(resposta.data.migrado);
             setAuditoria({
@@ -273,18 +282,18 @@ const PeriodoFechamentoAbertura = () => {
             });
             setIdFechamentoAbertura(resposta.data.id);
           } else {
-            setFechamento(obtemPeriodosIniciais());
+            limparRegistroCarregado();
           }
         })
         .catch(e => {
-          setFechamento(obtemPeriodosIniciais());
+          limparRegistroCarregado();
           erros(e);
         })
         .finally(() => setEmprocessamento(false));
     } else {
-      setFechamento(obtemPeriodosIniciais());
+      limparRegistroCarregado();
     }
-  }, [tipoCalendarioSelecionado]);
+  }, [limparRegistroCarregado, tipoCalendarioSelecionado]);
 
   useEffect(() => {
     carregaDados();
@@ -553,6 +562,7 @@ const PeriodoFechamentoAbertura = () => {
                         value={valorTipoCalendario}
                         label="Calendário"
                         labelRequired
+                        requiredOffset={0}
                         temErro={modoEdicao && !valorTipoCalendario}
                         mensagemErro="Campo obrigatório"
                       />

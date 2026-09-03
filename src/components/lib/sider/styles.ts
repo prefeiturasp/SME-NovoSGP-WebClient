@@ -188,7 +188,14 @@ export const SiderMenuButtonToggleStyle = styled.div<SiderMenuStylePros>`
 export const SiderMenuGroup = styled.div<SiderMenuStylePros>`
   display: flex;
   align-items: center;
+  width: 100%;
   flex-direction: ${(props) => (props?.collapsed ? 'column' : 'row')} !important;
+
+  ${(props) =>
+    !props.collapsed &&
+    `
+      padding-right: 28px;
+    `}
 `;
 
 export const SiderIconContainer = styled.div<SiderMenuStylePros>`
@@ -211,4 +218,11 @@ export const SiderMenuTitle = styled.div<SiderMenuStylePros>`
   font-weight: 700;
   white-space: normal;
   line-height: 12px;
+
+  ${(props) =>
+    !props.collapsed &&
+    `
+      flex: 1;
+      text-align: left;
+    `}
 `;

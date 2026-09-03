@@ -1,8 +1,8 @@
 import { Form, Formik } from 'formik';
 import { cloneDeep } from 'lodash';
-import * as moment from 'moment';
+import { dateAdapter } from '@/core/date/adapter';
 import PropTypes from 'prop-types';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Label } from '~/componentes';
 import tipoQuestao from '~/dtos/tipoQuestao';
@@ -61,12 +61,12 @@ const QuestionarioDinamico = props => {
 
   const [valoresIniciais, setValoresIniciais] = useState();
 
-  const [refForm, setRefForm] = useState({});
+  const refForm = useRef({});
 
-  const obterForm = () => refForm;
+  const obterForm = () => refForm.current;
 
   useEffect(() => {
-    if (refForm) {
+    if (refForm.current) {
       QuestionarioDinamicoFuncoes.adicionarFormsQuestionarioDinamico(
         () => obterForm(),
         dados.questionarioId,
@@ -74,7 +74,7 @@ const QuestionarioDinamico = props => {
         dados?.id
       );
     }
-  }, [refForm]);
+  }, [dados.questionarioId, dadosQuestionarioAtual, dados?.id]);
 
   const montarValoresIniciais = useCallback(() => {
     const valores = {};
@@ -107,13 +107,13 @@ const QuestionarioDinamico = props => {
             break;
           case tipoQuestao.Data:
             valorRespostaAtual = resposta[0].texto
-              ? moment(resposta[0].texto)
+              ? dateAdapter.parse(resposta[0].texto)
               : '';
             break;
           case tipoQuestao.Periodo:
             valorRespostaAtual = {
-              periodoInicio: moment(resposta[0].periodoInicio),
-              periodoFim: moment(resposta[0].periodoFim),
+              periodoInicio: dateAdapter.parse(resposta[0].periodoInicio),
+              periodoFim: dateAdapter.parse(resposta[0].periodoFim),
             };
             break;
           case tipoQuestao.FrequenciaEstudanteAEE:
@@ -774,21 +774,26 @@ const QuestionarioDinamico = props => {
       validationSchema={() =>
         QuestionarioDinamicoValidacoes.obterValidationSchema(
           dadosQuestionarioAtual,
-          refForm,
+          refForm.current,
           validarCampoObrigatorioCustomizado
         )
       }
       validateOnChange
       validateOnBlur
-      ref={refFormik => setRefForm(refFormik)}
+      innerRef={refFormik => {
+        refForm.current = refFormik;
+      }}
     >
-      {form => (
-        <Form>
-          <div className="row">
-            {montarQuestionarioAtual(dadosQuestionarioAtual, form)}
-          </div>
-        </Form>
-      )}
+      {form => {
+        refForm.current = form;
+        return (
+          <Form>
+            <div className="row">
+              {montarQuestionarioAtual(dadosQuestionarioAtual, form)}
+            </div>
+          </Form>
+        );
+      }}
     </Formik>
   ) : (
     <></>

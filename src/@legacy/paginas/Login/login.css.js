@@ -91,6 +91,7 @@ export const Cartao = styled(Card)`
   position: relative;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
+  z-index: 20;
 `;
 
 export const CorpoCartao = styled(CardBody)`
@@ -187,18 +188,37 @@ export const BannerSondagem = styled.div`
   top: 50%;
   left: 25%;
   transform: translate(-50%, -50%);
+  width: calc(50% - 48px);
+  max-width: 860px;
   background: rgba(255, 255, 255, 0.75);
   border-radius: 20px;
-  padding: 32px 120px;
+  padding: 24px 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  box-sizing: border-box;
   z-index: 10;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
 
+  > img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  @media (max-width: 1400px) {
+    width: calc(50% - 32px);
+    padding: 20px 28px;
+  }
+
+  @media (max-width: 1200px) {
+    width: calc(50% - 24px);
+    padding: 18px 20px;
+  }
+
   @media (max-width: 991px) {
-    left: 16.67%;
+    display: none;
   }
 
   button {
