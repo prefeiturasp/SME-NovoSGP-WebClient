@@ -49,6 +49,46 @@ import AlterarAula from './alterarAula';
 import ExcluirAula from './excluirAula';
 import { selecionarTurma } from '~/redux/modulos/usuario/actions';
 
+const possuiCodigoComponenteEquivalente = (
+  componente,
+  componenteCurricularId
+) => {
+  const codigo = Number(componenteCurricularId);
+
+  if (!componente || Number.isNaN(codigo)) {
+    return false;
+  }
+
+  return [
+    componente.codigoComponenteCurricular,
+    componente.id,
+    componente.codigoComponenteCurricularTerritorioSaber,
+    componente.CodigoComponenteCurricularTerritorioSaber,
+    componente.codDisciplinaPai,
+    componente.cdComponenteCurricularPai,
+  ].some(
+    codigoEquivalente =>
+      codigoEquivalente !== undefined &&
+      codigoEquivalente !== null &&
+      Number(codigoEquivalente) === codigo
+  );
+};
+
+const obterValueOptionComponente = listaComponentes =>
+  listaComponentes[0]?.regencia &&
+    listaComponentes[0]?.codDisciplinaPai &&
+    listaComponentes[0]?.codDisciplinaPai !== 0
+    ? 'codDisciplinaPai'
+    : 'id';
+
+const obterValorSelecaoComponente = (componente, listaComponentes) => {
+  if (!componente) {
+    return null;
+  }
+
+  return String(componente[obterValueOptionComponente(listaComponentes)]);
+};
+
 function CadastroDeAula() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -159,10 +199,7 @@ function CadastroDeAula() {
   const obterComponenteSelecionadoPorId = useCallback(
     componenteCurricularId => {
       return listaComponentes.find(
-        c =>
-          c.codigoComponenteCurricular === Number(componenteCurricularId) ||
-          c.id === Number(componenteCurricularId) ||
-          (c.regencia && c.codDisciplinaPai === Number(componenteCurricularId))
+        c => possuiCodigoComponenteEquivalente(c, componenteCurricularId)
       );
     },
     [listaComponentes]
@@ -347,22 +384,19 @@ function CadastroDeAula() {
             if (componentes) {
               const componenteSelecionado = componentes.find(
                 c =>
-                  String(c.codigoComponenteCurricular) ===
-                  String(respostaAula.disciplinaId) ||
-                  String(c.id) === String(respostaAula.disciplinaId) ||
-                  (c.regencia &&
-                    String(c.codDisciplinaPai) === respostaAula.disciplinaId)
+                  possuiCodigoComponenteEquivalente(
+                    c,
+                    respostaAula.disciplinaId
+                  )
               );
 
-              if (
-                componenteSelecionado.codigoComponenteCurricular ==
-                respostaAula.disciplinaId
-              ) {
-                respostaAula.disciplinaId = String(componenteSelecionado.id);
-                setAula(respostaAula);
-              }
-
               if (componenteSelecionado) {
+                respostaAula.disciplinaId = obterValorSelecaoComponente(
+                  componenteSelecionado,
+                  componentes
+                );
+                setAula(respostaAula);
+
                 carregarGrade(
                   componenteSelecionado,
                   respostaAula.dataAula,
@@ -881,11 +915,7 @@ function CadastroDeAula() {
                         lista={listaComponentes}
                         label="Componente Curricular"
                         valueOption={
-                          listaComponentes[0]?.regencia &&
-                            listaComponentes[0]?.codDisciplinaPai &&
-                            listaComponentes[0]?.codDisciplinaPai !== 0
-                            ? 'codDisciplinaPai'
-                            : 'id'
+                          obterValueOptionComponente(listaComponentes)
                         }
                         valueText="nome"
                         placeholder="Selecione um componente curricular"
