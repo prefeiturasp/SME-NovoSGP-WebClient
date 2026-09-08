@@ -22,8 +22,26 @@ const paraDayjs = valor => {
     const data = dayjs(valor.toDate());
     return data.isValid() ? data : null;
   }
+  if (typeof valor.valueOf === 'function') {
+    const data = dayjs(valor.valueOf());
+    return data.isValid() ? data : null;
+  }
   const data = dayjs(valor);
   return data.isValid() ? data : null;
+};
+
+const obterDataFormatada = valor => {
+  if (!valor) return null;
+  if (typeof valor === 'string' && /^\d{4}-\d{2}-\d{2}/.test(valor)) {
+    return valor.substring(0, 10);
+  }
+  return paraDayjs(valor)?.format('YYYY-MM-DD') ?? null;
+};
+
+const ehMesmoDia = (dataA, dataB) => {
+  const a = obterDataFormatada(dataA);
+  const b = obterDataFormatada(dataB);
+  return !!a && !!b && a === b;
 };
 
 class MomentSchema extends Yup.mixed {
@@ -63,10 +81,13 @@ const CampoData = ({
 }) => {
   const habilitarDatas = dataAtual => {
     let retorno = true;
+    const dataAtualFormatada = obterDataFormatada(dataAtual);
     const ehParaHabilitar =
       !!diasParaHabilitar &&
       diasParaHabilitar.length >= 1 &&
-      !!diasParaHabilitar.find(x => x === dataAtual.format('YYYY-MM-DD'));
+      !!diasParaHabilitar.find(
+        x => obterDataFormatada(x) === dataAtualFormatada
+      );
 
     if (
       !!diasParaHabilitar === false &&
@@ -112,24 +133,19 @@ const CampoData = ({
   const dataRender = (dataRenderizar, dataAtualSelecionada) => {
     const style = {};
     if (diasParaSinalizar?.length) {
-      const temDiaNaLista = diasParaSinalizar.find(dataSinalizar =>
-        dataSinalizar?.isSame(
-          paraDayjs(dataRenderizar)?.format('YYYY-MM-DD'),
-          'date'
-        )
+      const temDiaNaLista = diasParaSinalizar.some(dataSinalizar =>
+        ehMesmoDia(dataSinalizar, dataRenderizar)
       );
       if (
         temDiaNaLista &&
-        dayjs.isDayjs(dataAtualSelecionada) &&
-        !dataRenderizar?.isSame(
-          paraDayjs(dataAtualSelecionada)?.format('YYYY-MM-DD'),
-          'date'
-        )
+        dataAtualSelecionada &&
+        !ehMesmoDia(dataRenderizar, dataAtualSelecionada)
       ) {
         style.color = Base.AzulAnakiwa;
         style.border = `1px solid ${Base.AzulAnakiwa}`;
       }
     }
+    const dataCelula = paraDayjs(dataRenderizar);
     return (
       <div
         className="ant-picker-cell-inner"
@@ -137,7 +153,7 @@ const CampoData = ({
         aria-disabled="false"
         style={style}
       >
-        {dataRenderizar.date()}
+        {dataCelula ? dataCelula.date() : dataRenderizar?.date?.()}
       </div>
     );
   };
@@ -438,4 +454,10 @@ Yup.addMethod(
   }
 );
 
-export { CampoData, momentSchema };
+export {
+  CampoData,
+  momentSchema,
+  paraDayjs,
+  obterDataFormatada,
+  ehMesmoDia,
+};
