@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import comDefaultProps from '~/utils/comDefaultProps';
 import CardBody from '../cardBody';
 import { Base } from '../colors';
 import LinkRouter from '../linkRouter';
@@ -105,4 +106,4 @@ CardLink.propTypes = {
   minHeight: PropTypes.string,
 };
 
-export default CardLink;
+export default comDefaultProps(CardLink, CardLink.defaultProps);
