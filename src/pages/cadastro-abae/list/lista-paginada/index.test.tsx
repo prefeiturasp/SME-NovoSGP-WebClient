@@ -113,11 +113,10 @@ describe('ListaPaginadaCadastroABAE', () => {
 
     render(<ListaPaginadaCadastroABAE />);
 
-    expect(ListaPaginada).toHaveBeenCalledWith(
+    expect(ListaPaginada.mock.calls[0][0]).toEqual(
       expect.objectContaining({
         filtro: undefined,
       }),
-      expect.anything(),
     );
   });
 
@@ -151,11 +150,10 @@ describe('ListaPaginadaCadastroABAE', () => {
 
     await findByTestId('lista-paginada');
 
-    expect(ListaPaginada).toHaveBeenCalledWith(
+    expect(ListaPaginada.mock.calls[0][0]).toEqual(
       expect.objectContaining({
         filtro: undefined,
       }),
-      expect.anything(),
     );
   });
 });
