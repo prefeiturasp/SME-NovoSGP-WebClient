@@ -125,7 +125,8 @@ describe('AtribuicaoResponsaveisCadastro', () => {
 
     render(<AtribuicaoResponsaveisCadastro />);
 
-    const salvar = screen.getByRole('button', { name: 'Salvar' });
+    const salvar = await screen.findByRole('button', { name: 'Salvar' });
+    await waitFor(() => expect(salvar).toBeEnabled());
     fireEvent.click(salvar);
     fireEvent.click(salvar);
 
@@ -151,7 +152,9 @@ describe('AtribuicaoResponsaveisCadastro', () => {
     ServicoResponsaveis.salvarAtribuicao.mockReturnValue(requisicao.promise);
 
     render(<AtribuicaoResponsaveisCadastro />);
-    fireEvent.click(screen.getByRole('button', { name: 'Salvar' }));
+    const salvar = await screen.findByRole('button', { name: 'Salvar' });
+    await waitFor(() => expect(salvar).toBeEnabled());
+    fireEvent.click(salvar);
 
     await act(async () => requisicao.rejeitar(new Error('Falha de rede')));
 
@@ -174,7 +177,9 @@ describe('AtribuicaoResponsaveisCadastro', () => {
     });
 
     render(<AtribuicaoResponsaveisCadastro />);
-    fireEvent.click(screen.getByRole('button', { name: 'Salvar' }));
+    const salvar = await screen.findByRole('button', { name: 'Salvar' });
+    await waitFor(() => expect(salvar).toBeEnabled());
+    fireEvent.click(salvar);
 
     await waitFor(() =>
       expect(erro).toHaveBeenCalledWith(
