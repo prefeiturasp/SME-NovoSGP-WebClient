@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { TagDataUltimaConsolidacao } from './index';
 
 jest.mock('antd', () => ({
-  Tag: ({ children, ...props }: any) => (
+  Tag: ({ children }: any) => (
     <span data-testid="tag">{children}</span>
   ),
 }));
