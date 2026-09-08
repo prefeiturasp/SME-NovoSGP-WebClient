@@ -1,7 +1,7 @@
-import moment from 'moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CampoData } from '~/componentes';
+import { dayjs } from '@/core/date/dayjs';
+import { CampoData, obterDataFormatada, ehMesmoDia } from '~/componentes';
 import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import SelectComponent from '~/componentes/select';
@@ -103,8 +103,8 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
 
   const valorPadrao = useMemo(() => {
     const ano = turmaSelecionada.anoLetivo;
-    const dataParcial = moment().format('MM-DD');
-    const dataInteira = moment(`${dataParcial}-${ano}`, 'MM-DD-YYYY');
+    const dataParcial = dayjs().format('MM-DD');
+    const dataInteira = dayjs(`${dataParcial}-${ano}`, 'MM-DD-YYYY');
     return dataInteira;
   }, [turmaSelecionada.anoLetivo]);
 
@@ -129,13 +129,15 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       const habilitar = [];
       const sinalizar = [];
       datasDeAulas.data.forEach(itemDatas => {
-        const dataFormatada = moment(itemDatas.data).format('YYYY-MM-DD');
+        const dataFormatada = obterDataFormatada(itemDatas.data);
         itemDatas.aulas.forEach(itemAulas => {
-          if (itemAulas.possuiFrequenciaRegistrada) {
-            sinalizar.push(moment(dataFormatada));
+          if (itemAulas.possuiFrequenciaRegistrada && dataFormatada) {
+            sinalizar.push(dataFormatada);
           }
         });
-        habilitar.push(dataFormatada);
+        if (dataFormatada) {
+          habilitar.push(dataFormatada);
+        }
       });
       setDiasParaHabilitar(habilitar);
       setDiasParaSinalizar(sinalizar);
@@ -306,12 +308,9 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
   const obterAulaSelecionada = useCallback(
     async data => {
       if (listaDatasAulas) {
-        const aulaDataSelecionada = listaDatasAulas.find(item => {
-          return (
-            window.moment(item.data).format('DD/MM/YYYY') ===
-            window.moment(data).format('DD/MM/YYYY')
-          );
-        });
+        const aulaDataSelecionada = listaDatasAulas.find(item =>
+          ehMesmoDia(item.data, data)
+        );
 
         return aulaDataSelecionada;
       }
@@ -415,7 +414,7 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       diasParaHabilitar.length &&
       !dataSelecionada
     ) {
-      onChangeData(window.moment(dadosAulaFrequencia.dia), {
+      onChangeData(dayjs(dadosAulaFrequencia.dia), {
         ...dadosAulaFrequencia,
       });
       dispatch(salvarDadosAulaFrequencia());
@@ -435,12 +434,8 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       (a, b) => Date.parse(new Date(a)) - Date.parse(new Date(b))
     );
     const proximoIndice =
-      datasOrdenadas.findIndex(
-        data =>
-          window.moment(data).format('DD/MM/YYYY') ===
-          window.moment(dataSelecionada).format('DD/MM/YYYY')
-      ) + 1;
-    await onChangeData(window.moment(datasOrdenadas[proximoIndice]));
+      datasOrdenadas.findIndex(data => ehMesmoDia(data, dataSelecionada)) + 1;
+    await onChangeData(dayjs(datasOrdenadas[proximoIndice]));
   };
 
   useEffect(() => {
@@ -448,10 +443,8 @@ const CamposFiltrarDadosFrequenciaPlanoAula = () => {
       const datasOrdenadas = diasParaHabilitar.sort(
         (a, b) => Date.parse(new Date(a)) - Date.parse(new Date(b))
       );
-      const indiceAtual = datasOrdenadas.findIndex(
-        data =>
-          window.moment(data).format('DD/MM/YYYY') ===
-          window.moment(dataSelecionada).format('DD/MM/YYYY')
+      const indiceAtual = datasOrdenadas.findIndex(data =>
+        ehMesmoDia(data, dataSelecionada)
       );
       const qtdeItems = datasOrdenadas.length - 1;
       setBloquearProximo(indiceAtual >= qtdeItems);
