@@ -1,58 +1,66 @@
-import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import Paginacao from './paginacao';
 
+jest.mock('antd', () => ({
+  Pagination: props => (
+    <div>
+      <span data-testid="total">{props.total}</span>
+      <span data-testid="page-size">{props.pageSize}</span>
+      <button
+        data-testid="change-page"
+        onClick={() => props.onChange(2, props.pageSize)}
+      >
+        next
+      </button>
+      <button
+        data-testid="change-size"
+        onClick={() => props.onShowSizeChange(1, 20)}
+      >
+        size
+      </button>
+    </div>
+  ),
+}));
+
 describe('Paginacao', () => {
-  it('deve renderizar com props padrão', () => {
-    const { getByRole } = render(<Paginacao />);
-    expect(getByRole('list')).toBeInTheDocument();
-  });
-
-  it('deve chamar onChangePaginacao ao mudar de página', () => {
-    const onChangePaginacao = jest.fn();
-    const { getByTitle } = render(
-      <Paginacao numeroRegistros={30} onChangePaginacao={onChangePaginacao} />
+  it('renderiza total e pageSize iniciais', () => {
+    const { getByTestId } = render(
+      <Paginacao numeroRegistros={50} pageSize={10} />
     );
-    const nextButton = getByTitle('Next Page');
-    fireEvent.click(nextButton);
-    expect(onChangePaginacao).toHaveBeenCalled();
+    expect(getByTestId('total').textContent).toBe('50');
+    expect(getByTestId('page-size').textContent).toBe('10');
   });
 
-  it('deve chamar onChangeNumeroLinhas ao mudar o tamanho da página', () => {
+  it('chama onChangePaginacao ao mudar de página', () => {
+    const onChangePaginacao = jest.fn();
+    const { getByTestId } = render(
+      <Paginacao numeroRegistros={50} onChangePaginacao={onChangePaginacao} />
+    );
+    fireEvent.click(getByTestId('change-page'));
+    expect(onChangePaginacao).toHaveBeenCalledWith(2, 10);
+  });
+
+  it('chama onChangeNumeroLinhas ao mudar o tamanho', () => {
     const onChangeNumeroLinhas = jest.fn();
-    const { getByRole, findByText } = render(
+    const { getByTestId } = render(
       <Paginacao
-        mostrarNumeroLinhas
+        numeroRegistros={50}
         onChangeNumeroLinhas={onChangeNumeroLinhas}
       />
     );
-    const combobox = getByRole('combobox');
-    fireEvent.mouseDown(combobox);
-    findByText('20').then(option => {
-      fireEvent.click(option);
-      expect(onChangeNumeroLinhas).toHaveBeenCalled();
-    });
+    fireEvent.click(getByTestId('change-size'));
+    expect(onChangeNumeroLinhas).toHaveBeenCalledWith(1, 20);
   });
 
-  it('deve resetar o estado ao receber resetInitialState', () => {
+  it('reseta estado quando resetInitialState=true', () => {
     const setResetInitialState = jest.fn();
-    const { rerender } = render(
+    render(
       <Paginacao
-        resetInitialState
-        setResetInitialState={setResetInitialState}
-      />
-    );
-    rerender(
-      <Paginacao
+        numeroRegistros={50}
         resetInitialState
         setResetInitialState={setResetInitialState}
       />
     );
     expect(setResetInitialState).toHaveBeenCalledWith(false);
-  });
-
-  it('não deve chamar setResetInitialState se não for fornecido', () => {
-    render(<Paginacao resetInitialState />);
-    expect(true).toBe(true);
   });
 });
