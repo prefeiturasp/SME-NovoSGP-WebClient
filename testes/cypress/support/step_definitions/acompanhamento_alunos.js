@@ -22,7 +22,7 @@ When('envio uma requisição GET para o endpoint de acompanhamento de alunos', f
     method: 'GET',
     url:
       Cypress.config('baseUrl') +
-      `/api/v1/acompanhamento/alunos?turmaId=${Cypress.env('TURMA_CODIGO_APANHADO_GERAL')}&alunoId=${Cypress.env('ALUNO_ID')}&semestre=${Cypress.env('SEMESTRE_CODIGO')}&componenteCurricularId=${Cypress.env('COMPONENTE_CURRICULAR_CODIGO')}`,
+      `/api/v1/acompanhamento/alunos?turmaId=${Cypress.env('TURMA_ID')}&alunoId=${Cypress.env('ALUNO_ID')}&semestre=${Cypress.env('SEMESTRE_CODIGO')}&componenteCurricularId=${Cypress.env('COMPONENTE_CURRICULAR_CODIGO')}`,
     headers: {
       accept: 'text/plain',
       Authorization: `Bearer ${token}`,
@@ -76,7 +76,7 @@ When(
       method: 'GET',
       url:
         Cypress.config('baseUrl') +
-        `/api/v1/acompanhamento/alunos?turmaId=${Cypress.env('TURMA_CODIGO_APANHADO_GERAL')}&alunoId=${Cypress.env('ALUNO_ID')}&semestre=${Cypress.env('SEMESTRE_CODIGO')}&componenteCurricularId=0`,
+        `/api/v1/acompanhamento/alunos?turmaId=${Cypress.env('TURMA_ID')}&alunoId=${Cypress.env('ALUNO_ID')}&semestre=${Cypress.env('SEMESTRE_CODIGO')}&componenteCurricularId=0`,
       headers: {
         accept: 'text/plain',
         Authorization: `Bearer ${token}`,
@@ -101,7 +101,7 @@ When('envio uma requisição GET para o endpoint com id do aluno inexistente', f
     method: 'GET',
     url:
       Cypress.config('baseUrl') +
-      `/api/v1/acompanhamento/alunos?turmaId=${Cypress.env('TURMA_CODIGO_APANHADO_GERAL')}&alunoId=0&semestre=${Cypress.env('SEMESTRE_CODIGO')}&componenteCurricularId=${Cypress.env('COMPONENTE_CURRICULAR_CODIGO')}`,
+      `/api/v1/acompanhamento/alunos?turmaId=${Cypress.env('TURMA_ID')}&alunoId=0&semestre=${Cypress.env('SEMESTRE_CODIGO')}&componenteCurricularId=${Cypress.env('COMPONENTE_CURRICULAR_CODIGO')}`,
     headers: {
       accept: 'text/plain',
       Authorization: `Bearer ${token}`,

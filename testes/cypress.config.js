@@ -64,6 +64,7 @@ module.exports = defineConfig({
         'TURMA_CODIGO_INVALIDO',
         'TURMA_CODIGO_FECHAMENTO',
         'TURMA_CODIGO_APANHADO_GERAL',
+        'TURMA_ID',
         'BIMESTRE_CODIGO',
         'BIMESTRE_CODIGO_INVALIDO',
         'SEMESTRE_CODIGO',
