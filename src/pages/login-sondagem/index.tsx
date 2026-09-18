@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, MouseEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { Tooltip } from 'antd';
-import { Formik, Form } from 'formik';
+import { Formik } from 'formik';
 import shortid from 'shortid';
 import { isBrowser, IOSView } from 'react-device-detect';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -175,7 +175,7 @@ const LoginSondagem = () => {
                     validateOnChange={false}
                   >
                     {(form) => (
-                      <Form>
+                      <form onSubmit={form.handleSubmit}>
                         <Rotulo className="d-block" htmlFor="usuario">
                           Usuário
                           <Tooltip placement="top" title={TextoAjuda}>
@@ -230,7 +230,7 @@ const LoginSondagem = () => {
                         {erroGeral && !(form.errors.usuario || form.errors.senha) ? (
                           <ErroGeral>{erroGeral}</ErroGeral>
                         ) : null}
-                      </Form>
+                      </form>
                     )}
                   </Formik>
                 ) : (

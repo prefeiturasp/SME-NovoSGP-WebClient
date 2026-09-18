@@ -6,14 +6,15 @@ import { Form } from 'antd';
 jest.mock('@/core/services/busca-ativa-service');
 jest.mock('@/components/lib/inputs/select', () => (props: any) => {
   const { options, children, id, placeholder, value, onChange, 'data-testid': dataTestId } = props;
+  const selectProps: any = {
+    'data-testid': dataTestId,
+    id,
+    placeholder,
+    value,
+    onChange,
+  };
   return (
-    <select
-      data-testid={dataTestId}
-      id={id}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-    >
+    <select {...selectProps}>
       {options &&
         options.map((opt: any) => (
           <option key={opt.value} value={opt.value}>
