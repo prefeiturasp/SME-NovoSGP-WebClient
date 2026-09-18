@@ -32,6 +32,8 @@ jest.mock('antd/es/form/Form', () => ({
 jest.mock('@/@legacy/componentes', () => ({
   ListaPaginada: jest.fn(() => <div data-testid="lista-paginada" />),
 }));
+
+const listaPaginadaMock = ListaPaginada as unknown as jest.Mock;
 jest.mock('@/@legacy/constantes/ids/table', () => ({
   SGP_TABLE_CADASTRO_ABAE: 'table-id',
 }));
@@ -98,7 +100,7 @@ describe('ListaPaginadaCadastroABAE', () => {
     const navigate = jest.fn();
     (useNavigate as jest.Mock).mockReturnValue(navigate);
     let onClick: any;
-    (ListaPaginada as unknown as jest.Mock).mockImplementation((props) => {
+    listaPaginadaMock.mockImplementation((props) => {
       onClick = props.onClick;
       return <div data-testid="lista-paginada" />;
     });
@@ -113,7 +115,7 @@ describe('ListaPaginadaCadastroABAE', () => {
 
     render(<ListaPaginadaCadastroABAE />);
 
-    expect(ListaPaginada.mock.calls[0][0]).toEqual(
+    expect(listaPaginadaMock.mock.calls[0][0]).toEqual(
       expect.objectContaining({
         filtro: undefined,
       }),
@@ -150,7 +152,7 @@ describe('ListaPaginadaCadastroABAE', () => {
 
     await findByTestId('lista-paginada');
 
-    expect(ListaPaginada.mock.calls[0][0]).toEqual(
+    expect(listaPaginadaMock.mock.calls[0][0]).toEqual(
       expect.objectContaining({
         filtro: undefined,
       }),
