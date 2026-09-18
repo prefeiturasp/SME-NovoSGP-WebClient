@@ -21,6 +21,10 @@ const moduleFederationConfig = override(
   (config) => {
     config.output.publicPath = '/';
 
+    config.plugins = config.plugins.filter(
+      (plugin) => plugin?.constructor?.name !== 'ESLintWebpackPlugin',
+    );
+
     config.plugins.push(
       new ModuleFederationPlugin({
         name: 'sgpHost',
