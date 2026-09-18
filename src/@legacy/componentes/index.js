@@ -1,4 +1,9 @@
-export { CampoData, momentSchema } from './campoData/campoData';
+export {
+  CampoData,
+  momentSchema,
+  obterDataFormatada,
+  ehMesmoDia,
+} from './campoData/campoData';
 export { CoresGraficos, Colors, Base, Active, Hover } from './colors';
 export { default as Alert } from './alert';
 export { default as Auditoria } from './auditoria';

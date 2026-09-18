@@ -2,7 +2,13 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import { CampoData, momentSchema } from './campoData';
+import {
+  CampoData,
+  momentSchema,
+  obterDataFormatada,
+  ehMesmoDia,
+  paraDayjs,
+} from './campoData';
 import { dayjs } from '@/core/date/dayjs';
 
 jest.mock('antd/es/date-picker/locale/pt_BR', () => ({}));
@@ -86,5 +92,44 @@ describe('momentSchema com dayjs', () => {
         segundoBimestreDataInicial: dayjs('2026-05-05T00:00:00'),
       })
     ).rejects.toThrow('Data inválida');
+  });
+});
+
+const criarDataEstiloAntd = isoLocal => {
+  const dataNativa = new Date(`${isoLocal}T00:00:00`);
+  return {
+    toDate: () => dataNativa,
+    valueOf: () => dataNativa.getTime(),
+    format: mascara => dayjs(dataNativa).format(mascara),
+    date: () => dataNativa.getDate(),
+    isSame: () => false,
+  };
+};
+
+describe('comparacao de dias do calendario apos migracao moment para dayjs', () => {
+  test('normaliza data da API sem deslocar o dia', () => {
+    expect(obterDataFormatada('2026-08-05T00:00:00')).toBe('2026-08-05');
+    expect(obterDataFormatada('2026-08-06T00:00:00')).toBe('2026-08-06');
+    expect(obterDataFormatada('2026-08-07T00:00:00')).toBe('2026-08-07');
+  });
+
+  test('reconhece o mesmo dia entre API, dayjs e objeto do DatePicker do antd', () => {
+    const dataApi = '2026-08-05T00:00:00';
+    const dataDayjs = dayjs('2026-08-05T00:00:00');
+    const dataAntd = criarDataEstiloAntd('2026-08-05');
+
+    expect(dayjs.isDayjs(dataAntd)).toBe(false);
+    expect(ehMesmoDia(dataApi, dataAntd)).toBe(true);
+    expect(ehMesmoDia(dataDayjs, dataAntd)).toBe(true);
+    expect(ehMesmoDia('2026-08-05', dataAntd)).toBe(true);
+    expect(ehMesmoDia(dataAntd, '2026-08-06')).toBe(false);
+  });
+
+  test('converte objeto do DatePicker do antd para dayjs valido', () => {
+    const dataAntd = criarDataEstiloAntd('2026-08-07');
+    const convertido = paraDayjs(dataAntd);
+
+    expect(convertido).not.toBeNull();
+    expect(convertido.format('YYYY-MM-DD')).toBe('2026-08-07');
   });
 });
