@@ -86,12 +86,13 @@ export default createGlobalStyle`
 
   /* Antd V5 Start */
 
-  .ant-select-item-option:hover  {
-    background-color:  ${Base.Roxo} !important;
-  }
-
-  .ant-select-item-option-active {
-    background-color:  ${Base.Branco} !important;
+  .ant-select-dropdown:not(.select-colorido-dropdown) .ant-select-item-option:hover,
+  .ant-select-dropdown:not(.select-colorido-dropdown) .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+    background-color: ${Base.Roxo} !important;
+    color: #ffffff !important;
+    outline: none !important;
+    font-weight: normal !important;
+    transition: none !important;
   }
 
   .ant-select {
@@ -112,9 +113,12 @@ export default createGlobalStyle`
     }
   }
 
-  .ant-select-item-option-selected {
+  .ant-select-dropdown:not(.select-colorido-dropdown) .ant-select-item-option-selected:not(.ant-select-item-option-disabled),
+  .ant-select-dropdown:not(.select-colorido-dropdown) .ant-select-item-option-selected.ant-select-item-option-active {
     color: #ffffff !important;
-    background-color:  ${Base.Roxo} !important;
+    background-color: ${Base.Roxo} !important;
+    outline: none !important;
+    font-weight: normal !important;
   }
 
   .ant-select-selection {
