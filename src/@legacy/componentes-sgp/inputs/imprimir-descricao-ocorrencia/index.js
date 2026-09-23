@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import { RadioGroupButton } from '~/componentes';
 import { SGP_RADIO_DESCRICAO_OCORRENCIA } from '~/constantes/ids/radio';
 
-export const ImprimirDescricaoOcorrencia = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const ImprimirDescricaoOcorrenciaComponent = ({
   name,
   form,
   onChange,
@@ -37,7 +38,7 @@ export const ImprimirDescricaoOcorrencia = ({
   );
 };
 
-ImprimirDescricaoOcorrencia.propTypes = {
+ImprimirDescricaoOcorrenciaComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
@@ -46,7 +47,7 @@ ImprimirDescricaoOcorrencia.propTypes = {
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
-ImprimirDescricaoOcorrencia.defaultProps = {
+ImprimirDescricaoOcorrenciaComponent.defaultProps = {
   form: null,
   disabled: false,
   valorInicial: false,
@@ -54,3 +55,8 @@ ImprimirDescricaoOcorrencia.defaultProps = {
   onChange: () => null,
   name: 'imprimirDescricaoOcorrencia',
 };
+
+export const ImprimirDescricaoOcorrencia = comDefaultProps(
+  ImprimirDescricaoOcorrenciaComponent,
+  ImprimirDescricaoOcorrenciaComponent.defaultProps
+);

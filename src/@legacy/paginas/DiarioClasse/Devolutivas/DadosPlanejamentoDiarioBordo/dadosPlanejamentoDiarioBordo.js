@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import CardPlanejamento from '~/paginas/DiarioClasse/Devolutivas/DadosPlanejamentoDiarioBordo/CardPlanejamento/cardPlanejamento';
 import BarraNavegacaoPlanejamento from '~/paginas/DiarioClasse/Devolutivas/DadosPlanejamentoDiarioBordo/BarraNavegacaoPlanejamento/barraNavegacaoPlanejamento';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DadosPlanejamentoDiarioBordo = React.memo(props => {
   const { onChangePage } = props;
 
@@ -33,4 +34,4 @@ DadosPlanejamentoDiarioBordo.defaultProps = {
   onChangePage: () => {},
 };
 
-export default DadosPlanejamentoDiarioBordo;
+export default comDefaultProps(DadosPlanejamentoDiarioBordo, DadosPlanejamentoDiarioBordo.defaultProps);

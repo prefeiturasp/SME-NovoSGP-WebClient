@@ -4,6 +4,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import MontarDadosQuantidadeRegistrosPorObjetivo from './montarDadosQuantidadeRegistrosPorObjetivo';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const QuantidadeRegistrosPorObjetivo = props => {
   const { anoLetivo, dreId, ueId, mesSelecionado } = props;
 
@@ -58,4 +59,4 @@ QuantidadeRegistrosPorObjetivo.defaultProps = {
   mesSelecionado: '',
 };
 
-export default QuantidadeRegistrosPorObjetivo;
+export default comDefaultProps(QuantidadeRegistrosPorObjetivo, QuantidadeRegistrosPorObjetivo.defaultProps);

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Styles
 import { TextoPequeno, VerticalCentralizado } from '../styles';
 
@@ -30,4 +31,4 @@ TextoInformativo.defaultProps = {
   dataTermino: {},
 };
 
-export default TextoInformativo;
+export default comDefaultProps(TextoInformativo, TextoInformativo.defaultProps);

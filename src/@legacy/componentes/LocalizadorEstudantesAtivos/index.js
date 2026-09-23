@@ -9,6 +9,7 @@ import { store } from '@/core/redux';
 import { setAlunosCodigo } from '~/redux/modulos/localizadorEstudante/actions';
 import { removerNumeros } from '~/utils/funcoes/gerais';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LocalizadorEstudantesAtivos = props => {
   const {
     onChange,
@@ -341,4 +342,4 @@ LocalizadorEstudantesAtivos.defaultProps = {
   dataReferencia: '',
 };
 
-export default LocalizadorEstudantesAtivos;
+export default comDefaultProps(LocalizadorEstudantesAtivos, LocalizadorEstudantesAtivos.defaultProps);

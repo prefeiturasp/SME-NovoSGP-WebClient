@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LoaderPlanoAnual = ({ children }) => {
   const exibirLoaderPlanoAnual = useSelector(
     store => store.planoAnual.exibirLoaderPlanoAnual
@@ -19,4 +20,4 @@ LoaderPlanoAnual.defaultProps = {
   children: () => {},
 };
 
-export default LoaderPlanoAnual;
+export default comDefaultProps(LoaderPlanoAnual, LoaderPlanoAnual.defaultProps);

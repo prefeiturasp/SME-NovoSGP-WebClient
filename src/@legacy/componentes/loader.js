@@ -10,6 +10,7 @@ import styled from 'styled-components';
 
 // Componentes
 import { Base } from './colors';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const LoaderWrapper = styled.div`
   width: auto;
@@ -57,4 +58,4 @@ Loader.defaultProps = {
   style: {},
 };
 
-export default Loader;
+export default comDefaultProps(Loader, Loader.defaultProps);

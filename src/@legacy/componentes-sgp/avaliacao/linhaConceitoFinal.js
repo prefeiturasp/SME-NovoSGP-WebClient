@@ -5,6 +5,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import { MarcadorTriangulo } from '~/componentes';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { tratarStringComponenteCurricularNome } from '~/utils';
 
 const LinhaConceitoFinal = props => {
@@ -88,4 +89,4 @@ LinhaConceitoFinal.defaultProps = {
   dados: [],
 };
 
-export default LinhaConceitoFinal;
+export default comDefaultProps(LinhaConceitoFinal, LinhaConceitoFinal.defaultProps);

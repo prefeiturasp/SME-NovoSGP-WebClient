@@ -7,6 +7,7 @@ import { OPCAO_TODOS } from '~/constantes';
 
 import GraficoSituacaoConselhoClasse from './graficoSituacaoConselhoClasse';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const SituacaoConselhoClasse = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
 
@@ -69,4 +70,4 @@ SituacaoConselhoClasse.defaultProps = {
   bimestre: null,
 };
 
-export default SituacaoConselhoClasse;
+export default comDefaultProps(SituacaoConselhoClasse, SituacaoConselhoClasse.defaultProps);

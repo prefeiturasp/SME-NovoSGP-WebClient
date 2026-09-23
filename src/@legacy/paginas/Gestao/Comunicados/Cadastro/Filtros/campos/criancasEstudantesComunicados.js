@@ -10,6 +10,7 @@ import {
 import { erros, ServicoComunicados } from '~/servicos';
 import ModalAlunos from '../../ListaAlunos/listaAlunos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CriancasEstudantesComunicados = ({
   form,
   onChangeCampos,
@@ -137,4 +138,4 @@ CriancasEstudantesComunicados.defaultProps = {
   comunicadoId: '',
 };
 
-export default CriancasEstudantesComunicados;
+export default comDefaultProps(CriancasEstudantesComunicados, CriancasEstudantesComunicados.defaultProps);

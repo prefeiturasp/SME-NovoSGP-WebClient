@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import t from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { SelectComponent } from '~/componentes';
 
@@ -73,4 +74,4 @@ SelectRespostas.defaultProps = {
   containerVinculoId: '',
 };
 
-export default SelectRespostas;
+export default comDefaultProps(SelectRespostas, SelectRespostas.defaultProps);

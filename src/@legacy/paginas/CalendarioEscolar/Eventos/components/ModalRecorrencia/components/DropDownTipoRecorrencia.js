@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Components
 import { Dropdown, Menu } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
@@ -45,4 +46,4 @@ DropDownTipoRecorrencia.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default DropDownTipoRecorrencia;
+export default comDefaultProps(DropDownTipoRecorrencia, DropDownTipoRecorrencia.defaultProps);

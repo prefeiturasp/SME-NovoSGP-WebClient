@@ -12,6 +12,7 @@ import { erro } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import { CampoAlerta, CampoCentralizado } from './campoNotaConceito.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 export const Combo = styled.div`
   width: 105px;
   height: 35px;
@@ -226,4 +227,4 @@ CampoConceito.defaultProps = {
   dadosNotaPosConselho: null,
 };
 
-export default CampoConceito;
+export default comDefaultProps(CampoConceito, CampoConceito.defaultProps);

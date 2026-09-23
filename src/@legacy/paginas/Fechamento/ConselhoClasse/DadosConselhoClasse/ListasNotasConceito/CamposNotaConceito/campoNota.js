@@ -11,6 +11,7 @@ import { erro } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import { CampoAlerta, CampoCentralizado } from './campoNotaConceito.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CampoNota = props => {
   const {
     id,
@@ -215,4 +216,4 @@ CampoNota.defaultProps = {
   dadosArredondamento: null,
 };
 
-export default CampoNota;
+export default comDefaultProps(CampoNota, CampoNota.defaultProps);

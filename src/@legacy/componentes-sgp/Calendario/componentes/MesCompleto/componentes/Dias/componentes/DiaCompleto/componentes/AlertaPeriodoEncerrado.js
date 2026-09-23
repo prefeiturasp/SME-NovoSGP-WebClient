@@ -1,6 +1,7 @@
 import React from 'react';
 import t from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { Alert } from '~/componentes';
 
@@ -29,4 +30,4 @@ AlertaPeriodoEncerrado.defaultProps = {
   exibir: false,
 };
 
-export default AlertaPeriodoEncerrado;
+export default comDefaultProps(AlertaPeriodoEncerrado, AlertaPeriodoEncerrado.defaultProps);

@@ -12,6 +12,7 @@ import {
   SGP_MENU_ITEM_ORDENAR_ORDEM_ALFABETICA_Z_A,
 } from '~/constantes/ids/menu-item';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const Container = styled(Dropdown)`
   background-color: #064f79 !important;
   color: white !important;
@@ -179,4 +180,4 @@ Ordenacao.propTypes = {
   desabilitado: PropTypes.bool,
   onChangeOrdenacao: PropTypes.func,
 };
-export default Ordenacao;
+export default comDefaultProps(Ordenacao, Ordenacao.defaultProps);

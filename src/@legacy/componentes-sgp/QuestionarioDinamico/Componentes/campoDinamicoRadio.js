@@ -6,6 +6,7 @@ import Label from '~/componentes/label';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ContainerRadioGroupButton = styled.div`
   .ant-radio-group {
     display: flex;
@@ -73,4 +74,4 @@ CampoDinamicoRadio.defaultProps = {
   onChange: () => {},
 };
 
-export default CampoDinamicoRadio;
+export default comDefaultProps(CampoDinamicoRadio, CampoDinamicoRadio.defaultProps);

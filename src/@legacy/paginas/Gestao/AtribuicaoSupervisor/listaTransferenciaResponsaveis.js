@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import TransferenciaLista from '~/componentes-sgp/TranferenciaLista/transferenciaLista';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaTransferenciaResponsaveis = props => {
   const {
     dadosEsquerda,
@@ -128,4 +129,4 @@ ListaTransferenciaResponsaveis.defaultProps = {
   podeConsultar: true,
 };
 
-export default ListaTransferenciaResponsaveis;
+export default comDefaultProps(ListaTransferenciaResponsaveis, ListaTransferenciaResponsaveis.defaultProps);

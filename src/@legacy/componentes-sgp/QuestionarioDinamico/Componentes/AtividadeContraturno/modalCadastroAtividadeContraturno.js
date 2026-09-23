@@ -15,6 +15,7 @@ import {
   SGP_INPUT_LOCAL_ATIVIDADE_CONTRATURNO_MODAL,
 } from '~/constantes/ids/input';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalCadastroAtividadeContraturno = props => {
   const { onClose, exibirModal, dadosIniciais, disabled } = props;
 
@@ -146,4 +147,4 @@ ModalCadastroAtividadeContraturno.defaultProps = {
   disabled: false,
 };
 
-export default ModalCadastroAtividadeContraturno;
+export default comDefaultProps(ModalCadastroAtividadeContraturno, ModalCadastroAtividadeContraturno.defaultProps);

@@ -2,6 +2,7 @@ import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { Base } from '~/componentes';
 import InputSelectReadOnly from '~/componentes-sgp/camposSomenteLeitura/InputSelectReadOnly';
 import LabelAusenteCellTable from '~/componentes-sgp/inputs/nota/labelAusenteCellTable';
@@ -150,4 +151,4 @@ ListaoCampoConceito.defaultProps = {
   styleContainer: {},
 };
 
-export default ListaoCampoConceito;
+export default comDefaultProps(ListaoCampoConceito, ListaoCampoConceito.defaultProps);

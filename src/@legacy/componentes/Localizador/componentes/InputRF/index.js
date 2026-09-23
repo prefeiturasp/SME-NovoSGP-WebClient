@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import t from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Form
 import { Field } from 'formik';
 
@@ -177,4 +178,4 @@ InputRF.defaultProps = {
   exibirLoader: false,
 };
 
-export default InputRF;
+export default comDefaultProps(InputRF, InputRF.defaultProps);

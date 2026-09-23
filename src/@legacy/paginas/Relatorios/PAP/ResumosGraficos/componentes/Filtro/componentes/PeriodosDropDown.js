@@ -1,6 +1,7 @@
 import React from 'react';
 import t from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { SelectComponent } from '~/componentes';
 
@@ -49,4 +50,4 @@ PeriodosDropDown.defaultProps = {
   form: null,
 };
 
-export default PeriodosDropDown;
+export default comDefaultProps(PeriodosDropDown, PeriodosDropDown.defaultProps);

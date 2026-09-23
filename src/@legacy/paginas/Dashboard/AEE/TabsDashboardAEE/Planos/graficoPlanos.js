@@ -4,6 +4,7 @@ import QuantidadeCriancasEstudantesPlanoVigente from './QuantidadeCriancasEstuda
 import QuantidadePlanosSituacao from './QuantidadePlanosSituacao/quantidadePlanosSituacao';
 import QuantidadePlanosUtilizamRecursosAcessibilidadeSalaRegularSRM from './QuantidadePlanosUtilizamRecursosAcessibilidadeSalaRegularSRM/quantidadePlanosUtilizamRecursosAcessibilidadeSalaRegularSRM';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficosPlanos = props => {
   const { anoLetivo, dreId, ueId } = props;
   return (
@@ -39,4 +40,4 @@ GraficosPlanos.defaultProps = {
   ueId: '',
 };
 
-export default GraficosPlanos;
+export default comDefaultProps(GraficosPlanos, GraficosPlanos.defaultProps);
