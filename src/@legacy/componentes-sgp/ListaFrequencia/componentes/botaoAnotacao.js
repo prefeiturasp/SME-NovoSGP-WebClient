@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Base } from '~/componentes/colors';
+import comDefaultProps from '~/utils/comDefaultProps';
 import {
   setDadosModalAnotacaoFrequencia,
   setExibirModalAnotacaoFrequencia,
@@ -102,4 +103,4 @@ BotaoAnotacao.defaultProps = {
   ehInfantil: false,
 };
 
-export default BotaoAnotacao;
+export default comDefaultProps(BotaoAnotacao, BotaoAnotacao.defaultProps);

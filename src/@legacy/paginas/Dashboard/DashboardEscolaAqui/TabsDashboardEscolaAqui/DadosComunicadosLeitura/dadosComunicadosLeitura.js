@@ -33,6 +33,7 @@ import LeituraDeComunicadosPorTurmas from './leituraDeComunicadosPorTurmas';
 import { ordenarListaMaiorParaMenor } from '~/utils/funcoes/gerais';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DadosComunicadosLeitura = props => {
   const { codigoDre, codigoUe } = props;
 
@@ -757,4 +758,4 @@ DadosComunicadosLeitura.defaultProps = {
   codigoUe: '',
 };
 
-export default DadosComunicadosLeitura;
+export default comDefaultProps(DadosComunicadosLeitura, DadosComunicadosLeitura.defaultProps);

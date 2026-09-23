@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Base } from '~/componentes';
 import GraficoFrequenciaModalidade from './graficoFrequenciaModalidade';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoFrequenciaPorModalidade = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, tipoVisualizacao, periodicidade } = props;
 
@@ -52,4 +53,4 @@ GraficoFrequenciaPorModalidade.defaultProps = {
   tipoVisualizacao: 'global',
 };
 
-export default GraficoFrequenciaPorModalidade;
+export default comDefaultProps(GraficoFrequenciaPorModalidade, GraficoFrequenciaPorModalidade.defaultProps);

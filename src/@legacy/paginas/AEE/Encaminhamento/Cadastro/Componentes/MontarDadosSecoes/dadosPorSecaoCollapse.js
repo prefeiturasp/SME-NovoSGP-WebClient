@@ -4,6 +4,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import MontarDadosPorSecao from './montarDadosPorSecao';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DadosPorSecaoCollapse = props => {
   const { dados, index } = props;
   const { nome } = dados;
@@ -42,4 +43,4 @@ DadosPorSecaoCollapse.defaultProps = {
   index: null,
 };
 
-export default DadosPorSecaoCollapse;
+export default comDefaultProps(DadosPorSecaoCollapse, DadosPorSecaoCollapse.defaultProps);

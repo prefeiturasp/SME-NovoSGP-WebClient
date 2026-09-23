@@ -23,6 +23,7 @@ import {
 import { erros } from '~/servicos';
 import ServicoEstudante from '~/servicos/Paginas/Estudante/ServicoEstudante';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalCadastroContatoResponsaveis = props => {
   const { onClose, exibirModal, dadosIniciais, disabled } = props;
 
@@ -221,4 +222,4 @@ ModalCadastroContatoResponsaveis.defaultProps = {
   dadosIniciais: null,
 };
 
-export default ModalCadastroContatoResponsaveis;
+export default comDefaultProps(ModalCadastroContatoResponsaveis, ModalCadastroContatoResponsaveis.defaultProps);

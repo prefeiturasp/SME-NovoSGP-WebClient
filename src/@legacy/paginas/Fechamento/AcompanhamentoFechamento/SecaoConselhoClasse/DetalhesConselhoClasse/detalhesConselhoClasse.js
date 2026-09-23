@@ -7,6 +7,7 @@ import { erros, ServicoAcompanhamentoFechamento } from '~/servicos';
 
 import { TabelaAlunosConselho } from '../TabelaAlunosConselho';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DetalhesConselhoClasse = ({ turmaId, parametrosFiltro }) => {
   const [exibirDetalhamento, setExibirDetalhamento] = useState(false);
   const [alunosDetalhesConselho, setAlunosDetalhesConselho] = useState([]);
@@ -81,4 +82,4 @@ DetalhesConselhoClasse.defaultProps = {
   turmaId: null,
   parametrosFiltro: {},
 };
-export default DetalhesConselhoClasse;
+export default comDefaultProps(DetalhesConselhoClasse, DetalhesConselhoClasse.defaultProps);

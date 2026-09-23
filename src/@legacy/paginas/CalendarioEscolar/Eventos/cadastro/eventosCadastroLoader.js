@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import { Loader } from '~/componentes';
 import EventosCadastroContext from './eventosCadastroContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const EventosCadastroLoader = props => {
   const { children } = props;
   const { exibirLoaderSalvar } = useContext(EventosCadastroContext);
@@ -22,4 +23,4 @@ EventosCadastroLoader.defaultProps = {
   children: () => {},
 };
 
-export default EventosCadastroLoader;
+export default comDefaultProps(EventosCadastroLoader, EventosCadastroLoader.defaultProps);

@@ -1,7 +1,8 @@
-import 'react-quill/dist/quill.snow.css';
+import 'react-quill-new/dist/quill.snow.css';
 import PropTypes from 'prop-types';
 import React, { useEffect, memo } from 'react';
-import ReactQuill from 'react-quill';
+import ReactQuill from 'react-quill-new';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const TextEditor = React.forwardRef((props, ref) => {
   const {
@@ -101,4 +102,4 @@ TextEditor.defaultProps = {
   toolbar: true,
 };
 
-export default memo(TextEditor);
+export default memo(comDefaultProps(TextEditor, TextEditor.defaultProps));

@@ -26,6 +26,7 @@ import {
   BotaoCustomizado,
 } from './listaAlunos.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaAlunos = props => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -328,4 +329,4 @@ ListaAlunos.defaultProps = {
   territorioSaber: false,
 };
 
-export default ListaAlunos;
+export default comDefaultProps(ListaAlunos, ListaAlunos.defaultProps);

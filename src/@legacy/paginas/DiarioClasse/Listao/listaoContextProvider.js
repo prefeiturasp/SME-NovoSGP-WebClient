@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import comDefaultProps from '~/utils/comDefaultProps';
 import React, { useState } from 'react';
 import ListaoContext from './listaoContext';
 
@@ -244,4 +245,7 @@ ListaoContextProvider.propTypes = {
   children: PropTypes.node,
 };
 
-export default ListaoContextProvider;
+export default comDefaultProps(
+  ListaoContextProvider,
+  ListaoContextProvider.defaultProps
+);

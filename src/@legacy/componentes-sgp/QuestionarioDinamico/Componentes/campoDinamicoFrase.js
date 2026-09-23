@@ -4,6 +4,7 @@ import { CampoTexto } from '~/componentes';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CampoDinamicoFrase = props => {
   const { questaoAtual, form, label, disabled, onChange, prefixId } = props;
 
@@ -43,4 +44,4 @@ CampoDinamicoFrase.defaultProps = {
   questaoAtual: null,
 };
 
-export default CampoDinamicoFrase;
+export default comDefaultProps(CampoDinamicoFrase, CampoDinamicoFrase.defaultProps);

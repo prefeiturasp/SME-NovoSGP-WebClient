@@ -5,7 +5,8 @@ import { SGP_SELECT_SITUACAO_ENCAMINHAMENTO_NAAPA } from '~/constantes/ids/selec
 import { erros } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 
-export const SituacaoEncaminhamentoNAAPA = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const SituacaoEncaminhamentoNAAPAComponent = ({
   name,
   form,
   onChange,
@@ -67,7 +68,7 @@ export const SituacaoEncaminhamentoNAAPA = ({
   );
 };
 
-SituacaoEncaminhamentoNAAPA.propTypes = {
+SituacaoEncaminhamentoNAAPAComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -78,7 +79,7 @@ SituacaoEncaminhamentoNAAPA.propTypes = {
   updateData: PropTypes.oneOfType([PropTypes.any]),
 };
 
-SituacaoEncaminhamentoNAAPA.defaultProps = {
+SituacaoEncaminhamentoNAAPAComponent.defaultProps = {
   form: null,
   disabled: false,
   multiple: true,
@@ -88,3 +89,8 @@ SituacaoEncaminhamentoNAAPA.defaultProps = {
   name: 'situacaoIds',
   updateData: () => null,
 };
+
+export const SituacaoEncaminhamentoNAAPA = comDefaultProps(
+  SituacaoEncaminhamentoNAAPAComponent,
+  SituacaoEncaminhamentoNAAPAComponent.defaultProps
+);

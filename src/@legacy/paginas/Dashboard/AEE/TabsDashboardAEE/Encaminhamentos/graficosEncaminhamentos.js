@@ -4,6 +4,7 @@ import QuantidadeEncaminhamentosSituacao from './QuantidadeEncaminhamentosSituac
 import QuantidadeEstudantesEncaminhamentosDeferidos from './QuantidadeEstudantesEncaminhamentosDeferidos/quantidadeEstudantesEncaminhamentosDeferidos';
 import QuantidadeEstudantesMatriculados from './QuantidadeEstudantesMatriculados/quantidadeEstudantesMatriculados';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficosEncaminhamentos = props => {
   const { anoLetivo, dreId, ueId, dreCodigo, ueCodigo } = props;
   return (
@@ -45,4 +46,4 @@ GraficosEncaminhamentos.defaultProps = {
   ueCodigo: '',
 };
 
-export default GraficosEncaminhamentos;
+export default comDefaultProps(GraficosEncaminhamentos, GraficosEncaminhamentos.defaultProps);

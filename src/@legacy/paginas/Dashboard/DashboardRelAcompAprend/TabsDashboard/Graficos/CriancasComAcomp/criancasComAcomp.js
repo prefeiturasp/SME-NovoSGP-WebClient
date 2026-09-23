@@ -5,6 +5,7 @@ import CardCollapse from '~/componentes/cardCollapse';
 import { SGP_COLLAPSE_TOTAL_CRIANCAS_RELATORIO_ACOMPANHAMENTO_APRENDIZADO } from '~/constantes/ids/collapse';
 import GraficoTotalCriancasComRelAcompanhamentoAprendizagem from './graficoTotalCriancas';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TotalCriancasComRelAcompanhamentoAprendizagem = props => {
   const { anoLetivo, dreId, ueId, dataUltimaConsolidacao } = props;
 
@@ -60,4 +61,4 @@ TotalCriancasComRelAcompanhamentoAprendizagem.defaultProps = {
   dataUltimaConsolidacao: null,
 };
 
-export default TotalCriancasComRelAcompanhamentoAprendizagem;
+export default comDefaultProps(TotalCriancasComRelAcompanhamentoAprendizagem, TotalCriancasComRelAcompanhamentoAprendizagem.defaultProps);

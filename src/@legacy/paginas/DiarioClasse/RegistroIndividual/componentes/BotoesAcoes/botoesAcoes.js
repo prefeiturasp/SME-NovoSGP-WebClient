@@ -17,6 +17,7 @@ import {
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import { useNavigate } from 'react-router-dom';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BotoesAcoes = ({ turmaInfantil }) => {
   const navigate = useNavigate();
 
@@ -86,4 +87,4 @@ BotoesAcoes.propTypes = {
 BotoesAcoes.defaultProps = {
   turmaInfantil: false,
 };
-export default BotoesAcoes;
+export default comDefaultProps(BotoesAcoes, BotoesAcoes.defaultProps);

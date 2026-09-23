@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LoaderAcompanhamentoAprendizagem = ({ children }) => {
   const exibirLoaderGeralAcompanhamentoAprendizagem = useSelector(
     store =>
@@ -35,4 +36,4 @@ LoaderAcompanhamentoAprendizagem.defaultProps = {
   children: () => {},
 };
 
-export default LoaderAcompanhamentoAprendizagem;
+export default comDefaultProps(LoaderAcompanhamentoAprendizagem, LoaderAcompanhamentoAprendizagem.defaultProps);

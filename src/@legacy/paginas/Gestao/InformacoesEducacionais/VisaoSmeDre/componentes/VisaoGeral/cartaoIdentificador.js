@@ -5,6 +5,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { Loader } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CardContainer = styled.div`
   background-color: #fff;
   border: 1px solid #e8e8e8;
@@ -98,4 +99,4 @@ CartaoIndicador.defaultProps = {
   loading: false,
 };
 
-export default CartaoIndicador;
+export default comDefaultProps(CartaoIndicador, CartaoIndicador.defaultProps);

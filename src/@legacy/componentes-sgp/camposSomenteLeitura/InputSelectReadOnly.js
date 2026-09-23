@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 export const Container = styled.div`
   height: 38px;
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
@@ -101,4 +102,4 @@ InputSelectReadOnly.defaultProps = {
   height: '',
 };
 
-export default InputSelectReadOnly;
+export default comDefaultProps(InputSelectReadOnly, InputSelectReadOnly.defaultProps);

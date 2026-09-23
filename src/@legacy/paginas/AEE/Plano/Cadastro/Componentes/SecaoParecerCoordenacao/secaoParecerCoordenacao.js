@@ -8,6 +8,7 @@ import {
   setParecerEmEdicao,
 } from '~/redux/modulos/planoAEE/actions';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const SecaoParecerCoordenacao = ({ desabilitar }) => {
   const parecerCoordenacao = useSelector(
     store => store.planoAEE.parecerCoordenacao
@@ -43,4 +44,4 @@ SecaoParecerCoordenacao.propTypes = {
   desabilitar: PropTypes.bool,
 };
 
-export default SecaoParecerCoordenacao;
+export default comDefaultProps(SecaoParecerCoordenacao, SecaoParecerCoordenacao.defaultProps);

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { SelectComponent } from '~/componentes';
 import { ServicoOcorrencias } from '~/servicos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TipoOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
   const [listaTiposOcorrencias, setListaTiposOcorrencias] = useState([]);
 
@@ -48,4 +49,4 @@ TipoOcorrencia.defaultProps = {
   desabilitar: false,
 };
 
-export default TipoOcorrencia;
+export default comDefaultProps(TipoOcorrencia, TipoOcorrencia.defaultProps);

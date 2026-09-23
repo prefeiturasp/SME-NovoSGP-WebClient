@@ -7,6 +7,7 @@ import ServicoMuralGoogleSalaAula from '~/servicos/Paginas/MuralGoogleSalaAula/S
 import CampoMensagem from './campoMensagem';
 import CampoMensagemInfantil from './campoMensagemInfantil';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DadosMuralGoogleSalaAula = props => {
   const { aulaId, podeAlterar, ehTurmaInfantil } = props;
 
@@ -90,4 +91,4 @@ DadosMuralGoogleSalaAula.defaultProps = {
   ehTurmaInfantil: false,
 };
 
-export default DadosMuralGoogleSalaAula;
+export default comDefaultProps(DadosMuralGoogleSalaAula, DadosMuralGoogleSalaAula.defaultProps);

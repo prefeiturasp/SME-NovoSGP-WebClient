@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { erros } from '~/servicos';
 import ServicoEstudantesReclassificados from '~/servicos/InformacoesEducacionais/ServicoEstudantesReclassificados';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function agruparModalidadesParaTabela(apiData) {
   const tabela = [];
   apiData.forEach(modalidadeObj => {
@@ -140,4 +141,4 @@ TabelaEstudantesReclassificados.defaultProps = {
   anoLetivo: null,
 };
 
-export default TabelaEstudantesReclassificados;
+export default comDefaultProps(TabelaEstudantesReclassificados, TabelaEstudantesReclassificados.defaultProps);

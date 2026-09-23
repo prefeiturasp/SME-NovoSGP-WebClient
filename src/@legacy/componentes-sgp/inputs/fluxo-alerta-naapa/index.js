@@ -5,7 +5,8 @@ import { SGP_SELECT_FLUXO_ALERTA_NAAPA } from '~/constantes/ids/select';
 import { erros } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 
-export const FluxoAlertaNAAPA = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const FluxoAlertaNAAPAComponent = ({
   name,
   form,
   onChange,
@@ -64,7 +65,7 @@ export const FluxoAlertaNAAPA = ({
   );
 };
 
-FluxoAlertaNAAPA.propTypes = {
+FluxoAlertaNAAPAComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -74,7 +75,7 @@ FluxoAlertaNAAPA.propTypes = {
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
-FluxoAlertaNAAPA.defaultProps = {
+FluxoAlertaNAAPAComponent.defaultProps = {
   form: null,
   disabled: false,
   multiple: true,
@@ -83,3 +84,8 @@ FluxoAlertaNAAPA.defaultProps = {
   onChange: () => null,
   name: 'fluxoAlertaIds',
 };
+
+export const FluxoAlertaNAAPA = comDefaultProps(
+  FluxoAlertaNAAPAComponent,
+  FluxoAlertaNAAPAComponent.defaultProps
+);

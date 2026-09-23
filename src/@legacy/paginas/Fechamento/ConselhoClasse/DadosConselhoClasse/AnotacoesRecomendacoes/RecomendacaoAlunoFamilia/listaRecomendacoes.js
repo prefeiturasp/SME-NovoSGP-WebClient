@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 import TransferenciaLista from '~/componentes-sgp/TranferenciaLista/transferenciaLista';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaRecomendacoes = props => {
   const {
     dadosRecomendacao,
@@ -120,4 +121,4 @@ ListaRecomendacoes.defaultProps = {
   desabilitar: false,
 };
 
-export default ListaRecomendacoes;
+export default comDefaultProps(ListaRecomendacoes, ListaRecomendacoes.defaultProps);

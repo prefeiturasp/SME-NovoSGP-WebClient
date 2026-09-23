@@ -3,6 +3,7 @@ import { Column } from '@ant-design/plots';
 import React from 'react';
 import { Base, CoresGraficos } from '~/componentes/colors';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoBarras = props => {
   const {
     data,
@@ -126,4 +127,4 @@ GraficoBarras.defaultProps = {
   showScrollbar: false,
 };
 
-export default GraficoBarras;
+export default comDefaultProps(GraficoBarras, GraficoBarras.defaultProps);

@@ -19,6 +19,7 @@ import { SGP_SELECT_ESTUDANTE_CRIANCA } from '@/@legacy/constantes/ids/select';
 import { Meses } from '@/@legacy/componentes-sgp/inputs/meses';
 import RelatorioControleFrequenciaMensalEstudantes from './relatorioControleFrequenciaMensalEstudantes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioControleFrequenciaMensalForm = props => {
   const { form, onChangeCampos } = props;
 
@@ -121,4 +122,4 @@ RelatorioControleFrequenciaMensalForm.defaultProps = {
   onChangeCampos: () => null,
 };
 
-export default RelatorioControleFrequenciaMensalForm;
+export default comDefaultProps(RelatorioControleFrequenciaMensalForm, RelatorioControleFrequenciaMensalForm.defaultProps);

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Loader from '~/componentes/loader';
 import { InputRFEstilo } from './styles';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const InputCodigo = props => {
   const { pessoaSelecionada, onSelect, onChange, desabilitado, exibirLoader } =
     props;
@@ -83,4 +84,4 @@ InputCodigo.defaultProps = {
   exibirLoader: false,
 };
 
-export default InputCodigo;
+export default comDefaultProps(InputCodigo, InputCodigo.defaultProps);

@@ -24,13 +24,13 @@ const inicializarContainerRemoto = async container => {
 
   const shareScope = {
     react: {
-      '^18.2.0': {
+      '^19.2.8': {
         get: async () => ReactLib,
         loaded: 1,
       },
     },
     'react-dom': {
-      '^18.2.0': {
+      '^19.2.8': {
         get: async () => ReactDOMLib,
         loaded: 1,
       },

@@ -7,6 +7,7 @@ import { erros } from '~/servicos';
 import ServicoDashboardRegistroItinerancia from '~/servicos/Paginas/Dashboard/ServicoDashboardRegistroItinerancia';
 import ServicoFuncionario from '~/servicos/Paginas/ServicoFuncionario';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const MontarDadosQuantidadeRegistrosPorObjetivo = props => {
   const { anoLetivo, dreId, ueId, mesSelecionado } = props;
 
@@ -110,4 +111,4 @@ MontarDadosQuantidadeRegistrosPorObjetivo.defaultProps = {
   mesSelecionado: '',
 };
 
-export default MontarDadosQuantidadeRegistrosPorObjetivo;
+export default comDefaultProps(MontarDadosQuantidadeRegistrosPorObjetivo, MontarDadosQuantidadeRegistrosPorObjetivo.defaultProps);

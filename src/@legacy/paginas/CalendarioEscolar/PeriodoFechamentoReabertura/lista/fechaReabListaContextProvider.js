@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import FechaReabListaContext from './fechaReabListaContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const FechaReabListaContextProvider = ({ children }) => {
   const [codigoDre, setCodigoDre] = useState();
   const [codigoUe, setCodigoUe] = useState();
@@ -42,4 +43,4 @@ FechaReabListaContextProvider.propTypes = {
   children: PropTypes.node,
 };
 
-export default FechaReabListaContextProvider;
+export default comDefaultProps(FechaReabListaContextProvider, FechaReabListaContextProvider.defaultProps);

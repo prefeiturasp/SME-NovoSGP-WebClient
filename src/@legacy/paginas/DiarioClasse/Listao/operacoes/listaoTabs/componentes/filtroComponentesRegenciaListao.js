@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
+import comDefaultProps from '~/utils/comDefaultProps';
 import ListaoContext from '../../../listaoContext';
 import FiltroComponentesRegencia from '@/@legacy/componentes-sgp/FiltroComponentesRegencia';
 
@@ -37,4 +38,7 @@ FiltroComponentesRegenciaListao.defaultProps = {
   ehSintese: false,
 };
 
-export default FiltroComponentesRegenciaListao;
+export default comDefaultProps(
+  FiltroComponentesRegenciaListao,
+  FiltroComponentesRegenciaListao.defaultProps
+);

@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LoaderGeralComunicados = props => {
   const { children } = props;
   const exibirLoaderGeralComunicados = useSelector(
@@ -24,4 +25,4 @@ LoaderGeralComunicados.defaultProps = {
   children: () => {},
 };
 
-export default LoaderGeralComunicados;
+export default comDefaultProps(LoaderGeralComunicados, LoaderGeralComunicados.defaultProps);

@@ -7,6 +7,7 @@ import { erros, sucesso } from '~/servicos';
 import ServicoRelatorioSondagem from '~/servicos/Paginas/Relatorios/Sondagem/ServicoRelatorioSondagem';
 import { useNavigate } from 'react-router-dom';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioSondagemAnaliticoBotoesAcoes = props => {
   const navigate = useNavigate();
 
@@ -92,4 +93,4 @@ RelatorioSondagemAnaliticoBotoesAcoes.defaultProps = {
   setDesabilitarGerar: () => false,
 };
 
-export default RelatorioSondagemAnaliticoBotoesAcoes;
+export default comDefaultProps(RelatorioSondagemAnaliticoBotoesAcoes, RelatorioSondagemAnaliticoBotoesAcoes.defaultProps);

@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { JoditEditor } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DescricaoComunicados = ({ form, onChangeCampos, desabilitar }) => {
   return (
     <JoditEditor
@@ -30,4 +31,4 @@ DescricaoComunicados.defaultProps = {
   desabilitar: false,
 };
 
-export default DescricaoComunicados;
+export default comDefaultProps(DescricaoComunicados, DescricaoComunicados.defaultProps);

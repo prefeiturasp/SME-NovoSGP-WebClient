@@ -9,6 +9,7 @@ import {
 import BotaoVoltarPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoVoltarPadrao';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function ButtonGroup({
   form,
   modoEdicao,
@@ -118,4 +119,4 @@ ButtonGroup.defaultProps = {
   idBotaoPrincipal: '',
 };
 
-export default ButtonGroup;
+export default comDefaultProps(ButtonGroup, ButtonGroup.defaultProps);

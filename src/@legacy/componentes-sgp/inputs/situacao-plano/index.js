@@ -5,7 +5,8 @@ import { SGP_SELECT_SITUACAO_PLANO } from '~/constantes/ids/select';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 import { erros } from '~/servicos';
 
-export const SituacaoPlano = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const SituacaoPlanoComponent = ({
   name,
   form,
   onChange,
@@ -67,7 +68,7 @@ export const SituacaoPlano = ({
   );
 };
 
-SituacaoPlano.propTypes = {
+SituacaoPlanoComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -78,7 +79,7 @@ SituacaoPlano.propTypes = {
   updateData: PropTypes.oneOfType([PropTypes.any]),
 };
 
-SituacaoPlano.defaultProps = {
+SituacaoPlanoComponent.defaultProps = {
   form: null,
   disabled: false,
   multiple: true,
@@ -88,3 +89,8 @@ SituacaoPlano.defaultProps = {
   name: 'situacaoPlano',
   updateData: () => null,
 };
+
+export const SituacaoPlano = comDefaultProps(
+  SituacaoPlanoComponent,
+  SituacaoPlanoComponent.defaultProps
+);

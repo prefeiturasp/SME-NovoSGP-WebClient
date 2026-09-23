@@ -6,6 +6,7 @@ import {
   SGP_INPUT_NOME_ESTUDANTE,
 } from '~/constantes/ids/input';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CompensacaoAusenciaListaCamposDebounce = props => {
   const {
     disciplinaIdSelecionada,
@@ -113,4 +114,4 @@ CompensacaoAusenciaListaCamposDebounce.defaultProps = {
   nomeAluno: '',
 };
 
-export default CompensacaoAusenciaListaCamposDebounce;
+export default comDefaultProps(CompensacaoAusenciaListaCamposDebounce, CompensacaoAusenciaListaCamposDebounce.defaultProps);

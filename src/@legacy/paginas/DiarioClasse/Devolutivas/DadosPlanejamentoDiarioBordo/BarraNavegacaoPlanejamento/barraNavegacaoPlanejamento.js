@@ -8,6 +8,7 @@ import {
   setPlanejamentoSelecionado,
 } from '~/redux/modulos/devolutivas/actions';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BarraNavegacaoPlanejamento = React.memo(props => {
   const { onChangePage } = props;
 
@@ -66,4 +67,4 @@ BarraNavegacaoPlanejamento.defaultProps = {
   onChangePage: () => {},
 };
 
-export default BarraNavegacaoPlanejamento;
+export default comDefaultProps(BarraNavegacaoPlanejamento, BarraNavegacaoPlanejamento.defaultProps);

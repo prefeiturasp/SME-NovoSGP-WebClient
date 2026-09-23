@@ -10,6 +10,7 @@ import Alert from '~/componentes/alert';
 import { Base, Colors } from '~/componentes/colors';
 import Grid from '~/componentes/grid';
 import Loader from '~/componentes/loader';
+import comDefaultProps from '~/utils/comDefaultProps';
 import TiposEventoAulaDTO from '~/dtos/tiposEventoAula';
 import {
   salvarDadosAulaFrequencia,
@@ -375,4 +376,4 @@ DiaCompleto.defaultProps = {
   filtros: {},
 };
 
-export default DiaCompleto;
+export default comDefaultProps(DiaCompleto, DiaCompleto.defaultProps);

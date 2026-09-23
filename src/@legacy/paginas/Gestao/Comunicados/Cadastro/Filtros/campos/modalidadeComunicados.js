@@ -10,6 +10,7 @@ import {
 import { ServicoFiltroRelatorio } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalidadeComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
 
@@ -117,4 +118,4 @@ ModalidadeComunicados.defaultProps = {
   desabilitar: false,
 };
 
-export default ModalidadeComunicados;
+export default comDefaultProps(ModalidadeComunicados, ModalidadeComunicados.defaultProps);

@@ -7,6 +7,7 @@ import { erros } from '~/servicos';
 import ServicoDashboardDevolutivas from '~/servicos/Paginas/Dashboard/ServicoDashboardDevolutivas';
 import { obterTodosMeses } from '~/utils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoUsuariosQueRegistraramDevolutivas = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -110,4 +111,4 @@ GraficoUsuariosQueRegistraramDevolutivas.defaultProps = {
   modalidade: null,
 };
 
-export default GraficoUsuariosQueRegistraramDevolutivas;
+export default comDefaultProps(GraficoUsuariosQueRegistraramDevolutivas, GraficoUsuariosQueRegistraramDevolutivas.defaultProps);

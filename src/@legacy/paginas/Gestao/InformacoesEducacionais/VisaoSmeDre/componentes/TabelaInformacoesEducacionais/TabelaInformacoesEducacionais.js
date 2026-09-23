@@ -4,6 +4,7 @@ import './TabelaInformacoesEducacionais.css';
 import PropTypes from 'prop-types';
 import ServicoTabelaEducacional from '~/servicos/InformacoesEducacionais/ServicoTabelaEducacional';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function TabelaInformacoesEducacionais({ codigoDre, codigoUe, anoLetivo }) {
   const [dadosTabela, setDadosTabela] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -209,4 +210,4 @@ TabelaInformacoesEducacionais.defaultProps = {
   anoLetivo: null,
 };
 
-export default TabelaInformacoesEducacionais;
+export default comDefaultProps(TabelaInformacoesEducacionais, TabelaInformacoesEducacionais.defaultProps);

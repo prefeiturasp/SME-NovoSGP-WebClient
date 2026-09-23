@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import SelectComponent from '~/componentes/select';
+import comDefaultProps from '~/utils/comDefaultProps';
 import TooltipEstudanteAusente from './tooltipEstudanteAusente';
 import TooltipStatusGsa from './tooltipStatusGsa';
 
@@ -81,4 +82,4 @@ CampoConceito.defaultProps = {
   listaTiposConceitos: [],
 };
 
-export default CampoConceito;
+export default comDefaultProps(CampoConceito, CampoConceito.defaultProps);

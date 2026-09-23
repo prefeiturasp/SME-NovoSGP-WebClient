@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import { Field } from 'formik';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 import { Base } from './colors';
 
@@ -119,4 +120,4 @@ CheckboxComponent.defaultProps = {
   setValueOnlyOnChange: false,
 };
 
-export default CheckboxComponent;
+export default comDefaultProps(CheckboxComponent, CheckboxComponent.defaultProps);

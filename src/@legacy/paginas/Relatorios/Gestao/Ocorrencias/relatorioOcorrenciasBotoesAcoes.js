@@ -7,6 +7,7 @@ import BotoesAcaoRelatorio from '~/componentes-sgp/botoesAcaoRelatorio';
 import { MENSAGEM_SOLICITACAO_RELATORIO_SUCESSO, URL_HOME } from '~/constantes';
 import { erros, sucesso } from '~/servicos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioOcorrenciasBotoesAcoes = props => {
   const {
     form,
@@ -108,4 +109,4 @@ RelatorioOcorrenciasBotoesAcoes.defaultProps = {
   setDesabilitarGerar: () => false,
 };
 
-export default RelatorioOcorrenciasBotoesAcoes;
+export default comDefaultProps(RelatorioOcorrenciasBotoesAcoes, RelatorioOcorrenciasBotoesAcoes.defaultProps);

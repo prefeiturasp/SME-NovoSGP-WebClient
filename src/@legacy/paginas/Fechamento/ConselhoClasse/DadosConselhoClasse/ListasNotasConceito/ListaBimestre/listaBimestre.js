@@ -14,6 +14,7 @@ import {
   tratarStringComponenteCurricularNome,
 } from '~/utils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaBimestre = props => {
   const {
     dadosLista,
@@ -283,4 +284,4 @@ ListaBimestre.defaultProps = {
   componentesAgrupados: [],
 };
 
-export default ListaBimestre;
+export default comDefaultProps(ListaBimestre, ListaBimestre.defaultProps);

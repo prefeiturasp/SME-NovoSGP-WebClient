@@ -8,6 +8,7 @@ import { erros } from '~/servicos';
 import ServicoFrequencia from '~/servicos/InformacoesEducacionais/ServicoFrequencia';
 import { gerarCoresDinamicas } from '~/utils/coresDinamicas';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoFrequenciaModalidade = ({
   dreId,
   periodicidade: periodicidadeProp = 'mensal',
@@ -249,4 +250,4 @@ GraficoFrequenciaModalidade.defaultProps = {
   periodicidade: 'mensal',
 };
 
-export default GraficoFrequenciaModalidade;
+export default comDefaultProps(GraficoFrequenciaModalidade, GraficoFrequenciaModalidade.defaultProps);

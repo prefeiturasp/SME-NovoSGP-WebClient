@@ -8,7 +8,8 @@ import { SGP_SELECT_PERFIS } from '~/constantes/ids/select';
 import { erros } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 
-export const SelectPerfis = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const SelectPerfisComponent = ({
   name,
   form,
   onChange,
@@ -126,7 +127,7 @@ export const SelectPerfis = ({
   );
 };
 
-SelectPerfis.propTypes = {
+SelectPerfisComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -138,7 +139,7 @@ SelectPerfis.propTypes = {
   nameList: PropTypes.string,
 };
 
-SelectPerfis.defaultProps = {
+SelectPerfisComponent.defaultProps = {
   form: null,
   name: 'perfis',
   disabled: false,
@@ -149,3 +150,8 @@ SelectPerfis.defaultProps = {
   mostrarOpcaoTodas: true,
   nameList: 'listaPerfis',
 };
+
+export const SelectPerfis = comDefaultProps(
+  SelectPerfisComponent,
+  SelectPerfisComponent.defaultProps
+);

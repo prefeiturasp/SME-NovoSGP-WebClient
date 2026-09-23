@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Ant
 import { Table, Tooltip } from 'antd';
 import { Base, SelectComponent } from '~/componentes';
@@ -444,4 +445,4 @@ TabelaResultados.defaultProps = {
   anos: false,
 };
 
-export default TabelaResultados;
+export default comDefaultProps(TabelaResultados, TabelaResultados.defaultProps);

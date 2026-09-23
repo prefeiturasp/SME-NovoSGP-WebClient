@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LoaderDrawerAtendimento = ({ children }) => {
   const exibirLoaderDrawerAtendimento = useSelector(
     store => store.encaminhamentoNAAPA.exibirLoaderDrawerAtendimento
@@ -22,4 +23,4 @@ LoaderDrawerAtendimento.defaultProps = {
   children: () => {},
 };
 
-export default LoaderDrawerAtendimento;
+export default comDefaultProps(LoaderDrawerAtendimento, LoaderDrawerAtendimento.defaultProps);

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import CardCollapse from '~/componentes/cardCollapse';
 import { Base } from '~/componentes';
 import TabelaAbandonoPorModalidade from './TabelaAbandonoPorModalidade';
+import comDefaultProps from '~/utils/comDefaultProps';
 import './tabelaAbandonoUe.css';
 
 function TabelaAbandonoUe({ ueCodigo, anoLetivo, dreCodigo }) {
@@ -88,4 +89,4 @@ TabelaAbandonoUe.defaultProps = {
   dreCodigo: null,
 };
 
-export default TabelaAbandonoUe;
+export default comDefaultProps(TabelaAbandonoUe, TabelaAbandonoUe.defaultProps);

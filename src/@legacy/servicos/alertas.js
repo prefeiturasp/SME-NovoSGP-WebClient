@@ -2,6 +2,10 @@ import { Modal, notification } from 'antd';
 import { CANCELADO_USUARIO, TOKEN_EXPIRADO } from '~/constantes';
 import { store } from '@/core/redux';
 import {
+  getAntdModal,
+  getAntdNotification,
+} from '@/core/config/antd-static-api';
+import {
   alertaConfirmar,
   alertaFechar,
 } from '../redux/modulos/alertas/actions';
@@ -30,12 +34,23 @@ const exibirAlerta = (tipo, mensagem) => {
       classeTipo = '';
       break;
   }
-  notification[tipo]({
+
+  const config = {
     message: titulo,
     description: mensagem,
     duration: 6,
     className: classeTipo,
-  });
+  };
+
+  // Preferir API hook (compatível com React 19).
+  // Fallback estático só para ambientes sem provider (ex.: testes).
+  const api = getAntdNotification();
+  if (api?.[tipo]) {
+    api[tipo](config);
+    return;
+  }
+
+  notification[tipo](config);
 };
 
 const sucesso = mensagem => {
@@ -77,7 +92,7 @@ const confirmacao = (
   okType,
   cancelText
 ) => {
-  confirm({
+  const config = {
     title: titulo,
     content: texto,
     okText: okText || 'Confirmar',
@@ -89,7 +104,15 @@ const confirmacao = (
     onCancel() {
       cancelar();
     },
-  });
+  };
+
+  const modalApi = getAntdModal();
+  if (modalApi?.confirm) {
+    modalApi.confirm(config);
+    return;
+  }
+
+  confirm(config);
 };
 
 const confirmar = (

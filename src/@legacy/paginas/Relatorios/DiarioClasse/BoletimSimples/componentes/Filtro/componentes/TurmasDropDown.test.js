@@ -1,5 +1,4 @@
-import { render, waitFor } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import { render, waitFor, act } from '@testing-library/react';
 import TurmasDropDown from './TurmasDropDown';
 
 jest.mock('~/componentes', () => ({

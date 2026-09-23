@@ -4,6 +4,7 @@ import CardCollapse from '~/componentes/cardCollapse';
 import { Base } from '~/componentes';
 import PlanoAEE from '../../../shared/PlanoAEE/PlanoAEE';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function PlanoAEEUe({ ueCodigo, anoLetivo, dreCodigo }) {
   const [exibirPlanoAEEUe, setExibirPlanoAEEUe] = useState(false);
 
@@ -50,4 +51,4 @@ PlanoAEEUe.defaultProps = {
   dreCodigo: null,
 };
 
-export default PlanoAEEUe;
+export default comDefaultProps(PlanoAEEUe, PlanoAEEUe.defaultProps);

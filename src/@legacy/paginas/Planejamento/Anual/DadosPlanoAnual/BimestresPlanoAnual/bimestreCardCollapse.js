@@ -6,6 +6,7 @@ import CardCollapse from '~/componentes/cardCollapse';
 import { setClicouNoBimestre } from '~/redux/modulos/anual/actions';
 import TabsComponentesCorriculares from '../TabsComponentesCorriculares/tabsComponentesCorriculares';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BimestreCardCollapse = props => {
   const { dadosBimestre } = props;
   const { bimestre } = dadosBimestre;
@@ -38,4 +39,4 @@ BimestreCardCollapse.defaultProps = {
   dadosBimestre: '',
 };
 
-export default BimestreCardCollapse;
+export default comDefaultProps(BimestreCardCollapse, BimestreCardCollapse.defaultProps);

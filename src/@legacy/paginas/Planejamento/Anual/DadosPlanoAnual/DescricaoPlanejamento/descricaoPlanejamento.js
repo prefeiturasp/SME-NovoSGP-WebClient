@@ -11,6 +11,7 @@ import {
 import { DescItensAutoraisProfessor } from '../../planoAnual.css';
 import servicoSalvarPlanoAnual from '../../servicoSalvarPlanoAnual';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DescricaoPlanejamento = React.memo(props => {
   const { dadosBimestre, tabAtualComponenteCurricular } = props;
   const { bimestre, periodoAberto } = dadosBimestre;
@@ -143,4 +144,4 @@ DescricaoPlanejamento.defaultProps = {
   tabAtualComponenteCurricular: {},
 };
 
-export default DescricaoPlanejamento;
+export default comDefaultProps(DescricaoPlanejamento, DescricaoPlanejamento.defaultProps);

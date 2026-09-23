@@ -10,6 +10,7 @@ import Button from '~/componentes/button';
 import { Colors } from '~/componentes/colors';
 import BotaoExcluirPadrao from '~/componentes-sgp/BotoesAcaoPadrao/botaoExcluirPadrao';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BotoesAcoesDiarioBordo = props => {
   const {
     onClickVoltar,
@@ -102,4 +103,4 @@ BotoesAcoesDiarioBordo.defaultProps = {
   id: '',
 };
 
-export default BotoesAcoesDiarioBordo;
+export default comDefaultProps(BotoesAcoesDiarioBordo, BotoesAcoesDiarioBordo.defaultProps);

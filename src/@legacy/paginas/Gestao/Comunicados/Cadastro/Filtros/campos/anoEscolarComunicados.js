@@ -8,6 +8,7 @@ import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
 import { erros, ServicoComunicados } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AnoEscolarComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaAnosEscolares, setListaAnosEscolares] = useState([]);
@@ -122,4 +123,4 @@ AnoEscolarComunicados.defaultProps = {
   desabilitar: false,
 };
 
-export default AnoEscolarComunicados;
+export default comDefaultProps(AnoEscolarComunicados, AnoEscolarComunicados.defaultProps);

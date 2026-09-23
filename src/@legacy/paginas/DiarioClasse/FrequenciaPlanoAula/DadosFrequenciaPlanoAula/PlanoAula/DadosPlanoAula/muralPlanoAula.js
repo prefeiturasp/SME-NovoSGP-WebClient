@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import MuralGoogleSalaAula from '~/componentes-sgp/MuralGoogleSalaAula/muralGoogleSalaAula';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const MuralPlanoAula = props => {
   const { aulaId } = props;
 
@@ -28,4 +29,4 @@ MuralPlanoAula.defaultProps = {
   aulaId: 0,
 };
 
-export default MuralPlanoAula;
+export default comDefaultProps(MuralPlanoAula, MuralPlanoAula.defaultProps);

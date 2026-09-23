@@ -22,6 +22,7 @@ import FiltrosAvancados from './filtrosAvancados';
 import { OPCAO_TODOS } from '~/constantes';
 import { onchangeMultiSelect } from '~/utils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const Filtros = ({ onChangeFiltros, temModalidadeEja }) => {
   const [anoAtual] = useState(window.moment().format('YYYY'));
   const [anoLetivo, setAnoLetivo] = useState();
@@ -509,4 +510,4 @@ Filtros.defaultProps = {
   temModalidadeEja: false,
 };
 
-export default Filtros;
+export default comDefaultProps(Filtros, Filtros.defaultProps);

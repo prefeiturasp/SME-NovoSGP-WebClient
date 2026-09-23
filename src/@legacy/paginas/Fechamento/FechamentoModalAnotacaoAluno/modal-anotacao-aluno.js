@@ -16,6 +16,7 @@ import Button from '~/componentes/button';
 import { EditorAnotacao } from './modal-anotacao-aluno.css';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalAnotacaoAluno = props => {
   const {
     exibirModal,
@@ -271,4 +272,4 @@ ModalAnotacaoAluno.defaultProps = {
   dadosAlunoSelecionado: null,
 };
 
-export default ModalAnotacaoAluno;
+export default comDefaultProps(ModalAnotacaoAluno, ModalAnotacaoAluno.defaultProps);

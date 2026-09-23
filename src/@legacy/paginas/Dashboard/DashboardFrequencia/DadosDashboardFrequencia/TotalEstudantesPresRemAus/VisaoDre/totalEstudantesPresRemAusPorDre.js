@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Base, CardCollapse } from '~/componentes';
 import GraficoTotalEstudantesPresenciasRemotosAusentes from '../graficototalEstudantesPresRemAus';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TotalEstudantesPresenciasRemotosAusentesPorDre = ({
   anoLetivo,
   dreId,
@@ -66,4 +67,4 @@ TotalEstudantesPresenciasRemotosAusentesPorDre.defaultProps = {
   ehInfantil: false,
 };
 
-export default TotalEstudantesPresenciasRemotosAusentesPorDre;
+export default comDefaultProps(TotalEstudantesPresenciasRemotosAusentesPorDre, TotalEstudantesPresenciasRemotosAusentesPorDre.defaultProps);

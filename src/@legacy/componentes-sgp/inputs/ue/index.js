@@ -5,7 +5,8 @@ import { OPCAO_TODOS } from '~/constantes';
 import { SGP_SELECT_UE } from '~/constantes/ids/select';
 import { AbrangenciaServico, erros } from '~/servicos';
 
-export const Ue = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const UeComponent = ({
   name,
   form,
   onChange,
@@ -110,7 +111,7 @@ export const Ue = ({
   );
 };
 
-Ue.propTypes = {
+UeComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
@@ -122,7 +123,7 @@ Ue.propTypes = {
   touchedInitialValue: PropTypes.bool,
 };
 
-Ue.defaultProps = {
+UeComponent.defaultProps = {
   form: null,
   name: 'ueCodigo',
   disabled: false,
@@ -133,3 +134,8 @@ Ue.defaultProps = {
   nameList: 'listaUes',
   touchedInitialValue: false,
 };
+
+export const Ue = comDefaultProps(
+  UeComponent,
+  UeComponent.defaultProps
+);

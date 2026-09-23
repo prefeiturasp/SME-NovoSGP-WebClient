@@ -8,6 +8,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros, ServicoDashboardFrequencia } from '~/servicos';
 import ServicoDashboardDiarioBordo from '~/servicos/Paginas/Dashboard/ServicoDashboardDiarioBordo';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoTotalDiariosBordoPorDRE = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -161,4 +162,4 @@ GraficoTotalDiariosBordoPorDRE.defaultProps = {
   modalidade: null,
 };
 
-export default GraficoTotalDiariosBordoPorDRE;
+export default comDefaultProps(GraficoTotalDiariosBordoPorDRE, GraficoTotalDiariosBordoPorDRE.defaultProps);

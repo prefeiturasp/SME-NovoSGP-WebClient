@@ -11,6 +11,7 @@ import ServicoAcompanhamentoFrequencia from '~/servicos/Paginas/DiarioClasse/Ser
 import { BtnVisualizarAnotacao, TabelaColunasFixas } from './listaAlunos.css';
 import { Loader } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AusenciasAluno = props => {
   const { indexLinha, componenteCurricularId, codigoAluno, turmaId, bimestre } =
     props;
@@ -161,4 +162,4 @@ AusenciasAluno.propTypes = {
   bimestre: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
-export default AusenciasAluno;
+export default comDefaultProps(AusenciasAluno, AusenciasAluno.defaultProps);
