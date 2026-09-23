@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Base } from '~/componentes/colors';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 import Label from './label';
 
@@ -146,4 +147,4 @@ RadioGroupButton.defaultProps = {
   setValueOnlyOnChange: false,
 };
 
-export default RadioGroupButton;
+export default comDefaultProps(RadioGroupButton, RadioGroupButton.defaultProps);

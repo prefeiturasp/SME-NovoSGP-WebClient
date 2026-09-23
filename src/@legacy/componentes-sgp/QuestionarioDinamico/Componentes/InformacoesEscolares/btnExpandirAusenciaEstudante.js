@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setQuestionarioDinamicoExpandirLinhaAusenciaEstudante } from '~/redux/modulos/questionarioDinamico/actions';
 import { ContainerColunaMotivoAusencia } from './informacoesEscolares.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BtnExpandirAusenciaEstudante = props => {
   const dispatch = useDispatch();
 
@@ -49,4 +50,4 @@ BtnExpandirAusenciaEstudante.propTypes = {
   indexLinha: null,
 };
 
-export default BtnExpandirAusenciaEstudante;
+export default comDefaultProps(BtnExpandirAusenciaEstudante, BtnExpandirAusenciaEstudante.defaultProps);

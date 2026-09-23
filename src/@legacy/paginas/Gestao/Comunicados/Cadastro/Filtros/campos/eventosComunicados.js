@@ -5,6 +5,7 @@ import { OPCAO_TODOS } from '~/constantes';
 import { erros } from '~/servicos';
 import ServicoComunicadoEvento from '~/servicos/Paginas/AcompanhamentoEscolar/ComunicadoEvento/ServicoComunicadoEvento';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaEventos, setListaEventos] = useState([]);
@@ -102,4 +103,4 @@ EventosComunicados.defaultProps = {
   desabilitar: false,
 };
 
-export default EventosComunicados;
+export default comDefaultProps(EventosComunicados, EventosComunicados.defaultProps);

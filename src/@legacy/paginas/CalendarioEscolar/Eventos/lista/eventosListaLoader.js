@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import { Loader } from '~/componentes';
 import EventosListaContext from './eventosListaContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const EventosListaLoader = props => {
   const { children } = props;
   const { exibirLoaderListaEventos } = useContext(EventosListaContext);
@@ -22,4 +23,4 @@ EventosListaLoader.defaultProps = {
   children: () => {},
 };
 
-export default EventosListaLoader;
+export default comDefaultProps(EventosListaLoader, EventosListaLoader.defaultProps);

@@ -6,6 +6,7 @@ import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ObjetivosEspecificosDesenvolvimentoAula = props => {
   const dispatch = useDispatch();
 
@@ -48,4 +49,4 @@ ObjetivosEspecificosDesenvolvimentoAula.defaultProps = {
   indexPlano: null,
 };
 
-export default ObjetivosEspecificosDesenvolvimentoAula;
+export default comDefaultProps(ObjetivosEspecificosDesenvolvimentoAula, ObjetivosEspecificosDesenvolvimentoAula.defaultProps);

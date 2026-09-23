@@ -5,7 +5,8 @@ import { erros } from '~/servicos/alertas';
 import PropTypes from 'prop-types';
 import { Loader } from '~/componentes';
 
-export default function TabelaIdebAnosAnteriores({ ueCodigo, anoLetivo }) {
+import comDefaultProps from '~/utils/comDefaultProps';
+function TabelaIdebAnosAnteriores({ ueCodigo, anoLetivo }) {
   const [dados, setDados] = useState([]);
   const [carregando, setCarregando] = useState(false);
 
@@ -55,3 +56,5 @@ TabelaIdebAnosAnteriores.defaultProps = {
   ueCodigo: null,
   anoLetivo: null,
 };
+
+export default comDefaultProps(TabelaIdebAnosAnteriores, TabelaIdebAnosAnteriores.defaultProps);

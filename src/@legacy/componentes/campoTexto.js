@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 import { maskSomenteTexto, maskTelefone, maskNota } from '~/utils';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { Base } from './colors';
 import Label from './label';
 
@@ -251,4 +252,4 @@ CampoTexto.defaultProps = {
   autoFocus: false,
 };
 
-export default CampoTexto;
+export default comDefaultProps(CampoTexto, CampoTexto.defaultProps);

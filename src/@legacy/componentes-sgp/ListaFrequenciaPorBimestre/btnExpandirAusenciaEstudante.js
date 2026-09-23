@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setExpandirLinhaAusenciaEstudante } from '~/redux/modulos/listaFrequenciaPorBimestre/actions';
 import { ContainerColunaMotivoAusencia } from './listaFrequenciaPorBimestre.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BtnExpandirAusenciaEstudante = props => {
   const dispatch = useDispatch();
 
@@ -45,4 +46,4 @@ BtnExpandirAusenciaEstudante.propTypes = {
   indexLinha: '',
 };
 
-export default BtnExpandirAusenciaEstudante;
+export default comDefaultProps(BtnExpandirAusenciaEstudante, BtnExpandirAusenciaEstudante.defaultProps);

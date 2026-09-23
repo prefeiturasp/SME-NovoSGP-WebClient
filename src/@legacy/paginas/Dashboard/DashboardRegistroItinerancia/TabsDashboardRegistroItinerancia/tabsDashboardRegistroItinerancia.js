@@ -5,6 +5,7 @@ import { ContainerTabsCard } from '~/componentes/tabs/style';
 import { ContainerTabsDashboard } from '../../style';
 import GraficosRegistroItinerancia from './GraficosRegistroItinerancia/graficosRegistroItinerancia';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const { TabPane } = Tabs;
 
 const TabsDashboardRegistroItinerancia = props => {
@@ -67,4 +68,4 @@ TabsDashboardRegistroItinerancia.defaultProps = {
   mesSelecionado: '',
 };
 
-export default TabsDashboardRegistroItinerancia;
+export default comDefaultProps(TabsDashboardRegistroItinerancia, TabsDashboardRegistroItinerancia.defaultProps);

@@ -10,6 +10,7 @@ import {
 } from '~/paginas/Dashboard/ComponentesDashboard/graficosDashboardUtils';
 import { erros } from '~/servicos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const MontarGraficoBarras = props => {
   const {
     anoLetivo,
@@ -238,4 +239,4 @@ MontarGraficoBarras.defaultProps = {
   mapearDados: null,
 };
 
-export default MontarGraficoBarras;
+export default comDefaultProps(MontarGraficoBarras, MontarGraficoBarras.defaultProps);

@@ -4,6 +4,7 @@ import { Field } from 'formik';
 import PropTypes from 'prop-types';
 import React, { useRef } from 'react';
 import styled, { css } from 'styled-components';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { Base } from './colors';
 import Label from './label';
 
@@ -197,4 +198,4 @@ CampoNumero.defaultProps = {
   placeholder: '',
 };
 
-export default CampoNumero;
+export default comDefaultProps(CampoNumero, CampoNumero.defaultProps);

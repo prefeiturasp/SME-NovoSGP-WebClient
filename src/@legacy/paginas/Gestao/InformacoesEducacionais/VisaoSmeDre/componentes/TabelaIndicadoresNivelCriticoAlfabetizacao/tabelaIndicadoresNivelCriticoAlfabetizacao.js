@@ -5,6 +5,7 @@ import { erros } from '~/servicos';
 import { Loader } from '~/componentes';
 import ServicoNivelAlfabetizacao from '~/servicos/InformacoesEducacionais/ServicoNivelAlfabetizacao';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TabelaIndicadoresNivelCriticoAlfabetizacao = ({
   codigoDre,
   codigoUe,
@@ -136,4 +137,4 @@ TabelaIndicadoresNivelCriticoAlfabetizacao.defaultProps = {
   codigoUe: null,
 };
 
-export default TabelaIndicadoresNivelCriticoAlfabetizacao;
+export default comDefaultProps(TabelaIndicadoresNivelCriticoAlfabetizacao, TabelaIndicadoresNivelCriticoAlfabetizacao.defaultProps);

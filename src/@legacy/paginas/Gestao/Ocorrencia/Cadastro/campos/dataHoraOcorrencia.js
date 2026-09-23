@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { CampoData } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DataHoraOcorrencia = ({ form, onChangeCampos, desabilitar }) => {
   const desabilitarData = current => {
     if (current) {
@@ -57,4 +58,4 @@ DataHoraOcorrencia.defaultProps = {
   onChangeCampos: () => null,
 };
 
-export default DataHoraOcorrencia;
+export default comDefaultProps(DataHoraOcorrencia, DataHoraOcorrencia.defaultProps);

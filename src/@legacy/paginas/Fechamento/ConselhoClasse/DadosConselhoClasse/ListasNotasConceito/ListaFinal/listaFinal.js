@@ -16,6 +16,7 @@ import LinhaJustificativa from '../../Justificativa/LinhaJustificativa/LinhaJust
 import { MarcadorTriangulo } from '~/componentes';
 import { moverFocoCampoNotaConselhoClasse } from '~/componentes-sgp/inputs/nota/funcoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaFinal = props => {
   const {
     dadosLista,
@@ -334,4 +335,4 @@ ListaFinal.defaultProps = {
   componentesAgrupados: null,
 };
 
-export default ListaFinal;
+export default comDefaultProps(ListaFinal, ListaFinal.defaultProps);

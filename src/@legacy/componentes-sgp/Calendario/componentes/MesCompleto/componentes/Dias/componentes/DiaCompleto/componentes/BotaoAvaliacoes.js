@@ -2,6 +2,7 @@ import t from 'prop-types';
 import { useCallback } from 'react';
 import shortid from 'shortid';
 import styled from 'styled-components';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 // Ant
 import { Tooltip } from 'antd';
@@ -94,4 +95,4 @@ BotaoAvaliacoes.defaultProps = {
   permissaoTela: {},
 };
 
-export default BotaoAvaliacoes;
+export default comDefaultProps(BotaoAvaliacoes, BotaoAvaliacoes.defaultProps);

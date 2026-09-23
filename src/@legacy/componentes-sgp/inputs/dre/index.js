@@ -6,7 +6,8 @@ import { OPCAO_TODOS } from '~/constantes';
 import { SGP_SELECT_DRE } from '~/constantes/ids/select';
 import { AbrangenciaServico, erros } from '~/servicos';
 
-export const Dre = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const DreComponent = ({
   name,
   form,
   onChange,
@@ -96,7 +97,7 @@ export const Dre = ({
   );
 };
 
-Dre.propTypes = {
+DreComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
@@ -107,7 +108,7 @@ Dre.propTypes = {
   nameList: PropTypes.string,
 };
 
-Dre.defaultProps = {
+DreComponent.defaultProps = {
   form: null,
   disabled: false,
   showSearch: true,
@@ -117,3 +118,8 @@ Dre.defaultProps = {
   mostrarOpcaoTodas: true,
   nameList: 'listaDres',
 };
+
+export const Dre = comDefaultProps(
+  DreComponent,
+  DreComponent.defaultProps
+);

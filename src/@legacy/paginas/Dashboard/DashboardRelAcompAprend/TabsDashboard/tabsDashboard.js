@@ -5,6 +5,7 @@ import { ContainerTabsCard } from '~/componentes/tabs/style';
 import { ContainerTabsDashboard } from '../../style';
 import GraficosAcompanhamentoAprendizagem from './Graficos/graficosAcompAprend';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const { TabPane } = Tabs;
 
 const TabsDashboardRelAcompanhamentoAprendizagem = props => {
@@ -69,4 +70,4 @@ TabsDashboardRelAcompanhamentoAprendizagem.defaultProps = {
   dataUltimaConsolidacao: null,
 };
 
-export default TabsDashboardRelAcompanhamentoAprendizagem;
+export default comDefaultProps(TabsDashboardRelAcompanhamentoAprendizagem, TabsDashboardRelAcompanhamentoAprendizagem.defaultProps);

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import FiltroHelper from '~/componentes-sgp/filtro/helper';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { SelectComponent, Loader } from '~/componentes';
 
@@ -68,4 +69,4 @@ AnoLetivoDropDown.defaultProps = {
   consideraHistorico: false,
 };
 
-export default AnoLetivoDropDown;
+export default comDefaultProps(AnoLetivoDropDown, AnoLetivoDropDown.defaultProps);

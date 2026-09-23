@@ -5,6 +5,7 @@ import CardCollapse from '~/componentes/cardCollapse';
 import MontarGraficoBarras from '~/paginas/Dashboard/ComponentesDashboard/montarGraficoBarras';
 import ServicoDashboardAEE from '~/servicos/Paginas/Dashboard/ServicoDashboardAEE';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const QuantidadePlanosUtilizamRecursosAcessibilidadeSalaRegularSRM = props => {
   const { anoLetivo, dreId, ueId } = props;
 
@@ -66,4 +67,4 @@ QuantidadePlanosUtilizamRecursosAcessibilidadeSalaRegularSRM.defaultProps = {
   ueId: '',
 };
 
-export default QuantidadePlanosUtilizamRecursosAcessibilidadeSalaRegularSRM;
+export default comDefaultProps(QuantidadePlanosUtilizamRecursosAcessibilidadeSalaRegularSRM, QuantidadePlanosUtilizamRecursosAcessibilidadeSalaRegularSRM.defaultProps);

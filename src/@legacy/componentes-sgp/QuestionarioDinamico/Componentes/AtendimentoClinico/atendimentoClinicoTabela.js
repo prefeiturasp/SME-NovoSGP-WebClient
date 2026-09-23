@@ -11,6 +11,7 @@ import { confirmar } from '~/servicos';
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 import ModalCadastroAtendimentoClinico from './modalCadastroAtendimentoClinico';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AtendimentoClinicoTabela = props => {
   const { label, questaoAtual, form, desabilitado, onChange } = props;
 
@@ -199,4 +200,4 @@ AtendimentoClinicoTabela.defaultProps = {
   onChange: () => {},
 };
 
-export default AtendimentoClinicoTabela;
+export default comDefaultProps(AtendimentoClinicoTabela, AtendimentoClinicoTabela.defaultProps);

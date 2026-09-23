@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { ContainerLegendaGrafico } from './legendaGrafico.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LegendaGrafico = props => {
   const { orizontal, dados } = props;
 
@@ -77,4 +78,4 @@ LegendaGrafico.defaultProps = {
   dados: null,
 };
 
-export default LegendaGrafico;
+export default comDefaultProps(LegendaGrafico, LegendaGrafico.defaultProps);

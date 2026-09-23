@@ -9,6 +9,7 @@ import { setExibirLoaderFrequenciaPlanoAula } from '~/redux/modulos/frequenciaPl
 import { erros, sucesso } from '~/servicos/alertas';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 export const BotaoGerarRelatorio = styled(Button)`
   i {
     margin-right: 0px !important;
@@ -54,4 +55,4 @@ BotaoGerarRelatorioPlanoAula.defaultProps = {
   planoAulaId: 0,
 };
 
-export default BotaoGerarRelatorioPlanoAula;
+export default comDefaultProps(BotaoGerarRelatorioPlanoAula, BotaoGerarRelatorioPlanoAula.defaultProps);

@@ -10,6 +10,7 @@ import { CardTabelaAlunos } from '../styles';
 import BtnEditarCompensacoes from './btnEditarCompensacoes';
 import ServicoCompensacaoAusencia from '~/servicos/Paginas/DiarioClasse/ServicoCompensacaoAusencia';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaAlunosAusenciasCompensadas = props => {
   const {
     listaAusenciaCompensada,
@@ -224,4 +225,4 @@ ListaAlunosAusenciasCompensadas.defaultProps = {
   desabilitarCampos: false,
 };
 
-export default ListaAlunosAusenciasCompensadas;
+export default comDefaultProps(ListaAlunosAusenciasCompensadas, ListaAlunosAusenciasCompensadas.defaultProps);

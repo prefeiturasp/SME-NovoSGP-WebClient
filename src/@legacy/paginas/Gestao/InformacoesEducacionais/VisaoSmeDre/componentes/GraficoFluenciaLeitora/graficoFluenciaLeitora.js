@@ -6,6 +6,7 @@ import { erros } from '~/servicos';
 import ServicoFluenciaLeituraGrafico from '~/servicos/InformacoesEducacionais/ServicoFluenciaLeituraGrafico';
 import { SelectComponent } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const listaPeriodicidade = [
   { valor: 1, desc: 'Avaliação de entrada' },
   { valor: 2, desc: 'Avaliação de saída ' },
@@ -152,4 +153,4 @@ GraficoFluenciaLeitora.defaultProps = {
   anoLetivo: new Date().getFullYear(),
 };
 
-export default GraficoFluenciaLeitora;
+export default comDefaultProps(GraficoFluenciaLeitora, GraficoFluenciaLeitora.defaultProps);

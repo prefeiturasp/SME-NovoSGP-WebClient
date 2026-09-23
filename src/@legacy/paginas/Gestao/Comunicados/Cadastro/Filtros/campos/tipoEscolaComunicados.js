@@ -7,6 +7,7 @@ import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
 import { erros, ServicoComunicados } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TipoEscolaComunicados = ({
   form,
   onChangeCampos,
@@ -126,4 +127,4 @@ TipoEscolaComunicados.defaultProps = {
   comunicadoId: '',
 };
 
-export default TipoEscolaComunicados;
+export default comDefaultProps(TipoEscolaComunicados, TipoEscolaComunicados.defaultProps);

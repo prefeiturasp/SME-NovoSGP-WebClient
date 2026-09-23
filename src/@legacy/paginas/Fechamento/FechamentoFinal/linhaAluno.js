@@ -16,6 +16,7 @@ import ColunaNotaFinalRegencia from './colunaNotaFinalRegencia';
 import { Info } from './fechamentoFinal.css';
 import LinhaConceitoFinal from './linhaConceitoFinal';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LinhaAluno = ({
   dados,
   aluno,
@@ -254,4 +255,4 @@ LinhaAluno.defaultProps = {
   dadosFechamentoFinal: null,
 };
 
-export default LinhaAluno;
+export default comDefaultProps(LinhaAluno, LinhaAluno.defaultProps);

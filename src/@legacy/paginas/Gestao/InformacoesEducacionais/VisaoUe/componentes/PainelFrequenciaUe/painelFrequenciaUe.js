@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import CardCollapse from '~/componentes/cardCollapse';
 import { Base } from '~/componentes';
 import PainelFrequenciaBase from '~/paginas/Gestao/InformacoesEducacionais/shared/PainelFrequenciaBase/PainelFrequenciaBase';
+import comDefaultProps from '~/utils/comDefaultProps';
 import '~/paginas/Gestao/InformacoesEducacionais/shared/PainelFrequenciaBase/painelFrequenciaBase.css';
 
-export default function PainelFrequenciaUe({ ueCodigo, anoLetivo, nomeUe }) {
+function PainelFrequenciaUe({ ueCodigo, anoLetivo, nomeUe }) {
   const [exibirCard, setExibirCard] = useState(false);
 
   const configCabecalho = {
@@ -32,3 +33,5 @@ PainelFrequenciaUe.defaultProps = {
   ueCodigo: null,
   anoLetivo: null,
 };
+
+export default comDefaultProps(PainelFrequenciaUe, PainelFrequenciaUe.defaultProps);

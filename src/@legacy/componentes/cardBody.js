@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const CardBody = props => {
   const { children, className, style } = props;
@@ -19,4 +20,4 @@ CardBody.defaultProps = {
   children: () => {},
 };
 
-export default CardBody;
+export default comDefaultProps(CardBody, CardBody.defaultProps);

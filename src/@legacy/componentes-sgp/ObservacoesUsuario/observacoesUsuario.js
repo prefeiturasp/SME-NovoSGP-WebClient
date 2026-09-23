@@ -5,6 +5,7 @@ import CampoObservacao from './campoObservacao';
 import { ContainerObservacoesUsuario } from './observacoesUsuario.css';
 import ObservacoesUsuarioMontarDados from './observacoesUsuarioMontarDados';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ObservacoesUsuario = props => {
   const {
     salvarObservacao,
@@ -106,4 +107,4 @@ ObservacoesUsuario.defaultProps = {
   ueId: '',
 };
 
-export default ObservacoesUsuario;
+export default comDefaultProps(ObservacoesUsuario, ObservacoesUsuario.defaultProps);

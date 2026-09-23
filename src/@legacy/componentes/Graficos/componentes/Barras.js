@@ -3,6 +3,7 @@ import t from 'prop-types';
 
 // Nivo
 import { ResponsiveBar } from '@nivo/bar';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 function Barras({
   dados,
@@ -85,10 +86,8 @@ function Barras({
         },
       ]}
       animate
-      motionStiffness={90}
-      motionDamping={15}
-      labelFormat={porcentagem ? format : ''}
-      tooltipFormat={porcentagem ? format : ''}
+      motionConfig="gentle"
+      valueFormat={porcentagem ? format : v => `${v}`}
       {...customProps}
     />
   );
@@ -128,4 +127,4 @@ Barras.defaultProps = {
   labelSkipHeight: 12,
 };
 
-export default Barras;
+export default comDefaultProps(Barras, Barras.defaultProps);

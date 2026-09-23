@@ -6,6 +6,7 @@ import notasConceitos from '~/dtos/notasConceitos';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 import { obterDescricaoConceito } from '~/paginas/DiarioClasse/Listao/listaoFuncoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 export const ContainerDescConceito = styled.div`
   padding: 7px 7px 7px 7px;
   border-radius: 3px;
@@ -82,4 +83,4 @@ ColunaNotaConceitoPorBimestre.defaultProps = {
   listaTiposConceitos: [],
 };
 
-export default ColunaNotaConceitoPorBimestre;
+export default comDefaultProps(ColunaNotaConceitoPorBimestre, ColunaNotaConceitoPorBimestre.defaultProps);

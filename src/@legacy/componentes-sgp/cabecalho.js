@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { Affix } from 'antd';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -116,15 +117,6 @@ const Cabecalho = ({
   );
 };
 
-Cabecalho.defaultProps = {
-  titulo: '',
-  pagina: '',
-  children: '',
-  classes: '',
-  removeAffix: false,
-  style: {},
-};
-
 Cabecalho.propTypes = {
   titulo: PropTypes.string,
   pagina: PropTypes.string,
@@ -133,4 +125,12 @@ Cabecalho.propTypes = {
   removeAffix: PropTypes.bool,
   style: PropTypes.oneOfType([PropTypes.any]),
 };
-export default Cabecalho;
+
+export default comDefaultProps(Cabecalho, {
+  titulo: '',
+  pagina: '',
+  children: '',
+  classes: '',
+  removeAffix: false,
+  style: {},
+});

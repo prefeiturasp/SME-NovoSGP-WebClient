@@ -6,7 +6,8 @@ import { SGP_SELECT_MODALIDADE } from '~/constantes/ids/select';
 import { erros, ServicoFiltroRelatorio } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 
-export const Modalidade = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const ModalidadeComponent = ({
   name,
   form,
   onChange,
@@ -113,7 +114,7 @@ export const Modalidade = ({
   );
 };
 
-Modalidade.propTypes = {
+ModalidadeComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
@@ -125,7 +126,7 @@ Modalidade.propTypes = {
   multiple: PropTypes.bool,
 };
 
-Modalidade.defaultProps = {
+ModalidadeComponent.defaultProps = {
   form: null,
   disabled: false,
   showSearch: true,
@@ -136,3 +137,8 @@ Modalidade.defaultProps = {
   nameList: 'listaModalidades',
   multiple: false,
 };
+
+export const Modalidade = comDefaultProps(
+  ModalidadeComponent,
+  ModalidadeComponent.defaultProps
+);

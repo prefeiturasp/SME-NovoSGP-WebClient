@@ -7,7 +7,8 @@ import {
   SGP_DATE_INICIO_OCORRENCIA,
 } from '~/constantes/ids/date';
 
-export const DataOcorrencia = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const DataOcorrenciaComponent = ({
   form,
   disabled,
   onChangeDataInicio,
@@ -67,16 +68,21 @@ export const DataOcorrencia = ({
   );
 };
 
-DataOcorrencia.propTypes = {
+DataOcorrenciaComponent.propTypes = {
   form: PropTypes.oneOfType([PropTypes.any]),
   disabled: PropTypes.bool,
   onChangeDataInicio: PropTypes.func,
   onChangeDataFim: PropTypes.func,
 };
 
-DataOcorrencia.defaultProps = {
+DataOcorrenciaComponent.defaultProps = {
   form: null,
   disabled: false,
   onChangeDataInicio: () => null,
   onChangeDataFim: () => null,
 };
+
+export const DataOcorrencia = comDefaultProps(
+  DataOcorrenciaComponent,
+  DataOcorrenciaComponent.defaultProps
+);

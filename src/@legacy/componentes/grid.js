@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const Grid = props => {
   const { cols, className, children, style } = props;
@@ -27,4 +28,4 @@ Grid.defaultProps = {
   style: null,
 };
 
-export default Grid;
+export default comDefaultProps(Grid, Grid.defaultProps);

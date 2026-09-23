@@ -13,6 +13,7 @@ import RelatorioDinamicoNAAPAContext from '../relatorioDinamicoNAAPAContext';
 import CollapseRelatorioDinamicoNAAPAFormDinamico from './collapseFormDinamico';
 import RelatorioDinamicoNAAPALista from './relatorioDinamicoNAAPALista';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioDinamicoNAAPAFormDinamico = props => {
   const { setListaSecoesParaDesabilitar } = useContext(
     RelatorioDinamicoNAAPAContext
@@ -135,4 +136,4 @@ RelatorioDinamicoNAAPAFormDinamico.defaultProps = {
   form: null,
 };
 
-export default RelatorioDinamicoNAAPAFormDinamico;
+export default comDefaultProps(RelatorioDinamicoNAAPAFormDinamico, RelatorioDinamicoNAAPAFormDinamico.defaultProps);

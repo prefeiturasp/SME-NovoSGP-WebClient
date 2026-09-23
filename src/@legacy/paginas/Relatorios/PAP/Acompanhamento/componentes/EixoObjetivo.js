@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import t from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { Base } from '~/componentes/colors';
 
@@ -66,4 +67,4 @@ EixoObjetivo.defaultProps = {
   objetivo: {},
 };
 
-export default EixoObjetivo;
+export default comDefaultProps(EixoObjetivo, EixoObjetivo.defaultProps);

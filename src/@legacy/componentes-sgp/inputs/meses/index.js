@@ -5,7 +5,8 @@ import { SGP_SELECT_MESES } from '~/constantes/ids/select';
 import { obterTodosMeses, onchangeMultiSelect } from '@/@legacy/utils';
 import { OPCAO_TODOS } from '@/@legacy/constantes';
 
-export const Meses = ({ form, onChange, multiple, disabled }) => {
+import comDefaultProps from '~/utils/comDefaultProps';
+const MesesComponent = ({ form, onChange, multiple, disabled }) => {
   const [lista, setLista] = useState([]);
 
   const montarMeses = useCallback(() => {
@@ -54,16 +55,21 @@ export const Meses = ({ form, onChange, multiple, disabled }) => {
   );
 };
 
-Meses.propTypes = {
+MesesComponent.propTypes = {
   onChange: PropTypes.func,
   form: PropTypes.oneOfType([PropTypes.any]),
   multiple: PropTypes.bool,
   disabled: PropTypes.bool,
 };
 
-Meses.defaultProps = {
+MesesComponent.defaultProps = {
   form: null,
   onChange: () => null,
   multiple: true,
   disabled: false,
 };
+
+export const Meses = comDefaultProps(
+  MesesComponent,
+  MesesComponent.defaultProps
+);

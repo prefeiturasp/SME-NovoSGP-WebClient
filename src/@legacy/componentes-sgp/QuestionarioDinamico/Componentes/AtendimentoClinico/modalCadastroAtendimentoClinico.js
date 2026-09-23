@@ -14,6 +14,7 @@ import {
 } from '~/componentes';
 import Button from '~/componentes/button';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalCadastroAtendimentoClinico = props => {
   const { onClose, exibirModal, dadosIniciais } = props;
 
@@ -207,4 +208,4 @@ ModalCadastroAtendimentoClinico.defaultProps = {
   dadosIniciais: null,
 };
 
-export default ModalCadastroAtendimentoClinico;
+export default comDefaultProps(ModalCadastroAtendimentoClinico, ModalCadastroAtendimentoClinico.defaultProps);

@@ -7,6 +7,7 @@ import { erros } from '~/servicos/alertas';
 import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoConselhoClasse';
 import ComponenteSemNota from './ComponenteSemNota/ComponenteSemNota';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const Sintese = props => {
   const { ehFinal, turmaId, bimestreSelecionado } = props;
 
@@ -89,4 +90,4 @@ Sintese.defaultProps = {
   bimestreSelecionado: 0,
 };
 
-export default Sintese;
+export default comDefaultProps(Sintese, Sintese.defaultProps);

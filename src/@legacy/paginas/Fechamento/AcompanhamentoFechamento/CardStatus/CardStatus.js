@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Container } from './cardStatus.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CardStatus = ({ dadosStatus, statusAcompanhamento }) => {
   const [corStatus, setCorStatus] = useState('');
 
@@ -36,4 +37,4 @@ CardStatus.defaultProps = {
   dadosStatus: [],
   statusAcompanhamento: {},
 };
-export default CardStatus;
+export default comDefaultProps(CardStatus, CardStatus.defaultProps);

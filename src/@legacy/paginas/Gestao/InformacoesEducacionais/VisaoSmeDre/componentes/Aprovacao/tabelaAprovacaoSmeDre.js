@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Table } from 'antd';
 import PropTypes from 'prop-types';
 import ServicoAprovacao from '~/servicos/InformacoesEducacionais/ServicoAprovacao';
+import comDefaultProps from '~/utils/comDefaultProps';
 import './tabelaAprovacaoSmeDre.css';
 
 function montarColunasAgrupadas() {
@@ -175,4 +176,4 @@ TabelaAprovacaoSmeDre.defaultProps = {
   anoLetivo: null,
 };
 
-export default TabelaAprovacaoSmeDre;
+export default comDefaultProps(TabelaAprovacaoSmeDre, TabelaAprovacaoSmeDre.defaultProps);

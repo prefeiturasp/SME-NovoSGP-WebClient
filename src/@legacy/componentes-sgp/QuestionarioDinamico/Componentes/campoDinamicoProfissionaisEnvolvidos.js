@@ -6,6 +6,7 @@ import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes'
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import { erros } from '~/servicos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CampoDinamicoProfissionaisEnvolvidos = props => {
   const {
     questaoAtual,
@@ -105,4 +106,4 @@ CampoDinamicoProfissionaisEnvolvidos.defaultProps = {
   onChange: () => {},
 };
 
-export default CampoDinamicoProfissionaisEnvolvidos;
+export default comDefaultProps(CampoDinamicoProfissionaisEnvolvidos, CampoDinamicoProfissionaisEnvolvidos.defaultProps);

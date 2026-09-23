@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Alert from '~/componentes/alert';
 import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AlertaPermiteSomenteTurmaInfantil = props => {
   const { turmaSelecionada } = useSelector(store => store.usuario);
 
@@ -55,4 +56,4 @@ AlertaPermiteSomenteTurmaInfantil.defaultProps = {
   validarModalidadeFiltroPrincipal: true,
 };
 
-export default AlertaPermiteSomenteTurmaInfantil;
+export default comDefaultProps(AlertaPermiteSomenteTurmaInfantil, AlertaPermiteSomenteTurmaInfantil.defaultProps);

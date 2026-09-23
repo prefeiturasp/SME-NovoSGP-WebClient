@@ -9,6 +9,7 @@ import ModalAnotacoesQuestionarioDinamico from './modalAnotacoesQuestionarioDina
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 import { formatarFrequencia } from '~/utils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const InformacoesEscolares = props => {
   const [dados, setDados] = useState([]);
   const { codigoAluno, codigoTurma, anoLetivo, questaoAtual } = props;
@@ -133,4 +134,4 @@ InformacoesEscolares.defaultProps = {
   questaoAtual: null,
 };
 
-export default InformacoesEscolares;
+export default comDefaultProps(InformacoesEscolares, InformacoesEscolares.defaultProps);

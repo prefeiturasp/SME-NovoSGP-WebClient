@@ -17,6 +17,7 @@ import { confirmar } from '~/servicos';
 import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/AcompanhamentoAprendizagem/ServicoAcompanhamentoAprendizagem';
 import { useNavigate } from 'react-router-dom';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BotoesAcoesAcompanhamentoAprendizagem = props => {
   const {
     semestreSelecionado,
@@ -170,4 +171,4 @@ BotoesAcoesAcompanhamentoAprendizagem.defaultProps = {
   componenteCurricularId: '',
 };
 
-export default BotoesAcoesAcompanhamentoAprendizagem;
+export default comDefaultProps(BotoesAcoesAcompanhamentoAprendizagem, BotoesAcoesAcompanhamentoAprendizagem.defaultProps);

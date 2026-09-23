@@ -5,7 +5,8 @@ import { SGP_SELECT_TIPO_DOCUMENTO } from '~/constantes/ids/select';
 import { erros } from '~/servicos';
 import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
 
-export const TipoDocumento = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const TipoDocumentoComponent = ({
   name,
   form,
   onChange,
@@ -113,7 +114,7 @@ export const TipoDocumento = ({
   );
 };
 
-TipoDocumento.propTypes = {
+TipoDocumentoComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
@@ -123,7 +124,7 @@ TipoDocumento.propTypes = {
   nameList: PropTypes.string,
 };
 
-TipoDocumento.defaultProps = {
+TipoDocumentoComponent.defaultProps = {
   form: null,
   disabled: false,
   showSearch: true,
@@ -132,3 +133,8 @@ TipoDocumento.defaultProps = {
   name: 'tipoDocumentoId',
   nameList: 'listaTipoDocumento',
 };
+
+export const TipoDocumento = comDefaultProps(
+  TipoDocumentoComponent,
+  TipoDocumentoComponent.defaultProps
+);

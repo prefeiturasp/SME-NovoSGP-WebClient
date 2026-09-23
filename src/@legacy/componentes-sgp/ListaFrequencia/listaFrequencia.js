@@ -20,6 +20,7 @@ import { formatarFrequencia } from '~/utils';
 import { setTemEstudanteAlteradoComCompensacao } from '~/redux/modulos/frequenciaPlanoAula/actions';
 import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaFrequencia = props => {
   const {
     onChangeFrequencia,
@@ -416,4 +417,4 @@ ListaFrequencia.defaultProps = {
   setDataSource: () => {},
 };
 
-export default ListaFrequencia;
+export default comDefaultProps(ListaFrequencia, ListaFrequencia.defaultProps);

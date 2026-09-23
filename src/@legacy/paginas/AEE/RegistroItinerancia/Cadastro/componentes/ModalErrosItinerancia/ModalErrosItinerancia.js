@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ModalMultiLinhas } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalErrosItinerancia = ({ erros, modalVisivel, setModalVisivel }) => {
   return (
     <ModalMultiLinhas
@@ -27,4 +28,4 @@ ModalErrosItinerancia.propTypes = {
   erros: PropTypes.oneOfType([PropTypes.any]),
 };
 
-export default ModalErrosItinerancia;
+export default comDefaultProps(ModalErrosItinerancia, ModalErrosItinerancia.defaultProps);

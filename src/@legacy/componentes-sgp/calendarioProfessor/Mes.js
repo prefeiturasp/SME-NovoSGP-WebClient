@@ -8,6 +8,7 @@ import {
   selecionaDia,
 } from '~/redux/modulos/calendarioProfessor/actions';
 import { Base } from '~/componentes/colors';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const Div = styled.div``;
 const Icone = styled.i``;
@@ -121,4 +122,4 @@ Mes.defaultProps = {
   filtros: {},
 };
 
-export default Mes;
+export default comDefaultProps(Mes, Mes.defaultProps);

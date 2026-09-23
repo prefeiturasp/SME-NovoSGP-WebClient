@@ -1,5 +1,6 @@
 import React from 'react';
 import t from 'prop-types';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 // Ant
 import { Tooltip } from 'antd';
@@ -81,4 +82,4 @@ Dia.defaultProps = {
   onClick: () => {},
 };
 
-export default Dia;
+export default comDefaultProps(Dia, Dia.defaultProps);

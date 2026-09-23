@@ -7,6 +7,7 @@ import BtnExpandirAusenciaEstudante from './btnExpandirAusenciaEstudante';
 import { TabelaColunasFixas } from './listaFrequenciaPorBimestre.css';
 import ModalAnotacoes from './modalAnotacoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaFrequenciaPorBimestre = props => {
   const {
     dados,
@@ -114,4 +115,4 @@ ListaFrequenciaPorBimestre.defaultProps = {
   esconderBimestre: false,
 };
 
-export default ListaFrequenciaPorBimestre;
+export default comDefaultProps(ListaFrequenciaPorBimestre, ListaFrequenciaPorBimestre.defaultProps);

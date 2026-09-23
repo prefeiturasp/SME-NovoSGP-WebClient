@@ -3,6 +3,7 @@ import { Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useCallback, useEffect, useState } from 'react';
 import SelectComponent from '~/componentes/select';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const CampoConceitoFinal = props => {
   const {
@@ -118,4 +119,4 @@ CampoConceitoFinal.propTypes = {
   montaNotaConceitoFinal: () => {},
 };
 
-export default CampoConceitoFinal;
+export default comDefaultProps(CampoConceitoFinal, CampoConceitoFinal.defaultProps);

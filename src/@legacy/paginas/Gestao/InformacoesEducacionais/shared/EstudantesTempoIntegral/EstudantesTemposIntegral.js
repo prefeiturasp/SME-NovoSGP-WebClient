@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import './EstudantesTemposIntegral.css';
 import ServicoEstudantesTempoIntegral from '~/servicos/InformacoesEducacionais/ServicoEstudantesTempoIntegral';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function formataNumero(valor) {
   if (typeof valor !== 'number') return valor;
   return valor.toLocaleString('pt-BR');
@@ -200,4 +201,4 @@ EstudantesIntegral.defaultProps = {
   anoLetivo: null,
 };
 
-export default EstudantesIntegral;
+export default comDefaultProps(EstudantesIntegral, EstudantesIntegral.defaultProps);

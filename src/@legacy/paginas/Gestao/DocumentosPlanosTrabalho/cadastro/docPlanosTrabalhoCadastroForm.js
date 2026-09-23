@@ -22,6 +22,7 @@ import { TIPO_DOCUMENTO } from '~/constantes';
 import { SGP_UPLOAD_DOCUMENTOS_PLANOS_DE_TRABALHO } from '~/constantes/ids/upload';
 import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DocPlanosTrabalhoCadastroForm = props => {
   const {
     form,
@@ -296,4 +297,4 @@ DocPlanosTrabalhoCadastroForm.defaultProps = {
   setExibirLoader: null,
 };
 
-export default DocPlanosTrabalhoCadastroForm;
+export default comDefaultProps(DocPlanosTrabalhoCadastroForm, DocPlanosTrabalhoCadastroForm.defaultProps);
