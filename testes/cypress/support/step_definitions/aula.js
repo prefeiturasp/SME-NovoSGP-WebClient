@@ -122,7 +122,7 @@ When(
       method: 'GET',
       url:
         Cypress.config('baseUrl') +
-        `/api/v1/calendarios/professores/aulas/${Cypress.env('AULA_ID')}/turmas/3019147/componente-curricular/${componenteCurricularId}?dataAula=${dataAula}&tipoAula=1`,
+        `/api/v1/calendarios/professores/aulas/${Cypress.env('AULA_ID')}/turmas/3019147/componente-curricular/${componenteCurricularId}?dataAula=${dataAula}&ehRegencia=true&tipoAula=1`,
       headers: {
         accept: 'text/plain',
         Authorization: `Bearer ${token}`,
