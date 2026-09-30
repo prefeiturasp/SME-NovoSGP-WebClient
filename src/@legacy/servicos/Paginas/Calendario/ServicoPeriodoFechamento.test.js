@@ -18,7 +18,7 @@ describe('ServicoPeriodoFechamento', () => {
 
       const resposta = await ServicoPeriodoFechamento.obterPorTipoCalendario(5);
 
-      expect(api.get).toHaveBeenCalledWith('/v1/periodos/fechamentos/aberturas?tipoCalendarioId=5');
+      expect(api.get).toHaveBeenCalledWith('/v1/periodos/fechamentos/aberturas?tipoCalendarioId=5&aplicacao=1');
       expect(resposta.data).toEqual(['fechamento1']);
     });
   });
@@ -30,7 +30,10 @@ describe('ServicoPeriodoFechamento', () => {
 
       const resposta = await ServicoPeriodoFechamento.salvar(fechamento);
 
-      expect(api.post).toHaveBeenCalledWith('/v1/periodos/fechamentos/aberturas', fechamento);
+      expect(api.post).toHaveBeenCalledWith('/v1/periodos/fechamentos/aberturas', {
+        ...fechamento,
+        aplicacao: 1,
+      });
       expect(resposta.data).toEqual({ sucesso: true });
     });
   });
