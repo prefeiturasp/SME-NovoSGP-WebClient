@@ -1,15 +1,19 @@
 import moment from 'moment';
 import api from '~/servicos/api';
+import { Aplicacao } from '~/constantes';
 
 class ServicoPeriodoFechamento {
   obterPorTipoCalendario = tipoCalendarioSelecionado => {
     return api.get(
-      `/v1/periodos/fechamentos/aberturas?tipoCalendarioId=${tipoCalendarioSelecionado}`
+      `/v1/periodos/fechamentos/aberturas?tipoCalendarioId=${tipoCalendarioSelecionado}&aplicacao=${Aplicacao.SGP}`
     );
   };
 
   salvar = async fechamento => {
-    return api.post('/v1/periodos/fechamentos/aberturas', fechamento);
+    return api.post('/v1/periodos/fechamentos/aberturas', {
+      ...fechamento,
+      aplicacao: Aplicacao.SGP,
+    });
   };
 
   verificarSePodeAlterarNoPeriodo = async (
