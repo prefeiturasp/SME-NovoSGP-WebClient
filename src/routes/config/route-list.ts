@@ -106,7 +106,7 @@ import RelatorioRegistroItinerancia from '~/paginas/Relatorios/AEE/registroItine
 import RelatorioAtaBimestral from '~/paginas/Relatorios/Atas/AtaBimestral/relatorioAtaBimestral';
 import AtaFinalResultados from '~/paginas/Relatorios/Atas/AtaFinalResultados/ataFinalResultados';
 import RelatorioCompensacaoAusencia from '~/paginas/Relatorios/CompensacaoAusencia/relatorioCompensacaoAusencia';
-import BoletimSimples from '~/paginas/Relatorios/DiarioClasse/BoletimSimples';
+import BoletimSimples from '~/paginas/Boletim/boletimMicrofrontend';
 import ControleGrade from '~/paginas/Relatorios/DiarioClasse/ControleGrade/controleGrade';
 import RelatorioPlanejamentoDiario from '~/paginas/Relatorios/DiarioClasse/PlanejamentoDiario/relatorioPlanejamentoDiario';
 import relatorioEscolaAquiAdesao from '~/paginas/Relatorios/EscolaAqui/Adesao/relatorioEscolaAquiAdesao';
