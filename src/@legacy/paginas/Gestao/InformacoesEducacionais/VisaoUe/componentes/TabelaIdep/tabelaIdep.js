@@ -5,7 +5,8 @@ import ServicoIdepTabela from '~/servicos/InformacoesEducacionais/ServicoIdepTab
 import { erros } from '~/servicos/alertas';
 import TabelaIdepDetalhes from './tabelaIdepDetalhes';
 
-export default function TabelaIdep({ anoLetivo, ueCodigo }) {
+import comDefaultProps from '~/utils/comDefaultProps';
+function TabelaIdep({ anoLetivo, ueCodigo }) {
   const [dados, setDados] = useState([]);
   const [carregando, setCarregando] = useState(false);
 
@@ -62,3 +63,5 @@ TabelaIdep.defaultProps = {
   anoLetivo: null,
   ueCodigo: null,
 };
+
+export default comDefaultProps(TabelaIdep, TabelaIdep.defaultProps);

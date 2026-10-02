@@ -8,6 +8,7 @@ import { SGP_SELECT_SEMESTRE } from '~/constantes/ids/select';
 import { erros } from '~/servicos';
 import ServicoDashboardRelAcompanhamentoAprendizagem from '~/servicos/Paginas/Dashboard/ServicoDashboardRelAcompanhamentoAprendizagem';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoTotalCriancasComRelAcompanhamentoAprendizagem = props => {
   const { anoLetivo, dreId, ueId, dataUltimaConsolidacao } = props;
 
@@ -112,4 +113,4 @@ GraficoTotalCriancasComRelAcompanhamentoAprendizagem.defaultProps = {
   dataUltimaConsolidacao: null,
 };
 
-export default GraficoTotalCriancasComRelAcompanhamentoAprendizagem;
+export default comDefaultProps(GraficoTotalCriancasComRelAcompanhamentoAprendizagem, GraficoTotalCriancasComRelAcompanhamentoAprendizagem.defaultProps);

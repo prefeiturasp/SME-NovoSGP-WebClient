@@ -14,6 +14,7 @@ import { erros, ServicoComunicados } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 import { OPCAO_TODOS } from '~/constantes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const FiltrosAvancados = ({
   atualizaFiltrosAvançados,
   filtrosPrincipais,
@@ -485,4 +486,4 @@ FiltrosAvancados.defaultProps = {
   temModalidadeEja: false,
 };
 
-export default FiltrosAvancados;
+export default comDefaultProps(FiltrosAvancados, FiltrosAvancados.defaultProps);

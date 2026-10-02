@@ -2,6 +2,7 @@ import { AutoComplete, Input } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import Loader from '~/componentes/loader';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { InputNomeEstilo } from './styles';
 
 const InputNome = props => {
@@ -113,4 +114,4 @@ InputNome.defaultProps = {
   exibirLoader: false,
 };
 
-export default InputNome;
+export default comDefaultProps(InputNome, InputNome.defaultProps);

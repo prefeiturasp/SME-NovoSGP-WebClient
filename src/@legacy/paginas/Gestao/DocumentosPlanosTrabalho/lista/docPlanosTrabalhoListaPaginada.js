@@ -11,6 +11,7 @@ import { SGP_TABLE_DOCUMENTOS_PLANOS_TRABALHO } from '~/constantes/ids/table';
 import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
 import DocPlanosTrabalhoDownloadViewFile from './docPlanosTrabalhoDownloadViewFile';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DocPlanosTrabalhoListaPaginada = props => {
   const { form } = props;
   const navigate = useNavigate();
@@ -259,4 +260,4 @@ DocPlanosTrabalhoListaPaginada.defaultProps = {
   form: null,
 };
 
-export default DocPlanosTrabalhoListaPaginada;
+export default comDefaultProps(DocPlanosTrabalhoListaPaginada, DocPlanosTrabalhoListaPaginada.defaultProps);

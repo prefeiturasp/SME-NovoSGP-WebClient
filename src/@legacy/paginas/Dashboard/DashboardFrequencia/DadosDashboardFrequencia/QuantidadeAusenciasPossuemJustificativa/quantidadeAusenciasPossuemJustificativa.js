@@ -4,6 +4,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import GraficoQuantidadeAusenciasPossuemJustificativa from './graficoQuantidadeAusenciasPossuemJustificativa';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const QuantidadeAusenciasPossuemJustificativa = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre } = props;
 
@@ -61,4 +62,4 @@ QuantidadeAusenciasPossuemJustificativa.defaultProps = {
   semestre: null,
 };
 
-export default QuantidadeAusenciasPossuemJustificativa;
+export default comDefaultProps(QuantidadeAusenciasPossuemJustificativa, QuantidadeAusenciasPossuemJustificativa.defaultProps);

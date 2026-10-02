@@ -7,6 +7,7 @@ import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import ListaRecomendacaoAluno from './listaRecomendacaoAluno';
 import ListaRecomendacaoFamilia from './listaRecomendacaoFamilia';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RecomendacaoAlunoFamilia = props => {
   const {
     onChangeRecomendacaoAluno,
@@ -94,4 +95,4 @@ RecomendacaoAlunoFamilia.defaultProps = {
   alunoDesabilitado: false,
 };
 
-export default RecomendacaoAlunoFamilia;
+export default comDefaultProps(RecomendacaoAlunoFamilia, RecomendacaoAlunoFamilia.defaultProps);

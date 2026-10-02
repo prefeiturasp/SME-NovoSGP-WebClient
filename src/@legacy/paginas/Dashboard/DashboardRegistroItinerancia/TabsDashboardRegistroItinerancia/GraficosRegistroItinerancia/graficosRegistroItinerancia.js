@@ -3,6 +3,7 @@ import React from 'react';
 import QuantidadeRegistrosPAAI from './QuantidadeRegistrosPAAI/quantidadeRegistrosPAAI';
 import QuantidadeRegistrosPorObjetivo from './QuantidadeRegistrosPorObjetivo/quantidadeRegistrosPorObjetivo';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficosRegistroItinerancia = props => {
   const { anoLetivo, dreId, ueId, mesSelecionado } = props;
   return (
@@ -37,4 +38,4 @@ GraficosRegistroItinerancia.defaultProps = {
   mesSelecionado: '',
 };
 
-export default GraficosRegistroItinerancia;
+export default comDefaultProps(GraficosRegistroItinerancia, GraficosRegistroItinerancia.defaultProps);

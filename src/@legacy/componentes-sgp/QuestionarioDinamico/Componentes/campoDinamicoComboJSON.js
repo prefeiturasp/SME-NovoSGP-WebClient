@@ -1,10 +1,11 @@
 import { cloneDeep } from 'lodash';
 import PropTypes from 'prop-types';
 import SelectComponent from '~/componentes/select';
+import comDefaultProps from '~/utils/comDefaultProps';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 
-export const CampoDinamicoComboJSON = props => {
+const CampoDinamicoComboJSONBase = props => {
   const {
     questaoAtual,
     form,
@@ -64,7 +65,7 @@ export const CampoDinamicoComboJSON = props => {
   );
 };
 
-CampoDinamicoComboJSON.propTypes = {
+CampoDinamicoComboJSONBase.propTypes = {
   questaoAtual: PropTypes.oneOfType([PropTypes.any]),
   form: PropTypes.oneOfType([PropTypes.any]),
   label: PropTypes.oneOfType([PropTypes.any]),
@@ -74,7 +75,7 @@ CampoDinamicoComboJSON.propTypes = {
   multiple: PropTypes.bool,
 };
 
-CampoDinamicoComboJSON.defaultProps = {
+CampoDinamicoComboJSONBase.defaultProps = {
   questaoAtual: null,
   form: null,
   label: '',
@@ -83,3 +84,8 @@ CampoDinamicoComboJSON.defaultProps = {
   onChange: () => {},
   multiple: false,
 };
+
+export const CampoDinamicoComboJSON = comDefaultProps(
+  CampoDinamicoComboJSONBase,
+  CampoDinamicoComboJSONBase.defaultProps
+);

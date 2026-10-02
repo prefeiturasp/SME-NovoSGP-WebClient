@@ -6,6 +6,7 @@ import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CampoDinamicoEditor = props => {
   const dispatch = useDispatch();
   const textArea = useRef(null);
@@ -75,4 +76,4 @@ CampoDinamicoEditor.defaultProps = {
   onChange: () => {},
 };
 
-export default CampoDinamicoEditor;
+export default comDefaultProps(CampoDinamicoEditor, CampoDinamicoEditor.defaultProps);

@@ -12,6 +12,7 @@ import {
 
 import { ordenarPor } from '~/utils/funcoes/gerais';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TabelaLinhaRemovivel = ({
   botaoAdicionar,
   dadosTabela,
@@ -124,4 +125,4 @@ TabelaLinhaRemovivel.defaultProps = {
   desabilitadoExcluir: false,
 };
 
-export default TabelaLinhaRemovivel;
+export default comDefaultProps(TabelaLinhaRemovivel, TabelaLinhaRemovivel.defaultProps);

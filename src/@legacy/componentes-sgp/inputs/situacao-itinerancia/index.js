@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Loader, SelectComponent } from '~/componentes';
 import { SGP_SELECT_SITUACAO_REGISTRO_ITINERANCIA } from '~/constantes/ids/select';
 import { ServicoRegistroItineranciaAEE, erros } from '~/servicos';
+import comDefaultProps from '~/utils/comDefaultProps';
 
-export const SituacaoItinerancia = ({
+const SituacaoItineranciaComponent = ({
   name,
   form,
   onChange,
@@ -64,7 +65,7 @@ export const SituacaoItinerancia = ({
   );
 };
 
-SituacaoItinerancia.propTypes = {
+SituacaoItineranciaComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -74,7 +75,7 @@ SituacaoItinerancia.propTypes = {
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
-SituacaoItinerancia.defaultProps = {
+SituacaoItineranciaComponent.defaultProps = {
   form: null,
   disabled: false,
   multiple: false,
@@ -83,3 +84,8 @@ SituacaoItinerancia.defaultProps = {
   onChange: () => null,
   name: 'situacao',
 };
+
+export const SituacaoItinerancia = comDefaultProps(
+  SituacaoItineranciaComponent,
+  SituacaoItineranciaComponent.defaultProps
+);

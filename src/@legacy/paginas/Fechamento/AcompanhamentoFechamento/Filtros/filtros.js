@@ -13,6 +13,7 @@ import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros, ServicoFiltroRelatorio } from '~/servicos';
 import { OPCAO_TODOS, ANO_INICIO_INFANTIL } from '~/constantes/constantes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const Filtros = ({ onChangeFiltros, ehInfantil }) => {
   const dispatch = useDispatch();
   const [anoAtual] = useState(window.moment().format('YYYY'));
@@ -700,4 +701,4 @@ Filtros.defaultProps = {
   ehInfantil: false,
 };
 
-export default Filtros;
+export default comDefaultProps(Filtros, Filtros.defaultProps);

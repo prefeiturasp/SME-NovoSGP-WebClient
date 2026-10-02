@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import CardCollapse from '~/componentes/cardCollapse';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AnotacoesPedagogicas = props => {
   const { onChange, dadosIniciais, alunoDesabilitado } = props;
 
@@ -59,4 +60,4 @@ AnotacoesPedagogicas.defaultProps = {
   alunoDesabilitado: false,
 };
 
-export default AnotacoesPedagogicas;
+export default comDefaultProps(AnotacoesPedagogicas, AnotacoesPedagogicas.defaultProps);

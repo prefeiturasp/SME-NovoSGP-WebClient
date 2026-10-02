@@ -2,6 +2,7 @@ import { Row } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const CardEstilo = styled.div`
   padding: ${props => props.padding};
@@ -31,4 +32,4 @@ Card.defaultProps = {
   addRow: true,
 };
 
-export default Card;
+export default comDefaultProps(Card, Card.defaultProps);

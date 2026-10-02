@@ -4,6 +4,7 @@ import CardCollapse from '~/componentes/cardCollapse';
 import { Base } from '~/componentes';
 import EstudantesTemposIntegral from '../../../shared/EstudantesTempoIntegral/EstudantesTemposIntegral';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function EstudantesTempoIntegralUe({ ueCodigo, anoLetivo, dreCodigo }) {
   const [exibirTempoIntegralUe, setExibirTempoIntegralUe] = useState(false);
 
@@ -50,4 +51,4 @@ EstudantesTempoIntegralUe.defaultProps = {
   dreCodigo: null,
 };
 
-export default EstudantesTempoIntegralUe;
+export default comDefaultProps(EstudantesTempoIntegralUe, EstudantesTempoIntegralUe.defaultProps);

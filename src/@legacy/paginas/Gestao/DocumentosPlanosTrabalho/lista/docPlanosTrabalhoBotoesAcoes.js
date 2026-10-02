@@ -8,6 +8,7 @@ import { SGP_BUTTON_NOVO } from '~/constantes/ids/button';
 import { ROUTES } from '@/core/enum/routes';
 import { useNavigate } from 'react-router-dom';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DocPlanosTrabalhoBotoesAcoes = props => {
   const { desabilitarNovo } = props;
 
@@ -49,4 +50,4 @@ DocPlanosTrabalhoBotoesAcoes.defaultProps = {
   desabilitarNovo: false,
 };
 
-export default DocPlanosTrabalhoBotoesAcoes;
+export default comDefaultProps(DocPlanosTrabalhoBotoesAcoes, DocPlanosTrabalhoBotoesAcoes.defaultProps);

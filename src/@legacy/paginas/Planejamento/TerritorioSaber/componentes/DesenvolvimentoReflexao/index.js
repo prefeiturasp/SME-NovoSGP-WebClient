@@ -1,6 +1,7 @@
 import t from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { Auditoria, Grid } from '~/componentes';
 // Estilos
@@ -87,4 +88,4 @@ DesenvolvimentoReflexao.defaultProps = {
   onChange: () => {},
 };
 
-export default DesenvolvimentoReflexao;
+export default comDefaultProps(DesenvolvimentoReflexao, DesenvolvimentoReflexao.defaultProps);

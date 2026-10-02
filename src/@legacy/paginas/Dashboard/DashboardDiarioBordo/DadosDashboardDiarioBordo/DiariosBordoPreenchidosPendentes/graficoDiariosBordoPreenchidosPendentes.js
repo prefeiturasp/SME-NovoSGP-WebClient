@@ -8,6 +8,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardDiarioBordo from '~/servicos/Paginas/Dashboard/ServicoDashboardDiarioBordo';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoDiariosBordoPreenchidosPendentes = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -110,4 +111,4 @@ GraficoDiariosBordoPreenchidosPendentes.defaultProps = {
   modalidade: null,
 };
 
-export default GraficoDiariosBordoPreenchidosPendentes;
+export default comDefaultProps(GraficoDiariosBordoPreenchidosPendentes, GraficoDiariosBordoPreenchidosPendentes.defaultProps);

@@ -5,6 +5,7 @@ import { CampoTexto } from '~/componentes';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CampoDinamicoNumericoContainer = styled.div`
   .ant-input-number {
     width: 100% !important;
@@ -53,4 +54,4 @@ CampoDinamicoNumerico.defaultProps = {
   questaoAtual: null,
 };
 
-export default CampoDinamicoNumerico;
+export default comDefaultProps(CampoDinamicoNumerico, CampoDinamicoNumerico.defaultProps);

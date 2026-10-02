@@ -9,6 +9,7 @@ import { SGP_BUTTON_ADD_OBJETIVOS_APRENDIZAGEM_DESENVOLVIMENTO } from '~/constan
 import Button from '~/componentes/button';
 import ModalObjetivosAprendizagem from './modalObjetivosAprendizagem';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 export const ContainerTag = styled(Tag)`
   font-size: 16px;
   color: ${Base.CinzaMako};
@@ -162,4 +163,4 @@ AdicionarObjetivosAprendizagem.defaultProps = {
   checkedExibirEscolhaObjetivos: false,
 };
 
-export default AdicionarObjetivosAprendizagem;
+export default comDefaultProps(AdicionarObjetivosAprendizagem, AdicionarObjetivosAprendizagem.defaultProps);

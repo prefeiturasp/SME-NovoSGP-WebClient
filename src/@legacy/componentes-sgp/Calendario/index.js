@@ -3,6 +3,7 @@ import t from 'prop-types';
 
 // Componentes
 import { Loader } from '~/componentes';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 // Componentes internos
 import Mes from './componentes/Mes';
@@ -120,4 +121,4 @@ Calendario.defaultProps = {
   turmaSelecionada: {},
 };
 
-export default Calendario;
+export default comDefaultProps(Calendario, Calendario.defaultProps);

@@ -9,6 +9,7 @@ import { erros, sucesso } from '~/servicos';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CampoDinamicoUploadArquivos = props => {
   const {
     dados,
@@ -110,4 +111,4 @@ CampoDinamicoUploadArquivos.defaultProps = {
   onChange: () => {},
 };
 
-export default CampoDinamicoUploadArquivos;
+export default comDefaultProps(CampoDinamicoUploadArquivos, CampoDinamicoUploadArquivos.defaultProps);

@@ -33,6 +33,7 @@ import TurmasComunicados from './campos/turmasComunicados';
 import UeComunicados from './campos/ueComunicados';
 import InfoEstudantesReceberComunicados from './infoEstudantesReceberComunicado';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const FormCadastroComunicados = props => {
   const { comunicadoId, somenteConsulta } = props;
 
@@ -397,4 +398,4 @@ FormCadastroComunicados.defaultProps = {
   somenteConsulta: false,
 };
 
-export default FormCadastroComunicados;
+export default comDefaultProps(FormCadastroComunicados, FormCadastroComunicados.defaultProps);

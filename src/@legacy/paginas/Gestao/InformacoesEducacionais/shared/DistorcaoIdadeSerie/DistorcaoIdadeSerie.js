@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { erros } from '~/servicos';
 import ServicoDistorcaoIdadeSerie from '~/servicos/InformacoesEducacionais/ServicoDistorcaoIdadeSerie';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function agruparModalidadesParaTabela(apiData) {
   const tabela = [];
   apiData.forEach(modalidadeObj => {
@@ -129,4 +130,4 @@ DistorcaoIdadeSerie.defaultProps = {
   anoLetivo: null,
 };
 
-export default DistorcaoIdadeSerie;
+export default comDefaultProps(DistorcaoIdadeSerie, DistorcaoIdadeSerie.defaultProps);

@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LoaderFrequenciaPlanoAula = ({ children }) => {
   const exibirLoaderFrequenciaPlanoAula = useSelector(
     store => store.frequenciaPlanoAula.exibirLoaderFrequenciaPlanoAula
@@ -19,4 +20,4 @@ LoaderFrequenciaPlanoAula.defaultProps = {
   children: () => {},
 };
 
-export default LoaderFrequenciaPlanoAula;
+export default comDefaultProps(LoaderFrequenciaPlanoAula, LoaderFrequenciaPlanoAula.defaultProps);

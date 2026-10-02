@@ -21,6 +21,7 @@ import {
 import { confirmar, erros, ServicoComunicados, sucesso } from '~/servicos';
 import { useNavigate } from 'react-router-dom';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BotoesAcoesCadastroComunicados = props => {
   const { comunicadoId, somenteConsulta } = props;
   const navigate = useNavigate();
@@ -245,4 +246,4 @@ BotoesAcoesCadastroComunicados.defaultProps = {
   somenteConsulta: false,
 };
 
-export default BotoesAcoesCadastroComunicados;
+export default comDefaultProps(BotoesAcoesCadastroComunicados, BotoesAcoesCadastroComunicados.defaultProps);

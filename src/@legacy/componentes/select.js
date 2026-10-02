@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import comDefaultProps from '~/utils/comDefaultProps';
 import styled from 'styled-components';
 import { Select, Tooltip } from 'antd';
 import shortid from 'shortid';
@@ -258,4 +259,4 @@ SelectComponent.defaultProps = {
   requiredOffset: 0,
 };
 
-export default SelectComponent;
+export default comDefaultProps(SelectComponent, SelectComponent.defaultProps);

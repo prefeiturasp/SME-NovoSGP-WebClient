@@ -8,6 +8,7 @@ import { erros } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import AuditoriaEncaminhamento from '../AuditoriaEncaminhamento/auditoriaEncaminhamento';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const MontarDadosPorSecao = props => {
   const dispatch = useDispatch();
 
@@ -98,4 +99,4 @@ MontarDadosPorSecao.defaultProps = {
   dados: {},
 };
 
-export default MontarDadosPorSecao;
+export default comDefaultProps(MontarDadosPorSecao, MontarDadosPorSecao.defaultProps);

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 
 import { TabelaRetratil } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TabelaRetratilRegistroIndividual = ({
   onChangeAlunoSelecionado,
   children,
@@ -42,4 +43,4 @@ TabelaRetratilRegistroIndividual.defaultProps = {
   permiteOnChangeAluno: null,
 };
 
-export default TabelaRetratilRegistroIndividual;
+export default comDefaultProps(TabelaRetratilRegistroIndividual, TabelaRetratilRegistroIndividual.defaultProps);

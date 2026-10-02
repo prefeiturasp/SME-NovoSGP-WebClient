@@ -15,6 +15,7 @@ import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 import { erros } from '~/servicos/alertas';
 import { ContainerListaObjetivos } from './listaObjetivosPlanoAula.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaObjetivosPlanoAula = React.memo(props => {
   const { tabAtualComponenteCurricular } = props;
 
@@ -329,4 +330,4 @@ ListaObjetivosPlanoAula.defaultProps = {
   tabAtualComponenteCurricular: {},
 };
 
-export default ListaObjetivosPlanoAula;
+export default comDefaultProps(ListaObjetivosPlanoAula, ListaObjetivosPlanoAula.defaultProps);

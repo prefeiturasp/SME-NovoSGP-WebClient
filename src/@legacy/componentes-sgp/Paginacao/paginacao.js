@@ -1,6 +1,7 @@
 import { Pagination } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const Paginacao = props => {
   const {
@@ -78,4 +79,4 @@ Paginacao.defaultProps = {
   pageSize: 10,
 };
 
-export default Paginacao;
+export default comDefaultProps(Paginacao, Paginacao.defaultProps);

@@ -6,6 +6,7 @@ import { OPCAO_TODOS } from '~/constantes';
 import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
 import { AbrangenciaServico, erros } from '~/servicos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const UeComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaUes, setListaUes] = useState([]);
@@ -105,4 +106,4 @@ UeComunicados.defaultProps = {
   desabilitar: false,
 };
 
-export default UeComunicados;
+export default comDefaultProps(UeComunicados, UeComunicados.defaultProps);

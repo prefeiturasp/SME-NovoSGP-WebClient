@@ -4,6 +4,7 @@ import { SelectComponent } from '~/componentes';
 import { ServicoCalendarios } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BimestreCadastroEventos = ({
   form,
   onChangeCampos,
@@ -67,4 +68,4 @@ BimestreCadastroEventos.defaultProps = {
   tipoCalendarioId: 0,
 };
 
-export default BimestreCadastroEventos;
+export default comDefaultProps(BimestreCadastroEventos, BimestreCadastroEventos.defaultProps);

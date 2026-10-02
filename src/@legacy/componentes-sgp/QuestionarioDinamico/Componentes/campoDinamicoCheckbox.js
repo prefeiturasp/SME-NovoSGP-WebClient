@@ -4,6 +4,7 @@ import CheckboxGroup from '~/componentes/checkboxGroup';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CampoDinamicoCheckbox = props => {
   const { questaoAtual, form, label, desabilitado, onChange, prefixId } = props;
 
@@ -46,4 +47,4 @@ CampoDinamicoCheckbox.defaultProps = {
   onChange: () => {},
 };
 
-export default CampoDinamicoCheckbox;
+export default comDefaultProps(CampoDinamicoCheckbox, CampoDinamicoCheckbox.defaultProps);

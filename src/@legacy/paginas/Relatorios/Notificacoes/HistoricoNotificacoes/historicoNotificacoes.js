@@ -139,11 +139,12 @@ const HistoricoNotificacoes = () => {
         } else {
           setListaUes([]);
         }
+        setCarregandoGeral(false);
       } else {
         setListaUes([]);
       }
     },
-    [anoLetivo]
+    [anoLetivo, consideraHistorico]
   );
 
   const onChangeDre = dre => {

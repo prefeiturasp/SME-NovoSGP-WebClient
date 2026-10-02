@@ -17,6 +17,7 @@ import {
   TabelaColunasFixas,
 } from './listaFrequenciaPorBimestre.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AusenciasEstudante = props => {
   const {
     indexLinha,
@@ -211,4 +212,4 @@ AusenciasEstudante.defaultProps = {
   componenteCurricularId: 0,
 };
 
-export default AusenciasEstudante;
+export default comDefaultProps(AusenciasEstudante, AusenciasEstudante.defaultProps);

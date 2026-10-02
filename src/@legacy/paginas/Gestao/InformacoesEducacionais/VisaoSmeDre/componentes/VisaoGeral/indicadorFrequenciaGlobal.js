@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CartaoIndicador from './cartaoIdentificador';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const IndicadorFrequenciaGlobal = ({ dados, loading }) => {
   return (
     <CartaoIndicador
@@ -23,4 +24,4 @@ IndicadorFrequenciaGlobal.defaultProps = {
   loading: false,
 };
 
-export default IndicadorFrequenciaGlobal;
+export default comDefaultProps(IndicadorFrequenciaGlobal, IndicadorFrequenciaGlobal.defaultProps);

@@ -10,7 +10,7 @@ jest.mock('@/components/lib/inputs/select', () => (props: any) => {
     <select
       data-testid={dataTestId}
       id={id}
-      placeholder={placeholder}
+      data-placeholder={placeholder}
       value={value}
       onChange={onChange}
     >
@@ -66,7 +66,10 @@ describe('SelectMotivoAusenciaBuscaAtiva', () => {
       <SelectMotivoAusenciaBuscaAtiva data-testid="select-test" placeholder="Teste Placeholder" />,
     );
     await waitFor(() => {
-      expect(screen.getByTestId('select-test')).toHaveAttribute('placeholder', 'Teste Placeholder');
+      expect(screen.getByTestId('select-test')).toHaveAttribute(
+        'data-placeholder',
+        'Teste Placeholder',
+      );
     });
   });
 

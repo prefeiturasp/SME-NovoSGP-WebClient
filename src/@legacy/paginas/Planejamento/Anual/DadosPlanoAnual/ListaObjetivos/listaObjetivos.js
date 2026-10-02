@@ -11,6 +11,7 @@ import { erros } from '~/servicos/alertas';
 import ServicoPlanoAnual from '~/servicos/Paginas/ServicoPlanoAnual';
 import { ContainerListaObjetivos } from './listaObjetivos.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaObjetivos = React.memo(props => {
   const { dadosBimestre, tabAtualComponenteCurricular } = props;
   const { bimestre, periodoAberto } = dadosBimestre;
@@ -272,4 +273,4 @@ ListaObjetivos.defaultProps = {
   tabAtualComponenteCurricular: {},
 };
 
-export default ListaObjetivos;
+export default comDefaultProps(ListaObjetivos, ListaObjetivos.defaultProps);

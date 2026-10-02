@@ -6,6 +6,7 @@ import { OPCAO_TODOS } from '~/constantes';
 import { AbrangenciaServico, erros, ServicoCalendarios } from '~/servicos';
 import EventosCadastroContext from '../eventosCadastroContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const UeCadastroEventos = ({ form, onChangeCampos, desabilitar, eventoId }) => {
   const { listaCalendarios, setListaUes, listaUes } = useContext(
     EventosCadastroContext
@@ -123,4 +124,4 @@ UeCadastroEventos.defaultProps = {
   eventoId: 0,
 };
 
-export default UeCadastroEventos;
+export default comDefaultProps(UeCadastroEventos, UeCadastroEventos.defaultProps);

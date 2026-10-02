@@ -16,7 +16,8 @@ import PlanoAEEUe from './componentes/PlanoAEEUE/PlanoAEEUe';
 import FluenciaLeitoraUe from './componentes/FluenciaLeitoraUE/tabelaFluenciaLeitoraUE';
 import EstudantesTempoIntegralUe from './componentes/EstudantesTempoIntegralUe/EstudantesTempoIntegralUe';
 import TabelaAprovacaoUe from './componentes/Aprovacao/tabelaAprovacaoUe';
-export default function DetalhesUnidadeEducacional({
+import comDefaultProps from '~/utils/comDefaultProps';
+function DetalhesUnidadeEducacional({
   anoLetivo,
   ueCodigo,
   dreNome,
@@ -191,3 +192,5 @@ DetalhesUnidadeEducacional.defaultProps = {
   anoLetivo: null,
   ueCodigo: null,
 };
+
+export default comDefaultProps(DetalhesUnidadeEducacional, DetalhesUnidadeEducacional.defaultProps);

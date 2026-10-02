@@ -10,6 +10,7 @@ import { dayjs } from '@/core/date/dayjs';
 
 import { Base } from '../colors';
 import Label from '../label';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 import { Campo, IconeEstilizado } from './campoDataNovo.css';
 
@@ -400,6 +401,11 @@ CampoData.defaultProps = {
   allowClear: true,
 };
 
+const CampoDataComDefaultProps = comDefaultProps(
+  CampoData,
+  CampoData.defaultProps
+);
+
 const momentSchema = new MomentSchema();
 
 const dataEhMesmaOuPosterior = (dataInicial, dataFinal) => {
@@ -455,7 +461,7 @@ Yup.addMethod(
 );
 
 export {
-  CampoData,
+  CampoDataComDefaultProps as CampoData,
   momentSchema,
   paraDayjs,
   obterDataFormatada,

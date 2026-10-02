@@ -7,6 +7,7 @@ import ListaFinal from './ListaFinal/listaFinal';
 import { Base } from '~/componentes';
 import { removerArrayAninhados } from '~/utils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListasCarregar = props => {
   const {
     ehFinal,
@@ -111,4 +112,4 @@ ListasCarregar.defaultProps = {
   dadosArredondamento: null,
 };
 
-export default ListasCarregar;
+export default comDefaultProps(ListasCarregar, ListasCarregar.defaultProps);

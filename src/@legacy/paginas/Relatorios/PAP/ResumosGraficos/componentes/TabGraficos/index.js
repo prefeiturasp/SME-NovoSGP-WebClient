@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import shortid from 'shortid';
 import { useSelector } from 'react-redux';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import {
   BarraNavegacao,
@@ -517,4 +518,4 @@ TabGraficos.defaultProps = {
   filtroTela: {},
 };
 
-export default TabGraficos;
+export default comDefaultProps(TabGraficos, TabGraficos.defaultProps);

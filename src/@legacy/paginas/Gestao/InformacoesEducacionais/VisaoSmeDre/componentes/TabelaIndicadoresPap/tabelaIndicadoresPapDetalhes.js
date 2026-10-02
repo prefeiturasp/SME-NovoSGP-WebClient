@@ -3,6 +3,7 @@ import { Table } from 'antd';
 import PropTypes from 'prop-types';
 import styles from './tabelaIndicadoresPapDetalhes.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TabelaIndicadoresPapDetalhes = ({ dados }) => {
   const dataSource = dados?.quantidadesPorTipoPap || [];
   const nomeDificuldade1 = dados?.nomeDificuldadeTop1 || 'Leitura';
@@ -100,4 +101,4 @@ TabelaIndicadoresPapDetalhes.defaultProps = {
   dados: null,
 };
 
-export default TabelaIndicadoresPapDetalhes;
+export default comDefaultProps(TabelaIndicadoresPapDetalhes, TabelaIndicadoresPapDetalhes.defaultProps);

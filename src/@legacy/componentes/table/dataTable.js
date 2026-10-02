@@ -4,6 +4,7 @@ import React from 'react';
 import shortid from 'shortid';
 import { Container } from './dataTable.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DataTable = props => {
   const {
     selectedRowKeys,
@@ -190,4 +191,4 @@ DataTable.defaultProps = {
   showExpandColumn: true,
 };
 
-export default DataTable;
+export default comDefaultProps(DataTable, DataTable.defaultProps);

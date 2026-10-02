@@ -6,6 +6,7 @@ import { ContainerTabsDashboard } from '../../style';
 import GraficosEncaminhamentos from './Encaminhamentos/graficosEncaminhamentos';
 import GraficosPlanos from './Planos/graficoPlanos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const { TabPane } = Tabs;
 
 const TabsDashboardAEE = props => {
@@ -69,4 +70,4 @@ TabsDashboardAEE.defaultProps = {
   ueCodigo: '',
 };
 
-export default TabsDashboardAEE;
+export default comDefaultProps(TabsDashboardAEE, TabsDashboardAEE.defaultProps);

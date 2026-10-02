@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Ant
 import { Table } from 'antd';
 
@@ -127,4 +128,4 @@ TabelaFrequencia.defaultProps = {
   dados: [],
 };
 
-export default TabelaFrequencia;
+export default comDefaultProps(TabelaFrequencia, TabelaFrequencia.defaultProps);

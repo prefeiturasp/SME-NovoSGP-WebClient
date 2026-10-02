@@ -5,103 +5,102 @@ import { SGP_SELECT_PAAI_RESPONSAVEL } from '~/constantes/ids/select';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import { erros } from '~/servicos';
 import ServicoFuncionario from '@/@legacy/servicos/Paginas/ServicoFuncionario';
+import comDefaultProps from '~/utils/comDefaultProps';
 
-export const PAAIResponsavel = React.memo(
-  ({
-    name,
-    form,
-    onChange,
-    disabled,
-    allowClear,
-    multiple,
-    ehRelatorio,
-    label,
-    responsaveisAEE,
-  }) => {
-    const [exibirLoader, setExibirLoader] = useState(false);
-    const [responsaveisPAAI, setResponsaveisPAAI] = useState([]);
+const PAAIResponsavelComponent = ({
+  name,
+  form,
+  onChange,
+  disabled,
+  allowClear,
+  multiple,
+  ehRelatorio,
+  label,
+  responsaveisAEE,
+}) => {
+  const [exibirLoader, setExibirLoader] = useState(false);
+  const [responsaveisPAAI, setResponsaveisPAAI] = useState([]);
 
-    const dreCodigo = form.values?.dreCodigo;
-    const listaDres = form.values?.listaDres;
+  const dreCodigo = form.values?.dreCodigo;
+  const listaDres = form.values?.listaDres;
 
-    const consultarDados = async () => {
-      if (responsaveisAEE) {
-        const resposta =
-          await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(
-            null,
-            dreCodigo,
-            ehRelatorio
-          ).catch(e => erros(e));
+  const consultarDados = async () => {
+    if (responsaveisAEE) {
+      const resposta =
+        await ServicoEncaminhamentoAEE.obterResponsaveisPAAIPesquisa(
+          null,
+          dreCodigo,
+          ehRelatorio
+        ).catch(e => erros(e));
 
-        return resposta?.data?.items?.length ? resposta?.data?.items : [];
-      }
+      return resposta?.data?.items?.length ? resposta?.data?.items : [];
+    }
 
-      const dreAtual = listaDres?.find(d => d?.codigo === dreCodigo);
-      const resposta = await ServicoFuncionario.obterFuncionariosPAAIs(
-        dreAtual?.id
-      ).catch(e => erros(e));
+    const dreAtual = listaDres?.find(d => d?.codigo === dreCodigo);
+    const resposta = await ServicoFuncionario.obterFuncionariosPAAIs(
+      dreAtual?.id
+    ).catch(e => erros(e));
 
-      return resposta?.data?.length ? resposta.data : [];
-    };
+    return resposta?.data?.length ? resposta.data : [];
+  };
 
-    const obterResponsaveisPAAI = useCallback(async () => {
-      setExibirLoader(true);
+  const obterResponsaveisPAAI = useCallback(async () => {
+    setExibirLoader(true);
 
-      const resposta = await consultarDados();
+    const resposta = await consultarDados();
 
-      if (resposta?.length) {
-        const listaResp = resposta.map(item => {
-          return {
-            ...item,
-            codigoRF: item.codigoRf,
-            nomeServidorFormatado: `${item.nomeServidor} - ${item.codigoRf}`,
-          };
-        });
+    if (resposta?.length) {
+      const listaResp = resposta.map(item => {
+        return {
+          ...item,
+          codigoRF: item.codigoRf,
+          nomeServidorFormatado: `${item.nomeServidor} - ${item.codigoRf}`,
+        };
+      });
 
-        setResponsaveisPAAI(listaResp);
-      }
+      setResponsaveisPAAI(listaResp);
+    }
 
-      setExibirLoader(false);
-    }, [dreCodigo, ehRelatorio]);
+    setExibirLoader(false);
+  }, [dreCodigo, ehRelatorio]);
 
-    useEffect(() => {
-      setResponsaveisPAAI([]);
-      form.setFieldValue(name, undefined);
+  useEffect(() => {
+    setResponsaveisPAAI([]);
+    form.setFieldValue(name, undefined);
 
-      if (dreCodigo) obterResponsaveisPAAI();
-    }, [dreCodigo]);
+    if (dreCodigo) obterResponsaveisPAAI();
+  }, [dreCodigo]);
 
-    return (
-      <Loader loading={exibirLoader} ignorarTip>
-        <SelectComponent
-          showSearch
-          searchValue
-          form={form}
-          name={name}
-          disabled={disabled}
-          multiple={multiple}
-          label={label}
-          allowClear={allowClear}
-          lista={responsaveisPAAI}
-          valueOption="codigoRF"
-          valueText="nomeServidorFormatado"
-          id={SGP_SELECT_PAAI_RESPONSAVEL}
-          placeholder="Pesquise por nome ou RF"
-          setValueOnlyOnChange
-          onChange={newValue => {
-            form.setFieldValue('modoEdicao', true);
+  return (
+    <Loader loading={exibirLoader} ignorarTip>
+      <SelectComponent
+        showSearch
+        searchValue
+        form={form}
+        name={name}
+        disabled={disabled}
+        multiple={multiple}
+        label={label}
+        allowClear={allowClear}
+        lista={responsaveisPAAI}
+        valueOption="codigoRF"
+        valueText="nomeServidorFormatado"
+        id={SGP_SELECT_PAAI_RESPONSAVEL}
+        placeholder="Pesquise por nome ou RF"
+        setValueOnlyOnChange
+        onChange={newValue => {
+          form.setFieldValue('modoEdicao', true);
 
-            form.setFieldValue(name, newValue);
-            form.setFieldTouched(name, true, true);
-            onChange(newValue);
-          }}
-        />
-      </Loader>
-    );
-  }
-);
+          form.setFieldValue(name, newValue);
+          form.setFieldTouched(name, true, true);
+          onChange(newValue);
+        }}
+      />
+    </Loader>
+  );
+};
 
-PAAIResponsavel.propTypes = {
+PAAIResponsavelComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
@@ -113,7 +112,7 @@ PAAIResponsavel.propTypes = {
   responsaveisAEE: PropTypes.bool,
 };
 
-PAAIResponsavel.defaultProps = {
+PAAIResponsavelComponent.defaultProps = {
   form: null,
   disabled: false,
   allowClear: true,
@@ -124,3 +123,7 @@ PAAIResponsavel.defaultProps = {
   label: 'PAAI responsável',
   responsaveisAEE: true,
 };
+
+export const PAAIResponsavel = React.memo(
+  comDefaultProps(PAAIResponsavelComponent, PAAIResponsavelComponent.defaultProps)
+);

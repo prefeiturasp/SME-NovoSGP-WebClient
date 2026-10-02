@@ -18,6 +18,7 @@ import { ehTurmaInfantil } from '~/servicos/Validacoes/validacoesInfatil';
 import ServicoSalvarCartaIntencoes from '../../servicoSalvarCartaIntencoes';
 import { useNavigate } from 'react-router-dom';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BotoesAcoesCartaIntencoes = props => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -184,4 +185,4 @@ BotoesAcoesCartaIntencoes.defaultProps = {
   salvarEditarObservacao: () => {},
 };
 
-export default BotoesAcoesCartaIntencoes;
+export default comDefaultProps(BotoesAcoesCartaIntencoes, BotoesAcoesCartaIntencoes.defaultProps);

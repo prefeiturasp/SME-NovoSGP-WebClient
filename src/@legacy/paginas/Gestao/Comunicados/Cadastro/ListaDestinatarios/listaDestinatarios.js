@@ -4,6 +4,7 @@ import React from 'react';
 import { Label } from '~/componentes';
 import { Conteudo, IconeEstilizado } from './listaDestinatarios.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaDestinatarios = ({ form, onChangeCampos, desabilitar }) => {
   const { alunos } = form.values;
 
@@ -51,4 +52,4 @@ ListaDestinatarios.defaultProps = {
   desabilitar: false,
 };
 
-export default ListaDestinatarios;
+export default comDefaultProps(ListaDestinatarios, ListaDestinatarios.defaultProps);

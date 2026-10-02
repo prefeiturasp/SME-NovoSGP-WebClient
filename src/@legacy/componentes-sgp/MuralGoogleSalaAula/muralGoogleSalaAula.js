@@ -5,6 +5,7 @@ import CardCollapse from '~/componentes/cardCollapse';
 import { SGP_COLLAPSE_MURAL_GOOGLE_SALA_AULA } from '~/constantes/ids/collapse';
 import DadosMuralGoogleSalaAula from './dadosMuralGoogleSalaAula';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const MuralGoogleSalaAula = props => {
   const { aulaId, podeAlterar } = props;
 
@@ -49,4 +50,4 @@ MuralGoogleSalaAula.defaultProps = {
   podeAlterar: true,
 };
 
-export default MuralGoogleSalaAula;
+export default comDefaultProps(MuralGoogleSalaAula, MuralGoogleSalaAula.defaultProps);

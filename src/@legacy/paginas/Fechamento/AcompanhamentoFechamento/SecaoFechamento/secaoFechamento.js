@@ -8,6 +8,7 @@ import { statusAcompanhamentoFechamento } from '~/dtos';
 import { DetalhesFechamento } from './DetalhesFechamento';
 import { CardStatus } from '../CardStatus';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const SecaoFechamento = ({
   dadosTurmas,
   dadosStatusFechamento,
@@ -59,4 +60,4 @@ SecaoFechamento.propTypes = {
   parametrosFiltro: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
 };
 
-export default SecaoFechamento;
+export default comDefaultProps(SecaoFechamento, SecaoFechamento.defaultProps);

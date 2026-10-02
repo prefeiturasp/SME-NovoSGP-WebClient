@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Col } from 'antd';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ColunaDimensionavel = props => {
   const { children, novaEstrutura, dimensao } = props;
 
@@ -35,4 +36,4 @@ ColunaDimensionavel.defaultProps = {
   dimensao: 12,
 };
 
-export default ColunaDimensionavel;
+export default comDefaultProps(ColunaDimensionavel, ColunaDimensionavel.defaultProps);

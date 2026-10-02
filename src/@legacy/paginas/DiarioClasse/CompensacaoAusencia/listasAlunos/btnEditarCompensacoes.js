@@ -6,6 +6,7 @@ import { Base } from '~/componentes';
 import _ from 'lodash';
 import ModalAusenciasAluno from './modalAusenciasAluno';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BtnEditarCompensacoes = props => {
   const {
     listaAusenciaCompensada,
@@ -105,4 +106,4 @@ BtnEditarCompensacoes.defaultProps = {
   dadosAluno: null,
 };
 
-export default BtnEditarCompensacoes;
+export default comDefaultProps(BtnEditarCompensacoes, BtnEditarCompensacoes.defaultProps);

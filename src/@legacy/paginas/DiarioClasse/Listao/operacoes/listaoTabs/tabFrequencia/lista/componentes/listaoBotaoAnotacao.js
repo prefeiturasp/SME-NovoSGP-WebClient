@@ -6,6 +6,7 @@ import React from 'react';
 import { Base } from '~/componentes/colors';
 import { ContainerBtbAnotacao } from '~/paginas/DiarioClasse/Listao/operacoes/listaoTabs/tabFrequencia/lista/listaFrequencia.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaoBotaoAnotacao = props => {
   const {
     desabilitarCampos,
@@ -84,4 +85,4 @@ ListaoBotaoAnotacao.defaultProps = {
   corIcone: '',
 };
 
-export default ListaoBotaoAnotacao;
+export default comDefaultProps(ListaoBotaoAnotacao, ListaoBotaoAnotacao.defaultProps);

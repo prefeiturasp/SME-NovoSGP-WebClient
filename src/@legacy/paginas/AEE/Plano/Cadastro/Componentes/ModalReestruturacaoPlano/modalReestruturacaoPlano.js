@@ -18,6 +18,7 @@ import {
 import { confirmar, erros, sucesso } from '~/servicos';
 import ServicoPlanoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoPlanoAEE';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalReestruturacaoPlano = ({
   key,
   alternarModal,
@@ -264,4 +265,4 @@ ModalReestruturacaoPlano.propTypes = {
   semestre: PropTypes.number.isRequired,
 };
 
-export default ModalReestruturacaoPlano;
+export default comDefaultProps(ModalReestruturacaoPlano, ModalReestruturacaoPlano.defaultProps);

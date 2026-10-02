@@ -20,6 +20,7 @@ import {
 import { LinhaTabela, IconeSeta } from './tabelaComponentesCurriculares.css';
 import { Table } from 'antd';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TabelaComponentesCurriculares = ({
   dadosComponentesCurriculares,
   turmaId,
@@ -315,4 +316,4 @@ TabelaComponentesCurriculares.propTypes = {
   bimestre: PropTypes.string,
 };
 
-export default TabelaComponentesCurriculares;
+export default comDefaultProps(TabelaComponentesCurriculares, TabelaComponentesCurriculares.defaultProps);

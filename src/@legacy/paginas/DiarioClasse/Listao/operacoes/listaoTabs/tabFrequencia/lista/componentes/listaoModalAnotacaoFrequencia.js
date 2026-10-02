@@ -8,6 +8,7 @@ import {
 import ModalAnotacoesFrequencia from '~/componentes-sgp/ModalAnotacoes/modalAnotacoes';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaoModalAnotacaoFrequencia = ({
   dadosListaFrequencia,
   ehInfantil,
@@ -90,4 +91,4 @@ ListaoModalAnotacaoFrequencia.defaultProps = {
   fechouModal: () => {},
 };
 
-export default ListaoModalAnotacaoFrequencia;
+export default comDefaultProps(ListaoModalAnotacaoFrequencia, ListaoModalAnotacaoFrequencia.defaultProps);

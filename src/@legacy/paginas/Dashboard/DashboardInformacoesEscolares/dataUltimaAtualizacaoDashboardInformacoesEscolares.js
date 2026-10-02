@@ -5,6 +5,7 @@ import { TagGrafico } from '~/componentes-sgp';
 import { erros } from '~/servicos';
 import ServicoDashboardInformacoesEscolares from '~/servicos/Paginas/Dashboard/ServicoDashboardInformacoesEscolares';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DataUltimaAtualizacaoDashboardInformacoesEscolares = props => {
   const { anoLetivo } = props;
 
@@ -54,4 +55,4 @@ DataUltimaAtualizacaoDashboardInformacoesEscolares.defaultProps = {
   anoLetivo: '',
 };
 
-export default DataUltimaAtualizacaoDashboardInformacoesEscolares;
+export default comDefaultProps(DataUltimaAtualizacaoDashboardInformacoesEscolares, DataUltimaAtualizacaoDashboardInformacoesEscolares.defaultProps);

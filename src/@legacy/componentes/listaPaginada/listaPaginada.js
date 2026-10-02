@@ -6,6 +6,7 @@ import queryString from 'query-string';
 import { Table } from 'antd';
 
 import { api, erros } from '~/servicos';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 import { Container } from './listaPaginada.css';
 
@@ -301,4 +302,4 @@ ListaPaginada.defaultProps = {
   limparDados: false,
 };
 
-export default ListaPaginada;
+export default comDefaultProps(ListaPaginada, ListaPaginada.defaultProps);

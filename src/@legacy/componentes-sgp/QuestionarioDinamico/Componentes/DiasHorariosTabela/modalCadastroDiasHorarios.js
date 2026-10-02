@@ -15,6 +15,7 @@ import Button from '~/componentes/button';
 import { confirmar } from '~/servicos';
 import QuestionarioDinamicoFuncoes from '../../Funcoes/QuestionarioDinamicoFuncoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalCadastroDiasHorario = props => {
   const { onClose, exibirModal, dadosIniciais } = props;
 
@@ -190,4 +191,4 @@ ModalCadastroDiasHorario.defaultProps = {
   dadosIniciais: {},
 };
 
-export default ModalCadastroDiasHorario;
+export default comDefaultProps(ModalCadastroDiasHorario, ModalCadastroDiasHorario.defaultProps);

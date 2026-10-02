@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import ServicoDashboardEscolaAqui from '~/servicos/Paginas/Dashboard/ServicoDashboardEscolaAqui';
 import { ContainerDataUltimaAtualizacao } from '../../dashboardEscolaAqui.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DataUltimaAtualizacaoDashboardEscolaAqui = props => {
   const { tituloAdicional, nomeConsulta } = props;
 
@@ -47,4 +48,4 @@ DataUltimaAtualizacaoDashboardEscolaAqui.defaultProps = {
   nomeConsulta: '',
 };
 
-export default DataUltimaAtualizacaoDashboardEscolaAqui;
+export default comDefaultProps(DataUltimaAtualizacaoDashboardEscolaAqui, DataUltimaAtualizacaoDashboardEscolaAqui.defaultProps);

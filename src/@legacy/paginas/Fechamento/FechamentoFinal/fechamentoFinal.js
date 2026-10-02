@@ -19,6 +19,7 @@ import LinhaAluno from './linhaAluno';
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
 import Alert from '~/componentes/alert';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const FechamentoFinal = forwardRef((props, ref) => {
   const {
     turmaCodigo,
@@ -351,4 +352,4 @@ FechamentoFinal.defaultProps = {
   semestre: null,
 };
 
-export default FechamentoFinal;
+export default comDefaultProps(FechamentoFinal, FechamentoFinal.defaultProps);

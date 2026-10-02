@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import CartaoIndicador from './cartaoIdentificador';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const IndicadorTaxaAlfabetizacao = ({ dados, loading }) => {
   return (
     <CartaoIndicador
@@ -22,4 +23,4 @@ IndicadorTaxaAlfabetizacao.defaultProps = {
   loading: false,
 };
 
-export default IndicadorTaxaAlfabetizacao;
+export default comDefaultProps(IndicadorTaxaAlfabetizacao, IndicadorTaxaAlfabetizacao.defaultProps);

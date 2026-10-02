@@ -5,7 +5,8 @@ import { SGP_SELECT_COMPONENTE_CURRICULAR } from '~/constantes/ids/select';
 import { erros, ServicoDisciplina } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 
-export const ComponenteCurricular = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const ComponenteCurricularComponent = ({
   name,
   form,
   onChange,
@@ -103,7 +104,7 @@ export const ComponenteCurricular = ({
   );
 };
 
-ComponenteCurricular.propTypes = {
+ComponenteCurricularComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -114,7 +115,7 @@ ComponenteCurricular.propTypes = {
   nameList: PropTypes.string,
 };
 
-ComponenteCurricular.defaultProps = {
+ComponenteCurricularComponent.defaultProps = {
   form: null,
   name: 'codigoComponenteCurricular',
   disabled: false,
@@ -124,3 +125,8 @@ ComponenteCurricular.defaultProps = {
   onChange: () => null,
   nameList: 'listaComponentesCurriculares',
 };
+
+export const ComponenteCurricular = comDefaultProps(
+  ComponenteCurricularComponent,
+  ComponenteCurricularComponent.defaultProps
+);

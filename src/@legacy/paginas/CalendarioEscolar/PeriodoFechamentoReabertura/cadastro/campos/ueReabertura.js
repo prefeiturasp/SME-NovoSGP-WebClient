@@ -7,6 +7,7 @@ import { AbrangenciaServico, erros, ServicoCalendarios } from '~/servicos';
 import FechaReabCadastroContext from '../fechaReabCadastroContext';
 import { FiltroHelper } from '~/componentes-sgp';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const UeReabertura = ({ form, onChangeCampos }) => {
   const { setListaUes, listaUes, desabilitarCampos, calendarioSelecionado } =
     useContext(FechaReabCadastroContext);
@@ -150,4 +151,4 @@ UeReabertura.defaultProps = {
   onChangeCampos: () => null,
 };
 
-export default UeReabertura;
+export default comDefaultProps(UeReabertura, UeReabertura.defaultProps);

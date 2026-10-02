@@ -7,6 +7,7 @@ import { erros, sucesso } from '~/servicos';
 import { useNavigate } from 'react-router-dom';
 import ServicoRelatorioRegistroItinerancia from '@/@legacy/servicos/Paginas/Relatorios/AEE/ServicoRelatorioRegistroItinerancia';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioRegistroItineranciaBotoesAcoes = props => {
   const navigate = useNavigate();
 
@@ -95,4 +96,4 @@ RelatorioRegistroItineranciaBotoesAcoes.defaultProps = {
   setDesabilitarGerar: () => false,
 };
 
-export default RelatorioRegistroItineranciaBotoesAcoes;
+export default comDefaultProps(RelatorioRegistroItineranciaBotoesAcoes, RelatorioRegistroItineranciaBotoesAcoes.defaultProps);

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import ModalAnotacaoAluno from '~/paginas/Fechamento/FechamentoModalAnotacaoAluno/modal-anotacao-aluno';
 import ListaoBotaoAnotacao from '../../tabFrequencia/lista/componentes/listaoBotaoAnotacao';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AnotacoesFechamentoLisao = props => {
   const usuario = useSelector(store => store.usuario);
   const { turmaSelecionada } = usuario;
@@ -96,4 +97,4 @@ AnotacoesFechamentoLisao.defaultProps = {
   setDadosFechamento: () => null,
 };
 
-export default AnotacoesFechamentoLisao;
+export default comDefaultProps(AnotacoesFechamentoLisao, AnotacoesFechamentoLisao.defaultProps);

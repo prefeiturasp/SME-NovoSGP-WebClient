@@ -4,15 +4,15 @@ import Pie from './Pie';
 jest.mock('@nivo/pie', () => ({
   ResponsivePie: ({
     data,
-    enableRadialLabels,
-    radialLabel,
+    enableArcLinkLabels,
+    arcLinkLabel,
     margin,
     theme,
     isInteractive,
-    enableSlicesLabels,
-    radialLabelsLinkColor,
-    radialLabelsLinkDiagonalLength,
-    radialLabelsLinkStrokeWidth,
+    enableArcLabels,
+    arcLinkLabelsColor,
+    arcLinkLabelsDiagonalLength,
+    arcLinkLabelsThickness,
     colors,
   }) => {
     data.forEach(item => {
@@ -22,16 +22,16 @@ jest.mock('@nivo/pie', () => ({
     return (
       <div
         data-testid="responsive-pie"
-        data-enable-radial={enableRadialLabels}
-        data-radial-first={radialLabel(data[0])}
-        data-radial-second={radialLabel(data[1])}
+        data-enable-radial={enableArcLinkLabels}
+        data-radial-first={arcLinkLabel(data[0])}
+        data-radial-second={arcLinkLabel(data[1])}
         data-margin-top={margin.top}
         data-theme={JSON.stringify(theme)}
         data-is-interactive={isInteractive}
-        data-enable-slices-labels={enableSlicesLabels}
-        data-radial-link-color={JSON.stringify(radialLabelsLinkColor)}
-        data-radial-link-length={radialLabelsLinkDiagonalLength}
-        data-radial-link-width={radialLabelsLinkStrokeWidth}
+        data-enable-slices-labels={enableArcLabels}
+        data-radial-link-color={JSON.stringify(arcLinkLabelsColor)}
+        data-radial-link-length={arcLinkLabelsDiagonalLength}
+        data-radial-link-width={arcLinkLabelsThickness}
         style={{ height: 400 }}
       >
         {data.map(item => (
@@ -89,7 +89,7 @@ describe('Componente Pie', () => {
     const pie = screen.getByTestId('responsive-pie');
     expect(pie).toHaveAttribute('data-is-interactive', 'false');
     const theme = JSON.parse(pie.getAttribute('data-theme'));
-    expect(theme.fontFamily).toBe('Roboto');
+    expect(theme.labels.text.fontFamily).toBe('Roboto');
     expect(pie).toHaveAttribute('data-enable-slices-labels', 'false');
   });
 

@@ -15,6 +15,7 @@ import QuestionarioDinamicoFuncoes from '../../Funcoes/QuestionarioDinamicoFunco
 import ModalCadastroDiasHorario from './modalCadastroDiasHorarios';
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DiasHorariosTabela = props => {
   const { label, questaoAtual, form, desabilitado, onChange } = props;
 
@@ -229,4 +230,4 @@ DiasHorariosTabela.defaultProps = {
   onChange: () => {},
 };
 
-export default DiasHorariosTabela;
+export default comDefaultProps(DiasHorariosTabela, DiasHorariosTabela.defaultProps);

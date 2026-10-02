@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import EventosListaContext from './eventosListaContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const EventosListaContextProvider = ({ children }) => {
   const [codigoDre, setCodigoDre] = useState();
   const [codigoUe, setCodigoUe] = useState();
@@ -56,4 +57,4 @@ EventosListaContextProvider.propTypes = {
   children: PropTypes.node,
 };
 
-export default EventosListaContextProvider;
+export default comDefaultProps(EventosListaContextProvider, EventosListaContextProvider.defaultProps);

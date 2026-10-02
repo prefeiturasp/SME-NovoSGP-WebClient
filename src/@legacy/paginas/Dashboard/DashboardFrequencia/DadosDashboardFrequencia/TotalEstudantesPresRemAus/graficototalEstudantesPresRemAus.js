@@ -10,6 +10,7 @@ import { tipoGraficos } from '~/dtos';
 import { erros, ServicoDashboardFrequencia } from '~/servicos';
 import { obterTodosMeses } from '~/utils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoTotalEstudantesPresenciasRemotosAusentes = ({
   anoLetivo,
   dreId,
@@ -378,4 +379,4 @@ GraficoTotalEstudantesPresenciasRemotosAusentes.defaultProps = {
   visaoDre: false,
 };
 
-export default GraficoTotalEstudantesPresenciasRemotosAusentes;
+export default comDefaultProps(GraficoTotalEstudantesPresenciasRemotosAusentes, GraficoTotalEstudantesPresenciasRemotosAusentes.defaultProps);

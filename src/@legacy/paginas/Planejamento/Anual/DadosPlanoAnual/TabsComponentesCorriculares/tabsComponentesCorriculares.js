@@ -16,6 +16,7 @@ import {
   DescricaoNomeTabComponenteCurricular,
 } from './tabsComponentesCorriculares.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TabsComponentesCorriculares = props => {
   const dispatch = useDispatch();
   const listaComponentesCheck = useSelector(
@@ -251,4 +252,4 @@ TabsComponentesCorriculares.defaultProps = {
   dadosBimestre: '',
 };
 
-export default TabsComponentesCorriculares;
+export default comDefaultProps(TabsComponentesCorriculares, TabsComponentesCorriculares.defaultProps);

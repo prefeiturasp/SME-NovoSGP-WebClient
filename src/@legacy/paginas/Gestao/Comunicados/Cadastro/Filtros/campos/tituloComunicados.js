@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { CampoTexto } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TituloComunicados = ({ form, onChangeCampos, desabilitar }) => {
   return (
     <CampoTexto
@@ -28,4 +29,4 @@ TituloComunicados.defaultProps = {
   desabilitar: false,
 };
 
-export default TituloComunicados;
+export default comDefaultProps(TituloComunicados, TituloComunicados.defaultProps);

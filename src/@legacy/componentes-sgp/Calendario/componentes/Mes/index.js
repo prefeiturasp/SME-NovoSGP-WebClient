@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import t from 'prop-types';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 // Estilos
 import { DivMes, DivWrapperMes } from './styles';
@@ -48,4 +49,4 @@ Mes.defaultProps = {
   mes: {},
 };
 
-export default Mes;
+export default comDefaultProps(Mes, Mes.defaultProps);

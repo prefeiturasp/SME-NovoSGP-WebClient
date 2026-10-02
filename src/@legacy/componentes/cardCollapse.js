@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import shortid from 'shortid';
+import comDefaultProps from '~/utils/comDefaultProps';
 import CardHeader from './cardHeader';
 import CardBody from './cardBody';
 import { Base } from './colors';
@@ -74,4 +75,4 @@ CardCollapse.defaultProps = {
   id: '',
 };
 
-export default CardCollapse;
+export default comDefaultProps(CardCollapse, CardCollapse.defaultProps);

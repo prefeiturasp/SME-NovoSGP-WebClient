@@ -5,7 +5,8 @@ import { SGP_SELECT_PORTA_ENTRADA_NAAPA } from '~/constantes/ids/select';
 import { erros } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 
-export const PortaEntradaNAAPA = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const PortaEntradaNAAPAComponent = ({
   name,
   form,
   onChange,
@@ -64,7 +65,7 @@ export const PortaEntradaNAAPA = ({
   );
 };
 
-PortaEntradaNAAPA.propTypes = {
+PortaEntradaNAAPAComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -74,7 +75,7 @@ PortaEntradaNAAPA.propTypes = {
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
-PortaEntradaNAAPA.defaultProps = {
+PortaEntradaNAAPAComponent.defaultProps = {
   form: null,
   disabled: false,
   multiple: true,
@@ -83,3 +84,8 @@ PortaEntradaNAAPA.defaultProps = {
   onChange: () => null,
   name: 'portaEntradaIds',
 };
+
+export const PortaEntradaNAAPA = comDefaultProps(
+  PortaEntradaNAAPAComponent,
+  PortaEntradaNAAPAComponent.defaultProps
+);

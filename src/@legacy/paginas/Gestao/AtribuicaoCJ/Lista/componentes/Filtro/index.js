@@ -16,6 +16,7 @@ import { Linha } from '~/componentes/EstilosGlobais';
 import { FiltroHelper } from '~/componentes-sgp';
 import { ordenarDescPor } from '~/utils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function Filtro({ onFiltrar }) {
   const anoAtual = window.moment().format('YYYY');
 
@@ -143,4 +144,4 @@ Filtro.defaultProps = {
   onFiltrar: () => null,
 };
 
-export default Filtro;
+export default comDefaultProps(Filtro, Filtro.defaultProps);

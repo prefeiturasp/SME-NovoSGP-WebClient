@@ -30,6 +30,7 @@ import ListasNotasConceitos from './ListasNotasConceito/listasNotasConceitos';
 import MarcadorPeriodoInicioFim from './MarcadorPeriodoInicioFim/marcadorPeriodoInicioFim';
 import Sintese from './Sintese/Sintese';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const { TabPane } = Tabs;
 
 const DadosConselhoClasse = props => {
@@ -380,4 +381,4 @@ DadosConselhoClasse.defaultProps = {
   modalidade: '',
 };
 
-export default DadosConselhoClasse;
+export default comDefaultProps(DadosConselhoClasse, DadosConselhoClasse.defaultProps);

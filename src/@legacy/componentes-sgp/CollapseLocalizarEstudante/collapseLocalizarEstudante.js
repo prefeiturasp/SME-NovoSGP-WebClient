@@ -4,6 +4,7 @@ import CardCollapse from '~/componentes/cardCollapse';
 import CollapseLocalizarEstudanteDados from './collapseLocalizarEstudanteDados';
 import { SGP_COLLAPSE_LOCALIZAR_ESTUDANTE_CRIANCA } from '~/constantes/ids/collapse';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CollapseLocalizarEstudante = props => {
   const {
     changeDre,
@@ -64,4 +65,4 @@ CollapseLocalizarEstudante.defaultProps = {
   validarSePermiteProximoPasso: null,
 };
 
-export default CollapseLocalizarEstudante;
+export default comDefaultProps(CollapseLocalizarEstudante, CollapseLocalizarEstudante.defaultProps);

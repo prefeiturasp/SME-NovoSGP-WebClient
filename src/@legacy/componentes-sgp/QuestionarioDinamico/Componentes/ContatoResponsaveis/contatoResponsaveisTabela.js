@@ -15,6 +15,7 @@ import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 import QuestionarioDinamicoFuncoes from '../../Funcoes/QuestionarioDinamicoFuncoes';
 import { SGP_TABLE_CONTATO_RESPONSAVEIS } from '~/constantes/ids/table';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ContatoResponsaveisTabela = props => {
   const { label, questaoAtual, form, disabled, onChange } = props;
 
@@ -166,4 +167,4 @@ ContatoResponsaveisTabela.defaultProps = {
   questaoAtual: null,
 };
 
-export default ContatoResponsaveisTabela;
+export default comDefaultProps(ContatoResponsaveisTabela, ContatoResponsaveisTabela.defaultProps);

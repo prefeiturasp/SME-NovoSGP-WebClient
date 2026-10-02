@@ -3,6 +3,7 @@ import React from 'react';
 import shortid from 'shortid';
 import { BarraLateralAzul, Tabela } from './ComponenteSemNota.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ComponenteSemNota = props => {
   const { dados, nomeColunaComponente, corBorda, ehFinal } = props;
 
@@ -90,4 +91,4 @@ ComponenteSemNota.defaultProps = {
   ehFinal: false,
 };
 
-export default ComponenteSemNota;
+export default comDefaultProps(ComponenteSemNota, ComponenteSemNota.defaultProps);

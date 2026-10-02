@@ -5,6 +5,7 @@ import { ClassificacaoDocumento } from '~/componentes-sgp/inputs/classificacaoDo
 import { TipoDocumento } from '~/componentes-sgp/inputs/tipoDocumento';
 import DocPlanosTrabalhoListaPaginada from './docPlanosTrabalhoListaPaginada';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DocPlanosTrabalhoFiltros = props => {
   const { form } = props;
 
@@ -52,4 +53,4 @@ DocPlanosTrabalhoFiltros.defaultProps = {
   form: null,
 };
 
-export default DocPlanosTrabalhoFiltros;
+export default comDefaultProps(DocPlanosTrabalhoFiltros, DocPlanosTrabalhoFiltros.defaultProps);

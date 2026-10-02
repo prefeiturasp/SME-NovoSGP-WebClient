@@ -5,6 +5,7 @@ import { SGP_TABLE_FREQUENCIA_TURMA_PAP } from '~/constantes/ids/table';
 import ColunaDimensionavel from '../ColunaDimensionavel/colunaDimensionavel';
 import { formatarFrequencia } from '@/@legacy/utils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TabelaFrequenciaTurmaPAP = props => {
   const { label, questaoAtual, form } = props;
 
@@ -70,4 +71,4 @@ TabelaFrequenciaTurmaPAP.defaultProps = {
   questaoAtual: null,
 };
 
-export default TabelaFrequenciaTurmaPAP;
+export default comDefaultProps(TabelaFrequenciaTurmaPAP, TabelaFrequenciaTurmaPAP.defaultProps);

@@ -9,6 +9,7 @@ import { erros } from '~/servicos';
 
 import ServicoDashboardFechamento from '~/servicos/Paginas/Dashboard/ServicoDashboardFechamento';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoNotasFinais = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
 
@@ -79,4 +80,4 @@ GraficoNotasFinais.defaultProps = {
   bimestre: null,
 };
 
-export default GraficoNotasFinais;
+export default comDefaultProps(GraficoNotasFinais, GraficoNotasFinais.defaultProps);

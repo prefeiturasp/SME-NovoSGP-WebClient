@@ -9,6 +9,7 @@ import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 import ItineranciaNAAPADownloadViewFile from '../itineranciaNAAPADownloadViewFile';
 import { SGP_BUTTON_DOWNLOAD_ARQUIVO } from '~/constantes/ids/button';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaHistoricoAtendimentosPaginada = ({
   atualizarTabela,
   setAtendimentoId,
@@ -185,4 +186,4 @@ ListaHistoricoAtendimentosPaginada.defaultProps = {
   atualizarTabela: false,
 };
 
-export default ListaHistoricoAtendimentosPaginada;
+export default comDefaultProps(ListaHistoricoAtendimentosPaginada, ListaHistoricoAtendimentosPaginada.defaultProps);

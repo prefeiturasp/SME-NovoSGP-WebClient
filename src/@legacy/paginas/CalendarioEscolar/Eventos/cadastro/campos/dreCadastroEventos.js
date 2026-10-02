@@ -6,6 +6,7 @@ import { FiltroHelper } from '~/componentes-sgp';
 import { OPCAO_TODOS } from '~/constantes';
 import { AbrangenciaServico, erros } from '~/servicos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DreCadastroEventos = ({
   form,
   onChangeCampos,
@@ -97,4 +98,4 @@ DreCadastroEventos.defaultProps = {
   eventoId: 0,
 };
 
-export default DreCadastroEventos;
+export default comDefaultProps(DreCadastroEventos, DreCadastroEventos.defaultProps);

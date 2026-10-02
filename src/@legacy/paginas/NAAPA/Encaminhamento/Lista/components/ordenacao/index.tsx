@@ -159,6 +159,7 @@ export const BotaoOrdenacaoListaEncaminhamentoNAAPA: React.FC<
         // @ts-ignore
         value={ordenacoesSelecionadas}
         onChange={setOrdenacoesSelecionadas}
+        // @ts-ignore
         onSelect={onSelect}
         showCheckedStrategy={SHOW_PARENT}
         treeNodeLabelProp="label"

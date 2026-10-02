@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import CartaoIndicador from './cartaoIdentificador';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const IndicadorIdeb = ({ dados, loading }) => {
   return (
     <CartaoIndicador
@@ -22,4 +23,4 @@ IndicadorIdeb.defaultProps = {
   loading: false,
 };
 
-export default IndicadorIdeb;
+export default comDefaultProps(IndicadorIdeb, IndicadorIdeb.defaultProps);

@@ -9,6 +9,7 @@ import ServicoVisaoGeral from '~/servicos/InformacoesEducacionais/ServicoVisaoGe
 import { erros } from '~/servicos';
 import IndicadorTaxaAlfabetizacao from './IndicadorTaxaAlfabetizacao';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const Titulo = styled.h2`
   font-weight: bold;
   color: #333;
@@ -165,4 +166,4 @@ VisaoGeral.defaultProps = {
   dreCodigo: null,
 };
 
-export default VisaoGeral;
+export default comDefaultProps(VisaoGeral, VisaoGeral.defaultProps);

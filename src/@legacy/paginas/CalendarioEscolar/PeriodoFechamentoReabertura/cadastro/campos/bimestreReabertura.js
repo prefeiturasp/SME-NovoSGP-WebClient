@@ -6,6 +6,7 @@ import { onchangeMultiSelect } from '~/utils';
 import FechaReabCadastroContext from '../fechaReabCadastroContext';
 import { ModalidadeTipoCalendarioEnum } from '@/core/enum/modalidade-tipo-calendario-enum';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BimestreReabertura = ({ form, onChangeCampos }) => {
   const {
     desabilitarCampos,
@@ -97,4 +98,4 @@ BimestreReabertura.defaultProps = {
   onChangeCampos: () => null,
 };
 
-export default BimestreReabertura;
+export default comDefaultProps(BimestreReabertura, BimestreReabertura.defaultProps);

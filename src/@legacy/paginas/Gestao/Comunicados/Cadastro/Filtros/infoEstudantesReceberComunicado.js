@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { erros, ServicoComunicados } from '~/servicos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 export const Container = styled.div`
   font-style: normal;
   font-weight: normal;
@@ -82,4 +83,4 @@ InfoEstudantesReceberComunicados.defaultProps = {
   form: null,
 };
 
-export default InfoEstudantesReceberComunicados;
+export default comDefaultProps(InfoEstudantesReceberComunicados, InfoEstudantesReceberComunicados.defaultProps);

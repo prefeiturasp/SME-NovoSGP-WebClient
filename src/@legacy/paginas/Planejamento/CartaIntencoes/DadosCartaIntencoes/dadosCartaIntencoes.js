@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import shortid from 'shortid';
 import BimestresCartaIntencoes from './BimestresCartaIntencoes/bimestresCartaIntencoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DadosCartaIntencoes = props => {
   const { permissoesTela, somenteConsulta } = props;
 
@@ -40,4 +41,4 @@ DadosCartaIntencoes.defaultProps = {
   somenteConsulta: false,
 };
 
-export default DadosCartaIntencoes;
+export default comDefaultProps(DadosCartaIntencoes, DadosCartaIntencoes.defaultProps);

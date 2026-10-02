@@ -7,6 +7,7 @@ import LinhaObservacaoProprietario from './linhaObservacaoProprietario';
 import ListaNotificacoes from './listaNotificacoes/listaNotificacoes';
 import { ContainerCampoObservacao } from './observacoesUsuario.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ObservacoesUsuarioMontarDados = props => {
   const {
     onClickSalvarEdicao,
@@ -115,4 +116,4 @@ ObservacoesUsuarioMontarDados.defaultProps = {
   mostrarListaNotificacao: false,
 };
 
-export default ObservacoesUsuarioMontarDados;
+export default comDefaultProps(ObservacoesUsuarioMontarDados, ObservacoesUsuarioMontarDados.defaultProps);

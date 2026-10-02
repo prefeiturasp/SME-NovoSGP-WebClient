@@ -6,6 +6,7 @@ import { Label } from '~/componentes';
 
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const SwitchInformarObjetivosListao = ({
   exibirSwitchEscolhaObjetivos,
   desabilitar,
@@ -66,4 +67,4 @@ SwitchInformarObjetivosListao.defaultProps = {
   indexPlano: null,
 };
 
-export default SwitchInformarObjetivosListao;
+export default comDefaultProps(SwitchInformarObjetivosListao, SwitchInformarObjetivosListao.defaultProps);

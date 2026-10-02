@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { JoditEditor } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DescricaoOcorrencia = ({
   form,
   onChangeCampos,
@@ -35,4 +36,4 @@ DescricaoOcorrencia.defaultProps = {
   desabilitar: false,
 };
 
-export default DescricaoOcorrencia;
+export default comDefaultProps(DescricaoOcorrencia, DescricaoOcorrencia.defaultProps);

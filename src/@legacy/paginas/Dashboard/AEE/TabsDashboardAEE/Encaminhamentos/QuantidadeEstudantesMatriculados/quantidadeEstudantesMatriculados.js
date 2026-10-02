@@ -5,6 +5,7 @@ import CardCollapse from '~/componentes/cardCollapse';
 import MontarGraficoBarras from '~/paginas/Dashboard/ComponentesDashboard/montarGraficoBarras';
 import ServicoDashboardAEE from '~/servicos/Paginas/Dashboard/ServicoDashboardAEE';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const QuantidadeEstudantesMatriculados = props => {
   const { anoLetivo, ueCodigo, dreCodigo } = props;
 
@@ -66,4 +67,4 @@ QuantidadeEstudantesMatriculados.defaultProps = {
   ueCodigo: '',
 };
 
-export default QuantidadeEstudantesMatriculados;
+export default comDefaultProps(QuantidadeEstudantesMatriculados, QuantidadeEstudantesMatriculados.defaultProps);

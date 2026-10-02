@@ -1,6 +1,7 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import t from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { SelectComponent } from '~/componentes';
 import AcompanhamentoPAPServico from '~/servicos/Paginas/Relatorios/PAP/Acompanhamento';
@@ -65,4 +66,4 @@ PeriodosDropDown.defaultProps = {
   setSemPeriodos: () => {},
 };
 
-export default PeriodosDropDown;
+export default comDefaultProps(PeriodosDropDown, PeriodosDropDown.defaultProps);

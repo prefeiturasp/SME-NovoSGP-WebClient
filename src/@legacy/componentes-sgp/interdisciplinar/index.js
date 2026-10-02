@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Base } from '~/componentes/colors';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LabelInterdisciplinar = props => {
   const { disciplinas } = props;
 
@@ -42,4 +43,4 @@ LabelInterdisciplinar.defaultProps = {
   disciplinas: [],
 };
 
-export default LabelInterdisciplinar;
+export default comDefaultProps(LabelInterdisciplinar, LabelInterdisciplinar.defaultProps);

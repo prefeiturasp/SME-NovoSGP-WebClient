@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 import { IconePlusMarcadores } from './avaliacao.css';
 
@@ -42,8 +43,6 @@ ColunaNotaFinalRegencia.propTypes = {
   indexLinha: PropTypes.number,
 };
 
-ColunaNotaFinalRegencia.defaultProps = {
+export default comDefaultProps(ColunaNotaFinalRegencia, {
   indexLinha: null,
-};
-
-export default ColunaNotaFinalRegencia;
+});

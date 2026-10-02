@@ -12,6 +12,7 @@ import { urlBase } from '~/servicos/variaveis';
 import { Base } from '../colors';
 import Label from '../label';
 import { clone } from 'lodash';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const Campo = styled.div`
   .jodit-container {
@@ -781,4 +782,4 @@ JoditEditor.defaultProps = {
   permiteInserirArquivo: true,
 };
 
-export default JoditEditor;
+export default comDefaultProps(JoditEditor, JoditEditor.defaultProps);

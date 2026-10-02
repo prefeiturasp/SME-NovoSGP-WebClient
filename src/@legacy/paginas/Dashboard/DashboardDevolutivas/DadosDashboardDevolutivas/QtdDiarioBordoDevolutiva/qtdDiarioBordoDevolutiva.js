@@ -4,6 +4,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import GraficoQtdDiarioBordoDevolutiva from './graficoQtdDiarioBordoDevolutiva';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const QtdDiarioBordoDevolutiva = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -58,4 +59,4 @@ QtdDiarioBordoDevolutiva.defaultProps = {
   modalidade: null,
 };
 
-export default QtdDiarioBordoDevolutiva;
+export default comDefaultProps(QtdDiarioBordoDevolutiva, QtdDiarioBordoDevolutiva.defaultProps);

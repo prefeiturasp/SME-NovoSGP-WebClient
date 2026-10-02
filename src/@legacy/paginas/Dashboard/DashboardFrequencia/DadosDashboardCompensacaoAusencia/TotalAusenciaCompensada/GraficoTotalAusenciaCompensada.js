@@ -11,6 +11,7 @@ import {
 } from '~/servicos';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoTotalAusenciaCompensada = ({
   anoLetivo,
   dreId,
@@ -157,4 +158,4 @@ GraficoTotalAusenciaCompensada.defaultProps = {
   semestre: null,
 };
 
-export default GraficoTotalAusenciaCompensada;
+export default comDefaultProps(GraficoTotalAusenciaCompensada, GraficoTotalAusenciaCompensada.defaultProps);

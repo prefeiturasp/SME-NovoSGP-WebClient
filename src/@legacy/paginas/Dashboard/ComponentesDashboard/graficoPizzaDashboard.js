@@ -4,6 +4,7 @@ import { Graficos } from '~/componentes';
 import LegendaGrafico from '~/componentes-sgp/LegendaGrafico/legendaGrafico';
 import { TituloGrafico } from '../style';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoPizzaDashboard = props => {
   const { titulo, dadosGrafico } = props;
 
@@ -36,4 +37,4 @@ GraficoPizzaDashboard.defaultProps = {
   titulo: '',
 };
 
-export default GraficoPizzaDashboard;
+export default comDefaultProps(GraficoPizzaDashboard, GraficoPizzaDashboard.defaultProps);

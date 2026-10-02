@@ -6,6 +6,7 @@ import { ContainerTabsDashboard } from '../../style';
 import GraficosMatriculas from './Matriculas/graficosMatriculas';
 import GraficosTurmas from './Turmas/graficosTurmas';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const { TabPane } = Tabs;
 
 const TabsDashboardInformacoesEscolares = props => {
@@ -73,4 +74,4 @@ TabsDashboardInformacoesEscolares.defaultProps = {
   modalidade: '',
 };
 
-export default TabsDashboardInformacoesEscolares;
+export default comDefaultProps(TabsDashboardInformacoesEscolares, TabsDashboardInformacoesEscolares.defaultProps);

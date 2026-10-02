@@ -27,6 +27,7 @@ import { ordenarDescPor } from '~/utils';
 import { AvisoBoletim } from './styles';
 import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const Filtros = ({
   onFiltrar,
   filtrou,
@@ -699,4 +700,4 @@ Filtros.defaultProps = {
   setCancelou: () => {},
 };
 
-export default Filtros;
+export default comDefaultProps(Filtros, Filtros.defaultProps);

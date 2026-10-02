@@ -10,6 +10,7 @@ import ServicoAcompanhamentoAprendizagem from '~/servicos/Paginas/Relatorios/Aco
 import DadosGerais from './Tabs/DadosGerais/dadosGerais';
 import RegistrosFotos from './Tabs/RegistrosFotos/registrosFotos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const { TabPane } = Tabs;
 
 const DadosAcompanhamentoAprendizagem = props => {
@@ -126,4 +127,4 @@ DadosAcompanhamentoAprendizagem.defaultProps = {
   componenteCurricularId: '',
 };
 
-export default DadosAcompanhamentoAprendizagem;
+export default comDefaultProps(DadosAcompanhamentoAprendizagem, DadosAcompanhamentoAprendizagem.defaultProps);

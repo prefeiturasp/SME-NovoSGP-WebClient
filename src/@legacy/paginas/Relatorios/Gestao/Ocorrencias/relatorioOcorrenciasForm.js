@@ -15,6 +15,7 @@ import {
   Ue,
 } from '~/componentes-sgp/inputs';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioOcorrenciasForm = props => {
   const { form, onChangeCampos } = props;
 
@@ -98,4 +99,4 @@ RelatorioOcorrenciasForm.defaultProps = {
   onChangeCampos: () => null,
 };
 
-export default RelatorioOcorrenciasForm;
+export default comDefaultProps(RelatorioOcorrenciasForm, RelatorioOcorrenciasForm.defaultProps);

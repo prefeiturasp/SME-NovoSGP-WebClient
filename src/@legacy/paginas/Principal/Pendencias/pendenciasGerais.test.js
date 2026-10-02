@@ -20,20 +20,25 @@ jest.mock('~/componentes/select', () => {
     valueSelect,
     placeholder,
     onChange,
+    labelRequired,
   }) => (
     <label>
-      <span>{label}</span>
+      <span>
+        {label}
+        {labelRequired ? <span>*</span> : null}
+      </span>
       <select
         data-testid={id}
         value={valueSelect || ''}
         onChange={event => onChange(event.target.value || undefined)}
       >
         <option value="">{placeholder}</option>
-        {Array.isArray(lista) && lista.map(item => (
-          <option key={item[valueOption]} value={item[valueOption]}>
-            {item[valueText]}
-          </option>
-        ))}
+        {Array.isArray(lista) &&
+          lista.map(item => (
+            <option key={item[valueOption]} value={item[valueOption]}>
+              {item[valueText]}
+            </option>
+          ))}
       </select>
     </label>
   );

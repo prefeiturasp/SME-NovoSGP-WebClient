@@ -8,6 +8,7 @@ import { OPCAO_TODOS } from '~/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardDevolutivas from '~/servicos/Paginas/Dashboard/ServicoDashboardDevolutivas';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoQtdDevolutivasRegistradasEstimada = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -94,4 +95,4 @@ GraficoQtdDevolutivasRegistradasEstimada.defaultProps = {
   modalidade: null,
 };
 
-export default GraficoQtdDevolutivasRegistradasEstimada;
+export default comDefaultProps(GraficoQtdDevolutivasRegistradasEstimada, GraficoQtdDevolutivasRegistradasEstimada.defaultProps);

@@ -1,4 +1,5 @@
 import { SGPTheme } from '@/core/config/theme';
+import { AntdAppProvider } from '@/core/config/antd-app-provider';
 import { persistor, store } from '@/core/redux';
 import { ConfigProvider } from 'antd';
 import React from 'react';
@@ -12,7 +13,7 @@ import GlobalStyle from '~/estilos/global';
 import { Deslogar } from '~/redux/modulos/usuario/actions';
 import Routes from './routes';
 
-const App: React.FC = () => {
+const AppRoot: React.FC = () => {
   const verificaSairResetSenha = () => {
     const persistJson = localStorage.getItem('persist:sme-sgp');
     if (persistJson) {
@@ -38,18 +39,20 @@ const App: React.FC = () => {
   // @ts-ignore
   return (
     <ConfigProvider theme={SGPTheme}>
-      <ThemeProvider theme={SGPTheme}>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <BrowserRouter>
-              <GlobalStyle />
-              <Routes />
-            </BrowserRouter>
-          </PersistGate>
-        </Provider>
-      </ThemeProvider>
+      <AntdAppProvider>
+        <ThemeProvider theme={SGPTheme}>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <BrowserRouter>
+                <GlobalStyle />
+                <Routes />
+              </BrowserRouter>
+            </PersistGate>
+          </Provider>
+        </ThemeProvider>
+      </AntdAppProvider>
     </ConfigProvider>
   );
 };
 
-export default App;
+export default AppRoot;

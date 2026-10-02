@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { ListaPaginada } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const OcorrenciasCardCollapse = props => {
   const dadosAlunoObjectCard = useSelector(
     store => store.acompanhamentoAprendizagem.dadosAlunoObjectCard
@@ -85,4 +86,4 @@ OcorrenciasCardCollapse.defaultProps = {
   semestreSelecionado: '',
 };
 
-export default OcorrenciasCardCollapse;
+export default comDefaultProps(OcorrenciasCardCollapse, OcorrenciasCardCollapse.defaultProps);

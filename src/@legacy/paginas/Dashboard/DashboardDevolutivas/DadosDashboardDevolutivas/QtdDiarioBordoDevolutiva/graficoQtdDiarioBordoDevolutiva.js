@@ -6,6 +6,7 @@ import { OPCAO_TODOS } from '~/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardDevolutivas from '~/servicos/Paginas/Dashboard/ServicoDashboardDevolutivas';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoQtdDiarioBordoDevolutiva = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -75,4 +76,4 @@ GraficoQtdDiarioBordoDevolutiva.defaultProps = {
   modalidade: null,
 };
 
-export default GraficoQtdDiarioBordoDevolutiva;
+export default comDefaultProps(GraficoQtdDiarioBordoDevolutiva, GraficoQtdDiarioBordoDevolutiva.defaultProps);

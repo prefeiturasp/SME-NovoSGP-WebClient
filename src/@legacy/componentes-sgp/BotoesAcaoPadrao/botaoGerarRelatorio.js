@@ -6,6 +6,7 @@ import { SGP_BUTTON_GERAR_RELATORIO } from '../../constantes/ids/button';
 import { Colors } from '~/componentes/colors';
 import Loader from '~/componentes/loader';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BotaoGerarRelatorio = props => {
   const {
     onClick,
@@ -74,4 +75,4 @@ BotaoGerarRelatorio.defaultProps = {
   disabled: false,
 };
 
-export default BotaoGerarRelatorio;
+export default comDefaultProps(BotaoGerarRelatorio, BotaoGerarRelatorio.defaultProps);

@@ -4,6 +4,7 @@ import { OPCAO_TODOS } from '~/constantes';
 import TotalCriancasComRelAcompanhamentoAprendizagem from './CriancasComAcomp/criancasComAcomp';
 import TotalCriancasComAcompPorDRE from './CriancasComAcompPorDRE/totalCriancasComAcompPorDRE';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficosAcompanhamentoAprendizagem = props => {
   const { anoLetivo, dreId, ueId, dataUltimaConsolidacao } = props;
   return (
@@ -40,4 +41,4 @@ GraficosAcompanhamentoAprendizagem.defaultProps = {
   dataUltimaConsolidacao: null,
 };
 
-export default GraficosAcompanhamentoAprendizagem;
+export default comDefaultProps(GraficosAcompanhamentoAprendizagem, GraficosAcompanhamentoAprendizagem.defaultProps);

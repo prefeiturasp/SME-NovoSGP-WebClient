@@ -12,6 +12,7 @@ import {
   salvarEditarObservacao,
 } from '../../../listaoFuncoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ConteudoCollapse = props => {
   const [dadosIniciasPlanejamento, setDadosIniciasPlanejamento] = useState();
   const [temErro, setTemErro] = useState();
@@ -138,4 +139,4 @@ ConteudoCollapse.defaultProps = {
   turmaSelecionada: {},
 };
 
-export default ConteudoCollapse;
+export default comDefaultProps(ConteudoCollapse, ConteudoCollapse.defaultProps);

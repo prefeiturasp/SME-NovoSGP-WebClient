@@ -7,7 +7,8 @@ import { SGP_SELECT_ANO_ESCOLAR } from '~/constantes/ids/select';
 import { AbrangenciaServico, erros } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 
-export const AnoEscolar = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const AnoEscolarComponent = ({
   name,
   form,
   onChange,
@@ -169,7 +170,7 @@ export const AnoEscolar = ({
   );
 };
 
-AnoEscolar.propTypes = {
+AnoEscolarComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -182,7 +183,7 @@ AnoEscolar.propTypes = {
   validarSemestre: PropTypes.bool,
 };
 
-AnoEscolar.defaultProps = {
+AnoEscolarComponent.defaultProps = {
   form: null,
   name: 'anoCodigo',
   disabled: false,
@@ -194,3 +195,8 @@ AnoEscolar.defaultProps = {
   nameList: 'listaAnosEscolares',
   validarSemestre: true,
 };
+
+export const AnoEscolar = comDefaultProps(
+  AnoEscolarComponent,
+  AnoEscolarComponent.defaultProps
+);

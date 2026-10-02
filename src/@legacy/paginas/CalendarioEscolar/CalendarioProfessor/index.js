@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useReducer, useState } from 'react';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Redux
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -207,4 +208,4 @@ CalendarioProfessor.propTypes = {};
 
 CalendarioProfessor.defaultProps = {};
 
-export default CalendarioProfessor;
+export default comDefaultProps(CalendarioProfessor, CalendarioProfessor.defaultProps);

@@ -2,6 +2,7 @@ import React from 'react';
 import shortid from 'shortid';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Components
 import LabelDia from './components/LabelDia';
 
@@ -42,4 +43,4 @@ DiasDaSemana.propTypes = {
   onChange: PropTypes.func,
 };
 
-export default DiasDaSemana;
+export default comDefaultProps(DiasDaSemana, DiasDaSemana.defaultProps);

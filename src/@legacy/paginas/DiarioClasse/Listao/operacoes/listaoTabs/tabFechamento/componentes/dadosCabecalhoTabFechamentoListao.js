@@ -11,6 +11,7 @@ import {
 import { erros, sucesso } from '~/servicos';
 import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DadosCabecalhoTabFechamentoListao = props => {
   const { dadosFechamento, setDadosFechamento } = useContext(ListaoContext);
 
@@ -116,4 +117,4 @@ DadosCabecalhoTabFechamentoListao.defaultProps = {
   desabilitarCampos: false,
 };
 
-export default DadosCabecalhoTabFechamentoListao;
+export default comDefaultProps(DadosCabecalhoTabFechamentoListao, DadosCabecalhoTabFechamentoListao.defaultProps);

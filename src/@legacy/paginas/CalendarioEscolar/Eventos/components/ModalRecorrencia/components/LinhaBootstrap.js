@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function LinhaBootstrap({ children, paddingBottom }) {
   const className = `row ${paddingBottom ? `pb-${paddingBottom}` : ''}`;
   return <div className={className}>{children}</div>;
@@ -16,4 +17,4 @@ LinhaBootstrap.propTypes = {
   children: PropTypes.node,
 };
 
-export default LinhaBootstrap;
+export default comDefaultProps(LinhaBootstrap, LinhaBootstrap.defaultProps);

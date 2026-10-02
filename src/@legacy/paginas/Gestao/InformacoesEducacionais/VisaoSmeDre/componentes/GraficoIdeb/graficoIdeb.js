@@ -9,6 +9,7 @@ import { Area } from '@ant-design/plots';
 import { Base, Colors } from '~/componentes/colors';
 import { InformacaoAnosAnteriores } from '../../../shared/informacaoAnosAnteriores';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const listaSerie = [
   { valor: 1, desc: 'Anos iniciais (1º a 5º anos)' },
   { valor: 2, desc: 'Anos finais (6º a 9º anos)' },
@@ -165,4 +166,4 @@ GraficoIdeb.defaultProps = {
   dreId: null,
 };
 
-export default GraficoIdeb;
+export default comDefaultProps(GraficoIdeb, GraficoIdeb.defaultProps);

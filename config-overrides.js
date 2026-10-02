@@ -26,16 +26,17 @@ const moduleFederationConfig = override(
         name: 'sgpHost',
         remotes: {
           smeNovaSondagem: 'smeNovaSondagem@http://localhost:5173/assets/remoteEntry.js',
+          smeBoletim: 'smeBoletim@http://localhost:5174/assets/remoteEntry.js',
         },
         shared: {
           react: {
             singleton: true,
-            requiredVersion: '^18.2.0',
+            requiredVersion: '^19.2.8',
             eager: true,
           },
           'react-dom': {
             singleton: true,
-            requiredVersion: '^18.2.0',
+            requiredVersion: '^19.2.8',
             eager: true,
           },
           'react-redux': {
