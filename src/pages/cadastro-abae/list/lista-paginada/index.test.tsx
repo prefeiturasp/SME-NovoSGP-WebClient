@@ -115,7 +115,7 @@ describe('ListaPaginadaCadastroABAE', () => {
 
     render(<ListaPaginadaCadastroABAE />);
 
-    expect(listaPaginadaMock.mock.calls[0][0]).toEqual(
+    expect((ListaPaginada as unknown as jest.Mock).mock.calls[0][0]).toEqual(
       expect.objectContaining({
         filtro: undefined,
       }),
@@ -152,7 +152,7 @@ describe('ListaPaginadaCadastroABAE', () => {
 
     await findByTestId('lista-paginada');
 
-    expect(listaPaginadaMock.mock.calls[0][0]).toEqual(
+    expect((ListaPaginada as unknown as jest.Mock).mock.calls[0][0]).toEqual(
       expect.objectContaining({
         filtro: undefined,
       }),
