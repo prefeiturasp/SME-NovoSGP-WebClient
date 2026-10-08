@@ -28,6 +28,7 @@ function InputRF({
   style,
   placeholderRF,
   exibirLoader,
+  buscarAoSair,
 }) {
   const [valor, setValor] = useState('');
 
@@ -53,6 +54,13 @@ function InputRF({
     const { relatedTarget } = event;
     if (relatedTarget && relatedTarget.getAttribute('type') === 'button') {
       event.preventDefault();
+      return;
+    }
+
+    const rfJaConfirmado =
+      String(valor ?? '') === String(pessoaSelecionada?.professorRf ?? '');
+    if (buscarAoSair && valor && !desabilitado && !rfJaConfirmado) {
+      onSubmitRF(valor);
     }
   };
 
@@ -160,6 +168,7 @@ InputRF.propTypes = {
   style: t.objectOf(t.object),
   placeholderRF: t.string.isRequired,
   exibirLoader: t.bool,
+  buscarAoSair: t.bool,
 };
 
 InputRF.defaultProps = {
@@ -175,6 +184,7 @@ InputRF.defaultProps = {
   onKeyDown: null,
   style: {},
   exibirLoader: false,
+  buscarAoSair: false,
 };
 
 export default InputRF;
