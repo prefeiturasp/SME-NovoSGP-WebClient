@@ -232,7 +232,11 @@ const DevolutivasForm = () => {
   );
 
   const obterDatasFimParaHabilitar = async periodoInicio => {
-    const dataInicial = moment({ ...periodoInicio });
+    const dataInicial = moment(
+      typeof periodoInicio?.toDate === 'function'
+        ? periodoInicio.toDate()
+        : periodoInicio
+    );
     const datas = [dataInicial.format('YYYY-MM-DD')];
 
     setCarregandoGeral(true);
