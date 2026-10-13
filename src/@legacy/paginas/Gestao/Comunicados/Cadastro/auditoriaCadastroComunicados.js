@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Auditoria } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AuditoriaCadastroComunicados = ({ form }) => {
   const { criadoEm, criadoPor, criadoRF, alteradoPor, alteradoEm, alteradoRF } =
     form?.values;
@@ -31,4 +32,4 @@ AuditoriaCadastroComunicados.defaultProps = {
   form: null,
 };
 
-export default AuditoriaCadastroComunicados;
+export default comDefaultProps(AuditoriaCadastroComunicados, AuditoriaCadastroComunicados.defaultProps);

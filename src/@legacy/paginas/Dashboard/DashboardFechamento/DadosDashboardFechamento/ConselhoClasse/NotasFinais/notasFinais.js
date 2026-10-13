@@ -5,6 +5,7 @@ import { Base, CardCollapse } from '~/componentes';
 
 import GraficoNotasFinais from './graficoNotasFinais';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const NotasFinais = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
 
@@ -65,4 +66,4 @@ NotasFinais.defaultProps = {
   bimestre: null,
 };
 
-export default NotasFinais;
+export default comDefaultProps(NotasFinais, NotasFinais.defaultProps);

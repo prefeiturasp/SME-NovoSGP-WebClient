@@ -3,6 +3,7 @@ import { CampoData } from '~/componentes';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CampoDinamicoData = props => {
   const { questaoAtual, form, label, disabled, onChange, prefixId } = props;
 
@@ -77,4 +78,4 @@ CampoDinamicoData.defaultProps = {
   questaoAtual: null,
 };
 
-export default CampoDinamicoData;
+export default comDefaultProps(CampoDinamicoData, CampoDinamicoData.defaultProps);

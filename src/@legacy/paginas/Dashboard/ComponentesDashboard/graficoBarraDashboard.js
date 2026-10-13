@@ -8,6 +8,7 @@ import {
   tooltipCustomizadoDashboard,
 } from './graficosDashboardUtils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoBarraDashboard = props => {
   const {
     titulo,
@@ -100,4 +101,4 @@ GraficoBarraDashboard.defaultProps = {
   showAxisBottom: true,
 };
 
-export default GraficoBarraDashboard;
+export default comDefaultProps(GraficoBarraDashboard, GraficoBarraDashboard.defaultProps);

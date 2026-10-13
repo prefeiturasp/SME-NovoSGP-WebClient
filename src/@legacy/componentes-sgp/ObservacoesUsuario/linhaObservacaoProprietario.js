@@ -15,6 +15,7 @@ import { setObservacaoEmEdicao } from '~/redux/modulos/observacoesUsuario/action
 import { confirmar } from '~/servicos/alertas';
 import { ContainerCampoObservacao } from './observacoesUsuario.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LinhaObservacaoProprietario = props => {
   const {
     dados,
@@ -215,4 +216,4 @@ LinhaObservacaoProprietario.defaultProps = {
   proprietario: true,
 };
 
-export default LinhaObservacaoProprietario;
+export default comDefaultProps(LinhaObservacaoProprietario, LinhaObservacaoProprietario.defaultProps);

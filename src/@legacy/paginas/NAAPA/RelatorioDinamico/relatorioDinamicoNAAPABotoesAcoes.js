@@ -6,6 +6,7 @@ import { URL_HOME } from '~/constantes';
 import { useContext } from 'react';
 import RelatorioDinamicoNAAPAContext from './relatorioDinamicoNAAPAContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioDinamicoNAAPABotoesAcoes = ({ form }) => {
   const navigate = useNavigate();
 
@@ -40,4 +41,4 @@ RelatorioDinamicoNAAPABotoesAcoes.defaultProps = {
   form: null,
 };
 
-export default RelatorioDinamicoNAAPABotoesAcoes;
+export default comDefaultProps(RelatorioDinamicoNAAPABotoesAcoes, RelatorioDinamicoNAAPABotoesAcoes.defaultProps);

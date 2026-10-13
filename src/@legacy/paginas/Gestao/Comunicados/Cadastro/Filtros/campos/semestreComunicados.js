@@ -6,6 +6,7 @@ import { Loader, SelectComponent } from '~/componentes';
 import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
 import { ServicoComunicados, erros } from '~/servicos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const SemestreComunicados = ({ form, onChangeCampos, desabilitar }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [listaSemestres, setListaSemestres] = useState([]);
@@ -111,4 +112,4 @@ SemestreComunicados.defaultProps = {
   desabilitar: false,
 };
 
-export default SemestreComunicados;
+export default comDefaultProps(SemestreComunicados, SemestreComunicados.defaultProps);

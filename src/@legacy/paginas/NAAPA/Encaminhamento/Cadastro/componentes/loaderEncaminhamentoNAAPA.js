@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LoaderEncaminhamentoNAAPA = ({ children }) => {
   const exibirLoaderEncaminhamentoNAAPA = useSelector(
     store => store.encaminhamentoNAAPA.exibirLoaderEncaminhamentoNAAPA
@@ -22,4 +23,4 @@ LoaderEncaminhamentoNAAPA.defaultProps = {
   children: () => {},
 };
 
-export default LoaderEncaminhamentoNAAPA;
+export default comDefaultProps(LoaderEncaminhamentoNAAPA, LoaderEncaminhamentoNAAPA.defaultProps);

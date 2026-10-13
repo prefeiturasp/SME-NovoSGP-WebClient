@@ -22,6 +22,7 @@ import ServicoAcompanhamentoFrequencia from '~/servicos/Paginas/DiarioClasse/Ser
 import { erros, sucesso } from '~/servicos';
 import { OPCAO_TODOS } from '~/constantes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalImpressao = ({ dadosAlunos, componenteCurricularId }) => {
   const [incluirAlunosImpressao, setIncluirAlunosImpressao] =
     useState(OPCAO_TODOS);
@@ -204,4 +205,4 @@ ModalImpressao.defaultProps = {
   componenteCurricularId: '',
 };
 
-export default ModalImpressao;
+export default comDefaultProps(ModalImpressao, ModalImpressao.defaultProps);

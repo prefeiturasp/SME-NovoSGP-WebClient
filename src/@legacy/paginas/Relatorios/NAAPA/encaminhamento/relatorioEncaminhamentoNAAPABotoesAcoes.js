@@ -7,6 +7,7 @@ import { erros, sucesso } from '~/servicos';
 import ServicoRelatorioEncaminhamentoNAAPA from '~/servicos/Paginas/Relatorios/NAAPA/ServicoRelatorioEncaminhamentoNAAPA';
 import { useNavigate } from 'react-router-dom';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioEncaminhamentoNAAPABotoesAcoes = props => {
   const navigate = useNavigate();
 
@@ -101,4 +102,4 @@ RelatorioEncaminhamentoNAAPABotoesAcoes.defaultProps = {
   setDesabilitarGerar: () => false,
 };
 
-export default RelatorioEncaminhamentoNAAPABotoesAcoes;
+export default comDefaultProps(RelatorioEncaminhamentoNAAPABotoesAcoes, RelatorioEncaminhamentoNAAPABotoesAcoes.defaultProps);

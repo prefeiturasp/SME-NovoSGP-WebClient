@@ -4,6 +4,7 @@ import SelectComponent from '~/componentes/select';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CampoDinamicoCombo = props => {
   const { questaoAtual, form, label, desabilitado, onChange, prefixId } = props;
 
@@ -51,4 +52,4 @@ CampoDinamicoCombo.defaultProps = {
   onChange: () => {},
 };
 
-export default CampoDinamicoCombo;
+export default comDefaultProps(CampoDinamicoCombo, CampoDinamicoCombo.defaultProps);

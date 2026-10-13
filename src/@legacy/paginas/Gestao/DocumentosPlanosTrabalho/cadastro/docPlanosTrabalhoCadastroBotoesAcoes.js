@@ -15,6 +15,7 @@ import { confirmar, erro, erros, sucesso } from '~/servicos';
 import ServicoArmazenamento from '~/servicos/Componentes/ServicoArmazenamento';
 import ServicoDocumentosPlanosTrabalho from '~/servicos/Paginas/Gestao/DocumentosPlanosTrabalho/ServicoDocumentosPlanosTrabalho';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DocPlanosTrabalhoCadastroBotoesAcoes = props => {
   const {
     form,
@@ -281,4 +282,4 @@ DocPlanosTrabalhoCadastroBotoesAcoes.defaultProps = {
   podeExcluir: false,
 };
 
-export default DocPlanosTrabalhoCadastroBotoesAcoes;
+export default comDefaultProps(DocPlanosTrabalhoCadastroBotoesAcoes, DocPlanosTrabalhoCadastroBotoesAcoes.defaultProps);

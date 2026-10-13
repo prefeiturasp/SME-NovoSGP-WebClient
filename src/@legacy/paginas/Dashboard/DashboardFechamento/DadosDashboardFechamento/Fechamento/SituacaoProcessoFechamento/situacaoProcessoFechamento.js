@@ -4,6 +4,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import GraficoSituacaoProcessoFechamento from './graficoSituacaoProcessoFechamento';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const SituacaoProcessoFechamento = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
 
@@ -64,4 +65,4 @@ SituacaoProcessoFechamento.defaultProps = {
   bimestre: null,
 };
 
-export default SituacaoProcessoFechamento;
+export default comDefaultProps(SituacaoProcessoFechamento, SituacaoProcessoFechamento.defaultProps);

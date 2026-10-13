@@ -7,6 +7,7 @@ import { setBimestreSelecionado } from '~/redux/modulos/acompanhamentoFrequencia
 import { setExpandirLinhaAusenciaEstudante } from '~/redux/modulos/listaFrequenciaPorBimestre/actions';
 import ListaAlunos from './ListaAlunos/listaAlunos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const { TabPane } = Tabs;
 
 const ListaBimestres = props => {
@@ -64,4 +65,4 @@ ListaBimestres.defaultProps = {
   bimestres: [],
 };
 
-export default ListaBimestres;
+export default comDefaultProps(ListaBimestres, ListaBimestres.defaultProps);

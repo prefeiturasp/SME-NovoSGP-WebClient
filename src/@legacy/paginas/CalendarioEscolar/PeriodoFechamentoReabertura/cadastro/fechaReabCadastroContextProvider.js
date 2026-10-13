@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import FechaReabCadastroContext from './fechaReabCadastroContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const FechaReabCadastroContextProvider = ({ children }) => {
   const [emEdicao, setEmEdicao] = useState(false);
   const [refForm, setRefForm] = useState();
@@ -74,4 +75,4 @@ FechaReabCadastroContextProvider.propTypes = {
   children: PropTypes.node,
 };
 
-export default FechaReabCadastroContextProvider;
+export default comDefaultProps(FechaReabCadastroContextProvider, FechaReabCadastroContextProvider.defaultProps);

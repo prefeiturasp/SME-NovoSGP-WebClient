@@ -1,3 +1,4 @@
+import comDefaultProps from '~/utils/comDefaultProps';
 ﻿import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -57,4 +58,4 @@ Calendario.defaultProps = {
   filtros: {},
 };
 
-export default Calendario;
+export default comDefaultProps(Calendario, Calendario.defaultProps);

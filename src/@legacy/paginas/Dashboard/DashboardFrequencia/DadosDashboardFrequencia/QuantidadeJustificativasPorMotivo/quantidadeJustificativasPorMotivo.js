@@ -4,6 +4,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import GraficoQuantidadeJustificativasPorMotivo from './graficoQuantidadeJustificativasPorMotivo';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const QuantidadeJustificativasPorMotivo = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, codigoUe } = props;
 
@@ -64,4 +65,4 @@ QuantidadeJustificativasPorMotivo.defaultProps = {
   codigoUe: '',
 };
 
-export default QuantidadeJustificativasPorMotivo;
+export default comDefaultProps(QuantidadeJustificativasPorMotivo, QuantidadeJustificativasPorMotivo.defaultProps);

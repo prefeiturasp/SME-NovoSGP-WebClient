@@ -10,6 +10,7 @@ import ServicoDashboardEscolaAqui from '~/servicos/Paginas/Dashboard/ServicoDash
 import { MarcadorSituacaoAluno } from '../../dashboardEscolaAqui.css';
 import { obterDadosComunicadoSelecionado } from '../../../ComponentesDashboard/graficosDashboardUtils';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LeituraDeComunicadosPorAlunos = props => {
   const { comunicado, listaComunicado } = props;
 
@@ -224,4 +225,4 @@ LeituraDeComunicadosPorAlunos.defaultProps = {
   listaComunicado: [],
 };
 
-export default LeituraDeComunicadosPorAlunos;
+export default comDefaultProps(LeituraDeComunicadosPorAlunos, LeituraDeComunicadosPorAlunos.defaultProps);

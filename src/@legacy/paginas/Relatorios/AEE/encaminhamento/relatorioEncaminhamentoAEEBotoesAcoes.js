@@ -7,6 +7,7 @@ import { erros, sucesso } from '~/servicos';
 import ServicoEncaminhamentoAEE from '~/servicos/Paginas/Relatorios/AEE/ServicoEncaminhamentoAEE';
 import { useNavigate } from 'react-router-dom';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const RelatorioEncaminhamentoAEEBotoesAcoes = props => {
   const {
     form,
@@ -102,4 +103,4 @@ RelatorioEncaminhamentoAEEBotoesAcoes.defaultProps = {
   setDesabilitarGerar: () => false,
 };
 
-export default RelatorioEncaminhamentoAEEBotoesAcoes;
+export default comDefaultProps(RelatorioEncaminhamentoAEEBotoesAcoes, RelatorioEncaminhamentoAEEBotoesAcoes.defaultProps);

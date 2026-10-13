@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { Base } from '~/componentes/colors';
 
 const AlertaBalao = props => {
@@ -72,4 +73,4 @@ AlertaBalao.defaultProps = {
   mostrarAlerta: true,
 };
 
-export default AlertaBalao;
+export default comDefaultProps(AlertaBalao, AlertaBalao.defaultProps);

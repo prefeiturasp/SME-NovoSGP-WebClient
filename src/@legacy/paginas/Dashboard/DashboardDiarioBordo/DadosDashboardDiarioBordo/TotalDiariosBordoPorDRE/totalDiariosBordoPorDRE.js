@@ -4,6 +4,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import GraficoTotalDiariosBordoPorDRE from './graficoTotalDiariosBordoPorDRE';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TotalDiariosBordoPorDRE = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -58,4 +59,4 @@ TotalDiariosBordoPorDRE.defaultProps = {
   modalidade: null,
 };
 
-export default TotalDiariosBordoPorDRE;
+export default comDefaultProps(TotalDiariosBordoPorDRE, TotalDiariosBordoPorDRE.defaultProps);
