@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Loader, SelectAutocomplete } from '~/componentes';
 import FechaReabCadastroContext from '../fechaReabCadastroContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TipoCalendarioReabertura = ({
   form,
   onChangeCampos,
@@ -86,4 +87,4 @@ TipoCalendarioReabertura.defaultProps = {
   onSelectCalendario: () => {},
 };
 
-export default TipoCalendarioReabertura;
+export default comDefaultProps(TipoCalendarioReabertura, TipoCalendarioReabertura.defaultProps);

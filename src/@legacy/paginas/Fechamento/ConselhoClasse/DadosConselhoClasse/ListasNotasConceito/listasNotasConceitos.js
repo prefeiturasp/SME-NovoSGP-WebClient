@@ -13,6 +13,7 @@ import ServicoConselhoClasse from '~/servicos/Paginas/ConselhoClasse/ServicoCons
 import { erros } from '~/servicos/alertas';
 import ListasCarregar from './listasCarregar';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListasNotasConceitos = props => {
   const { bimestreSelecionado } = props;
 
@@ -164,4 +165,4 @@ ListasNotasConceitos.defaultProps = {
   bimestreSelecionado: {},
 };
 
-export default ListasNotasConceitos;
+export default comDefaultProps(ListasNotasConceitos, ListasNotasConceitos.defaultProps);

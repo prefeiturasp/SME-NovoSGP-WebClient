@@ -15,6 +15,7 @@ import LoaderDrawerAtendimento from './loaderDrawerAtendimento';
 import { DrawerContainer } from './styles';
 import { store } from '@/core/redux';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const onClose = async (onClickSalvar, onCloseDrawer) => {
   const state = store.getState();
   const { questionarioDinamico } = state;
@@ -181,4 +182,4 @@ DrawerAtendimento.defaultProps = {
   }),
 };
 
-export default DrawerAtendimento;
+export default comDefaultProps(DrawerAtendimento, DrawerAtendimento.defaultProps);

@@ -17,6 +17,7 @@ import {
 } from '../ConstantesCamposDinâmicos';
 import { TituloEstilizado } from './modalObjetivos.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalObjetivos = ({
   modalVisivel,
   setModalVisivel,
@@ -240,4 +241,4 @@ ModalObjetivos.propTypes = {
   setModoEdicaoItinerancia: PropTypes.func,
 };
 
-export default ModalObjetivos;
+export default comDefaultProps(ModalObjetivos, ModalObjetivos.defaultProps);

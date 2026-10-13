@@ -4,6 +4,7 @@ import React from 'react';
 import shortid from 'shortid';
 import { Button, Colors, JoditEditor } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CollapseAluno = ({
   aluno,
   removerAlunos,
@@ -67,4 +68,4 @@ CollapseAluno.propTypes = {
   setModoEdicaoItinerancia: PropTypes.bool,
 };
 
-export default CollapseAluno;
+export default comDefaultProps(CollapseAluno, CollapseAluno.defaultProps);

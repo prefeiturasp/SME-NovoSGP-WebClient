@@ -7,6 +7,7 @@ import { OPCAO_TODOS } from '~/constantes';
 import { setAlunosComunicados } from '~/redux/modulos/comunicados/actions';
 import { AbrangenciaServico, erros } from '~/servicos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DreComunicados = ({
   form,
   onChangeCampos,
@@ -106,4 +107,4 @@ DreComunicados.defaultProps = {
   comunicadoId: '',
 };
 
-export default DreComunicados;
+export default comDefaultProps(DreComunicados, DreComunicados.defaultProps);

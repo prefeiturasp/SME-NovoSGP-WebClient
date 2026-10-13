@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Table, Pagination } from 'antd';
 import PropTypes from 'prop-types';
 import ServicoAprovacao from '~/servicos/InformacoesEducacionais/ServicoAprovacao';
+import comDefaultProps from '~/utils/comDefaultProps';
 import './tabelaAprovacaoUe.css';
 
 function montarColunasAgrupadas() {
@@ -200,4 +201,4 @@ TabelaAprovacaoModalidadeUe.defaultProps = {
   modalidadeId: null,
 };
 
-export default TabelaAprovacaoModalidadeUe;
+export default comDefaultProps(TabelaAprovacaoModalidadeUe, TabelaAprovacaoModalidadeUe.defaultProps);

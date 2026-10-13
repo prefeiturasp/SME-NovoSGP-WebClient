@@ -5,7 +5,8 @@ import ServicoIdebTabela from '~/servicos/InformacoesEducacionais/ServicoIdebTab
 import { erros } from '~/servicos/alertas';
 import TabelaIdebDetalhes from './tabelaIdebDetalhes';
 
-export default function TabelaIdeb({ anoLetivo, ueCodigo }) {
+import comDefaultProps from '~/utils/comDefaultProps';
+function TabelaIdeb({ anoLetivo, ueCodigo }) {
   const [dados, setDados] = useState([]);
   const [carregando, setCarregando] = useState(false);
 
@@ -62,3 +63,5 @@ TabelaIdeb.defaultProps = {
   anoLetivo: null,
   ueCodigo: null,
 };
+
+export default comDefaultProps(TabelaIdeb, TabelaIdeb.defaultProps);

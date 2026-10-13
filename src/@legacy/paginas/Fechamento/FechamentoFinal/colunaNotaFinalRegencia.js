@@ -5,6 +5,7 @@ import { setExpandirLinha } from '~/redux/modulos/notasConceitos/actions';
 
 import { MaisMenos } from './fechamentoFinal.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ColunaNotaFinalRegencia = props => {
   const dispatch = useDispatch();
 
@@ -46,4 +47,4 @@ ColunaNotaFinalRegencia.propTypes = {
   indexLinha: null,
 };
 
-export default ColunaNotaFinalRegencia;
+export default comDefaultProps(ColunaNotaFinalRegencia, ColunaNotaFinalRegencia.defaultProps);

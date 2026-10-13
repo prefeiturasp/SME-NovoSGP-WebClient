@@ -10,6 +10,7 @@ import {
 } from '~/redux/modulos/cartaIntencoes/actions';
 import servicoSalvarCartaIntencoes from '../../servicoSalvarCartaIntencoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BimestresCartaIntencoes = props => {
   const { permissoesTela, carta } = props;
   const {
@@ -111,4 +112,4 @@ BimestresCartaIntencoes.defaultProps = {
   somenteConsulta: false,
 };
 
-export default BimestresCartaIntencoes;
+export default comDefaultProps(BimestresCartaIntencoes, BimestresCartaIntencoes.defaultProps);

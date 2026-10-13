@@ -9,6 +9,7 @@ import GraficoFrequenciaSemanal from './GraficoFrequenciaSemanal';
 import PainelFrequenciaUe from '../PainelFrequenciaUe/painelFrequenciaUe';
 import { Col, Row } from 'antd';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function GraficoFrequenciaSemanalCollapse({ ueCodigo, anoLetivo, ueNome }) {
   const [exibirGraficoFrequenciaVisaoUe, setExibirGraficoFrequenciaVisaoUe] =
     useState(false);
@@ -100,7 +101,7 @@ function GraficoFrequenciaSemanalCollapse({ ueCodigo, anoLetivo, ueNome }) {
   );
 }
 
-export default GraficoFrequenciaSemanalCollapse;
+export default comDefaultProps(GraficoFrequenciaSemanalCollapse, GraficoFrequenciaSemanalCollapse.defaultProps);
 GraficoFrequenciaSemanalCollapse.propTypes = {
   ueCodigo: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   anoLetivo: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

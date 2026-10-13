@@ -5,7 +5,8 @@ import { SGP_SELECT_TIPO_SONDAGEM } from '~/constantes/ids/select';
 import { erros } from '~/servicos';
 import ServicoRelatorioSondagem from '~/servicos/Paginas/Relatorios/Sondagem/ServicoRelatorioSondagem';
 
-export const TipoSondagem = ({ form, onChange }) => {
+import comDefaultProps from '~/utils/comDefaultProps';
+const TipoSondagemComponent = ({ form, onChange }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [lista, setLista] = useState([]);
 
@@ -54,12 +55,17 @@ export const TipoSondagem = ({ form, onChange }) => {
   );
 };
 
-TipoSondagem.propTypes = {
+TipoSondagemComponent.propTypes = {
   onChange: PropTypes.func,
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
-TipoSondagem.defaultProps = {
+TipoSondagemComponent.defaultProps = {
   form: null,
   onChange: () => null,
 };
+
+export const TipoSondagem = comDefaultProps(
+  TipoSondagemComponent,
+  TipoSondagemComponent.defaultProps
+);

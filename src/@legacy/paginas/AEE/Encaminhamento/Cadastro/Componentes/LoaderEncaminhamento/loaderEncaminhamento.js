@@ -3,6 +3,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Loader } from '~/componentes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LoaderEncaminhamento = ({ children }) => {
   const exibirLoaderEncaminhamentoAEE = useSelector(
     store => store.encaminhamentoAEE.exibirLoaderEncaminhamentoAEE
@@ -19,4 +20,4 @@ LoaderEncaminhamento.defaultProps = {
   children: () => {},
 };
 
-export default LoaderEncaminhamento;
+export default comDefaultProps(LoaderEncaminhamento, LoaderEncaminhamento.defaultProps);

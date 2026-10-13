@@ -16,6 +16,7 @@ import { setExibirLoaderDrawerAtendimento } from '~/redux/modulos/encaminhamento
 import { confirmar, erros, sucesso, verificaSomenteConsulta } from '~/servicos';
 import ServicoNAAPA from '~/servicos/Paginas/Gestao/NAAPA/ServicoNAAPA';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DrawerAtendimentoBotoesAcao = ({
   onClickSalvar,
   onCloseDrawer,
@@ -155,4 +156,4 @@ DrawerAtendimentoBotoesAcao.defaultProps = {
   onCloseDrawer: () => {},
 };
 
-export default DrawerAtendimentoBotoesAcao;
+export default comDefaultProps(DrawerAtendimentoBotoesAcao, DrawerAtendimentoBotoesAcao.defaultProps);

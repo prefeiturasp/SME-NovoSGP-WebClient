@@ -5,6 +5,7 @@ import { Button, Colors, DataTable, ModalConteudoHtml } from '~/componentes';
 import { setExibirModalAlunos } from '~/redux/modulos/comunicados/actions';
 import { BotaoEstilizado } from './listaAlunos.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalAlunos = props => {
   const { alunosSelecionados, onCloseModal } = props;
 
@@ -128,4 +129,4 @@ ModalAlunos.defaultProps = {
   onCloseModal: () => null,
 };
 
-export default ModalAlunos;
+export default comDefaultProps(ModalAlunos, ModalAlunos.defaultProps);

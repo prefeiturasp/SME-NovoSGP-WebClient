@@ -8,6 +8,7 @@ import {
 } from '~/constantes/ids/button';
 import Button from '~/componentes/button';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BtnAcoesFechamentoBimestre = props => {
   const {
     salvarFechamentoFinal,
@@ -61,4 +62,4 @@ BtnAcoesFechamentoBimestre.defaultProps = {
   ehSintese: true,
 };
 
-export default BtnAcoesFechamentoBimestre;
+export default comDefaultProps(BtnAcoesFechamentoBimestre, BtnAcoesFechamentoBimestre.defaultProps);

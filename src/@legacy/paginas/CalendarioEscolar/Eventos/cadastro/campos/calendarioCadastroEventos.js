@@ -3,6 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import { SelectComponent } from '~/componentes';
 import EventosCadastroContext from '../eventosCadastroContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CalendarioCadastroEventos = ({
   form,
   eventoId,
@@ -56,4 +57,4 @@ CalendarioCadastroEventos.defaultProps = {
   montarTipoCalendarioPorId: () => null,
 };
 
-export default CalendarioCadastroEventos;
+export default comDefaultProps(CalendarioCadastroEventos, CalendarioCadastroEventos.defaultProps);

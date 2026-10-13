@@ -175,6 +175,7 @@ const LoginSondagem = () => {
                     validateOnChange={false}
                   >
                     {(form) => (
+                      // @ts-ignore formik@1.5.8 tipa Form com um Pick literal antigo, sem os campos novos do React 19
                       <Form>
                         <Rotulo className="d-block" htmlFor="usuario">
                           Usuário

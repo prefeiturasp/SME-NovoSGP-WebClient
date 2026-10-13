@@ -6,6 +6,7 @@ import { Base, SelectComponent } from '~/componentes';
 import { ColunasFixas, Tabela } from './index.css';
 import { ordenarPor } from '~/utils/funcoes/gerais';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function objetoExistaNaLista(objeto, lista) {
   return lista.some(
     elemento => JSON.stringify(elemento) === JSON.stringify(objeto)
@@ -251,4 +252,4 @@ TabelaInformacoesEscolares.defaultProps = {
   anos: false,
 };
 
-export default TabelaInformacoesEscolares;
+export default comDefaultProps(TabelaInformacoesEscolares, TabelaInformacoesEscolares.defaultProps);

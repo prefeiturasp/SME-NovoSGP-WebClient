@@ -3,6 +3,7 @@ import React from 'react';
 import t from 'prop-types';
 import shortid from 'shortid';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import styled from 'styled-components';
 import IconeStatus from './componentes/IconeStatus';
@@ -89,4 +90,4 @@ TabelaAlunos.defaultProps = {
   alunos: [],
 };
 
-export default TabelaAlunos;
+export default comDefaultProps(TabelaAlunos, TabelaAlunos.defaultProps);

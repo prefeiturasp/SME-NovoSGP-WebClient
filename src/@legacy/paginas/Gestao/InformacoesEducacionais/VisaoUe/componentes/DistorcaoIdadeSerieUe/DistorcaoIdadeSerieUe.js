@@ -4,6 +4,7 @@ import CardCollapse from '~/componentes/cardCollapse';
 import { Base } from '~/componentes';
 import DistorcaoIdadeSerie from '../../../shared/DistorcaoIdadeSerie/DistorcaoIdadeSerie';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function DistorcaoIdadeSerieUe({ ueCodigo, anoLetivo, dreCodigo }) {
   const [exibirDistorcaoUe, setExibirDistorcaoUe] = useState(false);
 
@@ -50,4 +51,4 @@ DistorcaoIdadeSerieUe.defaultProps = {
   dreCodigo: null,
 };
 
-export default DistorcaoIdadeSerieUe;
+export default comDefaultProps(DistorcaoIdadeSerieUe, DistorcaoIdadeSerieUe.defaultProps);

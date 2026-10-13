@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import t from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { SelectComponent } from '~/componentes';
 
@@ -89,4 +90,4 @@ ModalidadesDropDown.defaultProps = {
   labelRequired: false,
 };
 
-export default ModalidadesDropDown;
+export default comDefaultProps(ModalidadesDropDown, ModalidadesDropDown.defaultProps);

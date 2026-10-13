@@ -8,6 +8,7 @@ import { OPCAO_TODOS } from '~/constantes';
 import { AbrangenciaServico, erros } from '~/servicos';
 import FechaReabCadastroContext from '../fechaReabCadastroContext';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DreReabertura = ({ form, onChangeCampos }) => {
   const { setListaDres, listaDres, desabilitarCampos } = useContext(
     FechaReabCadastroContext
@@ -97,4 +98,4 @@ DreReabertura.defaultProps = {
   onChangeCampos: () => null,
 };
 
-export default DreReabertura;
+export default comDefaultProps(DreReabertura, DreReabertura.defaultProps);

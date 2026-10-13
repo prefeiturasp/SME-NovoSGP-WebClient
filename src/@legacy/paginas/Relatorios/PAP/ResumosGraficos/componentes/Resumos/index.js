@@ -2,6 +2,7 @@ import React, { lazy, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import {
   Button,
@@ -168,4 +169,4 @@ Resumos.defaultProps = {
   filtroTela: {},
 };
 
-export default Resumos;
+export default comDefaultProps(Resumos, Resumos.defaultProps);

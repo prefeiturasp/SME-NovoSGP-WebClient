@@ -7,7 +7,8 @@ import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { AbrangenciaServico, erros } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 
-export const Turma = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const TurmaComponent = ({
   name,
   form,
   onChange,
@@ -137,7 +138,7 @@ export const Turma = ({
   );
 };
 
-Turma.propTypes = {
+TurmaComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -150,7 +151,7 @@ Turma.propTypes = {
   selecionarTodasAoCarregar: PropTypes.bool,
 };
 
-Turma.defaultProps = {
+TurmaComponent.defaultProps = {
   form: null,
   name: 'turmaCodigo',
   disabled: false,
@@ -162,3 +163,8 @@ Turma.defaultProps = {
   nameList: 'listaTurmas',
   selecionarTodasAoCarregar: false,
 };
+
+export const Turma = comDefaultProps(
+  TurmaComponent,
+  TurmaComponent.defaultProps
+);

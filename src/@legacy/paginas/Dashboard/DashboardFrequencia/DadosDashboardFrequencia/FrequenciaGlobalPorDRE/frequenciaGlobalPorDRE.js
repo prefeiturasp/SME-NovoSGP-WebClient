@@ -4,6 +4,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import GraficoFrequenciaGlobalPorDRE from './graficoFrequenciaGlobalPorDRE';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const FrequenciaGlobalPorDRE = props => {
   const { anoLetivo, modalidade, semestre } = props;
 
@@ -55,4 +56,4 @@ FrequenciaGlobalPorDRE.defaultProps = {
   semestre: null,
 };
 
-export default FrequenciaGlobalPorDRE;
+export default comDefaultProps(FrequenciaGlobalPorDRE, FrequenciaGlobalPorDRE.defaultProps);

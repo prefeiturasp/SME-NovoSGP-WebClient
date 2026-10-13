@@ -11,6 +11,7 @@ import {
 } from '~/servicos';
 import { OPCAO_TODOS } from '~/constantes/constantes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoTotalAtividadeCompensacao = ({
   anoLetivo,
   dreId,
@@ -152,4 +153,4 @@ GraficoTotalAtividadeCompensacao.defaultProps = {
   semestre: null,
 };
 
-export default GraficoTotalAtividadeCompensacao;
+export default comDefaultProps(GraficoTotalAtividadeCompensacao, GraficoTotalAtividadeCompensacao.defaultProps);

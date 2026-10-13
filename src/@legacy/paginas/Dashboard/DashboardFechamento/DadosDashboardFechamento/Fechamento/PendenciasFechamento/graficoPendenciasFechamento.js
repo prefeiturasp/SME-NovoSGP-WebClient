@@ -6,6 +6,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardFechamento from '~/servicos/Paginas/Dashboard/ServicoDashboardFechamento';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoPendenciasFechamento = props => {
   const { anoLetivo, dreId, ueId, modalidade, semestre, bimestre } = props;
 
@@ -74,4 +75,4 @@ GraficoPendenciasFechamento.defaultProps = {
   bimestre: null,
 };
 
-export default GraficoPendenciasFechamento;
+export default comDefaultProps(GraficoPendenciasFechamento, GraficoPendenciasFechamento.defaultProps);

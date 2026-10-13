@@ -6,6 +6,7 @@ import { Button, Colors, Loader } from '~/componentes';
 
 import { erros, sucesso, ServicoAcompanhamentoAprendizagem } from '~/servicos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const BotaoGerarRelatorioAprendizagem = ({ semestre }) => {
   const [gerandoRelatorio, setGerandoRelatorio] = useState(false);
 
@@ -57,4 +58,4 @@ BotaoGerarRelatorioAprendizagem.defaultProps = {
   semestre: '',
 };
 
-export default BotaoGerarRelatorioAprendizagem;
+export default comDefaultProps(BotaoGerarRelatorioAprendizagem, BotaoGerarRelatorioAprendizagem.defaultProps);
