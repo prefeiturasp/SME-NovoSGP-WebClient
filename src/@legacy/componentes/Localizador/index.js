@@ -48,6 +48,7 @@ function Localizador({
   labelRequired,
   buscarPorTodasDre,
   novaEstrutura,
+  buscarAoSair,
 }) {
   const usuario = useSelector(store => store.usuario);
   const [dataSource, setDataSource] = useState([]);
@@ -289,6 +290,7 @@ function Localizador({
               desabilitarCampo.rf
             }
             exibirLoader={exibirLoader}
+            buscarAoSair={buscarAoSair}
           />
         </Col>
         <Col sm={24} md={16}>
@@ -345,6 +347,7 @@ function Localizador({
             desabilitarCampo.rf
           }
           exibirLoader={exibirLoader}
+          buscarAoSair={buscarAoSair}
         />
       </Grid>
       <Grid className={classesNome} cols={colunasNome}>
@@ -405,6 +408,7 @@ Localizador.propTypes = {
   labelRequired: PropTypes.bool,
   buscarPorTodasDre: PropTypes.bool,
   novaEstrutura: PropTypes.bool,
+  buscarAoSair: PropTypes.bool,
 };
 
 Localizador.defaultProps = {
@@ -433,6 +437,7 @@ Localizador.defaultProps = {
   labelRequired: false,
   buscarPorTodasDre: false,
   novaEstrutura: false,
+  buscarAoSair: false,
 };
 
 export default comDefaultProps(Localizador, Localizador.defaultProps);
