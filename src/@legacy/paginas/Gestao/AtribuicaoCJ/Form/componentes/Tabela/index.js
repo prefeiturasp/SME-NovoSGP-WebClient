@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Ant
 import { Switch } from 'antd';
 
@@ -63,4 +64,4 @@ Tabela.defaultProps = {
   somenteConsulta: false,
 };
 
-export default Tabela;
+export default comDefaultProps(Tabela, Tabela.defaultProps);

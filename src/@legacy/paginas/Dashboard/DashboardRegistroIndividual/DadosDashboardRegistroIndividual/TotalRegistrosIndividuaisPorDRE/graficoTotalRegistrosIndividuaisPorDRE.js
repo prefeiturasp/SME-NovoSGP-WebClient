@@ -6,6 +6,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros, ServicoDashboardFrequencia } from '~/servicos';
 import ServicoDashboardRegistroIndividual from '~/servicos/Paginas/Dashboard/ServicoDashboardRegistroIndividual';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoTotalRegistrosIndividuaisPorDRE = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -118,4 +119,4 @@ GraficoTotalRegistrosIndividuaisPorDRE.defaultProps = {
   modalidade: null,
 };
 
-export default GraficoTotalRegistrosIndividuaisPorDRE;
+export default comDefaultProps(GraficoTotalRegistrosIndividuaisPorDRE, GraficoTotalRegistrosIndividuaisPorDRE.defaultProps);

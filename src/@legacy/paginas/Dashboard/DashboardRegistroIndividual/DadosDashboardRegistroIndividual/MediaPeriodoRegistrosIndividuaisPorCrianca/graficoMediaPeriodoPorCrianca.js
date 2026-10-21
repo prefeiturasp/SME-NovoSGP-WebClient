@@ -8,6 +8,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardRegistroIndividual from '~/servicos/Paginas/Dashboard/ServicoDashboardRegistroIndividual';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoMediaPeriodoPorCrianca = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -88,4 +89,4 @@ GraficoMediaPeriodoPorCrianca.defaultProps = {
   modalidade: null,
 };
 
-export default GraficoMediaPeriodoPorCrianca;
+export default comDefaultProps(GraficoMediaPeriodoPorCrianca, GraficoMediaPeriodoPorCrianca.defaultProps);

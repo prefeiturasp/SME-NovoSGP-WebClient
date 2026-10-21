@@ -11,6 +11,7 @@ import { setAlunosCodigo } from '~/redux/modulos/localizadorEstudante/actions';
 import { removerNumeros } from '~/utils/funcoes/gerais';
 import { SGP_INPUT_CODIGO_EOL } from '~/constantes/ids/input';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const LocalizadorEstudante = props => {
   const {
     onChange,
@@ -414,4 +415,4 @@ LocalizadorEstudante.defaultProps = {
   novaEstrutura: false,
 };
 
-export default LocalizadorEstudante;
+export default comDefaultProps(LocalizadorEstudante, LocalizadorEstudante.defaultProps);

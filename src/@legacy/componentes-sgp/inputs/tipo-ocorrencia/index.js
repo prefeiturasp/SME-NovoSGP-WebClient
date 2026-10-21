@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
 import { ServicoOcorrencias, erros } from '~/servicos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TipoOcorrencia = ({ form, onChange, multiple, name }) => {
   const [exibirLoader, setExibirLoader] = useState(false);
   const [lista, setLista] = useState([]);
@@ -67,4 +68,4 @@ TipoOcorrencia.defaultProps = {
   name: 'ocorrenciaTipoIds',
 };
 
-export default TipoOcorrencia;
+export default comDefaultProps(TipoOcorrencia, TipoOcorrencia.defaultProps);

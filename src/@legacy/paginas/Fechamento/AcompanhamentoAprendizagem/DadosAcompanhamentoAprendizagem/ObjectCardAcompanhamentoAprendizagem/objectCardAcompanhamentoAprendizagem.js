@@ -6,6 +6,7 @@ import DetalhesAluno from '~/componentes/Alunos/Detalhes';
 
 import { erros, sucesso, ServicoAcompanhamentoAprendizagem } from '~/servicos';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ObjectCardAcompanhamentoAprendizagem = ({ semestre }) => {
   const dadosAlunoObjectCard = useSelector(
     store => store.acompanhamentoAprendizagem.dadosAlunoObjectCard
@@ -53,4 +54,4 @@ ObjectCardAcompanhamentoAprendizagem.defaultProps = {
   semestre: '',
 };
 
-export default ObjectCardAcompanhamentoAprendizagem;
+export default comDefaultProps(ObjectCardAcompanhamentoAprendizagem, ObjectCardAcompanhamentoAprendizagem.defaultProps);

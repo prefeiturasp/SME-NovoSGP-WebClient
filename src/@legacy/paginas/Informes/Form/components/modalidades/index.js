@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Loader, SelectComponent } from '~/componentes';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { OPCAO_TODOS } from '~/constantes';
 import { SGP_SELECT_MODALIDADE } from '~/constantes/ids/select';
 import { ServicoFiltroRelatorio, erros } from '~/servicos';
 import { onchangeMultiSelect } from '~/utils';
 import { temPerfisValidosCadstroInformes } from '../../utils';
 
-export const SelectModalidadesInformes = ({
+const SelectModalidadesInformesComponent = ({
   name,
   form,
   onChange,
@@ -137,7 +138,7 @@ export const SelectModalidadesInformes = ({
   );
 };
 
-SelectModalidadesInformes.propTypes = {
+SelectModalidadesInformesComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   multiple: PropTypes.bool,
@@ -149,7 +150,7 @@ SelectModalidadesInformes.propTypes = {
   nameList: PropTypes.string,
 };
 
-SelectModalidadesInformes.defaultProps = {
+SelectModalidadesInformesComponent.defaultProps = {
   form: null,
   name: 'modalidade',
   disabled: false,
@@ -160,3 +161,8 @@ SelectModalidadesInformes.defaultProps = {
   mostrarOpcaoTodas: true,
   nameList: 'listaModalidades',
 };
+
+export const SelectModalidadesInformes = comDefaultProps(
+  SelectModalidadesInformesComponent,
+  SelectModalidadesInformesComponent.defaultProps
+);

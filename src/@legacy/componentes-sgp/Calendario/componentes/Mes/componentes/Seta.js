@@ -1,5 +1,6 @@
 import React from 'react';
 import t from 'prop-types';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 function Seta({ estaAberto }) {
   return (
@@ -19,4 +20,4 @@ Seta.defaultProps = {
   estaAberto: false,
 };
 
-export default Seta;
+export default comDefaultProps(Seta, Seta.defaultProps);

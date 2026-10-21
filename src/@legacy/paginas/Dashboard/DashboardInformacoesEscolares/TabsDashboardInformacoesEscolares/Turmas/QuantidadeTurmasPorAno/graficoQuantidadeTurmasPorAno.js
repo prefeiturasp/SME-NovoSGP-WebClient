@@ -6,6 +6,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import { erros } from '~/servicos';
 import ServicoDashboardInformacoesEscolares from '~/servicos/Paginas/Dashboard/ServicoDashboardInformacoesEscolares';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const GraficoQuantidadeTurmasPorAno = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -188,4 +189,4 @@ GraficoQuantidadeTurmasPorAno.defaultProps = {
   modalidade: '',
 };
 
-export default GraficoQuantidadeTurmasPorAno;
+export default comDefaultProps(GraficoQuantidadeTurmasPorAno, GraficoQuantidadeTurmasPorAno.defaultProps);

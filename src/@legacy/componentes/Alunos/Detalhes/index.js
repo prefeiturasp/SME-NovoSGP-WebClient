@@ -11,6 +11,7 @@ import FotoEstudanteObjectCard from './imagemEstudanteObjectCard';
 import { Container, DadosAluno, FrequenciaGlobal } from './styles';
 import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const DetalhesAluno = props => {
   const {
     dados,
@@ -178,4 +179,4 @@ DetalhesAluno.defaultProps = {
   permiteAlterarImagem: true,
 };
 
-export default DetalhesAluno;
+export default comDefaultProps(DetalhesAluno, DetalhesAluno.defaultProps);

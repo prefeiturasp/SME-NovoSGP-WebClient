@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { useContext } from 'react';
 import { Loader } from '~/componentes';
+import comDefaultProps from '~/utils/comDefaultProps';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
 
 const ListaoLoaderGeral = ({ children }) => {
@@ -17,4 +18,7 @@ ListaoLoaderGeral.defaultProps = {
   children: <></>,
 };
 
-export default ListaoLoaderGeral;
+export default comDefaultProps(
+  ListaoLoaderGeral,
+  ListaoLoaderGeral.defaultProps
+);

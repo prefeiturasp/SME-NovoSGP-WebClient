@@ -22,6 +22,7 @@ import AnotacoesPedagogicas from './AnotacoesPedagogicas/anotacoesPedagogicas';
 import AuditoriaAnotacaoRecomendacao from './AuditoriaAnotacaoRecomendacao/auditoriaAnotacaoRecomendacao';
 import RecomendacaoAlunoFamilia from './RecomendacaoAlunoFamilia/recomendacaoAlunoFamilia';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AnotacoesRecomendacoes = props => {
   const { codigoTurma, bimestre, setCarregandoAba, setPermiteAcessarAbaFinal } =
     props;
@@ -305,4 +306,4 @@ AnotacoesRecomendacoes.defaultProps = {
   setCarregandoAba: () => {},
 };
 
-export default AnotacoesRecomendacoes;
+export default comDefaultProps(AnotacoesRecomendacoes, AnotacoesRecomendacoes.defaultProps);

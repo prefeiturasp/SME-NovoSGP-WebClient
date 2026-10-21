@@ -1,6 +1,7 @@
 import { Tabs } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { ContainerTabsCard } from './style';
 
 const { TabPane } = Tabs;
@@ -45,4 +46,4 @@ TabsComponent.defaultProps = {
   listaTabs: [],
 };
 
-export default TabsComponent;
+export default comDefaultProps(TabsComponent, TabsComponent.defaultProps);

@@ -1,6 +1,7 @@
 import { Button, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { Base } from '~/componentes/colors';
 import tipoFrequenciaDto from '~/dtos/tipoFrequencia';
 
@@ -84,4 +85,4 @@ CampoTiposFrequencia.defaultProps = {
   tipoFrequencia: '',
 };
 
-export default CampoTiposFrequencia;
+export default comDefaultProps(CampoTiposFrequencia, CampoTiposFrequencia.defaultProps);

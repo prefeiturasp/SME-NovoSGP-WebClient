@@ -4,6 +4,7 @@ import { Base } from '~/componentes';
 import CardCollapse from '~/componentes/cardCollapse';
 import GraficoQtdDevolutivasRegistradasEstimada from './graficoQtdDevolutivasRegistradasEstimada';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const QtdDevolutivasRegistradasEstimada = props => {
   const { anoLetivo, dreId, ueId, modalidade } = props;
 
@@ -58,4 +59,4 @@ QtdDevolutivasRegistradasEstimada.defaultProps = {
   modalidade: null,
 };
 
-export default QtdDevolutivasRegistradasEstimada;
+export default comDefaultProps(QtdDevolutivasRegistradasEstimada, QtdDevolutivasRegistradasEstimada.defaultProps);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import t from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Redux
 import { useSelector } from 'react-redux';
 
@@ -91,4 +92,4 @@ DropDownTerritorios.defaultProps = {
   onBuscarTerritorios: () => null,
 };
 
-export default DropDownTerritorios;
+export default comDefaultProps(DropDownTerritorios, DropDownTerritorios.defaultProps);

@@ -6,7 +6,8 @@ import { SGP_SELECT_ANO_LETIVO } from '~/constantes/ids/select';
 import { erros } from '~/servicos';
 import { ordenarDescPor } from '~/utils';
 
-export const AnoLetivo = ({
+import comDefaultProps from '~/utils/comDefaultProps';
+const AnoLetivoComponent = ({
   form,
   name,
   nameList,
@@ -106,7 +107,7 @@ export const AnoLetivo = ({
   );
 };
 
-AnoLetivo.propTypes = {
+AnoLetivoComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   showSearch: PropTypes.bool,
@@ -117,7 +118,7 @@ AnoLetivo.propTypes = {
   anoMinimo: PropTypes.oneOfType([PropTypes.any]),
 };
 
-AnoLetivo.defaultProps = {
+AnoLetivoComponent.defaultProps = {
   form: null,
   disabled: false,
   showSearch: true,
@@ -128,3 +129,8 @@ AnoLetivo.defaultProps = {
   defaultDataList: [],
   anoMinimo: undefined,
 };
+
+export const AnoLetivo = comDefaultProps(
+  AnoLetivoComponent,
+  AnoLetivoComponent.defaultProps
+);

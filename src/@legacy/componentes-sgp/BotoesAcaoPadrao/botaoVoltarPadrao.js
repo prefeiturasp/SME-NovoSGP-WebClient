@@ -4,6 +4,7 @@ import { Tooltip } from 'antd';
 import Button from '~/componentes/button';
 import { SGP_BUTTON_VOLTAR } from '../../constantes/ids/button';
 import { Colors } from '~/componentes/colors';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const BotaoVoltarPadrao = props => {
   const { onClick, className } = props;
@@ -40,4 +41,4 @@ BotaoVoltarPadrao.defaultProps = {
   className: '',
 };
 
-export default BotaoVoltarPadrao;
+export default comDefaultProps(BotaoVoltarPadrao, BotaoVoltarPadrao.defaultProps);

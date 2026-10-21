@@ -18,6 +18,7 @@ import {
 import { LinhaTabela } from './tabelaAlunosConselho.css';
 import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const TabelaAlunosConselho = props => {
   const { dadosAlunos, bimestre, turmaId } = props;
 
@@ -305,4 +306,4 @@ TabelaAlunosConselho.defaultProps = {
   bimestre: null,
 };
 
-export default TabelaAlunosConselho;
+export default comDefaultProps(TabelaAlunosConselho, TabelaAlunosConselho.defaultProps);

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Styles
 import styled from 'styled-components';
 import { Base } from '~/componentes/colors';
@@ -50,4 +51,4 @@ LabelDia.propTypes = {
   isActive: PropTypes.bool,
 };
 
-export default LabelDia;
+export default comDefaultProps(LabelDia, LabelDia.defaultProps);

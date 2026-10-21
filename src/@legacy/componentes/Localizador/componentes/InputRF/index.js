@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import t from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Form
 import { Field } from 'formik';
 
@@ -205,4 +206,4 @@ InputRF.defaultProps = {
   buscarAoSair: false,
 };
 
-export default InputRF;
+export default comDefaultProps(InputRF, InputRF.defaultProps);

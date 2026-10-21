@@ -6,6 +6,7 @@ import { Base } from '~/componentes';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import { ListaAnotacao, Tabela } from './anotacaoAluno.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const AnotacoesAlunoLista = props => {
   const { anotacoes } = props;
 
@@ -100,4 +101,4 @@ AnotacoesAlunoLista.defaultProps = {
   anotacoes: [],
 };
 
-export default AnotacoesAlunoLista;
+export default comDefaultProps(AnotacoesAlunoLista, AnotacoesAlunoLista.defaultProps);
