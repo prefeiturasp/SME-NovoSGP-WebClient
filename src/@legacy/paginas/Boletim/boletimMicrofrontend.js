@@ -112,7 +112,10 @@ const BoletimMicrofrontend = () => {
 
   return (
     <Provider store={store}>
-      <ComponenteRemoto apiUrl={process.env.REACT_APP_URL_API} />
+      <ComponenteRemoto
+        apiUrl={process.env.REACT_APP_URL_API}
+        boletimApiUrl={process.env.REACT_APP_URL_API_BOLETIM}
+      />
     </Provider>
   );
 };
