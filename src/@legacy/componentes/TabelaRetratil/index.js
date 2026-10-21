@@ -12,6 +12,7 @@ import { DetalhesAluno, LinhaTabela, Tabela, TabelaEstilo } from './style';
 import InconsistenciasEstudante from './componentes/Inconsistencias';
 import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 function TabelaRetratil({
   alunos,
   children,
@@ -277,4 +278,4 @@ TabelaRetratil.defaultProps = {
   obterIconeEstudanteCustomizado: null,
 };
 
-export default TabelaRetratil;
+export default comDefaultProps(TabelaRetratil, TabelaRetratil.defaultProps);

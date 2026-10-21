@@ -10,6 +10,7 @@ import ServicoImagemEstudante from '~/servicos/Componentes/ServicoImagemEstudant
 import { getBase64DataURL } from '~/utils';
 import { ContainerModalUploadImagem } from './styles';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ModalTrocarImagem = props => {
   const { exibirModal, onCloseModal, codigoEOL, dadosImagem } = props;
 
@@ -163,4 +164,4 @@ ModalTrocarImagem.defaultProps = {
   dadosImagem: null,
 };
 
-export default ModalTrocarImagem;
+export default comDefaultProps(ModalTrocarImagem, ModalTrocarImagem.defaultProps);

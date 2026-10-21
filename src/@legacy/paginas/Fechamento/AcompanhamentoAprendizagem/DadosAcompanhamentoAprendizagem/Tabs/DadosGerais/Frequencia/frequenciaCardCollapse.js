@@ -7,6 +7,7 @@ import { ModalidadeEnum } from '@/core/enum/modalidade-enum';
 import { erros } from '~/servicos';
 import ServicoAcompanhamentoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoAcompanhamentoFrequencia';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const FrequenciaCardCollapse = props => {
   const dadosAlunoObjectCard = useSelector(
     store => store.acompanhamentoAprendizagem.dadosAlunoObjectCard
@@ -92,4 +93,4 @@ FrequenciaCardCollapse.defaultProps = {
   semestreSelecionado: '',
 };
 
-export default FrequenciaCardCollapse;
+export default comDefaultProps(FrequenciaCardCollapse, FrequenciaCardCollapse.defaultProps);

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import EstudanteAtendidoAEE from '@/components/sgp/estudante-atendido-aee';
 import EstudanteMatriculadoPAP from '@/components/sgp/estudante-matriculado-pap';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const NomeEstudanteLista = ({ nome, ehAtendidoAEE, ehMatriculadoTurmaPAP }) => {
   return (
     <div className="d-flex justify-content-between w-100">
@@ -28,4 +29,4 @@ NomeEstudanteLista.propTypes = {
   ehMatriculadoTurmaPAP: PropTypes.bool,
 };
 
-export default NomeEstudanteLista;
+export default comDefaultProps(NomeEstudanteLista, NomeEstudanteLista.defaultProps);

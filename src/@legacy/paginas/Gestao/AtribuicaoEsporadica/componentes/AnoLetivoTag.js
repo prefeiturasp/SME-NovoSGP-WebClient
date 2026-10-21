@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import t from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Redux
 import { useSelector } from 'react-redux';
 
@@ -43,4 +44,4 @@ AnoLetivoTag.defaultProps = {
   label: null,
 };
 
-export default AnoLetivoTag;
+export default comDefaultProps(AnoLetivoTag, AnoLetivoTag.defaultProps);

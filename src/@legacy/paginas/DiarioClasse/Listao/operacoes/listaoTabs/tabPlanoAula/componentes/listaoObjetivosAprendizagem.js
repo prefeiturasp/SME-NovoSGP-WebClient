@@ -9,6 +9,7 @@ import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
 import ObjetivosEspecificosDesenvolvimentoAula from './listaoPlanoAulaCampoEditor';
 import SwitchInformarObjetivosListao from './switchInformarObjetivosListao';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaoObjetivosAprendizagem = props => {
   const dispatch = useDispatch();
 
@@ -110,4 +111,4 @@ ListaoObjetivosAprendizagem.defaultProps = {
   plano: null,
 };
 
-export default ListaoObjetivosAprendizagem;
+export default comDefaultProps(ListaoObjetivosAprendizagem, ListaoObjetivosAprendizagem.defaultProps);

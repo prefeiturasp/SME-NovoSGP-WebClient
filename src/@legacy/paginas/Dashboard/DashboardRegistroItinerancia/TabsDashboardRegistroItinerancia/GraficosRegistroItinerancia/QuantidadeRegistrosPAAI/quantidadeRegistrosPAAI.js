@@ -7,6 +7,7 @@ import { OPCAO_TODOS } from '~/constantes/constantes';
 import MontarGraficoBarras from '~/paginas/Dashboard/ComponentesDashboard/montarGraficoBarras';
 import ServicoDashboardRegistroItinerancia from '~/servicos/Paginas/Dashboard/ServicoDashboardRegistroItinerancia';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const QuantidadeRegistrosPAAI = props => {
   const { anoLetivo, dreId, ueId, mesSelecionado } = props;
 
@@ -92,4 +93,4 @@ QuantidadeRegistrosPAAI.defaultProps = {
   mesSelecionado: '',
 };
 
-export default QuantidadeRegistrosPAAI;
+export default comDefaultProps(QuantidadeRegistrosPAAI, QuantidadeRegistrosPAAI.defaultProps);

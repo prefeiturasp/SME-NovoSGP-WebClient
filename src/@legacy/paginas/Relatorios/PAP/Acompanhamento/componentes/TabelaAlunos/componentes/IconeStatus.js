@@ -2,6 +2,7 @@ import React from 'react';
 import t from 'prop-types';
 import styled from 'styled-components';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Ant
 import { Tooltip } from 'antd';
 
@@ -71,4 +72,4 @@ IconeStatus.defaultProps = {
   status: 0,
 };
 
-export default IconeStatus;
+export default comDefaultProps(IconeStatus, IconeStatus.defaultProps);

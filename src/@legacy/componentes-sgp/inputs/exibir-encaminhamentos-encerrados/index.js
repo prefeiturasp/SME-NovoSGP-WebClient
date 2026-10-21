@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { RadioGroupButton } from '~/componentes';
 import { SGP_RADIO_EXIBIR_ENCAMINHAMENTOS_AEE_ENCERRADOS } from '~/constantes/ids/radio';
+import comDefaultProps from '~/utils/comDefaultProps';
 
-export const ExibirEncaminhamentosEncerrados = ({
+const ExibirEncaminhamentosEncerradosComponent = ({
   name,
   form,
   onChange,
@@ -38,7 +39,7 @@ export const ExibirEncaminhamentosEncerrados = ({
   );
 };
 
-ExibirEncaminhamentosEncerrados.propTypes = {
+ExibirEncaminhamentosEncerradosComponent.propTypes = {
   name: PropTypes.string,
   disabled: PropTypes.bool,
   onChange: PropTypes.func,
@@ -47,7 +48,7 @@ ExibirEncaminhamentosEncerrados.propTypes = {
   form: PropTypes.oneOfType([PropTypes.any]),
 };
 
-ExibirEncaminhamentosEncerrados.defaultProps = {
+ExibirEncaminhamentosEncerradosComponent.defaultProps = {
   form: null,
   disabled: false,
   valorInicial: false,
@@ -55,3 +56,8 @@ ExibirEncaminhamentosEncerrados.defaultProps = {
   onChange: () => null,
   name: 'exibirEncaminhamentosEncerrados',
 };
+
+export const ExibirEncaminhamentosEncerrados = comDefaultProps(
+  ExibirEncaminhamentosEncerradosComponent,
+  ExibirEncaminhamentosEncerradosComponent.defaultProps
+);

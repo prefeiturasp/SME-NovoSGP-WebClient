@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Loader from '~/componentes/loader';
 import { InputNomeEstilo } from './styles';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const InputNome = props => {
   const {
     dataSource,
@@ -114,4 +115,4 @@ InputNome.defaultProps = {
   exibirLoader: false,
 };
 
-export default InputNome;
+export default comDefaultProps(InputNome, InputNome.defaultProps);

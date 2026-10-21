@@ -5,6 +5,7 @@ import { Loader } from '~/componentes';
 import { erros } from '~/servicos';
 import ServicoFrequencia from '~/servicos/InformacoesEducacionais/ServicoFrequencia';
 import { OPCAO_TODOS } from '~/constantes/constantes';
+import comDefaultProps from '~/utils/comDefaultProps';
 import './graficoAnaliseDeFrequencia.css';
 
 const GraficoAnaliseDeFrequencia = ({
@@ -180,4 +181,4 @@ GraficoAnaliseDeFrequencia.defaultProps = {
   periodicidade: 'mensal',
 };
 
-export default GraficoAnaliseDeFrequencia;
+export default comDefaultProps(GraficoAnaliseDeFrequencia, GraficoAnaliseDeFrequencia.defaultProps);

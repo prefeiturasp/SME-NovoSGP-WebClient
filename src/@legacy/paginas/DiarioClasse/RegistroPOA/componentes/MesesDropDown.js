@@ -1,6 +1,7 @@
 import React from 'react';
 import t from 'prop-types';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 // Componentes
 import { SelectComponent } from '~/componentes';
 
@@ -57,4 +58,4 @@ MesesDropDown.defaultProps = {
   onChange: () => null,
 };
 
-export default MesesDropDown;
+export default comDefaultProps(MesesDropDown, MesesDropDown.defaultProps);

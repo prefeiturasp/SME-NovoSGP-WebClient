@@ -5,6 +5,7 @@ import { Base } from '~/componentes/colors';
 import ColunaDimensionavel from './ColunaDimensionavel/colunaDimensionavel';
 import QuestionarioDinamicoFuncoes from '../Funcoes/QuestionarioDinamicoFuncoes';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const CampoDinamicoPeriodo = props => {
   const { questaoAtual, form, label, desabilitado, onChange, prefixId } = props;
 
@@ -140,4 +141,4 @@ CampoDinamicoPeriodo.defaultProps = {
   onChange: () => {},
 };
 
-export default CampoDinamicoPeriodo;
+export default comDefaultProps(CampoDinamicoPeriodo, CampoDinamicoPeriodo.defaultProps);

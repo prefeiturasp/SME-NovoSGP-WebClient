@@ -7,6 +7,7 @@ import DadosAdesao from './DadosAdesao/dadosAdesao';
 import DadosComunicadosLeitura from './DadosComunicadosLeitura/dadosComunicadosLeitura';
 import DadosComunicadosTotais from './DadosComunicadosTotais/dadosComunicadosTotais';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const { TabPane } = Tabs;
 
 const TabsDashboardEscolaAqui = props => {
@@ -89,4 +90,4 @@ TabsDashboardEscolaAqui.defaultProps = {
   codigoUe: '',
 };
 
-export default TabsDashboardEscolaAqui;
+export default comDefaultProps(TabsDashboardEscolaAqui, TabsDashboardEscolaAqui.defaultProps);

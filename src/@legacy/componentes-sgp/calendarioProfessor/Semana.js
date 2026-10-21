@@ -7,6 +7,7 @@ import {
   selecionaDia,
   salvarEventoAulaCalendarioEdicao,
 } from '~/redux/modulos/calendarioProfessor/actions';
+import comDefaultProps from '~/utils/comDefaultProps';
 import { Div, TipoEventosLista, TipoEvento } from './Semana.css';
 
 const Dia = props => {
@@ -204,4 +205,4 @@ Semana.defaultProps = {
   tipoEventosDiaLista: [],
 };
 
-export default Semana;
+export default comDefaultProps(Semana, Semana.defaultProps);

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Container } from './listaNotificacoes.css';
 
+import comDefaultProps from '~/utils/comDefaultProps';
 const ListaNotificacoes = ({ obs, somenteLeitura }) => {
   const [usuariosNotificacao, setUsuariosNotificacao] = useState();
 
@@ -45,4 +46,4 @@ ListaNotificacoes.defaultProps = {
   somenteLeitura: false,
 };
 
-export default ListaNotificacoes;
+export default comDefaultProps(ListaNotificacoes, ListaNotificacoes.defaultProps);

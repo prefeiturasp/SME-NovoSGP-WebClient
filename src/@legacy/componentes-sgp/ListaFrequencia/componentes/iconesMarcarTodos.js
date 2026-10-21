@@ -9,6 +9,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Base } from '~/componentes/colors';
 import tipoFrequencia from '~/dtos/tipoFrequencia';
+import comDefaultProps from '~/utils/comDefaultProps';
 
 const IconesMarcarTodos = props => {
   const { indexAluno, marcaPresencaFaltaTodasAulas, desabilitar } = props;
@@ -26,8 +27,8 @@ const IconesMarcarTodos = props => {
   );
 
   const selecionadoTodasAulasPorTipo = tipo => {
-    const totalAulas = aulas.length;
-    const totalAulasPorTipo = aulas.filter(
+    const totalAulas = aulas?.length || 0;
+    const totalAulasPorTipo = aulas?.filter(
       aula => aula.tipoFrequencia === tipo.valor
     );
 
@@ -97,4 +98,4 @@ IconesMarcarTodos.defaultProps = {
   desabilitar: false,
 };
 
-export default IconesMarcarTodos;
+export default comDefaultProps(IconesMarcarTodos, IconesMarcarTodos.defaultProps);
