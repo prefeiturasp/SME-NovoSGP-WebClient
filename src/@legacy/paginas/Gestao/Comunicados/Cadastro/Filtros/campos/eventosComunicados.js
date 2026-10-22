@@ -85,7 +85,7 @@ const EventosComunicados = ({ form, onChangeCampos, desabilitar }) => {
         onChange={() => {
           onChangeCampos();
         }}
-        labelRequired={codigoUe && codigoUe !== OPCAO_TODOS}
+        labelRequired={false}
       />
     </Loader>
   );
