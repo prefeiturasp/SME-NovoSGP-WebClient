@@ -97,7 +97,7 @@ function AtribuicaoEsporadicaForm() {
       dataFim: momentSchema.required('Campo obrigatório'),
       professorRf: Yup.number()
         .typeError('Informar um número inteiro')
-        .required('Campo obrigatório'),
+        .required('Preencha o campo e clique na lupa para validar o usuário'),
     });
   };
 
@@ -468,6 +468,7 @@ function AtribuicaoEsporadicaForm() {
                           desabilitado={somenteConsulta || valoresIniciais.id}
                           labelRequired
                           buscarPorTodasDre
+                          buscarAoSair
                         />
                       </Row>
                     </Grid>

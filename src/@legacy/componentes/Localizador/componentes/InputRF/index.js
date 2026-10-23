@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import t from 'prop-types';
 
 import comDefaultProps from '~/utils/comDefaultProps';
@@ -29,8 +29,10 @@ function InputRF({
   style,
   placeholderRF,
   exibirLoader,
+  buscarAoSair,
 }) {
   const [valor, setValor] = useState('');
+  const buscaPorTab = useRef(false);
 
   const onSubmitRF = rf => {
     onSelect({ rf });
@@ -50,11 +52,35 @@ function InputRF({
     return form && form.errors[name] && form.touched[name];
   };
 
+  const deveBuscarAoSair = () => {
+    const rfJaConfirmado =
+      String(valor ?? '') === String(pessoaSelecionada?.professorRf ?? '');
+    return buscarAoSair && valor && !desabilitado && !rfJaConfirmado;
+  };
+
   const executaOnBlur = event => {
+    if (buscaPorTab.current) {
+      buscaPorTab.current = false;
+      return;
+    }
+
     const { relatedTarget } = event;
     if (relatedTarget && relatedTarget.getAttribute('type') === 'button') {
       event.preventDefault();
+      return;
     }
+
+    if (deveBuscarAoSair()) {
+      onSubmitRF(valor);
+    }
+  };
+
+  const executaOnKeyDown = event => {
+    if (event.key === 'Tab' && deveBuscarAoSair()) {
+      buscaPorTab.current = true;
+      onSubmitRF(valor);
+    }
+    if (onKeyDown) onKeyDown(event);
   };
 
   const setInitialValues = !form?.values?.modoEdicao;
@@ -113,7 +139,7 @@ function InputRF({
             maxLength={maxlength || 7}
             value={valor}
             placeholder={placeholderRF}
-            onKeyDown={onKeyDown}
+            onKeyDown={executaOnKeyDown}
             onChange={e => {
               form.setFieldValue('modoEdicao', true);
               onChangeRf(e);
@@ -161,6 +187,7 @@ InputRF.propTypes = {
   style: t.objectOf(t.object),
   placeholderRF: t.string.isRequired,
   exibirLoader: t.bool,
+  buscarAoSair: t.bool,
 };
 
 InputRF.defaultProps = {
@@ -176,6 +203,7 @@ InputRF.defaultProps = {
   onKeyDown: null,
   style: {},
   exibirLoader: false,
+  buscarAoSair: false,
 };
 
 export default comDefaultProps(InputRF, InputRF.defaultProps);
