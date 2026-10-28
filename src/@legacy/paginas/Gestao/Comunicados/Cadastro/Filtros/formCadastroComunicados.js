@@ -212,17 +212,6 @@ const FormCadastroComunicados = props => {
       .min(10, 'Deve conter no mínimo 10 caracteres')
       .max(50, 'Deve conter no máximo 50 caracteres'),
     descricao: Yup.string().nullable().required(textoCampoObrigatorio),
-    eventoId: Yup.string()
-      .nullable()
-      .test('validaSeObrigatorio', textoCampoObrigatorio, function validar() {
-        const { codigoUe, eventoId } = this.parent;
-        const ehTodos = codigoUe === OPCAO_TODOS;
-
-        if (codigoUe && !ehTodos && !eventoId) {
-          return false;
-        }
-        return true;
-      }),
     tipoCalendarioId: Yup.string()
       .nullable()
       .test('validaSeObrigatorio', textoCampoObrigatorio, function validar() {

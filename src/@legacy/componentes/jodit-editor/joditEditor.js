@@ -218,6 +218,7 @@ const JoditEditor = forwardRef((props, ref) => {
   const [validacaoComErro, setValidacaoComErro] = useState(false);
 
   const editorInstance = useRef(null);
+  const isInternalChange = useRef(false);
   const [initialized, setInitialized] = useState(false);
 
   const BOTOES_PADRAO = !removerToolbar
@@ -363,6 +364,7 @@ const JoditEditor = forwardRef((props, ref) => {
       },
       change: async newValue => {
         if (!editorInstance.current) return;
+        isInternalChange.current = true;
 
         if (/(src="data:image\/|src="blob:)/.test(newValue)) {
           const novoHtml = await validarUploadImagensExternasEBinarias(
@@ -615,7 +617,11 @@ const JoditEditor = forwardRef((props, ref) => {
       editorInstance.current &&
       props.value !== editorInstance.current.value
     ) {
-      editorInstance.current.value = props.value || '';
+      if (isInternalChange.current) {
+        isInternalChange.current = false;
+      } else {
+        editorInstance.current.value = props.value || '';
+      }
     }
   }, [props.value, initialized]);
 
