@@ -31,10 +31,7 @@ import CalendarioEscolar from '~/paginas/CalendarioEscolar/Calendario';
 import CalendarioProfessor from '~/paginas/CalendarioEscolar/CalendarioProfessor';
 import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/eventosCadastro';
 import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista';
-import PeriodoFechamentoAbertura from '~/paginas/CalendarioEscolar/PeriodoFechamentoAbertura/periodo-fechamento-abertura';
-import FechaReabCadastro from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/cadastro/fechaReabCadastro';
-import FechaReabLista from '~/paginas/CalendarioEscolar/PeriodoFechamentoReabertura/lista/fechaReabLista';
-import PeriodosEscolares from '~/paginas/CalendarioEscolar/PeriodosEscolares/PeriodosEscolares';
+import CalendarioMicrofrontend from '~/paginas/CalendarioEscolar/calendarioMicrofrontend';
 import TipoCalendarioEscolarForm from '~/paginas/CalendarioEscolar/TipoCalendarioEscolar/tipoCalendarioEscolarForm';
 import TipoCalendarioEscolarLista from '~/paginas/CalendarioEscolar/TipoCalendarioEscolar/tipoCalendarioEscolarLista';
 import TipoEventosForm from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosForm';
@@ -439,7 +436,7 @@ route.set(ROUTES.PERIODOS_ESCOLARES, {
   breadcrumbName: 'Períodos Escolares',
   menu: ['Gestão'],
   parent: '/',
-  component: PeriodosEscolares,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -823,7 +820,7 @@ route.set(`${ROUTES.PERIODO_FECHAMENTO_ABERTURA}`, {
   breadcrumbName: 'Abertura',
   menu: ['Gestão'],
   parent: '/',
-  component: PeriodoFechamentoAbertura,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -834,7 +831,7 @@ route.set(`${ROUTES.PERIODO_FECHAMENTO_REABERTURA}`, {
   breadcrumbName: 'Reabertura',
   menu: ['Gestão'],
   parent: '/',
-  component: FechaReabLista,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -844,7 +841,7 @@ route.set(`${ROUTES.PERIODO_FECHAMENTO_REABERTURA}`, {
 route.set(`${ROUTES.PERIODO_FECHAMENTO_REABERTURA}/novo/`, {
   breadcrumbName: 'Períodos',
   parent: ROUTES.PERIODO_FECHAMENTO_REABERTURA,
-  component: FechaReabCadastro,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -854,7 +851,7 @@ route.set(`${ROUTES.PERIODO_FECHAMENTO_REABERTURA}/novo/`, {
 route.set(`${ROUTES.PERIODO_FECHAMENTO_REABERTURA}/novo/:tipoCalendarioId`, {
   breadcrumbName: 'Períodos',
   parent: ROUTES.PERIODO_FECHAMENTO_REABERTURA,
-  component: FechaReabCadastro,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -864,7 +861,7 @@ route.set(`${ROUTES.PERIODO_FECHAMENTO_REABERTURA}/novo/:tipoCalendarioId`, {
 route.set(`${ROUTES.PERIODO_FECHAMENTO_REABERTURA}/editar/:id`, {
   breadcrumbName: 'Períodos',
   parent: ROUTES.PERIODO_FECHAMENTO_REABERTURA,
-  component: FechaReabCadastro,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,

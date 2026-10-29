@@ -26,6 +26,7 @@ const moduleFederationConfig = override(
         name: 'sgpHost',
         remotes: {
           smeNovaSondagem: 'smeNovaSondagem@http://localhost:5173/assets/remoteEntry.js',
+          smeCalendario: 'smeCalendario@http://localhost:5175/assets/remoteEntry.js',
         },
         shared: {
           react: {
