@@ -10,7 +10,7 @@ Before(() => {
 });
 
 Given('que possuo um token de acesso válido', function () {
-  expect(token, 'valido').to.exist;
+  expect(Boolean(token), 'token de acesso foi informado').to.be.true;
 });
 
 Given('que possuo um token de acesso inválido', function () {

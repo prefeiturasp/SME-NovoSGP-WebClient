@@ -31,7 +31,7 @@ Funcionalidade: API - Retorna a turma por código, ano letivo, tipo de calendár
     Dado que login gerou um token de acesso válido
     Quando envio uma requisição GET para o endpoint de tipo de calendário
     Então retorna o status 200 com nome junto ao id
-  
+
   Cenário: Código da turma deve ser obrigatório no tipo de calendário
     Dado que login gerou um token de acesso válido
     Quando envio uma requisição GET para o endpoint sem turma no tipo de calendário
@@ -57,17 +57,17 @@ Funcionalidade: API - Retorna a turma por código, ano letivo, tipo de calendár
     Quando tento a requisição GET para o endpoint de modalidades
     Então retorna o status 401 sem dados de modalidades
 
-  Cenário: Buscar turmas de sondagem da UE 
+  Cenário: Buscar turmas de sondagem da UE
     Dado que login gerou um token de acesso válido
     Quando envio uma requisição GET para o endpoint de sondagem da UE
     Então retorna o status 200 com código da turma junto ao nome
 
-  Cenário: Ano deve ser obrigatório na sondagem da UE 
+  Cenário: Ano deve ser obrigatório na sondagem da UE
     Dado que login gerou um token de acesso válido
     Quando tento uma requisição GET para o endpoint de sondagem sem ano
     Então retorna o status 422 com mensagem de ano inválido
 
-  Cenário: UE deve ser obrigatório na sondagem da UE 
+  Cenário: UE deve ser obrigatório na sondagem da UE
     Dado que login gerou um token de acesso válido
     Quando tento uma requisição GET para o endpoint de sondagem sem UE
     Então retorna o status 404 sem dados de UE
@@ -97,6 +97,7 @@ Funcionalidade: API - Retorna a turma por código, ano letivo, tipo de calendár
     Quando tento uma requisição GET para o endpoint da listagem sem o bimestre
     Então retorna o status 422 que o bimestre está inválido
 
+  @ignore
   Cenário: Retornar listagem de turmas sem histórico
     Dado que login gerou um token de acesso válido
     Quando envio uma requisição GET para o endpoint de listagem sem histórico

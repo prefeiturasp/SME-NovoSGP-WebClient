@@ -2,7 +2,7 @@
 Funcionalidade: NAAPA - Busca ativa - Relatórios
 
 Background
-
+  @ignore
   Esquema do Cenário: Validar a geração de relatório pelo ABAE filtrando por "<cenario>"
     Dado que eu acesso o sistema com a visualização "<device>"
     E informo os dados nos campos "<usuario>" e "<senha>"

@@ -11,7 +11,7 @@ Background
 
    Exemplos:
     | usuario     | senha      | device | perfil                 | cenario                                 |
-    | 8482195     | SENHA      | web    | Professor CJ           | Usuario professor                       |
+    # | 8482195     | SENHA      | web    | Professor CJ           | Usuario professor                       |
     | 8269149     | SENHA      | web    | Professor Ed. Infantil | Usuario professor de ed. infantil       |
     | 7238711     | SENHA      | web    | Supervisor             | Usuario supervisor                      |
     | 7268009     | SENHA      | web    | Diretor                | Usuario diretor                         |

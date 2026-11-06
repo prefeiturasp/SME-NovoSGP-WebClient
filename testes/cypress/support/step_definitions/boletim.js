@@ -11,7 +11,7 @@ Before(() => {
 // GIVEN
 
 Given('que possuo um token de acesso válido', function () {
-  expect(token, 'valido').to.exist;
+  expect(Boolean(token), 'token de acesso foi informado').to.be.true;
 });
 
 Given('que não possuo um token de acesso válido', function () {
@@ -23,7 +23,7 @@ Given('que não possuo um token de acesso válido', function () {
 When('envio uma requisição GET para o endpoint de boletim com id da turma existente', function () {
   cy.request({
     method: 'GET',
-    url: '/api/v1/boletim/alunos?turmaCodigo=' + Cypress.env('TURMA_CODIGO'),
+    url: '/api/v1/boletim/alunos?turmaCodigo=' + Cypress.env('TURMA_ID'),
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -68,7 +68,7 @@ When(
   function () {
     cy.request({
       method: 'GET',
-      url: '/api/v1/boletim/alunos-obsevacoes?turmaCodigo=' + Cypress.env('TURMA_CODIGO'),
+      url: '/api/v1/boletim/alunos-obsevacoes?turmaCodigo=' + Cypress.env('TURMA_ID'),
       headers: {
         Authorization: `Bearer ${token}`,
       },

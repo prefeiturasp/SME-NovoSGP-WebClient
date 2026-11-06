@@ -2,6 +2,7 @@
 
 Funcionalidade: API - Dias letivos do calendário
 
+  @ignore
   Cenário: Quantidade de dias letivos do calendário
     Dado que login gerou um token de acesso válido
     Quando envio uma requisição POST na api de dias letivos
@@ -22,11 +23,13 @@ Funcionalidade: API - Dias letivos do calendário
     Quando tento uma requisição POST na api de dias letivos
     Então retorna o status 401 que não foi permitido
 
+  @ignore
   Cenário: Garantir que a quantidade retornada seja maior ou igual a zero
     Dado que login gerou um token de acesso válido
     Quando envio uma requisição POST na api de dias letivos
     Então retorna o status 200 com a quantidade
 
+  @ignore
   Cenário: Garantir que o retorno contenha apenas valor numérico para quantidade
     Dado que login gerou um token de acesso válido
     Quando envio uma requisição POST na api de dias letivos

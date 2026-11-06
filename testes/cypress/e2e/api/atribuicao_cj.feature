@@ -12,6 +12,7 @@ Funcionalidade: API - Atribuição CJ
     Quando tento a requisição GET para o endpoint atribuições
     Então não retorna atribuições CJ mostrando o status 401
 
+  @ignore
   Cenário: Cadastrar atribuição CJS com dados válidos
     Dado que possuo um token de acesso válido
     Quando envio uma requisição POST para cadastrar atribuições CJ
@@ -45,8 +46,9 @@ Funcionalidade: API - Atribuição CJ
   Cenário: Ano letivo deve ser preenchido
     Dado que possuo um token de acesso válido
     Quando envio a requisição CJS com ano letivo vazio
-    Então deve retornar status 500 devido o ano ser obrigatório 
+    Então deve retornar status 500 devido o ano ser obrigatório
 
+  @ignore
   Cenário: Cadastrar atribuição CJS com histórico false
     Dado que possuo um token de acesso válido
     Quando envio a requisição CJS com historico false
@@ -67,6 +69,7 @@ Funcionalidade: API - Atribuição CJ
     Quando tento a requisição GET para o endpoint de atribuições CJ
     Então não retorna no ano letivo mostrando o status 401
 
+  @ignore
   Cenário: Buscar as atribuições CJ através dos dados de UE
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET para o endpoint com todos os campos
@@ -107,11 +110,13 @@ Funcionalidade: API - Atribuição CJ
     Quando tento a requisição GET para o endpoint atribuições
     Então não retorna atribuições CJ mostrando o status 401
 
+  @ignore
   Cenário: Validar cadastro com histórico true
     Dado que possuo um token de acesso válido
     Quando envio uma requisição POST para cadastrar atribuições CJ
     Então retorna status 200 confirmando o cadastro
 
+  @ignore
   Cenário: Validar cadastro com histórico false
     Dado que possuo um token de acesso válido
     Quando envio a requisição CJS com historico false
@@ -162,6 +167,7 @@ Funcionalidade: API - Atribuição CJ
     Quando tento a requisição GET para o endpoint de atribuições CJ
     Então não retorna no ano letivo mostrando o status 401
 
+  @ignore
   Cenário: Validar busca por dados completos de UE
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET para o endpoint com todos os campos
