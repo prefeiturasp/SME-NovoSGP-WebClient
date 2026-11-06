@@ -9,7 +9,7 @@ Before(() => {
 });
 
 Given('que login gerou um token de acesso válido', function () {
-  expect(token, 'valido').to.exist;
+  expect(Boolean(token), 'token de acesso foi informado').to.be.true;
 });
 
 Given('que não gerou um token de acesso válido', () => {});
