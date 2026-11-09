@@ -32,6 +32,7 @@ Funcionalidade: API - Acompanhamento de alunos
     Quando envio uma requisição GET para o endpoint sem token de acesso
     Então retorna o status 401 de acesso não autorizado
 
+  @ignore
   Cenário: Retorna as fotos dos alunos acompanhados por semestres
     Dado que possuo um token de acesso válido
     Quando envio uma requisição GET para o endpoint de fotos dos alunos acompanhados

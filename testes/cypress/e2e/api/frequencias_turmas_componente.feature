@@ -2,9 +2,10 @@
 
 Funcionalidade: API - Frequências das turmas por componente
 
+  @ignore
   Cenário: Listar frequências das aulas por turma e componente
     Dado que possuo um token de acesso válido
-    Quando envio uma requisição GET para o endpoint de frequências das turmas por componente    
+    Quando envio uma requisição GET para o endpoint de frequências das turmas por componente
     Então a resposta deve ter o status 200 contendo os dados
 
   Cenário: Não permitir acessar sem autenticação

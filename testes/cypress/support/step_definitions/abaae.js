@@ -1,20 +1,19 @@
-import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps';
 
-let token
-let response
+let token;
+let response;
 
 Before(() => {
   cy.gerar_token().then((token_valido) => {
-    token = token_valido
-  })
-})
+    token = token_valido;
+  });
+});
 
 Given('que possuo um token de acesso válido', function () {
-  expect(token, 'valido').to.exist
-})
+  expect(Boolean(token), 'token de acesso foi informado').to.be.true;
+});
 
-Given('que não possuo um token de acesso válido', () => {
-})
+Given('que não possuo um token de acesso válido', () => {});
 
 /**
  * =============================
@@ -25,34 +24,34 @@ Given('que não possuo um token de acesso válido', () => {
 const bodyValido = {
   id: 0,
   alteradoEm: new Date().toISOString(),
-  alteradoPor: "Teste QA",
-  alteradoRF: "123456",
+  alteradoPor: 'Teste QA',
+  alteradoRF: '123456',
   criadoEm: new Date().toISOString(),
-  criadoPor: "Teste QA",
-  criadoRF: "123456",
+  criadoPor: 'Teste QA',
+  criadoRF: '123456',
   ueId: 1,
-  nome: "Usuário Teste",
-  cpf: "12345678901",
-  email: "teste@email.com",
-  telefone: "11999999999",
+  nome: 'Usuário Teste',
+  cpf: '12345678901',
+  email: 'teste@email.com',
+  telefone: '11999999999',
   situacao: true,
   cep: Cypress.env('CEP_VALIDO'),
-  endereco: "Rua Teste",
+  endereco: 'Rua Teste',
   numero: 123,
-  complemento: "Apto 1",
-  bairro: "Centro",
-  cidade: "São Paulo",
-  estado: "SP",
+  complemento: 'Apto 1',
+  bairro: 'Centro',
+  cidade: 'São Paulo',
+  estado: 'SP',
   excluido: false,
   ueCodigo: Cypress.env('UE_CODIGO'),
-  dreCodigo: Cypress.env('DRE_CODIGO')
-}
+  dreCodigo: Cypress.env('DRE_CODIGO'),
+};
 
 const bodyInvalido = {
-  nome: "",
-  cpf: "000",
-  email: "invalido",
-}
+  nome: '',
+  cpf: '000',
+  email: 'invalido',
+};
 
 /**
  * =============================
@@ -68,13 +67,13 @@ When('envio uma requisição POST de usuário válida', function () {
     body: bodyValido,
     headers: {
       accept: 'text/plain',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     },
-    failOnStatusCode: false
+    failOnStatusCode: false,
   }).then((res) => {
-    response = res
-  })
-})
+    response = res;
+  });
+});
 
 // INVALIDO
 When('envio uma requisição POST de usuário inválida', function () {
@@ -84,13 +83,13 @@ When('envio uma requisição POST de usuário inválida', function () {
     body: bodyInvalido,
     headers: {
       accept: 'text/plain',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     },
-    failOnStatusCode: false
+    failOnStatusCode: false,
   }).then((res) => {
-    response = res
-  })
-})
+    response = res;
+  });
+});
 
 // SEM AUTORIZAÇÃO
 When('envio uma requisição POST de usuário sem autorização', function () {
@@ -100,13 +99,13 @@ When('envio uma requisição POST de usuário sem autorização', function () {
     body: bodyValido,
     headers: {
       accept: 'text/plain',
-      Authorization: 'Bearer token-invalido'
+      Authorization: 'Bearer token-invalido',
     },
-    failOnStatusCode: false
+    failOnStatusCode: false,
   }).then((res) => {
-    response = res
-  })
-})
+    response = res;
+  });
+});
 
 // SEM ALTERAÇÃO (simulação)
 When('envio uma requisição POST sem alteração de usuário', function () {
@@ -116,13 +115,13 @@ When('envio uma requisição POST sem alteração de usuário', function () {
     body: bodyValido,
     headers: {
       accept: 'text/plain',
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     },
-    failOnStatusCode: false
+    failOnStatusCode: false,
   }).then((res) => {
-    response = res
-  })
-})
+    response = res;
+  });
+});
 
 /**
  * =============================
@@ -131,19 +130,19 @@ When('envio uma requisição POST sem alteração de usuário', function () {
  */
 
 Then('retorna os dados do usuário com status 200', function () {
-  expect(response.status).to.eq(200)
-  expect(response.body).to.have.property('id')
-  expect(response.body).to.have.property('nome')
-})
+  expect(response.status).to.eq(200);
+  expect(response.body).to.have.property('id');
+  expect(response.body).to.have.property('nome');
+});
 
 Then('retorna status 500 de erro', function () {
-  expect(response.status).to.eq(500)
-})
+  expect(response.status).to.eq(500);
+});
 
 Then('retorna status 401 não autorizado', function () {
-  expect(response.status).to.eq(401)
-})
+  expect(response.status).to.eq(401);
+});
 
 Then('retorna status 204 sem conteúdo', function () {
-  expect(response.status).to.eq(204)
-})
+  expect(response.status).to.eq(204);
+});

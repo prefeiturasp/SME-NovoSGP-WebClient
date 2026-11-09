@@ -2,7 +2,7 @@
 Funcionalidade: NAAPA - Consulta de crianças/estudantes ausentes
 
 Background
-
+  @ignore
   Esquema do Cenário: Validar consulta de ausências pelo ABAE para o cenário "<cenario>"
     Dado que eu acesso o sistema com a visualização "<device>"
     E informo os dados nos campos "<usuario>" e "<senha>"

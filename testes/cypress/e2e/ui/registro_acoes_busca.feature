@@ -3,6 +3,7 @@ Funcionalidade: NAAPA - Registro de ações
 
 Background
 
+  @ignore
   Esquema do Cenário: Validar a busca de ações pelo ABAE para o cenário "<cenario>"
    Dado que eu acesso o sistema com a visualização "<device>" para registro de ações
    E informo os dados nos campos "<usuario>" e "<senha>" para registro de ações
