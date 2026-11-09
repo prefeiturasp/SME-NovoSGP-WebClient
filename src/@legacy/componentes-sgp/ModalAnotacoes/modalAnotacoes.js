@@ -516,4 +516,7 @@ ModalAnotacoesFrequencia.defaultProps = {
   listaPadraoMotivoAusencia: [],
 };
 
-export default comDefaultProps(ModalAnotacoesFrequencia, ModalAnotacoesFrequencia.defaultProps);
+export default comDefaultProps(
+  ModalAnotacoesFrequencia,
+  ModalAnotacoesFrequencia.defaultProps
+);
