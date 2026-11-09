@@ -33,7 +33,6 @@ import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/evento
 import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista';
 import CalendarioMicrofrontend from '~/paginas/CalendarioEscolar/calendarioMicrofrontend';
 import TipoCalendarioEscolarForm from '~/paginas/CalendarioEscolar/TipoCalendarioEscolar/tipoCalendarioEscolarForm';
-import TipoCalendarioEscolarLista from '~/paginas/CalendarioEscolar/TipoCalendarioEscolar/tipoCalendarioEscolarLista';
 import TipoEventosForm from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosForm';
 import TipoEventosLista from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosLista';
 import TipoFeriadoForm from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoForm';
@@ -469,7 +468,7 @@ route.set(ROUTES.TIPO_CALENDARIO_ESCOLAR, {
   breadcrumbName: 'Tipo de Calendário Escolar',
   menu: ['Gestão'],
   parent: '/',
-  component: TipoCalendarioEscolarLista,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
