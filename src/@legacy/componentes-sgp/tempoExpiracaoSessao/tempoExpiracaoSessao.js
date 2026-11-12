@@ -14,9 +14,15 @@ import {
 } from '~/redux/modulos/usuario/actions';
 import { erros } from '~/servicos/alertas';
 import api from '~/servicos/api';
+import { tempoAvisoExpiracaoSessaoMinutos } from '~/servicos/variaveis';
 
 import ContadorExpiracao from './contadorExpiracao';
 import { useNavigate } from 'react-router-dom';
+
+const MILISSEGUNDOS_POR_MINUTO = 60 * 1000;
+const MINUTOS_POR_HORA = 60;
+const tempoAvisoExpiracaoSessaoEmMilissegundos =
+  tempoAvisoExpiracaoSessaoMinutos * MILISSEGUNDOS_POR_MINUTO;
 
 const Container = styled.div`
   margin-right: 10px;
@@ -27,6 +33,7 @@ const Container = styled.div`
 
   .desc-tempo-expiracao-sessao {
     width: 295px;
+    flex-shrink: 0;
     height: 47px;
     font-family: Roboto;
     font-size: 12px;
@@ -40,8 +47,9 @@ const Container = styled.div`
 const CaixaTempoExpiracao = styled.div`
   z-index: 2000;
   display: grid;
-  grid-template-columns: 30px 60px 40px;
-  width: 138px;
+  grid-template-columns: 30px max-content 40px;
+  width: max-content;
+  min-width: 138px;
   height: 47px;
   border-radius: 3px;
   background-color: ${Base.CinzaDesabilitado};
@@ -51,6 +59,7 @@ const CaixaTempoExpiracao = styled.div`
     font-size: 21.2px;
     font-weight: bold;
     color: #42474a;
+    white-space: nowrap;
   }
 
   .botao-refresh {
@@ -78,14 +87,19 @@ const TempoExpiracaoSessao = () => {
     expiraEm: '',
     diferenca: '',
   });
+  const [tempoParaExibir, setTempoParaExibir] = useState({
+    horas: 0,
+    minutos: 0,
+  });
   const [botaoDesabilitado, setBotaoDesabilitado] = useState(false);
 
   const calcularTempoExpiracao = useCallback(() => {
     const diferenca = +new Date(dataHoraExpiracao) - +new Date();
     if (diferenca > 0) {
-      const quinzeMinutos = 900000;
       const tempoParaExibir =
-        diferenca > quinzeMinutos ? diferenca - quinzeMinutos : 1;
+        diferenca > tempoAvisoExpiracaoSessaoEmMilissegundos
+          ? diferenca - tempoAvisoExpiracaoSessaoEmMilissegundos
+          : 1;
       setTempoParaExpirar({
         expiraNaData: dataHoraExpiracao,
         tempoParaExibir,
@@ -94,12 +108,12 @@ const TempoExpiracaoSessao = () => {
     }
   }, [dataHoraExpiracao]);
 
-  const deslogarDoUsuario = () => {
+  const deslogarDoUsuario = useCallback(() => {
     store.dispatch(limparDadosFiltro());
     store.dispatch(DeslogarSessaoExpirou());
     store.dispatch(LimparSessao());
     navigate(URL_LOGIN);
-  };
+  }, [navigate]);
 
   useEffect(() => {
     if (dataHoraExpiracao) {
@@ -122,6 +136,48 @@ const TempoExpiracaoSessao = () => {
     setMostraTempoExpiracao(false);
     return undefined;
   }, [tempoParaExpirar]);
+
+  const obterTempoParaExpirar = useCallback(() => {
+    const diferenca = +new Date(dataHoraExpiracao) - +new Date();
+    const minutosTotais = Math.max(
+      Math.ceil(diferenca / MILISSEGUNDOS_POR_MINUTO),
+      0
+    );
+
+    return {
+      horas: Math.floor(minutosTotais / MINUTOS_POR_HORA),
+      minutos: minutosTotais % MINUTOS_POR_HORA,
+    };
+  }, [dataHoraExpiracao]);
+
+  useEffect(() => {
+    if (!mostraTempoExpiracao) {
+      return undefined;
+    }
+
+    const atualizarTempoParaExpirar = () => {
+      setTempoParaExibir(obterTempoParaExpirar());
+    };
+
+    atualizarTempoParaExpirar();
+    const intervaloAtualizacao = setInterval(atualizarTempoParaExpirar, 1000);
+
+    return () => clearInterval(intervaloAtualizacao);
+  }, [mostraTempoExpiracao, obterTempoParaExpirar]);
+
+  const montarMensagemTempoExpiracao = ({ horas, minutos }) => {
+    if (horas > 0) {
+      const mensagemHoras = `${horas} ${horas === 1 ? 'hora' : 'horas'}`;
+      const mensagemMinutos =
+        minutos > 0
+          ? ` e ${minutos} ${minutos === 1 ? 'minuto' : 'minutos'}`
+          : '';
+
+      return mensagemHoras + mensagemMinutos;
+    }
+
+    return `${minutos} ${minutos === 1 ? 'minuto' : 'minutos'}`;
+  };
 
   const revalidarAutenticacao = async () => {
     setBotaoDesabilitado(true);
@@ -148,8 +204,9 @@ const TempoExpiracaoSessao = () => {
       {mostraTempoExpiracao ? (
         <Container>
           <div className="desc-tempo-expiracao-sessao">
-            Sua sessão irá expirar em 15 minutos. Renove sua sessão aqui para
-            não perder nenhum dado imputado.
+            Sua sessão irá expirar em{' '}
+            {montarMensagemTempoExpiracao(tempoParaExibir)}. Renove sua sessão
+            aqui para não perder nenhum dado imputado.
           </div>
           <CaixaTempoExpiracao>
             <i className="far fa-clock icone-tempo" />
