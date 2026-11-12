@@ -37,7 +37,6 @@ import TipoCalendarioEscolarLista from '~/paginas/CalendarioEscolar/TipoCalendar
 import TipoEventosForm from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosForm';
 import TipoEventosLista from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosLista';
 import TipoFeriadoForm from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoForm';
-import TipoFeriadoLista from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoLista';
 import CadastroAula from '~/paginas/CalendarioProfessor/CadastroAula/cadastroAula';
 import TipoAvaliacaoForm from '~/paginas/Configuracoes/TipoAvaliacao/tipoAvaliacaoForm';
 import TipoAvaliacaoLista from '~/paginas/Configuracoes/TipoAvaliacao/tipoAvaliacaoLista';
@@ -513,7 +512,7 @@ route.set(ROUTES.TIPO_FERIADO, {
   breadcrumbName: 'Lista de Tipo de Feriado',
   menu: ['Gestão'],
   parent: '/',
-  component: TipoFeriadoLista,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
