@@ -33,7 +33,6 @@ import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/evento
 import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista';
 import CalendarioMicrofrontend from '~/paginas/CalendarioEscolar/calendarioMicrofrontend';
 import TipoEventosForm from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosForm';
-import TipoEventosLista from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosLista';
 import TipoFeriadoForm from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoForm';
 import TipoFeriadoLista from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoLista';
 import CadastroAula from '~/paginas/CalendarioProfessor/CadastroAula/cadastroAula';
@@ -216,7 +215,7 @@ route.set(ROUTES.TIPO_EVENTOS, {
   breadcrumbName: 'Tipo de Eventos',
   menu: ['Gestão'],
   parent: '/',
-  component: TipoEventosLista,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
