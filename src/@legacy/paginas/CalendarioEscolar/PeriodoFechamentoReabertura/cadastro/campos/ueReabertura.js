@@ -20,24 +20,12 @@ const UeReabertura = ({ form, onChangeCampos }) => {
 
   const nomeCampo = 'ueCodigo';
 
-  function mesclarAbrangencias(obj1, obj2) {
-    const merged = [];
+  function mesclarAbrangencias(listaAtual, listaHistorica) {
+    const atual = Array.isArray(listaAtual) ? listaAtual : [];
+    const historica = Array.isArray(listaHistorica) ? listaHistorica : [];
+    const codigosAtuais = new Set(atual.map(ue => ue.codigo));
 
-    for (const key in obj1) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (obj1.hasOwnProperty(key)) {
-        merged[key] = obj1[key];
-      }
-    }
-
-    for (const key in obj2) {
-      // eslint-disable-next-line no-prototype-builtins
-      if (!merged.some(m => m.codigo === obj2[key].codigo)) {
-        merged[key] = obj2[key];
-      }
-    }
-
-    return merged;
+    return [...atual, ...historica.filter(ue => !codigosAtuais.has(ue.codigo))];
   }
 
   const obterUes = useCallback(async () => {
@@ -79,8 +67,9 @@ const UeReabertura = ({ form, onChangeCampos }) => {
       .catch(e => erros(e))
       .finally(() => setExibirLoader(false));
 
-    const dadosUes = Object.values(
-      mesclarAbrangencias(resposta?.data, respostaHistorica?.data)
+    const dadosUes = mesclarAbrangencias(
+      resposta?.data,
+      respostaHistorica?.data
     );
 
     if (dadosUes?.length) {
