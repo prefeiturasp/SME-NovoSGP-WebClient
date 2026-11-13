@@ -1,16 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 const ContadorExpiracao = props => {
   const { dataHoraExpiracao, deslogarDoUsuario } = props;
 
-  const calcularTempoExpiracao = () => {
+  const calcularTempoExpiracao = useCallback(() => {
     const diferenca = +new Date(dataHoraExpiracao) - +new Date();
-    let tempoParaExpirar = {};
+    let tempoParaExpirar = {
+      horas: 0,
+      minutos: 0,
+      segundos: 0,
+    };
 
     if (diferenca > 0) {
+      const totalSegundos = Math.floor(diferenca / 1000);
+
       tempoParaExpirar = {
-        minutos: Math.floor((diferenca / 1000 / 60) % 60),
-        segundos: Math.floor((diferenca / 1000) % 60),
+        horas: Math.floor(totalSegundos / 3600),
+        minutos: Math.floor((totalSegundos / 60) % 60),
+        segundos: totalSegundos % 60,
       };
     }
 
@@ -19,7 +26,7 @@ const ContadorExpiracao = props => {
     }
 
     return tempoParaExpirar;
-  };
+  }, [dataHoraExpiracao, deslogarDoUsuario]);
 
   const [tempoParaExpirar, setTempoParaExpirar] = useState(
     calcularTempoExpiracao()
@@ -30,7 +37,7 @@ const ContadorExpiracao = props => {
       setTempoParaExpirar(calcularTempoExpiracao());
     }, 1000);
     return () => clearInterval(calculo);
-  });
+  }, [calcularTempoExpiracao]);
 
   const montarExibicaoTempo = tempo => {
     if (tempo < 10) {
@@ -39,15 +46,20 @@ const ContadorExpiracao = props => {
     return tempo;
   };
 
-  return (
-    <>
-      {tempoParaExpirar.minutos || tempoParaExpirar.segundos
-        ? montarExibicaoTempo(tempoParaExpirar.minutos) +
-          ':' +
-          montarExibicaoTempo(tempoParaExpirar.segundos)
-        : '00:00'}
-    </>
-  );
+  const montarContadorExpiracao = ({ horas, minutos, segundos }) => {
+    const exibicaoMinutos = montarExibicaoTempo(minutos);
+    const exibicaoSegundos = montarExibicaoTempo(segundos);
+
+    if (horas === 0) {
+      return `${exibicaoMinutos}:${exibicaoSegundos}`;
+    }
+
+    return `${montarExibicaoTempo(
+      horas
+    )}:${exibicaoMinutos}:${exibicaoSegundos}`;
+  };
+
+  return <>{montarContadorExpiracao(tempoParaExpirar)}</>;
 };
 
 export default ContadorExpiracao;
