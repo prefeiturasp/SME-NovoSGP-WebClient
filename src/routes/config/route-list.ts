@@ -29,8 +29,8 @@ import RegistroItineranciaAEELista from '~/paginas/AEE/RegistroItinerancia/Lista
 import AvaliacaoForm from '~/paginas/CalendarioEscolar/Avaliacao/avaliacaoForm';
 import CalendarioEscolar from '~/paginas/CalendarioEscolar/Calendario';
 import CalendarioProfessor from '~/paginas/CalendarioEscolar/CalendarioProfessor';
-import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/eventosCadastro';
-import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista';
+// import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/eventosCadastro';
+// import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista';
 import CalendarioMicrofrontend from '~/paginas/CalendarioEscolar/calendarioMicrofrontend';
 import TipoCalendarioEscolarForm from '~/paginas/CalendarioEscolar/TipoCalendarioEscolar/tipoCalendarioEscolarForm';
 import TipoCalendarioEscolarLista from '~/paginas/CalendarioEscolar/TipoCalendarioEscolar/tipoCalendarioEscolarLista';
@@ -553,7 +553,7 @@ route.set(ROUTES.EVENTOS, {
   breadcrumbName: 'Eventos do calendário escolar',
   menu: ['Gestão'],
   parent: '/',
-  component: EventosLista,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -564,7 +564,7 @@ route.set(`${ROUTES.EVENTOS}/:tipoCalendarioId`, {
   breadcrumbName: 'Eventos do calendário escolar',
   menu: ['Calendário escolar'],
   parent: '/',
-  component: EventosLista,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -574,7 +574,7 @@ route.set(`${ROUTES.EVENTOS}/:tipoCalendarioId`, {
 route.set('/calendario-escolar/eventos/novo/:tipoCalendarioId', {
   breadcrumbName: 'Cadastro de eventos do calendário escolar',
   parent: '/calendario-escolar/eventos',
-  component: EventosCadastro,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -584,7 +584,7 @@ route.set('/calendario-escolar/eventos/novo/:tipoCalendarioId', {
 route.set('/calendario-escolar/eventos/editar/:id', {
   breadcrumbName: 'Cadastro de eventos do calendário escolar',
   parent: '/calendario-escolar/eventos',
-  component: EventosCadastro,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -594,7 +594,7 @@ route.set('/calendario-escolar/eventos/editar/:id', {
 route.set('/calendario-escolar/eventos/editar/:id/:tipoCalendarioId', {
   breadcrumbName: 'Cadastro de Eventos do Calendário Escolar',
   parent: '/calendario-escolar/eventos',
-  component: EventosCadastro,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
