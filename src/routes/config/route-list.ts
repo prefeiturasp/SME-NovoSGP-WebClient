@@ -32,7 +32,6 @@ import CalendarioProfessor from '~/paginas/CalendarioEscolar/CalendarioProfessor
 import EventosCadastro from '~/paginas/CalendarioEscolar/Eventos/cadastro/eventosCadastro';
 import EventosLista from '~/paginas/CalendarioEscolar/Eventos/lista/eventosLista';
 import CalendarioMicrofrontend from '~/paginas/CalendarioEscolar/calendarioMicrofrontend';
-import TipoEventosForm from '~/paginas/CalendarioEscolar/TipoEventos/tipoEventosForm';
 import TipoFeriadoForm from '~/paginas/CalendarioEscolar/TipoFeriado/tipoFeriadoForm';
 import CadastroAula from '~/paginas/CalendarioProfessor/CadastroAula/cadastroAula';
 import TipoAvaliacaoForm from '~/paginas/Configuracoes/TipoAvaliacao/tipoAvaliacaoForm';
@@ -224,7 +223,7 @@ route.set(ROUTES.TIPO_EVENTOS, {
 route.set('/calendario-escolar/tipo-eventos/novo', {
   breadcrumbName: 'Cadastro de Tipo de Eventos',
   parent: '/calendario-escolar/tipo-eventos',
-  component: TipoEventosForm,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
@@ -234,7 +233,7 @@ route.set('/calendario-escolar/tipo-eventos/novo', {
 route.set('/calendario-escolar/tipo-eventos/editar/:id', {
   breadcrumbName: 'Cadastro de Tipo de Eventos',
   parent: '/calendario-escolar/tipo-eventos',
-  component: TipoEventosForm,
+  component: CalendarioMicrofrontend,
   exact: true,
   tipo: RotasTipo.EstruturadaAutenticada,
   temPermissionamento: true,
