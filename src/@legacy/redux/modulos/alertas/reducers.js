@@ -36,6 +36,7 @@ export default function alertas(state = inicial, action) {
           textoOk: action.payload.textoOk || 'Sim',
           textoCancelar: action.payload.textoCancelar || 'Não',
           primeiroExibirTextoNegrito: action.payload.primeiroExibirTextoNegrito,
+          inverterBotoes: action.payload.inverterBotoes,
         };
         break;
       }

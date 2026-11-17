@@ -9,9 +9,10 @@ import {
   limparDadosObservacoesUsuario,
   setDadosObservacoesUsuario,
 } from '~/redux/modulos/observacoesUsuario/actions';
-import { confirmar, ServicoDiarioBordo } from '~/servicos';
+import { ServicoDiarioBordo } from '~/servicos';
 import ListaoContext from '../../../listaoContext';
 import {
+  confirmarListao,
   obterDiarioBordoListao,
   salvarEditarObservacao,
 } from '../../../listaoFuncoes';
@@ -63,11 +64,10 @@ const TabListaoDiarioBordoCollapses = () => {
 
   const perguntarSalvarObservacao = async () => {
     if (telaEmEdicao && idDiarioBordoAtual) {
-      const confirmou = await confirmar(
-        'Atenção',
-        '',
-        'Suas observações não foram salvas, deseja salvar agora?'
-      );
+      const confirmou = await confirmarListao({
+        titulo: 'Atenção',
+        textoNegrito: 'Suas observações não foram salvas, deseja salvar agora?',
+      });
 
       if (confirmou) {
         await salvarEditarObservacao(

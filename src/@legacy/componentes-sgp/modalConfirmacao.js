@@ -22,6 +22,7 @@ const ContainerModal = styled.div`
 const ContainerBotoes = styled.div`
   display: flex;
   justify-content: flex-end;
+  gap: 4px;
 
   .botao-confirmacao {
     color: ${({ loadingCliqueOk }) =>
@@ -33,7 +34,7 @@ const ModalConfirmacao = () => {
   const [loadingCliqueOk, setLoadingCliqueOk] = useState(false);
   const dispatch = useDispatch();
   const confirmacao = useSelector(state => state.alertas.confirmacao);
-  const { primeiroExibirTextoNegrito } = confirmacao;
+  const { primeiroExibirTextoNegrito, inverterBotoes } = confirmacao;
 
   const fecharConfirmacao = resultado => {
     if (confirmacao) confirmacao.resolve(resultado);
@@ -45,6 +46,33 @@ const ModalConfirmacao = () => {
       setLoadingCliqueOk(false);
     }
   }, [confirmacao.visivel]);
+
+  const botaoConfirmar = (
+    <Loader key="botao-confirmar" loading={loadingCliqueOk} ignorarTip>
+      <Button
+        id={SGP_BUTTON_CONFIRMAR_ALERTA}
+        className="botao-confirmacao"
+        onClick={() => {
+          setLoadingCliqueOk(true);
+          fecharConfirmacao(true);
+        }}
+        label={confirmacao.textoOk}
+        color={Colors.Azul}
+        border
+      />
+    </Loader>
+  );
+
+  const botaoCancelar = (
+    <Button
+      key="botao-cancelar"
+      id={SGP_BUTTON_FECHAR_ALERTA}
+      onClick={() => fecharConfirmacao(false)}
+      label={confirmacao.textoCancelar}
+      type="primary"
+      color={Colors.Azul}
+    />
+  );
 
   return confirmacao.visivel ? (
     <ContainerModal>
@@ -58,28 +86,9 @@ const ModalConfirmacao = () => {
             key={shortid.generate()}
             loadingCliqueOk={loadingCliqueOk}
           >
-            <Loader loading={loadingCliqueOk} ignorarTip className="mr-1">
-              <Button
-                id={SGP_BUTTON_CONFIRMAR_ALERTA}
-                className="botao-confirmacao"
-                key={shortid.generate()}
-                onClick={() => {
-                  setLoadingCliqueOk(true);
-                  fecharConfirmacao(true);
-                }}
-                label={confirmacao.textoOk}
-                color={Colors.Azul}
-                border
-              />
-            </Loader>
-            <Button
-              id={SGP_BUTTON_FECHAR_ALERTA}
-              key={shortid.generate()}
-              onClick={() => fecharConfirmacao(false)}
-              label={confirmacao.textoCancelar}
-              type="primary"
-              color={Colors.Azul}
-            />
+            {inverterBotoes
+              ? [botaoCancelar, botaoConfirmar]
+              : [botaoConfirmar, botaoCancelar]}
           </ContainerBotoes>,
         ]}
       >

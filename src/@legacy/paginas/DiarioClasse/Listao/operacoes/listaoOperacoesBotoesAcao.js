@@ -20,14 +20,7 @@ import {
   limparDadosObservacoesUsuario,
   setDadosObservacoesUsuario,
 } from '~/redux/modulos/observacoesUsuario/actions';
-import {
-  api,
-  confirmar,
-  erro,
-  erros,
-  ServicoDiarioBordo,
-  sucesso,
-} from '~/servicos';
+import { api, erro, erros, ServicoDiarioBordo, sucesso } from '~/servicos';
 import ServicoFrequencia from '~/servicos/Paginas/DiarioClasse/ServicoFrequencia';
 import ServicoPlanoAula from '~/servicos/Paginas/DiarioClasse/ServicoPlanoAula';
 import { editorTemValor, removerTagsHtml } from '~/utils';
@@ -40,6 +33,7 @@ import {
 } from '../listaoConstantes';
 import ListaoContext from '../listaoContext';
 import {
+  confirmarListao,
   montarIdsObjetivosSelecionadosListao,
   obterDiarioBordoListao,
   obterListaAlunosAvaliacaoListao,
@@ -98,11 +92,10 @@ const ListaoOperacoesBotoesAcao = () => {
   const desabilitarBotoes = !periodoAbertoListao || somenteConsultaListao;
 
   const pergutarParaSalvar = () =>
-    confirmar(
-      'Atenção',
-      '',
-      'Suas alterações não foram salvas, deseja salvar agora?'
-    );
+    confirmarListao({
+      titulo: 'Atenção',
+      textoNegrito: 'Suas alterações não foram salvas, deseja salvar agora?',
+    });
 
   const salvarFrequencia = async () => {
     const aulasAlteradasPossuiCompensacao = [];
@@ -148,13 +141,13 @@ const ListaoOperacoesBotoesAcao = () => {
     let continuarSalvar = true;
 
     if (aulasAlteradasPossuiCompensacao?.length) {
-      continuarSalvar = await confirmar(
-        'Atenção',
-        `Existe(m) estudante(s) com compensação de ausência para esta(s) aula(s) ${aulasAlteradasPossuiCompensacao.join(
+      continuarSalvar = await confirmarListao({
+        titulo: 'Atenção',
+        texto: `Existe(m) estudante(s) com compensação de ausência para esta(s) aula(s) ${aulasAlteradasPossuiCompensacao.join(
           ', '
         )}, ao alterar a frequência a compensação poderá ser alterada ou excluída.`,
-        'Deseja continuar?'
-      );
+        textoNegrito: 'Deseja continuar?',
+      });
     }
 
     if (!continuarSalvar) {
@@ -735,11 +728,11 @@ const ListaoOperacoesBotoesAcao = () => {
 
   const onClickCancelar = async () => {
     if (telaEmEdicao) {
-      const confirmou = await confirmar(
-        'Atenção',
-        'Você não salvou as informações preenchidas.',
-        'Deseja realmente cancelar as alterações?'
-      );
+      const confirmou = await confirmarListao({
+        titulo: 'Atenção',
+        texto: 'Você não salvou as informações preenchidas.',
+        textoNegrito: 'Deseja realmente cancelar as alterações?',
+      });
       if (confirmou) {
         limparDadosTabSelecionada();
         dispatch(setTelaEmEdicao(false));

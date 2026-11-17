@@ -19,7 +19,8 @@ export function alertaConfirmar(
   resolve,
   textoOk,
   textoCancelar,
-  primeiroExibirTextoNegrito
+  primeiroExibirTextoNegrito,
+  inverterBotoes
 ) {
   return {
     type: '@alertas/confirmar',
@@ -31,6 +32,7 @@ export function alertaConfirmar(
       textoOk,
       textoCancelar,
       primeiroExibirTextoNegrito,
+      inverterBotoes,
     },
   };
 }

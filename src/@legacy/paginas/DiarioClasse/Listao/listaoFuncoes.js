@@ -4,10 +4,18 @@ import { BIMESTRE_FINAL } from '~/constantes';
 import notasConceitos from '~/dtos/notasConceitos';
 import { store } from '@/core/redux';
 import { setTelaEmEdicao } from '~/redux/modulos/geral/actions';
-import { confirmar, erros, ServicoDiarioBordo, sucesso } from '~/servicos';
+import {
+  confirmarComOpcoes,
+  erros,
+  ServicoDiarioBordo,
+  sucesso,
+} from '~/servicos';
 import ServicoNotaConceito from '~/servicos/Paginas/DiarioClasse/ServicoNotaConceito';
 import ServicoFechamentoBimestre from '~/servicos/Paginas/Fechamento/ServicoFechamentoBimestre';
 import ServicoNotas from '~/servicos/ServicoNotas';
+
+const confirmarListao = opcoes =>
+  confirmarComOpcoes({ ...opcoes, inverterBotoes: true });
 
 const onChangeTabListao = async (
   tabAtiva,
@@ -194,11 +202,10 @@ const salvarEditarObservacao = async (
 };
 
 const excluirObservacao = async (obs, setExibirLoaderGeral) => {
-  const confirmado = await confirmar(
-    'Excluir',
-    '',
-    'Você tem certeza que deseja excluir este registro?'
-  );
+  const confirmado = await confirmarListao({
+    titulo: 'Excluir',
+    textoNegrito: 'Você tem certeza que deseja excluir este registro?',
+  });
 
   if (confirmado) {
     setExibirLoaderGeral(true);
@@ -408,11 +415,12 @@ const validarSalvarFechamentoListao = async (
   let continuarSalvar = true;
 
   if (temAvaliacoesBimestraisPendentes) {
-    continuarSalvar = await confirmar(
-      'Atenção',
-      dadosFechamento.observacoes,
-      'Deseja continuar mesmo assim com o fechamento do(s) bimestre(s)?'
-    );
+    continuarSalvar = await confirmarListao({
+      titulo: 'Atenção',
+      texto: dadosFechamento.observacoes,
+      textoNegrito:
+        'Deseja continuar mesmo assim com o fechamento do(s) bimestre(s)?',
+    });
   }
 
   if (!continuarSalvar) return false;
@@ -473,6 +481,7 @@ const obterDescricaoConceito = (listaTiposConceitos, valorConceito) => {
 };
 
 export {
+  confirmarListao,
   onChangeTabListao,
   montarIdsObjetivosSelecionadosListao,
   obterDiarioBordoListao,
