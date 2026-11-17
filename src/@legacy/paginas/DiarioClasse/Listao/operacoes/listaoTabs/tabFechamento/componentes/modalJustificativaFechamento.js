@@ -8,8 +8,10 @@ import Button from '~/componentes/button';
 import JoditEditor from '~/componentes/jodit-editor/joditEditor';
 import notasConceitos from '~/dtos/notasConceitos';
 import ListaoContext from '~/paginas/DiarioClasse/Listao/listaoContext';
-import { salvarFechamentoListao } from '~/paginas/DiarioClasse/Listao/listaoFuncoes';
-import { confirmar } from '~/servicos/alertas';
+import {
+  confirmarListao,
+  salvarFechamentoListao,
+} from '~/paginas/DiarioClasse/Listao/listaoFuncoes';
 
 const ModalJustificativaFechamento = () => {
   const {
@@ -106,11 +108,10 @@ const ModalJustificativaFechamento = () => {
   const validarAntesDeFechar = async () => {
     if (modoEdicao) {
       setExibirModal(false);
-      const confirmado = await confirmar(
-        'Atenção',
-        '',
-        'Suas alterações não foram salvas, deseja salvar agora?'
-      );
+      const confirmado = await confirmarListao({
+        titulo: 'Atenção',
+        textoNegrito: 'Suas alterações não foram salvas, deseja salvar agora?',
+      });
       if (confirmado) {
         validaAntesDoSubmit(true);
       } else {

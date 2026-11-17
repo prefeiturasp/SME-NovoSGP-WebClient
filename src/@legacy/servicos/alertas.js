@@ -121,7 +121,8 @@ const confirmar = (
   textoNegrito,
   textoOk,
   textoCancelar,
-  primeiroExibirTextoNegrito
+  primeiroExibirTextoNegrito,
+  inverterBotoes
 ) => {
   return new Promise(resolve => {
     store.dispatch(
@@ -132,11 +133,31 @@ const confirmar = (
         resolve,
         textoOk,
         textoCancelar,
-        primeiroExibirTextoNegrito
+        primeiroExibirTextoNegrito,
+        inverterBotoes
       )
     );
   });
 };
+
+const confirmarComOpcoes = ({
+  titulo,
+  texto,
+  textoNegrito,
+  textoOk,
+  textoCancelar,
+  primeiroExibirTextoNegrito,
+  inverterBotoes,
+}) =>
+  confirmar(
+    titulo,
+    texto,
+    textoNegrito,
+    textoOk,
+    textoCancelar,
+    primeiroExibirTextoNegrito,
+    inverterBotoes
+  );
 
 const fecharModalConfirmacao = () => {
   store.dispatch(alertaFechar());
@@ -148,6 +169,7 @@ export {
   erro,
   confirmacao,
   confirmar,
+  confirmarComOpcoes,
   fecharModalConfirmacao,
   erros,
   aviso,
