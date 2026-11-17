@@ -180,10 +180,17 @@ class ServicoSalvarFrequenciaPlanoAula {
     ) {
       dadosPlanoAula.objetivosAprendizagemComponente.forEach(item => {
         item.objetivosAprendizagem.forEach(obj => {
-          objetivosAprendizagemComponente.push({
-            componenteCurricularId: item.componenteCurricularId,
-            id: obj.id,
-          });
+          const jaAdicionado = objetivosAprendizagemComponente.some(
+            o =>
+              o.id === obj.id &&
+              o.componenteCurricularId === item.componenteCurricularId
+          );
+          if (!jaAdicionado) {
+            objetivosAprendizagemComponente.push({
+              componenteCurricularId: item.componenteCurricularId,
+              id: obj.id,
+            });
+          }
         });
       });
     }
