@@ -301,7 +301,7 @@ const ListaoOperacoesBotoesAcao = () => {
       const objetivosAprendizagemComponente = [];
 
       if (plano?.idsObjetivosAprendizagemSelecionados?.length) {
-        plano.idsObjetivosAprendizagemSelecionados.forEach(id => {
+        [...new Set(plano.idsObjetivosAprendizagemSelecionados)].forEach(id => {
           const dadosObj = listaObjetivosAprendizagem.find(
             item => item?.id === id
           );
